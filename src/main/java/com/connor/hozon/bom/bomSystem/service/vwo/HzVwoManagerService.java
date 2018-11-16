@@ -7,6 +7,9 @@
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
 import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelFeatureDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
@@ -22,18 +25,21 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.iservice.process.IProcess;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.process.FeatureProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.InterruptionContainer;
 import com.connor.hozon.bom.bomSystem.service.process.ModelColorProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.ReleaseContainer;
 import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
 import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
+import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.bomSystem.service.project.HzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.task.HzTasksService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.dao.OrgGroupDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
 import com.connor.hozon.bom.sys.entity.User;
@@ -47,12 +53,17 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import org.springframework.ui.Model;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
+import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.vwo.*;
 import sql.pojo.epl.HzEPLManageRecord;
+import sql.pojo.factory.HzFactory;
+import sql.pojo.project.HzMaterielRecord;
 import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
@@ -164,6 +175,20 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     @Autowired
     ModelColorProcessManager modelColorProcessManager;
 
+    //衍生物料变更DAO层
+    @Autowired
+    HzDMBasicChangeDao hzDMBasicChangeDao;
+    @Autowired
+    HzDMDetailChangeDao hzDMDetailChangeDao;
+    //车辆模型DAO
+    @Autowired
+    HzCfg0ModelFeatureService hzCfg0ModelFeatureService;
+    //工厂DAO
+    @Autowired
+    HzFactoryDAO hzFactoryDAO;
+    //超级物料
+    @Autowired
+    HzSuperMaterielService hzSuperMaterielService;
     /**
      * 日志
      */
@@ -451,109 +476,364 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         return result;
     }
 
-    //配色方案进入VWO
-    public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, ArrayList<String> dynamicTitle, Long changeFromId) {
-        JSONObject result = new JSONObject();
-        User user = UserInfo.getUser();
-        //源主数据
-        List<HzCfg0ModelColor> hzCfg0ModelColors = hzCfg0ModelColorDao.selectByPuids(colors);
-        //变更后主数据
-        List<HzCmcrChange> hzCmcrChangesAfter = new ArrayList<HzCmcrChange>();
-        //变更后从数据
-        List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = new ArrayList<HzCmcrDetailChange>();
-        //循环查看源主数据是否以发布流程,如已发布过则直接返回错误提示
-        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
-            if (hzCfg0ModelColor.getCmcrStatus() != null && !"0".equals(hzCfg0ModelColor.getCmcrStatus())) {
-                result.put("status", false);
-                result.put("msg", hzCfg0ModelColor.getpDescOfColorfulModel() + "已发起了VWO流程");
-                return result;
-            }
-            hzCfg0ModelColor.setCmcrStatus("10");
-        }
-        //源从数据
-        List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetails = hzColorModelDao.selectByModelColors(hzCfg0ModelColors);
-        //最新的Vwo实体类对象
-        HzVwoInfo hzVwoInfo = hzVwoManagerService.generateVwoEntity(user, projectPuid, result, 2);
-        hzVwoInfo.setVwoType(2);
-        //为源主数据添加VWO编码
-        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
-            hzCfg0ModelColor.setCmcrVwoId(changeFromId);
-        }
+//    //配色方案进入VWO
+//    public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, ArrayList<String> dynamicTitle, Long changeFromId) {
+//        JSONObject result = new JSONObject();
+//        User user = UserInfo.getUser();
+//        //源主数据
+//        List<HzCfg0ModelColor> hzCfg0ModelColors = hzCfg0ModelColorDao.selectByPuids(colors);
+//        //变更后主数据
+//        List<HzCmcrChange> hzCmcrChangesAfter = new ArrayList<HzCmcrChange>();
+//        //变更后从数据
+//        List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = new ArrayList<HzCmcrDetailChange>();
+//        //循环查看源主数据是否以发布流程,如已发布过则直接返回错误提示
+//        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
+//            if (hzCfg0ModelColor.getCmcrStatus() != null && !"0".equals(hzCfg0ModelColor.getCmcrStatus())) {
+//                result.put("status", false);
+//                result.put("msg", hzCfg0ModelColor.getpDescOfColorfulModel() + "已发起了VWO流程");
+//                return result;
+//            }
+//            hzCfg0ModelColor.setCmcrStatus("10");
+//        }
+//        //源从数据
+//        List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetails = hzColorModelDao.selectByModelColors(hzCfg0ModelColors);
+//        //最新的Vwo实体类对象
+//        HzVwoInfo hzVwoInfo = hzVwoManagerService.generateVwoEntity(user, projectPuid, result, 2);
+//        hzVwoInfo.setVwoType(2);
+//        //为源主数据添加VWO编码
+//        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
+//            hzCfg0ModelColor.setCmcrVwoId(changeFromId);
+//        }
+//
+//        //查询最近一次变更后主数据
+//        List<HzCmcrChange> hzCmcrChangesLastAfterQuery = new ArrayList<HzCmcrChange>();
+//        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
+//            HzCmcrChange hzCmcrChangeQuery = new HzCmcrChange();
+//            hzCmcrChangeQuery.setCmcrSrcMainCfg(hzCfg0ModelColor.getpCfg0MainRecordOfMC());
+//            hzCmcrChangeQuery.setCmcrSrcPuid(hzCfg0ModelColor.getPuid());
+//            hzCmcrChangesLastAfterQuery.add(hzCmcrChangeQuery);
+//        }
+//        List<HzCmcrChange> hzCmcrChangesLastAfter = null;
+//        try {
+//            hzCmcrChangesLastAfter = hzCmcrChangeDao.selectLastAfter(hzCmcrChangesLastAfterQuery);
+//        } catch (Exception e) {
+//            result.put("status", false);
+//            result.put("msg", e.getMessage());
+//        }
+//        //查询最近一次变更后从数据
+//        List<HzCmcrDetailChange> hzCmcrDetailChangesQuery = new ArrayList<HzCmcrDetailChange>();
+//        for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
+//            HzCmcrDetailChange hzCmcrDetailChange1Query = new HzCmcrDetailChange();
+//            hzCmcrDetailChange1Query.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
+//            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
+//            hzCmcrDetailChange1Query.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
+//
+//            if (hzCfg0ModelColorDetail.getCfgUid() != null) {
+//                HzCfg0OptionFamily hzCfg0OptionFamilyQuery = new HzCfg0OptionFamily();
+//                hzCfg0OptionFamilyQuery.setPuid(hzCfg0ModelColorDetail.getCfgUid());
+//                HzCfg0OptionFamily hzCfg0OptionFamily = hzCfg0OptionFamilyDao.selectByPrimaryKey(hzCfg0OptionFamilyQuery);
+//                //特性代码
+//                hzCmcrDetailChange1Query.setCmcrDetailCgFeatureCode(hzCfg0OptionFamily.getpOptionfamilyName());
+//                //特性名
+//                hzCmcrDetailChange1Query.setCmcrDetailCgFeatureName(hzCfg0OptionFamily.getpOptionfamilyDesc());
+//            }
+//
+//            hzCmcrDetailChangesQuery.add(hzCmcrDetailChange1Query);
+//        }
+//        List<HzCmcrDetailChange> hzCmcrDetailChangesLastAfter = null;
+//        try {
+////            hzCmcrDetailChangesLastAfter = hzCmcrDetailChangeDao.selectLastAfter(hzCmcrDetailChangesQuery);
+//            if(hzCmcrChangesLastAfter!=null&&hzCmcrChangesLastAfter.size()!=0){
+//            hzCmcrDetailChangesLastAfter = hzCmcrDetailChangeDao.selectAfter(hzCmcrChangesLastAfter);
+//
+//            }
+//        } catch (Exception e) {
+//            result.put("status", false);
+//            result.put("msg", e.getMessage());
+//        }
+//        //筛选出第一次变更的数据,并生成主数据
+//        if (hzCmcrChangesLastAfter.size() != hzCmcrChangesLastAfterQuery.size()) {
+//            for (HzCmcrChange hzCmcrChangeAfterQuery : hzCmcrChangesLastAfterQuery) {
+//                boolean flag = false;
+//                for (HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter) {
+//                    if (hzCmcrChangeAfterQuery.getCmcrSrcPuid().equals(hzCmcrChange.getCmcrSrcPuid())) {
+//                        flag = true;
+//                        break;
+//                    }
+//                }
+//                if (!flag) {
+//                    HzCmcrChange hzCmcrChange = new HzCmcrChange();
+//                    hzCmcrChange.setCmcrSrcPuid(hzCmcrChangeAfterQuery.getCmcrSrcPuid());
+//                    hzCmcrChange.setCmcrSrcMainCfg(hzCmcrChangeAfterQuery.getCmcrSrcMainCfg());
+//                    hzCmcrChange.setCmcrCgVwoId(changeFromId);
+//                    //变更状态
+//                    hzCmcrChange.setCmcrChangeStatus(1);
+//                    hzCmcrChangesAfter.add(hzCmcrChange);
+//                }
+//            }
+//        }
+//        Map<String,Long> changeAfterId = new HashMap<>();
+//        for(HzCmcrChange hzCmcrChange : hzCmcrChangesAfter){
+//            changeAfterId.put(hzCmcrChange.getCmcrSrcPuid(),hzCmcrChange.getCmcrCgId());
+//        }
+//        //筛选出第一次变更的数据,并生成从数据
+//        if (hzCmcrDetailChangesLastAfter.size() != hzCmcrDetailChangesQuery.size()) {
+//            for (HzCmcrDetailChange hzCmcrDetailChangeQuery : hzCmcrDetailChangesQuery) {
+//                boolean flag = false;
+//                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter) {
+//                    if (hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid().equals(hzCmcrDetailChange.getCmcrDetailSrcPuid())) {
+//                        flag = true;
+//                        break;
+//                    }
+//                }
+//                if (!flag) {
+//                    HzCmcrDetailChange hzCmcrDetailChange = new HzCmcrDetailChange();
+//                    //主数据ID
+//                    hzCmcrDetailChange.setCmcrCgChangeId(changeAfterId.get(hzCmcrDetailChangeQuery.getCmcrDetailSrcModelPuid()));
+//                    hzCmcrDetailChange.setCmcrDetailSrcPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid());
+//                    hzCmcrDetailChange.setCmcrDetailSrcCfgMainUid(hzCmcrDetailChangeQuery.getCmcrDetailSrcCfgMainUid());
+//                    hzCmcrDetailChange.setCmcrDetailCgVwoId(changeFromId);
+//                    hzCmcrDetailChange.setCmcrDetailSrcModelPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcModelPuid());
+//                    hzCmcrDetailChange.setCmcrDetailCgFeatureCode(hzCmcrDetailChangeQuery.getCmcrDetailCgFeatureCode());
+//                    hzCmcrDetailChange.setCmcrDetailCgFeatureName(hzCmcrDetailChangeQuery.getCmcrDetailCgFeatureName());
+//                    hzCmcrDetailChange.setCmcrDetailCgTitle(hzCmcrDetailChange.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChange.getCmcrDetailCgFeatureCode());
+//                    if (dynamicTitle.contains(hzCmcrDetailChange.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChange.getCmcrDetailCgFeatureCode())) {
+//                        hzCmcrDetailChange.setCmcrDetailCgIsColorful(1);
+//                    } else {
+//                        hzCmcrDetailChange.setCmcrDetailCgIsColorful(0);
+//                    }
+//                    hzCmcrDetailChangesAfter.add(hzCmcrDetailChange);
+//                }
+//            }
+//        }
+////        //根据最近一次变更后主数据生成变更前主数据
+////        for (HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter) {
+////            hzCmcrChange.setCmcrCgVwoId(hzVwoInfo.getId());
+////        }
+////        //根据最近一次变更后从数据生成变更前从数据
+////        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter) {
+////            hzCmcrDetailChange.setCmcrDetailCgVwoId(hzVwoInfo.getId());
+////        }
+//
+//
+//        //根据源主数据生成变更后主数据
+//
+//        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
+//            HzCmcrChange hzCmcrChangeAfter = new HzCmcrChange();
+//            //VWO号
+//            hzCmcrChangeAfter.setCmcrCgVwoId(changeFromId);
+//            //车身颜色代码
+//            hzCmcrChangeAfter.setCmcrCgShellCode(hzCfg0ModelColor.getpModelShellOfColorfulModel());
+//            //创建者
+//            hzCmcrChangeAfter.setCmcrCgCreator(user.getLogin());
+//            //主配置UID
+//            hzCmcrChangeAfter.setCmcrSrcMainCfg(hzCfg0ModelColor.getpCfg0MainRecordOfMC());
+//            //源数据UID
+//            hzCmcrChangeAfter.setCmcrSrcPuid(hzCfg0ModelColor.getPuid());
+//            //油漆车身总成
+//            hzCmcrChangeAfter.setCmcrSrcModelShell(hzCfg0ModelColor.getpModelShellOfColorfulModel());
+//            //颜色UID
+//            hzCmcrChangeAfter.setCmcrSrcColorUid(hzCfg0ModelColor.getpColorUid());
+//            //特性值的外键
+//            hzCmcrChangeAfter.setCmcrSrcShellCfg0Puid(hzCfg0ModelColor.getpShellCfg0Puid());
+//            //是否多色
+//            hzCmcrChangeAfter.setCmcrSrcColorIsMultiply(hzCfg0ModelColor.getpColorIsMultiply());
+//            //源创建时间
+//            hzCmcrChangeAfter.setCmcrSrcCreateDate(hzCfg0ModelColor.getCmcrCreateDate());
+//            //源创建人
+//            hzCmcrChangeAfter.setCmcrSrcCreator(hzCfg0ModelColor.getCmcrCreator());
+//            //源修改时间
+//            hzCmcrChangeAfter.setCmcrSrcUpdateDate(hzCfg0ModelColor.getCmcrUpdateDate());
+//            //源修改人
+//            hzCmcrChangeAfter.setCmcrSrcUpdater(hzCfg0ModelColor.getCmcrUpdater());
+//            //颜色车型代码
+//            hzCmcrChangeAfter.setCmcrSrcCodeOfColorMod(hzCfg0ModelColor.getpCodeOfColorfulModel());
+//            //颜色车型描述
+//            hzCmcrChangeAfter.setCmcrSrcDescOfColorMod(hzCfg0ModelColor.getpDescOfColorfulModel());
+//            //变更状态
+//            hzCmcrChangeAfter.setCmcrChangeStatus(0);
+//            hzCmcrChangesAfter.add(hzCmcrChangeAfter);
+//        }
+//
+//        for(HzCmcrChange hzCmcrChange : hzCmcrChangesAfter){
+//            changeAfterId.put(hzCmcrChange.getCmcrSrcPuid(),hzCmcrChange.getCmcrCgId());
+//        }
+//        //根据源从数据生成变更后从数据
+//        for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
+//            HzCmcrDetailChange hzCmcrDetailChangeAfter = new HzCmcrDetailChange();
+//            //主数据ID
+//            hzCmcrDetailChangeAfter.setCmcrCgChangeId(changeAfterId.get(hzCfg0ModelColorDetail.getModelUid()));
+//            //源数据PUID
+//            hzCmcrDetailChangeAfter.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
+//            //特性
+//            hzCmcrDetailChangeAfter.setCmcrDetailSrcCfgUid(hzCfg0ModelColorDetail.getCfgUid());
+//            //颜色外键
+//            hzCmcrDetailChangeAfter.setCmcrDetailSrcColorUid(hzCfg0ModelColorDetail.getColorUid());
+//            //主配置UID
+//            hzCmcrDetailChangeAfter.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
+//            //vwo主键
+//            hzCmcrDetailChangeAfter.setCmcrDetailCgVwoId(changeFromId);
+//            //源数据的创建时间
+//            hzCmcrDetailChangeAfter.setCmcrDetailSrcCreateDate(hzCfg0ModelColorDetail.getCreateDate());
+//            //源数据的修改时间
+//            hzCmcrDetailChangeAfter.setCmcrDetailSrcModifyDate(hzCfg0ModelColorDetail.getModifyDate());
+//            //源数据的创建者
+//            hzCmcrDetailChangeAfter.setCmcrDetailCgCreator(hzCfg0ModelColorDetail.getCreator());
+//            //源数据的修改者
+//            hzCmcrDetailChangeAfter.setCmcrDetailCgUpdater(hzCfg0ModelColorDetail.getModifier());
+//            //配色方案主数据PUID
+//            hzCmcrDetailChangeAfter.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
+//            if (hzCfg0ModelColorDetail.getCfgUid() != null) {
+//                HzCfg0OptionFamily hzCfg0OptionFamilyQuery = new HzCfg0OptionFamily();
+//                hzCfg0OptionFamilyQuery.setPuid(hzCfg0ModelColorDetail.getCfgUid());
+//                HzCfg0OptionFamily hzCfg0OptionFamily = hzCfg0OptionFamilyDao.selectByPrimaryKey(hzCfg0OptionFamilyQuery);
+//                //特性代码
+//                hzCmcrDetailChangeAfter.setCmcrDetailCgFeatureCode(hzCfg0OptionFamily.getpOptionfamilyName());
+//                //特性名
+//                hzCmcrDetailChangeAfter.setCmcrDetailCgFeatureName(hzCfg0OptionFamily.getpOptionfamilyDesc());
+//
+//                hzCmcrDetailChangeAfter.setCmcrDetailCgTitle(hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureCode());
+//                if (dynamicTitle.contains(hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureCode())) {
+//                    hzCmcrDetailChangeAfter.setCmcrDetailCgIsColorful(1);
+//                } else {
+//                    hzCmcrDetailChangeAfter.setCmcrDetailCgIsColorful(0);
+//                }
+//            }
+//            //颜色代码
+//            hzCmcrDetailChangeAfter.setCmcrDetailCgColorCode(hzCfg0ModelColorDetail.getpColorCode());
+//            //颜色名称
+//            hzCmcrDetailChangeAfter.setCmcrDetailCgColorName(hzCfg0ModelColorDetail.getpColorName());
+//
+//            hzCmcrDetailChangesAfter.add(hzCmcrDetailChangeAfter);
+//        }
+//
+//
+//        //跟新数据库
+//        try {
+//            //跟新源主数据
+//            if (hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors) <= 0) {
+//                result.put("status", false);
+//                result.put("msg", "变更源主数据失败");
+//            }
+//            //跟新变更后主数据
+//            if (hzCmcrChangeDao.insertAfterList(hzCmcrChangesAfter) != hzCmcrChangesAfter.size()) {
+//                result.put("status", false);
+//                result.put("msg", "变更后主数据失败");
+//            }
+//            //跟新变更后从数据
+//            if (hzCmcrDetailChangeDao.insertDetailAfterList(hzCmcrDetailChangesAfter) != hzCmcrDetailChangesAfter.size()) {
+//                result.put("status", false);
+//                result.put("msg", "变更后从数据失败");
+//            }
+////            //跟新变更前主数据
+////            if (hzCmcrChangesLastAfter != null && hzCmcrChangesLastAfter.size() != 0) {
+////                if (hzCmcrChangeDao.insertBeforeList(hzCmcrChangesLastAfter) != hzCmcrChangesLastAfter.size()) {
+////                    result.put("status", false);
+////                    result.put("msg", "跟变更前主数据失败");
+////                }
+////            }
+////            //跟新变更前从数据
+////            if (hzCmcrDetailChangesLastAfter != null && hzCmcrDetailChangesLastAfter.size() != 0) {
+////                if (hzCmcrDetailChangeDao.insertDetailBeforeList(hzCmcrDetailChangesLastAfter) != hzCmcrDetailChangesLastAfter.size()) {
+////                    result.put("status", false);
+////                    result.put("msg", "跟变更前从数据失败");
+////                }
+////            }
+//        } catch (Exception e) {
+//            result.put("status", false);
+//            result.put("msg", e.getMessage());
+//        }
+//        //新增VWO数据
+//
+//        if (result.get("status") == null) {
+//            result.put("status", true);
+//        }
+//        return result;
+//    }
+//配色方案进入VWO
+public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, ArrayList<String> dynamicTitle, Long changeFromId) {
+    JSONObject result = new JSONObject();
+    boolean firstFlag = false;
 
-        //查询最近一次变更后主数据
-        List<HzCmcrChange> hzCmcrChangesLastAfterQuery = new ArrayList<HzCmcrChange>();
-        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
-            HzCmcrChange hzCmcrChangeQuery = new HzCmcrChange();
-            hzCmcrChangeQuery.setCmcrSrcMainCfg(hzCfg0ModelColor.getpCfg0MainRecordOfMC());
-            hzCmcrChangeQuery.setCmcrSrcPuid(hzCfg0ModelColor.getPuid());
-            hzCmcrChangesLastAfterQuery.add(hzCmcrChangeQuery);
-        }
-        List<HzCmcrChange> hzCmcrChangesLastAfter = null;
-        try {
-            hzCmcrChangesLastAfter = hzCmcrChangeDao.selectLastAfter(hzCmcrChangesLastAfterQuery);
-        } catch (Exception e) {
+    User user = UserInfo.getUser();
+    //源主数据
+    List<HzCfg0ModelColor> hzCfg0ModelColors = hzCfg0ModelColorDao.selectByPuids(colors);
+    //源从数据
+    List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetails = hzColorModelDao.selectByModelColors(hzCfg0ModelColors);
+    //变更后主数据
+    List<HzCmcrChange> hzCmcrChangesAfter = new ArrayList<HzCmcrChange>();
+    //变更后从数据
+    List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = new ArrayList<HzCmcrDetailChange>();
+    //循环查看源主数据是否以发布流程,如已发布过则直接返回错误提示
+    for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
+        if (hzCfg0ModelColor.getCmcrStatus() != null && !"0".equals(hzCfg0ModelColor.getCmcrStatus())) {
             result.put("status", false);
-            result.put("msg", e.getMessage());
+            result.put("msg", hzCfg0ModelColor.getpDescOfColorfulModel() + "已发起了VWO流程");
+            return result;
         }
-        //查询最近一次变更后从数据
-        List<HzCmcrDetailChange> hzCmcrDetailChangesQuery = new ArrayList<HzCmcrDetailChange>();
-        for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
-            HzCmcrDetailChange hzCmcrDetailChange1Query = new HzCmcrDetailChange();
-            hzCmcrDetailChange1Query.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
-            hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
-            hzCmcrDetailChange1Query.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
+        hzCfg0ModelColor.setCmcrStatus("10");
+    }
+    //为源主数据添加变更编码
+    for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
+        hzCfg0ModelColor.setCmcrVwoId(changeFromId);
+    }
+    //查询最近一次变更后主数据
+    List<HzCmcrChange> hzCmcrChangesLastAfterQuery = new ArrayList<HzCmcrChange>();
+    for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
+        HzCmcrChange hzCmcrChangeQuery = new HzCmcrChange();
+        hzCmcrChangeQuery.setCmcrSrcMainCfg(hzCfg0ModelColor.getpCfg0MainRecordOfMC());
+        hzCmcrChangeQuery.setCmcrSrcPuid(hzCfg0ModelColor.getPuid());
+        hzCmcrChangesLastAfterQuery.add(hzCmcrChangeQuery);
+    }
+    List<HzCmcrChange> hzCmcrChangesLastAfter = null;
+    try {
+        hzCmcrChangesLastAfter = hzCmcrChangeDao.selectLastAfter(hzCmcrChangesLastAfterQuery);
+    } catch (Exception e) {
+        result.put("status", false);
+        result.put("msg", e.getMessage());
+    }
+    //根据源从数据生成变更后从数据
+    List<HzCmcrDetailChange> hzCmcrDetailChangesQuery = new ArrayList<HzCmcrDetailChange>();
+    for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
+        HzCmcrDetailChange hzCmcrDetailChange1Query = new HzCmcrDetailChange();
+        hzCmcrDetailChange1Query.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
+        hzCmcrDetailChange1Query.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
+        hzCmcrDetailChange1Query.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
+        hzCmcrDetailChange1Query.setCmcrDetailSrcColorUid(hzCfg0ModelColorDetail.getColorUid());
+        if (hzCfg0ModelColorDetail.getCfgUid() != null) {
+            HzCfg0OptionFamily hzCfg0OptionFamilyQuery = new HzCfg0OptionFamily();
+            hzCfg0OptionFamilyQuery.setPuid(hzCfg0ModelColorDetail.getCfgUid());
+            HzCfg0OptionFamily hzCfg0OptionFamily = hzCfg0OptionFamilyDao.selectByPrimaryKey(hzCfg0OptionFamilyQuery);
+            //特性代码
+            hzCmcrDetailChange1Query.setCmcrDetailCgFeatureCode(hzCfg0OptionFamily.getpOptionfamilyName());
+            //特性名
+            hzCmcrDetailChange1Query.setCmcrDetailCgFeatureName(hzCfg0OptionFamily.getpOptionfamilyDesc());
+        }
 
-            if (hzCfg0ModelColorDetail.getCfgUid() != null) {
-                HzCfg0OptionFamily hzCfg0OptionFamilyQuery = new HzCfg0OptionFamily();
-                hzCfg0OptionFamilyQuery.setPuid(hzCfg0ModelColorDetail.getCfgUid());
-                HzCfg0OptionFamily hzCfg0OptionFamily = hzCfg0OptionFamilyDao.selectByPrimaryKey(hzCfg0OptionFamilyQuery);
-                //特性代码
-                hzCmcrDetailChange1Query.setCmcrDetailCgFeatureCode(hzCfg0OptionFamily.getpOptionfamilyName());
-                //特性名
-                hzCmcrDetailChange1Query.setCmcrDetailCgFeatureName(hzCfg0OptionFamily.getpOptionfamilyDesc());
+        hzCmcrDetailChangesQuery.add(hzCmcrDetailChange1Query);
+    }
+    //筛选出第一次变更的数据,并生成主从数据
+    if (hzCmcrChangesLastAfter.size() != hzCmcrChangesLastAfterQuery.size()) {
+        firstFlag = true;
+        for (HzCmcrChange hzCmcrChangeAfterQuery : hzCmcrChangesLastAfterQuery) {
+            boolean flag = false;
+            for (HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter) {
+                if (hzCmcrChangeAfterQuery.getCmcrSrcPuid().equals(hzCmcrChange.getCmcrSrcPuid())) {
+                    flag = true;
+                    break;
+                }
             }
+            if (!flag) {
+                HzCmcrChange hzCmcrChange = new HzCmcrChange();
+                hzCmcrChange.setCmcrSrcPuid(hzCmcrChangeAfterQuery.getCmcrSrcPuid());
+                hzCmcrChange.setCmcrSrcMainCfg(hzCmcrChangeAfterQuery.getCmcrSrcMainCfg());
+                hzCmcrChange.setCmcrCgVwoId(changeFromId);
+                //变更状态
+                hzCmcrChange.setCmcrChangeStatus(1);
+                hzCmcrChangesAfter.add(hzCmcrChange);
 
-            hzCmcrDetailChangesQuery.add(hzCmcrDetailChange1Query);
-        }
-        List<HzCmcrDetailChange> hzCmcrDetailChangesLastAfter = null;
-        try {
-            hzCmcrDetailChangesLastAfter = hzCmcrDetailChangeDao.selectLastAfter(hzCmcrDetailChangesQuery);
-        } catch (Exception e) {
-            result.put("status", false);
-            result.put("msg", e.getMessage());
-        }
-        //筛选出第一次变更的数据,并生成主数据
-        if (hzCmcrChangesLastAfter.size() != hzCmcrChangesLastAfterQuery.size()) {
-            for (HzCmcrChange hzCmcrChangeAfterQuery : hzCmcrChangesLastAfterQuery) {
-                boolean flag = false;
-                for (HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter) {
-                    if (hzCmcrChangeAfterQuery.getCmcrSrcPuid().equals(hzCmcrChange.getCmcrSrcPuid())) {
-                        flag = true;
-                        break;
-                    }
-                }
-                if (!flag) {
-                    HzCmcrChange hzCmcrChange = new HzCmcrChange();
-                    hzCmcrChange.setCmcrSrcPuid(hzCmcrChangeAfterQuery.getCmcrSrcPuid());
-                    hzCmcrChange.setCmcrSrcMainCfg(hzCmcrChangeAfterQuery.getCmcrSrcMainCfg());
-                    hzCmcrChange.setCmcrCgVwoId(changeFromId);
-                    //变更状态
-                    hzCmcrChange.setCmcrChangeStatus(1);
-                    hzCmcrChangesAfter.add(hzCmcrChange);
-                }
-            }
-        }
-        //筛选出第一次变更的数据,并生成从数据
-        if (hzCmcrDetailChangesLastAfter.size() != hzCmcrDetailChangesQuery.size()) {
-            for (HzCmcrDetailChange hzCmcrDetailChangeQuery : hzCmcrDetailChangesQuery) {
-                boolean flag = false;
-                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter) {
-                    if (hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid().equals(hzCmcrDetailChange.getCmcrDetailSrcPuid())) {
-                        flag = true;
-                        break;
-                    }
-                }
-                if (!flag) {
+                //生成变更从数据
+                for (HzCmcrDetailChange hzCmcrDetailChangeQuery : hzCmcrDetailChangesQuery) {
                     HzCmcrDetailChange hzCmcrDetailChange = new HzCmcrDetailChange();
                     hzCmcrDetailChange.setCmcrDetailSrcPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcPuid());
                     hzCmcrDetailChange.setCmcrDetailSrcCfgMainUid(hzCmcrDetailChangeQuery.getCmcrDetailSrcCfgMainUid());
@@ -561,6 +841,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     hzCmcrDetailChange.setCmcrDetailSrcModelPuid(hzCmcrDetailChangeQuery.getCmcrDetailSrcModelPuid());
                     hzCmcrDetailChange.setCmcrDetailCgFeatureCode(hzCmcrDetailChangeQuery.getCmcrDetailCgFeatureCode());
                     hzCmcrDetailChange.setCmcrDetailCgFeatureName(hzCmcrDetailChangeQuery.getCmcrDetailCgFeatureName());
+                    hzCmcrDetailChange.setCmcrDetailSrcColorUid(hzCmcrDetailChangeQuery.getCmcrDetailSrcColorUid());
                     hzCmcrDetailChange.setCmcrDetailCgTitle(hzCmcrDetailChange.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChange.getCmcrDetailCgFeatureCode());
                     if (dynamicTitle.contains(hzCmcrDetailChange.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChange.getCmcrDetailCgFeatureCode())) {
                         hzCmcrDetailChange.setCmcrDetailCgIsColorful(1);
@@ -571,120 +852,135 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                 }
             }
         }
-//        //根据最近一次变更后主数据生成变更前主数据
-//        for (HzCmcrChange hzCmcrChange : hzCmcrChangesLastAfter) {
-//            hzCmcrChange.setCmcrCgVwoId(hzVwoInfo.getId());
-//        }
-//        //根据最近一次变更后从数据生成变更前从数据
-//        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesLastAfter) {
-//            hzCmcrDetailChange.setCmcrDetailCgVwoId(hzVwoInfo.getId());
-//        }
-
-
-        //根据源主数据生成变更后主数据
-
-        for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
-            HzCmcrChange hzCmcrChangeAfter = new HzCmcrChange();
-            //VWO号
-            hzCmcrChangeAfter.setCmcrCgVwoId(changeFromId);
-            //车身颜色代码
-            hzCmcrChangeAfter.setCmcrCgShellCode(hzCfg0ModelColor.getpModelShellOfColorfulModel());
-            //创建者
-            hzCmcrChangeAfter.setCmcrCgCreator(user.getLogin());
-            //主配置UID
-            hzCmcrChangeAfter.setCmcrSrcMainCfg(hzCfg0ModelColor.getpCfg0MainRecordOfMC());
-            //源数据UID
-            hzCmcrChangeAfter.setCmcrSrcPuid(hzCfg0ModelColor.getPuid());
-            //油漆车身总成
-            hzCmcrChangeAfter.setCmcrSrcModelShell(hzCfg0ModelColor.getpModelShellOfColorfulModel());
-            //颜色UID
-            hzCmcrChangeAfter.setCmcrSrcColorUid(hzCfg0ModelColor.getpColorUid());
-            //特性值的外键
-            hzCmcrChangeAfter.setCmcrSrcShellCfg0Puid(hzCfg0ModelColor.getpShellCfg0Puid());
-            //是否多色
-            hzCmcrChangeAfter.setCmcrSrcColorIsMultiply(hzCfg0ModelColor.getpColorIsMultiply());
-            //源创建时间
-            hzCmcrChangeAfter.setCmcrSrcCreateDate(hzCfg0ModelColor.getCmcrCreateDate());
-            //源创建人
-            hzCmcrChangeAfter.setCmcrSrcCreator(hzCfg0ModelColor.getCmcrCreator());
-            //源修改时间
-            hzCmcrChangeAfter.setCmcrSrcUpdateDate(hzCfg0ModelColor.getCmcrUpdateDate());
-            //源修改人
-            hzCmcrChangeAfter.setCmcrSrcUpdater(hzCfg0ModelColor.getCmcrUpdater());
-            //颜色车型代码
-            hzCmcrChangeAfter.setCmcrSrcCodeOfColorMod(hzCfg0ModelColor.getpCodeOfColorfulModel());
-            //颜色车型描述
-            hzCmcrChangeAfter.setCmcrSrcDescOfColorMod(hzCfg0ModelColor.getpDescOfColorfulModel());
-            //变更状态
-            hzCmcrChangeAfter.setCmcrChangeStatus(0);
-            hzCmcrChangesAfter.add(hzCmcrChangeAfter);
+    }
+    //根据源主数据生成变更后主数据
+    for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
+        HzCmcrChange hzCmcrChangeAfter = new HzCmcrChange();
+        //VWO号
+        hzCmcrChangeAfter.setCmcrCgVwoId(changeFromId);
+        //车身颜色代码
+        hzCmcrChangeAfter.setCmcrCgShellCode(hzCfg0ModelColor.getpModelShellOfColorfulModel());
+        //创建者
+        hzCmcrChangeAfter.setCmcrCgCreator(user.getLogin());
+        //主配置UID
+        hzCmcrChangeAfter.setCmcrSrcMainCfg(hzCfg0ModelColor.getpCfg0MainRecordOfMC());
+        //源数据UID
+        hzCmcrChangeAfter.setCmcrSrcPuid(hzCfg0ModelColor.getPuid());
+        //油漆车身总成
+        hzCmcrChangeAfter.setCmcrSrcModelShell(hzCfg0ModelColor.getpModelShellOfColorfulModel());
+        //颜色UID
+        hzCmcrChangeAfter.setCmcrSrcColorUid(hzCfg0ModelColor.getpColorUid());
+        //特性值的外键
+        hzCmcrChangeAfter.setCmcrSrcShellCfg0Puid(hzCfg0ModelColor.getpShellCfg0Puid());
+        //是否多色
+        hzCmcrChangeAfter.setCmcrSrcColorIsMultiply(hzCfg0ModelColor.getpColorIsMultiply());
+        //源创建时间
+        hzCmcrChangeAfter.setCmcrSrcCreateDate(hzCfg0ModelColor.getCmcrCreateDate());
+        //源创建人
+        hzCmcrChangeAfter.setCmcrSrcCreator(hzCfg0ModelColor.getCmcrCreator());
+        //源修改时间
+        hzCmcrChangeAfter.setCmcrSrcUpdateDate(hzCfg0ModelColor.getCmcrUpdateDate());
+        //源修改人
+        hzCmcrChangeAfter.setCmcrSrcUpdater(hzCfg0ModelColor.getCmcrUpdater());
+        //颜色车型代码
+        hzCmcrChangeAfter.setCmcrSrcCodeOfColorMod(hzCfg0ModelColor.getpCodeOfColorfulModel());
+        //颜色车型描述
+        hzCmcrChangeAfter.setCmcrSrcDescOfColorMod(hzCfg0ModelColor.getpDescOfColorfulModel());
+        //变更状态
+        hzCmcrChangeAfter.setCmcrChangeStatus(0);
+        hzCmcrChangesAfter.add(hzCmcrChangeAfter);
+    }
+    Map<String,Long> changeAfterId = new HashMap<>();
+    for(HzCmcrChange hzCmcrChange : hzCmcrChangesAfter){
+        if(hzCmcrChange.getCmcrChangeStatus()!=1) {
+            changeAfterId.put(hzCmcrChange.getCmcrSrcPuid(), hzCmcrChange.getCmcrCgId());
         }
-        //根据源从数据生成变更后从数据
+    }
+    //根据源从数据生成变更后从数据
+    for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
+        HzCmcrDetailChange hzCmcrDetailChangeAfter = new HzCmcrDetailChange();
+        //主数据ID
+        hzCmcrDetailChangeAfter.setCmcrCgChangeId(changeAfterId.get(hzCfg0ModelColorDetail.getModelUid()));
+        //源数据PUID
+        hzCmcrDetailChangeAfter.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
+        //特性
+        hzCmcrDetailChangeAfter.setCmcrDetailSrcCfgUid(hzCfg0ModelColorDetail.getCfgUid());
+        //颜色外键
+        hzCmcrDetailChangeAfter.setCmcrDetailSrcColorUid(hzCfg0ModelColorDetail.getColorUid());
+        //主配置UID
+        hzCmcrDetailChangeAfter.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
+        //vwo主键
+        hzCmcrDetailChangeAfter.setCmcrDetailCgVwoId(changeFromId);
+        //源数据的创建时间
+        hzCmcrDetailChangeAfter.setCmcrDetailSrcCreateDate(hzCfg0ModelColorDetail.getCreateDate());
+        //源数据的修改时间
+        hzCmcrDetailChangeAfter.setCmcrDetailSrcModifyDate(hzCfg0ModelColorDetail.getModifyDate());
+        //源数据的创建者
+        hzCmcrDetailChangeAfter.setCmcrDetailCgCreator(hzCfg0ModelColorDetail.getCreator());
+        //源数据的修改者
+        hzCmcrDetailChangeAfter.setCmcrDetailCgUpdater(hzCfg0ModelColorDetail.getModifier());
+        //配色方案主数据PUID
+        hzCmcrDetailChangeAfter.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
+        if (hzCfg0ModelColorDetail.getCfgUid() != null) {
+            HzCfg0OptionFamily hzCfg0OptionFamilyQuery = new HzCfg0OptionFamily();
+            hzCfg0OptionFamilyQuery.setPuid(hzCfg0ModelColorDetail.getCfgUid());
+            HzCfg0OptionFamily hzCfg0OptionFamily = hzCfg0OptionFamilyDao.selectByPrimaryKey(hzCfg0OptionFamilyQuery);
+            //特性代码
+            hzCmcrDetailChangeAfter.setCmcrDetailCgFeatureCode(hzCfg0OptionFamily.getpOptionfamilyName());
+            //特性名
+            hzCmcrDetailChangeAfter.setCmcrDetailCgFeatureName(hzCfg0OptionFamily.getpOptionfamilyDesc());
 
-        for (HzCfg0ModelColorDetail hzCfg0ModelColorDetail : hzCfg0ModelColorDetails) {
-            HzCmcrDetailChange hzCmcrDetailChangeAfter = new HzCmcrDetailChange();
-            //源数据PUID
-            hzCmcrDetailChangeAfter.setCmcrDetailSrcPuid(hzCfg0ModelColorDetail.getPuid());
-            //特性
-            hzCmcrDetailChangeAfter.setCmcrDetailSrcCfgUid(hzCfg0ModelColorDetail.getCfgUid());
-            //颜色外键
-            hzCmcrDetailChangeAfter.setCmcrDetailSrcColorUid(hzCfg0ModelColorDetail.getColorUid());
-            //主配置UID
-            hzCmcrDetailChangeAfter.setCmcrDetailSrcCfgMainUid(hzCfg0ModelColorDetail.getCfgMainUid());
-            //vwo主键
-            hzCmcrDetailChangeAfter.setCmcrDetailCgVwoId(changeFromId);
-            //源数据的创建时间
-            hzCmcrDetailChangeAfter.setCmcrDetailSrcCreateDate(hzCfg0ModelColorDetail.getCreateDate());
-            //源数据的修改时间
-            hzCmcrDetailChangeAfter.setCmcrDetailSrcModifyDate(hzCfg0ModelColorDetail.getModifyDate());
-            //源数据的创建者
-            hzCmcrDetailChangeAfter.setCmcrDetailCgCreator(hzCfg0ModelColorDetail.getCreator());
-            //源数据的修改者
-            hzCmcrDetailChangeAfter.setCmcrDetailCgUpdater(hzCfg0ModelColorDetail.getModifier());
-            //配色方案主数据PUID
-            hzCmcrDetailChangeAfter.setCmcrDetailSrcModelPuid(hzCfg0ModelColorDetail.getModelUid());
-            if (hzCfg0ModelColorDetail.getCfgUid() != null) {
-                HzCfg0OptionFamily hzCfg0OptionFamilyQuery = new HzCfg0OptionFamily();
-                hzCfg0OptionFamilyQuery.setPuid(hzCfg0ModelColorDetail.getCfgUid());
-                HzCfg0OptionFamily hzCfg0OptionFamily = hzCfg0OptionFamilyDao.selectByPrimaryKey(hzCfg0OptionFamilyQuery);
-                //特性代码
-                hzCmcrDetailChangeAfter.setCmcrDetailCgFeatureCode(hzCfg0OptionFamily.getpOptionfamilyName());
-                //特性名
-                hzCmcrDetailChangeAfter.setCmcrDetailCgFeatureName(hzCfg0OptionFamily.getpOptionfamilyDesc());
+            hzCmcrDetailChangeAfter.setCmcrDetailCgTitle(hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureCode());
+            if (dynamicTitle.contains(hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureCode())) {
+                hzCmcrDetailChangeAfter.setCmcrDetailCgIsColorful(1);
+            } else {
+                hzCmcrDetailChangeAfter.setCmcrDetailCgIsColorful(0);
+            }
+        }
+        //颜色代码
+        hzCmcrDetailChangeAfter.setCmcrDetailCgColorCode(hzCfg0ModelColorDetail.getpColorCode());
+        //颜色名称
+        hzCmcrDetailChangeAfter.setCmcrDetailCgColorName(hzCfg0ModelColorDetail.getpColorName());
 
-                hzCmcrDetailChangeAfter.setCmcrDetailCgTitle(hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureCode());
-                if (dynamicTitle.contains(hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureName() + "<br>" + hzCmcrDetailChangeAfter.getCmcrDetailCgFeatureCode())) {
-                    hzCmcrDetailChangeAfter.setCmcrDetailCgIsColorful(1);
-                } else {
-                    hzCmcrDetailChangeAfter.setCmcrDetailCgIsColorful(0);
+        hzCmcrDetailChangesAfter.add(hzCmcrDetailChangeAfter);
+    }
+
+
+    //跟新数据库
+    try {
+        //跟新源主数据
+        if (hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors) <= 0) {
+            result.put("status", false);
+            result.put("msg", "变更源主数据失败");
+        }
+        //跟新变更后主数据
+        if (hzCmcrChangeDao.insertAfterList(hzCmcrChangesAfter) != hzCmcrChangesAfter.size()) {
+            result.put("status", false);
+            result.put("msg", "变更后主数据失败");
+        }
+        List<HzCmcrChange> hzCmcrChanges = new ArrayList<>();
+        if(firstFlag){
+            List<HzCmcrChange> hzCmcrChangesBefor2= hzCmcrChangeDao.doQueryCmcrChangeBefor(changeFromId);
+            hzCmcrChanges.addAll(hzCmcrChangesBefor2);
+        }
+        List<HzCmcrChange> hzCmcrChangesAfter2 = hzCmcrChangeDao.doQueryCmcrChangeAfter(changeFromId);
+        hzCmcrChanges.addAll(hzCmcrChangesAfter2);
+        for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesAfter){
+            for(HzCmcrChange hzCmcrChange :hzCmcrChanges){
+                if(hzCmcrChange.getCmcrSrcPuid().equals(hzCmcrDetailChange.getCmcrDetailSrcModelPuid())&&hzCmcrChange.getCmcrChangeStatus()==0&&hzCmcrDetailChange.getCmcrDetailSrcCfgUid()!=null){
+                        hzCmcrDetailChange.setCmcrCgChangeId(hzCmcrChange.getCmcrCgId());
+                        break;
+                }else if(hzCmcrChange.getCmcrSrcPuid().equals(hzCmcrDetailChange.getCmcrDetailSrcModelPuid())&&hzCmcrChange.getCmcrChangeStatus()==1&&hzCmcrDetailChange.getCmcrDetailSrcCfgUid()==null){
+                        hzCmcrDetailChange.setCmcrCgChangeId(hzCmcrChange.getCmcrCgId());
+                        break;
                 }
             }
-            //颜色代码
-            hzCmcrDetailChangeAfter.setCmcrDetailCgColorCode(hzCfg0ModelColorDetail.getpColorCode());
-            //颜色名称
-            hzCmcrDetailChangeAfter.setCmcrDetailCgColorName(hzCfg0ModelColorDetail.getpColorName());
-
-            hzCmcrDetailChangesAfter.add(hzCmcrDetailChangeAfter);
         }
-
-
-        //跟新数据库
-        try {
-            //跟新源主数据
-            if (hzCfg0ModelColorDao.updateListData(hzCfg0ModelColors) <= 0) {
-                result.put("status", false);
-                result.put("msg", "变更源主数据失败");
-            }
-            //跟新变更后主数据
-            if (hzCmcrChangeDao.insertAfterList(hzCmcrChangesAfter) != hzCmcrChangesAfter.size()) {
-                result.put("status", false);
-                result.put("msg", "变更后主数据失败");
-            }
-            //跟新变更后从数据
-            if (hzCmcrDetailChangeDao.insertDetailAfterList(hzCmcrDetailChangesAfter) != hzCmcrDetailChangesAfter.size()) {
-                result.put("status", false);
-                result.put("msg", "变更后从数据失败");
-            }
+        //跟新变更后从数据
+        if (hzCmcrDetailChangeDao.insertDetailAfterList(hzCmcrDetailChangesAfter) != hzCmcrDetailChangesAfter.size()) {
+            result.put("status", false);
+            result.put("msg", "变更后从数据失败");
+        }
 //            //跟新变更前主数据
 //            if (hzCmcrChangesLastAfter != null && hzCmcrChangesLastAfter.size() != 0) {
 //                if (hzCmcrChangeDao.insertBeforeList(hzCmcrChangesLastAfter) != hzCmcrChangesLastAfter.size()) {
@@ -699,17 +995,17 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                    result.put("msg", "跟变更前从数据失败");
 //                }
 //            }
-        } catch (Exception e) {
-            result.put("status", false);
-            result.put("msg", e.getMessage());
-        }
-        //新增VWO数据
-
-        if (result.get("status") == null) {
-            result.put("status", true);
-        }
-        return result;
+    } catch (Exception e) {
+        result.put("status", false);
+        result.put("msg", e.getMessage());
     }
+    //新增VWO数据
+
+    if (result.get("status") == null) {
+        result.put("status", true);
+    }
+    return result;
+}
     //全配置BOM一级清单进入VWO
 
 
@@ -1873,6 +2169,207 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         return hzCmcrChangeDao.doQueryCmcrDetailChangeBeforAndAfter(hzCmcrChange);
     }
 
+//    /**
+//     * 查询变更前后从数据
+//     *
+//     * @param cmcrDetailSrcPuidList
+//     * @param cmcrCgVwoId
+//     * @return
+//     */
+//    public List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<String> cmcrDetailSrcPuidList, Long cmcrCgVwoId) {
+//        List<HzCmcrDetailChange> hzCmcrDetailChanges = new ArrayList<HzCmcrDetailChange>();
+//        for (String cmcrDetailSrcPuid : cmcrDetailSrcPuidList) {
+//            HzCmcrDetailChange hzCmcrDetailChange = new HzCmcrDetailChange();
+//            hzCmcrDetailChange.setCmcrDetailSrcPuid(cmcrDetailSrcPuid);
+//            hzCmcrDetailChange.setCmcrDetailCgVwoId(cmcrCgVwoId);
+//            hzCmcrDetailChanges.add(hzCmcrDetailChange);
+//        }
+//        return hzCmcrDetailChangeDao.doQueryCmcrDetailChangBeforAndAfter(hzCmcrDetailChanges);
+//    }
+//
+//    public void doQueryCmcrDetailChangBefor(Map<String, Object> map, Long vwoId) {
+//        //无序变更前后数据
+//        List<HzCmcrDetailChange> hzCmcrDetailChangeListBefor = new ArrayList<>();
+//        List<HzCmcrDetailChange> hzCmcrDetailChangeListAfter = new ArrayList<HzCmcrDetailChange>();
+//        Set<String> titleSet = new LinkedHashSet<>();
+//
+//
+//        List<HzCmcrChange> hzCmcrChangeListBefor = null;
+//        List<HzCmcrChange> hzCmcrChangeListAfter = null;
+//        //查询变更前主数据（vwo号小于变更后的vwo号）
+//        hzCmcrChangeListBefor = hzCmcrChangeDao.doQueryCmcrChangeBefor(vwoId);
+//        if (hzCmcrChangeListBefor == null || hzCmcrChangeListBefor.size() == 0) {
+////            //查询变更前主数据
+////            hzCmcrChangeListBefor = hzCmcrChangeDao.doQueryCmcrChangeBeforFirst(vwoId);
+////            //查询变更后主数据
+////            hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfterFirst(vwoId);
+//            return;
+//        } else {
+//            //查询变更后主数据
+//            hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfter(vwoId);
+//        }
+//
+//        for(int i=0;i<hzCmcrChangeListBefor.size();i++) {
+//            List<HzCmcrDetailChange> beforChange = new ArrayList<>();
+//            List<HzCmcrDetailChange> afterChange = new ArrayList<HzCmcrDetailChange>();
+//            //查询变更前从数据（vwo号小于变更后的vwo号）
+//            beforChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangBefor(hzCmcrChangeListBefor.get(i));
+//            //查不到则是第一次变更，vwo号相同
+//            if (beforChange == null || beforChange.size() == 0) {
+//                //查询变更前从数据
+//                beforChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(hzCmcrChangeListBefor.get(i));
+//                //查询变更后从数据
+//                afterChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirstAfter(hzCmcrChangeListAfter.get(i));
+//            } else {
+//                //查询变更后从数据
+//                afterChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangAfter(hzCmcrChangeListAfter.get(i));
+//            }
+//            for(HzCmcrDetailChange hzCmcrDetailChange : beforChange){
+//                hzCmcrDetailChangeListBefor.add(hzCmcrDetailChange);
+//            }
+//            for(HzCmcrDetailChange  hzCmcrDetailChange : afterChange){
+//                hzCmcrDetailChangeListAfter.add(hzCmcrDetailChange);
+//            }
+//        }
+//        //srcPuid为key的变更前从数据
+//        Map<String, List<HzCmcrDetailChange>> srcPuidBeforMap = new HashMap<String, List<HzCmcrDetailChange>>();
+//        //srcPuid为key的变更后从数据
+//        Map<String, List<HzCmcrDetailChange>> srcPuidAfterMap = new HashMap<String, List<HzCmcrDetailChange>>();
+//
+//        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListBefor) {
+//            //将变更前所有title放入set
+//            if(hzCmcrDetailChange.getCmcrDetailCgIsColorful()==null||hzCmcrDetailChange.getCmcrDetailCgIsColorful()==0) {
+//                continue;
+//            }
+//            titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+//            //根据源主数据将变更前从数据分开
+//            if (srcPuidBeforMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()) == null) {
+//                srcPuidBeforMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(), new ArrayList<HzCmcrDetailChange>());
+//            }
+//            srcPuidBeforMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()).add(hzCmcrDetailChange);
+//        }
+//        for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangeListAfter) {
+//            //将变更后所有title放入set
+//            if(hzCmcrDetailChange.getCmcrDetailCgIsColorful()==null||hzCmcrDetailChange.getCmcrDetailCgIsColorful()==0) {
+//                continue;
+//            }
+//            titleSet.add(hzCmcrDetailChange.getCmcrDetailCgTitle());
+//            //根据源主数据将变更后从数据分开
+//            if (srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()) == null) {
+//                srcPuidAfterMap.put(hzCmcrDetailChange.getCmcrDetailSrcModelPuid(), new ArrayList<HzCmcrDetailChange>());
+//            }
+//            srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()).add(hzCmcrDetailChange);
+//        }
+//
+//
+//        //titel数据Map
+////        List<Map<String, String>> result = new ArrayList<>();
+//
+////        Map<String, List<String>> titleMap = new LinkedHashMap<>();
+//
+////        titleMap.put("codeOfColorModel", new ArrayList<String>());
+////        titleMap.put("descOfColorModel", new ArrayList<String>());
+////        titleMap.put("modelShell", new ArrayList<String>());
+////        for (int i = 0; i < hzCmcrChangeListBefor.size(); i++) {
+////            titleMap.get("codeOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
+////            titleMap.get("descOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
+////            titleMap.get("modelShell").add(hzCmcrChangeListBefor.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
+////            titleMap.get("codeOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod());
+////            titleMap.get("descOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
+////            titleMap.get("modelShell").add(hzCmcrChangeListAfter.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrCgShellCode());
+////        }
+////
+////        Iterator<String> iterator = titleSet.iterator();
+////        int titleNum = 0;
+////        while (iterator.hasNext()) {
+////            String titleKey = "s" + titleNum;
+////            titleNum++;
+////            String title = iterator.next();
+////            titleMap.put(titleKey, new ArrayList<String>());
+////            for (int j = 0; j < hzCmcrChangeListAfter.size(); j++) {
+////                String srcPuid = hzCmcrChangeListBefor.get(j).getCmcrSrcPuid();
+////                List<HzCmcrDetailChange> hzCmcrDetailChangesBefor = srcPuidBeforMap.get(srcPuid);
+////                boolean beforTitleFlag = false;
+////                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesBefor) {
+////                    if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
+////                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode() == null ? "-" : hzCmcrDetailChange.getColorCode());
+////                        beforTitleFlag = true;
+////                        break;
+////                    }
+////                }
+////                if (!beforTitleFlag) {
+////                    titleMap.get(titleKey).add("-");
+////                }
+////                boolean afterTitleFlag = false;
+////                List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = srcPuidAfterMap.get(srcPuid);
+////                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesAfter) {
+////                    if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
+////                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode());
+////                        afterTitleFlag = true;
+////                        break;
+////                    }
+////                }
+////                if (!afterTitleFlag) {
+////                    titleMap.get(titleKey).add("-");
+////                }
+////            }
+////        }
+//
+//        List<Map<String,String>> result = new ArrayList<>();
+//        for(int i=0;i<hzCmcrChangeListAfter.size();i++){
+//            //变更前行
+//            Map<String,String> beforMap = new HashMap<>();
+//            //变更后行
+//            Map<String,String> afterMap = new HashMap<>();
+//            //变更前主数据
+//            beforMap.put("codeOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null ? "" : hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
+//            beforMap.put("descOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod() == null ? "" : hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
+//            beforMap.put("modelShell",hzCmcrChangeListBefor.get(i).getCmcrCgShellCode() == null ? "" : hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
+//            //变更后主数据
+//            afterMap.put("codeOfColorModel",hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod());
+//            afterMap.put("descOfColorModel",hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
+//            afterMap.put("modelShell",hzCmcrChangeListAfter.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrCgShellCode());
+//            //根据变更前主数据id从srcPuidBeforMap中获取变更前从数据
+//            String srcPuid = hzCmcrChangeListAfter.get(i).getCmcrSrcPuid();
+//            List<HzCmcrDetailChange> hzCmcrDetailChangesBefor = srcPuidBeforMap.get(srcPuid);
+//            List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = srcPuidAfterMap.get(srcPuid);
+//
+//            Iterator<String> iterator = titleSet.iterator();
+//            int titleNum = 0;
+//            while (iterator.hasNext()){
+//                String title = iterator.next();
+//                boolean beforTitleFlag = false;
+//                for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesBefor ){
+//                    if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
+//                        beforMap.put("s" + titleNum, hzCmcrDetailChange.getColorCode() == null ? "-" : hzCmcrDetailChange.getColorCode());
+//                        beforTitleFlag = true;
+//                        break;
+//                    }
+//                }
+//                if(!beforTitleFlag){
+//                    beforMap.put("s" + titleNum,"-");
+//                }
+//
+//                boolean afterTitleFlag = false;
+//                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesAfter) {
+//                    if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
+//                        afterMap.put("s" + titleNum, hzCmcrDetailChange.getColorCode() == null ? "-" : hzCmcrDetailChange.getColorCode());
+//                        afterTitleFlag = true;
+//                        break;
+//                    }
+//                }
+//                if(!afterTitleFlag){
+//                    afterMap.put("s" + titleNum,"-");
+//                }
+//                titleNum++;
+//            }
+//            result.add(beforMap);
+//            result.add(afterMap);
+//        }
+//        map.put("titleSet", titleSet);
+//        map.put("result", result);
+//    }
+
     /**
      * 查询变更前后从数据
      *
@@ -1892,49 +2389,49 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     }
 
     public void doQueryCmcrDetailChangBefor(Map<String, Object> map, Long vwoId) {
-        //无序变更前后数据
-        List<HzCmcrDetailChange> hzCmcrDetailChangeListBefor = new ArrayList<>();
-        List<HzCmcrDetailChange> hzCmcrDetailChangeListAfter = new ArrayList<HzCmcrDetailChange>();
-        Set<String> titleSet = new LinkedHashSet<>();
-
-
+        //变更前后主数据
         List<HzCmcrChange> hzCmcrChangeListBefor = null;
         List<HzCmcrChange> hzCmcrChangeListAfter = null;
+        //变更前后从数据
+        List<HzCmcrDetailChange> hzCmcrDetailChangeListBefor = new ArrayList<>();
+        List<HzCmcrDetailChange> hzCmcrDetailChangeListAfter = new ArrayList<HzCmcrDetailChange>();
+
+        Set<String> titleSet = new LinkedHashSet<>();
+
         //查询变更前主数据（vwo号小于变更后的vwo号）
         hzCmcrChangeListBefor = hzCmcrChangeDao.doQueryCmcrChangeBefor(vwoId);
         if (hzCmcrChangeListBefor == null || hzCmcrChangeListBefor.size() == 0) {
-//            //查询变更前主数据
-//            hzCmcrChangeListBefor = hzCmcrChangeDao.doQueryCmcrChangeBeforFirst(vwoId);
-//            //查询变更后主数据
-//            hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfterFirst(vwoId);
             return;
         } else {
             //查询变更后主数据
             hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfter(vwoId);
         }
 
-        for(int i=0;i<hzCmcrChangeListBefor.size();i++) {
-            List<HzCmcrDetailChange> beforChange = new ArrayList<>();
-            List<HzCmcrDetailChange> afterChange = new ArrayList<HzCmcrDetailChange>();
-            //查询变更前从数据（vwo号小于变更后的vwo号）
-            beforChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangBefor(hzCmcrChangeListBefor.get(i));
-            //查不到则是第一次变更，vwo号相同
-            if (beforChange == null || beforChange.size() == 0) {
-                //查询变更前从数据
-                beforChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(hzCmcrChangeListBefor.get(i));
-                //查询变更后从数据
-                afterChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirstAfter(hzCmcrChangeListAfter.get(i));
-            } else {
-                //查询变更后从数据
-                afterChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangAfter(hzCmcrChangeListAfter.get(i));
-            }
-            for(HzCmcrDetailChange hzCmcrDetailChange : beforChange){
-                hzCmcrDetailChangeListBefor.add(hzCmcrDetailChange);
-            }
-            for(HzCmcrDetailChange  hzCmcrDetailChange : afterChange){
-                hzCmcrDetailChangeListAfter.add(hzCmcrDetailChange);
-            }
-        }
+        //查询变更前后从数据
+        hzCmcrDetailChangeListBefor = hzCmcrDetailChangeDao.doQueryCmcrDetailByMainChange(hzCmcrChangeListBefor);
+        hzCmcrDetailChangeListAfter = hzCmcrDetailChangeDao.doQueryCmcrDetailByMainChange(hzCmcrChangeListAfter);
+//        for(int i=0;i<hzCmcrChangeListBefor.size();i++) {
+//            List<HzCmcrDetailChange> beforChange = new ArrayList<>();
+//            List<HzCmcrDetailChange> afterChange = new ArrayList<HzCmcrDetailChange>();
+//            //查询变更前从数据（vwo号小于变更后的vwo号）
+//            beforChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangBefor(hzCmcrChangeListBefor.get(i));
+//            //查不到则是第一次变更，vwo号相同
+//            if (beforChange == null || beforChange.size() == 0) {
+//                //查询变更前从数据
+//                beforChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirst(hzCmcrChangeListBefor.get(i));
+//                //查询变更后从数据
+//                afterChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangFirstAfter(hzCmcrChangeListAfter.get(i));
+//            } else {
+//                //查询变更后从数据
+//                afterChange = hzCmcrDetailChangeDao.doQueryCmcrDetailChangAfter(hzCmcrChangeListAfter.get(i));
+//            }
+//            for(HzCmcrDetailChange hzCmcrDetailChange : beforChange){
+//                hzCmcrDetailChangeListBefor.add(hzCmcrDetailChange);
+//            }
+//            for(HzCmcrDetailChange  hzCmcrDetailChange : afterChange){
+//                hzCmcrDetailChangeListAfter.add(hzCmcrDetailChange);
+//            }
+//        }
         //srcPuid为key的变更前从数据
         Map<String, List<HzCmcrDetailChange>> srcPuidBeforMap = new HashMap<String, List<HzCmcrDetailChange>>();
         //srcPuid为key的变更后从数据
@@ -1964,60 +2461,6 @@ public class HzVwoManagerService implements IHzVWOManagerService {
             }
             srcPuidAfterMap.get(hzCmcrDetailChange.getCmcrDetailSrcModelPuid()).add(hzCmcrDetailChange);
         }
-
-
-        //titel数据Map
-//        List<Map<String, String>> result = new ArrayList<>();
-
-//        Map<String, List<String>> titleMap = new LinkedHashMap<>();
-
-//        titleMap.put("codeOfColorModel", new ArrayList<String>());
-//        titleMap.put("descOfColorModel", new ArrayList<String>());
-//        titleMap.put("modelShell", new ArrayList<String>());
-//        for (int i = 0; i < hzCmcrChangeListBefor.size(); i++) {
-//            titleMap.get("codeOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
-//            titleMap.get("descOfColorModel").add(hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
-//            titleMap.get("modelShell").add(hzCmcrChangeListBefor.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
-//            titleMap.get("codeOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod());
-//            titleMap.get("descOfColorModel").add(hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
-//            titleMap.get("modelShell").add(hzCmcrChangeListAfter.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrCgShellCode());
-//        }
-//
-//        Iterator<String> iterator = titleSet.iterator();
-//        int titleNum = 0;
-//        while (iterator.hasNext()) {
-//            String titleKey = "s" + titleNum;
-//            titleNum++;
-//            String title = iterator.next();
-//            titleMap.put(titleKey, new ArrayList<String>());
-//            for (int j = 0; j < hzCmcrChangeListAfter.size(); j++) {
-//                String srcPuid = hzCmcrChangeListBefor.get(j).getCmcrSrcPuid();
-//                List<HzCmcrDetailChange> hzCmcrDetailChangesBefor = srcPuidBeforMap.get(srcPuid);
-//                boolean beforTitleFlag = false;
-//                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesBefor) {
-//                    if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
-//                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode() == null ? "-" : hzCmcrDetailChange.getColorCode());
-//                        beforTitleFlag = true;
-//                        break;
-//                    }
-//                }
-//                if (!beforTitleFlag) {
-//                    titleMap.get(titleKey).add("-");
-//                }
-//                boolean afterTitleFlag = false;
-//                List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = srcPuidAfterMap.get(srcPuid);
-//                for (HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChangesAfter) {
-//                    if (title.equals(hzCmcrDetailChange.getCmcrDetailCgTitle())) {
-//                        titleMap.get(titleKey).add(hzCmcrDetailChange.getColorCode());
-//                        afterTitleFlag = true;
-//                        break;
-//                    }
-//                }
-//                if (!afterTitleFlag) {
-//                    titleMap.get(titleKey).add("-");
-//                }
-//            }
-//        }
 
         List<Map<String,String>> result = new ArrayList<>();
         for(int i=0;i<hzCmcrChangeListAfter.size();i++){
@@ -2072,5 +2515,132 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         }
         map.put("titleSet", titleSet);
         map.put("result", result);
+    }
+
+    /**************************衍生物料变更描述表单***************************/
+    @Override
+    public Map<String, Object> getMaterielFeatureTable(Long formId,String projectUid) {
+        //总数据
+        Map<String, Object> map = new HashMap<String, Object>();
+        //列数据
+        Set<String> titleSet = new LinkedHashSet<>();
+        //行数据
+        List<Map<String,String>> result = new ArrayList<>();
+
+        //工厂MAP
+        Map<String,HzFactory> factoryMap = new HashMap<>();
+        //超级物料
+        HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+
+
+        //变更前主数据
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeansBefor = null;
+        //变更前从数据
+        List<HzDMDetailChangeBean> hzDMDetailChangeBeansBefor = null;
+        //变更后主数据
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeansAfter = null;
+        //变更后从数据
+        List<HzDMDetailChangeBean> hzDMDetailChangeBeansAfter = null;
+
+        /********查询变更前后主从数据*********/
+        //根据变更表单查询最近一次变更主数据
+        hzDMBasicChangeBeansBefor = hzDMBasicChangeDao.selectBefor(formId);
+        if(hzDMBasicChangeBeansBefor!=null&&hzDMBasicChangeBeansBefor.size()!=0){
+            //根据最近一次变更主数据查询变更从数据
+            hzDMDetailChangeBeansBefor = hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeansBefor);
+        }
+        //根据变更表单id查询变更后主数据
+        hzDMBasicChangeBeansAfter = hzDMBasicChangeDao.selectAfter(formId);
+        //根据变更后主数据查询变更后从数据
+        hzDMDetailChangeBeansAfter =hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeansAfter);
+
+        /******获取列*******/
+        //变更前
+        if(hzDMDetailChangeBeansBefor!=null&&hzDMDetailChangeBeansBefor.size()!=0){
+            for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansBefor){
+                titleSet.add(hzDMDetailChangeBean.getTitle());
+            }
+        }
+        //变更后
+        for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansAfter){
+            titleSet.add(hzDMDetailChangeBean.getTitle());
+        }
+        /******整理变更前后主数据*******/
+        for(int i=0;i<hzDMBasicChangeBeansAfter.size();i++){
+            Map<String,String> basicBefor = new HashMap<>();
+            Map<String,String> basicAfter= new HashMap<>();
+            if(hzDMBasicChangeBeansBefor.size()!=0&&hzDMBasicChangeBeansAfter!=null){
+                HzDMBasicChangeBean hzDMBasicChangeBeanBefor = hzDMBasicChangeBeansBefor.get(i);
+                HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBeanBefor.getDmbModelUid(),hzDMBasicChangeBeanBefor.getDmbColorModelUid());
+                basicBefor.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+                if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
+                    HzFactory factory = hzFactoryDAO.findFactory(hzCfg0ModelFeature.getFactoryCode(), null);
+                    factoryMap.put(hzCfg0ModelFeature.getFactoryCode(),factory);
+                }
+                basicBefor.put("factory",factoryMap.get(hzCfg0ModelFeature.getFactoryCode()).getpFactoryCode());
+                basicBefor.put("modeBasicDetailDesc",hzCfg0ModelFeature.getpFeatureCnDesc());
+                if (superMateriel != null) {
+                    basicBefor.put("superMateriel", superMateriel.getpMaterielCode());
+                } else {
+                    basicBefor.put("superMateriel", "");
+                }
+            }else {
+                basicBefor.put("modeBasicDetail","-");
+                basicBefor.put("factory","-");
+                basicBefor.put("modeBasicDetailDesc","-");
+                basicBefor.put("superMateriel","-");
+            }
+            HzDMBasicChangeBean hzDMBasicChangeBeanAfter = hzDMBasicChangeBeansAfter.get(i);
+            HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBeanAfter.getDmbModelUid(),hzDMBasicChangeBeanAfter.getDmbColorModelUid());
+            basicAfter.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+            if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
+                HzFactory factory = hzFactoryDAO.findFactory(hzCfg0ModelFeature.getFactoryCode(), null);
+                factoryMap.put(hzCfg0ModelFeature.getFactoryCode(),factory);
+            }
+            basicAfter.put("factory",factoryMap.get(hzCfg0ModelFeature.getFactoryCode()).getpFactoryCode());
+            basicAfter.put("modeBasicDetailDesc",hzCfg0ModelFeature.getpFeatureCnDesc());
+            if (superMateriel != null) {
+                basicAfter.put("superMateriel", superMateriel.getpMaterielCode());
+            } else {
+                basicAfter.put("superMateriel", "");
+            }
+            /**********整理变更前后从数据***********/
+            Iterator<String> iterator = titleSet.iterator();
+            int titleNum = 0;
+            while (iterator.hasNext()){
+                String title = iterator.next();
+                boolean beforTitleFlag = false;
+                if(hzDMDetailChangeBeansBefor!=null&&hzDMDetailChangeBeansBefor.size()!=0){
+                    for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansBefor){
+                        if (title.equals(hzDMDetailChangeBean.getTitle())) {
+                            basicBefor.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+                            beforTitleFlag = true;
+                            break;
+                        }
+                    }
+                }
+                if(!beforTitleFlag){
+                    basicBefor.put("s" + titleNum,"-");
+                }
+
+                boolean afterTitleFlag = false;
+                for (HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansAfter) {
+                    if (title.equals(hzDMDetailChangeBean.getTitle())) {
+                        basicAfter.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+                        afterTitleFlag = true;
+                        break;
+                    }
+                }
+                if(!afterTitleFlag){
+                    basicAfter.put("s" + titleNum,"-");
+                }
+                titleNum++;
+            }
+            result.add(basicBefor);
+            result.add(basicAfter);
+        }
+        map.put("titleSet",titleSet);
+        map.put("result",result);
+        return map;
     }
 }

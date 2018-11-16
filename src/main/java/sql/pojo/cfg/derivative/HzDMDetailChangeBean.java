@@ -2,6 +2,7 @@ package sql.pojo.cfg.derivative;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
+import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.Date;
@@ -92,6 +93,10 @@ public class HzDMDetailChangeBean {
      * 特性对象
      */
     private HzCfg0Record cfg0Record;
+
+    private Long dmbChangeBasicId;
+
+    private String title;
 
     public Long getId() {
         return id;
@@ -251,6 +256,22 @@ public class HzDMDetailChangeBean {
 
     public void setCfg0Record(HzCfg0Record cfg0Record) {
         this.cfg0Record = cfg0Record;
+    }
+
+    public Long getDmbChangeBasicId() {
+        return dmbChangeBasicId;
+    }
+
+    public void setDmbChangeBasicId(Long dmbChangeBasicId) {
+        this.dmbChangeBasicId = dmbChangeBasicId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void srcSetChange(HzDerivativeMaterielDetail hzDerivativeMaterielDetail) {

@@ -133,5 +133,5 @@ public class HzCmcrDetailChange {
     /**
      *变更主表ID
      */
-    private Integer cmcrCgChangeId;
+    private Long cmcrCgChangeId;
 }

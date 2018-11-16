@@ -4,6 +4,7 @@
  * Date: 2018/11/14
  * Time: 9:26
  */
+var dynamicTitle = [];
 var columnOfFeature1 = [
     {
         field: 'headDesc',
@@ -131,6 +132,17 @@ function skip(type) {
                 console.error("服务器错误:" + e.status);
             }
         })
+    } else if(type=="materieFeature"){
+        $.ajax({
+            url : "../vwo/getMaterielFeatureTable?formId="+6+"&projectUid="+getProjectUid(),
+            type : "POST",
+            success : function (result) {
+                MFInitTable(result);
+            },
+            error : function () {
+                
+            }
+        });
     }
 }
 
@@ -172,6 +184,69 @@ function initTable(data) {
         formId: "null",                       //需要定义formId，不定义的话会造成jQuery异常
         /**列信息，需要预先定义好*/
         columns: columnOfModelColor,
+
+    });
+    //加载成功时执行,渲染双行的
+    changeTableRendering("routingDaTable");
+}
+
+
+// function OnToTeXing() {
+//     window.Ewin.dialog({
+//         title: "添加",
+//         url:"../change/texing",
+//         gridId: "gridId",
+//         width: 950,
+//         height: 600
+//     })
+// }
+
+function MFInitTable(result){
+    var data = result.result;
+    var titleSet = result.titleSet;
+
+
+    var column = [];
+    column.push({field: 'modeBasicDetail', title: '基本信息代码'});
+    column.push({field: 'factory', title: '工厂'});
+    column.push({field: 'modeBasicDetailDesc', title: '基本信息'});
+    column.push({field: 'superMateriel', title: '超级物料'});
+    for (var i = 0; i < titleSet.length; i++) {
+        var josn = {
+            field: "s" + i,
+            title:
+                titleSet[i],
+            align:
+                'center',
+            valign:
+                'middle'
+        };
+        column.push(josn);
+    }
+
+
+
+
+
+
+
+    let $table = $("#routingDaTable");
+    $table.bootstrapTable('destroy');
+    $table.bootstrapTable({
+        // url: "getModelColorTable?vwoId=" + vwoId,
+        method: "get",
+        data: data,
+        cache: false,
+        height: 400,// $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 100,
+        width: $(window).width(),
+        showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+        showColumns: false,                  //是否显示所有的列
+        showRefresh: false,                  //是否显示刷新按钮
+        pagination: false,                   //是否显示分页（*）
+        clickToSelect: false,                // 单击某一行的时候选中某一条记录
+        formId: "null",                       //需要定义formId，不定义的话会造成jQuery异常
+        /**列信息，需要预先定义好*/
+        columns: column,
 
     });
     //加载成功时执行,渲染双行的
