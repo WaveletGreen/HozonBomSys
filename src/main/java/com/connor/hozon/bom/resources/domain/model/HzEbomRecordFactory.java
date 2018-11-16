@@ -2,13 +2,10 @@ package com.connor.hozon.bom.resources.domain.model;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -268,6 +265,11 @@ public class HzEbomRecordFactory {
 
     public static HzEbomRespDTO eplRecordToEbomRespDTO(HzEPLManageRecord record){
         HzEbomRespDTO respDTO   = new HzEbomRespDTO();
+        Integer is2Y = record.getIs2Y();
+        Integer hasChildren = record.getIsHas();
+        String lineIndex = record.getLineIndex();
+        String[] strings = HzBomSysFactory.getLevelAndRank(lineIndex, is2Y, hasChildren);
+        respDTO.setLevel(strings[0]);
         respDTO.setPuid(record.getPuid());
         respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
         respDTO.setLineId(record.getLineID());

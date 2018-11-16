@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by haozt on 2018/06/06
  */
-public class HzEbomRespDTO {
+public class HzEbomRespDTO extends BaseChangeRespDTO {
 
     private JSONArray jsonArray;
 

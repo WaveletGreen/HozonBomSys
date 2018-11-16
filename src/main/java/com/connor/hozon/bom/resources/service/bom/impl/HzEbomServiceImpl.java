@@ -25,7 +25,6 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
@@ -51,8 +50,6 @@ import sql.pojo.epl.HzEPLManageRecord;
 import sql.redis.SerializeUtil;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Created by haozt on 2018/06/06
@@ -1894,10 +1891,26 @@ public class HzEbomServiceImpl implements HzEbomService {
                 || null == reqDTO.getOrderId()){
             return WriteResultRespDTO.IllgalArgument();
         }
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
+        if(null == reqDTO.getOrderId()){
+            respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            respDTO.setErrMsg("请选择变更表单！");
+            return respDTO;
+        }
+        if(null == reqDTO.getAuditorId()){
+            respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            respDTO.setErrMsg("请选择审核人员！");
+            return respDTO;
+        }
+
         try {
             //获取申请人信息
             User user = UserInfo.getUser();
             Long applicantId = Long.valueOf(user.getId());
+
+            //表单id
+            Long orderId = reqDTO.getOrderId();
+
             //获取审核人信息
             Long auditorId = reqDTO.getAuditorId();
             //数据库表名
@@ -1909,9 +1922,19 @@ public class HzEbomServiceImpl implements HzEbomService {
             Map<String,Object> map = new HashMap<>();
 
             //查询EBOM表数据 保存历史记录
-            List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByPuids(reqDTO.getPuids(),reqDTO.getProjectId());
+            HzChangeDataDetailQuery query  = new HzChangeDataDetailQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuids(puids);
+            query.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
+            List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByPuids(query);
+            List<HzEPLManageRecord> afterRecords = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){
-                map.put("ebomAfter",records);
+                records.forEach(record -> {
+                    HzEPLManageRecord manageRecord = record;
+                    manageRecord.setOrderId(orderId);
+                    afterRecords.add(manageRecord);
+                });
+                map.put("ebomAfter",afterRecords);
             }
 
             //修改发起流程后状态值

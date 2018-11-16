@@ -8,7 +8,7 @@ import com.connor.hozon.bom.resources.domain.model.HzChangeOrderFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.service.change.HzChangeService;
+import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
@@ -24,8 +24,8 @@ import java.util.List;
  * @Date: 2018/11/12
  * @Description:
  */
-@Service("hzChangeService")
-public class HzChangeServiceImpl implements HzChangeService {
+@Service("hzChangeOrderService")
+public class HzChangeOrderServiceImpl implements HzChangeOrderService {
 
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;

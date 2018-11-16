@@ -25,25 +25,16 @@ public class DateUtil {
     }
 
     public static Date getToday() {
-        return trimTimestamp(new Date());
+        return new Date();
     }
 
-    public static Date trimTimestamp(Date dt) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(dt);
-        cal.set(11, 0);
-        cal.set(12, 0);
-        cal.set(13, 0);
-        cal.set(14, 0);
-        return cal.getTime();
-    }
 
     public static String formatDate(String format, Date dt) {
         if (dt == null) {
             return "";
         }
         if (StringUtils.isBlank(format)) {
-            format = "yyyy-MM-dd";
+            format = DEFAULT_PATTERN;
         }
         SimpleDateFormat fmt = new SimpleDateFormat(format);
         return fmt.format(dt);
@@ -112,7 +103,7 @@ public class DateUtil {
     }
 
     /**
-     * 字符串转换为默认格式(yyyy-MM-dd)日期对象
+     * 字符串转换为(yyyy-MM-dd)日期对象
      * @param date
      * @return
      * @throws Exception
@@ -120,6 +111,5 @@ public class DateUtil {
     public static Date parseDefaultDate(String date) {
         return parseDate(date, DEFAULT_PATTERN);
     }
-
 
 }
