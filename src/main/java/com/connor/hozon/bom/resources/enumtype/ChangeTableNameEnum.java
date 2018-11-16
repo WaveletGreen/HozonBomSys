@@ -9,6 +9,8 @@ public enum  ChangeTableNameEnum {
 
     HZ_EBOM_AFTER("HZ_EBOM_REOCRD_AFTER_CHANGE"),
     HZ_EBOM("HZ_BOM_LINE_RECORD"),
+    HZ_PBOM("HZ_PBOM_RECORD"),
+    HZ_PBOM_AFTER("HZ_PBOM_REOCRD_AFTER_CHANGE"),
     ;
 
     /**

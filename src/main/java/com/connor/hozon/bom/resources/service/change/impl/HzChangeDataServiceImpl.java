@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzChangeDataDetailRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeDataRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
@@ -8,9 +7,7 @@ import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.enumtype.TableNameToHyperLinkNameEnum;
-import com.connor.hozon.bom.resources.enumtype.TestServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.impl.HzEbomRecordDAOImpl;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
 import com.connor.hozon.bom.resources.util.ListUtil;

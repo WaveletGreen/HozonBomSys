@@ -406,7 +406,7 @@ public class HzPbomController extends BaseController {
 
 
     /**
-     * EBOM发起变更数据到变更单
+     * PBOM发起变更数据到变更单
      * @param reqDTO
      * @param response
      */
