@@ -77,6 +77,7 @@
                 var zTree = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.zTree;
                 var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
                 $.post($("#groupForm",window.top.document).attr('action'),$("#groupForm",window.top.document).serialize(),function(e){
+                    getActiveTab().undead();
                     if(e.result){
                         $('.modal-dialog', window.top.document).parent('div').remove()
                         $('body', window.top.document).find('.modal-backdrop').remove();
