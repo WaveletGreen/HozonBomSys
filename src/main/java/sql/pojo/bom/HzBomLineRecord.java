@@ -1,11 +1,11 @@
 package sql.pojo.bom;
 
-import sql.pojo.BasePOJO;
+import sql.pojo.BaseChangePOJO;
 
 import java.util.Date;
 import java.util.Objects;
 
-public class HzBomLineRecord extends BasePOJO {
+public class HzBomLineRecord extends BaseChangePOJO {
 
     private Long id;
     /**
@@ -224,15 +224,7 @@ public class HzBomLineRecord extends BasePOJO {
      * 针对二级配色方案对应的颜色值的UID
      */
     private String colorUid;
-    /**
-     * 数据库表名
-     */
-    private String tableName;
 
-    /**
-     * 变更单id
-     */
-    private Integer orderId;
 
     private String sortNum;
 
@@ -247,16 +239,6 @@ public class HzBomLineRecord extends BasePOJO {
      * 单车用量
      */
     private byte[] singleVehDosage;
-
-    /**
-     * 生效时间
-     */
-    private Date effectTime;
-
-    /**
-     * 版本
-     */
-    private String revision;
 
     public byte[] getSingleVehDosage() {
         return singleVehDosage;
@@ -316,16 +298,6 @@ public class HzBomLineRecord extends BasePOJO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
     }
 
     public String getpBuyEngineer() {
@@ -836,28 +808,4 @@ public class HzBomLineRecord extends BasePOJO {
         this.colorUid = colorUid;
     }
 
-
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
-    public Date getEffectTime() {
-        return effectTime;
-    }
-
-    public void setEffectTime(Date effectTime) {
-        this.effectTime = effectTime;
-    }
-
-    public String getRevision() {
-        return revision;
-    }
-
-    public void setRevision(String revision) {
-        this.revision = revision;
-    }
 }

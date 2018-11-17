@@ -134,4 +134,5 @@ public interface HzEbomRecordDAO {
      */
     List<HzEPLManageRecord> getEbomRecordsByPuids(HzChangeDataDetailQuery query);
 
+    HzEPLManageRecord getEBomRecordByPuidAndRevision(HzChangeDataDetailQuery query);
 }

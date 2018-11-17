@@ -1,11 +1,13 @@
 package sql.pojo.bom;
 
+import sql.pojo.BaseChangePOJO;
+
 import java.util.Date;
 
 /**
  * Created by haozt on 2018/5/24
  */
-public class HzMbomRecord {
+public class HzMbomRecord extends BaseChangePOJO {
     /**
      * 主键id
      */

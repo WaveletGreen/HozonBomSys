@@ -48,6 +48,9 @@
     <result column="P_COLOR_PART" jdbcType="INTEGER" property="colorPart" />
     <result column="P_IS_NEW_PART" jdbcType="INTEGER" property="isNewPart" />
     <result column="P_MWO_NO" jdbcType="VARCHAR" property="mwoNo"/>
+    <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
+    <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
+    <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
   </resultMap>
 
   <sql id="Pbom_List">
@@ -57,7 +60,7 @@
     P_LINE_INDEX, P_BOM_LINE_IS_HAS, P_BOM_LINE_PUID, P_BOM_LINE_ID, P_BOM_LINE_IS_2Y,
     P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT, P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME,
     P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME, P_BOM_LINE_PART_RESOURCE,P_BOM_ORDER_NUM,P_SORT_NUM,
-    P_COLOR_PART,P_IS_NEW_PART,P_MWO_NO
+    P_COLOR_PART,P_IS_NEW_PART,P_MWO_NO,P_ORDER_ID,P_REVISION,P_EFFECT_TIME
   </sql>
 
 
@@ -278,6 +281,41 @@
   </insert>
 
 
+
+  <!--批量插入-->
+  <insert id="HzPbomRecordDAOImpl_insertListForChange"  parameterType="java.util.HashMap">
+    insert into ${tableName}
+    (PUID,P_RESOURCE, P_COLOR_PART,P_TYPE,
+    P_BUY_UNIT, P_WORK_SHOP1, P_WORK_SHOP2,
+    P_PRODUCT_LINE, P_MOULD_TYPE, P_OUTER_PART,
+    P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,
+    P_UPDATE_NAME, P_STATION,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_E_BOM_PUID,
+    P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
+    P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
+    P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_PBOM_STATUS,P_IS_NEW_PART,
+    P_ORDER_ID,P_REVISION
+    )
+    <foreach collection="list" item="item" index="index" separator="UNION ALL">
+      select
+      #{item.puid,jdbcType=VARCHAR},#{item.resource,jdbcType=VARCHAR}, #{item.colorPart,jdbcType=INTEGER},
+      #{item.type,jdbcType=INTEGER},#{item.buyUnit,jdbcType=INTEGER}, #{item.workShop1,jdbcType=VARCHAR},
+      #{item.workShop2,jdbcType=VARCHAR},#{item.productLine,jdbcType=VARCHAR}, #{item.mouldType,jdbcType=VARCHAR},
+      #{item.outerPart,jdbcType=VARCHAR},sysdate, sysdate,#{item.createName,jdbcType=VARCHAR},
+      #{item.updateName,jdbcType=VARCHAR}, #{item.station,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
+      #{item.bomDigifaxId,jdbcType=VARCHAR},#{item.eBomPuid,jdbcType=VARCHAR},#{item.lineIndex,jdbcType=VARCHAR},
+      #{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
+      #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
+      #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
+      #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},#{item.isNewPart,jdbcType=INTEGER},
+      #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR}
+      from DUAL
+    </foreach>
+  </insert>
+
+
+
+
+
   <!--获取一条 PBOM记录-->
   <select id="HzPbomRecordDAOImpl_getHzPbomByEbomPuid" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
 
@@ -409,6 +447,8 @@
       )
   </insert>
 
+
+
   <insert id="HzPbomRecordDAOImpl_insert_before" parameterType="sql.pojo.bom.HzPbomLineRecord">
     insert into HZ_PBOM_REOCRD_BEFORE_CHANGE (PUID, P_RESOURCE, P_COLOR_PART,
       P_E_BOM_PUID, P_PBOM_STATUS, P_TYPE,
@@ -437,6 +477,7 @@
       #{mwoNo,jdbcType=VARCHAR}, #{sortNum,jdbcType=VARCHAR}
       )
   </insert>
+
 
 
   <update id="HzPbomRecordDAOImpl_update_before" parameterType="sql.pojo.bom.HzPbomLineRecord">
@@ -661,11 +702,11 @@
         P_LOU_LOA_FLAG = #{pLouaFlag,jdbcType=INTEGER},
       </if>
       <if test="singleVehDosage != null">
-        P_SINGLE_VEH_DOSAGE = #{singleVehDosage,jdbcType=VARCHAR}
+        P_SINGLE_VEH_DOSAGE = #{singleVehDosage,jdbcType=VARCHAR},
       </if>
+      P_PBOM_STATUS=2
     </set>
     where P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
-    and P_PBOM_STATUS <![CDATA[ <> ]]>0
   </update>
 
 
@@ -725,7 +766,10 @@
           P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=INTEGER},
         </if>
         <if test="item.singleVehDosage != null">
-          P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR}
+          P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR},
+        </if>
+        <if test="item.status != null">
+          P_PBOM_STATUS = #{item.status,jdbcType=VARCHAR}
         </if>
       </set>
       where P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR}
@@ -859,13 +903,25 @@
   </select>
 
   <!--批量删除 真的删除-->
-  <update id="HzPbomRecordDAOImpl_deleteListByPuids"  parameterType="java.util.HashMap">
+  <delete id="HzPbomRecordDAOImpl_deleteListByPuids"  parameterType="java.util.HashMap">
     <foreach collection="eBomPuids" item="item" index="index" open="begin" close=";end;" separator=";">
       delete HZ_PBOM_RECORD
       where P_E_BOM_PUID = #{eBomPuids[${index}]}
     </foreach>
-  </update>
+  </delete>
 
+
+  <!--批量删除 逻辑删除-->
+  <update id="HzPbomRecordDAOImpl_deleteByPuids"  parameterType="java.util.HashMap">
+    <foreach collection="eBomPuids" item="item" index="index" open="begin" close=";end;" separator=";">
+      update HZ_PBOM_RECORD
+      <set>
+        P_PBOM_STATUS=4,
+        P_UPDATE_TIME =sysdate
+      </set>
+      where P_E_BOM_PUID = #{eBomPuids[${index}]}
+    </foreach>
+  </update>
 
 
   <!--批量删除-->
@@ -873,7 +929,7 @@
     <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
       update HZ_PBOM_RECORD
       <set>
-        P_PBOM_STATUS=0,
+        P_PBOM_STATUS=4,
         P_UPDATE_TIME =sysdate
       </set>
       where P_E_BOM_PUID = #{item.eBomPuid,jdbcType=VARCHAR}
@@ -1001,5 +1057,52 @@
     P_BOM_DIGIFAX_ID = (select PUID from HZ_BOM_MAIN_RECORD where P_CFG0_OF_WHICH_PROJECT_PUID = #{projectId, jdbcType=VARCHAR})
     and
       P_PBOM_STATUS = 1
+  </select>
+
+
+
+  <!--批量查询数据-->
+  <select id="HzPbomRecordDAOImpl_getPbomRecordsByPuids" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
+    select * from ${tableName} t
+    where t.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+      t2.puid = #{projectId,jdbcType=VARCHAR}))
+      <if test="puids != null and puids.size()>0">
+        and t.puid in
+        <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
+          #{puids[${index}]}
+        </foreach>
+      </if>
+      <if test="revision!= null">
+        and P_REVISION is not null
+      </if>
+      <if test="status != null">
+        and P_PBOM_STATUS = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="orderId != null">
+        and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
+      </if>
+    </where>
+  </select>
+
+
+  <!--查询一条有变更记录数据-->
+  <select id="HzPbomRecordDAOImpl_getEBomRecordByPuidAndRevision" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
+    select * from ${tableName} t
+    where t.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+      t2.puid = #{projectId,jdbcType=VARCHAR}))
+      and t.puid =#{puid}
+      <if test="revision!= null">
+        and P_REVISION =#{revision,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null">
+        and P_PBOM_STATUS = #{status,jdbcType=INTEGER}
+      </if>
+    </where>
   </select>
 </mapper>

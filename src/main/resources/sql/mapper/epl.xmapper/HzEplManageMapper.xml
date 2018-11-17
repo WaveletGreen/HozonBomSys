@@ -67,8 +67,8 @@
       <result column="P_EBOM_STATUS" jdbcType="VARCHAR" property="status" />
       <result column="P_NUMBER" jdbcType="VARCHAR" property="number" />
       <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer" />
-      <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
       <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
+      <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
       <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
       <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
 
@@ -1835,7 +1835,7 @@
         P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, P_FASTENER_LEVEL,
         P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY,
         P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER,P_COLOR_PART,
-        P_ORDER_ID,P_EFFECT_TIME,P_REVISION
+        P_ORDER_ID,P_REVISION
         )
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
@@ -1858,7 +1858,7 @@
             #{item.pTorque,jdbcType=VARCHAR}, #{item.pDutyEngineer,jdbcType=VARCHAR}, #{item.pSupply,jdbcType=VARCHAR},
             #{item.pSupplyCode,jdbcType=VARCHAR}, #{item.pRemark,jdbcType=VARCHAR}, #{item.pRegulationCode,jdbcType=VARCHAR},
             #{item.number,jdbcType=VARCHAR},#{item.pBuyEngineer,jdbcType=VARCHAR},#{item.colorPart,jdbcType=INTEGER},
-            #{item.orderId,jdbcType=DOUBLE},#{item.effectTime,jdbcType=VARCHAR},#{item.revision,jdbcType=VARCHAR}
+            #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR}
             from DUAL
         </foreach>
     </insert>
@@ -1882,12 +1882,32 @@
             <if test="revision!= null">
                 and P_REVISION is not null
             </if>
-            <if test="state != null">
-               and P_EBOM_STATUS = #{state,jdbcType=INTEGER}
+            <if test="status != null">
+               and P_EBOM_STATUS = #{status,jdbcType=INTEGER}
             </if>
             <if test="orderId != null">
                and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
             </if>
         </where>
     </select>
+
+    <!--查询一条有变更记录数据-->
+    <select id="HzEbomRecordDAOImpl_getEBomRecordByPuidAndRevision" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select * from ${tableName} t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            and t.puid =#{puid}
+            <if test="revision!= null">
+                and P_REVISION =#{revision,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and P_EBOM_STATUS = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+
 </mapper>
