@@ -60,6 +60,9 @@
 
         <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
         <result column="P_MWO_NO" jdbcType="VARCHAR" property="mwoNo"/>
+        <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
+        <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
+        <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
     </resultMap>
 
 
@@ -77,7 +80,8 @@
         P_CREATE_NAME, P_UPDATE_NAME, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS,
         P_BOM_LINE_PUID, P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT,
         P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
-        P_BOM_LINE_PART_RESOURCE, P_BOM_ORDER_NUM,P_BOM_TYPE, P_STOCK_LOCATION,P_FACTORY_ID,P_SORT_NUM,P_COLOR_PUID
+        P_BOM_LINE_PART_RESOURCE, P_BOM_ORDER_NUM,P_BOM_TYPE, P_STOCK_LOCATION,P_FACTORY_ID,P_SORT_NUM,
+        P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME
   </sql>
 
 

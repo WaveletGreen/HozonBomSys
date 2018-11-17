@@ -399,4 +399,19 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.update("HzPbomRecordDAOImpl_deleteByPuids",map);
     }
 
+    @Override
+    public HzPbomLineRecord getPBomRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(null != query.getRevision()){
+            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+        }else {
+            map.put("revision",null);
+        }
+        map.put("status",query.getStatus());
+        map.put("tableName",query.getTableName());
+        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_getEBomRecordByPuidAndRevision",map);
+    }
+
 }

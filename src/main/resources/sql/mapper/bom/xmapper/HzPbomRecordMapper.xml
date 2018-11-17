@@ -293,22 +293,21 @@
     P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
     P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
     P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_PBOM_STATUS,P_IS_NEW_PART,
-    P_SINGLE_VEH_DOSAGE,P_ORDER_ID,P_EFFECT_TIME,P_REVISION
+    P_ORDER_ID,P_REVISION
     )
     <foreach collection="list" item="item" index="index" separator="UNION ALL">
       select
       #{item.puid,jdbcType=VARCHAR},#{item.resource,jdbcType=VARCHAR}, #{item.colorPart,jdbcType=INTEGER},
       #{item.type,jdbcType=INTEGER},#{item.buyUnit,jdbcType=INTEGER}, #{item.workShop1,jdbcType=VARCHAR},
       #{item.workShop2,jdbcType=VARCHAR},#{item.productLine,jdbcType=VARCHAR}, #{item.mouldType,jdbcType=VARCHAR},
-      #{item.outerPart,jdbcType=VARCHAR},sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},
+      #{item.outerPart,jdbcType=VARCHAR},sysdate, sysdate,#{item.createName,jdbcType=VARCHAR},
       #{item.updateName,jdbcType=VARCHAR}, #{item.station,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
       #{item.bomDigifaxId,jdbcType=VARCHAR},#{item.eBomPuid,jdbcType=VARCHAR},#{item.lineIndex,jdbcType=VARCHAR},
       #{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
       #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
       #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
-      #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status},#{item.isNewPart,jdbcType=INTEGER},
-      #{item.singleVehDosage,jdbcType=VARCHAR},
-      #{item.orderId,jdbcType=DOUBLE},#{item.effectTime,jdbcType=VARCHAR},#{item.revision,jdbcType=VARCHAR}
+      #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},#{item.isNewPart,jdbcType=INTEGER},
+      #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR}
       from DUAL
     </foreach>
   </insert>
@@ -1084,6 +1083,25 @@
       </if>
       <if test="orderId != null">
         and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
+      </if>
+    </where>
+  </select>
+
+
+  <!--查询一条有变更记录数据-->
+  <select id="HzPbomRecordDAOImpl_getEBomRecordByPuidAndRevision" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
+    select * from ${tableName} t
+    where t.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+    select t2.puid from Hz_project_libs t2
+    <where>
+      t2.puid = #{projectId,jdbcType=VARCHAR}))
+      and t.puid =#{puid}
+      <if test="revision!= null">
+        and P_REVISION =#{revision,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null">
+        and P_PBOM_STATUS = #{status,jdbcType=INTEGER}
       </if>
     </where>
   </select>
