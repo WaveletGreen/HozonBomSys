@@ -11,7 +11,7 @@ import com.connor.hozon.bom.resources.page.Page;
  * @Date: 2018/11/12
  * @Description: 变更
  */
-public interface HzChangeService {
+public interface HzChangeOrderService {
     /**
      * 新增变更表单
      * @param reqDTO

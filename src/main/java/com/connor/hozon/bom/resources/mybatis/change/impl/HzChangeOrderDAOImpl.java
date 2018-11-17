@@ -62,6 +62,7 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
             map.put("lastOriginTime",query.getLastOriginTime());
         }
         map.put("state",query.getState());
+        map.put("projectId",query.getProjectId());
         pageRequestParam.setFilters(map);
         return super.findPage("HzChangeOrderDAOImpl_findHzChangeOrderRecordByPage","HzChangeOrderDAOImpl_findHzChangeOrderTotalCount",pageRequestParam);
     }

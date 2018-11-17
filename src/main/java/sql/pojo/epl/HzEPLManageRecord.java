@@ -272,7 +272,7 @@ public class HzEPLManageRecord {
     /**
      * 变更表单id
      */
-    private Integer orderId;
+    private Long orderId;
 
     private Integer pLouaFlag;
 
@@ -969,11 +969,11 @@ public class HzEPLManageRecord {
         this.pRegulationCode = pRegulationCode;
     }
 
-    public Integer getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 

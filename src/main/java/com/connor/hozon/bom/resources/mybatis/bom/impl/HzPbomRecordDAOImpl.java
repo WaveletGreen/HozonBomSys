@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
@@ -334,6 +335,22 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findPage("HzPbomRecordDAOImpl_getHzPbomTreeByPage","HzPbomRecordDAOImpl_getHzPbomTreeTotalCount",request);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getPbomRecordsByPuids(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(!query.getRevision()){
+            map.put("revision",null);
+        }else {
+            map.put("revision","");
+        }
+        map.put("state",query.getState());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        return super.findForList("HzPbomRecordDAOImpl_getPbomRecordsByPuids",map);
     }
 
 }

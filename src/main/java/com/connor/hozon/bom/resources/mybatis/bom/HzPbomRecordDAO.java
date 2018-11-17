@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
@@ -168,5 +169,12 @@ public interface HzPbomRecordDAO {
      */
     Page<HzPbomLineRecord> getPbomTreeByPage(HzPbomByPageQuery query);
 
+
+    /**
+     * 根据PUIDS 获取对应PBOM数据
+     * @param query
+     * @return
+     */
+    List<HzPbomLineRecord> getPbomRecordsByPuids(HzChangeDataDetailQuery query);
 
 }

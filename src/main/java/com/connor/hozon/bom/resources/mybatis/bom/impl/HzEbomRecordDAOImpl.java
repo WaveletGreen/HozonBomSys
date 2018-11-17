@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
@@ -303,10 +304,18 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
-    public List<HzEPLManageRecord> getEbomRecordsByPuids(String puids, String projectId) {
+    public List<HzEPLManageRecord> getEbomRecordsByPuids(HzChangeDataDetailQuery query) {
         Map<String,Object> map = new HashMap<>();
-        map.put("puids",Lists.newArrayList(puids.split(",")));
-        map.put("projectId",projectId);
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(!query.getRevision()){
+            map.put("revision",null);
+        }else {
+            map.put("revision","");
+        }
+        map.put("state",query.getState());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
         return super.findForList("HzEbomRecordDAOImpl_getEbomRecordsByPuids",map);
     }
 

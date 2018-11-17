@@ -254,7 +254,7 @@ public class HzEWOServiceImpl implements HzEWOService {
 
 
     private HzEbomRespDTO recordToRespDTO(HzBomLineRecord record){
-        HzEbomRespDTO  respDTO = new HzEbomRespDTO();
+        HzEbomRespDTO respDTO = new HzEbomRespDTO();
         Integer is2Y = record.getIs2Y();
         Integer hasChildren = record.getIsHas();
         String lineIndex = record.getLineIndex();

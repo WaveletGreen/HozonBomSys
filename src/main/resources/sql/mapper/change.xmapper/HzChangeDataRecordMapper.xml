@@ -8,8 +8,15 @@
     <result column="AUDITOR_ID" jdbcType="DOUBLE" property="auditorId" />
     <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId" />
     <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName" />
+    <result column="APPLICANT" jdbcType="VARCHAR" property="applicant" />
+    <result column="AUDITOR" jdbcType="VARCHAR" property="auditor" />
+    <result column="APPLICANT_TIME" jdbcType="TIMESTAMP" property="applicantTime" />
   </resultMap>
 
+
+    <resultMap id="Puids_Map" type="java.lang.String">
+        <result column="PUID" jdbcType="VARCHAR" property="puid" />
+    </resultMap>
   <sql id="Base_Column_List">
     ID, PUID, APPLICANT_ID, AUDITOR_ID, ORDER_ID, TABLE_NAME
   </sql>
@@ -130,11 +137,38 @@
   </delete>
 
   <!--select-->
-  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from HZ_CHANGE_DATA_RECORD
-    where ID = #{id,jdbcType=DECIMAL}
+  <select id="HzChangeDataRecordDAOImpl_getChangeDataTableName" parameterType="com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery" resultMap="BaseResultMap">
+          SELECT
+       DISTINCT(t.TABLE_NAME),
+          T .ORDER_ID
+      FROM
+          HZ_CHANGE_DATA_RECORD T
+      where t.ORDER_ID =#{orderId,jdbcType=DOUBLE}
+  </select>
+
+  <!--
+       SELECT
+       DISTINCT(t.TABLE_NAME),
+           T .AUDITOR_ID,
+          T .ORDER_ID ,
+          T .APPLICANT_ID,
+           t1.USER_NAME as auditor,
+       t2.user_name as applicant,
+       t3.applicant_time
+      FROM
+          HZ_CHANGE_DATA_RECORD T
+       LEFT JOIN USERRECORD t1 ON T .AUDITOR_ID = T1.ID
+       LEFT JOIN USERRECORD t2 on t.APPLICANT_ID = t2.id
+       LEFT JOIN HZ_APPLICANT_CHANGE_RECORD t3 on t3.APPLICANT_ID = t.APPLICANT_ID
+      where t.ORDER_ID =#{orderId,jdbcType=DOUBLE}
+  -->
+  <select id="HzChangeDataRecordDAOImpl_getChangeDataPuids" parameterType="java.util.HashMap" resultMap="Puids_Map">
+      SELECT
+          t.puid
+      FROM
+          HZ_CHANGE_DATA_RECORD T
+      where t.ORDER_ID =#{orderId,jdbcType=DOUBLE}
+      and t.TABLE_NAME =#{tableName,jdbcType=VARCHAR}
   </select>
 
 </mapper>
