@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @Author: haozt
  * @Date: 2018/10/19
- * @Description: 基本属性 数据库建表有该字段时 直接继承
+ * @Description: 基本属性 数据库建表有该字段时 可直接继承
  */
 public abstract class BasePOJO {
     /**

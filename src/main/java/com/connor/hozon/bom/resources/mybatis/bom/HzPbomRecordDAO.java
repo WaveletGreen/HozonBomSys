@@ -57,6 +57,15 @@ public interface HzPbomRecordDAO {
     int update_after(HzPbomLineRecord record);
 
     int insertList(List<HzPbomLineRecord> records);
+
+    /**
+     * 批量插入变更数据
+     * @param records
+     * @param tableName
+     * @return
+     */
+    int insertListForChange(List<HzPbomLineRecord> records,String tableName);
+
     /**
      * 编辑 PBOM管理信息
      * @param record
@@ -177,4 +186,6 @@ public interface HzPbomRecordDAO {
      */
     List<HzPbomLineRecord> getPbomRecordsByPuids(HzChangeDataDetailQuery query);
 
+
+    int deleteByPuids(String puids);
 }

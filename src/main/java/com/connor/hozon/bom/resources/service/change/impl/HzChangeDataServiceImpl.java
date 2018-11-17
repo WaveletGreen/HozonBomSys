@@ -70,34 +70,38 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
                 updateQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
-                updateQuery.setState(2);
+                updateQuery.setStatus(2);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
                 updateQuery.setPuids(puids);
-                List<HzEPLManageRecord> beforeRecords = hzEbomRecordDAO.getEbomRecordsByPuids(updateQuery);
-                if(ListUtil.isNotEmpty(beforeRecords)){
-                    updateQuery.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
-                    List<HzEPLManageRecord> afterRecords = hzEbomRecordDAO.getEbomRecordsByPuids(updateQuery);
+                List<HzEPLManageRecord> afterRecords = hzEbomRecordDAO.getEbomRecordsByPuids(updateQuery);
+                if(ListUtil.isNotEmpty(afterRecords)){
                     for(HzEPLManageRecord record :afterRecords){
+                        HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
+                        beforeUpdateQuery.setProjectId(query.getProjectId());
+                        beforeUpdateQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());
+                        beforeUpdateQuery.setStatus(1);
+                        beforeUpdateQuery.setRevision(true);
+                        beforeUpdateQuery.setRevisionNo(record.getRevision());
+                        beforeUpdateQuery.setPuid(record.getPuid());
+                        HzEPLManageRecord eplManageRecord = hzEbomRecordDAO.getEBomRecordByPuidAndRevision(beforeUpdateQuery);
+
+                        if(eplManageRecord!=null){
+                            HzEbomRespDTO beforeRecord = HzEbomRecordFactory.eplRecordToEbomRespDTO(eplManageRecord);
+                            beforeRecord.setChangeType("变更前");
+                            beforeRecord.setChangeType("U");
+                            respDTOs.add(beforeRecord);
+                        }
                         HzEbomRespDTO afterRespDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
                         afterRespDTO.setChangeType("变更后");
                         afterRespDTO.setState("U");
-                        for(HzEPLManageRecord bRecord :beforeRecords){
-                            if(record.equals(bRecord)){
-                                HzEbomRespDTO beforeRecord = HzEbomRecordFactory.eplRecordToEbomRespDTO(bRecord);
-                                beforeRecord.setState("U");
-                                beforeRecord.setChangeType("变更前");
-                                respDTOs.add(beforeRecord);
-                                respDTOs.add(afterRespDTO);
-                                break;
-                            }
-                        }
+                        respDTOs.add(afterRespDTO);
                     }
                 }
                 //查新增的数据（无版本号 状态值为2）
                 HzChangeDataDetailQuery addQuery = new HzChangeDataDetailQuery();
                 addQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
-                addQuery.setState(2);
+                addQuery.setStatus(2);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
                 addQuery.setPuids(puids);
@@ -114,7 +118,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
-                deleteQuery.setState(4);
+                deleteQuery.setStatus(4);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
                 deleteQuery.setPuids(puids);
@@ -127,7 +131,6 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                         respDTOs.add(addRespDTO);
                     }
                 }
-
                 return respDTOs;
             });
             future.get();

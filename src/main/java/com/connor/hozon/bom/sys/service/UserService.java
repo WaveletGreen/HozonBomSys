@@ -132,6 +132,7 @@ public class UserService extends GenericService<User, QueryUser> {
 		return userDao.findByLogin(login);
 	}
 
+	
 	/**
 	 * 根据id 获取用户信息
 	 * @param id

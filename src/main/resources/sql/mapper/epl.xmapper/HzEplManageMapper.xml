@@ -67,8 +67,8 @@
       <result column="P_EBOM_STATUS" jdbcType="VARCHAR" property="status" />
       <result column="P_NUMBER" jdbcType="VARCHAR" property="number" />
       <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer" />
-      <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
       <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
+      <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
       <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
       <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
 
@@ -1882,12 +1882,32 @@
             <if test="revision!= null">
                 and P_REVISION is not null
             </if>
-            <if test="state != null">
-               and P_EBOM_STATUS = #{state,jdbcType=INTEGER}
+            <if test="status != null">
+               and P_EBOM_STATUS = #{status,jdbcType=INTEGER}
             </if>
             <if test="orderId != null">
                and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
             </if>
         </where>
     </select>
+
+    <!--查询一条有变更记录数据-->
+    <select id="HzEbomRecordDAOImpl_getEBomRecordByPuidAndRevision" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select * from ${tableName} t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            and t.puid =#{puid}
+            <if test="revision!= null">
+                and P_REVISION =#{revision,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and P_EBOM_STATUS = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+
 </mapper>
