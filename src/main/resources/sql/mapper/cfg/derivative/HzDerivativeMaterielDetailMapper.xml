@@ -75,7 +75,7 @@
             <result column="P_CFG0_MAIN_ITEM_PUID" jdbcType="VARCHAR" property="pCfg0MainItemPuid"/>
             <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR" property="pH9featureenname"/>
             <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
-            <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
+            <result column="CHANGE_ORDER_ID" jdbcType="DECIMAL" property="vwoId"/>
         </association>
     </resultMap>
     <sql id="Base_Column_List">
@@ -103,7 +103,7 @@
         P_CFG0_MAIN_ITEM_PUID,
         P_H9FEATUREENNAME,
         P_CFG0_FAMILY_DESC,
-        VWO_ID
+        CHANGE_ORDER_ID
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select

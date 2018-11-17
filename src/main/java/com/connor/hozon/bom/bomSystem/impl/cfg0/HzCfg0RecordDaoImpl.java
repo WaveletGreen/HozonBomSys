@@ -163,4 +163,9 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         return baseSQLUtil.executeUpdate(hzCfg0Record, clzName+".updateByVwoid");
     }
 
+    @Override
+    public List<HzCfg0Record> selectByPuids(List<String> puidList) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(), puidList, clzName+".selectByPuids");
+    }
+
 }

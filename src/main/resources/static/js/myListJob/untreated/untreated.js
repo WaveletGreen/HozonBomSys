@@ -26,7 +26,6 @@ function initTable(projectUid) {
     if (!checkIsSelectProject(projectUid)) {
         return;
     }
-
     var projectId = $("#project", window.top.document).val();
     var $table = $("#untreatedTable");
     $table.bootstrapTable("destroy");//查询时刷新表单用
@@ -118,6 +117,7 @@ function initTable(projectUid) {
 }
 function queryLou(id) {
     window.location.href="worklist/base/info?id="+id;
+    //window.location.href="untreated/ToUntreatedForm?id="+id;
 }
 // function basic() {
 //     window.Ewin.dialog({

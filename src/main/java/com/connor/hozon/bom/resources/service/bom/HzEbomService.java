@@ -33,7 +33,7 @@ public interface HzEbomService {
      * @param projectId
      * @return
      */
-    HzEbomRespDTO fingEbomById(String puid,String projectId);
+    HzEbomRespDTO fingEbomById(String puid, String projectId);
 
     HzEbomLevelRespDTO fingEbomLevelById(String puid, String projectId);
 
@@ -91,8 +91,27 @@ public interface HzEbomService {
      */
     HzBomLineRecord findParentFor2Y(String projectId,String puid);
 
+    /**
+     * 设置LOU
+     * @param reqDTO
+     * @return
+     */
     WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);
 
 
+    /**
+     * 获取LOA 信息
+     * @param query
+     * @return
+     */
     HzLouRespDTO getHzLouInfoById(HzLouaQuery query);
+
+
+    /**
+     * EBOM数据  到变更表单
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
+
 }

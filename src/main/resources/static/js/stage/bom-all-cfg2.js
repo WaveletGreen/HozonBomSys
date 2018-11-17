@@ -88,6 +88,13 @@ function loadData(projectUid) {
                         "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>生效日期：" + main.effectiveDate + "</td>" +
                         "</tr>";
                 }
+                else if(i == 4){
+                    temp +=
+                        "<tr id='tr" + i + "'>" +
+                        "<td></td>" +
+                        "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>状态：" + main.status+ "</td>" +
+                        "</tr>";
+                }
                 else {
                     temp +=
                         "<tr id='tr" + i + "'>" +
@@ -453,6 +460,7 @@ $(document).ready(
                     width: 450,
                     height: 450
                 });
+                undead();
             }),
             $("#release").click(function () {
                 window.Ewin.confirm({title: '提示', message: '您确定需要升小版本吗？', width: 500}).on(function (e) {
@@ -479,6 +487,26 @@ $(document).ready(
                         })
                     }
                 });
+            }),
+            $("#getVwo").click(function () {
+                window.Ewin.dialog({
+                    // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                    title: "选择变更表单",
+                    url: "bomAllCfg/setChangeFromPage?projectUid=" + getProjectUid(),
+                    gridId: "gridId",
+                    width: 450,
+                    height: 450
+                });
+                // $.ajax({
+                //     type : "GET",
+                //     url : "bomAllCfg/getVwo?projectId="+getProjectUid(),
+                //     success : function (result) {
+                //         window.location.reload();
+                //     },
+                //     error : function (result) {
+                //
+                //     }
+                // });
             })
         // ,
         // $("#export").click(function(){

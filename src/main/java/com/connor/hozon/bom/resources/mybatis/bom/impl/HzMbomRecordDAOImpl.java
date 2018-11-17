@@ -343,6 +343,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
             }
             return 1;
         }catch (Exception e){
+            e.printStackTrace();
             return 0;
         }
     }
@@ -388,6 +389,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
             }
             return 1;
         }catch (Exception e){
+            e.printStackTrace();
             return 0;
         }
     }

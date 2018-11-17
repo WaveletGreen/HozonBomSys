@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
@@ -13,9 +14,11 @@ import com.connor.hozon.bom.resources.domain.query.HzMbomByIdQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +56,8 @@ public class HzMbomController extends BaseController {
     HzSingleVehiclesServices hzSingleVehiclesServices;
     @Autowired
     HzPbomRecordDAO hzPbomRecordDAO;
+    @Autowired
+    private HzChangeOrderDAO hzChangeOrderDAO;
     LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
     /**
      * MBOM管理标题
@@ -367,6 +373,33 @@ public class HzMbomController extends BaseController {
         return "bomManage/mbom/mbomMaintenance/excelImport3";
     }
 
+
+
+    /**
+     * EBOM发起变更数据到变更单
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "data/change",method = RequestMethod.POST)
+    public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+    /**
+     * 跳转到MBOM选择变更单
+     * @return
+     */
+    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
+    public String getOrderChooseToPage(Integer type,String projectId,String puids,Model model){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
+        if(ListUtil.isNotEmpty(records)){
+            model.addAttribute("data",records);
+            model.addAttribute("puids",puids);
+            model.addAttribute("type",type);
+        }
+        return "bomManage/mbom/mbomMaintenance/mbomSetChangeForm";
+    }
 }
 
 

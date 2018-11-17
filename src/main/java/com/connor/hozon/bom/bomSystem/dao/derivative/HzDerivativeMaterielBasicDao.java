@@ -38,4 +38,8 @@ public interface HzDerivativeMaterielBasicDao extends BasicDao<HzDerivativeMater
     HzDerivativeMaterielBasic selectByModelAndColorUid(String modelUid, String colorModel);
 
     List<HzDerivativeMaterielBasic> selectByPuids(List<String> puids);
+
+    int updateByBasicList(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics);
+
+    int updateByBasicListChangId(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics);
 }

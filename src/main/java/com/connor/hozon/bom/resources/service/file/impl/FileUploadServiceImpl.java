@@ -7,6 +7,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.service.RefreshMbomThread;
@@ -266,7 +267,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                     th.start();
                 }
                 try {
-                    // 等待中 等子线程全部ok 继续
                     countDownLatch.await();
                 }catch (Exception e){
                     return WriteResultRespDTO.getFailResult();
@@ -919,6 +919,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     byte [] bytes = SerializeUtil.serialize(map);
                     record.setSingleVehDosage(bytes);
                     record.setBomDigifaxId(hzBomMainRecord.getPuid());
+                    record.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
                     singleVehDosageRecords.add(record);
 
                 }

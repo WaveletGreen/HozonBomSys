@@ -78,6 +78,7 @@ public interface UserDao extends GenericDao<User, QueryUser> {
 	/**
 	 * 获取当前用户 根据id
 	 * param state 账户状态 启用 禁用
+	 * param id 用户id
 	 * @return
 	 *  todo by haozt on 8/21/2018
 	 */

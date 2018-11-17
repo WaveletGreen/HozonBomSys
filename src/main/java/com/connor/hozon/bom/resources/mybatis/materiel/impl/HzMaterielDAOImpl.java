@@ -57,7 +57,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
                                 cout++;
                             }
 
-                            super.update("HzMaterialDAOImpl_insertList",list1);
+                            super.insert("HzMaterialDAOImpl_insertList",list1);
 
                         }
                     }
@@ -68,7 +68,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
                             cout++;
                         }
 
-                        super.update("HzMaterialDAOImpl_insertList",list1);
+                        super.insert("HzMaterialDAOImpl_insertList",list1);
 
                     }
                 }
@@ -76,6 +76,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
             }
             return 1;
         }catch (Exception e){
+            e.printStackTrace();
             return 0;
         }
     }
@@ -187,6 +188,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
                 i = super.delete("HzMaterialDAOImpl_deleteMaterielList",list);
             }
         }catch (Exception e){
+            e.printStackTrace();
             return 0;
         }
         return i;
@@ -219,7 +221,6 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
                             list1.add(list.get(cout));
                             cout++;
                         }
-
                         super.update("HzMaterialDAOImpl_updateList",list1);
 
                     }
@@ -228,6 +229,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
             }
             return 1;
         }catch (Exception e){
+            e.printStackTrace();
             return 0;
         }
     }

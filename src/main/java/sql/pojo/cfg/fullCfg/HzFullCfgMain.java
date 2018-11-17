@@ -37,6 +37,7 @@ public class HzFullCfgMain {
 
     private String updater;
 
+    private Integer fmIsRelease;
     public static String parseStage(Integer code) {
         if (null == code) {
             return "";
@@ -145,5 +146,13 @@ public class HzFullCfgMain {
 
     public void setUpdater(String updater) {
         this.updater = updater;
+    }
+
+    public Integer getFmIsRelease() {
+        return fmIsRelease;
+    }
+
+    public void setFmIsRelease(Integer fmIsRelease) {
+        this.fmIsRelease = fmIsRelease;
     }
 }

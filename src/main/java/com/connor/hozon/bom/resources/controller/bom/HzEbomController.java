@@ -2,16 +2,13 @@ package com.connor.hozon.bom.resources.controller.bom;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomLeveReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
@@ -20,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.bom.HzBomLineRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,10 +39,10 @@ public class HzEbomController extends BaseController {
     private HzEbomService hzEbomService;
 
     @Autowired
-    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
 
     @Autowired
-    private HzSingleVehiclesServices hzSingleVehiclesServices;
+    private HzChangeOrderDAO hzChangeOrderDAO;
 
     LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
 
@@ -108,7 +105,7 @@ public class HzEbomController extends BaseController {
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
-        toJSONResponse(ResultUtil.result(tableTitle), response);
+        toJSONResponse(Result.build(tableTitle), response);
     }
     
 
@@ -200,11 +197,6 @@ public class HzEbomController extends BaseController {
 
     @RequestMapping(value = "update/ebomLevel",method = RequestMethod.POST)
     public void updateEbomLevelToDB(@RequestBody UpdateHzEbomLeveReqDTO reqDTO, HttpServletResponse response){
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
 
         //WriteResultRespDTO respDTO= hzEbomService.updateHzEbomLevelRecord(reqDTO);
         //测试
@@ -234,63 +226,63 @@ public class HzEbomController extends BaseController {
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
             int index=1;
-            for (HzEbomRespDTO ebomRespDTO : dtos) {
+            for (HzEbomRespDTO hzEbomRespDTO : dtos) {
                 String[] cellArr = new String[title.length];
                 cellArr[0] = index+"";
                 index++;
-                cellArr[1] = ebomRespDTO.getLineId();
-                cellArr[2] = ebomRespDTO.getpBomLinePartName();
-                cellArr[3] = ebomRespDTO.getLevel();
-                cellArr[4] = ebomRespDTO.getpBomOfWhichDept();
-                cellArr[5] = ebomRespDTO.getRank();
-                cellArr[6] = ebomRespDTO.getGroupNum();
-                cellArr[7] = ebomRespDTO.getLineNo();
-                cellArr[8] = ebomRespDTO.getpBomLinePartEnName();
-                cellArr[9] = ebomRespDTO.getpLouaFlag();
-                cellArr[10] = ebomRespDTO.getpUnit();
-                cellArr[11] = ebomRespDTO.getpPictureNo();
-                cellArr[12] = ebomRespDTO.getpPictureSheet();
-                cellArr[13] = ebomRespDTO.getpMaterialHigh();
-                cellArr[14] = ebomRespDTO.getpMaterial1();
-                cellArr[15] = ebomRespDTO.getpMaterial2();
-                cellArr[16] = ebomRespDTO.getpMaterial3();
-                cellArr[17] = ebomRespDTO.getpDensity();
-                cellArr[18] = ebomRespDTO.getpMaterialStandard();
-                cellArr[19] = ebomRespDTO.getpSurfaceTreat();
-                cellArr[20] = ebomRespDTO.getpTextureColorNum();
-                cellArr[21] = ebomRespDTO.getpManuProcess();
-                cellArr[22] = ebomRespDTO.getpSymmetry();
-                cellArr[23] = ebomRespDTO.getpImportance();
-                cellArr[24] = ebomRespDTO.getpRegulationFlag();
-                cellArr[25] = ebomRespDTO.getP3cpartFlag();
-                cellArr[26] = ebomRespDTO.getpRegulationCode();
-                cellArr[27] = ebomRespDTO.getpBwgBoxPart();
-                cellArr[28] = ebomRespDTO.getpDevelopType();
-                cellArr[29] = ebomRespDTO.getpDataVersion();
-                cellArr[30] = ebomRespDTO.getpTargetWeight();
-                cellArr[31] = ebomRespDTO.getpFeatureWeight();
-                cellArr[32] = ebomRespDTO.getpActualWeight();
-                cellArr[33] = ebomRespDTO.getpFastener();
-                cellArr[34] = ebomRespDTO.getpFastenerStandard();
-                cellArr[35] = ebomRespDTO.getpFastenerLevel();
-                cellArr[36] = ebomRespDTO.getpTorque();
-                cellArr[37] = ebomRespDTO.getpDutyEngineer();
-                cellArr[38] = ebomRespDTO.getpSupply();
-                cellArr[39] = ebomRespDTO.getpSupplyCode();
-                cellArr[40] = ebomRespDTO.getpBuyEngineer();
-                cellArr[41] = ebomRespDTO.getpRemark();
-                cellArr[42] = ebomRespDTO.getpBomLinePartClass();
-                cellArr[43] = ebomRespDTO.getpBomLinePartResource();
-                cellArr[44] = ebomRespDTO.getpInOutSideFlag();
-                cellArr[45] = ebomRespDTO.getpUpc();
-                cellArr[46] = ebomRespDTO.getFna();
-                cellArr[47] = ebomRespDTO.getpFnaDesc();
-                cellArr[48] = ebomRespDTO.getNumber();
-                cellArr[49] = ebomRespDTO.getColorPart();
-                if(ebomRespDTO.getMap().size()>0){
+                cellArr[1] = hzEbomRespDTO.getLineId();
+                cellArr[2] = hzEbomRespDTO.getpBomLinePartName();
+                cellArr[3] = hzEbomRespDTO.getLevel();
+                cellArr[4] = hzEbomRespDTO.getpBomOfWhichDept();
+                cellArr[5] = hzEbomRespDTO.getRank();
+                cellArr[6] = hzEbomRespDTO.getGroupNum();
+                cellArr[7] = hzEbomRespDTO.getLineNo();
+                cellArr[8] = hzEbomRespDTO.getpBomLinePartEnName();
+                cellArr[9] = hzEbomRespDTO.getpLouaFlag();
+                cellArr[10] = hzEbomRespDTO.getpUnit();
+                cellArr[11] = hzEbomRespDTO.getpPictureNo();
+                cellArr[12] = hzEbomRespDTO.getpPictureSheet();
+                cellArr[13] = hzEbomRespDTO.getpMaterialHigh();
+                cellArr[14] = hzEbomRespDTO.getpMaterial1();
+                cellArr[15] = hzEbomRespDTO.getpMaterial2();
+                cellArr[16] = hzEbomRespDTO.getpMaterial3();
+                cellArr[17] = hzEbomRespDTO.getpDensity();
+                cellArr[18] = hzEbomRespDTO.getpMaterialStandard();
+                cellArr[19] = hzEbomRespDTO.getpSurfaceTreat();
+                cellArr[20] = hzEbomRespDTO.getpTextureColorNum();
+                cellArr[21] = hzEbomRespDTO.getpManuProcess();
+                cellArr[22] = hzEbomRespDTO.getpSymmetry();
+                cellArr[23] = hzEbomRespDTO.getpImportance();
+                cellArr[24] = hzEbomRespDTO.getpRegulationFlag();
+                cellArr[25] = hzEbomRespDTO.getP3cpartFlag();
+                cellArr[26] = hzEbomRespDTO.getpRegulationCode();
+                cellArr[27] = hzEbomRespDTO.getpBwgBoxPart();
+                cellArr[28] = hzEbomRespDTO.getpDevelopType();
+                cellArr[29] = hzEbomRespDTO.getpDataVersion();
+                cellArr[30] = hzEbomRespDTO.getpTargetWeight();
+                cellArr[31] = hzEbomRespDTO.getpFeatureWeight();
+                cellArr[32] = hzEbomRespDTO.getpActualWeight();
+                cellArr[33] = hzEbomRespDTO.getpFastener();
+                cellArr[34] = hzEbomRespDTO.getpFastenerStandard();
+                cellArr[35] = hzEbomRespDTO.getpFastenerLevel();
+                cellArr[36] = hzEbomRespDTO.getpTorque();
+                cellArr[37] = hzEbomRespDTO.getpDutyEngineer();
+                cellArr[38] = hzEbomRespDTO.getpSupply();
+                cellArr[39] = hzEbomRespDTO.getpSupplyCode();
+                cellArr[40] = hzEbomRespDTO.getpBuyEngineer();
+                cellArr[41] = hzEbomRespDTO.getpRemark();
+                cellArr[42] = hzEbomRespDTO.getpBomLinePartClass();
+                cellArr[43] = hzEbomRespDTO.getpBomLinePartResource();
+                cellArr[44] = hzEbomRespDTO.getpInOutSideFlag();
+                cellArr[45] = hzEbomRespDTO.getpUpc();
+                cellArr[46] = hzEbomRespDTO.getFna();
+                cellArr[47] = hzEbomRespDTO.getpFnaDesc();
+                cellArr[48] = hzEbomRespDTO.getNumber();
+                cellArr[49] = hzEbomRespDTO.getColorPart();
+                if(hzEbomRespDTO.getMap().size()>0){
                     //动态获取单车配置用量表头
-                    for(int i=0;i<ebomRespDTO.getMap().size();i++){
-                        cellArr[50+i] = ebomRespDTO.getMap().values().toArray()[i].toString();
+                    for(int i = 0; i< hzEbomRespDTO.getMap().size(); i++){
+                        cellArr[50+i] = hzEbomRespDTO.getMap().values().toArray()[i].toString();
                     }
                 }
                 dataList.add(cellArr);
@@ -337,11 +329,6 @@ public class HzEbomController extends BaseController {
             toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
         WriteResultRespDTO respDTO = hzEbomService.addHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
@@ -372,12 +359,18 @@ public class HzEbomController extends BaseController {
             toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){//管理员权限
-            toJSONResponse(Result.build(false,"您没有权限进行当前操作！"), response);
-            return;
-        }
         WriteResultRespDTO respDTO = hzEbomService.deleteHzEbomRecordById(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+    /**
+     * EBOM发起变更数据到变更单
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "data/change",method = RequestMethod.POST)
+    public void ebomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzEbomService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -389,4 +382,19 @@ public class HzEbomController extends BaseController {
     public String getExcelImport(){
         return "bomManage/ebom/ebomManage/excelImport";
     }
+
+    /**
+     * 跳转到EBOM选择变更单
+     * @return
+     */
+    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
+    public String getOrderChooseToPage(String projectId,String puids,Model model){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
+        if(ListUtil.isNotEmpty(records)){
+            model.addAttribute("data",records);
+            model.addAttribute("puids",puids);
+        }
+        return "bomManage/ebom/ebomManage/ebomSetChangeForm";
+    }
+
 }

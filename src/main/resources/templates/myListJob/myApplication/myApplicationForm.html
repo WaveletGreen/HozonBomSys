@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/11/13 Time: 18:58-->
+<head th:include="include/includebase"></head>
+<meta charset="UTF-8">
+<title>我的申请详情页面</title>
+</head>
+<body>
+<h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
+<div class="panel-body" style="padding:0px;">
+    <form id="basicForm" role="form" method="post" action="">
+        <div class="panel panel-default" style="padding:0px;">
+            <div class="panel-body" style="padding:0px;">
+                <div class="col-lg-12 col-md-12" style="padding:0px;">
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group after_the">
+                            <label for="ewoNo1">变更单号</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo1"
+                                   value="EC18AS00001" disabled="disabled"
+                                   placeholder="请输入变更单号"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="ewoNo2">创建时间</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo2"
+                                   disabled="disabled"
+                                   placeholder="请输入创建时间"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="ewoNo3">部门</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo3"
+                                   disabled="disabled"
+                                   placeholder="请输入部门"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group after_the">
+                            <label for="ewoNo4">发起人</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo4"
+                                   disabled="disabled"
+                                   placeholder="请输入发起人"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="ewoNo5">联系电话</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo5"
+                                   placeholder="请输入联系电话"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="ewoNo6">变更类型</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo6"
+                                   placeholder="请输入变更类型"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group after_the">
+                            <label for="ewoNo7">是否关联变更</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
+                                   placeholder="请输入部门关联变更号"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="ewoNo8">上市类型</label>
+                            <select class="form-control" name="platform" id="ewoNo8" placeholder="请选择上市类型">
+                                <option>上市前</option>
+                                <option>上市后</option>
+                            </select>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="ewoNo9">项目所属阶段</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo9"
+                                   placeholder="请输入项目所属阶段"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-3">
+                        <div class="form-group after_the">
+                            <label for="ewoNo10">备注</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo10"
+                                   placeholder="请输入备注"/>
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="ewoNo11">变更状态</label>
+                            <select class="form-control" name="platform" id="ewoNo11" placeholder="请选择变更状态">
+                                <option>进行中</option>
+                                <option>完成</option>
+                                <option>取消</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
+<div class="panel-body" style="padding:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="content col-lg-12" style="padding:0px;">
+                <table class="table table-striped tableNormalStyle" id="routingDaTable">
+                    <tr>
+                        <th>零件号</th>
+                        <th>名称</th>
+                        <th>层级</th>
+                        <th>专业</th>
+                        <th>是否法规件</th>
+                        <th>开发类别</th>
+                    </tr>
+                    <tr style="background-color: #b7bc31">
+                        <td>S00-1001</td>
+                        <td>油漆车身</td>
+                        <td>2Y</td>
+                        <td>车身</td>
+                        <td>Y</td>
+                        <td>A</td>
+                    </tr>
+                    <tr style="background-color: #6bbc38">
+                        <td>S00-1001</td>
+                        <td>油漆车身</td>
+                        <td>2Y</td>
+                        <td>车身</td>
+                        <td>Y</td>
+                        <td>A</td>
+                    </tr>
+                    <tr style="background-color: #b7bc31">
+                        <td>S00-1001</td>
+                        <td>油漆车身</td>
+                        <td>2Y</td>
+                        <td>车身</td>
+                        <td>Y</td>
+                        <td>A</td>
+                    </tr>
+                    <tr style="background-color: #6bbc38">
+                        <td>S00-1001</td>
+                        <td>油漆车身</td>
+                        <td>2Y</td>
+                        <td>车身</td>
+                        <td>Y</td>
+                        <td>A</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

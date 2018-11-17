@@ -7,12 +7,10 @@ import java.util.Map;
 /**
  * 分页请求参数
  */
-public class PageRequestParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class PageRequestParam {
 
 	/**
-	 * 过滤条件
+	 * 条件
 	 */
 	private Map filters;
 
@@ -22,7 +20,7 @@ public class PageRequestParam implements Serializable {
 	private int pageNumber;
 
 	/**
-	 * 页数
+	 * 每页条数
 	 */
 	private int pageSize;
 

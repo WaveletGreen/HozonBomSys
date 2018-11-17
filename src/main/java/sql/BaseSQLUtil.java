@@ -382,17 +382,16 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     }
 
     /**
-     * 带有分页信息的查询
-     *
+     * 分页查询 逻辑分页
      * @param sqlMapId         mybatis映射id
-     * @param pageRequestParam 分页请求参数信息 逻辑分页
+     * @param pageRequestParam 分页请求参数信息
      * @return
      */
     public Page findForPage(final String sqlMapId, final String totalMapId, PageRequestParam pageRequestParam) {
-        Map filters = new HashMap();
-        filters.putAll(pageRequestParam.getFilters());
+        Map map = new HashMap();
+        map.putAll(pageRequestParam.getFilters());
         // 查询总数
-        Number totalCount = (Number) findForObject(totalMapId, filters);
+        Number totalCount = (Number) findForObject(totalMapId, map);
         if (totalCount == null || totalCount.intValue() <= 0) {
             return new Page(pageRequestParam, 0);
         }
@@ -403,7 +402,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             pageRequestParam.setPageSize((int) totalCount);
         }
         Page page = new Page(pageRequestParam, totalCount.intValue());
-        List list = findForList(sqlMapId, filters, page.getFirstResult(), page.getPageSize());
+        List list = findForList(sqlMapId, map, page.getFirstResult(), page.getPageSize());
 
         page.setResult(list);
 
@@ -418,10 +417,10 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public Page findPage(final String sqlMapId, final String totalMapId, PageRequestParam pageRequestParam) {
-        Map filters = new HashMap();
-        filters.putAll(pageRequestParam.getFilters());
+        Map map = new HashMap();
+        map.putAll(pageRequestParam.getFilters());
         // 查询总数
-        Number totalCount = (Number) findForObject(totalMapId, filters);
+        Number totalCount = (Number) findForObject(totalMapId, map);
         if (totalCount == null || totalCount.intValue() <= 0) {
             return new Page(pageRequestParam, 0);
         }
@@ -432,9 +431,9 @@ public class BaseSQLUtil implements IBaseSQLUtil {
             pageRequestParam.setPageSize((int) totalCount);
         }
         Page page = new Page(pageRequestParam, totalCount.intValue());
-        filters.put("offset", (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize());
-        filters.put("limit", pageRequestParam.getPageNumber() * pageRequestParam.getPageSize());
-        List list = findForList(sqlMapId, filters);
+        map.put("offset", (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize());
+        map.put("limit", pageRequestParam.getPageNumber() * pageRequestParam.getPageSize());
+        List list = findForList(sqlMapId, map);
         page.setResult(list);
         return page;
     }
@@ -456,7 +455,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 //            session = f.openSession();
             return sqlSessionTemplate.selectList(sqlMapId, param, new RowBounds(offset, limit));
         } catch (Exception e) {
-//            logger.error("SQL执行出错: " + sqlMapId, e);
+            logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错: " + sqlMapId, e);
         }
 

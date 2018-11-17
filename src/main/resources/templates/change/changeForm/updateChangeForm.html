@@ -1,0 +1,179 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/11/9 Time: 10:13-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="changeForm" role="form" method="post" action="change/update">
+    <input type="hidden" id="id" th:value="${data.id}">
+    <div class="form-group">
+        <label for="changeNo">变更单号<span>*</span></label>
+        <input class="form-control" id="changeNo" name="changeNo" type="text"
+               th:value="${data.changeNo}" disabled
+               placeholder="请输入变更单号"/>
+    </div>
+    <!--<div class="form-group">-->
+    <!--<label for="lineId">创建时间<span>*</span></label>-->
+    <!--<input class="form-control" id="lineId2" name="lineId" type="text"-->
+    <!--placeholder="请输入零件号"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+    <!--<label for="lineId3">部门</label>-->
+    <!--<input class="form-control" id="lineId3" name="lineId" type="text"-->
+    <!--placeholder="请输入部门"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+    <!--<label for="lineId">发起人<span>*</span></label>-->
+    <!--<input class="form-control" id="lineId4" name="lineId" type="text"-->
+    <!--placeholder="请输入发起人"/>-->
+    <!--</div>-->
+    <div class="form-group">
+        <label for="tel">联系电话</label>
+        <input class="form-control" id="tel" name="tel" type="text"
+               th:value="${data.tel}"
+               placeholder="请输入联系电话"/>
+    </div>
+    <div class="form-group">
+        <label for="state">变更单状态<span>*</span></label>
+        <select class="form-control" name="state" id="state" placeholder="请选择变更单状态">
+            <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
+            <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
+            <option th:selected="${data.getState()=='取消'?true:false}">取消</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="changeType">变更类型</label>
+        <input class="form-control" id="changeType" name="changeType" type="text"
+               th:value="${data.changeType}"
+               placeholder="请输入变更类型"/>
+    </div>
+    <div class="form-group">
+        <label for="relationChangeNo">是否关联变更</label>
+        <input class="form-control" id="relationChangeNo" name="relationChangeNo" type="text"
+               th:value="${data.relationChangeNo}"
+               placeholder="请输入关联变更号"/>
+    </div>
+    <div class="form-group">
+        <label for="marketType">上市类型</label>
+        <select class="form-control" name="marketType" id="marketType" placeholder="请选择上市类型">
+            <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
+            <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="projectStage">项目所属阶段</label>
+        <input class="form-control" id="projectStage" name="projectStage" type="text"
+               th:value="${data.projectStage}"
+               placeholder="请输入项目所属阶段"/>
+    </div>
+    <div class="form-group">
+        <label for="remark">备注</label>
+        <input class="form-control" id="remark" name="remark" type="text"
+               th:value="${data.remark}"
+               placeholder="请输入备注"/>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#changeForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                changeNo: {
+                    message: '变更单号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '变更单号不能为空'
+                        },
+                        // stringLength: {
+                        //     min: 12,
+                        //     max: 12,
+                        //     message: '变更单号长度必须是12位'
+                        // },
+                        // threshold: 12,
+                        // remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+                        //     url: "change/exist",//验证地址
+                        //     data: function (validator) {// 获取需要传送到后台的验证的数据
+                        //         return {
+                        //             changeNo: $('#changeNo').val()
+                        //         }
+                        //     },
+                        //     message: '变更单号已存在',//提示消息
+                        //     // delay :  500,
+                        //     type: 'POST'//请求方式，
+                        // },
+                    }
+
+                }
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#changeForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#changeForm", window.top.document).attr('action');
+                // var projectId= $("#project", window.top.document).val();
+                var myData = JSON.stringify({
+                    "id":$("#id").val(),
+                    "changeNo": $("#changeNo").val(),
+                    "tel": $("#tel").val(),
+                    "state": $("state").val(),
+                    "changeType": $("#changeType").val(),
+                    "relationChangeNo": $("#relationChangeNo").val(),
+                    "marketType": $("#marketType").val(),
+                    "projectStage": $("#projectStage").val(),
+                    "remark": $("#remark").val(),
+
+                    "projectId": $("#project", window.top.document).val(),
+                });
+
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            /*if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                            // window.Ewin.alert({message:result.errMsg});
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+</body>
+</html>

@@ -90,5 +90,8 @@ public class HzFullCfgModelDaoImpl extends BasicDaoImpl<HzFullCfgModel> implemen
                 clzName + ".selectByModelUidWithMarks");
     }
 
-
+    @Override
+    public int updateByHzFullCfgModelListCfg(List<HzFullCfgModel> hzFullCfgModels) {
+        return  baseSQLUtil.executeUpdate(hzFullCfgModels, clzName+".updateByHzFullCfgModelListCfg");
+    }
 }

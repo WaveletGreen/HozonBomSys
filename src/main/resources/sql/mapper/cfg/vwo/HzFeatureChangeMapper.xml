@@ -36,7 +36,7 @@
         <result column="PROCESS_STATUS" jdbcType="INTEGER" property="processStatus"/>
         <!--变更创建时间-->
         <result column="CHANGE_CREATE_DATE" jdbcType="TIMESTAMP" property="changeCreateDate"/>
-        <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
+        <result column="CHANGE_ORDER_ID" jdbcType="DECIMAL" property="vwoId"/>
     </resultMap>
     <sql id="Base_Column_List">
         ID,
@@ -65,7 +65,7 @@
         PROCESS_FINISHER,
         PROCESS_STATUS,
         CHANGE_CREATE_DATE,
-        VWO_ID
+        CHANGE_ORDER_ID
   </sql>
     <sql id="Values_Of_Result">
         #{id,jdbcType=DECIMAL},
@@ -107,13 +107,13 @@
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
-        where VWO_ID = #{vwoId,jdbcType=DECIMAL}
+        where CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL}
     </select>
     <select id="selectCfgUidsByVwoId" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
         select distinct(temp.CFG_PUID) from (
             select distinct(t.cfg_puid) CFG_PUID,t.id from
               HZ_CFG0_AFTER_CHANGE_RECORD t
-                where t.VWO_ID = #{vwoId,jdbcType=DECIMAL}
+                where t.CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL}
                 and t.cfg_puid is not null
                 order by t.id) temp
     </select>
@@ -218,7 +218,7 @@
                 PROCESS_STATUS = #{processStatus,jdbcType=INTEGER},
             </if>
             <if test="vwoId!=null">
-                VWO_ID=#{vwoId,jdbcType=DECIMAL}
+                CHANGE_ORDER_ID=#{vwoId,jdbcType=DECIMAL}
             </if>
         </set>
         <where>
@@ -277,7 +277,7 @@
           WHERE
               t.CFG_PUID=#{cfgPuid,jdbcType=VARCHAR}
           and
-              t.VWO_ID &lt;= #{vwoId,jdbcType=INTEGER}
+              t.CHANGE_ORDER_ID &lt;= #{vwoId,jdbcType=INTEGER}
           ORDER BY t.id DESC
         ) te
         where

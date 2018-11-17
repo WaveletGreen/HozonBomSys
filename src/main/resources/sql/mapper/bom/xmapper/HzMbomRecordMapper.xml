@@ -85,7 +85,6 @@
     <select id="HzMbomRecordDAOImpl_getMBomRecord" resultMap="MbomResultMap" parameterType="java.util.HashMap">
         select t.*,tt.P_FACTORY_CODE from ${tableName} t
         left join HZ_FACTORY tt on t.p_factory_id = tt.puid
-        and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
         and tt.P_FACTORY_STATUS <![CDATA[ <> ]]>0
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
@@ -113,6 +112,7 @@
             <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
                 and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
             </if>
+            and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
             order by CAST(t.P_SORT_NUM as FLOAT),t.P_BOM_OF_WHICH_DEPT
         </where>
     </select>
@@ -1022,7 +1022,7 @@
     <!--批量删除-->
     <update id="HzMbomRecordDAOImpl_deleteList"  parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
-            update update ${item.tableName}
+            update ${item.tableName}
             <set>
                 P_MBOM_STATUS=0,
                 P_UPDATE_TIME =sysdate

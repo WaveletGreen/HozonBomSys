@@ -67,8 +67,10 @@
       <result column="P_EBOM_STATUS" jdbcType="VARCHAR" property="status" />
       <result column="P_NUMBER" jdbcType="VARCHAR" property="number" />
       <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer" />
-      <result column="P_EWO_NO" jdbcType="VARCHAR" property="ewoNo"/>
+      <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
       <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
+      <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
+      <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
 
     <!--PBOM-->
     <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
@@ -1383,7 +1385,7 @@
         P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, P_FASTENER_LEVEL,
         P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY,
         P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER,
-        P_COLOR_PART
+        P_COLOR_PART,P_ORDER_ID,P_EFFECT_TIME,P_REVISION
         )
         values
         (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
@@ -1406,7 +1408,8 @@
           #{pActualWeight,jdbcType=VARCHAR}, #{pFastenerStandard,jdbcType=VARCHAR}, #{pFastenerLevel,jdbcType=VARCHAR},
           #{pTorque,jdbcType=VARCHAR}, #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupply,jdbcType=VARCHAR},
           #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR},
-          #{number,jdbcType=VARCHAR},#{pBuyEngineer,jdbcType=VARCHAR},#{colorPart,jdbcType=INTEGER}
+          #{number,jdbcType=VARCHAR},#{pBuyEngineer,jdbcType=VARCHAR},#{colorPart,jdbcType=INTEGER},
+          #{orderId,jdbcType=DOUBLE},#{effectTime,jdbcType=VARCHAR},#{revision,jdbcType=VARCHAR}
       )
 
     </insert>
@@ -1464,7 +1467,7 @@
     <!--导入excel单车用量 更新EBOM信息-->
     <update id="HzEbomRecordDAOImpl_updateList" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
-            update HZ_BOM_LINE_RECORD
+            update ${item.tableName}
             <set>
                 P_UPDATE_TIME =sysdate,
                 <if test="item.pBomLinePartName != null">
@@ -1482,7 +1485,9 @@
                 <if test="item.singleVehDosage != null">
                     P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR},
                 </if>
-                  P_EBOM_STATUS = 2,
+                <if test="item.status != null">
+                    P_EBOM_STATUS = #{item.status,jdbcType=VARCHAR},
+                </if>
                 <if test="item.pFnaInfo != null">
                     P_FNA_INFO = #{item.pFnaInfo,jdbcType=VARCHAR},
                 </if>
@@ -1599,7 +1604,16 @@
                     P_BUY_ENGINEER = #{item.pBuyEngineer,jdbcType=VARCHAR},
                 </if>
                 <if test="item.colorPart != null">
-                    P_COLOR_PART = #{item.colorPart,jdbcType=INTEGER}
+                    P_COLOR_PART = #{item.colorPart,jdbcType=INTEGER},
+                </if>
+                <if test="item.orderId != null">
+                    P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.effectTime != null">
+                    P_EFFECT_TIME = #{item.effectTime,jdbcType=VARCHAR},
+                </if>
+                <if test="item.revision != null">
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR}
                 </if>
             </set>
             where P_BOM_LINE_ID = #{item.lineID,jdbcType=VARCHAR}
@@ -1640,7 +1654,7 @@
             #{item.lineId,jdbcType=VARCHAR},#{item.is2Y,jdbcType=INTEGER},#{item.isPart,jdbcType=INTEGER},
             #{item.sortNum,jdbcType=VARCHAR},#{item.pBomOfWhichDept,jdbcType=VARCHAR},#{item.pBomLinePartName,jdbcType=VARCHAR},
             #{item.pBomLinePartClass,jdbcType=VARCHAR},#{item.pBomLinePartEnName,jdbcType=VARCHAR},
-            #{item.pBomLinePartResource,jdbcType=VARCHAR}, #{item.pFnaInfo,jdbcType=VARCHAR},1,
+            #{item.pBomLinePartResource,jdbcType=VARCHAR}, #{item.pFnaInfo,jdbcType=VARCHAR},2,
             sysdate,sysdate, #{item.pFastener,jdbcType=VARCHAR}, #{item.p3cpartFlag,jdbcType=INTEGER}, #{item.pInOutSideFlag,jdbcType=INTEGER},
             #{item.pUpc,jdbcType=VARCHAR}, #{item.pFnaDesc,jdbcType=VARCHAR}, #{item.pCreateName,jdbcType=VARCHAR},
             #{item.pUpdateName,jdbcType=VARCHAR}, #{item.pUnit,jdbcType=VARCHAR}, #{item.pPictureNo,jdbcType=VARCHAR},
@@ -1797,4 +1811,83 @@
 
     </select>
 
+
+
+    <!--批量插入EBOM数据-->
+    <insert id="HzEbomRecordDAOImpl_insertList" parameterType="java.util.HashMap">
+        insert into ${tableName}
+        (
+        PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,
+        P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_SORT_NUM,P_BOM_OF_WHICH_DEPT,
+        P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS,
+        P_BOM_LINE_PART_EN_NAME,
+        P_BOM_LINE_PART_RESOURCE, P_FNA_INFO, P_EBOM_STATUS,
+        P_CREATE_TIME, P_UPDATE_TIME, P_FASTENER,
+        P_3CPART_FLAG, P_IN_OUT_SIDE_FLAG,
+        P_UPC, P_FNA_DESC, P_CREATE_NAME,
+        P_UPDATE_NAME, P_UNIT, P_PICTURE_NO,
+        P_PICTURE_SHEET, P_MATERIAL_HIGH, P_MATERIAL1,
+        P_MATERIAL2, P_MATERIAL3, P_DENSITY,
+        P_MATERIAL_STANDARD, P_SURFACE_TREAT, P_TEXTURE_COLOR_NUM,
+        P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE,
+        P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE,
+        P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT,
+        P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, P_FASTENER_LEVEL,
+        P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY,
+        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER,P_COLOR_PART,
+        P_ORDER_ID,P_EFFECT_TIME,P_REVISION
+        )
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            select
+            #{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},#{item.bomDigifaxId,jdbcType=VARCHAR},
+            #{item.lineIndex,jdbcType=VARCHAR},#{item.isHas,jdbcType=INTEGER},#{item.linePuid,jdbcType=VARCHAR},
+            #{item.lineID,jdbcType=VARCHAR},#{item.is2Y,jdbcType=INTEGER},#{item.isPart,jdbcType=INTEGER},
+            #{item.sortNum,jdbcType=VARCHAR},#{item.pBomOfWhichDept,jdbcType=VARCHAR},#{item.pBomLinePartName,jdbcType=VARCHAR},
+            #{item.pBomLinePartClass,jdbcType=VARCHAR},#{item.pBomLinePartEnName,jdbcType=VARCHAR},
+            #{item.pBomLinePartResource,jdbcType=VARCHAR}, #{item.fna,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},
+            sysdate,sysdate, #{item.pFastener,jdbcType=VARCHAR}, #{item.p3cpartFlag,jdbcType=INTEGER}, #{item.pInOutSideFlag,jdbcType=INTEGER},
+            #{item.pUpc,jdbcType=VARCHAR}, #{item.pFnaDesc,jdbcType=VARCHAR}, #{item.pCreateName,jdbcType=VARCHAR},
+            #{item.pUpdateName,jdbcType=VARCHAR}, #{item.pUnit,jdbcType=VARCHAR}, #{item.pPictureNo,jdbcType=VARCHAR},
+            #{item.pPictureSheet,jdbcType=VARCHAR}, #{item.pMaterialHigh,jdbcType=VARCHAR}, #{item.pMaterial1,jdbcType=VARCHAR},
+            #{item.pMaterial2,jdbcType=VARCHAR}, #{item.pMaterial3,jdbcType=VARCHAR}, #{item.pDensity,jdbcType=VARCHAR},
+            #{item.pMaterialStandard,jdbcType=VARCHAR}, #{item.pSurfaceTreat,jdbcType=VARCHAR}, #{item.pTextureColorNum,jdbcType=VARCHAR},
+            #{item.pManuProcess,jdbcType=VARCHAR}, #{item.pSymmetry,jdbcType=VARCHAR}, #{item.pImportance,jdbcType=VARCHAR},
+            #{item.pRegulationFlag,jdbcType=INTEGER}, #{item.pBwgBoxPart,jdbcType=VARCHAR}, #{item.pDevelopType,jdbcType=VARCHAR},
+            #{item.pDataVersion,jdbcType=VARCHAR}, #{item.pTargetWeight,jdbcType=VARCHAR}, #{item.pFeatureWeight,jdbcType=VARCHAR},
+            #{item.pActualWeight,jdbcType=VARCHAR}, #{item.pFastenerStandard,jdbcType=VARCHAR}, #{item.pFastenerLevel,jdbcType=VARCHAR},
+            #{item.pTorque,jdbcType=VARCHAR}, #{item.pDutyEngineer,jdbcType=VARCHAR}, #{item.pSupply,jdbcType=VARCHAR},
+            #{item.pSupplyCode,jdbcType=VARCHAR}, #{item.pRemark,jdbcType=VARCHAR}, #{item.pRegulationCode,jdbcType=VARCHAR},
+            #{item.number,jdbcType=VARCHAR},#{item.pBuyEngineer,jdbcType=VARCHAR},#{item.colorPart,jdbcType=INTEGER},
+            #{item.orderId,jdbcType=DOUBLE},#{item.effectTime,jdbcType=VARCHAR},#{item.revision,jdbcType=VARCHAR}
+            from DUAL
+        </foreach>
+    </insert>
+
+
+
+    <!--批量查询数据-->
+    <select id="HzEbomRecordDAOImpl_getEbomRecordsByPuids" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select * from ${tableName} t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            <if test="puids != null and puids.size()>0">
+                and t.puid in
+                <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
+                    #{puids[${index}]}
+                </foreach>
+            </if>
+            <if test="revision!= null">
+                and P_REVISION is not null
+            </if>
+            <if test="state != null">
+               and P_EBOM_STATUS = #{state,jdbcType=INTEGER}
+            </if>
+            <if test="orderId != null">
+               and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
+            </if>
+        </where>
+    </select>
 </mapper>

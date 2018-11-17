@@ -9,8 +9,10 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.work.HzWorkProcedure;
 
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +40,8 @@ public class HzWorkProcessController extends BaseController {
 
     @Autowired
     private HzWorkProcessService hzWorkProcessService;
+    @Autowired
+    private HzChangeOrderDAO hzChangeOrderDAO;
     /**
      * 工艺路线的标题
      * @param response
@@ -123,57 +128,57 @@ public class HzWorkProcessController extends BaseController {
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
-    /**
-     * 分页获取工艺数据 记录
-     *
-     * @param query
-     * @return
-     */
-    @RequestMapping(value = "record/page", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> getHzWorkProcessRecordForPage(HzWorkProcessByPageQuery query) {
-        HzWorkProcessByPageQuery ebomByPageQuery = query;
-        ebomByPageQuery.setPageSize(0);
-        try{
-            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        }catch (Exception e){
-
-        }
-        Page<HzWorkProcessRespDTO> page = hzWorkProcessService.findHzWorkProcessForPage(query);
-        if (page == null) {
-            return new HashMap<>();
-        }
-        List<HzWorkProcessRespDTO> list = page.getResult();
-        Map<String, Object> ret = new HashMap<>();
-        List<Map<String, Object>> _list = new ArrayList<>();
-        list.forEach(dto -> {
-            Map<String, Object> _res = new HashMap<>();
-            _res.put("No", dto.getNo());
-            _res.put("materielId", dto.getMaterielId());
-            _res.put("pMaterielCode", dto.getpMaterielCode());
-            _res.put("pMaterielDesc", dto.getpMaterielDesc());
-            _res.put("factoryCode", dto.getFactoryCode());
-            _res.put("purpose", dto.getPurpose());
-            _res.put("state", dto.getState());
-            _res.put("pProcedureCode", dto.getpProcedureCode());
-            _res.put("pWorkCode", dto.getpWorkCode());
-            _res.put("pWorkDesc", dto.getpWorkDesc());
-            _res.put("controlCode", dto.getControlCode());
-            _res.put("pProcedureDesc", dto.getpProcedureDesc());
-            _res.put("pCount", dto.getpCount());
-            _res.put("pDirectLabor", dto.getpDirectLabor());
-            _res.put("pIndirectLabor", dto.getpIndirectLabor());
-            _res.put("pMachineLabor", dto.getpMachineLabor());
-            _res.put("pBurn", dto.getpBurn());
-            _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
-            _res.put("pOtherCost", dto.getpOtherCost());
-
-            _list.add(_res);
-        });
-        ret.put("totalCount", page.getTotalCount());
-        ret.put("result", _list);
-        return ret;
-    }
+//    /**
+//     * 分页获取工艺数据 记录
+//     *
+//     * @param query
+//     * @return
+//     */
+//    @RequestMapping(value = "record/page", method = RequestMethod.GET)
+//    @ResponseBody
+//    public Map<String, Object> getHzWorkProcessRecordForPage(HzWorkProcessByPageQuery query) {
+//        HzWorkProcessByPageQuery ebomByPageQuery = query;
+//        ebomByPageQuery.setPageSize(0);
+//        try{
+//            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+//        }catch (Exception e){
+//
+//        }
+//        Page<HzWorkProcessRespDTO> page = hzWorkProcessService.findHzWorkProcessForPage(query);
+//        if (page == null) {
+//            return new HashMap<>();
+//        }
+//        List<HzWorkProcessRespDTO> list = page.getResult();
+//        Map<String, Object> ret = new HashMap<>();
+//        List<Map<String, Object>> _list = new ArrayList<>();
+//        list.forEach(dto -> {
+//            Map<String, Object> _res = new HashMap<>();
+//            _res.put("No", dto.getNo());
+//            _res.put("materielId", dto.getMaterielId());
+//            _res.put("pMaterielCode", dto.getpMaterielCode());
+//            _res.put("pMaterielDesc", dto.getpMaterielDesc());
+//            _res.put("factoryCode", dto.getFactoryCode());
+//            _res.put("purpose", dto.getPurpose());
+//            _res.put("state", dto.getState());
+//            _res.put("pProcedureCode", dto.getpProcedureCode());
+//            _res.put("pWorkCode", dto.getpWorkCode());
+//            _res.put("pWorkDesc", dto.getpWorkDesc());
+//            _res.put("controlCode", dto.getControlCode());
+//            _res.put("pProcedureDesc", dto.getpProcedureDesc());
+//            _res.put("pCount", dto.getpCount());
+//            _res.put("pDirectLabor", dto.getpDirectLabor());
+//            _res.put("pIndirectLabor", dto.getpIndirectLabor());
+//            _res.put("pMachineLabor", dto.getpMachineLabor());
+//            _res.put("pBurn", dto.getpBurn());
+//            _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
+//            _res.put("pOtherCost", dto.getpOtherCost());
+//
+//            _list.add(_res);
+//        });
+//        ret.put("totalCount", page.getTotalCount());
+//        ret.put("result", _list);
+//        return ret;
+//    }
 
 
     /**
@@ -266,7 +271,7 @@ public class HzWorkProcessController extends BaseController {
         List<Map<String, Object>> _list = new ArrayList<>();
         list.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
-            _res.put("no", dto.getNo());
+            _res.put("No", dto.getNo());
             _res.put("materielId", dto.getMaterielId());
             _res.put("pMaterielCode", dto.getpMaterielCode());
             _res.put("pMaterielDesc", dto.getpMaterielDesc());
@@ -285,7 +290,6 @@ public class HzWorkProcessController extends BaseController {
             _res.put("pBurn", dto.getpBurn());
             _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
             _res.put("pOtherCost", dto.getpOtherCost());
-
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -387,5 +391,19 @@ public class HzWorkProcessController extends BaseController {
 
         result.put("success",true);
         return result;
+    }
+
+    /**
+     * 跳转到工艺路线选择变更单
+     * @return
+     */
+    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
+    public String getOrderChooseToPage(String projectId,String puids,Model model){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
+        if(ListUtil.isNotEmpty(records)){
+            model.addAttribute("data",records);
+            model.addAttribute("puids",puids);
+        }
+        return "bomManage/mbom/routingData/routingSetChangeForm";
     }
 }

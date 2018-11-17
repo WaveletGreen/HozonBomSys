@@ -11,7 +11,7 @@
         <!--主键，从序列中获得-->
         <id column="CMCR_CG_ID" jdbcType="DECIMAL" property="cmcrCgId"/>
         <!--VWO号，外键，级联删除-->
-        <result column="CMCR_CG_VWO_ID" jdbcType="DECIMAL" property="cmcrCgVwoId"/>
+        <result column="CMCR_CHANGE_ORDER_UID" jdbcType="DECIMAL" property="cmcrCgVwoId"/>
         <!--车身颜色代码，要从特性中获取，万一特性删除了，还能保留该值，该值与CMCR_CG_MODEL_SHELL保持一致-->
         <result column="CMCR_CG_SHELL_CODE" jdbcType="VARCHAR" property="cmcrCgShellCode"/>
         <!--变更创建时间-->
@@ -65,7 +65,7 @@
     </resultMap>
     <sql id="Base_Column_List">
     CMCR_CG_ID,
-    CMCR_CG_VWO_ID,
+    CMCR_CHANGE_ORDER_UID,
     CMCR_CG_SHELL_CODE,
     CMCR_CG_CREATE_DATE,
     CMCR_CG_CREATOR,
@@ -130,7 +130,7 @@
     <insert id="insertList" parameterType="java.util.List">
         insert into ${whichTable} (
         CMCR_CG_ID,
-        CMCR_CG_VWO_ID,
+        CMCR_CHANGE_ORDER_UID,
         CMCR_CG_SHELL_CODE,
 
         CMCR_CG_CREATOR,
@@ -188,7 +188,7 @@
                 CMCR_CG_ID,
             </if>
             <if test="cmcrCgVwoId != null">
-                CMCR_CG_VWO_ID,
+                CMCR_CHANGE_ORDER_UID,
             </if>
             <if test="cmcrCgShellCode != null">
                 CMCR_CG_SHELL_CODE,
@@ -355,7 +355,7 @@
         update ${whichTable}
         <set>
             <if test="cmcrCgVwoId != null">
-                CMCR_CG_VWO_ID = #{cmcrCgVwoId,jdbcType=DECIMAL},
+                CMCR_CHANGE_ORDER_UID = #{cmcrCgVwoId,jdbcType=DECIMAL},
             </if>
             <if test="cmcrCgShellCode != null">
                 CMCR_CG_SHELL_CODE = #{cmcrCgShellCode,jdbcType=VARCHAR},
@@ -437,7 +437,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange">
     update ${whichTable}
-    set CMCR_CG_VWO_ID = #{cmcrCgVwoId,jdbcType=DECIMAL},
+    set CMCR_CHANGE_ORDER_UID = #{cmcrCgVwoId,jdbcType=DECIMAL},
       CMCR_CG_SHELL_CODE = #{cmcrCgShellCode,jdbcType=VARCHAR},
       CMCR_CG_CREATE_DATE = #{cmcrCgCreateDate,jdbcType=TIMESTAMP},
       CMCR_CG_CREATOR = #{cmcrCgCreator,jdbcType=VARCHAR},
@@ -501,7 +501,7 @@
         WHERE
         t.CMCR_SRC_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
         and
-        t.CMCR_CG_VWO_ID &lt;= #{cmcrCgVwoId,jdbcType=INTEGER}
+        t.CMCR_CHANGE_ORDER_UID &lt;= #{cmcrCgVwoId,jdbcType=INTEGER}
         ORDER BY t.CMCR_CG_ID DESC
         ) te
         where
@@ -516,15 +516,15 @@
         from
         HZ_CMCR_AFTER_CHANGE
         where
-        CMCR_CG_VWO_ID = (
-        select MAX(CMCR_CG_VWO_ID) from
-          (select CMCR_SRC_PUID,CMCR_CG_VWO_ID from HZ_CMCR_AFTER_CHANGE where
-            CMCR_CG_VWO_ID &lt;#{vwoId,jdbcType=INTEGER} and
-            CMCR_SRC_PUID in (select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}))
+        CMCR_CHANGE_ORDER_UID = (
+        select MAX(CMCR_CHANGE_ORDER_UID) from
+          (select CMCR_SRC_PUID,CMCR_CHANGE_ORDER_UID from HZ_CMCR_AFTER_CHANGE where
+            CMCR_CHANGE_ORDER_UID &lt;#{vwoId,jdbcType=INTEGER} and
+            CMCR_SRC_PUID in (select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CHANGE_ORDER_UID=#{vwoId,jdbcType=INTEGER}))
         )
         and
         CMCR_SRC_PUID in (
-        select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+        select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CHANGE_ORDER_UID=#{vwoId,jdbcType=INTEGER}
         )
         and CMCR_CG_SHELL_CODE is not null
     </select>
@@ -535,8 +535,8 @@
         from
         HZ_CMCR_AFTER_CHANGE
         where
-        CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
-        and ROWNUM&lt;(select (count(*)/2+1) from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER})
+        CMCR_CHANGE_ORDER_UID=#{vwoId,jdbcType=INTEGER}
+        and ROWNUM&lt;(select (count(*)/2+1) from HZ_CMCR_AFTER_CHANGE where CMCR_CHANGE_ORDER_UID=#{vwoId,jdbcType=INTEGER})
     </select>
 
     <select id="doQueryCmcrChangeAfterFirst" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -548,10 +548,10 @@
             from
             HZ_CMCR_AFTER_CHANGE
             where
-            CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+            CMCR_CHANGE_ORDER_UID=#{vwoId,jdbcType=INTEGER}
         )
         where
-          rn&gt;(select (count(*)/2) from HZ_CMCR_AFTER_CHANGE where CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER})
+          rn&gt;(select (count(*)/2) from HZ_CMCR_AFTER_CHANGE where CMCR_CHANGE_ORDER_UID=#{vwoId,jdbcType=INTEGER})
     </select>
 
     <select id="doQueryCmcrChangeAfter" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -560,6 +560,6 @@
         from
         HZ_CMCR_AFTER_CHANGE
         where
-        CMCR_CG_VWO_ID=#{vwoId,jdbcType=INTEGER}
+        CMCR_CHANGE_ORDER_UID=#{vwoId,jdbcType=INTEGER}
     </select>
 </mapper>

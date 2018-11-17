@@ -35,7 +35,7 @@
         <!--是否多色-->
         <result column="P_COLOR_IS_MULTIPLY" jdbcType="VARCHAR" property="pColorIsMultiply"/>
         <!--VWO变更号的ID，外键-->
-        <result column="CMCR_VWO_ID" jdbcType="BIGINT" property="cmcrVwoId"/>
+        <result column="CMCR_CHANGE_ORDER_UID" jdbcType="BIGINT" property="cmcrVwoId"/>
         <!--创建时间-->
         <result column="CMCR_CREATE_DATE" jdbcType="DATE" property="cmcrCreateDate"/>
         <!--创建人-->
@@ -73,7 +73,7 @@
     </sql>
     <sql id="Color_Is_Multiply">
         P_COLOR_IS_MULTIPLY,
-        CMCR_VWO_ID,
+        CMCR_CHANGE_ORDER_UID,
         CMCR_CREATE_DATE,
         CMCR_CREATOR,
         CMCR_UPDATE_DATE,
@@ -117,10 +117,10 @@
         <include refid="Base_Column_List"/>,
         t2.
         <include refid="Color_Is_Multiply"/>,
-        t3.VWO_NUM as cmcrVwoNum
+        t3.CHANGE_NO as cmcrVwoNum
         from HZ_CFG0_MODEL_COLOR_RECORD t
         left join HZ_CFG0_COLORSET t2 on p_model_shell=t2.p_color_code
-        left join HZ_VWO_INFO t3 on t3.ID = t.CMCR_VWO_ID
+        left join HZ_CHANGE_ORDER_RECORD t3 on t3.ID = t.CMCR_CHANGE_ORDER_UID
         where t.p_cfg0_main_record_of_mc=
         (select puid
         from hz_cfg0_main_record t3
@@ -179,7 +179,7 @@
     <update id="updateListData" parameterType="java.util.List">
         update
         HZ_CFG0_MODEL_COLOR_RECORD t
-        set t.CMCR_VWO_ID=
+        set t.CMCR_CHANGE_ORDER_UID=
         <foreach collection="list" item="hzCfg0ModelColor" open="case" close="end">
             when t.PUID=#{hzCfg0ModelColor.puid,jdbcType=VARCHAR}
             then
@@ -203,8 +203,8 @@
           HZ_CFG0_MODEL_COLOR_RECORD t
         set
           t.CMCR_STATUS = #{cmcrStatus},
-          t.CMCR_VWO_ID = null
+          t.CMCR_CHANGE_ORDER_UID = null
         where
-          t.CMCR_VWO_ID = #{cmcrVwoId}
+          t.CMCR_CHANGE_ORDER_UID = #{cmcrVwoId}
     </update>
 </mapper>

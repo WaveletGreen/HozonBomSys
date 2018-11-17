@@ -2,13 +2,10 @@ package com.connor.hozon.bom.resources.domain.model;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -268,6 +265,11 @@ public class HzEbomRecordFactory {
 
     public static HzEbomRespDTO eplRecordToEbomRespDTO(HzEPLManageRecord record){
         HzEbomRespDTO respDTO   = new HzEbomRespDTO();
+        Integer is2Y = record.getIs2Y();
+        Integer hasChildren = record.getIsHas();
+        String lineIndex = record.getLineIndex();
+        String[] strings = HzBomSysFactory.getLevelAndRank(lineIndex, is2Y, hasChildren);
+        respDTO.setLevel(strings[0]);
         respDTO.setPuid(record.getPuid());
         respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
         respDTO.setLineId(record.getLineID());
@@ -365,6 +367,57 @@ public class HzEbomRecordFactory {
         hzBomLineRecord.setpFeatureWeight(record.getpFeatureWeight());
         hzBomLineRecord.setpFnaDesc(record.getpFnaDesc());
         hzBomLineRecord.setpFnaInfo(record.getpFnaInfo());
+        hzBomLineRecord.setpInOutSideFlag(record.getpInOutSideFlag());
+        hzBomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+        hzBomLineRecord.setpImportance(record.getpImportance());
+        hzBomLineRecord.setpManuProcess(record.getpManuProcess());
+        hzBomLineRecord.setpMaterial1(record.getpMaterial1());
+        hzBomLineRecord.setpMaterial2(record.getpMaterial2());
+        hzBomLineRecord.setpMaterial3(record.getpMaterial3());
+        hzBomLineRecord.setpMaterialHigh(record.getpMaterialHigh());
+        hzBomLineRecord.setpMaterialStandard(record.getpMaterialStandard());
+        hzBomLineRecord.setpPictureNo(record.getpPictureNo());
+        hzBomLineRecord.setpPictureSheet(record.getpPictureSheet());
+        hzBomLineRecord.setpRegulationCode(record.getpRegulationCode());
+        hzBomLineRecord.setpUpc(record.getpUpc());
+        hzBomLineRecord.setpUnit(record.getpUnit());
+        hzBomLineRecord.setpRemark(record.getpRemark());
+        hzBomLineRecord.setpSymmetry(record.getpSymmetry());
+        hzBomLineRecord.setpTextureColorNum(record.getpTextureColorNum());
+        hzBomLineRecord.setpSurfaceTreat(record.getpSurfaceTreat());
+        hzBomLineRecord.setpTargetWeight(record.getpTargetWeight());
+        hzBomLineRecord.setpSupplyCode(record.getpSupplyCode());
+        hzBomLineRecord.setpSupply(record.getpSupply());
+        hzBomLineRecord.setpTorque(record.getpTorque());
+        hzBomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
+        hzBomLineRecord.setNumber(record.getNumber());
+        hzBomLineRecord.setStatus(2);
+        hzBomLineRecord.setpRegulationFlag(record.getpRegulationFlag());
+        hzBomLineRecord.setColorPart(record.getColorPart());
+        return hzBomLineRecord;
+    }
+
+    public static HzBomLineRecord eplRecordToBomLineRecord(HzEPLManageRecord record){
+        HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
+        hzBomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
+        hzBomLineRecord.setLineID(record.getLineID());
+        hzBomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
+        hzBomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
+        hzBomLineRecord.setP3cpartFlag(record.getP3cpartFlag());
+        hzBomLineRecord.setpBuyEngineer(record.getpBuyEngineer());
+        hzBomLineRecord.setpActualWeight(record.getpActualWeight());
+        hzBomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
+        hzBomLineRecord.setpBwgBoxPart(record.getpBwgBoxPart());
+        hzBomLineRecord.setpDataVersion(record.getpDataVersion());
+        hzBomLineRecord.setpDensity(record.getpDensity());
+        hzBomLineRecord.setpDevelopType(record.getpDevelopType());
+        hzBomLineRecord.setpDutyEngineer(record.getpDutyEngineer());
+        hzBomLineRecord.setpFastener(record.getpFastener());
+        hzBomLineRecord.setpFastenerLevel(record.getpFastenerLevel());
+        hzBomLineRecord.setpFastenerStandard(record.getpFastenerStandard());
+        hzBomLineRecord.setpFeatureWeight(record.getpFeatureWeight());
+        hzBomLineRecord.setpFnaDesc(record.getpFnaDesc());
+        hzBomLineRecord.setpFnaInfo(record.getFna());
         hzBomLineRecord.setpInOutSideFlag(record.getpInOutSideFlag());
         hzBomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
         hzBomLineRecord.setpImportance(record.getpImportance());

@@ -96,16 +96,16 @@ public class HzEWOServiceImpl implements HzEWOService {
                     HzBomLineRecord afterRecord = new HzBomLineRecord();
 
 
-                    srcRecord.setEwoNo(ewoNo);
+//                    srcRecord.setEwoNo(ewoNo);
                     srcRecord.setTableName("HZ_BOM_LINE_RECORD");
                     srcRecord.setPuid(bomLineRecord.getPuid());
 
-                    beforeRecord.setEwoNo(ewoNo);
+//                    beforeRecord.setEwoNo(ewoNo);
                     beforeRecord.setTableName("HZ_EBOM_REOCRD_BEFORE_CHANGE");
                     beforeRecord.setPuid(bomLineRecord.getPuid());
                     beforeRecords.add(beforeRecord);
 
-                    afterRecord.setEwoNo(ewoNo);
+//                    afterRecord.setEwoNo(ewoNo);
                     afterRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
                     afterRecord.setPuid(bomLineRecord.getPuid());
                     afterRecords.add(afterRecord);
@@ -122,14 +122,14 @@ public class HzEWOServiceImpl implements HzEWOService {
                             records.forEach(record -> {
                                 HzBomLineRecord srcBomLineRecord = new HzBomLineRecord();
                                 srcBomLineRecord.setPuid(record.getPuid());
-                                srcBomLineRecord.setEwoNo(ewoNo);
+//                                srcBomLineRecord.setEwoNo(ewoNo);
                                 srcBomLineRecord.setStatus(6);
                                 srcBomLineRecord.setTableName("HZ_BOM_LINE_RECORD");
                                 srcRecords.add(srcBomLineRecord);
 
                                 HzBomLineRecord afterBomLineRecord = new HzBomLineRecord();
                                 afterBomLineRecord.setPuid(record.getPuid());
-                                afterBomLineRecord.setEwoNo(ewoNo);
+//                                afterBomLineRecord.setEwoNo(ewoNo);
                                 afterBomLineRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
                                 afterRecords.add(afterBomLineRecord);
 
@@ -254,7 +254,7 @@ public class HzEWOServiceImpl implements HzEWOService {
 
 
     private HzEbomRespDTO recordToRespDTO(HzBomLineRecord record){
-        HzEbomRespDTO  respDTO = new HzEbomRespDTO();
+        HzEbomRespDTO respDTO = new HzEbomRespDTO();
         Integer is2Y = record.getIs2Y();
         Integer hasChildren = record.getIsHas();
         String lineIndex = record.getLineIndex();
