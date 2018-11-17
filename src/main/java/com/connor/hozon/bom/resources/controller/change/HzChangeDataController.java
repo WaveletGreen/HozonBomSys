@@ -107,7 +107,8 @@ public class HzChangeDataController extends BaseController {
 
     @RequestMapping(value = "ebom/page")
     public String ebomDataTOPage(Model model,String projectId,Long orderId){
-        return "change/ChangeOrder/changeEbomTable";
+        model.addAttribute("orderId",orderId);
+        return "change/changeOrder/changeEbomTable";
     }
 
     @RequestMapping(value = "ebom/data",method = RequestMethod.GET)
