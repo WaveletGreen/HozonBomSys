@@ -26,6 +26,15 @@ public class HzWorkListDAOImpl extends BaseSQLUtil implements HzWorkListDAO {
     }
 
     @Override
+    public int count(String user,String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        User user1 = UserInfo.getUser();
+        map.put("auditer",user);//接口人
+        return (int) super.findForObject("HzWorkListDAOImpl_count",map);
+    }
+
+    @Override
     public List<HzWorkListRecord> findWorkList(Map<String, Object> map) {
         return super.findForList("HzWorkListDAOImpl_findWorkList",map);
     }

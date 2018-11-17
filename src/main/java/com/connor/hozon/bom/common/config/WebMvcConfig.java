@@ -114,9 +114,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //待办事项
         registry.addViewController("/untreated").setViewName("/myListJob/untreated/untreated");
         //已处理事项
-        registry.addViewController("/handled").setViewName("/myListJob/untreated/handled/handled");
+        registry.addViewController("/processed").setViewName("/myListJob/untreated/handled/handled");
         //我的申请
-        registry.addViewController("/application").setViewName("/myListJob/untreated/application/application");
+        registry.addViewController("/myApplication").setViewName("/myListJob/untreated/application/application");
 
 
         //变更管理VWO表单

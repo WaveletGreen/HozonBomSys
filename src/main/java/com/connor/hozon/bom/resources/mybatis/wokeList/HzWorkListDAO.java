@@ -12,6 +12,8 @@ public interface HzWorkListDAO {
 
     int update(HzWorkListRecord record);
 
+    int count(String user,String projectId);
+
     List<HzWorkListRecord> findWorkList(Map<String,Object> map);
 
     List<HzWorkListRecord> findHzWorkListBasicInfoList(HzWorkListBasicInfoQuery query);

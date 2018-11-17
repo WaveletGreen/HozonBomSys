@@ -313,25 +313,16 @@
 		 DELETE FROM userRecord WHERE id=#{id}
 	</delete>
 
-	<!--统计-->
-	<select id="count" parameterType="com.connor.hozon.bom.sys.entity.QueryUser" resultType="int">
+	<!--统计待办事项-->
+	<select id="HzWorkListDAOImpl_count" parameterType="java.util.Map" resultType="int">
 		SELECT count(*) FROM HZ_WORK_LIST
 		WHERE 1=1
-		<if test="userName!=null and userName!='' ">
-			AND user_name=#{userName}
+		<!--接口（审批）人是自己（登录角色）-->
+		and AUDITER = #{auditer,jdbcType=VARCHAR}
+		<if test="projectId != null and projectId !='' ">
+			and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
 		</if>
-		<if test="address!=null and address!='' ">
-			AND address=#{address}
-		</if>
-		<if test="state!=null and state!='' ">
-			AND state=#{state}
-		</if>
-		<if test="type!=null and type!='' ">
-			AND type=#{type}
-		</if>
-		<if test="sort!= null and sort!='' ">
-			order by ${sort} ${order}
-		</if>
+
 	</select>
 
 </mapper>
