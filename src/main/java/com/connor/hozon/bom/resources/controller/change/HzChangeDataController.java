@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.change;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeDataRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
@@ -123,13 +124,41 @@ public class HzChangeDataController extends BaseController {
     }
 
 
+    @RequestMapping(value = "mbom/title",method = RequestMethod.GET)
+    public void getMbomTitle(String projectId,HttpServletResponse response) {
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        tableTitle.put("state","状态");
+        tableTitle.put("changeType","变更类型");
+        tableTitle.put("lineId", "零件号");
+        tableTitle.put("pBomLinePartName", "名称");
+        tableTitle.put("level", "层级");
+        tableTitle.put("rank", "级别");
+        tableTitle.put("pBomOfWhichDept", "专业");
+        tableTitle.put("pBomLinePartClass", "零件分类");
+        tableTitle.put("pBomLinePartResource", "零部件来源");
+        tableTitle.put("sparePart", "备件");
+        tableTitle.put("sparePartNum", "备件编号");
+        tableTitle.put("processRoute", "工艺路线");
+        tableTitle.put("laborHour", "人工工时");
+        tableTitle.put("rhythm", "节拍");
+        tableTitle.put("solderJoint", "焊点");
+        tableTitle.put("machineMaterial", "机物料");
+        tableTitle.put("standardPart", "标准件");
+        tableTitle.put("tools", "工具");
+        tableTitle.put("wasterProduct", "废品");
+        tableTitle.put("change", "变更");
+        tableTitle.put("changeNum", "变更号");
+        tableTitle.put("pFactoryCode", "工厂代码");
+        tableTitle.put("pStockLocation", "发货料库存地点");
+        tableTitle.put("pBomType", "BOM类型");
+        toJSONResponse(Result.build(tableTitle), response);
+    }
 
-
-
-
-
-
-
+    /**
+     * 获取超链接
+     * @param query
+     * @param response
+     */
     @RequestMapping(value = "order/hyper",method = RequestMethod.GET)
     public void getChangeOrderData(HzChangeDataQuery query,HttpServletResponse response){
         List<HzChangeDataRespDTO> respDTOS = hzChangeDataService.getChangeDataHyperRecord(query);
@@ -248,6 +277,50 @@ public class HzChangeDataController extends BaseController {
                 _res.put("mouldType", dto.getMouldType());
                 _res.put("outerPart", dto.getOuterPart());
                 _res.put("station", dto.getStation());
+                _list.add(_res);
+            });
+            ret.put("result", _list);
+            return ret;
+        }
+        return null;
+    }
+
+
+
+    @RequestMapping(value = "mbom/data",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getMBOMChangeDataDetail(HzChangeDataQuery query){
+        List<HzMbomRecordRespDTO> list = hzChangeDataService.getChangeDataRecordForMBOM(query);
+        Map<String, Object> ret = new HashMap<>();
+        if(ListUtil.isNotEmpty(list)){
+            List<Map<String, Object>> _list = new ArrayList<>();
+            list.forEach(dto -> {
+                Map<String, Object> _res = new HashMap<>();
+                _res.put("state",dto.getState());
+                _res.put("changeType",dto.getChangeType());
+                _res.put("rank",dto.getRank());
+                _res.put("level", dto.getLevel());
+                _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
+                _res.put("lineId", dto.getLineId());
+                _res.put("pBomLinePartName", dto.getpBomLinePartName());
+                _res.put("pBomLinePartClass", dto.getpBomLinePartClass());
+                _res.put("pBomLinePartResource", dto.getpBomLinePartResource());
+                _res.put("sparePart", dto.getSparePart());
+                _res.put("sparePartNum", dto.getSparePartNum());
+                _res.put("processRoute", dto.getProcessRoute());
+                _res.put("laborHour", dto.getLaborHour());
+                _res.put("rhythm", dto.getRhythm());
+                _res.put("pLouaFlag",dto.getpLouaFlag());
+                _res.put("solderJoint", dto.getSolderJoint());
+                _res.put("machineMaterial", dto.getMachineMaterial());
+                _res.put("standardPart", dto.getStandardPart());
+                _res.put("tools", dto.getTools());
+                _res.put("wasterProduct", dto.getWasterProduct());
+                _res.put("change", dto.getChange());
+                _res.put("changeNum", dto.getChangeNum());
+                _res.put("pFactoryCode", dto.getpFactoryCode());
+                _res.put("pStockLocation",dto.getpStockLocation());
+                _res.put("pBomType", dto.getpBomType());
                 _list.add(_res);
             });
             ret.put("result", _list);

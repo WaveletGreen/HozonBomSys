@@ -1200,7 +1200,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 }else if(Integer.valueOf(4).equals(record.getStatus())){// 删除状态----->审核状态
                     lineRecord.setStatus(6);
                 }
-                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+//                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
                 bomLineRecords.add(lineRecord);
             }
 

@@ -1,9 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom;
 
-import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
@@ -85,4 +82,11 @@ public interface HzMbomService {
      * @return
      */
     WriteResultRespDTO refreshHzMbom(String projectId);
+
+    /**
+     * MBOM数据  到变更表单
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
 }

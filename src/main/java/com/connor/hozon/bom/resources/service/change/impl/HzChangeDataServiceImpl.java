@@ -5,18 +5,21 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
+import com.connor.hozon.bom.resources.domain.model.HzMbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.enumtype.TableNameToHyperLinkNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -45,6 +48,10 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
     @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
+
+    @Autowired
+    private HzMbomRecordDAO hzMbomRecordDAO;
+
     @Override
     public List<HzChangeDataRespDTO> getChangeDataHyperRecord(HzChangeDataQuery query) {
         try {
@@ -233,6 +240,85 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
     @Override
     public List<HzMbomRecordRespDTO> getChangeDataRecordForMBOM(HzChangeDataQuery query) {
-        return null;
+        List<HzMbomRecordRespDTO> respDTOs = new ArrayList<>();
+        Integer type = query.getType();
+        query.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
+        try {
+            Future future = pool.submit(()->{
+                //变更数据
+                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+                //查更新的数据 分变更前 变更后（有版本号 状态值为2）
+                HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
+                updateQuery.setProjectId(query.getProjectId());
+                updateQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
+                updateQuery.setStatus(2);
+                updateQuery.setRevision(true);
+                updateQuery.setOrderId(query.getOrderId());
+                updateQuery.setPuids(puids);
+                List<HzMbomLineRecord> afterRecords = hzMbomRecordDAO.getMbomRecordsByPuids(updateQuery);
+                if(ListUtil.isNotEmpty(afterRecords)){
+                    for(HzMbomLineRecord record :afterRecords){
+                        HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
+                        beforeUpdateQuery.setProjectId(query.getProjectId());
+                        beforeUpdateQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MB"));
+                        beforeUpdateQuery.setStatus(1);
+                        beforeUpdateQuery.setRevision(true);
+                        beforeUpdateQuery.setRevisionNo(record.getRevision());
+                        beforeUpdateQuery.setPuid(record.getPuid());
+                        HzMbomLineRecord eplManageRecord = hzMbomRecordDAO.getMBomRecordByPuidAndRevision(beforeUpdateQuery);
+
+                        if(eplManageRecord!=null){
+                            HzMbomRecordRespDTO beforeRecord = HzMbomRecordFactory.mbomRecordToRespDTO(eplManageRecord);
+                            beforeRecord.setChangeType("变更前");
+                            beforeRecord.setChangeType("U");
+                            respDTOs.add(beforeRecord);
+                        }
+                        HzMbomRecordRespDTO afterRespDTO = HzMbomRecordFactory.mbomRecordToRespDTO(record);
+                        afterRespDTO.setChangeType("变更后");
+                        afterRespDTO.setState("U");
+                        respDTOs.add(afterRespDTO);
+                    }
+                }
+                //查新增的数据（无版本号 状态值为2）
+                HzChangeDataDetailQuery addQuery = new HzChangeDataDetailQuery();
+                addQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
+                addQuery.setStatus(2);
+                addQuery.setRevision(false);
+                addQuery.setOrderId(query.getOrderId());
+                addQuery.setPuids(puids);
+                addQuery.setProjectId(query.getProjectId());
+                List<HzMbomLineRecord> addRecords = hzMbomRecordDAO.getMbomRecordsByPuids(addQuery);
+                if(ListUtil.isNotEmpty(addRecords)){
+                    for(HzMbomLineRecord record :addRecords){
+                        HzMbomRecordRespDTO addRespDTO = HzMbomRecordFactory.mbomRecordToRespDTO(record);
+                        addRespDTO.setState("A");
+                        respDTOs.add(addRespDTO);
+                    }
+                }
+                //查删除的数据（状态值为4）
+
+                HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
+                deleteQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
+                deleteQuery.setStatus(4);
+                deleteQuery.setRevision(false);
+                deleteQuery.setOrderId(query.getOrderId());
+                deleteQuery.setPuids(puids);
+                deleteQuery.setProjectId(query.getProjectId());
+                List<HzMbomLineRecord> deleteRecords = hzMbomRecordDAO.getMbomRecordsByPuids(deleteQuery);
+                if(ListUtil.isNotEmpty(deleteRecords)){
+                    for(HzMbomLineRecord record :deleteRecords){
+                        HzMbomRecordRespDTO addRespDTO = HzMbomRecordFactory.mbomRecordToRespDTO(record);
+                        addRespDTO.setState("D");
+                        respDTOs.add(addRespDTO);
+                    }
+                }
+                return respDTOs;
+            });
+            future.get();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return respDTOs;
     }
 }

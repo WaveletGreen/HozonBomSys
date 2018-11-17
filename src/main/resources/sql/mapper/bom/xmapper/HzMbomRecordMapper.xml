@@ -741,6 +741,79 @@
        and P_MBOM_STATUS <![CDATA[ <> ]]>0
     </update>
 
+    <!--批量更新 根据零件号来更新-->
+    <update id="HzMbomRecordDAOImpl_updateList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update ${item.tableName}
+            <set>
+                P_UPDATE_TIME =sysdate,
+                <if test="item.updateName != null">
+                    P_UPDATE_NAME = #{item.updateName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.parentUid != null">
+                    P_PARENT_UID = #{item.parentUid,jdbcType=VARCHAR},
+                </if>
+                <if test="item.isHas != null">
+                    P_BOM_LINE_IS_HAS = #{item.isHas,jdbcType=INTEGER},
+                </if>
+                <if test="item.lineId != null">
+                    P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR},
+                </if>
+                <if test="item.is2Y != null">
+                    P_BOM_LINE_IS_2Y = #{item.is2Y,jdbcType=INTEGER},
+                </if>
+                <if test="item.isPart != null">
+                    P_BOM_LINE_IS_PART = #{item.isPart,jdbcType=INTEGER},
+                </if>
+                <if test="item.isDept != null">
+                    P_BOM_LINE_IS_DEPT = #{item.isDept,jdbcType=INTEGER},
+                </if>
+                <if test="item.pBomOfWhichDept != null">
+                    P_BOM_OF_WHICH_DEPT = #{item.pBomOfWhichDept,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pBomLinePartName != null">
+                    P_BOM_LINE_PART_NAME = #{item.pBomLinePartName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pBomLinePartClass != null">
+                    P_BOM_LINE_PART_CLASS = #{item.pBomLinePartClass,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pBomLinePartEnName != null">
+                    P_BOM_LINE_PART_EN_NAME = #{item.pBomLinePartEnName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pBomLinePartResource != null">
+                    P_BOM_LINE_PART_RESOURCE = #{item.pBomLinePartResource,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pBomType != null">
+                    P_BOM_TYPE = #{item.pBomType,jdbcType=INTEGER},
+                </if>
+                <if test="item.pStockLocation != null">
+                    P_STOCK_LOCATION = #{item.pStockLocation,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pFactoryId != null">
+                    P_FACTORY_ID = #{item.pFactoryId,jdbcType=VARCHAR},
+                </if>
+                <if test="item.colorId != null">
+                    P_COLOR_PUID = #{item.colorId,jdbcType=VARCHAR},
+                </if>
+                <if test="item.orderId != null">
+                    P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.revision != null">
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR},
+                </if>
+                <if test="item.effectTime != null">
+                    P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP}
+                </if>
+                <if test="item.status != null">
+                    P_MBOM_STATUS = #{item.status,jdbcType=INTEGER}
+                </if>
+            </set>
+            where P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR}
+            and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
+            and P_MBOM_STATUS <![CDATA[ <> ]]>0
+        </foreach>
+    </update>
+
     <!--恢复数据-->
     <update id="HzMbomRecordDAOImpl_recoverBomById" parameterType="java.lang.String">
     update HZ_MBOM_RECORD
@@ -763,149 +836,6 @@
     </select>
 
 
-    <!--分页获取超级MBOM数据信息-->
-    <!--<select id="HzMbomRecordDAOImpl_getHzSuberMbomByPage" parameterType="java.util.HashMap" resultMap="MbomResultMap">-->
-       <!--select m7.*,m6.P_CFG0_DESC,m6.P_CFG0_FAMILY_NAME,m6.P_CFG0_FAMILY_DESC,m2.OBJECT_NAME,-->
-        <!--m2.OBJECT_DESC,m2.P_CFG0_MODEL_BASIC_DETAIL,m9.*-->
-        <!--from HZ_BOM_LINE_RECORD m7-->
-        <!--LEFT JOIN HZ_BOM_STATE m8 on m7.puid = m8.P_BOM_ID-->
-        <!--LEFT OUTER JOIN HZ_MBOM_RECORD m9 ON  m7.puid = m9.P_BOM_PUID-->
-        <!--left join HZ_CFG0_OF_BOMLINE_RECORD m5 on m5.p_bomlinepuid=m7.puid-->
-        <!--left join Hz_Cfg0_Record m6 on m6.puid=m5.p_to_cfg0_id_of_bl-->
-        <!--left join HZ_CFG0_TO_MODEL_RECORD m3 on m3.p_cfg0_id_record=m6.puid-->
-        <!--left join Hz_Cfg0_Model_Record m2 on m2.puid=m3.p_cfg0_model_record-->
-        <!--left join HZ_CFG0_MAIN_RECORD m4 on m4.puid=m2.p_cfg0_model_of_main_record-->
-        <!--<where>-->
-            <!--(m8.P_BOM_STATE is null or m8.P_BOM_STATE <![CDATA[!= ]]>2)-->
-            <!--and (m9.P_MBOM_STATUS IS NULL OR m9.P_MBOM_STATUS=1)-->
-            <!--<if test="lineIndex != null and lineIndex!=''">-->
-                <!--and LENGTH(TRANSLATE(m7.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}-->
-            <!--</if>-->
-            <!--<if test="isHas != null and isHas==0">-->
-                <!--and (m7.P_BOM_LINE_IS_HAS = 0 or m7.P_BOM_LINE_IS_HAS = 1)-->
-            <!--</if>-->
-            <!--<if test="isHas != null and isHas==1">-->
-                <!--and m7.P_BOM_LINE_IS_HAS = 1-->
-            <!--</if>-->
-            <!--<if test="lineId != null and lineId!=''">-->
-                <!--and m7.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')-->
-            <!--</if>-->
-            <!--<if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">-->
-                <!--and m7.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')-->
-            <!--</if>-->
-
-        <!--</where>-->
-        <!--start with m7.PUID in(-->
-        <!--select t7.PUID-->
-        <!--from HZ_BOM_LINE_RECORD t7-->
-        <!--left join HZ_CFG0_OF_BOMLINE_RECORD t5 on t5.p_bomlinepuid=t7.puid-->
-        <!--left join Hz_Cfg0_Record t6 on t6.puid=t5.p_to_cfg0_id_of_bl-->
-        <!--left join HZ_CFG0_TO_MODEL_RECORD t3 on t3.p_cfg0_id_record=t6.puid-->
-        <!--left join Hz_Cfg0_Model_Record t2 on t2.puid=t3.p_cfg0_model_record-->
-        <!--left join HZ_CFG0_MAIN_RECORD t4 on t4.puid=t2.p_cfg0_model_of_main_record-->
-        <!--<where>-->
-            <!--t4.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}-->
-            <!--<if test="cfg0ModelRecordId != null and  cfg0ModelRecordId!='' ">-->
-                <!--and m3.P_CFG0_MODEL_RECORD =#{cfg0ModelRecordId,jdbcType=VARCHAR}-->
-            <!--</if>-->
-        <!--</where>-->
-
-        <!--)-->
-        <!--connect by prior m7.PUID=m7.P_PARENT_UID-->
-    <!--</select>-->
-
-
-
-
-    <!--获取超级MBOM总数-->
-    <!--<select id="HzMbomRecordDAOImpl_getHzSuberMbomTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">-->
-       <!--select count(1)-->
-           <!--from HZ_BOM_LINE_RECORD m7-->
-       <!--LEFT JOIN HZ_BOM_STATE m8 on m7.puid = m8.P_BOM_ID-->
-       <!--LEFT OUTER JOIN HZ_MBOM_RECORD m9 ON  m7.puid = m9.P_BOM_PUID-->
-       <!--left join HZ_CFG0_OF_BOMLINE_RECORD m5 on m5.p_bomlinepuid=m7.puid-->
-       <!--left join Hz_Cfg0_Record m6 on m6.puid=m5.p_to_cfg0_id_of_bl-->
-       <!--left join HZ_CFG0_TO_MODEL_RECORD m3 on m3.p_cfg0_id_record=m6.puid-->
-       <!--left join Hz_Cfg0_Model_Record m2 on m2.puid=m3.p_cfg0_model_record-->
-       <!--left join HZ_CFG0_MAIN_RECORD m4 on m4.puid=m2.p_cfg0_model_of_main_record-->
-    <!--<where>-->
-        <!--(m8.P_BOM_STATE is null or m8.P_BOM_STATE <![CDATA[!= ]]>2)-->
-        <!--and (m9.P_MBOM_STATUS IS NULL OR m9.P_MBOM_STATUS=1)-->
-        <!--<if test="lineIndex != null and lineIndex!=''">-->
-            <!--and LENGTH(TRANSLATE(m7.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}-->
-        <!--</if>-->
-        <!--<if test="isHas != null and isHas==0">-->
-            <!--and (m7.P_BOM_LINE_IS_HAS = 0 or m7.P_BOM_LINE_IS_HAS = 1)-->
-        <!--</if>-->
-        <!--<if test="isHas != null and isHas==1">-->
-            <!--and m7.P_BOM_LINE_IS_HAS = 1-->
-        <!--</if>-->
-        <!--<if test="lineId != null and lineId!=''">-->
-            <!--and m7.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')-->
-        <!--</if>-->
-        <!--<if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">-->
-            <!--and m7.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')-->
-        <!--</if>-->
-
-    <!--</where>-->
-           <!--start with m7.PUID in(-->
-      <!--select t7.PUID-->
-      <!--from HZ_BOM_LINE_RECORD t7-->
-      <!--left join HZ_CFG0_OF_BOMLINE_RECORD t5 on t5.p_bomlinepuid=t7.puid-->
-      <!--left join Hz_Cfg0_Record t6 on t6.puid=t5.p_to_cfg0_id_of_bl-->
-      <!--left join HZ_CFG0_TO_MODEL_RECORD t3 on t3.p_cfg0_id_record=t6.puid-->
-      <!--left join Hz_Cfg0_Model_Record t2 on t2.puid=t3.p_cfg0_model_record-->
-      <!--left join HZ_CFG0_MAIN_RECORD t4 on t4.puid=t2.p_cfg0_model_of_main_record-->
-      <!--<where>-->
-          <!--t4.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}-->
-          <!--<if test="cfg0ModelRecordId != null and  cfg0ModelRecordId!='' ">-->
-              <!--and m3.P_CFG0_MODEL_RECORD =#{cfg0ModelRecordId,jdbcType=VARCHAR}-->
-          <!--</if>-->
-      <!--</where>-->
-<!--)-->
- <!--connect by prior m7.PUID=m7.P_PARENT_UID-->
-    <!--</select>-->
-
-
-    <!--&lt;!&ndash;获取超级MBOM一条信息&ndash;&gt;-->
-    <!--<select id="HzMbomRecordDAOImpl_getHzSuberMbomByPuid" parameterType="java.util.HashMap" resultMap="MbomResultMap">-->
-       <!--select m7.*,m6.P_CFG0_DESC,m6.P_CFG0_FAMILY_NAME,m6.P_CFG0_FAMILY_DESC,m2.OBJECT_NAME,-->
-           <!--m2.OBJECT_DESC,m2.P_CFG0_MODEL_BASIC_DETAIL,m9.*-->
-       <!--from HZ_BOM_LINE_RECORD m7-->
-       <!--LEFT JOIN HZ_BOM_STATE m8 on m7.puid = m8.P_BOM_ID-->
-       <!--LEFT OUTER JOIN HZ_MBOM_RECORD m9 ON  m7.puid = m9.P_BOM_PUID-->
-       <!--left join HZ_CFG0_OF_BOMLINE_RECORD m5 on m5.p_bomlinepuid=m7.puid-->
-       <!--left join Hz_Cfg0_Record m6 on m6.puid=m5.p_to_cfg0_id_of_bl-->
-       <!--left join HZ_CFG0_TO_MODEL_RECORD m3 on m3.p_cfg0_id_record=m6.puid-->
-       <!--left join Hz_Cfg0_Model_Record m2 on m2.puid=m3.p_cfg0_model_record-->
-       <!--left join HZ_CFG0_MAIN_RECORD m4 on m4.puid=m2.p_cfg0_model_of_main_record-->
-    <!--<where>-->
-       <!--m4.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}-->
-       <!--and (m8.P_BOM_STATE is null or m8.P_BOM_STATE <![CDATA[!= ]]>2)-->
-       <!--and (m9.P_MBOM_STATUS IS NULL OR m9.P_MBOM_STATUS=1)-->
-    <!--<if test="pPuid != null and  pPuid!='' ">-->
-        <!--and m7.PUID = #{pPuid,jdbcType=VARCHAR}-->
-    <!--</if>-->
-    <!--</where>-->
-    <!--</select>-->
-
-
-
-
-    <!--&lt;!&ndash;获取MBOM一条信息&ndash;&gt;-->
-    <!--<select id="HzMbomRecordDAOImpl_getHzMbom" parameterType="java.util.HashMap" resultMap="MbomResultMap">-->
-        <!--select t.* from HZ_MBOM_RECORD t-->
-        <!--where t.p_bom_digifax_id=(-->
-        <!--select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(-->
-        <!--select t2.puid from Hz_project_libs t2-->
-        <!--<where>-->
-            <!--t2.puid = #{projectId,jdbcType=VARCHAR}))-->
-            <!--<if test="parentUid != null and  parentUid!='' " >-->
-                <!--and t.P_BOM_PUID = #{parentUid,jdbcType=VARCHAR}-->
-            <!--</if>-->
-            <!--t.P_MBOM_STATUS<![CDATA[ <> ]]>0-->
-        <!--</where>-->
-    <!--</select>-->
 
     <!--获取mbom最大排序值-->
     <select id="HzMbomRecordDAOImpl_getHzMbomMaxOrderNum" parameterType="java.lang.String" resultType="java.lang.String" >
@@ -1123,14 +1053,13 @@
         and P_MBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
-
     <insert id="HzMbomRecordDAOImpl_insertVO" useGeneratedKeys="false" parameterType="java.util.HashMap">
         insert  into ${tableName} (PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_BOM_PUID,
         P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
         P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
         P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_MBOM_STATUS,
         P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,
-        P_UPDATE_NAME,P_COLOR_PUID)
+        P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
@@ -1141,8 +1070,9 @@
             #{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},
             #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
             #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
-            #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},1,
-            sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.updateName,jdbcType=VARCHAR},#{item.colorId,jdbcType=VARCHAR}
+            #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},
+            sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.updateName,jdbcType=VARCHAR},#{item.colorId,jdbcType=VARCHAR},
+            #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR}
             from DUAL
         </foreach>
     </insert>
@@ -1328,4 +1258,49 @@
 
 
 
+    <!--批量查询数据-->
+    <select id="HzMbomRecordDAOImpl_getMbomRecordsByPuids" parameterType="java.util.HashMap" resultMap="MbomResultMap">
+        select * from ${tableName} t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            <if test="puids != null and puids.size()>0">
+                and t.puid in
+                <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
+                    #{puids[${index}]}
+                </foreach>
+            </if>
+            <if test="revision!= null">
+                and P_REVISION is not null
+            </if>
+            <if test="status != null">
+                and P_MBOM_STATUS = #{status,jdbcType=INTEGER}
+            </if>
+            <if test="orderId != null">
+                and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!--查询一条有变更记录数据-->
+    <select id="HzMbomRecordDAOImpl_getMBomRecordByPuidAndRevision" parameterType="java.util.HashMap" resultMap="MbomResultMap">
+        select * from ${tableName} t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            and t.puid =#{puid}
+            <if test="revision!= null">
+                and P_REVISION =#{revision,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and P_MBOM_STATUS = #{status,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
 </mapper>
