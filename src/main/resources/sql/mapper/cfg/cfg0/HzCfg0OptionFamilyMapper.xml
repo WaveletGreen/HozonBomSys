@@ -146,4 +146,16 @@
     <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.cfg0.HzCfg0OptionFamily">
         delete HZ_CFG0_OPTIONFAMILY_RECORD t where t.PUID=#{puid,jdbcType=VARCHAR}
     </delete>
+
+    <select id="selectByDM" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+        HZ_CFG0_OPTIONFAMILY_RECORD
+        where
+        puid in
+        <foreach collection="list" index="index" item="hzDMDetailChangeBean" open="(" separator="," close=")">
+            #{hzDMDetailChangeBean.dmdCfg0FamilyUid,jdbcType=VARCHAR}
+        </foreach>
+    </select>
 </mapper>

@@ -90,6 +90,10 @@ public class HzDMBasicChangeBean {
      * 特殊特性UID，特别是“车身颜色”
      */
     private String dmbSpecialFeatureUid;
+    /**
+     * 变更状态，0为流程中，1为生效
+     */
+    private Integer dmbChangeStatus;
 
     public Long getId() {
         return id;
@@ -249,6 +253,14 @@ public class HzDMBasicChangeBean {
 
     public void setDmbSrcId(Long dmbSrcId) {
         this.dmbSrcId = dmbSrcId;
+    }
+
+    public Integer getDmbChangeStatus() {
+        return dmbChangeStatus;
+    }
+
+    public void setDmbChangeStatus(Integer dmbChangeStatus) {
+        this.dmbChangeStatus = dmbChangeStatus;
     }
 
     public void srcSetChange(HzDerivativeMaterielBasic hzDerivativeMaterielBasic){

@@ -22,4 +22,9 @@ public class HzDMDetailChangeDaoImpl extends BasicDaoImpl<HzDMDetailChangeBean> 
     public int insertList(List<HzDMDetailChangeBean> hzDMDetailChangeBeans) {
         return baseSQLUtil.executeInsert(hzDMDetailChangeBeans,clz.getCanonicalName() + ".insertList");
     }
+
+    @Override
+    public List<HzDMDetailChangeBean> selectByBasic(List<HzDMBasicChangeBean> hzDMBasicChangeBeansBefor) {
+        return baseSQLUtil.executeQueryByPass(new HzDMDetailChangeBean(), hzDMBasicChangeBeansBefor,clz.getCanonicalName() + ".selectByBasic");
+    }
 }

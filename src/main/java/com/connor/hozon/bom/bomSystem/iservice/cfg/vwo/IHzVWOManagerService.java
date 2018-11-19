@@ -261,4 +261,6 @@ public interface IHzVWOManagerService {
     List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<String> cmcrDetailSrcPuidList, Long cmcrCgVwoId);
 
     void doQueryCmcrDetailChangBefor(Map<String,Object> map, Long vwoId);
+
+    Map<String,Object> getMaterielFeatureTable(Long formId,String projectUid);
 }

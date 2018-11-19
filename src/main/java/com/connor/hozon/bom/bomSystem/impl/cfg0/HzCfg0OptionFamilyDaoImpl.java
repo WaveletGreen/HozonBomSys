@@ -11,6 +11,8 @@ import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
+import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
+import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
 
 import java.util.List;
 import java.util.Map;
@@ -88,6 +90,11 @@ public class HzCfg0OptionFamilyDaoImpl extends BasicDaoImpl<HzCfg0OptionFamily> 
     @Override
     public List<HzCfg0OptionFamily> selectByCodeAndDescWithMain2(HzCfg0OptionFamily family) {
         return baseSQLUtil.executeQuery(family, clzName + ".selectByCodeAndDescWithMain");
+    }
+
+    @Override
+    public List<HzCfg0OptionFamily> selectByDM(List<HzDerivativeMaterielDetail> hzDMDetailChangeBeans) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0OptionFamily(),hzDMDetailChangeBeans,clzName + ".selectByDM");
     }
 
 }
