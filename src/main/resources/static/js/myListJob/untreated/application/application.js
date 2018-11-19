@@ -110,7 +110,7 @@ function initTable(projectUid) {
     // })
 }
 function queryLou(id) {
-    window.location.href="worklist/base/info?id="+id;
+    window.location.href="myApplication/ToMyApplicationForm?id="+id;
 }
 // function basic() {
 //     window.Ewin.dialog({
