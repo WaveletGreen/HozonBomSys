@@ -186,8 +186,36 @@ public class HzChangeDataController extends BaseController {
         model.addAttribute("type",type);
         return "change/changeOrder/changeMbomTable";
     }
-
-
+    @RequestMapping(value = "material/page")
+    public String materialDataTOPage(Model model,Long orderId){
+        model.addAttribute("orderId",orderId);
+        return "change/changeOrder/changeMaterialTable";
+    }
+    @RequestMapping(value = "routing/page")
+    public String routingDataTOPage(Model model,Long orderId){
+        model.addAttribute("orderId",orderId);
+        return "change/changeOrder/changeRoutingTable";
+    }
+    @RequestMapping(value = "feature/page")
+    public String featureDataTOPage(Model model,Long orderId){
+        model.addAttribute("orderId",orderId);
+        return "change/changeOrder/changeFeatureTable";
+    }
+    @RequestMapping(value = "modelColorCfg/page")
+    public String modelColorCfgDataTOPage(Model model,Long orderId){
+        model.addAttribute("orderId",orderId);
+        return "change/changeOrder/changeColorCfgTable";
+    }
+    @RequestMapping(value = "materielFeature/page")
+    public String materielFeatureDataTOPage(Model model,Long orderId){
+        model.addAttribute("orderId",orderId);
+        return "change/changeOrder/changeMaterielFeatureTable";
+    }
+    @RequestMapping(value = "bomCfg/page")
+    public String bomCfgDataTOPage(Model model,Long orderId){
+        model.addAttribute("orderId",orderId);
+        return "change/changeOrder/changeBomCfgTable";
+    }
 
     @RequestMapping(value = "ebom/data",method = RequestMethod.GET)
     @ResponseBody
