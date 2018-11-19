@@ -1,9 +1,6 @@
 package com.connor.hozon.bom.resources.service.change;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzChangeDataRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 
 import java.util.List;
@@ -42,4 +39,11 @@ public interface HzChangeDataService {
      * @return
      */
     List<HzMbomRecordRespDTO> getChangeDataRecordForMBOM(HzChangeDataQuery query);
+
+    /**
+     * 查询物料数据变更单信息
+     * @param query
+     * @return
+     */
+    List<HzMaterielRespDTO> getChangeDataRecordForMateriel(HzChangeDataQuery query);
 }

@@ -1,20 +1,15 @@
 package com.connor.hozon.bom.resources.controller.change;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.response.HzChangeDataRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
-import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -94,8 +89,6 @@ public class HzChangeDataController extends BaseController {
     }
 
 
-
-
     @RequestMapping(value = "pbom/title",method = RequestMethod.GET)
     public void getPbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
@@ -153,6 +146,32 @@ public class HzChangeDataController extends BaseController {
         tableTitle.put("pBomType", "BOM类型");
         toJSONResponse(Result.build(tableTitle), response);
     }
+
+    @RequestMapping(value = "materiel/title",method = RequestMethod.GET)
+    public void getMaterielTitle(HttpServletResponse response) {
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        tableTitle.put("state","状态");
+        tableTitle.put("changeType","变更类型");
+        tableTitle.put("pMaterielCode", "物料编码");
+        tableTitle.put("pMaterielDesc", "物料描述（中文）");
+        tableTitle.put("pMaterielType", "物料类型");
+        tableTitle.put("factoryCode","工厂");
+        tableTitle.put("pMaterielDescEn", "物料描述（英文）");
+        tableTitle.put("pBasicUnitMeasure", "单位");
+        tableTitle.put("pInventedPart", "虚拟件标识");
+        tableTitle.put("resource","采购类型");
+        tableTitle.put("pSpareMaterial", "备件&原材料双属性标识");
+        tableTitle.put("pVinPerNo", "VIN前置号");
+        tableTitle.put("pColorPart", "颜色件标识");
+        tableTitle.put("pHeight", "实际重量");
+        tableTitle.put("pInOutSideFlag", "内外饰标识");
+        tableTitle.put("p3cPartFlag", "3C件标识");
+        tableTitle.put("pMrpController", "MRP控制者");
+        tableTitle.put("pPartImportantDegree", "零件重要度");
+        tableTitle.put("pLoosePartFlag", "散件标识");
+        toJSONResponse(Result.build(tableTitle), response);
+    }
+
 
     /**
      * 获取超链接
@@ -216,6 +235,8 @@ public class HzChangeDataController extends BaseController {
         model.addAttribute("orderId",orderId);
         return "change/changeOrder/changeBomCfgTable";
     }
+
+
 
     @RequestMapping(value = "ebom/data",method = RequestMethod.GET)
     @ResponseBody
@@ -285,8 +306,6 @@ public class HzChangeDataController extends BaseController {
     }
 
 
-
-
     @RequestMapping(value = "pbom/data",method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getPBOMChangeDataDetail(HzChangeDataQuery query){
@@ -324,7 +343,6 @@ public class HzChangeDataController extends BaseController {
     }
 
 
-
     @RequestMapping(value = "mbom/data",method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getMBOMChangeDataDetail(HzChangeDataQuery query){
@@ -359,6 +377,43 @@ public class HzChangeDataController extends BaseController {
                 _res.put("pFactoryCode", dto.getpFactoryCode());
                 _res.put("pStockLocation",dto.getpStockLocation());
                 _res.put("pBomType", dto.getpBomType());
+                _list.add(_res);
+            });
+            ret.put("result", _list);
+            return ret;
+        }
+        return null;
+    }
+
+
+    @RequestMapping(value = "materiel/data",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getMaterielChangeDataDetail(HzChangeDataQuery query){
+        List<HzMaterielRespDTO> list = hzChangeDataService.getChangeDataRecordForMateriel(query);
+        Map<String, Object> ret = new HashMap<>();
+        if(ListUtil.isNotEmpty(list)){
+            List<Map<String, Object>> _list = new ArrayList<>();
+            list.forEach(dto -> {
+                Map<String, Object> _res = new HashMap<>();
+                _res.put("state",dto.getState());
+                _res.put("changeType",dto.getChangeType());
+                _res.put("resource",dto.getResource());
+                _res.put("pMaterielCode",dto.getpMaterielCode());
+                _res.put("pMaterielType",dto.getpMaterielType());
+                _res.put("pMaterielDesc",dto.getpMaterielDesc());
+                _res.put("pMaterielDescEn",dto.getpMaterielDescEn());
+                _res.put("pBasicUnitMeasure",dto.getpBasicUnitMeasure());
+                _res.put("pInventedPart",dto.getpInventedPart());
+                _res.put("pSpareMaterial",dto.getpSpareMaterial());
+                _res.put("pVinPerNo",dto.getpVinPerNo());
+                _res.put("pColorPart",dto.getpColorPart());
+                _res.put("pHeight",dto.getpHeight());
+                _res.put("pInOutSideFlag",dto.getpInOutSideFlag());
+                _res.put("p3cPartFlag",dto.getP3cPartFlag());
+                _res.put("pMrpController",dto.getpMrpController());
+                _res.put("pPartImportantDegree",dto.getpPartImportantDegree());
+                _res.put("pLoosePartFlag",dto.getpLoosePartFlag());
+                _res.put("factoryCode",dto.getFactoryCode());
                 _list.add(_res);
             });
             ret.put("result", _list);

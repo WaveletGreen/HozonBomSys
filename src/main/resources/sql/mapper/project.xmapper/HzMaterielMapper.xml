@@ -37,6 +37,9 @@
         <result column="IS_SENT" jdbcType="INTEGER" property="sendSapFlag"/>
 
         <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
+        <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
+        <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
+        <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
     </resultMap>
 
     <!--整车衍生物料主数据-->
@@ -64,7 +67,9 @@
     P_MATERIEL_DESC_EN, P_BASIC_UNIT_MEASURE, P_INVENTED_PART, P_SPARE_MATERIAL, P_VIN_PER_NO,
     P_COLOR_PART, P_HEIGHT, P_IN_OUT_SIDE_FLAG, P_3C_PART_FLAG, P_MRP_CONTROLLER, P_PART_IMPORTANT_DEGREE,
     P_LOOSE_PART_FLAG, P_VALID_FLAG, P_MATERIEL_DATA_TYPE, P_CREATE_TIME, P_UPDATE_TIME,
-    P_CREATE_NAME, P_UPDATE_NAME, P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_TYPE,IS_SENT
+    P_CREATE_NAME, P_UPDATE_NAME, P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_TYPE,IS_SENT,P_ORDER_ID,
+    P_REVISION,P_EFFECT_TIME
+
   </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -144,6 +149,7 @@
                 P_LOOSE_PART_FLAG = #{pLoosePartFlag,jdbcType=INTEGER},
             </if>
             P_UPDATE_TIME = sysdate,
+            P_VALID_FLAG = 2,
             <if test="pUpdateName != null">
                 P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
             </if>
@@ -193,13 +199,14 @@
     </select>
 
     <!--批量插入-->
-    <insert id="HzMaterialDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.List">
-        insert into HZ_MATERIEL_RECORD (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE,
+    <insert id="HzMaterialDAOImpl_insertList" useGeneratedKeys="false" parameterType="java.util.HashMap">
+        insert into ${tableName}
+        (PUID, P_MATERIEL_CODE, P_MATERIEL_TYPE,
         P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID, P_MATERIEL_DESC_EN,P_MATERIEL_DATA_TYPE,
         P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG,P_COLOR_PART,P_CREATE_TIME, P_UPDATE_TIME
         ,P_CREATE_NAME,P_UPDATE_NAME,P_BASIC_UNIT_MEASURE,P_INVENTED_PART, P_SPARE_MATERIAL, P_VIN_PER_NO,
          P_HEIGHT, P_IN_OUT_SIDE_FLAG, P_3C_PART_FLAG, P_MRP_CONTROLLER, P_PART_IMPORTANT_DEGREE,
-        P_LOOSE_PART_FLAG)
+        P_LOOSE_PART_FLAG,P_ORDER_ID,P_REVISION)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR}, #{item.pMaterielCode,jdbcType=VARCHAR},
@@ -208,7 +215,7 @@
             #{item.pMaterielDescEn,jdbcType=VARCHAR},
             #{item.pMaterielDataType,jdbcType=INTEGER},
             #{item.pFactoryPuid,jdbcType=VARCHAR},
-            #{item.materielResourceId,jdbcType=VARCHAR},1,#{item.pColorPart,jdbcType=INTEGER},
+            #{item.materielResourceId,jdbcType=VARCHAR},#{item.pValidFlag,jdbcType=INTEGER},#{item.pColorPart,jdbcType=INTEGER},
             sysdate,sysdate,#{item.pCreateName,jdbcType=VARCHAR},#{item.pUpdateName,jdbcType=VARCHAR},
             #{item.pBasicUnitMeasure,jdbcType=VARCHAR}, #{item.pInventedPart,jdbcType=INTEGER},
             #{item.pSpareMaterial,jdbcType=VARCHAR},
@@ -216,7 +223,8 @@
             #{item.pInOutSideFlag,jdbcType=INTEGER},
             #{item.p3cPartFlag,jdbcType=INTEGER},
             #{item.pMrpController,jdbcType=VARCHAR},
-            #{item.pPartImportantDegree,jdbcType=VARCHAR},#{item.pLoosePartFlag,jdbcType=INTEGER}
+            #{item.pPartImportantDegree,jdbcType=VARCHAR},#{item.pLoosePartFlag,jdbcType=INTEGER},
+            #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR}
             from DUAL
         </foreach>
     </insert>
@@ -231,7 +239,7 @@
         t.*,t1.P_FACTORY_CODE
         from HZ_MATERIEL_RECORD t left join HZ_FACTORY t1
         on t.P_FACTORY_PUID = t1.puid
-        and t.P_VALID_FLAG =1
+        and t.P_VALID_FLAG <![CDATA[ <> ]]>0
         and t1.P_FACTORY_STATUS <![CDATA[ <> ]]>0
         <where>
             1=1
@@ -257,7 +265,7 @@
             <if test="pMaterielType != null and pMaterielType != ''">
                 and t.P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
-            and t.P_VALID_FLAG =1
+            and t.P_VALID_FLAG <![CDATA[ <> ]]>0
         </where>
         )t
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -293,7 +301,7 @@
             <if test="pMaterielType != null and pMaterielType != ''">
                 and P_MATERIEL_TYPE like CONCAT(CONCAT('%',#{pMaterielType,jdbcType=VARCHAR}),'%')
             </if>
-            and P_VALID_FLAG =1
+            and P_VALID_FLAG <![CDATA[ <> ]]>0
         </where>
     </select>
 
@@ -321,7 +329,7 @@
             <if test="pMaterielCode != null">
                 and P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR}
             </if>
-            and P_VALID_FLAG =1
+            and P_VALID_FLAG <![CDATA[ <> ]]>0
         </where>
     </select>
 
@@ -365,7 +373,7 @@
             <if test="pMaterielDataType != null">
                 and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=VARCHAR}
             </if>
-            and P_VALID_FLAG=1
+            and P_VALID_FLAG<![CDATA[ <> ]]>0
         </where>
     </select>
 
@@ -383,7 +391,7 @@
             <if test="type != null">
                 and P_TYPE = #{type,jdbcType=VARCHAR}
             </if>
-            and P_VALID_FLAG=1
+            and P_VALID_FLAG<![CDATA[ <> ]]>0
         </where>
     </select>
 
@@ -426,7 +434,7 @@
             <if test="pMaterielCode != null">
                 and P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR}
             </if>
-            and P_VALID_FLAG=1
+            and P_VALID_FLAG<![CDATA[ <> ]]>0
         </where>
     </select>
 
@@ -511,7 +519,10 @@
                     P_PART_IMPORTANT_DEGREE = #{item.pPartImportantDegree,jdbcType=VARCHAR},
                 </if>
                 <if test="item.resource != null">
-                    P_RESOURCE = #{item.resource,jdbcType=VARCHAR}
+                    P_RESOURCE = #{item.resource,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pValidFlag != null">
+                    P_VALID_FLAG = #{item.pValidFlag,jdbcType=INTEGER}
                 </if>
             </set>
             where PUID = #{item.puid}
@@ -541,4 +552,43 @@
     </delete>
 
 
+    <!--批量查询数据-->
+    <select id="HzMaterialDAOImpl_getMaterialRecordsByPuids" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
+        select * from ${tableName} t
+        <where>
+            t.P_PERTAIN_TO_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
+            <if test="puids != null and puids.size()>0">
+                and t.puid in
+                <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
+                    #{puids[${index}]}
+                </foreach>
+            </if>
+            <if test="revision!= null">
+                and P_REVISION is not null
+            </if>
+            <if test="pValidFlag != null">
+                and P_VALID_FLAG = #{pValidFlag,jdbcType=INTEGER}
+            </if>
+            <if test="orderId != null">
+                and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!--查询一条有变更记录数据-->
+    <select id="HzMaterialDAOImpl_getMaterialRecordByPuidAndRevision" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
+        select * from ${tableName} t
+        <where>
+            t.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+            and t.puid =#{puid}
+            <if test="revision!= null">
+                and P_REVISION =#{revision,jdbcType=VARCHAR}
+            </if>
+            <if test="pValidFlag != null">
+                and P_VALID_FLAG = #{pValidFlag,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
 </mapper>

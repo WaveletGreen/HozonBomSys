@@ -64,6 +64,7 @@ public interface HzWorkProcessService {
 
     HzWorkProcessRespDTO findHzWorkProcess2(String materielId,String projectId, String procedureDesc);
 
+    @Deprecated
     WriteResultRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO);
 
     int doUpdateByBatch(Map<String,Object> map);

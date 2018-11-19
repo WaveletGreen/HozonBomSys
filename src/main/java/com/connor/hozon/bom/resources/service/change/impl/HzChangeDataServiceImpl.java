@@ -1,10 +1,8 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzChangeDataRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
+import com.connor.hozon.bom.resources.domain.model.HzMaterielFactory;
 import com.connor.hozon.bom.resources.domain.model.HzMbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
@@ -15,6 +13,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.epl.HzEPLManageRecord;
+import sql.pojo.project.HzMaterielRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +52,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
     @Autowired
     private HzMbomRecordDAO hzMbomRecordDAO;
 
+    @Autowired
+    private HzMaterielDAO hzMaterielDAO;
     @Override
     public List<HzChangeDataRespDTO> getChangeDataHyperRecord(HzChangeDataQuery query) {
         try {
@@ -308,6 +310,89 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 if(ListUtil.isNotEmpty(deleteRecords)){
                     for(HzMbomLineRecord record :deleteRecords){
                         HzMbomRecordRespDTO addRespDTO = HzMbomRecordFactory.mbomRecordToRespDTO(record);
+                        addRespDTO.setState("D");
+                        respDTOs.add(addRespDTO);
+                    }
+                }
+                return respDTOs;
+            });
+            future.get();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return respDTOs;
+    }
+
+    @Override
+    public List<HzMaterielRespDTO> getChangeDataRecordForMateriel(HzChangeDataQuery query) {
+        List<HzMaterielRespDTO> respDTOs = new ArrayList<>();
+        query.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
+        try {
+            Future future = pool.submit(()->{
+                //变更数据
+                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+                //查更新的数据 分变更前 变更后（有版本号 状态值为2）
+                HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
+                updateQuery.setProjectId(query.getProjectId());
+                updateQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
+                updateQuery.setStatus(2);
+                updateQuery.setRevision(true);
+                updateQuery.setOrderId(query.getOrderId());
+                updateQuery.setPuids(puids);
+                List<HzMaterielRecord> afterRecords = hzMaterielDAO.getMaterialRecordsByPuids(updateQuery);
+                if(ListUtil.isNotEmpty(afterRecords)){
+                    for(HzMaterielRecord record :afterRecords){
+                        HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
+                        beforeUpdateQuery.setProjectId(query.getProjectId());
+                        beforeUpdateQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_BEFORE.getTableName());
+                        beforeUpdateQuery.setStatus(1);
+                        beforeUpdateQuery.setRevision(true);
+                        beforeUpdateQuery.setRevisionNo(record.getRevision());
+                        beforeUpdateQuery.setPuid(record.getPuid());
+                        HzMaterielRecord eplManageRecord = hzMaterielDAO.getMaterialRecordByPuidAndRevision(beforeUpdateQuery);
+
+                        if(eplManageRecord!=null){
+                            HzMaterielRespDTO beforeRecord = HzMaterielFactory.hzMaterielRecordToRespDTO(eplManageRecord);
+                            beforeRecord.setChangeType("变更前");
+                            beforeRecord.setChangeType("U");
+                            respDTOs.add(beforeRecord);
+                        }
+                        HzMaterielRespDTO afterRespDTO = HzMaterielFactory.hzMaterielRecordToRespDTO(record);
+                        afterRespDTO.setChangeType("变更后");
+                        afterRespDTO.setState("U");
+                        respDTOs.add(afterRespDTO);
+                    }
+                }
+                //查新增的数据（无版本号 状态值为2）
+                HzChangeDataDetailQuery addQuery = new HzChangeDataDetailQuery();
+                addQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
+                addQuery.setStatus(2);
+                addQuery.setRevision(false);
+                addQuery.setOrderId(query.getOrderId());
+                addQuery.setPuids(puids);
+                addQuery.setProjectId(query.getProjectId());
+                List<HzMaterielRecord> addRecords = hzMaterielDAO.getMaterialRecordsByPuids(addQuery);
+                if(ListUtil.isNotEmpty(addRecords)){
+                    for(HzMaterielRecord record :addRecords){
+                        HzMaterielRespDTO addRespDTO = HzMaterielFactory.hzMaterielRecordToRespDTO(record);
+                        addRespDTO.setState("A");
+                        respDTOs.add(addRespDTO);
+                    }
+                }
+                //查删除的数据（状态值为4）
+
+                HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
+                deleteQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
+                deleteQuery.setStatus(4);
+                deleteQuery.setRevision(false);
+                deleteQuery.setOrderId(query.getOrderId());
+                deleteQuery.setPuids(puids);
+                deleteQuery.setProjectId(query.getProjectId());
+                List<HzMaterielRecord> deleteRecords = hzMaterielDAO.getMaterialRecordsByPuids(deleteQuery);
+                if(ListUtil.isNotEmpty(deleteRecords)){
+                    for(HzMaterielRecord record :deleteRecords){
+                        HzMaterielRespDTO addRespDTO = HzMaterielFactory.hzMaterielRecordToRespDTO(record);
                         addRespDTO.setState("D");
                         respDTOs.add(addRespDTO);
                     }

@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.controller.materiel;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -129,6 +130,7 @@ public class HzMaterielController  extends BaseController {
             _res.put("pPartImportantDegree",dto.getpPartImportantDegree());
             _res.put("pLoosePartFlag",dto.getpLoosePartFlag());
             _res.put("factoryCode",dto.getFactoryCode());
+            _res.put("status",dto.getStatus());
             _list.add(_res);
         });
         ret.put("totalCount", respDTOPage.getTotalCount());
@@ -211,4 +213,16 @@ public class HzMaterielController  extends BaseController {
         return "bomManage/mbom/materialData/materialSetChangeForm";
     }
 
+
+
+    /**
+     * 物料数据发起变更数据到变更单
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "data/change",method = RequestMethod.POST)
+    public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzMaterielService.dataToChangeOrder(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
 }
