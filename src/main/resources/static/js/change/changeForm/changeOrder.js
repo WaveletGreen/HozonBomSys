@@ -13,10 +13,10 @@ $(document).ready(function () {
     table +="<th><a href=''>配色方案</a></th>";
     table +="<th><a href=''>配置物料</a></th>";
     table +="<th><a href='../change/data/ebom/page?projectId="+projectId+"&orderId="+id+"'>EBOM管理</a></th>";
-    table +="<th><a href=''>PBOM管理</a></th>";
-    table +="<th><a href=''>超级MBOM</a></th>";
-    table +="<th><a href=''>白车身生产</a></th>";
-    table +="<th><a href=''>白车身财务</a></th>";
+    table +="<th><a href='../change/data/pbom/page?projectId="+projectId+"&orderId="+id+"'>PBOM管理</a></th>";
+    table +="<th><a href='../change/data/mbom/page?projectId="+projectId+"&orderId="+id+"'>超级MBOM</a></th>";
+    table +="<th><a href='../change/data/mbom/page?projectId="+projectId+"&orderId="+id+"&type=1"+"'>白车身生产</a></th>";
+    table +="<th><a href='../change/data/mbom/page?projectId="+projectId+"&orderId="+id+"&type=6"+"'>白车身财务</a></th>";
     table +="<th><a href=''>物料数据</a></th>";
     table +="<th><a href=''>工艺路线</a></th>";
     table +="</tr>"
