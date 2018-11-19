@@ -171,12 +171,21 @@ public class HzChangeDataController extends BaseController {
 
 
     @RequestMapping(value = "ebom/page")
-    public String ebomDataTOPage(Model model,String projectId,Long orderId){
+    public String ebomDataTOPage(Model model,Long orderId){
         model.addAttribute("orderId",orderId);
         return "change/changeOrder/changeEbomTable";
     }
-
-
+    @RequestMapping(value = "pbom/page")
+    public String pbomDataTOPage(Model model,Long orderId){
+        model.addAttribute("orderId",orderId);
+        return "change/changeOrder/changePbomTable";
+    }
+    @RequestMapping(value = "mbom/page")
+    public String mbomDataTOPage(Model model,Long orderId,Integer type){
+        model.addAttribute("orderId",orderId);
+        model.addAttribute("type",type);
+        return "change/changeOrder/changeMbomTable";
+    }
 
 
 
