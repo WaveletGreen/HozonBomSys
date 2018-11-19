@@ -418,4 +418,10 @@ public class HzVwoController {
         return map;
     }
 
+    /**************************衍生物料变更描述表单***************************/
+    @RequestMapping(value = "getMaterielFeatureTable", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> getMaterielFeatureTable(@RequestParam Long formId,@RequestParam String projectUid){
+        return iHzVWOManagerService.getMaterielFeatureTable(formId,projectUid);
+    }
 }

@@ -188,4 +188,8 @@ public interface HzPbomRecordDAO {
 
 
     int deleteByPuids(String puids);
+
+
+    HzPbomLineRecord getPBomRecordByPuidAndRevision(HzChangeDataDetailQuery query);
+
 }

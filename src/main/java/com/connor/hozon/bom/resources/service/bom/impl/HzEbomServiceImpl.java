@@ -1891,12 +1891,6 @@ public class HzEbomServiceImpl implements HzEbomService {
                 || null == reqDTO.getOrderId()){
             return WriteResultRespDTO.IllgalArgument();
         }
-        WriteResultRespDTO respDTO = new WriteResultRespDTO();
-        if(null == reqDTO.getOrderId()){
-            respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-            respDTO.setErrMsg("请选择变更表单！");
-            return respDTO;
-        }
         try {
             //获取申请人信息
             User user = UserInfo.getUser();

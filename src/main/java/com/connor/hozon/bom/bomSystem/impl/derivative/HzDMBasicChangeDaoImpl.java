@@ -4,9 +4,12 @@ import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
+import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class HzDMBasicChangeDaoImpl extends BasicDaoImpl<HzDMBasicChangeBean> implements HzDMBasicChangeDao {
@@ -20,5 +23,26 @@ public class HzDMBasicChangeDaoImpl extends BasicDaoImpl<HzDMBasicChangeBean> im
     @Override
     public int insertList(List<HzDMBasicChangeBean> hzDMBasicChangeBeans) {
         return baseSQLUtil.executeInsert(hzDMBasicChangeBeans,clz.getCanonicalName() + ".insertList");
+    }
+
+    @Override
+    public List<HzDMBasicChangeBean> selectByFormid(Long changeFromId) {
+        return baseSQLUtil.executeQueryByPass(new HzDMBasicChangeBean(),changeFromId, clz.getCanonicalName() + ".selectByFormid");
+    }
+
+    @Override
+    public List<HzDMBasicChangeBean> selectBefor(Long formId) {
+        Map<String,Long> map = new HashMap<>();
+        map.put("formId",formId);
+        map.put("status",1L);
+        return baseSQLUtil.executeQueryByPass(new HzDMBasicChangeBean(), map, clz.getCanonicalName() + ".selectBefor");
+    }
+
+    @Override
+    public List<HzDMBasicChangeBean> selectAfter(Long formId) {
+        Map<String,Long> map = new HashMap<>();
+        map.put("formId",formId);
+        map.put("status",0L);
+        return baseSQLUtil.executeQueryByPass(new HzDMBasicChangeBean(), map, clz.getCanonicalName() + ".selectBefor");
     }
 }

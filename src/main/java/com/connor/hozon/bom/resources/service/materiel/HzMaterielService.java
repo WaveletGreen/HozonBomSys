@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.materiel;
 
+import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -35,4 +36,11 @@ public interface HzMaterielService {
     Page<HzMaterielRespDTO> findHzMaterielForPage(HzMaterielByPageQuery query);
 
     HzMaterielRespDTO getHzMateriel(HzMaterielQuery query);
+
+    /**
+     * 物料数据走变更流程
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
 }

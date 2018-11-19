@@ -11,6 +11,7 @@
 <div class="panel-body" style="padding-bottom: 0;">
     <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
           id="ebomChangeData">
+        <input type="hidden" id="orderId" th:value="${orderId}">
     </form>
 </div>
 <div class="panel-body" style="padding:0px;">
@@ -35,6 +36,7 @@
     function initTable() {
         var projectPuid = $("#project", window.top.document).val();
         var $table = $("#ebom_table");
+        var orderId = $("#orderId").val();
         var column = [];
         $.ajax({
             url: "../../../change/data/ebom/title",
@@ -53,7 +55,7 @@
                     }
                 }
                 $table.bootstrapTable({
-                    url: "../../../change/data/ebom/data?projectId="+projectPuid+"&orderId="+1,
+                    url: "../../../change/data/ebom/data?projectId="+projectPuid+"&orderId="+orderId,
                     method: 'GET',
                     dataType: 'json',
                     //cache: false,

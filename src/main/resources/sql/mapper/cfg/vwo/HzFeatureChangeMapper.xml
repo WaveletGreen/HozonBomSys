@@ -277,7 +277,7 @@
           WHERE
               t.CFG_PUID=#{cfgPuid,jdbcType=VARCHAR}
           and
-              t.CHANGE_ORDER_ID &lt;= #{vwoId,jdbcType=INTEGER}
+              t.ID&lt;=(select MAX(ID) from HZ_CFG0_AFTER_CHANGE_RECORD where CHANGE_ORDER_ID = #{vwoId,jdbcType=INTEGER} and CFG_PUID=#{cfgPuid,jdbcType=VARCHAR})
           ORDER BY t.id DESC
         ) te
         where

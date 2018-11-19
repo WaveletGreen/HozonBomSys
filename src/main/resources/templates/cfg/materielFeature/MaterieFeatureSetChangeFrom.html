@@ -38,16 +38,16 @@
             data.titles = titles;
             data.projectPuid = projectPuid;
             data.changeFromId = changeFromId;
-            alert(JSON.stringify(data));
             $.ajax({
                 type : "POST",
                 url: "./materielV2/getVWO",
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success: function (result) {
-                    $('.modal-dialog', window.top.document).parent('div').remove()
-                    $('body', window.top.document).find('.modal-backdrop').remove();
-                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    // $('.modal-dialog', window.top.document).parent('div').remove()
+                    // $('body', window.top.document).find('.modal-backdrop').remove();
+                    // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    activeTabBodyRefresh();
                     // if (result.status) {
                     if (result.status) {
                         layer.msg(result.msg, {icon: 1, time: 2000});

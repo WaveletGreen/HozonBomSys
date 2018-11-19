@@ -29,4 +29,8 @@ public class HzChangeDataQuery {
      */
     private String tableName;
 
+    /**
+     * 1 生成 6 财务
+     */
+    private Integer type;
 }

@@ -301,9 +301,9 @@
         from
           HZ_DERIVATIVE_MATERIEL_BASIC
         where
-        DMB_MODEL_UID in
+        ID in
         <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="(" separator="," close=")">
-              #{hzDerivativeMaterielBasic,jdbcType=VARCHAR}
+              #{hzDerivativeMaterielBasic,jdbcType=DECIMAL}
         </foreach>
     </select>
 

@@ -198,6 +198,47 @@ function initTable(projectUid) {
                     });
                 }
             },
+            {
+                text: '发起流程',
+                iconCls: 'glyphicon glyphicon-log-out',
+                handler: function () {
+                    var rows = $table.bootstrapTable('getSelections');
+                    // var puids = "";
+                    // for (var i = 0 ; i<rows.length;i++){
+                    //     puids += rows[i].puid+",";
+                    // };
+                    // var myData = JSON.stringify({
+                    //     "puids":puids,
+                    // });
+                    if (rows.length == 0) {
+                        window.Ewin.alert({message: '请选择一条需要发起流程的数据!'});
+                        return false;
+                    }
+                    window.Ewin.confirm({title: '提示', message: "确定要确定发起流程吗?", width: 500}).on(function (e) {
+                        if (e) {
+                            $.ajax({
+                                type: "",
+                                //ajax需要添加打包名
+                                url: "change/delete?id=" + rows[0].id,
+                                // data: myData,
+                                // contentType: "application/json",
+                                success: function (result) {
+                                    if (result.success) {
+                                        layer.msg('发起流程成功', {icon: 1, time: 2000})
+                                    }
+                                    else if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg})
+                                    }
+                                    $table.bootstrapTable("refresh");
+                                },
+                                error: function (info) {
+                                    window.Ewin.alert({message: "发起流程删除:" + info.status});
+                                }
+                            })
+                        }
+                    });
+                }
+            },
         ],
     });
 

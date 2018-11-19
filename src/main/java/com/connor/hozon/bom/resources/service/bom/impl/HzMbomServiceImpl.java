@@ -5,17 +5,20 @@ import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.interaction.iservice.IHzConfigBomColorService;
-import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.model.HzMaterielFactory;
 import com.connor.hozon.bom.resources.domain.model.HzMbomRecordFactory;
+import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
+import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -25,13 +28,19 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
+import sql.pojo.change.HzApplicantChangeRecord;
+import sql.pojo.change.HzAuditorChangeRecord;
+import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.interaction.HzConfigBomColorBean;
 import sql.pojo.project.HzMaterielRecord;
@@ -70,6 +79,15 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Autowired
     private HzCfg0ModelFeatureService hzCfg0ModelFeatureService;
+
+    @Autowired
+    private HzChangeDataRecordDAO hzChangeDataRecordDAO;
+
+    @Autowired
+    private HzApplicantChangeDAO hzApplicantChangeDAO;
+
+    @Autowired
+    private HzAuditorChangeDAO hzAuditorChangeDAO;
 
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
@@ -482,10 +500,7 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Override
     public WriteResultRespDTO refreshHzMbom(String projectId) {
-        if(!PrivilegeUtil.writePrivilege()){
-            return WriteResultRespDTO.getFailPrivilege();
-        }
-        if(null == projectId || ""==projectId){
+        if(StringUtils.isEmpty(projectId)){
             return WriteResultRespDTO.IllgalArgument();
         }
         try {
@@ -841,7 +856,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                         @Override
                         public void refreshMbom() {
                             if(Integer.valueOf(10).equals(entry.getKey())){
-                                hzMaterielDAO.insertList(entry.getValue());
+                                hzMaterielDAO.insertList(entry.getValue(),ChangeTableNameEnum.HZ_MATERIEL.getTableName());
                             }else if(Integer.valueOf(11).equals(entry.getKey())){
                                 hzMaterielDAO.updateList(entry.getValue());
                             }else if(Integer.valueOf(12).equals(entry.getKey())){
@@ -876,6 +891,141 @@ public class HzMbomServiceImpl implements HzMbomService{
             return WriteResultRespDTO.getFailResult();
         }
 
+    }
+
+    @Override
+    public WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO) {
+        if(StringUtil.isEmpty(reqDTO.getPuids()) || StringUtil.isEmpty(reqDTO.getProjectId())
+                || null == reqDTO.getOrderId()){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+
+        try {
+            //获取申请人信息
+            User user = UserInfo.getUser();
+            Long applicantId = Long.valueOf(user.getId());
+            //对应的表
+            Integer type = reqDTO.getType();
+            //表单id
+            Long orderId = reqDTO.getOrderId();
+
+            //获取审核人信息
+            Long auditorId = reqDTO.getAuditorId();
+            //数据库表名
+            String tableName = ChangeTableNameEnum.getMbomTableName(type,"MA");
+            //获取数据信息
+            List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
+
+            //统计操作数据
+            Map<String,Object> map = new HashMap<>();
+
+            //查询MBOM表数据 保存历史记录
+            HzChangeDataDetailQuery query  = new HzChangeDataDetailQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuids(puids);
+            query.setTableName(ChangeTableNameEnum.getMbomTableName(type,"M"));
+
+
+            List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByPuids(query);
+            List<HzMbomLineRecord> afterRecords = new ArrayList<>();
+            if(ListUtil.isNotEmpty(records)){
+                records.forEach(record -> {
+                    HzMbomLineRecord manageRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
+                    manageRecord.setOrderId(orderId);
+                    afterRecords.add(manageRecord);
+                });
+                HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
+                vo.setRecordList(afterRecords);
+                vo.setTableName(tableName);
+                map.put("mbomAfter",vo);
+            }
+
+            //修改发起流程后状态值
+            List<HzMbomLineRecord> bomLineRecords = new ArrayList<>();
+            for(HzMbomLineRecord record:records){
+                HzMbomLineRecord lineRecord = new HzMbomLineRecord();
+                lineRecord.setLineId(record.getLineId());
+                lineRecord.setBomDigifaxId(record.getBomDigifaxId());
+                if(Integer.valueOf(2).equals(record.getStatus())){//草稿状态---->审核状态
+                    lineRecord.setStatus(5);
+                }else if(Integer.valueOf(4).equals(record.getStatus())){// 删除状态----->审核状态
+                    lineRecord.setStatus(6);
+                }
+                lineRecord.setTableName(ChangeTableNameEnum.getMbomTableName(type,"M"));
+                bomLineRecords.add(lineRecord);
+            }
+
+
+            map.put("mbomBefore",bomLineRecords);
+            //保存以上获取信息
+            //变更数据
+            List<HzChangeDataRecord> dataRecords = new ArrayList<>();
+            puids.forEach(s -> {
+                HzChangeDataRecord record = new HzChangeDataRecord();
+                record.setApplicantId(applicantId);
+                record.setOrderId(reqDTO.getOrderId());
+                record.setPuid(s);
+                record.setTableName(tableName);
+                dataRecords.add(record);
+            });
+
+            map.put("changeData",dataRecords);
+            //申请人
+            HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
+            applicantChangeRecord.setApplicantId(applicantId);
+            applicantChangeRecord.setOrderId(reqDTO.getOrderId());
+            applicantChangeRecord.setTableName(tableName);
+
+            map.put("applicant",applicantChangeRecord);
+            //审核人
+            HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
+            auditorChangeRecord.setAuditorId(auditorId);
+            auditorChangeRecord.setOrderId(reqDTO.getOrderId());
+            auditorChangeRecord.setTableName(tableName);
+
+            map.put("auditor",auditorChangeRecord);
+
+
+            //启动线程进行插入操作
+            List<ExecutorServices> services = new ArrayList<>();
+            for(Map.Entry<String,Object> entry:map.entrySet()){
+                ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                    @Override
+                    public void action() {
+                        switch (entry.getKey()){
+                            case "mbomAfter":
+                                hzMbomRecordDAO.insertVO((HzMbomLineRecordVO) entry.getValue());
+                                break;
+                            case "mbomBefore":
+                                hzMbomRecordDAO.updateList((List<HzMbomLineRecord>) entry.getValue());
+                                break;
+                            case "changeData":
+                                hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
+                                break;
+                            case "applicant":
+                                hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+                                break;
+                            case "auditor" :
+                                hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
+                                break;
+                            default:break;
+                        }
+                    }
+                };
+                services.add(executorServices);
+            }
+
+            if(ListUtil.isNotEmpty(services)){
+                for(ExecutorServices s:services){
+                    s.execute();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return WriteResultRespDTO.getFailResult();
+        }
+        return WriteResultRespDTO.getSuccessResult();
     }
 
 

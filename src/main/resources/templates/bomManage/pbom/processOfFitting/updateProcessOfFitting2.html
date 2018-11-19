@@ -169,8 +169,9 @@
                     success:
                         function (result) {
                             if (result.status) {
-                                $('.modal-dialog', window.top.document).parent('div').remove()
-                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // $('.modal-dialog', window.top.document).parent('div').remove()
+                                // $('body', window.top.document).find('.modal-backdrop').remove();
+                                activeTabBodyReset();
                                 layer.msg(result.msg, {icon: 1, time: 2000});
                                 if (result.status) {
                                     $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doReloadTree(result);

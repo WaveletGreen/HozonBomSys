@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
  * Created by haozt on 2018/5/25
  * PBOM出参
  */
-public class HzPbomLineRespDTO {
+public class HzPbomLineRespDTO extends BaseChangeRespDTO {
 
     private int No;//1
 

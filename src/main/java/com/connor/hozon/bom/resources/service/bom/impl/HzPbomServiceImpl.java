@@ -15,6 +15,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSimulateCraftingPartDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
+import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.executors.ExecutorServices;
@@ -1183,7 +1184,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             List<HzPbomLineRecord> afterRecords = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){
                 records.forEach(record -> {
-                    HzPbomLineRecord manageRecord = record;
+                    HzPbomLineRecord manageRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
                     manageRecord.setOrderId(orderId);
                     afterRecords.add(manageRecord);
                 });
@@ -1193,13 +1194,13 @@ public class HzPbomServiceImpl implements HzPbomService {
             //修改发起流程后状态值
             List<HzPbomLineRecord> bomLineRecords = new ArrayList<>();
             for(HzPbomLineRecord record:records){
-                HzPbomLineRecord lineRecord = record;
+                HzPbomLineRecord lineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
                 if(Integer.valueOf(2).equals(record.getStatus())){//草稿状态---->审核状态
                     lineRecord.setStatus(5);
                 }else if(Integer.valueOf(4).equals(record.getStatus())){// 删除状态----->审核状态
                     lineRecord.setStatus(6);
                 }
-                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+//                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
                 bomLineRecords.add(lineRecord);
             }
 

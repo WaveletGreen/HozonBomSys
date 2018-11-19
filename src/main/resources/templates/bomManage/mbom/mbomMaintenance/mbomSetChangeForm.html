@@ -108,16 +108,26 @@
             var changeFromId = $("#stage option:selected").val();
             var projectId = $("#project", window.top.document).val();
             var puids = $("#puids").val();
+            var type = $("#type").val();
+            var url = $("#form", window.top.document).attr('action');
+            var myData = JSON.stringify({
+                "puids":puids ,
+                "orderId": changeFromId,
+                "projectId":projectId,
+                "type":type
+                // "auditorId":typeId
+            });
             $.ajax({
                 type: "POST",
                 //ajax需要添加打包名
-                url: "./vwoProcess/featureGetIntoVWO?projectUid="+projectPuid+"&changeFromId="+changeFromId,
-                data: JSON.stringify(rows),
+                url: url,
+                data: myData,
                 contentType: "application/json",
                 success: function (result) {
-                    $('.modal-dialog', window.top.document).parent('div').remove()
-                    $('body', window.top.document).find('.modal-backdrop').remove();
-                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    // $('.modal-dialog', window.top.document).parent('div').remove()
+                    // $('body', window.top.document).find('.modal-backdrop').remove();
+                    // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    activeTabBodyRefresh();
                     // if (result.status) {
                     if (result.status) {
                         layer.msg(result.msg, {icon: 1, time: 2000});

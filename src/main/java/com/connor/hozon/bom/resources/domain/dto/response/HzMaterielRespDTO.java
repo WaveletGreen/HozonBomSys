@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.dto.response;
  * @Date: 2018/7/3
  * @Description:
  */
-public class HzMaterielRespDTO {
+public class HzMaterielRespDTO extends BaseChangeRespDTO {
 
     private Integer No;
     /**
@@ -85,6 +85,16 @@ public class HzMaterielRespDTO {
      * 采购类型
      */
     private String resource;
+
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public String getResource() {
         return resource;

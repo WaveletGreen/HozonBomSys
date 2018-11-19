@@ -79,8 +79,9 @@
                 $.post($("#groupForm",window.top.document).attr('action'),$("#groupForm",window.top.document).serialize(),function(e){
                     getActiveTab().undead();
                     if(e.result){
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // $('.modal-dialog', window.top.document).parent('div').remove()
+                        // $('body', window.top.document).find('.modal-backdrop').remove();
+                        activeTabBodyReset();
                         var entity = e.entity;
                         // 更新菜单节点的信息
                         selectNode.name = entity.name;

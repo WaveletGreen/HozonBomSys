@@ -23,4 +23,6 @@ import java.util.List;
 public interface HzDMDetailChangeDao extends BasicDao<HzDMDetailChangeBean> {
 
     int insertList(List<HzDMDetailChangeBean> hzDMDetailChangeBeans);
+
+    List<HzDMDetailChangeBean> selectByBasic(List<HzDMBasicChangeBean> hzDMBasicChangeBeansBefor);
 }

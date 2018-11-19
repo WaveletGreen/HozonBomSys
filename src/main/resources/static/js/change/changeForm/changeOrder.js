@@ -4,105 +4,21 @@
  * Date: 2018/11/14
  * Time: 9:26
  */
-var columnOfFeature1 = [
-    {
-        field: 'headDesc',
-        title: '变更类型',
-    },
-    {
-        field: 'featureName',
-        title: '特性名称',
-    },
-    {
-        field: 'featureDesc',
-        title: '特性描述',
-        align: 'center',
-        valign: 'middle',
-    },
-    {
-        field: 'h9featureenname',
-        title: '特性英文名称',
-        align: 'center',
-        valign: 'middle'
-    },
-    {
-        field: 'featureValueName',
-        title: '特性值/配置代码',
-        align: 'center',
-        valign: 'middle',
-    },
-    {
-        field: 'featureValueDesc',
-        title: '特性值/配置(描述)',
-        align: 'center',
-        valign: 'middle',
-    },
-    {
-        field: 'cfgEffectedDate',
-        title: '生效时间',
-        align: 'center',
-        valign: 'middle',
-        //——修改——获取日期列的值进行转换
-        formatter: function (value, row, index) {
-            return dateToStringFormat(value)
-        }
-    },
-    {
-        field: 'cfgAbolishDate',
-        title: '废止时间',
-        align: 'center',
-        valign: 'middle',
-        //——修改——获取日期列的值进行转换
-        formatter: function (value, row, index) {
-            return dateToStringFormat(value)
-        }
-    }];
-
-
-function skip(type) {
-    if(type=='feature'){
-        // $.ajax({
-        //    type : "POST",
-        //    url : "./vwoProcess/changeDetails",
-        //    success : function (result) {
-        //
-        //    },
-        //    error : function (result) {
-        //
-        //    }
-        // });
-        // window.
-        var $table = $("#routingDaTable");
-        $table.bootstrapTable('destroy');
-        $table.bootstrapTable({
-            // url: "getFeatureTable?vwoId=" + vwoId,
-            url : "../vwo/getFeatureTable?vwoId="+6,
-            method: "POST",
-            height: 400,// $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 100,
-            width: $(window).width(),
-            showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-            showColumns: false,                  //是否显示所有的列
-            showRefresh: false,                  //是否显示刷新按钮
-            pagination: false,                   //是否显示分页（*）
-            clickToSelect: false,                // 单击某一行的时候选中某一条记录
-            formId: "null",                      //需要定义formId，不定义的话会造成jQuery异常，随便定义一个没有的id即可
-            /**列信息，需要预先定义好*/
-            columns: columnOfFeature1,
-            onLoadSuccess: function () {
-                //加载成功时执行,渲染双行的
-                changeTableRendering("routingDaTable");
-            },
-        });
-    }
-}
-
-
-// function OnToTeXing() {
-//     window.Ewin.dialog({
-//         title: "添加",
-//         url:"../change/texing",
-//         gridId: "gridId",
-//         width: 950,
-//         height: 600
-//     })
-// }
+$(document).ready(function () {
+    var id = $("#id").val();
+    var projectId = $("#project", window.top.document).val();
+    var table = "<tr>";
+    table +="<th><a href='../change/data/feature/page?projectId="+projectId+"&orderId="+id+"'>特性变更</a></th>";
+    table +="<th><a href='../change/data/bomCfg/page?projectId="+projectId+"&orderId="+id+"'>全BOM配置</a></th>";
+    table +="<th><a href='../change/data/modelColorCfg/page?projectId="+projectId+"&orderId="+id+"'>配色方案</a></th>";
+    table +="<th><a href='../change/data/materielFeature/page?projectId="+projectId+"&orderId="+id+"'>配置物料</a></th>";
+    table +="<th><a href='../change/data/ebom/page?projectId="+projectId+"&orderId="+id+"'>EBOM管理</a></th>";
+    table +="<th><a href='../change/data/pbom/page?projectId="+projectId+"&orderId="+id+"'>PBOM管理</a></th>";
+    table +="<th><a href='../change/data/mbom/page?projectId="+projectId+"&orderId="+id+"'>超级MBOM</a></th>";
+    table +="<th><a href='../change/data/mbom/page?projectId="+projectId+"&orderId="+id+"&type=1"+"'>白车身生产</a></th>";
+    table +="<th><a href='../change/data/mbom/page?projectId="+projectId+"&orderId="+id+"&type=6"+"'>白车身财务</a></th>";
+    table +="<th><a href='../change/data/material/page?projectId="+projectId+"&orderId="+id+"'>物料数据</a></th>";
+    table +="<th><a href='../change/data/routing/page?projectId="+projectId+"&orderId="+id+"'>工艺路线</a></th>";
+    table +="</tr>"
+    $("#changeOrderTable").html(table) ;
+})

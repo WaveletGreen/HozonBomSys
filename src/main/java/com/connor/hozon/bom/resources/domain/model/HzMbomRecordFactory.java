@@ -72,6 +72,7 @@ public class HzMbomRecordFactory {
         }
         hzMbomLineRecord.setIsPart(record.getIsPart());
         hzMbomLineRecord.setIs2Y(record.getIs2Y());
+        hzMbomLineRecord.setStatus(1);
         hzMbomLineRecord.setLineIndex(record.getLineIndex());
         hzMbomLineRecord.setParentUid(record.getParentUid());
         hzMbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
@@ -204,6 +205,45 @@ public class HzMbomRecordFactory {
         return mbomLineRecord;
     }
 
+
+
+    public static HzMbomLineRecord mbomLineRecordToMbomLineRecord(HzMbomLineRecord record){
+        HzMbomLineRecord mbomLineRecord = new HzMbomLineRecord();
+        mbomLineRecord.setPuid(record.getPuid());
+        mbomLineRecord.seteBomPuid(record.geteBomPuid());
+        mbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+        mbomLineRecord.setIsHas(record.getIsHas());
+        mbomLineRecord.setIs2Y(record.getIs2Y());
+        mbomLineRecord.setLineIndex(record.getLineIndex());
+        mbomLineRecord.setLineId(record.getLineId());
+        mbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
+        mbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
+        mbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
+        mbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
+        mbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
+        mbomLineRecord.setSparePart(record.getSparePart());
+        mbomLineRecord.setSparePartNum(record.getSparePartNum());
+        mbomLineRecord.setLaborHour(record.getLaborHour());
+        mbomLineRecord.setRhythm(record.getRhythm());
+        mbomLineRecord.setSolderJoint(record.getSolderJoint());
+        mbomLineRecord.setMachineMaterial(record.getMachineMaterial());
+        mbomLineRecord.setStandardPart(record.getStandardPart());
+        mbomLineRecord.setTools(record.getTools());
+        mbomLineRecord.setWasterProduct(record.getWasterProduct());
+        mbomLineRecord.setChange(record.getChange());
+        mbomLineRecord.setProcessRoute(record.getProcessRoute());
+        mbomLineRecord.setChangeNum(record.getChangeNum());
+        mbomLineRecord.setStatus(record.getStatus());
+        mbomLineRecord.setpStockLocation(record.getpStockLocation());
+        mbomLineRecord.setColorId(record.getColorId());
+        mbomLineRecord.setOrderId(record.getOrderId());
+        mbomLineRecord.setRevision(record.getRevision());
+        mbomLineRecord.setParentUid(record.getParentUid());
+        mbomLineRecord.setIsColorPart(record.getIsColorPart());
+        mbomLineRecord.setpFactoryId(record.getpFactoryId());
+        mbomLineRecord.setCreateName(record.getCreateName());
+        return mbomLineRecord;
+    }
 
 //    public static void main(String[] a){
 //        String s1 = "2.3.34.5.65.432.5.32";//原父

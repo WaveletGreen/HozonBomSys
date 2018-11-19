@@ -66,7 +66,6 @@
                                 <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
                                 <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
                             </select>
-
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo9">项目所属阶段</label>
@@ -104,47 +103,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="content col-lg-12" style="padding:0px;">
-                <table class="table table-striped tableNormalStyle" id="routingDaTable">
-                    <tr>
-                        <th>零件号</th>
-                        <th>名称</th>
-                        <th>层级</th>
-                        <th>专业</th>
-                        <th>是否法规件</th>
-                        <th>开发类别</th>
-                    </tr>
-                    <tr style="background-color: #b7bc31">
-                        <td>S00-1001</td>
-                        <td>油漆车身</td>
-                        <td>2Y</td>
-                        <td>车身</td>
-                        <td>Y</td>
-                        <td>A</td>
-                    </tr>
-                    <tr style="background-color: #6bbc38">
-                        <td>S00-1001</td>
-                        <td>油漆车身</td>
-                        <td>2Y</td>
-                        <td>车身</td>
-                        <td>Y</td>
-                        <td>A</td>
-                    </tr>
-                    <tr style="background-color: #b7bc31">
-                        <td>S00-1001</td>
-                        <td>油漆车身</td>
-                        <td>2Y</td>
-                        <td>车身</td>
-                        <td>Y</td>
-                        <td>A</td>
-                    </tr>
-                    <tr style="background-color: #6bbc38">
-                        <td>S00-1001</td>
-                        <td>油漆车身</td>
-                        <td>2Y</td>
-                        <td>车身</td>
-                        <td>Y</td>
-                        <td>A</td>
-                    </tr>
+                <table class="table table-striped tableNormalStyle" id="untreatedFormTable">
                 </table>
             </div>
         </div>
@@ -190,6 +149,26 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    $(document).ready(function () {
+        var id = $("#id").val();
+        var projectId = $("#project", window.top.document).val();
+        var table = "<tr>";
+        table +="<th><a href='../change/texing?projectId="+projectId+"&id="+id+"'>特性变更</a></th>";
+        table +="<th><a href=''>全BOM配置</a></th>";
+        table +="<th><a href=''>配色方案</a></th>";
+        table +="<th><a href=''>配置物料</a></th>";
+        table +="<th><a href='../change/data/ebom/page?projectId="+projectId+"&orderId="+id+"'>EBOM管理</a></th>";
+        table +="<th><a href=''>PBOM管理</a></th>";
+        table +="<th><a href=''>超级MBOM</a></th>";
+        table +="<th><a href=''>白车身生产</a></th>";
+        table +="<th><a href=''>白车身财务</a></th>";
+        table +="<th><a href=''>物料数据</a></th>";
+        table +="<th><a href=''>工艺路线</a></th>";
+        table +="</tr>"
+        $("#untreatedFormTable").html(table) ;
+    })
+</script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:src="@{/js/helper/taskHelper.js}"></script>
 <script th:src="@{/js/helper/jsonHelper.js}"></script>

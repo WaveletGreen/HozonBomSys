@@ -71,7 +71,7 @@ function initTable(url) {
             };
             column.push({
                 field: 'status',
-                title: '状态',
+                title: '变更状态',
                 align: 'center',
                 valign: 'middle',
                 formatter: function (value, row, index) {
@@ -405,7 +405,7 @@ function initTable(url) {
                             var rows = $table.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].materielId + ",";
+                                puids += rows[i].puid + ",";
                             }
                             ;
                             // var myData = JSON.stringify({

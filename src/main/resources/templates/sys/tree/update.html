@@ -98,11 +98,12 @@
                 var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
                 $.post($("#treeForm",window.top.document).attr('action'),$("#treeForm",window.top.document).serialize(),function(e){
                     if(e.result){
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // $('.modal-dialog', window.top.document).parent('div').remove()
+                        // $('body', window.top.document).find('.modal-backdrop').remove();
                         var entity = e.entity;
                         selectNode.name = entity.name;
                         zTree.updateNode(selectNode);
+                        activeTabBodyRefresh();
                         // window.Ewin.alert({message:'修改数据成功!'});
                         layer.msg('修改成功', {icon: 1, time: 2000})
                     }else{
