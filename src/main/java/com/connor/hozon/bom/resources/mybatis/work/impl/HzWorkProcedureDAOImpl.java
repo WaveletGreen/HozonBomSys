@@ -1,14 +1,17 @@
 package com.connor.hozon.bom.resources.mybatis.work.impl;
 
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.work.HzWorkProcedure;
 import sql.pojo.work.HzWorkProcess;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +130,120 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     @Override
     public List<HzWorkProcedure> queryProcedures(List<HzWorkProcedure> hzWorkProcedureList) {
         return super.executeQueryByPass(new HzWorkProcedure(),hzWorkProcedureList, "HzWorkProcedureDAOImpl_queryProcedures");
+    }
+
+    @Override
+    public List<HzWorkProcedure> getHzWorkProcedureByPuids(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"":null);
+        }else {
+            map.put("revision",null);
+        }
+        map.put("status",query.getStatus());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        return super.findForList("HzWorkProcedureDAOImpl_getHzWorkProcedureByPuids",map);
+    }
+
+    @Override
+    public HzWorkProcedure getHzWorkProcedureByPuidAndRevision(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(null != query.getRevision()){
+            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+        }else {
+            map.put("revision",null);
+        }
+        map.put("status",query.getStatus());
+        map.put("tableName",query.getTableName());
+        return (HzWorkProcedure) super.findForObject("HzWorkProcedureDAOImpl_getHzWorkProcedureByPuidAndRevision",map);
+    }
+
+    @Override
+    public int updateList(List<HzWorkProcedure> list) {
+        try {
+            if (ListUtil.isNotEmpty(list)) {
+                int size = list.size();
+                //分批更新数据 一次1000条
+                int i = 0;
+                int cout = 0;
+                synchronized (this){
+                    if (size > 1000) {
+                        for (i = 0; i < size / 1000; i++) {
+                            List<HzWorkProcedure> list1 = new ArrayList<>();
+                            for (int j = 0; j < 1000; j++) {
+                                list1.add(list.get(cout));
+                                cout++;
+                            }
+
+                            super.update("HzWorkProcedureDAOImpl_updateList",list1);
+
+                        }
+                    }
+                    if (i * 1000 < size) {
+                        List<HzWorkProcedure> list1 = new ArrayList<>();
+                        for (int j = 0; j < size - i * 1000; j++) {
+                            list1.add(list.get(cout));
+                            cout++;
+                        }
+                        super.update("HzWorkProcedureDAOImpl_updateList",list1);
+
+                    }
+                }
+
+            }
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int insertList(List<HzWorkProcedure> list, String tableName) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("tableName",tableName);
+        try {
+            if (ListUtil.isNotEmpty(list)) {
+                int size = list.size();
+                //分批更新数据 一次1000条
+                int i = 0;
+                int cout = 0;
+                synchronized (this){
+                    if (size > 1000) {
+                        for (i = 0; i < size / 1000; i++) {
+                            List<HzWorkProcedure> list1 = new ArrayList<>();
+                            for (int j = 0; j < 1000; j++) {
+                                list1.add(list.get(cout));
+                                cout++;
+                            }
+                            map.put("list",list1);
+                            super.insert("HzWorkProcedureDAOImpl_insertList",map);
+
+                        }
+                    }
+                    if (i * 1000 < size) {
+                        List<HzWorkProcedure> list1 = new ArrayList<>();
+                        for (int j = 0; j < size - i * 1000; j++) {
+                            list1.add(list.get(cout));
+                            cout++;
+                        }
+                        map.put("list",list1);
+                        super.insert("HzWorkProcedureDAOImpl_insertList",map);
+
+                    }
+                }
+
+            }
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
 }

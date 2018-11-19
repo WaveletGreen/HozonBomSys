@@ -1,14 +1,23 @@
 package com.connor.hozon.bom.resources.service.work.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzMaterielFactory;
+import com.connor.hozon.bom.resources.domain.model.HzWorkProcedureFactory;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
+import com.connor.hozon.bom.resources.executors.ExecutorServices;
+import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkCenterDAO;
@@ -17,9 +26,15 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
+import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import sql.pojo.change.HzApplicantChangeRecord;
+import sql.pojo.change.HzAuditorChangeRecord;
+import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 import sql.pojo.work.HzWorkCenter;
@@ -46,6 +61,15 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
 
     @Autowired
     private HzFactoryDAO hzFactoryDAO;
+
+    @Autowired
+    private HzChangeDataRecordDAO hzChangeDataRecordDAO;
+
+    @Autowired
+    private HzApplicantChangeDAO hzApplicantChangeDAO;
+
+    @Autowired
+    private HzAuditorChangeDAO hzAuditorChangeDAO;
     @Override
     public WriteResultRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO) {
         try{
@@ -341,10 +365,6 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
 
     @Override
     public WriteResultRespDTO deleteHzWorkProcess(String puid) {
-        boolean b = PrivilegeUtil.writePrivilege();
-        if(!b){
-            return WriteResultRespDTO.getFailPrivilege();
-        }
         try{
             HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(puid);
             if(workProcess == null){
@@ -452,11 +472,8 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             for(HzWorkProcess process:list){
                 HzWorkProcessRespDTO respDTO = new HzWorkProcessRespDTO();
                 respDTO.setNo(++num);
-                if(process.getFactoryCode() == null){
-                    respDTO.setFactoryCode("1001");
-                }else{
-                    respDTO.setFactoryCode(process.getFactoryCode());
-                }
+
+                respDTO.setFactoryCode(process.getFactoryCode()==null?"1001":process.getFactoryCode());
                 respDTO.setpBurn(process.getpBurn());
                 respDTO.setpCount(process.getpCount());
                 respDTO.setpDirectLabor(process.getpDirectLabor());
@@ -468,12 +485,14 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 respDTO.setpProcedureDesc(process.getpProcedureDesc());
                 respDTO.setpWorkCode(process.getWorkCenterCode());
                 respDTO.setpWorkDesc(process.getWorkCenterDesc());
-                respDTO.setMaterielId(process.getPuid());
+                respDTO.setMaterielId(process.getMaterielId());
                 respDTO.setpMaterielCode(process.getpMaterielCode());
                 respDTO.setpMaterielDesc(process.getpMaterielDesc());
                 respDTO.setControlCode(process.getControlCode());
                 respDTO.setPurpose(process.getPurpose());
                 respDTO.setState(process.getState());
+                respDTO.setPuid(process.getPuid());
+                respDTO.setStatus(process.getpStatus());
                 respDTOS.add(respDTO);
             }
             return new Page<>(hzWorkProcessPage.getPageNumber(),hzWorkProcessPage.getPageSize(),hzWorkProcessPage.getTotalCount(),respDTOS);
@@ -691,5 +710,132 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Override
     public List<HzWorkProcedure> queryProcedures(List<HzWorkProcedure> hzWorkProcedureList) {
         return hzWorkProcedureDAO.queryProcedures(hzWorkProcedureList);
+    }
+
+    @Override
+    public WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO) {
+        if(StringUtil.isEmpty(reqDTO.getPuids()) || StringUtil.isEmpty(reqDTO.getProjectId())
+                || null == reqDTO.getOrderId()){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+
+        try {
+            //获取申请人信息
+            User user = UserInfo.getUser();
+            Long applicantId = Long.valueOf(user.getId());
+
+            //表单id
+            Long orderId = reqDTO.getOrderId();
+
+            //获取审核人信息
+            Long auditorId = reqDTO.getAuditorId();
+            //数据库表名
+            String tableName = ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName();
+            //获取数据信息
+            List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
+
+            //统计操作数据
+            Map<String,Object> map = new HashMap<>();
+
+            //查询PBOM表数据 保存历史记录
+            HzChangeDataDetailQuery query  = new HzChangeDataDetailQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuids(puids);
+            query.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
+            List<HzWorkProcedure> records = hzWorkProcedureDAO.getHzWorkProcedureByPuids(query);
+            List<HzWorkProcedure> afterRecords = new ArrayList<>();
+            if(ListUtil.isNotEmpty(records)){
+                records.forEach(record -> {
+                    HzWorkProcedure manageRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
+                    manageRecord.setOrderId(orderId);
+                    afterRecords.add(manageRecord);
+                });
+                map.put("workProcedureAfter",afterRecords);
+            }
+
+            //修改发起流程后状态值
+            List<HzWorkProcedure> bomLineRecords = new ArrayList<>();
+            for(HzWorkProcedure record:records){
+                HzWorkProcedure lineRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
+                if(Integer.valueOf(2).equals(record.getpStatus())){//草稿状态---->审核状态
+                    lineRecord.setpStatus(5);
+                }else if(Integer.valueOf(4).equals(record.getpStatus())){// 删除状态----->审核状态
+                    lineRecord.setpStatus(6);
+                }
+//                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+                bomLineRecords.add(lineRecord);
+            }
+
+
+            map.put("workProcedureBefore",bomLineRecords);
+            //保存以上获取信息
+            //变更数据
+            List<HzChangeDataRecord> dataRecords = new ArrayList<>();
+            puids.forEach(s -> {
+                HzChangeDataRecord record = new HzChangeDataRecord();
+                record.setApplicantId(applicantId);
+                record.setOrderId(reqDTO.getOrderId());
+                record.setPuid(s);
+                record.setTableName(tableName);
+                dataRecords.add(record);
+            });
+
+            map.put("changeData",dataRecords);
+            //申请人
+            HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
+            applicantChangeRecord.setApplicantId(applicantId);
+            applicantChangeRecord.setOrderId(reqDTO.getOrderId());
+            applicantChangeRecord.setTableName(tableName);
+
+            map.put("applicant",applicantChangeRecord);
+            //审核人
+            HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
+            auditorChangeRecord.setAuditorId(auditorId);
+            auditorChangeRecord.setOrderId(reqDTO.getOrderId());
+            auditorChangeRecord.setTableName(tableName);
+
+            map.put("auditor",auditorChangeRecord);
+
+
+            //启动线程进行插入操作
+            List<ExecutorServices> services = new ArrayList<>();
+            for(Map.Entry<String,Object> entry:map.entrySet()){
+                ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                    @Override
+                    public void action() {
+                        switch (entry.getKey()){
+                            case "materielAfter":
+                                hzWorkProcedureDAO.insertList((List<HzWorkProcedure>) entry.getValue(),tableName);
+                                break;
+                            case "materielBefore":
+                                hzWorkProcedureDAO.updateList((List<HzWorkProcedure>) entry.getValue());
+                                break;
+                            case "changeData":
+                                hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
+                                break;
+                            case "applicant":
+                                hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+                                break;
+                            case "auditor" :
+                                hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
+                                break;
+                            default:break;
+                        }
+                    }
+                };
+                services.add(executorServices);
+            }
+
+            if(ListUtil.isNotEmpty(services)){
+                for(ExecutorServices s:services){
+                    s.execute();
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return WriteResultRespDTO.getFailResult();
+        }
+        return WriteResultRespDTO.getSuccessResult();
     }
 }

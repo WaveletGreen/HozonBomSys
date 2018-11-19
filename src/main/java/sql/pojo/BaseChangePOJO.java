@@ -11,12 +11,23 @@ import java.util.Date;
  */
 @Data
 public abstract class BaseChangePOJO extends BasePOJO{
+    /**
+     * 变更表单id
+     */
     private Long orderId;
 
+    /**
+     * 生效时间
+     */
     private Date effectTime;
-
+    /**
+     * 版本
+     */
     private String revision;
 
+    /**
+     * 对应操作的表名
+     */
     private String tableName;
 
 }
