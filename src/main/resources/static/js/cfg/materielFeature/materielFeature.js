@@ -356,15 +356,15 @@ function launchChangeForm() {
         msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
     }
 
-    var data = {};
-    data.rows = rows;
-    var puids = [];
-    for(var i=0;i<rows.length;i++){
-        puids.push(rows[i].basicId);
-    }
-    data.puids = puids;
-    data.titles = dynamicTitle;
-    data.projectPuid = projectUid;
+    // var data = {};
+    // data.rows = rows;
+    // var puids = [];
+    // for(var i=0;i<rows.length;i++){
+    //     puids.push(rows[i].basicId);
+    // }
+    // data.puids = puids;
+    // data.titles = dynamicTitle;
+    // data.projectPuid = projectUid;
     window.Ewin.confirm({
         title: '提示',
         message: '是否要发起变更？',
@@ -373,7 +373,7 @@ function launchChangeForm() {
         if (e) {
             var puids = "";
             for(let i in rows){
-                puids += rows[i].puid;
+                puids += rows[i].basicId;
                 if(i<rows.length-1){
                     puids+=",";
                 }

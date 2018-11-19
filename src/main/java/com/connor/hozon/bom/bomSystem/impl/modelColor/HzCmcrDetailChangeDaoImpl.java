@@ -234,6 +234,12 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     }
 
 
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailByMainChange(List<HzCmcrChange> hzCmcrChangeListBefor) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(),hzCmcrChangeListBefor,"selectCmcrDetailBefor");
+    }
+
+
     private List<HzCmcrDetailChange> executeSelectLast(List<HzCmcrDetailChange> hzCmcrDetailChangeList, String by) {
         Map<String,Object> map = new HashMap<String, Object>();
         map.put("whichTable",hzCmcrDetailChangeList.get(0).getWhichTable());

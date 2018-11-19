@@ -45,6 +45,10 @@
         <result column="DMD_RESERVED_5" jdbcType="VARCHAR" property="dmdReserved5"/>
         <!--特性值,放在最后直接显示在前端-->
         <result column="DMD_FEATURE_VALUE" jdbcType="VARCHAR" property="dmdFeatureValue"/>
+        <!--特性值,放在最后直接显示在前端-->
+        <result column="DMB_CHANGE_BASIC_ID" jdbcType="DECIMAL" property="dmbChangeBasicId"/>
+        <!--特性值,放在最后直接显示在前端-->
+        <result column="TITLE" jdbcType="VARCHAR" property="title"/>
         <!--特性对象-->
         <!--<result column="DMB_COLOR_MODEL_UID" jdbcType="VARCHAR" property="cfg0Record"/>-->
     </resultMap>
@@ -68,7 +72,9 @@
         DMD_RESERVED_3,
         DMD_RESERVED_4,
         DMD_RESERVED_5,
-        DMD_FEATURE_VALUE
+        DMD_FEATURE_VALUE,
+        DMB_CHANGE_BASIC_ID,
+        TITLE
     </sql>
 
 
@@ -126,10 +132,25 @@
             #{hzDMDetailChangeBean.dmdReserved3,jdbcType=VARCHAR},
             #{hzDMDetailChangeBean.dmdReserved4,jdbcType=VARCHAR},
             #{hzDMDetailChangeBean.dmdReserved5,jdbcType=VARCHAR},
-            #{hzDMDetailChangeBean.dmdFeatureValue,jdbcType=VARCHAR}
+            #{hzDMDetailChangeBean.dmdFeatureValue,jdbcType=VARCHAR},
+            #{hzDMDetailChangeBean.dmbChangeBasicId,jdbcType=DECIMAL},
+            #{hzDMDetailChangeBean.title,jdbcType=VARCHAR}
+
             from
             dual
         </foreach>
         )A
     </insert>
+
+    <select id="selectByBasic" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_DM_DETAIL_CHANGE
+        where
+        DMB_CHANGE_BASIC_ID in
+        <foreach collection="list" index="index" item="hzDMBasicChangeBean" open="(" separator="," close=")">
+            #{hzDMBasicChangeBean.id,jdbcType=DECIMAL}
+        </foreach>
+    </select>
 </mapper>
