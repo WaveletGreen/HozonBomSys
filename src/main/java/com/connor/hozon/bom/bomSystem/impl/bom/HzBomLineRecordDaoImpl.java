@@ -154,4 +154,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
         return (Integer) super.findForObject("HzBomLineRecordDaoImpl_getMaxLineIndexFirstNum",projectId);
     }
 
+    public List<HzBomLineRecord> selectByPuids(List<String> withCfgPuids) {
+        return executeQueryByPass(new HzBomLineRecord(), withCfgPuids,"HzBomLineRecordDaoImpl_selectByPuids");
+    }
 }

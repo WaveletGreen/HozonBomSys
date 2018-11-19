@@ -20,12 +20,12 @@ import java.math.BigDecimal;
 @Configuration
 public interface HzFullCfgMainDao extends BasicDao<HzFullCfgMain>{
 
-    int deleteByPrimaryKey(BigDecimal id);
+    int deleteByPrimaryKey(Long id);
 
-    BigDecimal insertBackId(HzFullCfgMain record);
+    Long insertBackId(HzFullCfgMain record);
 
 
-    HzFullCfgMain selectByPrimaryKey(BigDecimal id);
+    HzFullCfgMain selectByPrimaryKey(Long id);
 
     HzFullCfgMain selectByProjectId(String id);
 }

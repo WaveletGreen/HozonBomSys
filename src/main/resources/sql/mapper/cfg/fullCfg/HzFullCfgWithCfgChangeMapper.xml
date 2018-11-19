@@ -19,11 +19,16 @@
     <result column="FL_CFG_VERSION" jdbcType="DECIMAL" property="flCfgVersion" />
     <result column="FL_OPERATION_TYPE" jdbcType="VARCHAR" property="flOperationType" />
     <result column="FL_COMMENT" jdbcType="VARCHAR" property="flComment" />
+
+    <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="cfgDesc" />
+    <result column="P_CFG0_CODE" jdbcType="VARCHAR" property="cfgCode" />
+    <result column="IS_COLOR" jdbcType="VARCHAR" property="isColor" />
   </resultMap>
   <sql id="Base_Column_List">
     ID, CHANGE_ORDER_UID, FL_MAIN_ID, CFG_CFG0_UID, CFG_BOMLINE_UID, FL_CFG_CREATE_DATE, FL_CFG_UPDATE_DATE, FL_CFG_CREATOR,
     FL_CFG_UPDATOR, FL_CFG_CREATE_DATE_CHANGE, FL_CFG_UPDATE_DATE_CHANGE, FL_CFG_CREATOR_CHANGE, 
-    FL_CFG_UPDATOR_CHANGE, FL_CFG_BOMLINE_NAME, FL_CFG_VERSION, FL_OPERATION_TYPE, FL_COMMENT
+    FL_CFG_UPDATOR_CHANGE, FL_CFG_BOMLINE_NAME, FL_CFG_VERSION, FL_OPERATION_TYPE, FL_COMMENT,
+    P_CFG0_DESC,P_CFG0_CODE,IS_COLOR
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
     select 
@@ -40,13 +45,14 @@
       FL_CFG_CREATE_DATE, FL_CFG_UPDATE_DATE, FL_CFG_CREATOR, 
       FL_CFG_UPDATOR, FL_CFG_CREATE_DATE_CHANGE, FL_CFG_UPDATE_DATE_CHANGE, 
       FL_CFG_CREATOR_CHANGE, FL_CFG_UPDATOR_CHANGE, FL_CFG_BOMLINE_NAME, 
-      FL_CFG_VERSION, FL_OPERATION_TYPE, FL_COMMENT
+      FL_CFG_VERSION, FL_OPERATION_TYPE, FL_COMMENT,P_CFG0_DESC,P_CFG0_CODE,IS_COLOR
       )
     values (#{id,jdbcType=DECIMAL}, #{cfgCfg0Uid,jdbcType=VARCHAR}, #{cfgBomlineUid,jdbcType=VARCHAR}, 
       #{flCfgCreateDate,jdbcType=DATE}, #{flCfgUpdateDate,jdbcType=DATE}, #{flCfgCreator,jdbcType=VARCHAR},
       #{flCfgUpdator,jdbcType=VARCHAR}, #{flCfgCreateDateChange,jdbcType=DATE}, #{flCfgUpdateDateChange,jdbcType=DATE},
       #{flCfgCreatorChange,jdbcType=VARCHAR}, #{flCfgUpdatorChange,jdbcType=VARCHAR}, #{flCfgBomlineName,jdbcType=VARCHAR},
-      #{flCfgVersion,jdbcType=DECIMAL}, #{flOperationType,jdbcType=DECIMAL}, #{flComment,jdbcType=VARCHAR}
+      #{flCfgVersion,jdbcType=DECIMAL}, #{flOperationType,jdbcType=DECIMAL}, #{flComment,jdbcType=VARCHAR},
+      #{cfgDesc,jdbcType=VARCHAR}, #{cfgCode,jdbcType=VARCHAR}, #{isColor,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
@@ -209,7 +215,10 @@
       FL_CFG_BOMLINE_NAME = #{flCfgBomlineName,jdbcType=VARCHAR},
       FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL},
       FL_OPERATION_TYPE = #{flOperationType,jdbcType=DECIMAL},
-      FL_COMMENT = #{flComment,jdbcType=VARCHAR}
+      FL_COMMENT = #{flComment,jdbcType=VARCHAR},
+      P_CFG0_DESC = #{cfgDesc,jdbcType=VARCHAR},
+      P_CFG0_CODE = #{cfgCode,jdbcType=VARCHAR},
+      IS_COLOR = #{isColor,jdbcType=VARCHAR}
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 
@@ -235,10 +244,27 @@
         #{hzFullCfgWithCfgChange.flCfgBomlineName,jdbcType=VARCHAR},
         #{hzFullCfgWithCfgChange.flCfgVersion,jdbcType=DECIMAL},
         #{hzFullCfgWithCfgChange.flOperationType,jdbcType=DECIMAL},
-        #{hzFullCfgWithCfgChange.flComment,jdbcType=VARCHAR}
+        #{hzFullCfgWithCfgChange.flComment,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.cfgDesc,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.cfgCode,jdbcType=VARCHAR},
+        #{hzFullCfgWithCfgChange.isColor,jdbcType=VARCHAR}
       from
         dual
     </foreach>
     )A
   </insert>
+
+
+
+
+
+
+  <select id="selectByMainId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      HZ_FC_WITHCFG_RECORD_CHANGE
+    where
+      FL_MAIN_ID = #{id,jdbcType=DECIMAL}
+  </select>
 </mapper>

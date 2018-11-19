@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao;
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.fullCfg.HzFullCfgModelChange;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
@@ -19,12 +20,12 @@ public class HzFullCfgWithCfgChangeDaoImpl extends BasicDaoImpl<HzFullCfgWithCfg
     }
 
     @Override
-    public int deleteByPrimaryKey(BigDecimal id) {
+    public int deleteByPrimaryKey(Long id) {
         return 0;
     }
 
     @Override
-    public HzFullCfgWithCfgChange selectByPrimaryKey(BigDecimal id) {
+    public HzFullCfgWithCfgChange selectByPrimaryKey(Long id) {
         return null;
     }
 
@@ -36,5 +37,10 @@ public class HzFullCfgWithCfgChangeDaoImpl extends BasicDaoImpl<HzFullCfgWithCfg
     @Override
     public HzFullCfgWithCfg selectBy2Yid(HzFullCfgWithCfg hzFullCfgWithCfg) {
         return baseSQLUtil.executeQueryById(hzFullCfgWithCfg, clzName+"selectBy2Yid");
+    }
+
+    @Override
+    public List<HzFullCfgWithCfgChange> selectByMainId(Integer id) {
+        return baseSQLUtil.executeQueryByPass(new HzFullCfgWithCfgChange(), id,clzName+"selectByMainId");
     }
 }

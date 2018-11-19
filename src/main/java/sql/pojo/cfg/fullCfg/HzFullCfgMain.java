@@ -17,7 +17,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  * @Modified By:
  */
 public class HzFullCfgMain {
-    private BigDecimal id;
+    private Long id;
 
     private String projectUid;
 
@@ -68,11 +68,11 @@ public class HzFullCfgMain {
         }
     }
 
-    public BigDecimal getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

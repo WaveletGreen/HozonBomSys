@@ -32,14 +32,14 @@ public class HzFullCfgModelDaoImpl extends BasicDaoImpl<HzFullCfgModel> implemen
     }
 
     @Override
-    public int deleteByPrimaryKey(BigDecimal id) {
+    public int deleteByPrimaryKey(Long id) {
         HZ_FULL_CFG_MODEL.setId(id);
         return baseSQLUtil.executeDelete(HZ_FULL_CFG_MODEL,
                 clzName + ".deleteByPrimaryKey");
     }
 
     @Override
-    public HzFullCfgModel selectByPrimaryKey(BigDecimal id) {
+    public HzFullCfgModel selectByPrimaryKey(Long id) {
         HZ_FULL_CFG_MODEL.setId(id);
         return baseSQLUtil.executeQueryById(HZ_FULL_CFG_MODEL,
                 clzName + ".selectByPrimaryKey");
@@ -59,7 +59,7 @@ public class HzFullCfgModelDaoImpl extends BasicDaoImpl<HzFullCfgModel> implemen
     }
 
     @Override
-    public List<HzFullCfgModel> selectByMainPuid(BigDecimal mainPuid) {
+    public List<HzFullCfgModel> selectByMainPuid(Long mainPuid) {
         HZ_FULL_CFG_MODEL.setFlModVersion(mainPuid);
         return baseSQLUtil.executeQuery(HZ_FULL_CFG_MODEL,
                 clzName + ".selectByMainPuid");

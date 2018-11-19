@@ -7,12 +7,14 @@
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
 import com.alibaba.fastjson.JSON;
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.*;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
@@ -110,6 +112,11 @@ public class HzBomAllCfgService {
     HzFullCfgModelChangeDao hzFullCfgModelChangeDao;
     @Autowired
     HzFullCfgWithCfgChangeDao hzFullCfgWithCfgChangeDao;
+    @Autowired
+    HzBomLineRecordDaoImpl hzBomLineRecordDao;
+    //特性DAO
+    @Autowired
+    HzCfg0RecordDao hzCfg0RecordDao;
     private static final String[] selfDesc =
             {
                     "operationType"/*操作类型*/,
@@ -387,7 +394,7 @@ public class HzBomAllCfgService {
         //检查main、model、withcfg三张表的数据是否为空
         if (hzFullCfgMain == null) {
             //为main新增一条信息
-            BigDecimal mainPuid = addHzFullCfgMain(projectPuid, user);
+            Long mainPuid = addHzFullCfgMain(projectPuid, user);
             hzFullCfgMain.setId(mainPuid);
             //为withcfg新增数据
 //            addHzFullCfgWithCfg(hzCfg0Records, user, mainPuid);
@@ -494,14 +501,14 @@ public class HzBomAllCfgService {
      * @param user        当前用户
      * @return
      */
-    private BigDecimal addHzFullCfgMain(String projectPuid, User user) {
+    private Long addHzFullCfgMain(String projectPuid, User user) {
         HzFullCfgMain hzFullCfgMain1 = new HzFullCfgMain();
         hzFullCfgMain1.setProjectUid(projectPuid);
         hzFullCfgMain1.setStatus("编辑");
         hzFullCfgMain1.setVersion("1.0");
         hzFullCfgMain1.setCreator(user.getUserName());
         hzFullCfgMain1.setUpdater(user.getUserName());
-        BigDecimal mainPuid = hzFullCfgMainDao.insertBackId(hzFullCfgMain1);
+        Long mainPuid = hzFullCfgMainDao.insertBackId(hzFullCfgMain1);
         return mainPuid;
     }
 
@@ -593,7 +600,7 @@ public class HzBomAllCfgService {
      * @param user             当前用户
      * @param mainPuid         主表id
      */
-    private void addHzFullCfgWithCfgForBomLine(List<HzBomLineRecord> hzBomLineRecords, User user, BigDecimal mainPuid) {
+    private void addHzFullCfgWithCfgForBomLine(List<HzBomLineRecord> hzBomLineRecords, User user, Long mainPuid) {
         List<HzFullCfgWithCfg> hzFullCfgWithCfgs = new ArrayList<HzFullCfgWithCfg>();
         for (HzBomLineRecord hzBomLineRecord : hzBomLineRecords) {
             HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
@@ -989,13 +996,28 @@ public class HzBomAllCfgService {
         HzFullCfgMainChange hzFullCfgMainChange = new HzFullCfgMainChange();
         hzFullCfgMainChange.srcSetChange(hzFullCfgMain);
         hzFullCfgMainChange.setChangeOrderId(changeFromId);
+        hzFullCfgMainChange.setChangeStatus(0);
         //变更车型模型集合
         List<HzFullCfgModelChange> hzFullCfgModelChanges = new ArrayList<HzFullCfgModelChange>();
         for(HzFullCfgModel hzFullCfgModel : hzFullCfgModels){
+            //获取车辆模型详情
+            HzCfg0ModelDetail hzCfg0ModelDetailQuery = new HzCfg0ModelDetail();
+            hzCfg0ModelDetailQuery.setpModelPuid(hzFullCfgModel.getModModelUid());
+            HzCfg0ModelDetail hzCfg0ModelDetail =hzCfg0ModelDetailDao.selectByModelId(hzCfg0ModelDetailQuery);
+
+
             HzFullCfgModelChange hzFullCfgModelChange = new HzFullCfgModelChange();
             hzFullCfgModelChange.srcSetChange(hzFullCfgModel);
             hzFullCfgModelChange.setChangeOrderId(changeFromId);
             hzFullCfgModelChange.setMainID(hzFullCfgMainChange.getId());
+
+            hzFullCfgModelChange.setModelVersion(hzCfg0ModelDetail.getpModelVersion());
+            hzFullCfgModelChange.setModelShape(hzCfg0ModelDetail.getpModelShape());
+            hzFullCfgModelChange.setModelAnnouncement(hzCfg0ModelDetail.getpModelAnnouncement());
+            hzFullCfgModelChange.setModelCfgDesc(hzCfg0ModelDetail.getpModelCfgDesc());
+            hzFullCfgModelChange.setModelCfgMng(hzCfg0ModelDetail.getpModelCfgMng());
+            hzFullCfgModelChange.setModelTrailNum(hzCfg0ModelDetail.getpModelTrailNum());
+            hzFullCfgModelChange.setModelGoodsNum(hzCfg0ModelDetail.getpModelGoodsNum());
             hzFullCfgModelChanges.add(hzFullCfgModelChange );
         }
         //变更2Y层数据
@@ -1005,6 +1027,16 @@ public class HzBomAllCfgService {
             hzFullCfgWithCfgChange.srcSetChange(hzFullCfgWithCfg);
             hzFullCfgWithCfgChange.setChangeOrderId(changeFromId);
             hzFullCfgWithCfgChange.setMainID(hzFullCfgMainChange.getId());
+            //查询特性
+            HzCfg0Record hzCfg0Record  = hzCfg0RecordDao.selectByPrimaryKey(hzFullCfgWithCfg.getCfgCfg0Uid());
+            hzFullCfgWithCfgChange.setCfgDesc(hzCfg0Record.getpCfg0Desc());
+            hzFullCfgWithCfgChange.setCfgCode(hzCfg0Record.getpCfg0ObjectId());
+            //查询是否颜色件
+            Map queryMap = new HashMap();
+            queryMap.put("puid",hzFullCfgWithCfg.getCfgBomlineUid());
+            queryMap.put("projectId",projectId);
+            HzBomLineRecord hzBomLineRecord  = hzBomLineRecordDao.findBomLineByPuid(queryMap);
+            hzFullCfgWithCfgChange.setIsColor(hzBomLineRecord.getColorPart()==1?"Y":"N");
             hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChange);
         }
 
@@ -1015,6 +1047,15 @@ public class HzBomAllCfgService {
             result.put("msg","跟新变更主数据失败");
             return result;
         }
+        //查询变更主数据，并将其ID为车辆模型和2Y层赋值
+        HzFullCfgMainChange hzFullCfgMainChange1 = hzFullCfgMainChangeDao.selectByChangeId(changeFromId);
+        for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChanges){
+            hzFullCfgModelChange.setMainID(hzFullCfgMainChange1.getId());
+        }
+        for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChanges){
+            hzFullCfgWithCfgChange.setMainID(hzFullCfgMainChange1.getId());
+        }
+
         //跟新变更车型模型
         int insertMidelNum = hzFullCfgModelChangeDao.insertList(hzFullCfgModelChanges);
         if(insertMidelNum<=0){

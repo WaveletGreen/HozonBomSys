@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.dao.model;
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.fullCfg.HzFullCfgModelChange;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
 import java.util.List;
@@ -57,4 +58,6 @@ public interface HzCfg0ModelRecordDao extends BasicDao<HzCfg0ModelRecord> {
     List<HzCfg0ModelRecord> selectByProjectPuid(@Param("projectPuid") String projectPuid);
 
     int deleteModelById(String puid);
+
+    List<HzCfg0ModelRecord> selectByFullCfgModel(Integer orderChangeId);
 }

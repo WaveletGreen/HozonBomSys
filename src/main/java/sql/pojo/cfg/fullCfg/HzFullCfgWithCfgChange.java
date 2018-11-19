@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class HzFullCfgWithCfgChange {
-    private BigDecimal id;
+    private Long id;
 
     //变更表单ID
     private Integer changeOrderId;
@@ -37,18 +37,22 @@ public class HzFullCfgWithCfgChange {
 
     private String flCfgBomlineName;
 
-    private BigDecimal flCfgVersion;
+    private Long flCfgVersion;
 
     private Integer flOperationType;
 
     private String flComment;
 
+    private String cfgDesc;
+    private String cfgCode;
+    private String isColor;
 
-    public BigDecimal getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -156,11 +160,11 @@ public class HzFullCfgWithCfgChange {
         this.flCfgBomlineName = flCfgBomlineName;
     }
 
-    public BigDecimal getFlCfgVersion() {
+    public Long getFlCfgVersion() {
         return flCfgVersion;
     }
 
-    public void setFlCfgVersion(BigDecimal flCfgVersion) {
+    public void setFlCfgVersion(Long flCfgVersion) {
         this.flCfgVersion = flCfgVersion;
     }
 
@@ -178,6 +182,30 @@ public class HzFullCfgWithCfgChange {
 
     public void setFlComment(String flComment) {
         this.flComment = flComment;
+    }
+
+    public String getCfgDesc() {
+        return cfgDesc;
+    }
+
+    public void setCfgDesc(String cfgDesc) {
+        this.cfgDesc = cfgDesc;
+    }
+
+    public String getCfgCode() {
+        return cfgCode;
+    }
+
+    public void setCfgCode(String cfgCode) {
+        this.cfgCode = cfgCode;
+    }
+
+    public String getIsColor() {
+        return isColor;
+    }
+
+    public void setIsColor(String isColor) {
+        this.isColor = isColor;
     }
 
     public void srcSetChange(HzFullCfgWithCfg hzFullCfgWithCfg) {
@@ -200,5 +228,20 @@ public class HzFullCfgWithCfgChange {
         this.flComment = hzFullCfgWithCfg.getFlComment();
     }
 
+    public String getFlOperationTypeString(){
+        switch (this.getFlOperationType()){
+            case 1 : return "新增";
+            case 2 : return  "跟新";
+            case 3 : return  "删除";
+            default: return  "未知状态";
+        }
+    }
 
+    public String getFlCommentString(){
+        if("1".equals(flComment)){
+            return "标配";
+        }else {
+            return "选配";
+        }
+    }
 }

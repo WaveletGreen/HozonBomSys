@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
+import sql.pojo.cfg.fullCfg.HzFullCfgModelChange;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 
 import java.util.List;
@@ -74,5 +75,10 @@ public class HzCfg0ModelRecordDaoImpl extends BasicDaoImpl<HzCfg0ModelRecord> im
     public int deleteModelById(String modelId) {
         return baseSQLUtil.executeDelete(modelId,
                 clzName + ".deleteModelById");
+    }
+
+    @Override
+    public List<HzCfg0ModelRecord> selectByFullCfgModel(Integer orderChangeId) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelRecord(),orderChangeId,clzName+".selectByFullCfgModel");
     }
 }

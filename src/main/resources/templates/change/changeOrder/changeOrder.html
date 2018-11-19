@@ -16,7 +16,7 @@
                         <div class="form-group after_the">
                             <label for="changeNo">变更单号</label>
                             <input type="text" class="form-control" name="changeNo" id="changeNo"
-                                   th:value="${data.changeNo}" disabled="disabled"
+                                    th:value="${data.changeNo}" disabled="disabled"
                                    placeholder="请输入变更单号"/>
                         </div>
                         <div class="form-group after_the">
@@ -96,17 +96,17 @@
 </div>
 <!--<h4><i class="fa fa-minus-square" aria-hidden="true">变更附件</i></h4>-->
 <!--<div class="panel-body" style="padding:0px;">-->
-<!--<div class="panel panel-default">-->
-<!--<div class="panel-body">-->
-<!--<div class="col-md-12 col-lg-12" style="padding:0px;">-->
-<!--<div class="form-group after_the">-->
-<!--<label for="EWOnum5">附件:</label>-->
-<!--<input type="file" class="form-control" name="level" id="EWOnum5"-->
-<!--placeholder=""/>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
+    <!--<div class="panel panel-default">-->
+        <!--<div class="panel-body">-->
+            <!--<div class="col-md-12 col-lg-12" style="padding:0px;">-->
+                <!--<div class="form-group after_the">-->
+                    <!--<label for="EWOnum5">附件:</label>-->
+                    <!--<input type="file" class="form-control" name="level" id="EWOnum5"-->
+                           <!--placeholder=""/>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 <!--</div>-->
 <h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
 <div class="panel-body" style="padding:0px;">
@@ -114,10 +114,10 @@
         <div class="panel-body">
             <div class="content col-lg-12 col-md-12" style="padding:0px;">
                 <table class="table table-striped tableNormalStyle" id="routingDaTable">
-                    <!--<tr><td><a onclick="skip('feature')">特性变更</a></td></tr>-->
+                    <tr><td><a onclick="skip('materieFeature')">特性变更</a></td></tr>
                     <tr>
-                        <th><a href="../change/texing">特性变更</a></th>
-                        <th><a href="#">全BOM配置</a></th>
+                        <th><a href="../vwo/featurePage?vwoId=6">特性变更</a></th>
+                        <th><a href="../vwo/fullCfgPage?orderChangeId=6">全BOM配置</a></th>
                         <th><a href="#">配色方案</a></th>
                         <th><a href="#">配置物料</a></th>
                         <th><a href="../change/data/ebom/page">EBOM管理</a></th>

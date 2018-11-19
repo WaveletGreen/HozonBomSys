@@ -18,7 +18,18 @@
     <result column="CREATOR_CHANGE" jdbcType="OTHER" property="creatorChange" />
     <result column="UPDATER_CHANGE" jdbcType="OTHER" property="updaterChange" />
     <result column="FM_IS_RELEASE" jdbcType="DECIMAL" property="fmIsRelease" />
+    <result column="SRC_MAIN_ID" jdbcType="DECIMAL" property="srcMainId" />
+    <result column="CHANGE_STATUS" jdbcType="DECIMAL" property="changeStatus" />
   </resultMap>
+
+  <sql id="Base_Column_List">
+      ID, CHANGE_ORDER_UID, PROJECT_UID, STATUS,
+      STAGE, VERSION, EFFECTIVE_DATE,
+      CREATE_DATE, UPDATE_DATE, CREATOR,
+      UPDATER, CREATE_DATE_CHANGE, UPDATE_DATE_CHANGE,
+      CREATOR_CHANGE, UPDATER_CHANGE, FM_IS_RELEASE,SRC_MAIN_ID,CHANGE_STATUS
+  </sql>
+
   <insert id="insert" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange">
     <selectKey keyProperty="id" order="BEFORE" resultType="Integer">
         select SEQ_HZ_FC_MAIN_RECORD_CHANGE.NEXTVAL from dual
@@ -27,13 +38,14 @@
       STAGE, VERSION, EFFECTIVE_DATE, 
       CREATE_DATE, UPDATE_DATE, CREATOR, 
       UPDATER, CREATE_DATE_CHANGE, UPDATE_DATE_CHANGE, 
-      CREATOR_CHANGE, UPDATER_CHANGE, FM_IS_RELEASE
+      CREATOR_CHANGE, UPDATER_CHANGE, FM_IS_RELEASE,SRC_MAIN_ID,CHANGE_STATUS
       )
     values ( #{id,jdbcType=DECIMAL},#{changeOrderId,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=OTHER},
       #{stage,jdbcType=DECIMAL}, #{version,jdbcType=OTHER}, #{effectiveDate,jdbcType=TIMESTAMP}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{creator,jdbcType=OTHER}, 
       #{updater,jdbcType=OTHER}, #{createDateChange,jdbcType=TIMESTAMP}, #{updateDateChange,jdbcType=TIMESTAMP}, 
-      #{creatorChange,jdbcType=OTHER}, #{updaterChange,jdbcType=OTHER}, #{fmIsRelease,jdbcType=DECIMAL}
+      #{creatorChange,jdbcType=OTHER}, #{updaterChange,jdbcType=OTHER}, #{fmIsRelease,jdbcType=DECIMAL},
+      #{srcMainId,jdbcType=DECIMAL},#{changeStatus,jdbcType=DECIMAL}
       )
   </insert>
   <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange">
@@ -136,4 +148,22 @@
       </if>
     </trim>
   </insert>
+
+  <select id="selectByChangeId" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List"/>
+      from
+        HZ_FULL_CFG_MAIN_RECORD_CHANGE
+      where
+        CHANGE_ORDER_UID = #{changeOrderId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectLastFullCfg" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      HZ_FULL_CFG_MAIN_RECORD_CHANGE
+    where
+      ID = (select Max(ID) from HZ_FULL_CFG_MAIN_RECORD_CHANGE where SRC_MAIN_ID = #{srcMainId,jdbcType=DECIMAL} and CHANGE_STATUS = 1)
+  </select>
 </mapper>
