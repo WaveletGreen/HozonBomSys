@@ -104,7 +104,7 @@
   <select id="HzWorkProcedureDAOImpl_findHzWorkProcessByPage2" parameterType="java.util.HashMap" resultMap="HzWorkProcessMap">
     select * from
     (select t.*,ROWNUM as rn from
-    (SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t1.PUID,t2.P_PROCEDURE_CODE,t2.P_PROCEDURE_DESC, t2.P_DIRECT_LABOR,
+    (SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t2.PUID,t2.P_PROCEDURE_CODE,t2.P_PROCEDURE_DESC, t2.P_DIRECT_LABOR,
     t2.P_INDIRECT_LABOR,t2.P_MACHINE_LABOR, t2.P_BURN, t2.P_MACHINE_MATERIAL_LABOR, t2.P_OTHER_COST, t2.P_COUNT,t2.P_PURPOSE,
     t2.P_STATE, t2.P_CONTROL_CODE,t2.P_STATUS,t3.P_WORK_CODE,t3.P_WORK_DESC,
     t4.P_FACTORY_CODE FROM HZ_MATERIEL_RECORD t1
@@ -690,6 +690,7 @@
       #{item.pMaterielCode, jdbcType=VARCHAR},#{item.pMaterielDesc, jdbcType=VARCHAR},
       #{item.pFactoryId, jdbcType=VARCHAR},#{item.revision, jdbcType=VARCHAR},
       #{item.orderId, jdbcType=DOUBLE}
+      from DUAL
     </foreach>
   </insert>
 
@@ -729,8 +730,8 @@
             P_COUNT = #{item.pCount,jdbcType=INTEGER},
           </if>
             P_UPDATE_TIME = sysdate,
-          <if test="pUpdateName != null">
-            P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
+          <if test="item.pUpdateName != null">
+            P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
           </if>
           <if test="item.pStatus != null">
             P_STATUS = #{item.pStatus,jdbcType=INTEGER},

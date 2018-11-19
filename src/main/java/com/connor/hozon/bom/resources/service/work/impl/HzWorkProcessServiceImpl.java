@@ -48,7 +48,7 @@ import java.util.*;
  * @Date: 2018/7/5
  * @Description:
  */
-@Service("HzWorkProcessService")
+@Service("hzWorkProcessService")
 public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Autowired
     private HzWorkProcedureDAO hzWorkProcedureDAO;

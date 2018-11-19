@@ -460,7 +460,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 //查删除的数据（状态值为4）
 
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
-                deleteQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
+                deleteQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
                 deleteQuery.setStatus(4);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
