@@ -35,7 +35,7 @@ public class HzChangeDataController extends BaseController {
     @RequestMapping(value = "ebom/title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
-        tableTitle.put("state","状态");
+//        tableTitle.put("state","状态");
         tableTitle.put("changeType","变更类型");
         tableTitle.put("lineId","零件号" );
         tableTitle.put("pBomLinePartName","名称" );
@@ -92,7 +92,7 @@ public class HzChangeDataController extends BaseController {
     @RequestMapping(value = "pbom/title",method = RequestMethod.GET)
     public void getPbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
-        tableTitle.put("state","状态");
+//        tableTitle.put("state","状态");
         tableTitle.put("changeType","变更类型");
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
@@ -120,7 +120,7 @@ public class HzChangeDataController extends BaseController {
     @RequestMapping(value = "mbom/title",method = RequestMethod.GET)
     public void getMbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
-        tableTitle.put("state","状态");
+//        tableTitle.put("state","状态");
         tableTitle.put("changeType","变更类型");
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
@@ -150,7 +150,7 @@ public class HzChangeDataController extends BaseController {
     @RequestMapping(value = "materiel/title",method = RequestMethod.GET)
     public void getMaterielTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
-        tableTitle.put("state","状态");
+//        tableTitle.put("state","状态");
         tableTitle.put("changeType","变更类型");
         tableTitle.put("pMaterielCode", "物料编码");
         tableTitle.put("pMaterielDesc", "物料描述（中文）");
@@ -171,6 +171,31 @@ public class HzChangeDataController extends BaseController {
         tableTitle.put("pLoosePartFlag", "散件标识");
         toJSONResponse(Result.build(tableTitle), response);
     }
+
+    @RequestMapping(value = "work/procedure/title",method = RequestMethod.GET)
+    public void getworkProcedureTitle(HttpServletResponse response) {
+        LinkedHashMap<String, String> title = new LinkedHashMap<>();
+        title.put("changeType","变更类型");
+        title.put("pMaterielCode", "物料代码");//物料
+        title.put("pMaterielDesc","物料名称");//物料名称
+        title.put("factoryCode", "工厂");//工厂
+        title.put("purpose", "用途");//用途
+        title.put("state", "状态");//状态
+        title.put("pProcedureCode", "工序号");//工序号
+        title.put("pWorkCode", "工作中心");//工作中心
+        title.put("pWorkDesc", "工作中心描述");//工作中心描述
+        title.put("controlCode", "控制码");//控制码
+        title.put("pProcedureDesc", "工序描述");//工序描述
+        title.put("pCount", "基本数量 ");//基本数量
+        title.put("pDirectLabor", "直接人工/机物料消耗");//直接人工时间
+        title.put("pIndirectLabor", "间接人工/标准件消耗");//间接人工时间
+        title.put("pMachineLabor", "折旧/工具消耗");//机器时间
+        title.put("pBurn", "燃动费/废品损失");//燃动能
+        title.put("pMachineMaterialLabor", "辅助人工/设备维修");//机物料消耗
+        title.put("pOtherCost", "辅助折旧/辅助其他费用");//其他费用
+        toJSONResponse(Result.build(title), response);
+    }
+
 
 
     /**
@@ -247,7 +272,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-                _res.put("state",dto.getState());
+//                _res.put("state",dto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("lineId",dto.getLineId() );
                 _res.put("pBomLinePartName",dto.getpBomLinePartName() );
@@ -315,7 +340,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-                _res.put("state",dto.getState());
+//                _res.put("state",dto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("level", dto.getLevel());
                 _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
@@ -352,7 +377,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-                _res.put("state",dto.getState());
+//                _res.put("state",dto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("rank",dto.getRank());
                 _res.put("level", dto.getLevel());
@@ -395,7 +420,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-                _res.put("state",dto.getState());
+//                _res.put("state",dto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("resource",dto.getResource());
                 _res.put("pMaterielCode",dto.getpMaterielCode());
@@ -414,6 +439,42 @@ public class HzChangeDataController extends BaseController {
                 _res.put("pPartImportantDegree",dto.getpPartImportantDegree());
                 _res.put("pLoosePartFlag",dto.getpLoosePartFlag());
                 _res.put("factoryCode",dto.getFactoryCode());
+                _list.add(_res);
+            });
+            ret.put("result", _list);
+            return ret;
+        }
+        return null;
+    }
+
+
+    @RequestMapping(value = "work/procedure/data",method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> getWorkProcedureChangeDataDetail(HzChangeDataQuery query){
+        List<HzWorkProcessRespDTO> list = hzChangeDataService.getChangeDataRecordForWorkProcedure(query);
+        Map<String, Object> ret = new HashMap<>();
+        if(ListUtil.isNotEmpty(list)){
+            List<Map<String, Object>> _list = new ArrayList<>();
+            list.forEach(dto -> {
+                Map<String, Object> _res = new HashMap<>();
+                _res.put("changeType",dto.getChangeType());
+                _res.put("pMaterielCode", dto.getpMaterielCode());
+                _res.put("pMaterielDesc", dto.getpMaterielDesc());
+                _res.put("factoryCode", dto.getFactoryCode());
+                _res.put("purpose", dto.getPurpose());
+                _res.put("state", dto.getState());
+                _res.put("pProcedureCode", dto.getpProcedureCode());
+                _res.put("pWorkCode", dto.getpWorkCode());
+                _res.put("pWorkDesc", dto.getpWorkDesc());
+                _res.put("controlCode", dto.getControlCode());
+                _res.put("pProcedureDesc", dto.getpProcedureDesc());
+                _res.put("pCount", dto.getpCount());
+                _res.put("pDirectLabor", dto.getpDirectLabor());
+                _res.put("pIndirectLabor", dto.getpIndirectLabor());
+                _res.put("pMachineLabor", dto.getpMachineLabor());
+                _res.put("pBurn", dto.getpBurn());
+                _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
+                _res.put("pOtherCost", dto.getpOtherCost());
                 _list.add(_res);
             });
             ret.put("result", _list);

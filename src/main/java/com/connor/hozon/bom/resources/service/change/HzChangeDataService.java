@@ -46,4 +46,11 @@ public interface HzChangeDataService {
      * @return
      */
     List<HzMaterielRespDTO> getChangeDataRecordForMateriel(HzChangeDataQuery query);
+
+    /**
+     * 查询工艺路线的变更数据
+     * @param query
+     * @return
+     */
+    List<HzWorkProcessRespDTO> getChangeDataRecordForWorkProcedure(HzChangeDataQuery query);
 }

@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.dto.response;
  * @Date: 2018/7/5
  * @Description:
  */
-public class HzWorkProcessRespDTO {
+public class HzWorkProcessRespDTO extends BaseChangeRespDTO{
     private Integer No;
     /**
      * 主键id
@@ -96,6 +96,13 @@ public class HzWorkProcessRespDTO {
      * 是否已发送过SAP
      */
     private Integer isSent;
+    /**
+     * 数据状态 删除状态 草稿状态 审核中等
+     * 因为工艺路本身有一个字段名为 状态
+     * 这里做一下区分
+     */
+    private Integer status;
+
 
     public Integer getNo() {
         return No;
@@ -270,4 +277,13 @@ public class HzWorkProcessRespDTO {
     public void setIsSent(Integer isSent) {
         this.isSent = isSent;
     }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
 }

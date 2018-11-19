@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.controller.work;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
 
+import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
@@ -272,6 +273,7 @@ public class HzWorkProcessController extends BaseController {
         list.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
             _res.put("No", dto.getNo());
+            _res.put("puid",dto.getPuid());
             _res.put("materielId", dto.getMaterielId());
             _res.put("pMaterielCode", dto.getpMaterielCode());
             _res.put("pMaterielDesc", dto.getpMaterielDesc());
@@ -290,6 +292,7 @@ public class HzWorkProcessController extends BaseController {
             _res.put("pBurn", dto.getpBurn());
             _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
             _res.put("pOtherCost", dto.getpOtherCost());
+            _res.put("status",dto.getStatus());
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -405,5 +408,16 @@ public class HzWorkProcessController extends BaseController {
             model.addAttribute("puids",puids);
         }
         return "bomManage/mbom/routingData/routingSetChangeForm";
+    }
+
+    /**
+     * 工艺路线发起变更数据到变更单
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "data/change",method = RequestMethod.POST)
+    public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzWorkProcessService.dataToChangeOrder(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 }

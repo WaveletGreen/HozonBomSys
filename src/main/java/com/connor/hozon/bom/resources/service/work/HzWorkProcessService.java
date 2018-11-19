@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.work;
 
+import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
@@ -78,4 +79,11 @@ public interface HzWorkProcessService {
     List<String> queryProcessDesc( List<String> puidList);
 
     List<HzWorkProcedure> queryProcedures(List<HzWorkProcedure> hzWorkProcedureList);
+
+    /**
+     * 工艺路线发起流程
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
 }
