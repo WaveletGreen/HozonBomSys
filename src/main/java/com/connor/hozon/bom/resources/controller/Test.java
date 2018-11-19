@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzEbomRecordDAOImpl;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -25,35 +26,37 @@ public class Test {
 //        HzEbomRecordDAO dao = new HzEbomRecordDAOImpl();
 //        List<HzEPLManageRecord> recordList = dao.getEbomRecordsByPuids(puids,"1c128c60-84a2-4076-9b1c-f7093e56e4df");
 //        System.out.println(JSON.toJSONString(recordList));
-        long m = System.currentTimeMillis();
-         pool.execute(new Runnable() {
-            long  sum = 0L;
-            @Override
-            public void run() {
-                for(long i  =0L;i<100000000L;i++){
-                    for(long j = 0L;j<10L;j++){
-
-                    }
-                    sum+=i;
-                }
-                System.out.println(sum);
-            }
-
-        });
-        long b = System.currentTimeMillis();
-        System.out.println((b-m)+"ms");
-        if(pool != null){
-            pool.shutdown();
-        }
-        long p = System.currentTimeMillis();
-        long s = 0L;
-        for(long i  =0L;i<100000000L;i++){
-            for(long j = 0L;j<10L;j++){
-            }
-            s+=i;
-        }
-        System.out.println(s);
-        long o = System.currentTimeMillis();
-        System.out.println((o-p)+"ms");
+//        long m = System.currentTimeMillis();
+//         pool.execute(new Runnable() {
+//            long  sum = 0L;
+//            @Override
+//            public void run() {
+//                for(long i  =0L;i<100000000L;i++){
+//                    for(long j = 0L;j<10L;j++){
+//
+//                    }
+//                    sum+=i;
+//                }
+//                System.out.println(sum);
+//            }
+//
+//        });
+//        long b = System.currentTimeMillis();
+//        System.out.println((b-m)+"ms");
+//        if(pool != null){
+//            pool.shutdown();
+//        }
+//        long p = System.currentTimeMillis();
+//        long s = 0L;
+//        for(long i  =0L;i<100000000L;i++){
+//            for(long j = 0L;j<10L;j++){
+//            }
+//            s+=i;
+//        }
+//        System.out.println(s);
+//        long o = System.currentTimeMillis();
+//        System.out.println((o-p)+"ms");
+//        String s = ChangeTableNameEnum.getMbomTableName(1,"M");
+//        System.out.println(s);
     }
 }

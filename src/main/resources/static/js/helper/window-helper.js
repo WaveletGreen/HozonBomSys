@@ -13,3 +13,20 @@ function undead() {
 function getActiveTab() {
     return $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow;
 }
+
+/**
+ * 因弹窗造成的body卡死情况，将当前激活的iframe下的body样式modal-open去除
+ */
+function activeTabBodyReset() {
+    $('.modal-dialog', window.top.document).parent('div').remove();
+    $('body', window.top.document).find('.modal-backdrop').remove();
+    getActiveTab().undead();
+}
+
+/**
+ *即重置body的样式，又刷新页面
+ */
+function activeTabBodyRefresh(){
+    activeTabBodyReset();
+    getActiveTab().doQuery();
+}

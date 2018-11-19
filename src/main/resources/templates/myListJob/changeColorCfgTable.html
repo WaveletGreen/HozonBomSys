@@ -11,14 +11,13 @@
 <div class="panel-body" style="padding-bottom: 0;">
     <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
           id="ebomChangeData">
-        <input type="hidden" id="orderId" th:value="${orderId}">
     </form>
 </div>
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="content col-lg-12 col-md-12" style="padding:0px;">
-                <table class="table table-striped tableNormalStyle" id="colorCfg_table">
+                <table class="table table-striped tableNormalStyle" id="ebom_table">
                 </table>
             </div>
         </div>
@@ -32,49 +31,28 @@
 
     function initTable() {
         var projectPuid = $("#project", window.top.document).val();
-        var $table = $("#colorCfg_table");
+        var $table = $("#ebom_table");
         var column = [];
-        var orderId = $("#orderId").val();
-        column.push({
-            field: 'codeOfColorModel',
-            title: '车型颜色代码',
-            align: 'center',
-            valign: 'middle'
-        });
-        column.push({
-            field: 'descOfColorModel',
-            title: '描述',
-            align: 'center',
-            valign: 'middle'
-        });
-        column.push({
-            field: 'modelShell',
-            title: '油漆车身总成',
-            align: 'center',
-            valign: 'middle'
-        })
         $.ajax({
-            url: "../../../vwo/getModelColorTable?vwoId=" + orderId,
-            type: "POST",
-            success: function (data) {
-                let titles = data.titleSet;
-                let tableData = data.result;
-                for (let i in titles) {
-                    column.push({
-                        field: "s" + i,
-                        title:
-                            titles[i],
-                        align:
-                            'center',
-                        valign:
-                            'middle'
-                    })
+            url: "../../../change/data/ebom/title",
+            type: "GET",
+            success: function (result) {
+                var data = result.data;
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        var json = {
+                            field: key,
+                            title: data[key],
+                            // align: 'center',
+                            valign: 'middle',
+                        };
+                        column.push(json);
+                    }
                 }
                 $table.bootstrapTable({
-                    // url: "../../../vwo/getModelColorTable?vwoId=" + orderId,
+                    url: "../../../change/data/ebom/data?projectId="+projectPuid+"&orderId="+1,
                     method: 'GET',
-                    data:tableData,
-                    // dataType: 'json',
+                    dataType: 'json',
                     //cache: false,
                     // striped: true,                              //是否显示行间隔色
                     height: $(window.parent.document).find("#wrapper").height() - 150,
@@ -98,12 +76,12 @@
                     showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: false,                  //是否显示刷新按钮
                     //minimumCountColumns:4,
+
                 });
 
             }
         });
     }
-
 </script>
 </body>
 </html>

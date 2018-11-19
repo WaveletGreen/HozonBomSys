@@ -600,7 +600,7 @@
             update HZ_BOM_LINE_RECORD
             <set>
                 P_UPDATE_TIME =sysdate,
-                P_EBOM_STATUS = 0
+                P_EBOM_STATUS = 4
             </set>
             where PUID = #{puids[${index}]}
            </foreach>

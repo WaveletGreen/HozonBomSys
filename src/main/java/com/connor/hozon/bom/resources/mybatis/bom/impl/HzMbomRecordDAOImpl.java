@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
@@ -32,6 +33,40 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     @Override
     public int insertList(List<HzMbomLineRecord> list) {
         return super.insert("HzMbomRecordDAOImpl_insertList",list);
+    }
+
+    @Override
+    public int updateList(List<HzMbomLineRecord> records) {
+        int size = records.size();
+        //分批更新数据 一次1000条
+        int i = 0;
+        int cout = 0;
+        try {
+            synchronized (this){
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzMbomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        super.update("HzMbomRecordDAOImpl_updateList",list);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzMbomLineRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    super.update("HzMbomRecordDAOImpl_updateList",list);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -444,6 +479,38 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         request.setFilters(map);
         return super.findPage("HzMbomRecordDAOImpl_getHzMbomTreeByPage","HzMbomRecordDAOImpl_getHzMbomTreeTotalCount",request);
 
+    }
+
+    @Override
+    public List<HzMbomLineRecord> getMbomRecordsByPuids(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"":null);
+        }else {
+            map.put("revision",null);
+        }
+        map.put("status",query.getStatus());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        return super.findForList("HzMbomRecordDAOImpl_getMbomRecordsByPuids",map);
+
+    }
+
+    @Override
+    public HzMbomLineRecord getMBomRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(null != query.getRevision()){
+            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+        }else {
+            map.put("revision",null);
+        }
+        map.put("status",query.getStatus());
+        map.put("tableName",query.getTableName());
+        return (HzMbomLineRecord)super.findForObject("HzMbomRecordDAOImpl_getMBomRecordByPuidAndRevision",map);
     }
 
 }

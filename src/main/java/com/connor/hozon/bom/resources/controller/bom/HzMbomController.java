@@ -376,13 +376,13 @@ public class HzMbomController extends BaseController {
 
 
     /**
-     * EBOM发起变更数据到变更单
+     * MBOM发起变更数据到变更单
      * @param reqDTO
      * @param response
      */
     @RequestMapping(value = "data/change",method = RequestMethod.POST)
     public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO = new WriteResultRespDTO();
+        WriteResultRespDTO respDTO = hzMbomService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
