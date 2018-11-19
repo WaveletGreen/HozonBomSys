@@ -79,8 +79,9 @@
                 $.post($("#groupForm",window.top.document).attr('action'),$("#groupForm",window.top.document).serialize(),function(e){
                     getActiveTab().undead();
                     if(e.result){
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // $('.modal-dialog', window.top.document).parent('div').remove()
+                        // $('body', window.top.document).find('.modal-backdrop').remove();
+                        activeTabBodyReset();
                         var entity = e.entity;
                         zTree.addNodes(selectNode, {node:entity.node, parentNode:entity.parentNode, name:entity.name,groupId:entity.groupId,groupCode:entity.groupCode });
                         // window.Ewin.alert({message:'增加数据成功!'});

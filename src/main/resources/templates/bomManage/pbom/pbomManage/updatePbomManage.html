@@ -11,7 +11,8 @@
     </div>
     <div class="form-group">
         <label for="pBomLinePartName">名称</label>
-        <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text" disabled="disabled" th:value="${data.pBomLinePartName}"
+        <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text" disabled="disabled"
+               th:value="${data.pBomLinePartName}"
                placeholder="请输入名称"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
@@ -21,7 +22,8 @@
     </div>
     <div class="form-group">
         <label for="pBomOfWhichDept">专业</label>
-        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text" disabled="disabled" th:value="${data.pBomOfWhichDept}"
+        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text" disabled="disabled"
+               th:value="${data.pBomOfWhichDept}"
                placeholder="请输入专业"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
@@ -31,22 +33,26 @@
     </div>
     <div class="form-group">
         <label for="groupNum">分组号</label>
-        <input class="form-control" id="groupNum" name="groupNum" type="text" disabled="disabled" th:value="${data.groupNum}"
+        <input class="form-control" id="groupNum" name="groupNum" type="text" disabled="disabled"
+               th:value="${data.groupNum}"
                placeholder="请输入分组号"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pBomLinePartEnName">英文名称</label>
-        <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text" disabled="disabled" th:value="${data.pBomLinePartEnName}"
+        <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text" disabled="disabled"
+               th:value="${data.pBomLinePartEnName}"
                placeholder="请输入英文名称"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pBomLinePartClass">零件分类</label>
-        <input class="form-control" id="pBomLinePartClass" name="pBomLinePartClass" type="text" disabled="disabled" th:value="${data.pBomLinePartClass}"
+        <input class="form-control" id="pBomLinePartClass" name="pBomLinePartClass" type="text" disabled="disabled"
+               th:value="${data.pBomLinePartClass}"
                placeholder="请输入零件分类"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
         <label for="pBomLinePartResource">零部件来源</label>
-        <input class="form-control" id="pBomLinePartResource" name="pBomLinePartResource" type="text" disabled="disabled" th:value="${data.pBomLinePartResource}"
+        <input class="form-control" id="pBomLinePartResource" name="pBomLinePartResource" type="text"
+               disabled="disabled" th:value="${data.pBomLinePartResource}"
                placeholder="请输入零部件来源"/><!--th:value="${entity.level}"-->
     </div>
     <div class="form-group">
@@ -99,12 +105,12 @@
                placeholder="请输入外委件"/><!--th:value="${entity.level}"-->
     </div>
     <!--<div class="form-group">-->
-        <!--<label for="colorPart">颜色件</label>-->
-        <!--<select class="form-control" name="colorPart" id="colorPart" placeholder="请选择是否为颜色件">-->
-            <!--<option></option>-->
-            <!--<option th:selected="${data.getColorPart()=='Y'?true:false}">Y</option>-->
-            <!--<option th:selected="${data.getColorPart()=='N'?true:false}">N</option>-->
-        <!--</select>-->
+    <!--<label for="colorPart">颜色件</label>-->
+    <!--<select class="form-control" name="colorPart" id="colorPart" placeholder="请选择是否为颜色件">-->
+    <!--<option></option>-->
+    <!--<option th:selected="${data.getColorPart()=='Y'?true:false}">Y</option>-->
+    <!--<option th:selected="${data.getColorPart()=='N'?true:false}">N</option>-->
+    <!--</select>-->
     <!--</div>-->
     <div class="form-group">
         <label for="station">工位</label>
@@ -144,7 +150,7 @@
                 var pBomPuid = $("#pBomPuid").val();
                 var myData = JSON.stringify({
                     "eBomPuid": $("#eBomPuid").val(),
-                    "projectId":projectId,
+                    "projectId": projectId,
                     // "rank": $("#rank").val(),
                     // "level": $("#level").val(),
                     "lineId": $("#lineId").val(),
@@ -172,19 +178,19 @@
                         'POST',
                     url: url,
                     data: myData,
-                    success:function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
-                            $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-
-                            if (result.success) {
-                                layer.msg('修改成功', {icon: 1, time: 2000})
-                            }
-                            else if(!result.success){
-                                window.Ewin.alert({message: result.errMsg})
-                            }
-                        },
+                    success: function (result) {
+                        // $('.modal-dialog', window.top.document).parent('div').remove()
+                        // $('body', window.top.document).find('.modal-backdrop').remove();
+                        // jquery 调用刷新当前操作的table页面的refresh方法
+                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                        activeTabBodyRefresh();
+                        if (result.success) {
+                            layer.msg('修改成功', {icon: 1, time: 2000})
+                        }
+                        else if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg})
+                        }
+                    },
                     error: function (status) {
                         window.Ewin.alert({message: status.status + ':修改数据失败!'});
                     }
@@ -192,9 +198,9 @@
             }
         });
     })
-    $(document).keydown(function(event) {
+    $(document).keydown(function (event) {
         if (event.keyCode == 13) {
-            $('form').each(function() {
+            $('form').each(function () {
                 event.preventDefault();
             });
         }

@@ -55,8 +55,9 @@ $(document).ready(function () {
                     data: myData,
                     success:
                         function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
-                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // $('.modal-dialog', window.top.document).parent('div').remove()
+                            // $('body', window.top.document).find('.modal-backdrop').remove();
+                            activeTabBodyReset();
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                             window.Ewin.alert({message: result.errMsg});

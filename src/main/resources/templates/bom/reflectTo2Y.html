@@ -43,8 +43,9 @@
                 data: JSON.stringify(data),
                 success:
                     function (result) {
-                        $('.modal-dialog', window.top.document).parent('div').remove();
-                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // $('.modal-dialog', window.top.document).parent('div').remove();
+                        // $('body', window.top.document).find('.modal-backdrop').remove();
+                        activeTabBodyReset();
                         window.Ewin.alert({message: result.msg});
                     },
                 error: function (status) {

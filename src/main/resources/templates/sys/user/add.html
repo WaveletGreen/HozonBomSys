@@ -234,10 +234,11 @@
             bootstrapValidator.validate();
             if(bootstrapValidator.isValid()){
                 $.post($("#userForm",window.top.document).attr('action'),$("#userForm",window.top.document).serialize(),function(e){
-                    $('.modal-dialog', window.top.document).parent('div').remove()
-                    $('body', window.top.document).find('.modal-backdrop').remove();
+                    // $('.modal-dialog', window.top.document).parent('div').remove()
+                    // $('body', window.top.document).find('.modal-backdrop').remove();
                     // jquery 调用刷新当前操作的table页面的refresh方法
-                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    activeTabBodyRefresh();
                     if(e.result){
                         layer.msg('操作成功', {icon: 1, time: 2000})
                     }else{

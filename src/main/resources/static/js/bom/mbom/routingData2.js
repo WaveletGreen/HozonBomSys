@@ -71,7 +71,7 @@ function initTable(url) {
             };
             column.push({
                 field: 'status',
-                title: '状态',
+                title: '变更状态',
                 align: 'center',
                 valign: 'middle',
                 formatter: function (value, row, index) {
