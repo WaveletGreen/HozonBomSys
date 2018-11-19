@@ -15,6 +15,17 @@
   </sql>
 
 
+  <!--我的申请返回ORDER_ID-->
+  <select id="HzApplicantChangeDAOImpl_findAuditorList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_APPLICANT_CHANGE_RECORD
+    where 1=1
+    <!--ID = #{id,jdbcType=DOUBLE}-->
+    and APPLICANT_ID = #{applicantId,jdbcType=DOUBLE}
+    <!--and AUDIT_RESULT is NULL-->
+
+  </select>
 
   <!--insert-->
   <insert id="HzApplicantChangeDAOImpl_insert" parameterType="sql.pojo.change.HzApplicantChangeRecord">

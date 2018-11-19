@@ -13,19 +13,19 @@
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"id="queryHandled">
                 <div class="form-group">
                     <label for="VWOnum1">变更单号:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="changeNum" id="VWOnum1"
+                    <input type="text" style="width: 150px;" class="form-control" name="changeNo" id="VWOnum1"
                            placeholder="请输入变更单号"/>
                 </div>
 
                 <div class="form-group">
                     <label for="VWOnum1">发起人:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="launcher" id="VWOnum3"
+                    <input type="text" style="width: 150px;" class="form-control" name="originator" id="VWOnum3"
                            placeholder="请输入发起人"/>
                 </div>
                 <div class="form-group">
                     <label for="VWOnum1">开始日期:</label>
-                    <input class="form-control head-input-set" name="launchTimeStart" id="startdate" type="date"/>~
-                    <input class="form-control head-input-set" name="launchTimeEnd" id="enddate" type="date"/>
+                    <input class="form-control head-input-set" name="firstOriginTime" id="startdate" type="date"/>~
+                    <input class="form-control head-input-set" name="lastOriginTime" id="enddate" type="date"/>
                 </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>

@@ -31,7 +31,7 @@ function initTable(projectUid) {
     //         var column = [];
     column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
-        field: 'changeNum',
+        field: 'changeNo',
         title: '变更单号',
         align: 'center',
         valign: 'middle',
@@ -43,12 +43,12 @@ function initTable(projectUid) {
             ].join("");
         }
     });
-    column.push({field: 'launchTime', title: '发起时间', align: 'center', valign: 'middle'});
-    column.push({field: 'launcherDep', title: '部门', align: 'center', valign: 'middle'});
+    column.push({field: 'originTime', title: '发起时间', align: 'center', valign: 'middle'});
+    column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
     //column.push({field: 'reasonCode', title: '原因类型', align: 'center', valign: 'middle'});
     //column.push({field: 'title', title: '标题', align: 'center', valign: 'middle'});
-    column.push({field: 'launcher', title: '流程发起人', align: 'center', valign: 'middle'});
+    column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
     // var data = result.data;
     // var keys = [];
     // var values;
@@ -83,7 +83,7 @@ function initTable(projectUid) {
         //         }
         //     })
         // },
-        url: "worklist/base/infoList?projectId=" + projectUid +"&flag=2",
+        url: "processed/infoList?projectId=" + projectUid ,
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),
@@ -110,7 +110,7 @@ function initTable(projectUid) {
     // })
 }
 function queryLou(id) {
-    window.location.href="worklist/base/info?id="+id;
+    window.location.href="processed/ToProcessedForm?id="+id;
 }
 // function basic() {
 //     window.Ewin.dialog({

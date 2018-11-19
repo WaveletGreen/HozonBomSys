@@ -113,6 +113,45 @@
     where ID = #{id,jdbcType=DOUBLE}
   </select>
 
+  <!--<select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds" parameterType="java.util.Map" resultMap="BaseResultMap">-->
+    <!--select-->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from HZ_CHANGE_ORDER_RECORD-->
+    <!--where ID = #{id,jdbcType=DOUBLE}-->
+    <!--and PROJECT_ID = #{projectId,jdbcType=VARCHAR}-->
+  <!--</select>-->
+
+  <!--待办事项列表-->
+  <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select *
+    from HZ_CHANGE_ORDER_RECORD
+    <where>
+      1=1
+      <if test="id != null">
+        and ID = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="changeNo != null and changeNo!=''">
+        and CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
+      </if>
+      <if test="originator != null and originator!=''">
+        and ORIGINATOR = #{originator,jdbcType=VARCHAR}
+      </if>
+      <if test="projectId != null and projectId !='' ">
+        and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
+      <!--发起时间比较-->
+      <if test="firstOriginTime != null and firstOriginTime !=''">
+        <!--and (ORIGIN_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+        and (ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+        and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+      </if>
+      <!--接口人是自己-->
+      <!--and AUDITER = #{auditer,jdbcType=VARCHAR}-->
+      <!--状态：进行中的变更单-->
+
+    </where>
+  </select>
+
 
     <select id="HzChangeOrderDAOImpl_changeNoExist" parameterType="java.lang.String" resultType="java.lang.Integer">
         select
