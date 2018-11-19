@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.work;
 
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.work.HzWorkProcedure;
@@ -45,4 +46,35 @@ public interface HzWorkProcedureDAO {
     int deleteHzWorkProcesses(List<HzWorkProcedure> hzWorkProceduresDel);
 
     List<HzWorkProcedure> queryProcedures(List<HzWorkProcedure> hzWorkProcedureList);
+
+
+
+    /**
+     * 变更 根据puids 获取工艺路线集合
+     * @param query
+     * @return
+     */
+    List<HzWorkProcedure> getHzWorkProcedureByPuids(HzChangeDataDetailQuery query);
+
+    /**
+     * 根据puid 和版本号获取工艺路线
+     * @param query
+     * @return
+     */
+    HzWorkProcedure getHzWorkProcedureByPuidAndRevision(HzChangeDataDetailQuery query);
+
+    /**
+     * 批量修改
+     * @param list
+     * @return
+     */
+    int updateList(List<HzWorkProcedure> list);
+
+    /**
+     * 批量新增
+     * @param list
+     * @param tableName
+     * @return
+     */
+    int insertList(List<HzWorkProcedure> list,String tableName);
 }

@@ -16,7 +16,7 @@ public class WriteResultRespDTO {
     public static final String ILLGAL_ARGUMENT = "非法参数！";
     public static final String FILE_SIZE_OVER_FLOW ="文件过大！";
     public static final String FILE_IS_NOT_EXCEL ="传入的文件格式不是excel！";
-    public static final String CANT_DELETE = "不能删除基础工艺对象";
+    public static final String CANT_DELETE = "不能删除基础工艺对象！";
     public static final String FILE_FORMAT_ERROR="文件列信息不全,不进行导入操作！";
     public static final String FILE_ERROR = "文件格式错误！";
 
