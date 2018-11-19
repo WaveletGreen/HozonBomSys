@@ -744,93 +744,94 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             query.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
             List<HzWorkProcedure> records = hzWorkProcedureDAO.getHzWorkProcedureByPuids(query);
             List<HzWorkProcedure> afterRecords = new ArrayList<>();
-            if(ListUtil.isNotEmpty(records)){
+            if(ListUtil.isNotEmpty(records)){//根据查询结果 记录数据
                 records.forEach(record -> {
                     HzWorkProcedure manageRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
                     manageRecord.setOrderId(orderId);
                     afterRecords.add(manageRecord);
                 });
                 map.put("workProcedureAfter",afterRecords);
-            }
 
-            //修改发起流程后状态值
-            List<HzWorkProcedure> bomLineRecords = new ArrayList<>();
-            for(HzWorkProcedure record:records){
-                HzWorkProcedure lineRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
-                if(Integer.valueOf(2).equals(record.getpStatus())){//草稿状态---->审核状态
-                    lineRecord.setpStatus(5);
-                }else if(Integer.valueOf(4).equals(record.getpStatus())){// 删除状态----->审核状态
-                    lineRecord.setpStatus(6);
-                }
-//                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
-                bomLineRecords.add(lineRecord);
-            }
-
-
-            map.put("workProcedureBefore",bomLineRecords);
-            //保存以上获取信息
-            //变更数据
-            List<HzChangeDataRecord> dataRecords = new ArrayList<>();
-            puids.forEach(s -> {
-                HzChangeDataRecord record = new HzChangeDataRecord();
-                record.setApplicantId(applicantId);
-                record.setOrderId(reqDTO.getOrderId());
-                record.setPuid(s);
-                record.setTableName(tableName);
-                dataRecords.add(record);
-            });
-
-            map.put("changeData",dataRecords);
-            //申请人
-            HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
-            applicantChangeRecord.setApplicantId(applicantId);
-            applicantChangeRecord.setOrderId(reqDTO.getOrderId());
-            applicantChangeRecord.setTableName(tableName);
-
-            map.put("applicant",applicantChangeRecord);
-            //审核人
-            HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
-            auditorChangeRecord.setAuditorId(auditorId);
-            auditorChangeRecord.setOrderId(reqDTO.getOrderId());
-            auditorChangeRecord.setTableName(tableName);
-
-            map.put("auditor",auditorChangeRecord);
-
-
-            //启动线程进行插入操作
-            List<ExecutorServices> services = new ArrayList<>();
-            for(Map.Entry<String,Object> entry:map.entrySet()){
-                ExecutorServices executorServices = new ExecutorServices(map.size()) {
-                    @Override
-                    public void action() {
-                        switch (entry.getKey()){
-                            case "materielAfter":
-                                hzWorkProcedureDAO.insertList((List<HzWorkProcedure>) entry.getValue(),tableName);
-                                break;
-                            case "materielBefore":
-                                hzWorkProcedureDAO.updateList((List<HzWorkProcedure>) entry.getValue());
-                                break;
-                            case "changeData":
-                                hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
-                                break;
-                            case "applicant":
-                                hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
-                                break;
-                            case "auditor" :
-                                hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
-                                break;
-                            default:break;
-                        }
+                //修改发起流程后状态值
+                List<HzWorkProcedure> bomLineRecords = new ArrayList<>();
+                for(HzWorkProcedure record:records){
+                    HzWorkProcedure lineRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
+                    if(Integer.valueOf(2).equals(record.getpStatus())){//草稿状态---->审核状态
+                        lineRecord.setpStatus(5);
+                    }else if(Integer.valueOf(4).equals(record.getpStatus())){// 删除状态----->审核状态
+                        lineRecord.setpStatus(6);
                     }
-                };
-                services.add(executorServices);
-            }
+//                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+                    bomLineRecords.add(lineRecord);
+                }
 
-            if(ListUtil.isNotEmpty(services)){
-                for(ExecutorServices s:services){
-                    s.execute();
+
+                map.put("workProcedureBefore",bomLineRecords);
+                //保存以上获取信息
+                //变更数据
+                List<HzChangeDataRecord> dataRecords = new ArrayList<>();
+                puids.forEach(s -> {
+                    HzChangeDataRecord record = new HzChangeDataRecord();
+                    record.setApplicantId(applicantId);
+                    record.setOrderId(reqDTO.getOrderId());
+                    record.setPuid(s);
+                    record.setTableName(tableName);
+                    dataRecords.add(record);
+                });
+
+                map.put("changeData",dataRecords);
+                //申请人
+                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
+                applicantChangeRecord.setApplicantId(applicantId);
+                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
+                applicantChangeRecord.setTableName(tableName);
+
+                map.put("applicant",applicantChangeRecord);
+                //审核人
+                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
+                auditorChangeRecord.setAuditorId(auditorId);
+                auditorChangeRecord.setOrderId(reqDTO.getOrderId());
+                auditorChangeRecord.setTableName(tableName);
+
+                map.put("auditor",auditorChangeRecord);
+
+
+                //启动线程进行插入操作
+                List<ExecutorServices> services = new ArrayList<>();
+                for(Map.Entry<String,Object> entry:map.entrySet()){
+                    ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                        @Override
+                        public void action() {
+                            switch (entry.getKey()){
+                                case "workProcedureAfter":
+                                    hzWorkProcedureDAO.insertList((List<HzWorkProcedure>) entry.getValue(),tableName);
+                                    break;
+                                case "workProcedureBefore":
+                                    hzWorkProcedureDAO.updateList((List<HzWorkProcedure>) entry.getValue());
+                                    break;
+                                case "changeData":
+                                    hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
+                                    break;
+                                case "applicant":
+                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+                                    break;
+                                case "auditor" :
+                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
+                                    break;
+                                default:break;
+                            }
+                        }
+                    };
+                    services.add(executorServices);
+                }
+
+                if(ListUtil.isNotEmpty(services)){
+                    for(ExecutorServices s:services){
+                        s.execute();
+                    }
                 }
             }
+
         }catch (Exception e){
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
