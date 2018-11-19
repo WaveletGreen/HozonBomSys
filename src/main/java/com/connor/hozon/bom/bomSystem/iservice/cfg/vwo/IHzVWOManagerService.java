@@ -263,4 +263,6 @@ public interface IHzVWOManagerService {
     void doQueryCmcrDetailChangBefor(Map<String,Object> map, Long vwoId);
 
     Map<String,Object> getMaterielFeatureTable(Long formId,String projectUid);
+
+    Map<String,Object> getFullCfgTable(Integer orderChangeId, String projectUid);
 }

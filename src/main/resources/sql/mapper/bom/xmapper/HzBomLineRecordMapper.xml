@@ -704,4 +704,16 @@
             PUID = #{puid,jdbcType=VARCHAR}
         </where>
     </update>
+
+    <select id="HzBomLineRecordDaoImpl_selectByPuids" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        Hz_Bom_Line_Record
+        where
+        PUID in
+        <foreach collection="list" index="index" item="puid" separator="," open="(" close=")">
+            #{puid,jdbcType=VARCHAR}
+        </foreach>
+    </select>
 </mapper>

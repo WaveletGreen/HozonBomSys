@@ -105,4 +105,15 @@
         where
           PUID = #{puid,jdbcType=VARCHAR}
     </delete>
+
+    <select id="selectByFullCfgModel" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CFG0_MODEL_RECORD
+        where
+          PUID in (
+            select distinct(MOD_MODEL_UID) from HZ_FC_MODEL_RECORD_CHANGE where FL_MAIN_ID = #{orderChangeId,jdbcType=DECIMAL}
+          )
+    </select>
 </mapper>

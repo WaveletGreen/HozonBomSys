@@ -424,4 +424,36 @@ public class HzVwoController {
     public Map<String,Object> getMaterielFeatureTable(@RequestParam Long formId,@RequestParam String projectUid){
         return iHzVWOManagerService.getMaterielFeatureTable(formId,projectUid);
     }
+
+    /**************************全配置BOM变更描述表单*************************************/
+    @RequestMapping(value = "getFullCfgTable", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> getFullCfgTable(@RequestParam Integer orderChangeId,@RequestParam String projectUid){
+        return  iHzVWOManagerService.getFullCfgTable(orderChangeId,projectUid);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @RequestMapping(value = "featurePage")
+    public String featurePage (Long vwoId, Model model){
+        model.addAttribute("orderChangeId",vwoId);
+        return "change/ChangeOrder/changeFeatureTable";
+    }
+
+    @RequestMapping(value = "fullCfgPage")
+    public String fullCfgPage(Long orderChangeId, Model model){
+        model.addAttribute("orderChangeId", orderChangeId);
+        return "change/ChangeOrder/changeBomCfgTable";
+    }
 }

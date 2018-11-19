@@ -651,7 +651,7 @@ public class HzProjectLibsController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public boolean delete(@RequestParam String puid, @RequestParam String type) {
-        if (checkString(puid) || checkString(type)) {
+        if (!checkString(puid) || !checkString(type)) {
             return false;
         }
         switch (type) {

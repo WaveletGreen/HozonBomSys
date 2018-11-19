@@ -6,16 +6,23 @@
 
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
+import com.connor.hozon.bom.bomSystem.controller.HzProjectLibsController;
 import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelFeatureDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMDetailChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
+import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFeatureTableDto;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
+import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
@@ -50,12 +57,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import org.springframework.ui.Model;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
 import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
+import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
+import sql.pojo.cfg.fullCfg.HzFullCfgModelChange;
+import sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange;
+import sql.pojo.cfg.model.HzCfg0ModelDetail;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
@@ -189,6 +202,23 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     //超级物料
     @Autowired
     HzSuperMaterielService hzSuperMaterielService;
+
+
+    /*****全配置BOM的DAO******/
+    @Autowired
+    HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
+    @Autowired
+    HzFullCfgModelChangeDao hzFullCfgModelChangeDao;
+    @Autowired
+    HzFullCfgWithCfgChangeDao hzFullCfgWithCfgChangeDao;
+    @Autowired
+    HzCfg0ModelRecordDao hzCfg0ModelRecordDao;
+    @Autowired
+    HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
+    //2Y层DAO
+    @Autowired
+    HzBomLineRecordDaoImpl hzBomLineRecordDao;
+
     /**
      * 日志
      */
@@ -2642,5 +2672,382 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         map.put("titleSet",titleSet);
         map.put("result",result);
         return map;
+    }
+
+    @Override
+    public Map<String, Object> getFullCfgTable(Integer orderChangeId, String projectUid) {
+        //结果Map
+        Map<String, Object> resultMap = new HashMap<>();
+        //变更主数据MAP
+        Map<String,String> mainMap = new HashMap<>();
+        //车辆模型Mao
+        Map<String,List<String>> modelmap = new HashMap<>();
+        //2Y层数据MAP
+        Map<String,List<String>> withCfgMap = new HashMap<>();
+        //打点图数据MAP
+        Map<String,String> pointMap = new HashMap<>();
+
+        //查询变更后全配置主数据
+        HzFullCfgMainChange hzFullCfgMainChangeAfter = null;
+        //根据变更后主数据查询变更后的车辆模型
+        List<HzFullCfgModelChange> hzFullCfgModelChangesAfter = null;
+        //根据变更后主数据查询变更后的2Y
+        List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChangesAfter = null;
+
+        hzFullCfgMainChangeAfter = hzFullCfgMainChangeDao.selectByChangeId(orderChangeId);
+        hzFullCfgModelChangesAfter = hzFullCfgModelChangeDao.selectByMainId(hzFullCfgMainChangeAfter.getId());
+        hzFullCfgWithCfgChangesAfter = hzFullCfgWithCfgChangeDao.selectByMainId(hzFullCfgMainChangeAfter.getId());
+
+
+        //查询变更前的主数据
+        HzFullCfgMainChange hzFullCfgMainChangeBefor =null;
+        //查询变更前的车辆模型
+        List<HzFullCfgModelChange> hzFullCfgModelChangesBefor = null;
+        //查询变更前的2Y
+        List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChangesBefor = null;
+
+        hzFullCfgMainChangeBefor = hzFullCfgMainChangeDao.selectLast(hzFullCfgMainChangeAfter.getSrcMainId());
+        if(hzFullCfgMainChangeBefor!=null){
+            hzFullCfgModelChangesBefor = hzFullCfgModelChangeDao.selectByMainId(hzFullCfgMainChangeBefor.getId());
+            hzFullCfgWithCfgChangesBefor = hzFullCfgWithCfgChangeDao.selectByMainId(hzFullCfgMainChangeBefor.getId());
+        }
+
+        /******************整理变更主数据***************/
+        if(hzFullCfgMainChangeBefor!=null){
+            mainMap.put("stage",hzFullCfgMainChangeAfter.getStageString()+"("+hzFullCfgMainChangeBefor.getStageString()+")");
+            mainMap.put("version",hzFullCfgMainChangeAfter.getVersion()+"("+hzFullCfgMainChangeBefor.getVersion()+")");
+            mainMap.put("effectiveDate",hzFullCfgMainChangeAfter.getEffectiveDate()+"("+hzFullCfgMainChangeBefor.getEffectiveDate()+")");
+         /***********整理车辆模型数据**************/
+            //查询变更前后存在的车辆模型
+            List<HzCfg0ModelRecord> hzCfg0ModelRecordsBefor =hzCfg0ModelRecordDao.selectByFullCfgModel(hzFullCfgMainChangeBefor.getId());
+            List<HzCfg0ModelRecord> hzCfg0ModelRecordsAfter =hzCfg0ModelRecordDao.selectByFullCfgModel(hzFullCfgMainChangeAfter.getId());
+            //将变更前后的车辆模型一起存放在一个Map中
+            Map<String,HzCfg0ModelRecord> beforAndAfterMap = new HashMap();
+            for(HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecordsBefor){
+                beforAndAfterMap.put(hzCfg0ModelRecord.getPuid(),hzCfg0ModelRecord );
+            }
+            for(HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecordsAfter){
+                beforAndAfterMap.put(hzCfg0ModelRecord.getPuid(),hzCfg0ModelRecord);
+            }
+
+            modelmap.put("modelVersion",new ArrayList<>());
+            modelmap.put("modelShape",new ArrayList<>());
+            modelmap.put("modelAnnouncement",new ArrayList<>());
+            modelmap.put("modelCfgDesc",new ArrayList<>());
+            modelmap.put("modelCfgMng",new ArrayList<>());
+            modelmap.put("modelTrailNum",new ArrayList<>());
+            modelmap.put("modelGoodsNum",new ArrayList<>());
+
+            //车辆模型顺序List
+            List<HzFullCfgModelChange> hzFullCfgModelChanges = new ArrayList<>();
+            //往车辆模型中添加数据
+            Set<String> beforAndAfterModelKeySet = beforAndAfterMap.keySet();
+            for(String key : beforAndAfterModelKeySet){
+                //车辆模型ID
+                String modelPuid = beforAndAfterMap.get(key).getPuid();
+                //找到变更前车辆模型对应的数据
+                HzFullCfgModelChange hzFullCfgModelChangeBefor = null;
+                for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChangesBefor){
+                    if(modelPuid.equals(hzFullCfgModelChange.getModModelUid())){
+                        hzFullCfgModelChangeBefor = hzFullCfgModelChange;
+                        break;
+                    }
+                }
+                //找到变更前车辆模型对应的数据
+                HzFullCfgModelChange hzFullCfgModelChangeAfter = null;
+                for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChangesAfter){
+                    if(modelPuid.equals(hzFullCfgModelChange.getModModelUid())){
+                        hzFullCfgModelChangeAfter = hzFullCfgModelChange;
+                        break;
+                    }
+                }
+                modelmap.get("modelVersion").add(hzFullCfgModelChangeAfter.getModelVersion()==null?"":hzFullCfgModelChangeAfter.getModelVersion()+"("+hzFullCfgModelChangeBefor.getModelVersion()==null?"":hzFullCfgModelChangeBefor.getModelVersion()+")");
+                modelmap.get("modelShape").add(hzFullCfgModelChangeAfter.getModelShape()==null?"":hzFullCfgModelChangeAfter.getModelShape()+"("+hzFullCfgModelChangeBefor.getModelShape()==null?"":hzFullCfgModelChangeBefor.getModelShape()+")");
+                modelmap.get("modelAnnouncement").add(hzFullCfgModelChangeAfter.getModelAnnouncement()==null?"":hzFullCfgModelChangeAfter.getModelAnnouncement()+"("+hzFullCfgModelChangeBefor.getModelAnnouncement()==null?"":hzFullCfgModelChangeBefor.getModelAnnouncement()+")");
+                modelmap.get("modelCfgDesc").add(hzFullCfgModelChangeAfter.getModelCfgDesc()==null?"":hzFullCfgModelChangeAfter.getModelCfgDesc()+"("+hzFullCfgModelChangeBefor.getModelCfgDesc()==null?"":hzFullCfgModelChangeBefor.getModelCfgDesc()+")");
+                modelmap.get("modelCfgMng").add(hzFullCfgModelChangeAfter.getModelCfgMng()==null?"":hzFullCfgModelChangeAfter.getModelCfgMng()+"("+hzFullCfgModelChangeBefor.getModelCfgMng()==null?"":hzFullCfgModelChangeBefor.getModelCfgMng()+")");
+                modelmap.get("modelTrailNum").add(hzFullCfgModelChangeAfter.getModelTrailNum()==null?"":hzFullCfgModelChangeAfter.getModelTrailNum()+"("+hzFullCfgModelChangeBefor.getModelTrailNum()==null?"":hzFullCfgModelChangeBefor.getModelTrailNum()+")");
+                modelmap.get("modelGoodsNum").add(hzFullCfgModelChangeAfter.getModelGoodsNum()==null?"":hzFullCfgModelChangeAfter.getModelGoodsNum()+"("+hzFullCfgModelChangeBefor.getModelGoodsNum()==null?"":hzFullCfgModelChangeBefor.getModelGoodsNum()+")");
+
+                hzFullCfgModelChanges.add(hzFullCfgModelChangeAfter);
+                hzFullCfgModelChanges.add(hzFullCfgModelChangeBefor);
+            }
+
+         /***********************整理2Y数据***************************/
+            //将变更前后2Y的数据合并
+            Map<String,HzFullCfgWithCfgChange> beforAndAfterWithCfgMap = new HashMap<>();
+            for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesAfter){
+                beforAndAfterWithCfgMap.put(hzFullCfgWithCfgChange.getCfgBomlineUid(),hzFullCfgWithCfgChange);
+            }
+            for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesBefor){
+                beforAndAfterWithCfgMap.put(hzFullCfgWithCfgChange.getCfgBomlineUid(),hzFullCfgWithCfgChange);
+            }
+            //往withCfgMap中添加Key
+            //操作类型
+            withCfgMap.put("operationType",new ArrayList<>());
+            //系统
+            withCfgMap.put("pBomOfWhichDept",new ArrayList<>());
+            //总成零件号
+            withCfgMap.put("pBomLineId",new ArrayList<>());
+            //总成零件名称
+            withCfgMap.put("pBomLineName",new ArrayList<>());
+            //总成零件英文名称
+            withCfgMap.put("pH9featureenname",new ArrayList<>());
+            //责任工程师
+            withCfgMap.put("owningUser",new ArrayList<>());
+            //配置描述
+            withCfgMap.put("pCfg0Desc",new ArrayList<>());
+            //配置代码
+            withCfgMap.put("pCfg0ObjectId",new ArrayList<>());
+            //是否颜色件
+            withCfgMap.put("isColorPart",new ArrayList<>());
+            //备注
+            withCfgMap.put("comment",new ArrayList<>());
+
+            //2Y层数据顺序List
+            List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChanges = new ArrayList<>();
+            //往2Y层加数据
+            Set<String> beforAndAfterWithCfgKeySet = beforAndAfterWithCfgMap.keySet();
+            List<String> withCfgPuids = new ArrayList<>();
+            withCfgPuids.addAll(beforAndAfterWithCfgKeySet);
+            List<HzBomLineRecord> hzBomLineRecords = hzBomLineRecordDao.selectByPuids(withCfgPuids);
+            Map<String,HzBomLineRecord> hzBomLineRecordMap =new HashMap<>();
+            for(HzBomLineRecord hzBomLineRecord : hzBomLineRecords){
+                hzBomLineRecordMap.put(hzBomLineRecord.getPuid(),hzBomLineRecord );
+            }
+            for(String key : beforAndAfterWithCfgKeySet){
+                String cfgBomlineUid = beforAndAfterWithCfgMap.get(key).getCfgBomlineUid();
+                //找到变更前2Y层对应的数据
+                HzFullCfgWithCfgChange hzFullCfgWithCfgChangeBefor = null;
+                for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesBefor){
+                    if(cfgBomlineUid.equals(hzFullCfgWithCfgChange.getCfgBomlineUid())){
+                        hzFullCfgWithCfgChangeBefor = hzFullCfgWithCfgChange;
+                        break;
+                    }
+                }
+                //找到变更后2Y层对应的数据
+                HzFullCfgWithCfgChange hzFullCfgWithCfgChangeAfter = null;
+                for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesAfter){
+                    if(cfgBomlineUid.equals(hzFullCfgWithCfgChange .getCfgBomlineUid())){
+                        hzFullCfgWithCfgChangeAfter = hzFullCfgWithCfgChange;
+                    }
+                }
+                //操作类型
+                String flOperationType = "";
+                if(hzFullCfgWithCfgChangeAfter.getFlOperationType()!=null){
+                    flOperationType += hzFullCfgWithCfgChangeAfter.getFlOperationTypeString();
+                }else {
+                    flOperationType += "-";
+                }
+                flOperationType += "(";
+                if(hzFullCfgWithCfgChangeBefor.getFlOperationType()!=null){
+                    flOperationType += hzFullCfgWithCfgChangeBefor.getFlOperationTypeString();
+                }else {
+                    flOperationType += "-";
+                }
+                flOperationType += ")";
+                withCfgMap.get("operationType").add(flOperationType);
+                HzBomLineRecord hzBomLineRecord = hzBomLineRecordMap.get(hzFullCfgWithCfgChangeAfter.getCfgBomlineUid());
+                withCfgMap.get("pBomOfWhichDept").add(hzBomLineRecord.getpBomOfWhichDept()==null?"":hzBomLineRecord.getpBomOfWhichDept());
+                withCfgMap.get("pBomLineId").add(hzBomLineRecord.getLineID()==null?"":hzBomLineRecord.getLineID());
+                withCfgMap.get("pBomLineName").add(hzBomLineRecord.getpBomLinePartName()==null?"":hzBomLineRecord.getpBomLinePartName());
+                withCfgMap.get("pH9featureenname").add(hzBomLineRecord.getpBomLinePartEnName()==null?"":hzBomLineRecord.getpBomLinePartEnName());
+                withCfgMap.get("owningUser").add(hzBomLineRecord.getpDutyEngineer()==null?"":hzBomLineRecord.getpDutyEngineer());
+                withCfgMap.get("pCfg0Desc").add(hzFullCfgWithCfgChangeAfter.getCfgDesc()+"("+hzFullCfgWithCfgChangeBefor.getCfgDesc()+")");
+                withCfgMap.get("pCfg0ObjectId").add(hzFullCfgWithCfgChangeAfter.getCfgCode()+"("+hzFullCfgWithCfgChangeBefor.getCfgCode()+")");
+                withCfgMap.get("isColorPart").add(hzFullCfgWithCfgChangeAfter.getIsColor()+"("+hzFullCfgWithCfgChangeBefor+")");
+                withCfgMap.get("comment").add(hzFullCfgWithCfgChangeAfter.getFlCommentString()+"("+hzFullCfgWithCfgChangeBefor.getFlCommentString()+")");
+
+                hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChangeAfter);
+                hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChangeBefor);
+            }
+
+            /****************打点图填充数据******************/
+            //生成一个车辆模型和2Y层的双层MAP数据,其结构为<modelUID<cfgUID，model对象>>
+            Map<String,Map<String,String>> modelAndCfgMap = new HashMap<>();
+            for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChanges){
+                if(modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid())==null){
+                    modelAndCfgMap.put(hzFullCfgModelChange.getModModelUid(),new HashMap<>());
+                }
+                Map<String, String> cfgMap = modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid());
+                for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChanges){
+                    String pointAfter = null;
+                    for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesAfter){
+                        if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgModelChange.getFlModelBomlineUid())){
+                            pointAfter = hzFullCfgModelChange1.getModPointType()==0?"-":hzFullCfgModelChange1.getModPointType()==1?"○":"●";
+                            break;
+                        }
+                    }
+                    String pointBefor = null;
+                    for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesBefor){
+                        if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgModelChange.getFlModelBomlineUid())){
+                            pointBefor = hzFullCfgModelChange1.getModPointType()==0?"-":hzFullCfgModelChange1.getModPointType()==1?"○":"●";
+                            break;
+                        }
+                    }
+                    cfgMap.put(hzFullCfgWithCfgChange.getCfgCfg0Uid(),pointAfter+"("+pointBefor+")");
+                }
+            }
+            //遍历车型和2Y层从Map中获取打点图信息
+            for(int i=0;i<hzFullCfgWithCfgChanges.size();i++){
+                for(int j=0;j<hzFullCfgModelChanges.size();j++){
+                    String key = "c"+i+"m"+j;
+                    //变更前
+                    String point = modelAndCfgMap.get(hzFullCfgModelChanges.get(j).getModModelUid()).get(hzFullCfgWithCfgChanges.get(i).getCfgBomlineUid());
+                    //变更后
+                    pointMap.put(key,point);
+                }
+            }
+        }else {
+
+                mainMap.put("stage",hzFullCfgMainChangeAfter.getStageString()+"()");
+                mainMap.put("version",hzFullCfgMainChangeAfter.getVersion()+"()");
+                mainMap.put("effectiveDate",hzFullCfgMainChangeAfter.getEffectiveDate()+"()");
+                /***********整理车辆模型数据**************/
+                //查询变更前存在的车辆模型
+                List<HzCfg0ModelRecord> hzCfg0ModelRecordsAfter =hzCfg0ModelRecordDao.selectByFullCfgModel(hzFullCfgMainChangeAfter.getId());
+                //将变更前后的车辆模型一起存放在一个Map中
+                Map<String,HzCfg0ModelRecord> beforAndAfterMap = new HashMap();
+                for(HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecordsAfter){
+                    beforAndAfterMap.put(hzCfg0ModelRecord.getPuid(),hzCfg0ModelRecord);
+                }
+
+                modelmap.put("modelVersion",new ArrayList<>());
+                modelmap.put("modelShape",new ArrayList<>());
+                modelmap.put("modelAnnouncement",new ArrayList<>());
+                modelmap.put("modelCfgDesc",new ArrayList<>());
+                modelmap.put("modelCfgMng",new ArrayList<>());
+                modelmap.put("modelTrailNum",new ArrayList<>());
+                modelmap.put("modelGoodsNum",new ArrayList<>());
+
+                //车辆模型顺序List
+                List<HzFullCfgModelChange> hzFullCfgModelChanges = new ArrayList<>();
+                //往车辆模型中添加数据
+                Set<String> beforAndAfterModelKeySet = beforAndAfterMap.keySet();
+                for(String key : beforAndAfterModelKeySet){
+                    //车辆模型ID
+                    String modelPuid = beforAndAfterMap.get(key).getPuid();
+                    //找到变更后车辆模型对应的数据
+                    HzFullCfgModelChange hzFullCfgModelChangeAfter = null;
+                    for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChangesAfter){
+                        if(modelPuid.equals(hzFullCfgModelChange.getModModelUid())){
+                            hzFullCfgModelChangeAfter = hzFullCfgModelChange;
+                            break;
+                        }
+                    }
+                    modelmap.get("modelVersion").add(hzFullCfgModelChangeAfter.getModelVersion()==null?"":hzFullCfgModelChangeAfter.getModelVersion()+"()");
+                    modelmap.get("modelShape").add(hzFullCfgModelChangeAfter.getModelShape()==null?"":hzFullCfgModelChangeAfter.getModelShape()+"()");
+                    modelmap.get("modelAnnouncement").add(hzFullCfgModelChangeAfter.getModelAnnouncement()==null?"":hzFullCfgModelChangeAfter.getModelAnnouncement()+"()");
+                    modelmap.get("modelCfgDesc").add(hzFullCfgModelChangeAfter.getModelCfgDesc()==null?"":hzFullCfgModelChangeAfter.getModelCfgDesc()+"()");
+                    modelmap.get("modelCfgMng").add(hzFullCfgModelChangeAfter.getModelCfgMng()==null?"":hzFullCfgModelChangeAfter.getModelCfgMng()+"()");
+                    modelmap.get("modelTrailNum").add(hzFullCfgModelChangeAfter.getModelTrailNum()==null?"":hzFullCfgModelChangeAfter.getModelTrailNum()+"()");
+                    modelmap.get("modelGoodsNum").add(hzFullCfgModelChangeAfter.getModelGoodsNum()==null?"":hzFullCfgModelChangeAfter.getModelGoodsNum()+"()");
+
+                    hzFullCfgModelChanges.add(hzFullCfgModelChangeAfter);
+                }
+
+                /***********************整理2Y数据***************************/
+                //将变更前后2Y的数据合并
+                Map<String,HzFullCfgWithCfgChange> beforAndAfterWithCfgMap = new HashMap<>();
+                for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesAfter){
+                    beforAndAfterWithCfgMap.put(hzFullCfgWithCfgChange.getCfgBomlineUid(),hzFullCfgWithCfgChange);
+                }
+                //往withCfgMap中添加Key
+                //操作类型
+                withCfgMap.put("operationType",new ArrayList<>());
+                //系统
+                withCfgMap.put("pBomOfWhichDept",new ArrayList<>());
+                //总成零件号
+                withCfgMap.put("pBomLineId",new ArrayList<>());
+                //总成零件名称
+                withCfgMap.put("pBomLineName",new ArrayList<>());
+                //总成零件英文名称
+                withCfgMap.put("pH9featureenname",new ArrayList<>());
+                //责任工程师
+                withCfgMap.put("owningUser",new ArrayList<>());
+                //配置描述
+                withCfgMap.put("pCfg0Desc",new ArrayList<>());
+                //配置代码
+                withCfgMap.put("pCfg0ObjectId",new ArrayList<>());
+                //是否颜色件
+                withCfgMap.put("isColorPart",new ArrayList<>());
+                //备注
+                withCfgMap.put("comment",new ArrayList<>());
+
+                //2Y层数据顺序List
+                List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChanges = new ArrayList<>();
+                //往2Y层加数据
+                Set<String> beforAndAfterWithCfgKeySet = beforAndAfterWithCfgMap.keySet();
+                List<String> withCfgPuids = new ArrayList<>();
+                withCfgPuids.addAll(beforAndAfterWithCfgKeySet);
+                List<HzBomLineRecord> hzBomLineRecords = hzBomLineRecordDao.selectByPuids(withCfgPuids);
+                Map<String,HzBomLineRecord> hzBomLineRecordMap =new HashMap<>();
+                for(HzBomLineRecord hzBomLineRecord : hzBomLineRecords){
+                    hzBomLineRecordMap.put(hzBomLineRecord.getPuid(),hzBomLineRecord );
+                }
+                for(String key : beforAndAfterWithCfgKeySet){
+                    String cfgBomlineUid = beforAndAfterWithCfgMap.get(key).getCfgBomlineUid();
+                    //找到变更后2Y层对应的数据
+                    HzFullCfgWithCfgChange hzFullCfgWithCfgChangeAfter = null;
+                    for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesAfter){
+                        if(cfgBomlineUid.equals(hzFullCfgWithCfgChange .getCfgBomlineUid())){
+                            hzFullCfgWithCfgChangeAfter = hzFullCfgWithCfgChange;
+                        }
+                    }
+                    //操作类型
+                    String flOperationType = "";
+                    if(hzFullCfgWithCfgChangeAfter.getFlOperationType()!=null){
+                        flOperationType += hzFullCfgWithCfgChangeAfter.getFlOperationTypeString();
+                    }else {
+                        flOperationType += "-";
+                    }
+                    flOperationType += "()";
+
+                    withCfgMap.get("operationType").add(flOperationType);
+                    HzBomLineRecord hzBomLineRecord = hzBomLineRecordMap.get(hzFullCfgWithCfgChangeAfter.getCfgBomlineUid());
+                    withCfgMap.get("pBomOfWhichDept").add(hzBomLineRecord.getpBomOfWhichDept()==null?"":hzBomLineRecord.getpBomOfWhichDept());
+                    withCfgMap.get("pBomLineId").add(hzBomLineRecord.getLineID()==null?"":hzBomLineRecord.getLineID());
+                    withCfgMap.get("pBomLineName").add(hzBomLineRecord.getpBomLinePartName()==null?"":hzBomLineRecord.getpBomLinePartName());
+                    withCfgMap.get("pH9featureenname").add(hzBomLineRecord.getpBomLinePartEnName()==null?"":hzBomLineRecord.getpBomLinePartEnName());
+                    withCfgMap.get("owningUser").add(hzBomLineRecord.getpDutyEngineer()==null?"":hzBomLineRecord.getpDutyEngineer());
+                    withCfgMap.get("pCfg0Desc").add(hzFullCfgWithCfgChangeAfter.getCfgDesc()+"()");
+                    withCfgMap.get("pCfg0ObjectId").add(hzFullCfgWithCfgChangeAfter.getCfgCode()+"()");
+                    withCfgMap.get("isColorPart").add(hzFullCfgWithCfgChangeAfter.getIsColor()+"()");
+                    withCfgMap.get("comment").add(hzFullCfgWithCfgChangeAfter.getFlCommentString()+"()");
+
+                    hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChangeAfter);
+                }
+            /****************打点图填充数据******************/
+            //生成一个车辆模型和2Y层的双层MAP数据,其结构为<modelUID<BOMLineId，model对象>>
+            Map<String,Map<String,String>> modelAndCfgMap = new HashMap<>();
+            for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChanges){
+                if(modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid())==null){
+                    modelAndCfgMap.put(hzFullCfgModelChange.getModModelUid(),new HashMap<>());
+                }
+                Map<String, String> cfgMap = modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid());
+                for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChanges){
+                    for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesAfter){
+                        if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getModModelUid().equals(hzFullCfgModelChange.getModModelUid())){
+                            cfgMap.put(hzFullCfgModelChange1.getFlModelBomlineUid(),hzFullCfgModelChange1.getModPointType()==0?"-()":hzFullCfgModelChange1.getModPointType()==1?"○()":"●()");
+                        }
+                    }
+                }
+            }
+            //遍历车型和2Y层从Map中获取打点图信息
+            for(int i=0;i<hzFullCfgWithCfgChanges.size();i++){
+                for(int j=0;j<hzFullCfgModelChanges.size();j++){
+                    String key = "c"+i+"m"+j;
+                    //变更后
+                    String point = modelAndCfgMap.get(hzFullCfgModelChanges.get(j).getModModelUid()).get(hzFullCfgWithCfgChanges.get(i).getCfgBomlineUid());
+                    pointMap.put(key,point);
+                }
+            }
+        }
+
+        resultMap.put("mainResult",mainMap);
+        resultMap.put("modelResult",modelmap);
+        resultMap.put("withCfgResult",withCfgMap);
+        resultMap.put("pointResult",pointMap);
+        return resultMap;
     }
 }

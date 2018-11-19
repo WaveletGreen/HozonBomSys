@@ -38,6 +38,10 @@ public class HzFullCfgMainChange {
     private Object updaterChange;
     //是否已发布
     private Integer fmIsRelease;
+    //源主数据ID
+    private Long srcMainId;
+    //变更状态
+    private Integer changeStatus;
 
     public Integer getId() {
         return id;
@@ -167,6 +171,21 @@ public class HzFullCfgMainChange {
         this.fmIsRelease = fmIsRelease;
     }
 
+    public Long getSrcMainId() {
+        return srcMainId;
+    }
+
+    public void setSrcMainId(Long srcMainId) {
+        this.srcMainId = srcMainId;
+    }
+
+    public Integer getChangeStatus() {
+        return changeStatus;
+    }
+
+    public void setChangeStatus(Integer changeStatus) {
+        this.changeStatus = changeStatus;
+    }
 
     public void srcSetChange(HzFullCfgMain hzFullCfgMain){
         Date date = new Date();
@@ -186,5 +205,34 @@ public class HzFullCfgMainChange {
         this.creatorChange = user.getLogin();
         this.updaterChange = user.getLogin();
         this.fmIsRelease = hzFullCfgMain.getFmIsRelease();
+        this.srcMainId = hzFullCfgMain.getId();
+    }
+
+
+    public String getStageString(){
+        switch (this.stage){
+            case 1 :
+                return "P0-P1阶段";
+            case 2 :
+                return "P1-P2阶段";
+            case 3 :
+                return "P2-P3阶段";
+            case 4 :
+                return "P3-P4阶段";
+            case 5 :
+                return "P4-P5阶段";
+            case 6 :
+                return "P5-P6阶段";
+            case 7 :
+                return "P6-P7阶段";
+            case 8 :
+                return "P7-P8阶段";
+            case 9 :
+                return "P8-P9阶段";
+            case 10 :
+                return "P9-P10阶段";
+                default:
+                    return "";
+        }
     }
 }

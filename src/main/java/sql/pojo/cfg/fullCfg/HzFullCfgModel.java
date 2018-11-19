@@ -6,7 +6,6 @@
 
 package sql.pojo.cfg.fullCfg;
 
-import java.math.BigDecimal;
 import java.util.Date;
 /**
  * @Author: Fancyears·Maylos·Maywas
@@ -15,7 +14,7 @@ import java.util.Date;
  * @Modified By:
  */
 public class HzFullCfgModel {
-    private BigDecimal id;
+    private Long id;
 
     private String modModelUid;
 
@@ -31,16 +30,16 @@ public class HzFullCfgModel {
 
     private String flModLastUpdater;
 
-    private BigDecimal flModVersion;
+    private Long flModVersion;
     /**
      * 2Y层主键
      */
     private String flModelBomlineUid;
 
-    public BigDecimal getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -100,11 +99,11 @@ public class HzFullCfgModel {
         this.flModLastUpdater = flModLastUpdater;
     }
 
-    public BigDecimal getFlModVersion() {
+    public Long getFlModVersion() {
         return flModVersion;
     }
 
-    public void setFlModVersion(BigDecimal flModVersion) {
+    public void setFlModVersion(Long flModVersion) {
         this.flModVersion = flModVersion;
     }
 

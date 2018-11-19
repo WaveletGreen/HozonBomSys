@@ -3,11 +3,10 @@ package sql.pojo.cfg.fullCfg;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class HzFullCfgModelChange {
-    private BigDecimal id;
+    private Long id;
 
     //变更表单ID
     private Integer changeOrderId;
@@ -37,15 +36,24 @@ public class HzFullCfgModelChange {
 
     private Object flModLastUpdaterChange;
 
-    private BigDecimal flModVersion;
+    private Long flModVersion;
 
     private String flModelBomlineUid;
 
-    public BigDecimal getId() {
+    //车辆模型详情字段
+    private String modelVersion;
+    private String modelShape;
+    private String modelAnnouncement;
+    private String modelCfgDesc;
+    private String modelCfgMng;
+    private String modelTrailNum;
+    private String modelGoodsNum;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -153,11 +161,11 @@ public class HzFullCfgModelChange {
         this.flModLastUpdaterChange = flModLastUpdaterChange;
     }
 
-    public BigDecimal getFlModVersion() {
+    public Long getFlModVersion() {
         return flModVersion;
     }
 
-    public void setFlModVersion(BigDecimal flModVersion) {
+    public void setFlModVersion(Long flModVersion) {
         this.flModVersion = flModVersion;
     }
 
@@ -167,6 +175,62 @@ public class HzFullCfgModelChange {
 
     public void setFlModelBomlineUid(String flModelBomlineUid) {
         this.flModelBomlineUid = flModelBomlineUid == null ? null : flModelBomlineUid.trim();
+    }
+
+    public String getModelVersion() {
+        return modelVersion;
+    }
+
+    public void setModelVersion(String modelVersion) {
+        this.modelVersion = modelVersion;
+    }
+
+    public String getModelShape() {
+        return modelShape;
+    }
+
+    public void setModelShape(String modelShape) {
+        this.modelShape = modelShape;
+    }
+
+    public String getModelAnnouncement() {
+        return modelAnnouncement;
+    }
+
+    public void setModelAnnouncement(String modelAnnouncement) {
+        this.modelAnnouncement = modelAnnouncement;
+    }
+
+    public String getModelCfgDesc() {
+        return modelCfgDesc;
+    }
+
+    public void setModelCfgDesc(String modelCfgDesc) {
+        this.modelCfgDesc = modelCfgDesc;
+    }
+
+    public String getModelCfgMng() {
+        return modelCfgMng;
+    }
+
+    public void setModelCfgMng(String modelCfgMng) {
+        this.modelCfgMng = modelCfgMng;
+    }
+
+    public String getModelTrailNum() {
+        return modelTrailNum;
+    }
+
+    public void setModelTrailNum(String modelTrailNum) {
+        this.modelTrailNum = modelTrailNum;
+    }
+
+    public String getModelGoodsNum() {
+        return modelGoodsNum;
+    }
+
+    public void setModelGoodsNum(String modelGoodsNum) {
+        this.modelGoodsNum = modelGoodsNum;
     }
 
     public void srcSetChange(HzFullCfgModel hzFullCfgModel) {
