@@ -405,7 +405,7 @@ function initTable(url) {
                             var rows = $table.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].materielId + ",";
+                                puids += rows[i].puid + ",";
                             }
                             ;
                             // var myData = JSON.stringify({
