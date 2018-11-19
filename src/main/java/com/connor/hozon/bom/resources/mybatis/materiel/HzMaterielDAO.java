@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.materiel;
 
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.page.Page;
@@ -43,7 +44,7 @@ public interface HzMaterielDAO {
      * @param hzMaterielRecords
      * @return
      */
-    int insertList(List<HzMaterielRecord> hzMaterielRecords);
+    int insertList(List<HzMaterielRecord> hzMaterielRecords,String tableName);
 
     /**
      * 分页获取物料数据
@@ -121,4 +122,18 @@ public interface HzMaterielDAO {
     List<HzMaterielRecord> findHzMaterielForProcess(String projectId);
 
     int deleteMaterielByProjectId(String projectId);
+
+    /**
+     * 变更 根据puids 获取物料数据
+     * @param query
+     * @return
+     */
+    List<HzMaterielRecord> getMaterialRecordsByPuids(HzChangeDataDetailQuery query);
+
+    /**
+     * 根据puid 和版本号获取唯一物料
+     * @param query
+     * @return
+     */
+    HzMaterielRecord getMaterialRecordByPuidAndRevision(HzChangeDataDetailQuery query);
 }

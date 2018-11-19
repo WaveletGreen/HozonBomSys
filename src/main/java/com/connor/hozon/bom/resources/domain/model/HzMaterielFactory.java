@@ -116,8 +116,7 @@ public class HzMaterielFactory {
         respDTO.setpMaterielDescEn(record.getpMaterielDescEn());
         respDTO.setpMaterielType(record.getpMaterielType());
         respDTO.setpMrpController(record.getpMrpController());
-
-
+        respDTO.setStatus(record.getpValidFlag());
         if(StringUtil.isEmpty(record.getFactoryCode())){
             respDTO.setFactoryCode("1001");
         }else {
@@ -202,4 +201,39 @@ public class HzMaterielFactory {
         return hzMaterielRecord;
     }
 
+
+
+
+    public static HzMaterielRecord hzMaterielRecordToMaterielRecord(HzMaterielRecord record){
+        HzMaterielRecord respDTO = new HzMaterielRecord();
+        respDTO.setpBasicUnitMeasure(record.getpBasicUnitMeasure());
+        respDTO.setpMaterielCode(record.getpMaterielCode());
+        respDTO.setpMaterielDesc(record.getpMaterielDesc());
+        respDTO.setpMaterielDescEn(record.getpMaterielDescEn());
+        respDTO.setpMaterielType(record.getpMaterielType());
+        respDTO.setpMrpController(record.getpMrpController());
+        respDTO.setpFactoryPuid(record.getpFactoryPuid());
+        respDTO.setPuid(record.getPuid());
+        respDTO.setP3cPartFlag(record.getP3cPartFlag());
+        respDTO.setpColorPart(record.getpColorPart());
+        respDTO.setpInOutSideFlag(record.getpInOutSideFlag());
+        respDTO.setpInventedPart(record.getpInventedPart());
+        respDTO.setpLoosePartFlag(record.getpLoosePartFlag());
+        respDTO.setpHeight(record.getpHeight());
+        respDTO.setpPartImportantDegree(record.getpPartImportantDegree());
+        respDTO.setpSpareMaterial(record.getpSpareMaterial());
+        respDTO.setpVinPerNo(record.getpVinPerNo());
+        respDTO.setResource(record.getResource());
+        respDTO.setOrderId(record.getOrderId());
+        respDTO.setEffectTime(record.getEffectTime());
+        respDTO.setRevision(record.getRevision());
+        respDTO.setMaterielResourceId(record.getMaterielResourceId());
+        respDTO.setpValidFlag(record.getpValidFlag());
+        respDTO.setpMaterielDataType(record.getpMaterielDataType());
+        respDTO.setpCreateTime(record.getpCreateTime());
+        respDTO.setpCreateName(record.getpCreateName());
+        respDTO.setpPertainToProjectPuid(record.getpPertainToProjectPuid());
+        respDTO.setType(record.getType());
+        return respDTO;
+    }
 }

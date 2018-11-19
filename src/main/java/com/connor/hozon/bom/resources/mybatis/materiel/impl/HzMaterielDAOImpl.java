@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.materiel.impl;
 
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
@@ -40,8 +41,9 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     }
 
     @Override
-    public int insertList(List<HzMaterielRecord> hzMaterielRecords) {
-
+    public int insertList(List<HzMaterielRecord> hzMaterielRecords,String tableName) {
+            Map<String,Object> map = new HashMap<>();
+            map.put("tableName",tableName);
         try {
             if (ListUtil.isNotEmpty(hzMaterielRecords)) {
                 int size = hzMaterielRecords.size();
@@ -56,8 +58,8 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
                                 list1.add(hzMaterielRecords.get(cout));
                                 cout++;
                             }
-
-                            super.insert("HzMaterialDAOImpl_insertList",list1);
+                            map.put("list",list1);
+                            super.insert("HzMaterialDAOImpl_insertList",map);
 
                         }
                     }
@@ -67,8 +69,8 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
                             list1.add(hzMaterielRecords.get(cout));
                             cout++;
                         }
-
-                        super.insert("HzMaterialDAOImpl_insertList",list1);
+                        map.put("list",list1);
+                        super.insert("HzMaterialDAOImpl_insertList",map);
 
                     }
                 }
@@ -77,7 +79,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
             return 1;
         }catch (Exception e){
             e.printStackTrace();
-            return 0;
+            throw new RuntimeException(e);
         }
     }
 
@@ -242,5 +244,36 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     @Override
     public int deleteMaterielByProjectId(String projectId) {
         return super.delete("HzMaterialDAOImpl_deleteMaterielByProjectId",projectId);
+    }
+
+    @Override
+    public List<HzMaterielRecord> getMaterialRecordsByPuids(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"":null);
+        }else {
+            map.put("revision",null);
+        }
+        map.put("pValidFlag",query.getStatus());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        return super.findForList("HzMaterialDAOImpl_getMaterialRecordsByPuids",map);
+    }
+
+    @Override
+    public HzMaterielRecord getMaterialRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids", query.getPuids());
+        map.put("projectId",query.getProjectId());
+        if(null != query.getRevision()){
+            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+        }else {
+            map.put("revision",null);
+        }
+        map.put("pValidFlag",query.getStatus());
+        map.put("tableName",query.getTableName());
+        return (HzMaterielRecord)super.findForObject("HzMaterialDAOImpl_getMaterialRecordByPuidAndRevision",map);
     }
 }

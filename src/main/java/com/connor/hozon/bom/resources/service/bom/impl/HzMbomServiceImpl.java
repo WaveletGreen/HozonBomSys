@@ -856,7 +856,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                         @Override
                         public void refreshMbom() {
                             if(Integer.valueOf(10).equals(entry.getKey())){
-                                hzMaterielDAO.insertList(entry.getValue());
+                                hzMaterielDAO.insertList(entry.getValue(),ChangeTableNameEnum.HZ_MATERIEL.getTableName());
                             }else if(Integer.valueOf(11).equals(entry.getKey())){
                                 hzMaterielDAO.updateList(entry.getValue());
                             }else if(Integer.valueOf(12).equals(entry.getKey())){

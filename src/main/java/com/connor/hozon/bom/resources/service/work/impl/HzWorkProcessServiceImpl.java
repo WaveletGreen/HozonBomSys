@@ -125,6 +125,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                return WriteResultRespDTO.getSuccessResult();
            }
         }catch (Exception e){
+            e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
 
@@ -586,7 +587,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                     record.setpMaterielDescEn(respDTO.getpBomLinePartEnName());
                     materielRecords.add(record);
                 }
-                int i = hzMaterielDAO.insertList(materielRecords);
+                int i = hzMaterielDAO.insertList(materielRecords,"");
                 if(i>0){
                     return WriteResultRespDTO.getSuccessResult();
                 }
