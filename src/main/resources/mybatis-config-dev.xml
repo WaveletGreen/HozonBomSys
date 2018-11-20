@@ -85,6 +85,11 @@
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainMapper.xml"/>
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelMapper.xml"/>
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgMapper.xml"/>
+
+        <!--fullCfg变更-->
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgChangeMapper.xml"/>
         <!--main-->
         <mapper resource="sql/mapper/cfg/main/HzCfg0MainRecordMapper.xml"/>
         <!--model-->
