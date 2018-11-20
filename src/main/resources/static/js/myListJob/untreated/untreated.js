@@ -89,7 +89,7 @@ function saveAgreement() {
     for (var p in _d) {
         data[_d[p].name] = _d[p].value;
     }
-    data.id = $("id").val();
+    data.id = $("#id").val();
     log(data);
     $.ajax({
         contentType:

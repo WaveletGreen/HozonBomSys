@@ -14,9 +14,6 @@
     <form class="form-horizontal" id="cntForm" role="form" method="post">
         <fieldset>
             <div class="panel panel-default" style="margin-top: 10px;">
-                <input th:value="${vwoId}" type="hidden" id="vwoId" name="vwoId"/>
-                <input th:value="${selectId}" type="hidden" id="selectId" name="selectId"/>
-                <input th:value="${typeName}" type="hidden" id="selectOption"/>
                 <input type="hidden" id="selectedUserId" name="selectedUserId"/>
                 <div class="panel-body">
                     <div class="col-lg-6">
@@ -25,8 +22,8 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group col-lg-12">
-                            <label th:for="${typeName}">审核人:</label>
-                            <input type="text" class="form-control" th:id="${typeName}" th:name="${typeName}"
+                            <label th:for="user">审核人:</label>
+                            <input type="text" class="form-control" id="user" name="user"
                                    placeholder="请选择工程师"
                             />
                         </div>
@@ -45,47 +42,73 @@
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:inline="javascript">
-    var setting = {
-        check: {
-            enable: false
-        },
-        view: {
-            dblClickExpand: false,
-            showLine: true,
-            selectedMulti: false
-        },
-        data: {
-            simpleData: {
-                enable: true,
-                idKey: "uid",
-                pIdKey: "pUid",
-                rootPId: "0"
-            }
-        },
-        callback: {
-            beforeClick: function (treeId, treeNode) {
-                var zTree = $.fn.zTree.getZTreeObj('orgGroupTree');
-                if (treeNode.isParent) {
-                    zTree.expandNode(treeNode);
-                    return false;
-                } else {
-                    return true;
-                }
-            },
-            onClick: function (event, treeId, treeNode) {
-                console.log(treeId);
-                console.log($("#selectOption").val());
-                let userId = treeNode.uid;
-                $.ajax({
-                    type: "GET",
-                    //ajax需要添加打包名
-                    url: "./vwo/getUserDetail?uid=" + userId,
-                    success: function (result) {
-                        if (result.status) {
-                            $("#dept").val(result.groupName);
-                            $("#selectedUserId").val(result.personId);
-                            $("#" + $("#selectOption").val()).val(result.personName);
 
+    $(function () {
+        $('#cntForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                user: {
+                    message: '没有选择审核人',
+                    validators: {
+                        notEmpty: {
+                            message: '没有选择审核人,请选择审核人而非部门'
+                        }
+                    }
+                },
+                dept: {
+                    message: '没有部门',
+                    validators: {
+                        notEmpty: {
+                            message: '选择的审核人没有挂靠部门，请联系系统管理员'
+                        }
+                    }
+                }
+            }
+        });
+        orgTree.init({
+            id: "orgGroupTree",
+            targetTable: "changeOrderTable",
+            selectedUserId: "selectedUserId",
+            user: "user",
+            dept: "dept"
+        });
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#cntForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            //重新验证字段
+            // bootstrapValidator.revalidateField("pColorAbolishDate");
+            // bootstrapValidator.revalidateField("pColorEffectedDate");
+            bootstrapValidator.revalidateField("user");
+            if (bootstrapValidator.isValid()) {
+
+                let data = {};
+                var _d = $("#cntForm").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                // console.log(data);
+                JSON.stringify(data);
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    data: JSON.stringify(data),
+                    url: "./vwo/saveInfluenceUser",
+                    success: function (result) {
+                        $('.modal-dialog', window.top.document).parent('div').remove()
+                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        if (result.status) {
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet(result.type, result.name);//.find('#' + result.type).text(result.name);
+                            layer.msg(result.msg, {icon: 1, time: 2000});
+                        }
+                        else {
+                            window.Ewin.alert({message: result.msg});
                         }
                     },
                     error: function (e) {
@@ -93,47 +116,6 @@
                     }
                 });
             }
-        }
-    };
-    $(
-        initZTree = function () {
-            $.post("./vwo/getUserAndGroup", function (info) {
-                var t = $("#orgGroupTree");
-                t = $.fn.zTree.init(t, setting, info.data);
-            })
-        }
-    );
-    $(function () {
-        $("#btnOk", window.top.document).click(function () {
-            let data = {};
-            var _d = $("#cntForm").serializeArray();
-            for (var p in _d) {
-                data[_d[p].name] = _d[p].value;
-            }
-            // console.log(data);
-            JSON.stringify(data);
-            $.ajax({
-                contentType:
-                    "application/json",
-                type:
-                    'POST',
-                data: JSON.stringify(data),
-                url: "./vwo/saveInfluenceUser",
-                success: function (result) {
-                    $('.modal-dialog', window.top.document).parent('div').remove()
-                    $('body', window.top.document).find('.modal-backdrop').remove();
-                    if (result.status) {
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet(result.type,result.name);//.find('#' + result.type).text(result.name);
-                        layer.msg(result.msg, {icon: 1, time: 2000});
-                    }
-                    else {
-                        window.Ewin.alert({message: result.msg});
-                    }
-                },
-                error: function (e) {
-                    console.error("连接服务器异常:" + e.status);
-                }
-            });
         })
     })
 </script>
