@@ -8,6 +8,7 @@
 $(document).ready((function () {
     var url = "untreated/infoList";
     initTable(url);
+    initListener();
 }))
 
 function doQuery() {
@@ -71,4 +72,44 @@ function initTable(url) {
 
 function queryLou(id) {
     window.location.href = "untreated/ToUntreatedForm?id=" + id;
+}
+
+/**
+ *添加监听
+ */
+function initListener() {
+    $("#saveBtn").click(function () {
+        saveAgreement();
+    })
+}
+
+function saveAgreement() {
+    let data = {};
+    var _d = $("#bomLeaderOpinion").serializeArray();
+    for (var p in _d) {
+        data[_d[p].name] = _d[p].value;
+    }
+    data.id = $("id").val();
+    log(data);
+    $.ajax({
+        contentType:
+            "application/json",
+        type:
+            'POST',
+        url: "../process/doCheck",
+        data: JSON.stringify(data),
+        success:
+            function (result) {
+                activeTabBodyRefresh();
+                if (result.status) {
+                    layer.msg(result.msg, {icon: 1, time: 2000})
+                }
+                else {
+                    window.Ewin.alert({message: result.msg});
+                }
+            },
+        error: function (status) {
+            window.Ewin.alert({message: "提交失败:" + status.status});
+        }
+    })
 }
