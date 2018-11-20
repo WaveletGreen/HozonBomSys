@@ -84,6 +84,11 @@ public class HzChangeOrderRecord extends BasePOJO {
     private String projectId;
 
     /**
+     * 项目名
+     */
+    private String projectName;
+
+    /**
      * 表单信息是否同步自TC
      */
     private Integer fromTc;
@@ -97,6 +102,14 @@ public class HzChangeOrderRecord extends BasePOJO {
      * 创建者 来自TC
      */
     private String createNameTC;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public String getOriginator() {
         return originator;

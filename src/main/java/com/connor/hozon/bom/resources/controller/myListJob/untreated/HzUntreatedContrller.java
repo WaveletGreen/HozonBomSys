@@ -71,6 +71,7 @@ public class HzUntreatedContrller {
             object.put("deptName",hzChangeOrderRespDTO.getDeptName());
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
+            object.put("projectName",hzChangeOrderRespDTO.getProjectName());
             list.add(object);
         });
         jsonObject.put("result",list);

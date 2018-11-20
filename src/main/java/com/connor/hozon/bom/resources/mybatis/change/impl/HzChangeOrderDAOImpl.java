@@ -52,14 +52,32 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
         Map<String,Object> map = new HashMap<>();
         map.put("id",id);
         map.put("changeNo",query.getChangeNo());
-        //map.put("projectId",query.getProjectId());
+        map.put("projectId",query.getProjectId());
         map.put("originator",query.getOriginator());
         map.put("firstOriginTime",query.getFirstOriginTime());
         map.put("lastOriginTime",query.getLastOriginTime());
+        //map.put("",query.get)
         //User user = UserInfo.getUser();
         //map.put("auditer",user.getLogin());//接口人
 
         return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds",map);
+    }
+
+
+    @Override
+    public HzChangeOrderRecord findHzChangeOrderRecordByIdTC(HzChangeOrderByPageQuery query,Long id) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("changeNo",query.getChangeNo());
+        map.put("projectId",query.getProjectId());
+        map.put("originator",query.getOriginator());
+        map.put("firstOriginTime",query.getFirstOriginTime());
+        map.put("lastOriginTime",query.getLastOriginTime());
+        //map.put("",query.get)
+        //User user = UserInfo.getUser();
+        //map.put("auditer",user.getLogin());//接口人
+
+        return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_findHzChangeOrderRecordByIdsTC",map);
     }
 
     @Override
