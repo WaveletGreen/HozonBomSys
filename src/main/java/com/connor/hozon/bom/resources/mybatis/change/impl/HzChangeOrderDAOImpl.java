@@ -1,9 +1,11 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
+import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
+import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.change.HzChangeOrderRecord;
@@ -43,6 +45,21 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
     @Override
     public HzChangeOrderRecord findHzChangeOrderRecordById(Long id) {
         return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_findHzChangeOrderRecordById",id);
+    }
+
+    @Override
+    public HzChangeOrderRecord findHzChangeOrderRecordById(HzChangeOrderByPageQuery query,Long id) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("changeNo",query.getChangeNo());
+        map.put("projectId",query.getProjectId());
+        map.put("originator",query.getOriginator());
+        map.put("firstOriginTime",query.getFirstOriginTime());
+        map.put("lastOriginTime",query.getLastOriginTime());
+        //User user = UserInfo.getUser();
+        //map.put("auditer",user.getLogin());//接口人
+
+        return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds",map);
     }
 
     @Override

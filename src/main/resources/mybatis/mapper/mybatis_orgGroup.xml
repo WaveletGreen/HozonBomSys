@@ -33,11 +33,24 @@
 	</select>
 
     <!--保存-->
+    <!--
     <insert id="save" parameterType="com.connor.hozon.bom.sys.entity.OrgGroup" useGeneratedKeys="false"
             keyProperty="groupId">
 		INSERT INTO org_group(existing_num,group_code,name,node,num,parent_node)
 		VALUES(#{existingNum},#{groupCode},#{name},#{node},#{num},#{parentNode})
 	</insert>
+    -->
+
+    <!--保存-->
+    <insert id="save" parameterType="com.connor.hozon.bom.sys.entity.OrgGroup" useGeneratedKeys="false"
+            keyProperty="groupId">
+        <selectKey order="BEFORE"
+                   keyColumn="group_id" keyProperty="groupId" resultType="java.lang.Long">
+            select SEQ_HZ_ORG_GROUP.Nextval from dual
+        </selectKey>
+        INSERT INTO org_group(group_id,existing_num,group_code,name,node,num,parent_node)
+        VALUES(#{groupId},#{existingNum},#{groupCode},#{name},#{node},#{num},#{parentNode})
+    </insert>
 
     <!--修改-->
     <update id="update" parameterType="com.connor.hozon.bom.sys.entity.OrgGroup">

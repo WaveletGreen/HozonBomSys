@@ -111,12 +111,16 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
 
 
-        //代办事项
+        //待办事项
         registry.addViewController("/untreated").setViewName("/myListJob/untreated/untreated");
         //已处理事项
-        registry.addViewController("/processed").setViewName("/myListJob/processed/processed");
+        registry.addViewController("/processed").setViewName("/myListJob/untreated/handled/handled");
         //我的申请
-        registry.addViewController("/myApplication").setViewName("/myListJob/myApplication/myApplication");
+        registry.addViewController("/myApplication").setViewName("/myListJob/untreated/application/application");
+        //已处理事项
+        //registry.addViewController("/processed").setViewName("/myListJob/processed/processed");
+        //我的申请
+        //registry.addViewController("/myApplication").setViewName("/myListJob/myApplication/myApplication");
 
 
         //变更表单
@@ -139,10 +143,6 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/codpwoFromList").setViewName("/changeManage/codpwo/codpwoFromList");
         //临时变更表单
         registry.addViewController("/1111").setViewName("/updateLog/1111");
-
-
-
-
 
 
 

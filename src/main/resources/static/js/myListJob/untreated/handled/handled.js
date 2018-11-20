@@ -1,9 +1,3 @@
-/**
- * Created with IntelliJ IDEA.
- * User: xlf
- * Date: 2018/11/8
- * Time: 15:17
- */
 
 $(document).ready((function () {
     doQuery();
@@ -27,7 +21,7 @@ function initTable(projectUid) {
         return;
     }
     var projectId = $("#project", window.top.document).val();
-    var $table = $("#untreatedTable");
+    var $table = $("#handledTable");
     $table.bootstrapTable("destroy");//查询时刷新表单用
     var column = [];
     // $.ajax({
@@ -89,7 +83,7 @@ function initTable(projectUid) {
         //         }
         //     })
         // },
-        url: "untreated/infoList?projectId=" + projectUid ,
+        url: "processed/infoList?projectId=" + projectUid ,
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),
@@ -102,8 +96,8 @@ function initTable(projectUid) {
         sidePagination: "server",          //分页方式：client客户端分页，server服务端分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         showExport: false,
-        formId: "queryUntreated",
-        columns: column,                     //列信 息，需要预先定义好
+        formId: "queryHandled",
+        columns: column,                     //列信息，需要预先定义好
         sortable: false,                     //是否启用排序
         sortOrder: "asc",                   //排序方式
         striped: true,                      //是否显示行间隔色
@@ -116,8 +110,7 @@ function initTable(projectUid) {
     // })
 }
 function queryLou(id) {
-    //window.location.href="worklist/base/info?id="+id;
-    window.location.href="untreated/ToUntreatedForm?id="+id;
+    window.location.href="processed/ToProcessedForm?id="+id;
 }
 // function basic() {
 //     window.Ewin.dialog({

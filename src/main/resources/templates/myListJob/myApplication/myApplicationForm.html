@@ -16,19 +16,19 @@
                         <div class="form-group after_the">
                             <label for="ewoNo1">变更单号</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo1"
-                                   disabled="disabled"
+                                   th:value="${data.changeNo}" disabled="disabled"
                                    placeholder="请输入变更单号"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo2">创建时间</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo2"
-                                   disabled="disabled"
+                                   th:value="${data.createTime}" disabled="disabled"
                                    placeholder="请输入创建时间"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo3">部门</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo3"
-                                   disabled="disabled"
+                                   th:value="${data.deptName}" disabled="disabled"
                                    placeholder="请输入部门"/>
                         </div>
                     </div>
@@ -36,53 +36,60 @@
                         <div class="form-group after_the">
                             <label for="ewoNo4">发起人</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo4"
-                                   disabled="disabled"
+                                   th:value="${data.originator}" disabled="disabled"
                                    placeholder="请输入发起人"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo5">联系电话</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo5"
-                                   disabled="disabled"
-                                   placeholder="请输入联系电话"/>
+                                   th:value="${data.tel}" placeholder="请输入联系电话"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo6">变更类型</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo6"
-                                   disabled="disabled"
-                                   placeholder="请输入变更类型"/>
+                                   th:value="${data.changeType}" placeholder="请输入变更类型"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo7">是否关联变更</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
-                                   placeholder="请输入部门关联变更号"/>
+                                   th:value="${data.hasRelatedChange}" placeholder="请输入部门关联变更号"/>
                         </div>
                         <div class="form-group after_the">
-                            <label for="ewoNo8">上市类型</label>
-                            <select class="form-control" name="platform" id="ewoNo8" placeholder="请选择上市类型">
-                                <option>上市前</option>
-                                <option>上市后</option>
+                            <label for="marketType">上市类型</label>
+                            <!--<select class="form-control" name="platform" id="ewoNo8" placeholder="请选择上市类型">-->
+                                <!--<option>上市前</option>-->
+                                <!--<option>上市后</option>-->
+                            <!--</select>-->
+                            <select class="form-control" name="marketType" id="marketType"disabled="disabled" placeholder="请选择上市类型">
+                                <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
+                                <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
                             </select>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo9">项目所属阶段</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo9"
-                                   placeholder="请输入项目所属阶段"/>
+                                   th:value="${data.projectStage}" placeholder="请输入项目所属阶段"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo10">备注</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo10"
-                                   placeholder="请输入备注"/>
+                                   th:value="${data.remark}" placeholder="请输入备注"/>
                         </div>
                         <div class="form-group after_the">
-                            <label for="ewoNo11">变更状态</label>
-                            <select class="form-control" name="platform" id="ewoNo11" placeholder="请选择变更状态">
-                                <option>进行中</option>
-                                <option>完成</option>
-                                <option>取消</option>
+                            <label for="state">变更状态</label>
+                            <!--<select class="form-control" name="platform" id="ewoNo11" placeholder="请选择变更状态">-->
+                                <!--<option>进行中</option>-->
+                                <!--<option>完成</option>-->
+                                <!--<option>取消</option>-->
+                            <!--</select>-->
+                            <select class="form-control" name="state" id="state" placeholder="请选择变更状态"disabled="disabled">
+                                <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
+                                <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
+                                <option th:selected="${data.getState()=='取消 '?true:false}">取消</option>
                             </select>
                         </div>
                     </div>
@@ -123,5 +130,10 @@
         $("#myApplicationFormTable").html(table) ;
     })
 </script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/helper/taskHelper.js}"></script>
+<script th:src="@{/js/helper/jsonHelper.js}"></script>
+<script th:src="@{/js/helper/renderingTableColorHelper.js}"></script>
+<script th:src="@{/js/myListJob/untreated/application/application.js}"></script>
 </body>
 </html>
