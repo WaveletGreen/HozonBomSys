@@ -17,9 +17,10 @@ function formatDate() {
     $('#enddate').val(vwoEndEffectiveTime);
 }
 function initTable(projectUid) {
-    if (!checkIsSelectProject(projectUid)) {
-        return;
-    }
+    //不关联项目（注掉）
+    // if (!checkIsSelectProject(projectUid)) {
+    //     return;
+    // }
     var projectId = $("#project", window.top.document).val();
     var $table = $("#handledTable");
     $table.bootstrapTable("destroy");//查询时刷新表单用

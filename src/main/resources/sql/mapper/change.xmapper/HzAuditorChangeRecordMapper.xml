@@ -48,6 +48,15 @@
     and AUDIT_RESULT is not NULL
   </select>
 
+  <!--统计待办事项-->
+  <select id="HzAuditorChangeDAOImpl_count" parameterType="java.util.Map" resultType="int">
+    SELECT count(*) FROM HZ_AUDITOR_CHANGE_RECORD
+    WHERE 1=1
+    <!--接口（审批）人是自己（登录角色）-->
+    and AUDITOR_ID = #{auditorId,jdbcType=DOUBLE}
+    and AUDIT_RESULT is null
+  </select>
+
   <insert id="insertSelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
     insert into HZ_AUDITOR_CHANGE_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">

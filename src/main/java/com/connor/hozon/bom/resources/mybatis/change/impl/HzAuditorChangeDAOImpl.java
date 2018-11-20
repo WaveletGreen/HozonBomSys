@@ -42,4 +42,12 @@ public class HzAuditorChangeDAOImpl extends BaseSQLUtil implements HzAuditorChan
 
         return  super.findForList("HzAuditorChangeDAOImpl_findAuditorList2",map);
     }
+
+    @Override
+    public int count(int userId) {
+        Map<String,Object> map = new HashMap<>();
+        //User user1 = UserInfo.getUser();
+        map.put("auditorId",userId);//接口人
+        return (int) super.findForObject("HzAuditorChangeDAOImpl_count",map);
+    }
 }

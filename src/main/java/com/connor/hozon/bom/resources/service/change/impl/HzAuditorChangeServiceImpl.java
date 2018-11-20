@@ -27,6 +27,7 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
     public List<HzChangeOrderRespDTO> findChangeOrderList(HzChangeOrderByPageQuery query, HzAuditorChangeRecord record) {
         List<HzChangeOrderRespDTO> auditorList = new ArrayList<>();
         try{
+            //从HZ_AUDITOR_CHANGE_RECORD表中查找任务条数
             List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList(record);
 
             if(ListUtil.isNotEmpty(infos)){
@@ -64,17 +65,19 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                 for(int i=0;i<infos.size();i++){
                     //根据返回的OrderId到ChangeOrder表中查数据
                     HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,infos.get(i).getOrderId());
+                    if(rec!=null){
+                        HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
+                        respDTO.setProjectId(rec.getProjectId());
+                        respDTO.setChangeNo(rec.getChangeNo());//changeNo
+                        respDTO.setId(rec.getId());
+                        respDTO.setOriginator(rec.getOriginator());
+                        respDTO.setDeptName(rec.getDeptName());//部门-deptName
+                        respDTO.setChangeType(rec.getChangeType());//变更类型
+                        respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
+                        //respDTO.setLaunchTime(rec.getLaunchTime());
+                        auditorList.add(respDTO);
+                    }
 
-                    HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
-                    respDTO.setProjectId(rec.getProjectId());
-                    respDTO.setChangeNo(rec.getChangeNo());//changeNo
-                    respDTO.setId(rec.getId());
-                    respDTO.setOriginator(rec.getOriginator());
-                    respDTO.setDeptName(rec.getDeptName());//部门-deptName
-                    respDTO.setChangeType(rec.getChangeType());//变更类型
-                    respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
-                    //respDTO.setLaunchTime(rec.getLaunchTime());
-                    auditorList.add(respDTO);
                 }
                 return auditorList;
             }

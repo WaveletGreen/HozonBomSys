@@ -50,9 +50,9 @@ public class HzProcessedContrller {
     @RequestMapping(value = "infoList",method = RequestMethod.GET)
     @ResponseBody
     public JSONObject getChangeOrderList(HzChangeOrderByPageQuery query, HzAuditorChangeRecord record){
-        if(StringUtil.isEmpty(query.getProjectId())){
-            return new JSONObject();
-        }
+//        if(StringUtil.isEmpty(query.getProjectId())){
+//            return new JSONObject();
+//        }
 
         List<HzChangeOrderRespDTO> respDTOs = hzAuditorChangeService.findChangeOrderList2(query,record);
 

@@ -22,7 +22,8 @@ function loadTasks() {
         success: function (data) {
             var _data = data.data;
             taskData = null;
-            let count = 1;
+            let count = data.count;
+            alert(count);
 
             if (_data) {
                 $("#myTasks li").remove();

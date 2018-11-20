@@ -21,4 +21,7 @@ public interface HzAuditorChangeDAO {
     List<HzAuditorChangeRecord> findAuditorList(HzAuditorChangeRecord record);
     //已处理事项
     List<HzAuditorChangeRecord> findAuditorList2(HzAuditorChangeRecord record);
+
+    //统计任务个数
+    int count(int userId);
 }
