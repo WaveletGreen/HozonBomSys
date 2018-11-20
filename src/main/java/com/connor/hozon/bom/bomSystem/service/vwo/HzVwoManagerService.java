@@ -37,10 +37,7 @@ import com.connor.hozon.bom.bomSystem.service.process.FeatureProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.InterruptionContainer;
 import com.connor.hozon.bom.bomSystem.service.process.ModelColorProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.ReleaseContainer;
-import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
-import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
-import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
-import com.connor.hozon.bom.bomSystem.service.project.HzVehicleService;
+import com.connor.hozon.bom.bomSystem.service.project.*;
 import com.connor.hozon.bom.bomSystem.service.task.HzTasksService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -76,12 +73,10 @@ import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.vwo.*;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
-import sql.pojo.project.HzMaterielRecord;
-import sql.pojo.project.HzPlatformRecord;
-import sql.pojo.project.HzProjectLibs;
-import sql.pojo.project.HzVehicleRecord;
+import sql.pojo.project.*;
 import sql.pojo.task.HzTasks;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -133,6 +128,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
      */
     @Autowired
     HzPlatformService hzPlatformService;
+    @Autowired
+    HzBrandService hzBrandService;
     @Autowired
     IHzVwoInfluenceDeptService iHzVwoInfluenceDeptService;
     @Autowired
@@ -2687,7 +2684,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         //打点图数据MAP
         Map<String,String> pointMap = new HashMap<>();
 
-        //查询变更后全配置主数据
+        /******************查询变更后全配置主数据*****************/
         HzFullCfgMainChange hzFullCfgMainChangeAfter = null;
         //根据变更后主数据查询变更后的车辆模型
         List<HzFullCfgModelChange> hzFullCfgModelChangesAfter = null;
@@ -2697,9 +2694,15 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         hzFullCfgMainChangeAfter = hzFullCfgMainChangeDao.selectByChangeId(orderChangeId);
         hzFullCfgModelChangesAfter = hzFullCfgModelChangeDao.selectByMainId(hzFullCfgMainChangeAfter.getId());
         hzFullCfgWithCfgChangesAfter = hzFullCfgWithCfgChangeDao.selectByMainId(hzFullCfgMainChangeAfter.getId());
-
-
-        //查询变更前的主数据
+        /********初始化车型模型数据************/
+        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectUid);
+        //车型
+        HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
+        //平台
+        HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+        //品牌
+        HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+        /*********************查询变更前的主数据************************/
         HzFullCfgMainChange hzFullCfgMainChangeBefor =null;
         //查询变更前的车辆模型
         List<HzFullCfgModelChange> hzFullCfgModelChangesBefor = null;
@@ -2730,6 +2733,10 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 beforAndAfterMap.put(hzCfg0ModelRecord.getPuid(),hzCfg0ModelRecord);
             }
 
+
+            modelmap.put("brand",new ArrayList<>());
+            modelmap.put("platform",new ArrayList<>());
+            modelmap.put("vehicle",new ArrayList<>());
             modelmap.put("modelVersion",new ArrayList<>());
             modelmap.put("modelShape",new ArrayList<>());
             modelmap.put("modelAnnouncement",new ArrayList<>());
@@ -2739,7 +2746,8 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             modelmap.put("modelGoodsNum",new ArrayList<>());
 
             //车辆模型顺序List
-            List<HzFullCfgModelChange> hzFullCfgModelChanges = new ArrayList<>();
+            List<HzFullCfgModelChange> hzFullCfgModelChangesOrderBefor = new ArrayList<>();
+            List<HzFullCfgModelChange> hzFullCfgModelChangesOrderAfter = new ArrayList<>();
             //往车辆模型中添加数据
             Set<String> beforAndAfterModelKeySet = beforAndAfterMap.keySet();
             for(String key : beforAndAfterModelKeySet){
@@ -2761,16 +2769,31 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                         break;
                     }
                 }
-                modelmap.get("modelVersion").add(hzFullCfgModelChangeAfter.getModelVersion()==null?"":hzFullCfgModelChangeAfter.getModelVersion()+"("+hzFullCfgModelChangeBefor.getModelVersion()==null?"":hzFullCfgModelChangeBefor.getModelVersion()+")");
-                modelmap.get("modelShape").add(hzFullCfgModelChangeAfter.getModelShape()==null?"":hzFullCfgModelChangeAfter.getModelShape()+"("+hzFullCfgModelChangeBefor.getModelShape()==null?"":hzFullCfgModelChangeBefor.getModelShape()+")");
-                modelmap.get("modelAnnouncement").add(hzFullCfgModelChangeAfter.getModelAnnouncement()==null?"":hzFullCfgModelChangeAfter.getModelAnnouncement()+"("+hzFullCfgModelChangeBefor.getModelAnnouncement()==null?"":hzFullCfgModelChangeBefor.getModelAnnouncement()+")");
-                modelmap.get("modelCfgDesc").add(hzFullCfgModelChangeAfter.getModelCfgDesc()==null?"":hzFullCfgModelChangeAfter.getModelCfgDesc()+"("+hzFullCfgModelChangeBefor.getModelCfgDesc()==null?"":hzFullCfgModelChangeBefor.getModelCfgDesc()+")");
-                modelmap.get("modelCfgMng").add(hzFullCfgModelChangeAfter.getModelCfgMng()==null?"":hzFullCfgModelChangeAfter.getModelCfgMng()+"("+hzFullCfgModelChangeBefor.getModelCfgMng()==null?"":hzFullCfgModelChangeBefor.getModelCfgMng()+")");
-                modelmap.get("modelTrailNum").add(hzFullCfgModelChangeAfter.getModelTrailNum()==null?"":hzFullCfgModelChangeAfter.getModelTrailNum()+"("+hzFullCfgModelChangeBefor.getModelTrailNum()==null?"":hzFullCfgModelChangeBefor.getModelTrailNum()+")");
-                modelmap.get("modelGoodsNum").add(hzFullCfgModelChangeAfter.getModelGoodsNum()==null?"":hzFullCfgModelChangeAfter.getModelGoodsNum()+"("+hzFullCfgModelChangeBefor.getModelGoodsNum()==null?"":hzFullCfgModelChangeBefor.getModelGoodsNum()+")");
+                modelmap.get("brand").add(brand.getpBrandName());
+                modelmap.get("platform").add(platform.getpPlatformName());
+                modelmap.get("vehicle").add(vehicle.getpVehicleName());
+                modelmap.get("modelVersion").add(hzFullCfgModelChangeAfter==null?"":hzFullCfgModelChangeAfter.getModelVersion()==null?"":hzFullCfgModelChangeAfter.getModelVersion()+"<br>("+(hzFullCfgModelChangeBefor==null?"":hzFullCfgModelChangeBefor.getModelVersion()==null?"":hzFullCfgModelChangeBefor.getModelVersion())+")");
+                modelmap.get("modelShape").add(hzFullCfgModelChangeAfter==null?"":hzFullCfgModelChangeAfter.getModelShape()==null?"":hzFullCfgModelChangeAfter.getModelShape()+"<br>("+(hzFullCfgModelChangeBefor==null?"":hzFullCfgModelChangeBefor.getModelShape()==null?"":hzFullCfgModelChangeBefor.getModelShape())+")");
+                modelmap.get("modelAnnouncement").add(hzFullCfgModelChangeAfter==null?"":hzFullCfgModelChangeAfter.getModelAnnouncement()==null?"":hzFullCfgModelChangeAfter.getModelAnnouncement()+"<br>("+(hzFullCfgModelChangeBefor==null?"":hzFullCfgModelChangeBefor.getModelAnnouncement()==null?"":hzFullCfgModelChangeBefor.getModelAnnouncement())+")");
+                modelmap.get("modelCfgDesc").add(hzFullCfgModelChangeAfter==null?"":hzFullCfgModelChangeAfter.getModelCfgDesc()==null?"":hzFullCfgModelChangeAfter.getModelCfgDesc()+"<br>("+(hzFullCfgModelChangeBefor==null?"":hzFullCfgModelChangeBefor.getModelCfgDesc()==null?"":hzFullCfgModelChangeBefor.getModelCfgDesc())+")");
+                modelmap.get("modelCfgMng").add(hzFullCfgModelChangeAfter==null?"":hzFullCfgModelChangeAfter.getModelCfgMng()==null?"":hzFullCfgModelChangeAfter.getModelCfgMng()+"<br>("+(hzFullCfgModelChangeBefor==null?"":hzFullCfgModelChangeBefor.getModelCfgMng()==null?"":hzFullCfgModelChangeBefor.getModelCfgMng())+")");
+                modelmap.get("modelTrailNum").add(hzFullCfgModelChangeAfter==null?"":hzFullCfgModelChangeAfter.getModelTrailNum()==null?"":hzFullCfgModelChangeAfter.getModelTrailNum()+"<br>("+(hzFullCfgModelChangeBefor==null?"":hzFullCfgModelChangeBefor.getModelTrailNum()==null?"":hzFullCfgModelChangeBefor.getModelTrailNum())+")");
+                modelmap.get("modelGoodsNum").add(hzFullCfgModelChangeAfter==null?"":hzFullCfgModelChangeAfter.getModelGoodsNum()==null?"":hzFullCfgModelChangeAfter.getModelGoodsNum()+"<br>("+(hzFullCfgModelChangeBefor==null?"":hzFullCfgModelChangeBefor.getModelGoodsNum()==null?"":hzFullCfgModelChangeBefor.getModelGoodsNum())+")");
 
-                hzFullCfgModelChanges.add(hzFullCfgModelChangeAfter);
-                hzFullCfgModelChanges.add(hzFullCfgModelChangeBefor);
+                if(hzFullCfgModelChangeAfter==null){
+                    HzFullCfgModelChange hzFullCfgModelChange = new HzFullCfgModelChange();
+                    hzFullCfgModelChange.setModModelUid(hzFullCfgModelChangeBefor.getModModelUid());
+                    hzFullCfgModelChangesOrderAfter.add(hzFullCfgModelChange);
+                }else {
+                    hzFullCfgModelChangesOrderAfter.add(hzFullCfgModelChangeAfter);
+                }
+                if(hzFullCfgModelChangeBefor==null){
+                    HzFullCfgModelChange hzFullCfgModelChange = new HzFullCfgModelChange();
+                    hzFullCfgModelChange.setModModelUid(hzFullCfgModelChangeAfter.getModModelUid());
+                    hzFullCfgModelChangesOrderBefor.add(hzFullCfgModelChange);
+                }else {
+                    hzFullCfgModelChangesOrderBefor.add(hzFullCfgModelChangeBefor);
+                }
             }
 
          /***********************整理2Y数据***************************/
@@ -2805,7 +2828,8 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             withCfgMap.put("comment",new ArrayList<>());
 
             //2Y层数据顺序List
-            List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChanges = new ArrayList<>();
+            List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChangesOrderBefor = new ArrayList<>();
+            List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChangesOrderAfter = new ArrayList<>();
             //往2Y层加数据
             Set<String> beforAndAfterWithCfgKeySet = beforAndAfterWithCfgMap.keySet();
             List<String> withCfgPuids = new ArrayList<>();
@@ -2839,7 +2863,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 }else {
                     flOperationType += "-";
                 }
-                flOperationType += "(";
+                flOperationType += "<br>(";
                 if(hzFullCfgWithCfgChangeBefor.getFlOperationType()!=null){
                     flOperationType += hzFullCfgWithCfgChangeBefor.getFlOperationTypeString();
                 }else {
@@ -2853,53 +2877,148 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 withCfgMap.get("pBomLineName").add(hzBomLineRecord.getpBomLinePartName()==null?"":hzBomLineRecord.getpBomLinePartName());
                 withCfgMap.get("pH9featureenname").add(hzBomLineRecord.getpBomLinePartEnName()==null?"":hzBomLineRecord.getpBomLinePartEnName());
                 withCfgMap.get("owningUser").add(hzBomLineRecord.getpDutyEngineer()==null?"":hzBomLineRecord.getpDutyEngineer());
-                withCfgMap.get("pCfg0Desc").add(hzFullCfgWithCfgChangeAfter.getCfgDesc()+"("+hzFullCfgWithCfgChangeBefor.getCfgDesc()+")");
-                withCfgMap.get("pCfg0ObjectId").add(hzFullCfgWithCfgChangeAfter.getCfgCode()+"("+hzFullCfgWithCfgChangeBefor.getCfgCode()+")");
-                withCfgMap.get("isColorPart").add(hzFullCfgWithCfgChangeAfter.getIsColor()+"("+hzFullCfgWithCfgChangeBefor+")");
-                withCfgMap.get("comment").add(hzFullCfgWithCfgChangeAfter.getFlCommentString()+"("+hzFullCfgWithCfgChangeBefor.getFlCommentString()+")");
+                withCfgMap.get("pCfg0Desc").add(hzFullCfgWithCfgChangeAfter.getCfgDesc()+"<br>("+hzFullCfgWithCfgChangeBefor.getCfgDesc()+")");
+                withCfgMap.get("pCfg0ObjectId").add(hzFullCfgWithCfgChangeAfter.getCfgCode()+"<br>("+hzFullCfgWithCfgChangeBefor.getCfgCode()+")");
+                withCfgMap.get("isColorPart").add(hzFullCfgWithCfgChangeAfter.getIsColor()+"<br>("+hzFullCfgWithCfgChangeBefor.getIsColor()+")");
+                withCfgMap.get("comment").add(hzFullCfgWithCfgChangeAfter.getFlCommentString()+"<br>("+hzFullCfgWithCfgChangeBefor.getFlCommentString()+")");
 
-                hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChangeAfter);
-                hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChangeBefor);
+                if(hzFullCfgWithCfgChangeAfter==null){
+                    HzFullCfgWithCfgChange hzFullCfgWithCfgChange = new HzFullCfgWithCfgChange();
+                    hzFullCfgWithCfgChange.setCfgBomlineUid(hzFullCfgWithCfgChangeBefor.getCfgBomlineUid());
+                    hzFullCfgWithCfgChangesOrderAfter.add(hzFullCfgWithCfgChange);
+                }else {
+                    hzFullCfgWithCfgChangesOrderAfter.add(hzFullCfgWithCfgChangeAfter);
+                }
+                if(hzFullCfgWithCfgChangeBefor==null){
+                    HzFullCfgWithCfgChange hzFullCfgWithCfgChange = new HzFullCfgWithCfgChange();
+                    hzFullCfgWithCfgChange.setCfgBomlineUid(hzFullCfgWithCfgChangeAfter.getCfgBomlineUid());
+                    hzFullCfgWithCfgChangesOrderBefor.add(hzFullCfgWithCfgChange);
+                }else {
+                    hzFullCfgWithCfgChangesOrderBefor.add(hzFullCfgWithCfgChangeBefor);
+                }
             }
 
             /****************打点图填充数据******************/
             //生成一个车辆模型和2Y层的双层MAP数据,其结构为<modelUID<cfgUID，model对象>>
             Map<String,Map<String,String>> modelAndCfgMap = new HashMap<>();
-            for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChanges){
+            for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChangesOrderAfter){
                 if(modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid())==null){
                     modelAndCfgMap.put(hzFullCfgModelChange.getModModelUid(),new HashMap<>());
                 }
                 Map<String, String> cfgMap = modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid());
-                for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChanges){
-                    String pointAfter = null;
+                for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesOrderAfter){
                     for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesAfter){
-                        if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgModelChange.getFlModelBomlineUid())){
-                            pointAfter = hzFullCfgModelChange1.getModPointType()==0?"-":hzFullCfgModelChange1.getModPointType()==1?"○":"●";
-                            break;
+                        if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getModModelUid().equals(hzFullCfgModelChange.getModModelUid())){
+                            cfgMap.put(hzFullCfgModelChange1.getFlModelBomlineUid(),hzFullCfgModelChange1.getModPointType()==0?"-()":hzFullCfgModelChange1.getModPointType()==1?"○()":"●()");
                         }
                     }
-                    String pointBefor = null;
-                    for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesBefor){
-                        if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgModelChange.getFlModelBomlineUid())){
-                            pointBefor = hzFullCfgModelChange1.getModPointType()==0?"-":hzFullCfgModelChange1.getModPointType()==1?"○":"●";
-                            break;
-                        }
-                    }
-                    cfgMap.put(hzFullCfgWithCfgChange.getCfgCfg0Uid(),pointAfter+"("+pointBefor+")");
                 }
             }
+
+            for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChangesOrderBefor){
+                if(modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid())==null){
+                    modelAndCfgMap.put(hzFullCfgModelChange.getModModelUid(),new HashMap<>());
+                }
+                Map<String, String> cfgMap = modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid());
+                for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesOrderBefor){
+                    for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesAfter){
+                        if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getModModelUid().equals(hzFullCfgModelChange.getModModelUid())){
+                            cfgMap.put(hzFullCfgModelChange1.getFlModelBomlineUid(),cfgMap.get(hzFullCfgModelChange1.getFlModelBomlineUid())+(hzFullCfgModelChange1.getModPointType()==0?"-()":hzFullCfgModelChange1.getModPointType()==1?"○()":"●()"));
+                        }
+                    }
+                }
+            }
+//            for(int i=0;i<hzFullCfgModelChanges.size()-1;i++){
+//                String modeUid = "";
+//                //数据类型，1为添加，2为删除，0为修改
+//                Integer flag = 0;
+//                Boolean beforFlag = false;
+//                Boolean afterFlag = false;
+//                if(hzFullCfgModelChanges.get(i)!=null){
+//                    modeUid = hzFullCfgModelChanges.get(i).getModModelUid();
+//                    afterFlag = true;
+//                    if(modelAndCfgMap.get(modeUid)==null){
+//                        modelAndCfgMap.put(modeUid,new HashMap<>());
+//                    }
+//                }
+//                if(hzFullCfgModelChanges.get(i+1)!=null){
+//                    modeUid = hzFullCfgModelChanges.get(i+1).getModModelUid();
+//                    beforFlag = true;
+//                    if(modelAndCfgMap.get(modeUid)==null){
+//                        modelAndCfgMap.put(modeUid,new HashMap<>());
+//                    }
+//                }
+//                if(beforFlag&&afterFlag){
+//                    flag = 0;
+//                }else if(beforFlag==true&&afterFlag==false){
+//                    flag = 2;
+//                }else if(beforFlag==false&&afterFlag==true){
+//                    flag =1;
+//                }
+//                Map<String, String> cfgMap = modelAndCfgMap.get(hzFullCfgModelChanges.get(i).getModModelUid());
+//                for(int j=0;j<hzFullCfgWithCfgChanges.size();j+=2){
+//                    String pointAfter = "";
+//                    if(afterFlag){
+//                        for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesAfter){
+//                            if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChanges.get(j).getCfgBomlineUid())&&hzFullCfgModelChange1.getModModelUid().equals(hzFullCfgModelChanges.get(i).getModModelUid())){
+//                                pointAfter += hzFullCfgModelChange1.getModPointType()==0?"-":hzFullCfgModelChange1.getModPointType()==1?"○":"●";
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    String pointBefor = "";
+//                    if(beforFlag){
+//                        for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesBefor){
+//                            if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChanges.get(j+1))&&hzFullCfgModelChange1.getModModelUid().equals(hzFullCfgModelChanges.get(i+1).getModModelUid())){
+//                                pointBefor += hzFullCfgModelChange1.getModPointType()==0?"-":hzFullCfgModelChange1.getModPointType()==1?"○":"●";
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    cfgMap.put(hzFullCfgWithCfgChanges.get(j).getCfgBomlineUid(),pointAfter+"("+pointBefor+")");
+//                }
+//                i++;
+//            }
+
+
+
+
+
+
+//            for(HzFullCfgModelChange hzFullCfgModelChange : hzFullCfgModelChanges){
+//                if(modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid())==null){
+//                    modelAndCfgMap.put(hzFullCfgModelChange.getModModelUid(),new HashMap<>());
+//                }
+//                Map<String, String> cfgMap = modelAndCfgMap.get(hzFullCfgModelChange.getModModelUid());
+//                for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChanges){
+//                    String pointAfter = "";
+//                    for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesAfter){
+//                        if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgModelChange.getFlModelBomlineUid())){
+//                            pointAfter += hzFullCfgModelChange1.getModPointType()==0?"-":hzFullCfgModelChange1.getModPointType()==1?"○":"●";
+//                            break;
+//                        }
+//                    }
+//                    String pointBefor = "";
+//                    for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesBefor){
+//                        if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgModelChange.getFlModelBomlineUid())){
+//                            pointBefor += hzFullCfgModelChange1.getModPointType()==0?"-":hzFullCfgModelChange1.getModPointType()==1?"○":"●";
+//                            break;
+//                        }
+//                    }
+//                    cfgMap.put(hzFullCfgWithCfgChange.getCfgBomlineUid(),pointAfter+"("+pointBefor+")");
+//                }
+//            }
             //遍历车型和2Y层从Map中获取打点图信息
-            for(int i=0;i<hzFullCfgWithCfgChanges.size();i++){
-                for(int j=0;j<hzFullCfgModelChanges.size();j++){
+            for(int i=0;i<hzFullCfgWithCfgChangesOrderAfter.size();i++){
+                for(int j=0;j<hzFullCfgModelChangesOrderAfter.size();j++){
                     String key = "c"+i+"m"+j;
                     //变更前
-                    String point = modelAndCfgMap.get(hzFullCfgModelChanges.get(j).getModModelUid()).get(hzFullCfgWithCfgChanges.get(i).getCfgBomlineUid());
+                    String point = modelAndCfgMap.get(hzFullCfgModelChangesOrderAfter.get(j).getModModelUid()).get(hzFullCfgWithCfgChangesOrderAfter.get(i).getCfgBomlineUid());
                     //变更后
                     pointMap.put(key,point);
                 }
             }
         }else {
-
                 mainMap.put("stage",hzFullCfgMainChangeAfter.getStageString()+"()");
                 mainMap.put("version",hzFullCfgMainChangeAfter.getVersion()+"()");
                 mainMap.put("effectiveDate",hzFullCfgMainChangeAfter.getEffectiveDate()+"()");
@@ -2912,6 +3031,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     beforAndAfterMap.put(hzCfg0ModelRecord.getPuid(),hzCfg0ModelRecord);
                 }
 
+                modelmap.put("brand",new ArrayList<>());
+                modelmap.put("platform",new ArrayList<>());
+                modelmap.put("vehicle", new ArrayList<>());
                 modelmap.put("modelVersion",new ArrayList<>());
                 modelmap.put("modelShape",new ArrayList<>());
                 modelmap.put("modelAnnouncement",new ArrayList<>());
@@ -2935,13 +3057,16 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                             break;
                         }
                     }
-                    modelmap.get("modelVersion").add(hzFullCfgModelChangeAfter.getModelVersion()==null?"":hzFullCfgModelChangeAfter.getModelVersion()+"()");
-                    modelmap.get("modelShape").add(hzFullCfgModelChangeAfter.getModelShape()==null?"":hzFullCfgModelChangeAfter.getModelShape()+"()");
-                    modelmap.get("modelAnnouncement").add(hzFullCfgModelChangeAfter.getModelAnnouncement()==null?"":hzFullCfgModelChangeAfter.getModelAnnouncement()+"()");
-                    modelmap.get("modelCfgDesc").add(hzFullCfgModelChangeAfter.getModelCfgDesc()==null?"":hzFullCfgModelChangeAfter.getModelCfgDesc()+"()");
-                    modelmap.get("modelCfgMng").add(hzFullCfgModelChangeAfter.getModelCfgMng()==null?"":hzFullCfgModelChangeAfter.getModelCfgMng()+"()");
-                    modelmap.get("modelTrailNum").add(hzFullCfgModelChangeAfter.getModelTrailNum()==null?"":hzFullCfgModelChangeAfter.getModelTrailNum()+"()");
-                    modelmap.get("modelGoodsNum").add(hzFullCfgModelChangeAfter.getModelGoodsNum()==null?"":hzFullCfgModelChangeAfter.getModelGoodsNum()+"()");
+                    modelmap.get("brand").add(brand.getpBrandName());
+                    modelmap.get("platform").add(platform.getpPlatformName());
+                    modelmap.get("vehicle").add(vehicle.getpVehicleName());
+                    modelmap.get("modelVersion").add(hzFullCfgModelChangeAfter.getModelVersion()==null?"":hzFullCfgModelChangeAfter.getModelVersion()+"<br>()");
+                    modelmap.get("modelShape").add(hzFullCfgModelChangeAfter.getModelShape()==null?"":hzFullCfgModelChangeAfter.getModelShape()+"<br>()");
+                    modelmap.get("modelAnnouncement").add(hzFullCfgModelChangeAfter.getModelAnnouncement()==null?"":hzFullCfgModelChangeAfter.getModelAnnouncement()+"<br>()");
+                    modelmap.get("modelCfgDesc").add(hzFullCfgModelChangeAfter.getModelCfgDesc()==null?"":hzFullCfgModelChangeAfter.getModelCfgDesc()+"<br>()");
+                    modelmap.get("modelCfgMng").add(hzFullCfgModelChangeAfter.getModelCfgMng()==null?"":hzFullCfgModelChangeAfter.getModelCfgMng()+"<br>()");
+                    modelmap.get("modelTrailNum").add(hzFullCfgModelChangeAfter.getModelTrailNum()==null?"":hzFullCfgModelChangeAfter.getModelTrailNum()+"<br>()");
+                    modelmap.get("modelGoodsNum").add(hzFullCfgModelChangeAfter.getModelGoodsNum()==null?"":hzFullCfgModelChangeAfter.getModelGoodsNum()+"<br>()");
 
                     hzFullCfgModelChanges.add(hzFullCfgModelChangeAfter);
                 }
@@ -3010,10 +3135,10 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     withCfgMap.get("pBomLineName").add(hzBomLineRecord.getpBomLinePartName()==null?"":hzBomLineRecord.getpBomLinePartName());
                     withCfgMap.get("pH9featureenname").add(hzBomLineRecord.getpBomLinePartEnName()==null?"":hzBomLineRecord.getpBomLinePartEnName());
                     withCfgMap.get("owningUser").add(hzBomLineRecord.getpDutyEngineer()==null?"":hzBomLineRecord.getpDutyEngineer());
-                    withCfgMap.get("pCfg0Desc").add(hzFullCfgWithCfgChangeAfter.getCfgDesc()+"()");
-                    withCfgMap.get("pCfg0ObjectId").add(hzFullCfgWithCfgChangeAfter.getCfgCode()+"()");
-                    withCfgMap.get("isColorPart").add(hzFullCfgWithCfgChangeAfter.getIsColor()+"()");
-                    withCfgMap.get("comment").add(hzFullCfgWithCfgChangeAfter.getFlCommentString()+"()");
+                    withCfgMap.get("pCfg0Desc").add(hzFullCfgWithCfgChangeAfter.getCfgDesc()+"<br>()");
+                    withCfgMap.get("pCfg0ObjectId").add(hzFullCfgWithCfgChangeAfter.getCfgCode()+"<br>()");
+                    withCfgMap.get("isColorPart").add(hzFullCfgWithCfgChangeAfter.getIsColor()+"<br>()");
+                    withCfgMap.get("comment").add(hzFullCfgWithCfgChangeAfter.getFlCommentString()+"<br>()");
 
                     hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChangeAfter);
                 }

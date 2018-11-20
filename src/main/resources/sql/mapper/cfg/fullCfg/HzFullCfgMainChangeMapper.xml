@@ -156,6 +156,8 @@
         HZ_FULL_CFG_MAIN_RECORD_CHANGE
       where
         CHANGE_ORDER_UID = #{changeOrderId,jdbcType=DECIMAL}
+    and
+    CHANGE_STATUS = 0
   </select>
 
   <select id="selectLastFullCfg" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap">
