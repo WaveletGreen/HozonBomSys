@@ -330,7 +330,7 @@ function initTable(eBomUrl) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "ebom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -989,7 +989,7 @@ function initTable1(eBomUrl, puids) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "ebom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {

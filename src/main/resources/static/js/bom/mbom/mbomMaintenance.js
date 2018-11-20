@@ -321,7 +321,7 @@ function initTable1(mBomUrl) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -1122,7 +1122,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -1882,7 +1882,7 @@ function initTable2(productionUrl) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -2286,7 +2286,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -2704,7 +2704,7 @@ function initTable3(financialUrl) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -3113,7 +3113,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {

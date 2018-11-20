@@ -248,7 +248,7 @@ function initTable(url) {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "ebom/delete/ebom",
+                                            url: "materiel/cancel",
                                             data: myData,
                                             contentType: "application/json",
                                             success: function (result) {
