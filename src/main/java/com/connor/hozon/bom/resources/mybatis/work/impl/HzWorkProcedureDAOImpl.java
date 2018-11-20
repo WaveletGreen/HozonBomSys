@@ -151,7 +151,7 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     @Override
     public HzWorkProcedure getHzWorkProcedureByPuidAndRevision(HzChangeDataDetailQuery query) {
         Map<String,Object> map = new HashMap<>();
-        map.put("puids", query.getPuids());
+        map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
             map.put("revision",query.getRevision()?null:query.getRevisionNo());
@@ -244,6 +244,11 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int deleteByPuids(List<String> puids) {
+        return super.delete("HzWorkProcedureDAOImpl_deleteByPuids",new HashMap<>().put("puids",puids));
     }
 
 }

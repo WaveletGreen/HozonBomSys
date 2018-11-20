@@ -2,10 +2,7 @@ package com.connor.hozon.bom.resources.controller.work;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
 
-import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -416,8 +413,20 @@ public class HzWorkProcessController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "data/change",method = RequestMethod.POST)
-    public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+    public void workProcessDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO respDTO = hzWorkProcessService.dataToChangeOrder(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+
+    /**
+     * EBOM撤销
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "cancel",method = RequestMethod.POST)
+    public void workProcessCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzWorkProcessService.backBomUtilLastValidState(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 }

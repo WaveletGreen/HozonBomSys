@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.controller.materiel;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -221,8 +222,19 @@ public class HzMaterielController  extends BaseController {
      * @param response
      */
     @RequestMapping(value = "data/change",method = RequestMethod.POST)
-    public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+    public void materielDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO respDTO = hzMaterielService.dataToChangeOrder(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+    /**
+     * EBOM撤销
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "cancel",method = RequestMethod.POST)
+    public void materielCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzMaterielService.backBomUtilLastValidState(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 }

@@ -3,10 +3,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
@@ -399,6 +396,17 @@ public class HzMbomController extends BaseController {
             model.addAttribute("type",type);
         }
         return "bomManage/mbom/mbomMaintenance/mbomSetChangeForm";
+    }
+
+    /**
+     * EBOM撤销
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "cancel",method = RequestMethod.POST)
+    public void pbomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzMbomService.backBomUtilLastValidState(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 }
 

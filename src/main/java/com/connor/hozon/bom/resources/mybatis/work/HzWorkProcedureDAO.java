@@ -77,4 +77,11 @@ public interface HzWorkProcedureDAO {
      * @return
      */
     int insertList(List<HzWorkProcedure> list,String tableName);
+
+    /**
+     * 批量删除
+     * @param puids
+     * @return
+     */
+    int deleteByPuids(List<String> puids);
 }

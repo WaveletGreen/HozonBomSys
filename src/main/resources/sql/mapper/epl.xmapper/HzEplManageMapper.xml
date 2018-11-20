@@ -1464,14 +1464,14 @@
 
 
 
-    <!--导入excel单车用量 更新EBOM信息-->
+    <!-- 更新EBOM信息-->
     <update id="HzEbomRecordDAOImpl_updateList" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
             update ${item.tableName}
             <set>
                 P_UPDATE_TIME =sysdate,
                 <if test="item.pBomLinePartName != null">
-                    P_BOM_LINE_PART_NAME = #{item.pBomLinePartName,jdbcType=INTEGER},
+                    P_BOM_LINE_PART_NAME = #{item.pBomLinePartName,jdbcType=VARCHAR},
                 </if>
                 <if test="item.pBomLinePartClass != null">
                     P_BOM_LINE_PART_CLASS = #{item.pBomLinePartClass,jdbcType=VARCHAR},

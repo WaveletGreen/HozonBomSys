@@ -49,7 +49,7 @@ public class HzChangeController extends BaseController {
         return "change/changeForm/updateChangeForm";
     }
     @RequestMapping(value = "ToChangeOrder",method = RequestMethod.GET)
-    public String getToChangeOrderToPage(Long id,Model model){
+    public String toChangeOrderPage(Long id,Model model){
         HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
         if(respDTO != null){
             model.addAttribute("data",respDTO);

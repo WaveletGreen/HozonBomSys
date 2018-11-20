@@ -1,10 +1,7 @@
 package com.connor.hozon.bom.resources.service.work.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -29,6 +26,7 @@ import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -42,6 +40,8 @@ import sql.pojo.work.HzWorkProcedure;
 import sql.pojo.work.HzWorkProcess;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @Author: haozt
@@ -70,6 +70,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
 
     @Autowired
     private HzAuditorChangeDAO hzAuditorChangeDAO;
+
+    private ExecutorService pool = Executors.newFixedThreadPool(5);
+
     @Override
     public WriteResultRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO) {
         try{
@@ -728,7 +731,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             Long orderId = reqDTO.getOrderId();
 
             //获取审核人信息
-            Long auditorId = reqDTO.getAuditorId();
+//            Long auditorId = reqDTO.getAuditorId();
             //数据库表名
             String tableName = ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName();
             //获取数据信息
@@ -788,12 +791,12 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
 
                 map.put("applicant",applicantChangeRecord);
                 //审核人
-                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
-                auditorChangeRecord.setAuditorId(auditorId);
-                auditorChangeRecord.setOrderId(reqDTO.getOrderId());
-                auditorChangeRecord.setTableName(tableName);
-
-                map.put("auditor",auditorChangeRecord);
+//                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
+//                auditorChangeRecord.setAuditorId(auditorId);
+//                auditorChangeRecord.setOrderId(reqDTO.getOrderId());
+//                auditorChangeRecord.setTableName(tableName);
+//
+//                map.put("auditor",auditorChangeRecord);
 
 
                 //启动线程进行插入操作
@@ -815,9 +818,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                                 case "applicant":
                                     hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
                                     break;
-                                case "auditor" :
-                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
-                                    break;
+//                                case "auditor" :
+//                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
+//                                    break;
                                 default:break;
                             }
                         }
@@ -838,5 +841,58 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             return WriteResultRespDTO.getFailResult();
         }
         return WriteResultRespDTO.getSuccessResult();
+    }
+
+    @Override
+    public WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO) {
+        try{
+            List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
+            HzChangeDataDetailQuery query = new HzChangeDataDetailQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuids(puids);
+            query.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
+            List<String> deleteRecords = new ArrayList<>();
+            List<HzWorkProcedure> updateRecords = new ArrayList<>();
+            List<HzWorkProcedure> updateList = new ArrayList<>();
+            pool.submit(()->{
+                List<HzWorkProcedure> list = hzWorkProcedureDAO.getHzWorkProcedureByPuids(query);
+                //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
+                if(ListUtil.isNotEmpty(list)){
+                    list.forEach(record -> {
+                        if(StringUtils.isBlank(record.getRevision())){
+                            deleteRecords.add(record.getPuid());
+                        }else {
+                            updateRecords.add(record);
+                        }
+                    });
+                }
+                if(ListUtil.isNotEmpty(updateRecords)){
+                    HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                    dataDetailQuery.setRevision(true);
+                    dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                    dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_BEFORE.getTableName());
+                    dataDetailQuery.setStatus(1);
+                    updateRecords.forEach(record -> {
+                        dataDetailQuery.setRevisionNo(record.getRevision());
+                        HzWorkProcedure manageRecord = hzWorkProcedureDAO.getHzWorkProcedureByPuidAndRevision(dataDetailQuery);
+                        if(manageRecord!=null){
+                            updateList.add(HzWorkProcedureFactory.workProcedureToProcedure(manageRecord));
+                        }
+                    });
+
+                    if(ListUtil.isNotEmpty(updateList)){
+                        hzWorkProcedureDAO.updateList(updateList);
+                    }
+                    if(ListUtil.isNotEmpty(deleteRecords)){
+                        hzWorkProcedureDAO.deleteByPuids(deleteRecords);
+                    }
+                }
+            });
+            return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
+
     }
 }

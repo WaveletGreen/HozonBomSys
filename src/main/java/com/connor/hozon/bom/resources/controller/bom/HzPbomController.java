@@ -412,7 +412,7 @@ public class HzPbomController extends BaseController {
      * @param response
      */
     @RequestMapping(value = "data/change",method = RequestMethod.POST)
-    public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+    public void pbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO respDTO = hzPbomService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
@@ -430,4 +430,16 @@ public class HzPbomController extends BaseController {
         }
         return "bomManage/pbom/pbomManage/pbomSetChangeForm";
     }
+
+    /**
+     * EBOM撤销
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "cancel",method = RequestMethod.POST)
+    public void pbomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzPbomService.backBomUtilLastValidState(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
 }

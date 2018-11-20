@@ -818,4 +818,14 @@
       </if>
     </where>
   </select>
+
+  <!--根据ids删除工艺路线-->
+  <delete id="HzWorkProcedureDAOImpl_deleteByPuids" parameterType="java.util.HashMap">
+    delete HZ_WORK_PROCEDURE
+    where puid
+    in
+    <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
+      #{puids[${index}]}
+    </foreach>
+  </delete>
 </mapper>

@@ -1,9 +1,6 @@
 package com.connor.hozon.bom.resources.service.work;
 
-import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
@@ -86,4 +83,11 @@ public interface HzWorkProcessService {
      * @return
      */
     WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
+
+    /**
+     * 数据撤销
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO);
 }

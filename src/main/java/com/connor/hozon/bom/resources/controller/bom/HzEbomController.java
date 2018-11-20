@@ -397,4 +397,14 @@ public class HzEbomController extends BaseController {
         return "bomManage/ebom/ebomManage/ebomSetChangeForm";
     }
 
+    /**
+     * EBOM撤销
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "cancel",method = RequestMethod.POST)
+    public void ebomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzEbomService.backBomUtilLastValidState(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
 }
