@@ -155,5 +155,8 @@
         <mapper resource="sql/mapper/interaction/HzSingleVehiclesMapper.xml"/>
         <!--任务-->
         <mapper resource="sql/mapper/task/HzTaskMapper.xml"/>
+        <!--derivative变更 -->
+        <mapper resource="sql/mapper/cfg/derivative/HzMDBasicChangeBeanMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/derivative/HzMDDetailChangeBeanMapper.xml"/>
     </mappers>
 </configuration>

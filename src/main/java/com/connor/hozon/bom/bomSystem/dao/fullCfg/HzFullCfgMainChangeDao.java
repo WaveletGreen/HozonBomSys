@@ -9,4 +9,8 @@ public interface HzFullCfgMainChangeDao {
     int insert(HzFullCfgMainChange record);
 
     int insertSelective(HzFullCfgMainChange record);
+
+    HzFullCfgMainChange selectByChangeId(Integer orderChangeId);
+
+    HzFullCfgMainChange selectLast(Long srcMainId);
 }

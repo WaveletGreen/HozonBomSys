@@ -54,7 +54,7 @@ public class HzFullCfgWithCfgDaoImpl extends BasicDaoImpl<HzFullCfgWithCfg> impl
     }
 
     @Override
-    public List<HzFullCfgWithCfg> selectByMainID(BigDecimal flCfgVersion) {
+    public List<HzFullCfgWithCfg> selectByMainID(Long flCfgVersion) {
         WITH_CFG.setFlCfgVersion(flCfgVersion);
         return baseSQLUtil.executeQuery(WITH_CFG,
                 clzName + ".selectByMainID");
@@ -79,7 +79,7 @@ public class HzFullCfgWithCfgDaoImpl extends BasicDaoImpl<HzFullCfgWithCfg> impl
     }
 
     @Override
-    public HzFullCfgWithCfg selectByBomLineUidWithVersion(BigDecimal version, String puid) {
+    public HzFullCfgWithCfg selectByBomLineUidWithVersion(Long version, String puid) {
         HzFullCfgWithCfg cfg = new HzFullCfgWithCfg();
         cfg.setFlCfgVersion(version);
         cfg.setCfgBomlineUid(puid);
@@ -94,7 +94,7 @@ public class HzFullCfgWithCfgDaoImpl extends BasicDaoImpl<HzFullCfgWithCfg> impl
     }
 
     @Override
-    public HzExFullCfgWithCfg selectByBLOutWithCfg(BigDecimal version, String puid) {
+    public HzExFullCfgWithCfg selectByBLOutWithCfg(Long version, String puid) {
         HzExFullCfgWithCfg cfg = new HzExFullCfgWithCfg();
         cfg.setFlCfgVersion(version);
         cfg.setCfgBomlineUid(puid);
@@ -110,7 +110,7 @@ public class HzFullCfgWithCfgDaoImpl extends BasicDaoImpl<HzFullCfgWithCfg> impl
      * @return
      */
     @Override
-    public HzExFullCfgWithCfg selectByBLOutWithCfgAndBL(BigDecimal version, String puid) {
+    public HzExFullCfgWithCfg selectByBLOutWithCfgAndBL(Long version, String puid) {
         HzExFullCfgWithCfg cfg = new HzExFullCfgWithCfg();
         cfg.setFlCfgVersion(version);
         cfg.setCfgBomlineUid(puid);

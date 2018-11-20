@@ -152,6 +152,10 @@ function initTable(url) {
                                     window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                     return false;
                                 }
+                                else if (rows[0].status == 5 || rows[0].status == 6) {
+                                    window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                    return false;
+                                }
                                 window.Ewin.dialog({
                                     title: "修改",
                                     url: "materiel/updateMBom?projectId=" + projectId + "&puid=" + rows[0].puid,
@@ -169,7 +173,11 @@ function initTable(url) {
                                 if (rows.length == 0) {
                                     window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                     return false;
+                                }else if (rows[0].status == 5 || rows[0].status == 6) {
+                                    window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
+                                    return false;
                                 }
+
                                 var _table = '<p>是否要删除您所选择的记录？</p>' +
                                     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                                 for (var index in rows) {
@@ -306,17 +314,17 @@ function initTable(url) {
                                 //     "puids": puids,
                                 // });
                                 if (rows.length == 0) {
-                                    window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                    window.Ewin.alert({message: '请选择需要变更的数据!'});
                                     return false;
                                 }
-                                // else {
-                                //     for (var i = 0; i < rows.length; i++) {
-                                //         if (rows[i].status != 4 && rows[i].status != 2) {
-                                //             window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
-                                //             return false;
-                                //         }
-                                //     }
-                                // }
+                                else {
+                                    for (var i = 0; i < rows.length; i++) {
+                                        if (rows[i].status != 4 && rows[i].status != 2) {
+                                            window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                            return false;
+                                        }
+                                    }
+                                }
                                 window.Ewin.dialog({
                                     title: "选择变更表单",
                                     url: "materiel/order/choose?projectId="+projectId+"&puids="+puids,

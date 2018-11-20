@@ -22,17 +22,17 @@ import java.util.List;
 @Configuration
 public interface HzFullCfgModelDao extends BasicDao<HzFullCfgModel> {
 
-    int deleteByPrimaryKey(BigDecimal id);
+    int deleteByPrimaryKey(Long id);
 
 
-    HzFullCfgModel selectByPrimaryKey(BigDecimal id);
+    HzFullCfgModel selectByPrimaryKey(Long id);
 
 
     List<String> selectCfg(String puid);
 
     void insertCfgs(List<HzFullCfgModel> cfgs);
 
-    List<HzFullCfgModel> selectByMainPuid(BigDecimal mainPuid);
+    List<HzFullCfgModel> selectByMainPuid(Long mainPuid);
 
     int updateByHzFullCfgModelList(List<HzFullCfgModel> hzFullCfgModels);
 

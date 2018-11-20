@@ -32,7 +32,7 @@ public class HzFullCfgWithCfg {
 
     private String flCfgBomlineName;
 
-    private BigDecimal flCfgVersion;
+    private Long flCfgVersion;
     /**
      * 操作类型,1新增，2更新，3删除
      */
@@ -106,11 +106,11 @@ public class HzFullCfgWithCfg {
         this.flCfgBomlineName = flCfgBomlineName;
     }
 
-    public BigDecimal getFlCfgVersion() {
+    public Long getFlCfgVersion() {
         return flCfgVersion;
     }
 
-    public void setFlCfgVersion(BigDecimal flCfgVersion) {
+    public void setFlCfgVersion(Long flCfgVersion) {
         this.flCfgVersion = flCfgVersion;
     }
 

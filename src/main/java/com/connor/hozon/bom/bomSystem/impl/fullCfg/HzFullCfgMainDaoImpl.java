@@ -28,19 +28,19 @@ public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements
     }
 
     @Override
-    public int deleteByPrimaryKey(BigDecimal id) {
+    public int deleteByPrimaryKey(Long id) {
         HZ_FULL_CFG_MAIN.setId(id);
         return baseSQLUtil.executeDelete(HZ_FULL_CFG_MAIN, clzName + ".deleteByPrimaryKey");
     }
 
     @Override
-    public BigDecimal insertBackId(HzFullCfgMain record) {
+    public Long insertBackId(HzFullCfgMain record) {
         baseSQLUtil.executeInsert(record, clzName + ".insertBackId");
         return record.getId();
     }
 
     @Override
-    public HzFullCfgMain selectByPrimaryKey(BigDecimal id) {
+    public HzFullCfgMain selectByPrimaryKey(Long id) {
         HZ_FULL_CFG_MAIN.setId(id);
         return baseSQLUtil.executeQueryById(HZ_FULL_CFG_MAIN, clzName + ".selectByPrimaryKey");
     }

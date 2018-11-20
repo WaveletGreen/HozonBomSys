@@ -4,7 +4,6 @@ import lombok.Data;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -31,7 +30,7 @@ public class HzExFullCfgWithCfg {
 
     private String flCfgBomlineName;
 
-    private BigDecimal flCfgVersion;
+    private Long flCfgVersion;
     /**
      * 操作类型,1新增，2更新，3删除
      */
