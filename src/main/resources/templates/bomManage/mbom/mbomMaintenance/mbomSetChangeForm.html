@@ -10,7 +10,7 @@
                 <input id="puids" type="hidden" th:value="${puids}">
                 <input id="type" type="hidden" th:value="${type}">
                 <div class="form-group">
-                    <label for="stage">阶段</label>
+                    <label for="stage">选择变更表单</label>
                     <select class="form-control" id="stage" name="stage">
                         <option th:each="model:${data}"
                                 th:value="${model.getId()}"

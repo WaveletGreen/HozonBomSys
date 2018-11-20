@@ -402,7 +402,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     @Override
     public HzPbomLineRecord getPBomRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
         Map<String,Object> map = new HashMap<>();
-        map.put("puids", query.getPuids());
+        map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
             map.put("revision",query.getRevision()?null:query.getRevisionNo());

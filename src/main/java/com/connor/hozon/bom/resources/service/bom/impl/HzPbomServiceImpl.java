@@ -34,6 +34,7 @@ import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,8 @@ import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeDataRecord;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 
@@ -91,6 +94,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
     private HzAuditorChangeDAO hzAuditorChangeDAO;
 
+    private ExecutorService pool = Executors.newFixedThreadPool(5);
     @Override
     public WriteResultRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
         WriteResultRespDTO respDTO = new WriteResultRespDTO();
@@ -1166,7 +1170,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             Long orderId = reqDTO.getOrderId();
 
             //获取审核人信息
-            Long auditorId = reqDTO.getAuditorId();
+//            Long auditorId = reqDTO.getAuditorId();
             //数据库表名
             String tableName = ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName();
             //获取数据信息
@@ -1227,12 +1231,12 @@ public class HzPbomServiceImpl implements HzPbomService {
 
                 map.put("applicant",applicantChangeRecord);
                 //审核人
-                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
-                auditorChangeRecord.setAuditorId(auditorId);
-                auditorChangeRecord.setOrderId(reqDTO.getOrderId());
-                auditorChangeRecord.setTableName(tableName);
-
-                map.put("auditor",auditorChangeRecord);
+//                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
+//                auditorChangeRecord.setAuditorId(auditorId);
+//                auditorChangeRecord.setOrderId(reqDTO.getOrderId());
+//                auditorChangeRecord.setTableName(tableName);
+//
+//                map.put("auditor",auditorChangeRecord);
 
 
                 //启动线程进行插入操作
@@ -1254,9 +1258,9 @@ public class HzPbomServiceImpl implements HzPbomService {
                                 case "applicant":
                                     hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
                                     break;
-                                case "auditor" :
-                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
-                                    break;
+//                                case "auditor" :
+//                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
+//                                    break;
                                 default:break;
                             }
                         }
@@ -1277,6 +1281,59 @@ public class HzPbomServiceImpl implements HzPbomService {
             return WriteResultRespDTO.getFailResult();
         }
         return WriteResultRespDTO.getSuccessResult();
+    }
+
+    @Override
+    public WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO) {
+        try{
+            List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
+            HzChangeDataDetailQuery query = new HzChangeDataDetailQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuids(puids);
+            query.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+            StringBuffer deletePuids = new StringBuffer();
+            List<HzPbomLineRecord> updateRecords = new ArrayList<>();
+            List<HzPbomLineRecord> updateList = new ArrayList<>();
+            pool.submit(()->{
+                List<HzPbomLineRecord> list = hzPbomRecordDAO.getPbomRecordsByPuids(query);
+                //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
+                if(ListUtil.isNotEmpty(list)){
+                    list.forEach(record -> {
+                        if(StringUtils.isBlank(record.getRevision())){
+                            deletePuids.append(record.geteBomPuid()+",");
+                        }else {
+                            updateRecords.add(record);
+                        }
+                    });
+                }
+                if(ListUtil.isNotEmpty(updateRecords)){
+                    HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                    dataDetailQuery.setRevision(true);
+                    dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                    dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_BEFORE.getTableName());
+                    dataDetailQuery.setStatus(1);
+                    updateRecords.forEach(record -> {
+                        dataDetailQuery.setRevisionNo(record.getRevision());
+                        HzPbomLineRecord manageRecord = hzPbomRecordDAO.getPBomRecordByPuidAndRevision(dataDetailQuery);
+                        if(manageRecord!=null){
+                            updateList.add(HzPbomRecordFactory.bomLineRecordToBomRecord(manageRecord));
+                        }
+                    });
+
+                    if(ListUtil.isNotEmpty(updateList)){
+                        hzPbomRecordDAO.updateList(updateList);
+                    }
+                    if(StringUtils.isNotBlank(deletePuids.toString())){
+                        hzPbomRecordDAO.deleteByPuids(deletePuids.toString());
+                    }
+
+                }
+            });
+            return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
     }
 
     /**

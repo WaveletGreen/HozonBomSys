@@ -265,7 +265,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     @Override
     public HzMaterielRecord getMaterialRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
         Map<String,Object> map = new HashMap<>();
-        map.put("puids", query.getPuids());
+        map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
             map.put("revision",query.getRevision()?null:query.getRevisionNo());

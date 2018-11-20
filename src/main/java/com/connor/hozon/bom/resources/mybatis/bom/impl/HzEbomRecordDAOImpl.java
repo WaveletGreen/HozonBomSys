@@ -112,6 +112,13 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public int deleteByPuids(List<String> puids) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puids",puids);
+        return super.delete("HzEbomRecordDAOImpl_deleteByPuids",map);
+    }
+
+    @Override
     public int updateList(List<HzBomLineRecord> records) {
         try {
             if (ListUtil.isNotEmpty(records)) {
@@ -322,7 +329,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     @Override
     public HzEPLManageRecord getEBomRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
         Map<String,Object> map = new HashMap<>();
-        map.put("puids", query.getPuids());
+        map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
             map.put("revision",query.getRevision()?null:query.getRevisionNo());

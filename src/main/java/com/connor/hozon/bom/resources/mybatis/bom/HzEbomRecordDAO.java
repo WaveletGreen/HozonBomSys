@@ -57,6 +57,12 @@ public interface HzEbomRecordDAO {
     int delete(String puid);
 
     /**
+     * 删除 直接delete
+     * @param puids
+     * @return
+     */
+    int deleteByPuids(List<String> puids);
+    /**
      * EBOM 批量更新 根据零件号来更新
      * @param records
      * @return

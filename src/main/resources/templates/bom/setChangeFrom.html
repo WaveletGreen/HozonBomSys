@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="stage">阶段</label>
+                    <label for="stage">选择变更表单</label>
                     <select class="form-control" id="stage" name="stage">
                         <option th:each="model:${changeFroms}"
                                 th:value="${model.getId()}"

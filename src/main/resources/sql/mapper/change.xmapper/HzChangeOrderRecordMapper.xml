@@ -225,6 +225,9 @@
     WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
   </select>
 
+  <select id="">
+    select  t1.*,t2.user_name
+  </select>
 
   <select id="HzChangeOrderDAOImpl_findHzChangeOrderTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
    SELECT count(*)
