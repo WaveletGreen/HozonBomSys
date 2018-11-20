@@ -22,3 +22,7 @@ $(document).ready(function () {
     table +="</tr>"
     $("#changeOrderTable").html(table) ;
 })
+
+function doReturn() {
+    window.location.href="javascript:history.go(-1);"
+}

@@ -146,13 +146,13 @@ $(document).ready(function () {
     b.append('<div style="text-align:center;margin:50px 0; font:normal 14px/24px \'MicroSoft YaHei\';"></div>');
     context.settings({compress: true});   //字体属性大小
     context.attach('html', [
-        {header: '&emsp;快捷操作'},
+        // {header: '&emsp;快捷操作'},
         {divider: true},
         {text: '关闭其他标签页', href: 'javascript:void(0)', func: "closeOthers()"},
         {divider: true},
         {text: '关闭左边所有标签页', href: 'javascript:void(0)', func: "closeLeft()"},
-        {divider: true},
-        {text: '关闭右边所有标签页', href: 'javascript:void(0)', func: "closeRigth()"},
+        // {divider: true},
+        // {text: '关闭右边所有标签页', href: 'javascript:void(0)', func: "closeRigth()"},
         {divider: true},      //控制实线
         {text: '关闭所有标签页', href: 'javascript:void(0)', func: "closeAll()"},
     ]);
