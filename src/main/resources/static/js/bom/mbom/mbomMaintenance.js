@@ -709,7 +709,7 @@ function initTable1(mBomUrl) {
                             //     "puids": puids,
                             // });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
