@@ -17,10 +17,10 @@ function doQuery() {
 }
 
 function formatDate() {
-    let startdate = stringToDateFormat($('#startdate').data("time"));
-    let enddate = stringToDateFormat($('#enddate').data("time"));
-    $('#startdate').val(startdate);
-    $('#enddate').val(enddate);
+    let firstOriginTime = stringToDateFormat($('#firstOriginTime').data("time"));
+    let lastOriginTime = stringToDateFormat($('#lastOriginTime').data("time"));
+    $('#firstOriginTime').val(firstOriginTime);
+    $('#lastOriginTime').val(lastOriginTime);
 }
 
 function initTable(url) {

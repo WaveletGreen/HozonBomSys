@@ -17,10 +17,10 @@ function doQuery() {
 }
 
 function formatDate() {
-    let startdate = stringToDateFormat($('#startdate').data("time"));
-    let enddate = stringToDateFormat($('#enddate').data("time"));
-    $('#startdate').val(startdate);
-    $('#enddate').val(enddate);
+    let firstOriginTime = stringToDateFormat($('#firstOriginTime').data("time"));
+    let lastOriginTime = stringToDateFormat($('#lastOriginTime').data("time"));
+    $('#firstOriginTime').val(firstOriginTime);
+    $('#lastOriginTime').val(lastOriginTime);
 }
 
 function initTable(url) {
@@ -28,7 +28,7 @@ function initTable(url) {
     var column = [];
     column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
-        field: 'ewoNo',
+        field: 'changeNo',
         title: '变更单号',
         align: 'center',
         valign: 'middle',
@@ -39,11 +39,11 @@ function initTable(url) {
             ].join("");
         }
     });
-    column.push({field: 'formCreateTime', title: '发起时间', align: 'center', valign: 'middle'});
-    column.push({field: 'dept', title: '部门', align: 'center', valign: 'middle'});
+    column.push({field: 'originTime', title: '发起时间', align: 'center', valign: 'middle'});
+    column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
-    column.push({field: 'originator', title: '项目', align: 'center', valign: 'middle'})
+    column.push({field: 'originator', title: '项目', align: 'center', valign: 'middle'});
     $table.bootstrapTable({
         url: url,
         method: 'get',

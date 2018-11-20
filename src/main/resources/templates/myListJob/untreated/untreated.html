@@ -12,8 +12,8 @@
         <div class="panel-body">
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"id="queryUntreated">
                 <div class="form-group">
-                    <label for="VWOnum1">变更单号:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="changeNo" id="VWOnum1"
+                    <label for="changeNo">变更单号:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="changeNo" id="changeNo"
                            placeholder="请输入变更单号"/>
                 </div>
                 <!--<div class="form-group">-->
@@ -22,14 +22,14 @@
                            <!--placeholder="请输入部门"/>-->
                 <!--</div>-->
                 <div class="form-group">
-                    <label for="VWOnum1">发起人:</label>
-                    <input type="text" style="width: 150px;" class="form-control" name="originator" id="VWOnum3"
+                    <label for="originator">发起人:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="originator" id="originator"
                            placeholder="请输入发起人"/>
                 </div>
                 <div class="form-group">
-                    <label for="VWOnum1">开始日期:</label>
-                    <input class="form-control head-input-set" name="firstOriginTime" id="startdate" type="date"/>~
-                    <input class="form-control head-input-set" name="lastOriginTime" id="enddate" type="date"/>
+                    <label for="firstOriginTime">开始日期:</label>
+                    <input class="form-control head-input-set" name="firstOriginTime" id="firstOriginTime" type="date"/>~
+                    <input class="form-control head-input-set" name="lastOriginTime" id="lastOriginTime" type="date"/>
                 </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
