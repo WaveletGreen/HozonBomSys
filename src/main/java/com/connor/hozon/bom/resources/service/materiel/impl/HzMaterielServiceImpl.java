@@ -387,14 +387,12 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                             updateList.add(HzMaterielFactory.hzMaterielRecordToMaterielRecord(manageRecord));
                         }
                     });
-
-                    if(ListUtil.isNotEmpty(updateList)){
-                        hzMaterielDAO.updateList(updateList);
-                    }
-                    if(ListUtil.isNotEmpty(deleteRecords)){
-                        hzMaterielDAO.deleteMaterielList(deleteRecords);
-                    }
-
+                }
+                if(ListUtil.isNotEmpty(updateList)){
+                    hzMaterielDAO.updateList(updateList);
+                }
+                if(ListUtil.isNotEmpty(deleteRecords)){
+                    hzMaterielDAO.deleteMaterielList(deleteRecords);
                 }
             });
             return WriteResultRespDTO.getSuccessResult();

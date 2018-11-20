@@ -1043,11 +1043,26 @@ public class HzMbomServiceImpl implements HzMbomService{
             List<HzMbomLineRecord> deleteRecords = new ArrayList<>();
             List<HzMbomLineRecord> updateRecords = new ArrayList<>();
             List<HzMbomLineRecord> updateList = new ArrayList<>();
+            Set<HzMbomLineRecord> set = new HashSet<>();
             pool.submit(()->{
                 List<HzMbomLineRecord> list = hzMbomRecordDAO.getMbomRecordsByPuids(query);
                 //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
                 if(ListUtil.isNotEmpty(list)){
-                    list.forEach(record -> {
+                    list.forEach(r->{
+                        if(1==r.getIsHas()){
+                            HzMbomTreeQuery ebomTreeQuery = new HzMbomTreeQuery();
+                            ebomTreeQuery.setProjectId(reqDTO.getProjectId());
+                            ebomTreeQuery.setPuid(r.geteBomPuid());
+                            List<HzMbomLineRecord> l = hzMbomRecordDAO.getHzMbomTree(ebomTreeQuery);
+                            if(ListUtil.isNotEmpty(l))
+                                set.addAll(l);
+                        }else {
+                            set.add(r);
+                        }
+                    });
+                }
+                if(ListUtil.isNotEmpty(set)){
+                    set.forEach(record -> {
                         if(StringUtils.isBlank(record.getRevision())){
                             deleteRecords.add(record);
                         }else {
@@ -1068,16 +1083,14 @@ public class HzMbomServiceImpl implements HzMbomService{
                             updateList.add(HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(manageRecord));
                         }
                     });
-
-                    if(ListUtil.isNotEmpty(updateList)){
-                        hzMbomRecordDAO.updateList(updateList);
-                    }
-                    if(ListUtil.isNotEmpty(deleteRecords)){
-                        HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-                        vo.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"M"));
-                        hzMbomRecordDAO.deleteMbomList(vo);
-                    }
-
+                }
+                if(ListUtil.isNotEmpty(updateList)){
+                    hzMbomRecordDAO.updateList(updateList);
+                }
+                if(ListUtil.isNotEmpty(deleteRecords)){
+                    HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
+                    vo.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"M"));
+                    hzMbomRecordDAO.deleteMbomList(vo);
                 }
             });
             return WriteResultRespDTO.getSuccessResult();

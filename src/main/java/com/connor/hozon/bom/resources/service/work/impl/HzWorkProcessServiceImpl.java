@@ -879,13 +879,13 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                             updateList.add(HzWorkProcedureFactory.workProcedureToProcedure(manageRecord));
                         }
                     });
+                }
 
-                    if(ListUtil.isNotEmpty(updateList)){
-                        hzWorkProcedureDAO.updateList(updateList);
-                    }
-                    if(ListUtil.isNotEmpty(deleteRecords)){
-                        hzWorkProcedureDAO.deleteByPuids(deleteRecords);
-                    }
+                if(ListUtil.isNotEmpty(updateList)){
+                    hzWorkProcedureDAO.updateList(updateList);
+                }
+                if(ListUtil.isNotEmpty(deleteRecords)){
+                    hzWorkProcedureDAO.deleteByPuids(deleteRecords);
                 }
             });
             return WriteResultRespDTO.getSuccessResult();

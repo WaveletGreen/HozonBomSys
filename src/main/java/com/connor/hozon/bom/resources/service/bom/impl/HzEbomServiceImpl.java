@@ -53,6 +53,7 @@ import sql.redis.SerializeUtil;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Created by haozt on 2018/06/06
@@ -2030,11 +2031,27 @@ public class HzEbomServiceImpl implements HzEbomService {
             List<String> deletePuids = new ArrayList<>();
             List<HzEPLManageRecord> updateRecords = new ArrayList<>();
             List<HzBomLineRecord> updateList = new ArrayList<>();
+            Set<HzEPLManageRecord> set = new HashSet<>();
             pool.submit(()->{
                 List<HzEPLManageRecord> list = hzEbomRecordDAO.getEbomRecordsByPuids(query);
+                //带子层撤销
                 //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
                 if(ListUtil.isNotEmpty(list)){
-                    list.forEach(record -> {
+                    list.forEach(r->{
+                        if(1==r.getIsHas()){
+                            HzEbomTreeQuery ebomTreeQuery = new HzEbomTreeQuery();
+                            ebomTreeQuery.setProjectId(reqDTO.getProjectId());
+                            ebomTreeQuery.setPuid(r.getPuid());
+                            List<HzEPLManageRecord> l = hzEbomRecordDAO.getHzBomLineChildren(ebomTreeQuery);
+                            if(ListUtil.isNotEmpty(l))
+                            set.addAll(l);
+                        }else {
+                           set.add(r);
+                        }
+                    });
+                }
+                if(ListUtil.isNotEmpty(set)){
+                    set.forEach(record -> {
                         if(StringUtils.isBlank(record.getRevision())){
                             deletePuids.add(record.getPuid());
                         }else {
@@ -2055,15 +2072,14 @@ public class HzEbomServiceImpl implements HzEbomService {
                             updateList.add(HzEbomRecordFactory.eplRecordToBomLineRecord(manageRecord));
                         }
                     });
-
-                    if(ListUtil.isNotEmpty(updateList)){
-                        hzBomLineRecordDao.updateBatch(updateList);
-                    }
-                    if(ListUtil.isNotEmpty(deletePuids)){
-                        hzEbomRecordDAO.deleteByPuids(deletePuids);
-                    }
-
                 }
+                if(ListUtil.isNotEmpty(updateList)){
+                    hzEbomRecordDAO.updateList(updateList);
+                }
+                if(ListUtil.isNotEmpty(deletePuids)){
+                    hzEbomRecordDAO.deleteByPuids(deletePuids);
+                }
+
             });
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){

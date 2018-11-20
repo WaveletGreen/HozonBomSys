@@ -1294,11 +1294,26 @@ public class HzPbomServiceImpl implements HzPbomService {
             StringBuffer deletePuids = new StringBuffer();
             List<HzPbomLineRecord> updateRecords = new ArrayList<>();
             List<HzPbomLineRecord> updateList = new ArrayList<>();
+            Set<HzPbomLineRecord> set = new HashSet<>();
             pool.submit(()->{
                 List<HzPbomLineRecord> list = hzPbomRecordDAO.getPbomRecordsByPuids(query);
                 //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
                 if(ListUtil.isNotEmpty(list)){
-                    list.forEach(record -> {
+                    list.forEach(r->{
+                        if(1==r.getIsHas()){
+                            HzPbomTreeQuery ebomTreeQuery = new HzPbomTreeQuery();
+                            ebomTreeQuery.setProjectId(reqDTO.getProjectId());
+                            ebomTreeQuery.setPuid(r.geteBomPuid());
+                            List<HzPbomLineRecord> l = hzPbomRecordDAO.getHzPbomTree(ebomTreeQuery);
+                            if(ListUtil.isNotEmpty(l))
+                                set.addAll(l);
+                        }else {
+                            set.add(r);
+                        }
+                    });
+                }
+                if(ListUtil.isNotEmpty(set)){
+                    set.forEach(record -> {
                         if(StringUtils.isBlank(record.getRevision())){
                             deletePuids.append(record.geteBomPuid()+",");
                         }else {
@@ -1319,14 +1334,12 @@ public class HzPbomServiceImpl implements HzPbomService {
                             updateList.add(HzPbomRecordFactory.bomLineRecordToBomRecord(manageRecord));
                         }
                     });
-
-                    if(ListUtil.isNotEmpty(updateList)){
-                        hzPbomRecordDAO.updateList(updateList);
-                    }
-                    if(StringUtils.isNotBlank(deletePuids.toString())){
-                        hzPbomRecordDAO.deleteByPuids(deletePuids.toString());
-                    }
-
+                }
+                if(ListUtil.isNotEmpty(updateList)){
+                    hzPbomRecordDAO.updateList(updateList);
+                }
+                if(StringUtils.isNotBlank(deletePuids.toString())){
+                    hzPbomRecordDAO.deleteListByPuids(deletePuids.toString());
                 }
             });
             return WriteResultRespDTO.getSuccessResult();
