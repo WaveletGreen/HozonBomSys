@@ -13,6 +13,7 @@ import com.connor.hozon.bom.bomSystem.iservice.task.IHzTaskService;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.service.TreeService;
@@ -49,6 +50,8 @@ public class HzTasksService implements IHzTaskService {
     @Autowired
     HzVwoInfoService hzVwoInfoService;
 
+    @Autowired
+    private HzWorkListDAO hzWorkListDAO;
 
     private final static Logger LOGGER = LoggerFactory.getLogger(HzTasksService.class);
 
@@ -214,6 +217,9 @@ public class HzTasksService implements IHzTaskService {
                     default:
                         break;
                 }
+                //HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
+                //int count = hzWorkListDAO.count(user.getLogin(),info.getProjectUid());
+
                 dto.setReserve("");
                 dto.setReserve2("");
                 dto.setReserve3("");

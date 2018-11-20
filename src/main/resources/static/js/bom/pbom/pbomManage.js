@@ -190,6 +190,10 @@ function initTable(pBomUrl) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
@@ -215,6 +219,10 @@ function initTable(pBomUrl) {
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -321,6 +329,10 @@ function initTable(pBomUrl) {
                             //只能选一条
                             if (rows.length != 1) {
                                 window.Ewin.alert({message: '请选择一条需要添加工艺辅料的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能添加工艺辅料!'});
                                 return false;
                             }
                             window.Ewin.dialog({
@@ -657,6 +669,10 @@ function initTable1(pBomUrl,lineIds) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
@@ -682,6 +698,10 @@ function initTable1(pBomUrl,lineIds) {
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -788,6 +808,10 @@ function initTable1(pBomUrl,lineIds) {
                             //只能选一条
                             if (rows.length != 1) {
                                 window.Ewin.alert({message: '请选择一条需要添加工艺辅料的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能添加工艺辅料!'});
                                 return false;
                             }
                             window.Ewin.dialog({

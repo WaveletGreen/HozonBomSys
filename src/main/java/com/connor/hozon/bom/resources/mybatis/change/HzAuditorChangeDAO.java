@@ -2,6 +2,8 @@ package com.connor.hozon.bom.resources.mybatis.change;
 
 import sql.pojo.change.HzAuditorChangeRecord;
 
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/11/14
@@ -14,4 +16,12 @@ public interface HzAuditorChangeDAO {
      * @return
      */
     int insert(HzAuditorChangeRecord record);
+
+    //待办事项
+    List<HzAuditorChangeRecord> findAuditorList(HzAuditorChangeRecord record);
+    //已处理事项
+    List<HzAuditorChangeRecord> findAuditorList2(HzAuditorChangeRecord record);
+
+    //统计任务个数
+    int count(int userId);
 }

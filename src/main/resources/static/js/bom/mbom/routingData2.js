@@ -149,6 +149,10 @@ function initTable(url) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "work/process/updateWorkProcess2?projectId="+projectId+"&materielId="+rows[0].materielId+"&procedureDesc="+rows[0].pProcedureDesc,
@@ -167,7 +171,10 @@ function initTable(url) {
                                 window.Ewin.alert({message:'请先选择工艺路线'})
                                 return false;
                             }
-
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             for (var i = 0; i < rows.length; i++) {
                                 for (var j = i+1; j < rows.length; j++) {
                                     if(rows[i].materielId==rows[j].materielId){
@@ -222,6 +229,10 @@ function initTable(url) {
                             var procedureDesc = [];
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -279,6 +290,10 @@ function initTable(url) {
                                 window.Ewin.alert({message: '请选择一条需要发送的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
+                                return false;
+                            }
                             var _table = '<p>是否要发送您所选择的记录？</p>' +
                                 '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                             for (var index in rows) {
@@ -322,6 +337,10 @@ function initTable(url) {
                                 window.Ewin.alert({message: '请选择一条需要发送的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
+                                return false;
+                            }
                             var _table = '<p>是否要发送您所选择的记录？</p>' +
                                 '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
                             for (var index in rows) {
@@ -363,6 +382,10 @@ function initTable(url) {
                             var projectId = $("#project", window.top.document).val();
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要发送的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
                                 return false;
                             }
                             var _table = '<p>是否要发送您所选择的记录？</p>' +
@@ -413,17 +436,17 @@ function initTable(url) {
                             //     "puids": puids,
                             // });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
-                            // else {
-                            //     for (var i = 0; i < rows.length; i++) {
-                            //         if (rows[i].status != 4 && rows[i].status != 2) {
-                            //             window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
-                            //             return false;
-                            //         }
-                            //     }
-                            // }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                                        return false;
+                                    }
+                                }
+                            }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
                                 url: "work/process/order/choose?projectId="+projectId+"&puids="+puids,

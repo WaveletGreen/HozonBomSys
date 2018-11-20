@@ -261,7 +261,7 @@ function initTable(eBomUrl) {
                                 return false;
                             }
                             else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -434,6 +434,10 @@ function initTable(eBomUrl) {
                             //只能选一条进行层级调整
                             if (rows.length != 1) {
                                 window.Ewin.alert({message: '请选择一条需要引用层级的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能引用层级!'});
                                 return false;
                             }
                             //判断选中行是否有子层
@@ -853,7 +857,7 @@ function initTable1(eBomUrl, puids) {
                                 return false;
                             }
                             else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -1030,6 +1034,10 @@ function initTable1(eBomUrl, puids) {
                             //只能选一条进行层级调整
                             if (rows.length != 1) {
                                 window.Ewin.alert({message: '请选择一条需要引用层级的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能引用层级!'});
                                 return false;
                             }
                             //判断选中行是否有子层
