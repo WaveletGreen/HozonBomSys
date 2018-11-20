@@ -16,10 +16,9 @@ public interface IInterruptionCallBack {
     /**
      * 中断操作
      *
-     * @param vwoId vwo变更流程ID
-     * @param projectUId 项目UID
+     * @param formId vwo变更流程ID
+     * @param params 项目UID
      * @return
      */
-    boolean interrupt(Long vwoId, String projectUId);
-
+    boolean interrupt(Long formId,Object ... params);
 }

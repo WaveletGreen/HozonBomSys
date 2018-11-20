@@ -136,7 +136,7 @@ function initTable(projectUid) {
                     }
                     window.Ewin.dialog({
                         title: "修改",
-                        url: "change/updatePage?id="+rows[0].id,
+                        url: "change/updatePage?id=" + rows[0].id,
                         gridId: "gridId",
                         width: 500,
                         height: 500
@@ -214,29 +214,42 @@ function initTable(projectUid) {
                         window.Ewin.alert({message: '请选择一条需要发起流程的数据!'});
                         return false;
                     }
-                    window.Ewin.confirm({title: '提示', message: "确定要确定发起流程吗?", width: 500}).on(function (e) {
-                        if (e) {
-                            $.ajax({
-                                type: "",
-                                //ajax需要添加打包名
-                                url: "change/delete?id=" + rows[0].id,
-                                // data: myData,
-                                // contentType: "application/json",
-                                success: function (result) {
-                                    if (result.success) {
-                                        layer.msg('发起流程成功', {icon: 1, time: 2000})
-                                    }
-                                    else if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg})
-                                    }
-                                    $table.bootstrapTable("refresh");
-                                },
-                                error: function (info) {
-                                    window.Ewin.alert({message: "发起流程删除:" + info.status});
-                                }
-                            })
+                    for (let i in rows) {
+                        if ("1" == rows[i].state || 1 == rows[i].state) {
+                            window.Ewin.alert({message: '已有表单完成，请取消选中已完成的表单'});
+                            return;
                         }
+                    }
+                    window.Ewin.dialog({
+                        title: "选择审核人",
+                        url: "process/getAuditorPage",
+                        gridId: "getAuditorPage",
+                        width: 500,
+                        height: 500
                     });
+                    // window.Ewin.confirm({title: '提示', message: "确定要确定发起流程吗?", width: 500}).on(function (e) {
+                    //     if (e) {
+                    //         $.ajax({
+                    //             type: "",
+                    //             //ajax需要添加打包名
+                    //             url: "../process/delete?id=" + rows[0].id,
+                    //             // data: myData,
+                    //             // contentType: "application/json",
+                    //             success: function (result) {
+                    //                 if (result.success) {
+                    //                     layer.msg('发起流程成功', {icon: 1, time: 2000})
+                    //                 }
+                    //                 else if (!result.success) {
+                    //                     window.Ewin.alert({message: result.errMsg})
+                    //                 }
+                    //                 $table.bootstrapTable("refresh");
+                    //             },
+                    //             error: function (info) {
+                    //                 window.Ewin.alert({message: "发起流程删除:" + info.status});
+                    //             }
+                    //         })
+                    //     }
+                    // });
                 }
             },
         ],
