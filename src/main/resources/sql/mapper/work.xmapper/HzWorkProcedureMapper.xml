@@ -776,37 +776,45 @@
 
 
   <select id="HzWorkProcedureDAOImpl_getHzWorkProcedureByPuids" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-    select * from ${tableName} t
+    SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t2.*,
+    t3.P_WORK_CODE,t3.P_WORK_DESC,
+    t4.P_FACTORY_CODE  FROM HZ_MATERIEL_RECORD t1 LEFT OUTER JOIN ${tableName} t2 on T1.puid = T2.P_MATERIEL_PUID
+    LEFT OUTER JOIN HZ_WORK_CENTER t3 ON t2.P_Work_PUID=t3.PUID
+    LEFT OUTER JOIN HZ_FACTORY t4 ON t2.P_FACTORYID = t4.PUID
     <where>
-      t.P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
+      t2.P_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
       <if test="puids != null and puids.size()>0">
-        and t.puid in
+        and t2.puid in
         <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
           #{puids[${index}]}
         </foreach>
       </if>
       <if test="revision!= null">
-        and P_REVISION is not null
+        and t2.P_REVISION is not null
       </if>
       <if test="status != null">
-        and P_STATUS = #{status,jdbcType=INTEGER}
+        and t2.P_STATUS = #{status,jdbcType=INTEGER}
       </if>
       <if test="orderId != null">
-        and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
+        and t2.P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
       </if>
     </where>
   </select>
 
   <select id="HzWorkProcedureDAOImpl_getHzWorkProcedureByPuidAndRevision" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-    select * from ${tableName} t
+    SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t2.*,
+    t3.P_WORK_CODE,t3.P_WORK_DESC,
+    t4.P_FACTORY_CODE  FROM HZ_MATERIEL_RECORD t1 LEFT OUTER JOIN ${tableName} t2 on T1.puid = T2.P_MATERIEL_PUID
+    LEFT OUTER JOIN HZ_WORK_CENTER t3 ON t2.P_Work_PUID=t3.PUID
+    LEFT OUTER JOIN HZ_FACTORY t4 ON t2.P_FACTORYID = t4.PUID
     <where>
-      t.P_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
-      and t.puid =#{puid}
+      t2.P_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+      and t2.puid =#{puid}
       <if test="revision!= null">
-        and P_REVISION =#{revision,jdbcType=VARCHAR}
+        and t2.P_REVISION =#{revision,jdbcType=VARCHAR}
       </if>
       <if test="status != null">
-        and P_STATUS = #{status,jdbcType=INTEGER}
+        and t2.P_STATUS = #{status,jdbcType=INTEGER}
       </if>
     </where>
   </select>
