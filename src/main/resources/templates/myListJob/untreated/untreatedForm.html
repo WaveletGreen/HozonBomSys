@@ -143,6 +143,9 @@
                         <input class="form-control" id="opiBomMngOptionDate" type="text"
                                disabled="disabled"/>
                     </div>
+                    <div class="form-group">
+                        <button type="button" id="saveBtn" onclick="doSave();" class="btn btn-primary" style="width: 400px;margin-left: 35px">保存</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -169,6 +172,9 @@
         table +="</tr>"
         $("#untreatedFormTable").html(table) ;
     })
+    function doSave() {
+
+    }
 </script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:src="@{/js/helper/taskHelper.js}"></script>

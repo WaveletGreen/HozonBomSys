@@ -6,16 +6,24 @@
  */
 
 $(document).ready((function () {
-    doQuery();
+    var projectId = $("#project", window.top.document).val();
+    var url = "change/order/list?projectId=" + projectId;
+    initTable(url);
 }))
 
 //刷新
 function doRefresh(projectUid) {
-    initTable(projectUid);
+    $('#changeFormTable').bootstrapTable('destroy');
+    var url = "change/order/list?projectId=" + projectUid;
+    initTable(url);
 }
 
 function doQuery() {
-    initTable(getProjectUid());
+    $('#changeFormTable').bootstrapTable('destroy');
+    var projectId = $("#project", window.top.document).val();
+    var url = "change/order/list?projectId=" + projectId;
+    initTable(url);
+
 }
 
 function formatDate() {
@@ -25,11 +33,11 @@ function formatDate() {
     $('#enddate').val(vwoEndEffectiveTime);
 }
 
-function initTable(projectUid) {
-    if (!checkIsSelectProject(projectUid)) {
+function initTable(url) {
+    var projectId = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectId)) {
         return;
     }
-    var projectId = $("#project", window.top.document).val();
     var $table = $("#changeFormTable");
     var column = [];
     column.push({field: 'ck', checkbox: true, width: 50});
@@ -67,30 +75,8 @@ function initTable(projectUid) {
     column.push({field: 'marketType', title: '上市类型', align: 'center', valign: 'middle'});
     column.push({field: 'projectStage', title: '项目所属阶段', align: 'center', valign: 'middle'});
     column.push({field: 'remark', title: '备注', align: 'center', valign: 'middle'});
-    // column.push({field: 'state', title: '变更状态', align: 'center', valign: 'middle'});
-    // $.ajax({
-    //     url: "ebom/title?projectId=" + projectPuid,
-    //     type: "GET",
-    //     success: function (result) {
-    //         var column = [];
-    // var data = result.data;
-    // var keys = [];
-    // var values;
-    // for (var key in data) {
-    //     if (data.hasOwnProperty(key)) {
-    //         var json = {
-    //             field: key,
-    //             title: data[key],
-    //             align:
-    //                 'center',
-    //             valign:
-    //                 'middle'
-    //         };
-    //         column.push(json);
-    //     }
-    // };
     $table.bootstrapTable({
-        url: "change/order/list?projectId=" + projectUid,
+        url: url,
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),
