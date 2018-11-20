@@ -6,35 +6,26 @@
  */
 
 $(document).ready((function () {
-    doQuery();
+    var url = "untreated/infoList";
+    initTable(url);
 }))
 
-//刷新
-function doRefresh(projectUid) {
-    initTable(projectUid);
-}
 function doQuery() {
-    initTable(getProjectUid());
+    var url = "untreated/infoList";
+    initTable(url);
+    $('#untreatedTable').bootstrapTable('destroy');
 }
+
 function formatDate() {
     let startdate = stringToDateFormat($('#startdate').data("time"));
     let enddate = stringToDateFormat($('#enddate').data("time"));
-    $('#startdate').val(finishTime);
-    $('#enddate').val(vwoEndEffectiveTime);
+    $('#startdate').val(startdate);
+    $('#enddate').val(enddate);
 }
-function initTable(projectUid) {
-    if (!checkIsSelectProject(projectUid)) {
-        return;
-    }
-    var projectId = $("#project", window.top.document).val();
+
+function initTable(url) {
     var $table = $("#untreatedTable");
-    $table.bootstrapTable("destroy");//查询时刷新表单用
     var column = [];
-    // $.ajax({
-    //     url: "ebom/title?projectId=" + projectPuid,
-    //     type: "GET",
-    //     success: function (result) {
-    //         var column = [];
     column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
         field: 'changeNo',
@@ -44,7 +35,6 @@ function initTable(projectUid) {
         formatter: function (value, row, index) {
             var id = row.id
             return [
-                // '<a href="ewo/base/info?id='+id +'">' + value + '</a>'
                 '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
             ].join("");
         }
@@ -52,44 +42,10 @@ function initTable(projectUid) {
     column.push({field: 'originTime', title: '发起时间', align: 'center', valign: 'middle'});
     column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
-    //column.push({field: 'reasonCode', title: '原因类型', align: 'center', valign: 'middle'});
-    //column.push({field: 'title', title: '标题', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
-    // var data = result.data;
-    // var keys = [];
-    // var values;
-    // for (var key in data) {
-    //     if (data.hasOwnProperty(key)) {
-    //         var json = {
-    //             field: key,
-    //             title: data[key],
-    //             align:
-    //                 'center',
-    //             valign:
-    //                 'middle'
-    //         };
-    //         column.push(json);
-    //     }
-    // };
+    column.push({field: 'originator', title: '项目', align: 'center', valign: 'middle'});
     $table.bootstrapTable({
-        // ajax: function (request) {
-        //     $.ajax({
-        //         url: "ewo/base/infoList?projectId=" + projectId,
-        //         success: function (result) {
-        //             // var data = JSON.stringify(result);
-        //             // var msg = JSON.parse(data);
-        //             // console.log(msg);
-        //             request.success({
-        //                 row: result
-        //             });
-        //             $table.bootstrapTable('load', result);
-        //         },
-        //         error: function () {
-        //             window.Ewin.alert("操作错误")
-        //         }
-        //     })
-        // },
-        url: "untreated/infoList?projectId=" + projectUid ,
+        url: url,
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 90,
         width: $(window).width(),
@@ -111,20 +67,8 @@ function initTable(projectUid) {
         showColumns: false,                 //是否显示所有的列
 
     });
+}
 
-    //     }
-    // })
-}
 function queryLou(id) {
-    //window.location.href="worklist/base/info?id="+id;
-    window.location.href="untreated/ToUntreatedForm?id="+id;
+    window.location.href = "untreated/ToUntreatedForm?id=" + id;
 }
-// function basic() {
-//     window.Ewin.dialog({
-//         title: '信息',
-//         url: 'vwo/vwoFromList',
-//         gridId: "gridId",
-//         width: 800,
-//         height: 500
-//     })
-// }
