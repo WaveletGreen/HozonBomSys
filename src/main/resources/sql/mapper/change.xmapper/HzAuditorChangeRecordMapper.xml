@@ -15,20 +15,47 @@
     ID, AUDITOR_ID, AUDIT_TIME, AUDIT_RESULT, AUDIT_SUGG, ORDER_ID, TABLE_NAME
   </sql>
 
-
-
-
-
   <!--insert-->
   <insert id="HzAuditorChangeDAOImpl_insert" parameterType="sql.pojo.change.HzAuditorChangeRecord">
-    insert into HZ_AUDITOR_CHANGE_RECORD (ID, AUDITOR_ID,
-      ORDER_ID,
-      TABLE_NAME)
-    values (SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval, #{auditorId,jdbcType=DOUBLE},
-       #{orderId,jdbcType=DOUBLE},
-      #{tableName,jdbcType=VARCHAR})
+    insert into HZ_AUDITOR_CHANGE_RECORD (ID, AUDITOR_ID,ORDER_ID,TABLE_NAME)
+    values
+    (SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval,
+    #{auditorId,jdbcType=DOUBLE},
+    #{orderId,jdbcType=DOUBLE},
+    #{tableName,jdbcType=VARCHAR})
   </insert>
 
+  <!--待办事项返回ORDER_ID-->
+  <select id="HzAuditorChangeDAOImpl_findAuditorList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_AUDITOR_CHANGE_RECORD
+    where 1=1
+    <!--ID = #{id,jdbcType=DOUBLE}-->
+    and AUDITOR_ID = #{auditorId,jdbcType=DOUBLE}
+    and AUDIT_RESULT is NULL
+
+  </select>
+
+  <!--已处理事项返回ORDER_ID-->
+  <select id="HzAuditorChangeDAOImpl_findAuditorList2" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_AUDITOR_CHANGE_RECORD
+    where 1=1
+    <!--ID = #{id,jdbcType=DOUBLE}-->
+    and AUDITOR_ID = #{auditorId}
+    and AUDIT_RESULT is not NULL
+  </select>
+
+  <!--统计待办事项-->
+  <select id="HzAuditorChangeDAOImpl_count" parameterType="java.util.Map" resultType="int">
+    SELECT count(*) FROM HZ_AUDITOR_CHANGE_RECORD
+    WHERE 1=1
+    <!--接口（审批）人是自己（登录角色）-->
+    and AUDITOR_ID = #{auditorId,jdbcType=DOUBLE}
+    and AUDIT_RESULT is null
+  </select>
 
   <insert id="insertSelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
     insert into HZ_AUDITOR_CHANGE_RECORD

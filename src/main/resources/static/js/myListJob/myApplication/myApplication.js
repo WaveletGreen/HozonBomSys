@@ -6,63 +6,44 @@
  */
 
 $(document).ready((function () {
-    var projectId = $("#project", window.top.document).val();
-    var url = "ewo/base/infoList?projectId="+projectId;
+    var url = "myApplication/infoList";
     initTable(url);
 }))
 
-//刷新
-// function doRefresh(projectUid) {
-//     initTable(projectUid);
-// }
 function doQuery() {
-    // initTable(getProjectUid());
-    var projectId = $("#project", window.top.document).val();
-    var url = "ewo/base/infoList?projectId="+projectId;
+    var url = "myApplication/infoList";
     initTable(url);
     $('#myApplicationTable').bootstrapTable('destroy');
 }
 
 function formatDate() {
-    let startdate = stringToDateFormat($('#startdate').data("time"));
-    let enddate = stringToDateFormat($('#enddate').data("time"));
-    $('#startdate').val(finishTime);
-    $('#enddate').val(vwoEndEffectiveTime);
+    let firstOriginTime = stringToDateFormat($('#firstOriginTime').data("time"));
+    let lastOriginTime = stringToDateFormat($('#lastOriginTime').data("time"));
+    $('#firstOriginTime').val(firstOriginTime);
+    $('#lastOriginTime').val(lastOriginTime);
 }
 
 function initTable(url) {
-    // if (!checkIsSelectProject(projectUid)) {
-    //     return;
-    // }
-    // var projectId = $("#project", window.top.document).val();
     var $table = $("#myApplicationTable");
     var column = [];
-    // $.ajax({
-    //     url: "ebom/title?projectId=" + projectPuid,
-    //     type: "GET",
-    //     success: function (result) {
-    //         var column = [];
     column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
-        field: 'ewoNo',
+        field: 'changeNo',
         title: '变更单号',
         align: 'center',
         valign: 'middle',
         formatter: function (value, row, index) {
             var id = row.id
             return [
-                // '<a href="ewo/base/info?id='+id +'">' + value + '</a>'
                 '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
             ].join("");
         }
     });
-    column.push({field: 'formCreateTime', title: '发起时间', align: 'center', valign: 'middle'});
-    column.push({field: 'dept', title: '部门', align: 'center', valign: 'middle'});
+    column.push({field: 'originTime', title: '发起时间', align: 'center', valign: 'middle'});
+    column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
-    column.push({field: 'reasonCode', title: '原因类型', align: 'center', valign: 'middle'});
-    column.push({field: 'title', title: '标题', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
-    column.push({field: 'originator', title: '项目', align: 'center', valign: 'middle'})
+    column.push({field: 'originator', title: '项目', align: 'center', valign: 'middle'});
     $table.bootstrapTable({
         url: url,
         method: 'get',
