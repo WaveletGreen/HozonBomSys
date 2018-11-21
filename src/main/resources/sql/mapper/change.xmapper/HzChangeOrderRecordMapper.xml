@@ -31,6 +31,8 @@
 
     <result column="ORIGINATOR" jdbcType="VARCHAR" property="originator" />
 
+    <result column="PROJECT_NAME" jdbcType="VARCHAR" property="projectName" />
+
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -127,7 +129,72 @@
     <!--and PROJECT_ID = #{projectId,jdbcType=VARCHAR}-->
   <!--</select>-->
 
-  <!--待办事项列表-->
+
+    <!--待办事项列表从TC同步的数据-->
+    <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIdsTC" parameterType="java.util.Map" resultMap="BaseResultMap">
+        <!--select *-->
+        <!--from HZ_CHANGE_ORDER_RECORD-->
+        <!--<where>-->
+        <!--1=1-->
+        <!--<if test="id != null">-->
+        <!--and ID = #{id,jdbcType=INTEGER}-->
+        <!--</if>-->
+        <!--<if test="changeNo != null and changeNo!=''">-->
+        <!--and CHANGE_NO = #{changeNo,jdbcType=VARCHAR}-->
+        <!--</if>-->
+        <!--<if test="originator != null and originator!=''">-->
+        <!--and ORIGINATOR = #{originator,jdbcType=VARCHAR}-->
+        <!--</if>-->
+        <!--&lt;!&ndash;<if test="projectId != null and projectId !='' ">&ndash;&gt;-->
+        <!--&lt;!&ndash;and PROJECT_ID = #{projectId,jdbcType=VARCHAR}&ndash;&gt;-->
+        <!--&lt;!&ndash;</if>&ndash;&gt;-->
+        <!--&lt;!&ndash;发起时间比较&ndash;&gt;-->
+        <!--<if test="firstOriginTime != null and firstOriginTime !=''">-->
+        <!--&lt;!&ndash;and (ORIGIN_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))&ndash;&gt;-->
+        <!--and (ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')-->
+        <!--and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))-->
+        <!--</if>-->
+        <!--&lt;!&ndash;接口人是自己&ndash;&gt;-->
+        <!--&lt;!&ndash;and AUDITER = #{auditer,jdbcType=VARCHAR}&ndash;&gt;-->
+        <!--&lt;!&ndash;状态：进行中的变更单&ndash;&gt;-->
+        <!--</where>-->
+
+        select * FROM
+        (SELECT u.*,rownum as rn from
+        (SELECT
+        t1.*,
+        t5.p_project_name as PROJECT_NAME
+        FROM
+        HZ_CHANGE_ORDER_RECORD t1
+        LEFT JOIN HZ_PROJECT_LIBS t5 ON t1.project_id = t5. PUID
+        <where>
+            1=1
+            <if test="id != null">
+                and t1.ID = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="changeNo != null and changeNo!=''">
+                and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
+            </if>
+            <if test="originator != null and originator!=''">
+                and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+            </if>
+            <if test="projectId != null">
+                and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+            <!--发起时间比较-->
+            <if test="firstOriginTime != null and firstOriginTime !=''">
+                <!--and (ORIGIN_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+                and (t1.ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+                and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+            </if>
+            )u
+            )
+        </where>
+        <!--WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}-->
+    </select>
+
+
+    <!--待办事项列表-->
   <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds" parameterType="java.util.Map" resultMap="BaseResultMap">
     <!--select *-->
     <!--from HZ_CHANGE_ORDER_RECORD-->
@@ -157,16 +224,21 @@
     <!--</where>-->
 
     select * FROM
+
     (SELECT u.*,rownum as rn from
     (SELECT
     t1.*, T2.USER_NAME as CREATE_NAME,
     t3.USER_NAME as ORIGINATOR,
-    t4. NAME as DEPT_NAME
+    t4. NAME as DEPT_NAME,
+    t5.p_project_name as PROJECT_NAME
     FROM
     HZ_CHANGE_ORDER_RECORD t1
+
     LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
     LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+    LEFT JOIN HZ_PROJECT_LIBS t5 ON t1.project_id = t5. PUID
     JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
+
     <where>
       1=1
       <if test="id != null">
@@ -178,14 +250,19 @@
       <if test="originator != null and originator!=''">
       and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
       </if>
+      <if test="projectId != null">
+        and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
       <!--发起时间比较-->
       <if test="firstOriginTime != null and firstOriginTime !=''">
       <!--and (ORIGIN_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
       and (t1.ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
       and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
       </if>
-      )u)
+      )u
+      )
     </where>
+    <!--WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}-->
   </select>
 
 
