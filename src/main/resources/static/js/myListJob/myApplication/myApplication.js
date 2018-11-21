@@ -27,6 +27,22 @@ function initTable(url) {
     var $table = $("#myApplicationTable");
     var column = [];
     column.push({
+        field: '',
+        title: '序号',
+        align: 'center',
+        width:50,
+        formatter: function (value, row, index) {
+            //return index+1;
+            // var temp = $('#changeFormTable').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
+            // return temp + index;
+            if (index != NaN) {
+                var options = $table.bootstrapTable('getOptions');
+                return options.pageSize * (options.pageNumber - 1) + index + 1;
+            }
+
+        }
+    }),
+    column.push({
         field: 'changeNo',
         title: '变更单号',
         align: 'center',
@@ -53,7 +69,7 @@ function initTable(url) {
         pagination: true,                   //是否显示分页（*）
         pageSize: 20,
         pageNumber: 1,
-        pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
+        pageList: [/*'ALL',*/ 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
         sidePagination: "server",          //分页方式：client客户端分页，server服务端分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         showExport: false,
