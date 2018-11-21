@@ -98,7 +98,7 @@ public interface HzPbomRecordDAO {
      * @param puids eBomPuid  中间全部用英文逗号 隔开
      * @return
      */
-    int deleteList(String puids);
+//    int deleteList(String puids);
 
     /**
      * 批量删除
@@ -193,7 +193,7 @@ public interface HzPbomRecordDAO {
      */
     int deleteByPuids(String puids);
     /**
-     * 根据ebomPuid 进行物理删除
+     * 根据Puid 进行物理删除
      * @param puids
      * @return
      */

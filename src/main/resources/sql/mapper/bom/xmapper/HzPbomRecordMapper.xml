@@ -904,9 +904,9 @@
 
   <!--批量删除 真的删除-->
   <delete id="HzPbomRecordDAOImpl_deleteListByPuids"  parameterType="java.util.HashMap">
-    delete HZ_PBOM_RECORD where P_E_BOM_PUID in
+    delete HZ_PBOM_RECORD where PUID in
     <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
-    #{eBomPuids[${index}]}
+    #{puids[${index}]}
     </foreach>
   </delete>
 

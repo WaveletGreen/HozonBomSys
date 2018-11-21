@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
@@ -199,12 +200,12 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.update("HzPbomRecordDAOImpl_recoverBomById",ePuid);
     }
 
-    @Override
-    public int deleteList(String puids) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("eBomPuids",Lists.newArrayList(puids.split(",")));
-        return super.delete("HzPbomRecordDAOImpl_deleteListByPuids",map);
-    }
+//    @Override
+//    public int deleteList(String puids) {
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("eBomPuids",Lists.newArrayList(puids.split(",")));
+//        return super.delete("HzPbomRecordDAOImpl_deleteByPuids",map);
+//    }
 
     @Override
     public int deleteList(List<DeleteHzPbomReqDTO> list) {
@@ -401,9 +402,28 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public int deleteListByPuids(String puids) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("eBomPuids",Lists.newArrayList(puids.split(",")));
-        return super.update("HzPbomRecordDAOImpl_deleteListByPuids",map);
+        List<String> list = Lists.newArrayList(puids.split(","));
+        try {
+            int size = list.size();
+            Map<String,Object> m = new HashMap<>();
+            synchronized (this){
+                if(size>1000){
+                    HzBomSysFactory<String> factory = new HzBomSysFactory();
+                    Map<Integer,List<String>> map = factory.spiltList(list);
+                    for(List<String> v:map.values()){
+                        m.put("puids",v);
+                        super.delete("HzPbomRecordDAOImpl_deleteListByPuids",m);
+                    }
+                }else {
+                    m.put("puids",list);
+                    super.delete("HzPbomRecordDAOImpl_deleteListByPuids",m);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

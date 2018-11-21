@@ -68,11 +68,6 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
 
-    @Autowired
-    private HzAuditorChangeDAO hzAuditorChangeDAO;
-
-    private ExecutorService pool = Executors.newFixedThreadPool(5);
-
     @Override
     public WriteResultRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO) {
         try{
@@ -684,6 +679,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setMaterielId(hzMaterielRecord.getPuid());
             //工厂
             hzWorkProcedure.setpFactoryId("1001");
+            hzWorkProcedure.setpStatus(2);
             hzWorkProceduresAdd.add(hzWorkProcedure);
         }
         if(hzWorkProceduresAdd!=null&&hzWorkProceduresAdd.size()!=0){
@@ -854,40 +850,38 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             List<String> deleteRecords = new ArrayList<>();
             List<HzWorkProcedure> updateRecords = new ArrayList<>();
             List<HzWorkProcedure> updateList = new ArrayList<>();
-            pool.submit(()->{
-                List<HzWorkProcedure> list = hzWorkProcedureDAO.getHzWorkProcedureByPuids(query);
-                //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
-                if(ListUtil.isNotEmpty(list)){
-                    list.forEach(record -> {
-                        if(StringUtils.isBlank(record.getRevision())){
-                            deleteRecords.add(record.getPuid());
-                        }else {
-                            updateRecords.add(record);
-                        }
-                    });
-                }
-                if(ListUtil.isNotEmpty(updateRecords)){
-                    HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-                    dataDetailQuery.setRevision(true);
-                    dataDetailQuery.setProjectId(reqDTO.getProjectId());
-                    dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_BEFORE.getTableName());
-                    dataDetailQuery.setStatus(1);
-                    updateRecords.forEach(record -> {
-                        dataDetailQuery.setRevisionNo(record.getRevision());
-                        HzWorkProcedure manageRecord = hzWorkProcedureDAO.getHzWorkProcedureByPuidAndRevision(dataDetailQuery);
-                        if(manageRecord!=null){
-                            updateList.add(HzWorkProcedureFactory.workProcedureToProcedure(manageRecord));
-                        }
-                    });
-                }
+            List<HzWorkProcedure> list = hzWorkProcedureDAO.getHzWorkProcedureByPuids(query);
+            //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
+            if(ListUtil.isNotEmpty(list)){
+                list.forEach(record -> {
+                    if(StringUtils.isBlank(record.getRevision())){
+                        deleteRecords.add(record.getPuid());
+                    }else {
+                        updateRecords.add(record);
+                    }
+                });
+            }
+            if(ListUtil.isNotEmpty(updateRecords)){
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setRevision(true);
+                dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_BEFORE.getTableName());
+                dataDetailQuery.setStatus(1);
+                updateRecords.forEach(record -> {
+                    dataDetailQuery.setRevisionNo(record.getRevision());
+                    HzWorkProcedure manageRecord = hzWorkProcedureDAO.getHzWorkProcedureByPuidAndRevision(dataDetailQuery);
+                    if(manageRecord!=null){
+                        updateList.add(HzWorkProcedureFactory.workProcedureToProcedure(manageRecord));
+                    }
+                });
+            }
 
-                if(ListUtil.isNotEmpty(updateList)){
-                    hzWorkProcedureDAO.updateList(updateList);
-                }
-                if(ListUtil.isNotEmpty(deleteRecords)){
-                    hzWorkProcedureDAO.deleteByPuids(deleteRecords);
-                }
-            });
+            if(ListUtil.isNotEmpty(updateList)){
+                hzWorkProcedureDAO.updateList(updateList);
+            }
+            if(ListUtil.isNotEmpty(deleteRecords)){
+                hzWorkProcedureDAO.deleteByPuids(deleteRecords);
+            }
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();

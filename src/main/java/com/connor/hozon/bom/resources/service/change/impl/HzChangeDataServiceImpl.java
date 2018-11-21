@@ -11,15 +11,18 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.change.HzChangeDataRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.project.HzMaterielRecord;
 import sql.pojo.work.HzWorkProcedure;
@@ -38,7 +41,7 @@ import java.util.concurrent.Future;
 @Service("hzChangeDataService")
 public class HzChangeDataServiceImpl implements HzChangeDataService {
 
-    private ExecutorService pool = Executors.newFixedThreadPool(7);
+    private ExecutorService pool = Executors.newFixedThreadPool(10);
 
     @Autowired
     private HzChangeDataRecordDAO hzChangeDataRecordDAO;
@@ -58,6 +61,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
     @Autowired
     private HzWorkProcedureDAO hzWorkProcedureDAO;
 
+    @Autowired
+    private HzChangeOrderDAO hzChangeOrderDAO;
     @Override
     public List<HzChangeDataRespDTO> getChangeDataHyperRecord(HzChangeDataQuery query) {
         try {
@@ -81,7 +86,14 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
     @Override
     public List<HzEbomRespDTO> getChangeDataRecordForEBOM(HzChangeDataQuery query) {
         List<HzEbomRespDTO> respDTOs = new ArrayList<>();
+        if(null == query.getOrderId()){
+            return new ArrayList<>();
+        }
         query.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
+        if(StringUtils.isBlank(query.getProjectId())){
+            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(query.getOrderId());
+            query.setProjectId(record.getProjectId());
+        }
         try {
             Future future = pool.submit(()->{
                 //变更数据
@@ -161,8 +173,16 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
     @Override
     public List<HzPbomLineRespDTO> getChangeDataRecordForPBOM(HzChangeDataQuery query) {
+        if(null == query.getOrderId()){
+            return null;
+        }
+
         List<HzPbomLineRespDTO> respDTOs = new ArrayList<>();
         query.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
+        if(StringUtils.isBlank(query.getProjectId())){
+            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(query.getOrderId());
+            query.setProjectId(record.getProjectId());
+        }
         try {
             Future future = pool.submit(()->{
                 //变更数据
@@ -242,6 +262,14 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
     @Override
     public List<HzMbomRecordRespDTO> getChangeDataRecordForMBOM(HzChangeDataQuery query) {
+
+        if(null == query.getOrderId()){
+            return null;
+        }
+        if(StringUtils.isBlank(query.getProjectId())){
+            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(query.getOrderId());
+            query.setProjectId(record.getProjectId());
+        }
         List<HzMbomRecordRespDTO> respDTOs = new ArrayList<>();
         Integer type = query.getType();
         query.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
@@ -324,8 +352,15 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
     @Override
     public List<HzMaterielRespDTO> getChangeDataRecordForMateriel(HzChangeDataQuery query) {
+        if(null == query.getOrderId()){
+            return null;
+        }
         List<HzMaterielRespDTO> respDTOs = new ArrayList<>();
         query.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
+        if(StringUtils.isBlank(query.getProjectId())){
+            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(query.getOrderId());
+            query.setProjectId(record.getProjectId());
+        }
         try {
             Future future = pool.submit(()->{
                 //变更数据
@@ -405,8 +440,15 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
     @Override
     public List<HzWorkProcessRespDTO> getChangeDataRecordForWorkProcedure(HzChangeDataQuery query) {
+        if(null == query.getOrderId()){
+            return null;
+        }
         List<HzWorkProcessRespDTO> respDTOs = new ArrayList<>();
         query.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
+        if(StringUtils.isBlank(query.getProjectId())){
+            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(query.getOrderId());
+            query.setProjectId(record.getProjectId());
+        }
         try {
             Future future = pool.submit(()->{
                 //变更数据

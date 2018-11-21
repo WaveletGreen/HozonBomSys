@@ -736,6 +736,9 @@
             <if test="pLouaFlag != null">
                 P_LOU_LOA_FLAG = #{pLouaFlag,jdbcType=INTEGER},
             </if>
+            <if test="status != null">
+                P_MBOM_STATUS = #{status,jdbcType=INTEGER}
+            </if>
         </set>
         where P_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
        and P_MBOM_STATUS <![CDATA[ <> ]]>0
@@ -958,7 +961,7 @@
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
             update ${item.tableName}
             <set>
-                P_MBOM_STATUS=0,
+                P_MBOM_STATUS=4,
                 P_UPDATE_TIME =sysdate
             </set>
             where P_BOM_PUID = #{item.puid,jdbcType=VARCHAR}
