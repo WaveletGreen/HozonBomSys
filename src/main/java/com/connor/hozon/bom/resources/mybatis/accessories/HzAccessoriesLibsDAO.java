@@ -32,4 +32,11 @@ public interface HzAccessoriesLibsDAO {
     HzAccessoriesLibs getHzAccessoriesLibsByCode(String pMaterielCode);
 
     List<String> queryAccessoriesListByMaterielCode(List<String> materielCodeList);
+
+    /**
+     * 根据物料号查询对应
+     * @param materielCodes
+     * @return
+     */
+    List<HzAccessoriesLibs> queryAccessoriesByMaterielCodes(List<String> materielCodes);
 }
