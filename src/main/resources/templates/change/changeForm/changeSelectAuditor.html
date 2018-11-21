@@ -85,24 +85,23 @@
             // bootstrapValidator.revalidateField("pColorEffectedDate");
             bootstrapValidator.revalidateField("user");
             if (bootstrapValidator.isValid()) {
-
-                let data = {};
-                var _d = $("#cntForm").serializeArray();
-                for (var p in _d) {
-                    data[_d[p].name] = _d[p].value;
+                var rows = getActiveTab().getRows();
+                var activeDivId = getActiveDiv()[0].id;
+                var data = {
+                    userId: $("#selectedUserId").val(),
+                    orderId: rows[0].id,
+                    activeDivId: activeDivId
                 }
-                // console.log(data);
-                JSON.stringify(data);
+                console.log(data);
                 $.ajax({
                     contentType:
                         "application/json",
                     type:
                         'POST',
                     data: JSON.stringify(data),
-                    url: "./vwo/saveInfluenceUser",
+                    url: "./process/doStartProcess",
                     success: function (result) {
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        activeTabBodyReset();
                         if (result.status) {
                             $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet(result.type, result.name);//.find('#' + result.type).text(result.name);
                             layer.msg(result.msg, {icon: 1, time: 2000});

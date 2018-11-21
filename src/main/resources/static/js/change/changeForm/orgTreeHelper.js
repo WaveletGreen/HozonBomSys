@@ -61,14 +61,12 @@ var orgTree = (function () {
                     let userId = treeNode.uid;
                     $.ajax({
                         type: "GET",
-                        //ajax需要添加打包名
                         url: "./vwo/getUserDetail?uid=" + userId,
                         success: function (result) {
                             if (result.status) {
                                 $("#" + opts.dept).val(result.groupName);
                                 $("#" + opts.selectedUserId).val(result.personId);
                                 $("#" + opts.user).val(result.personName);
-
                             }
                         },
                         error: function (e) {

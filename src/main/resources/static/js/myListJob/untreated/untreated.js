@@ -4,12 +4,18 @@
  * Date: 2018/11/8
  * Time: 15:17
  */
-
 $(document).ready((function () {
-    var url = "untreated/infoList";
-    initTable(url);
-    initListener();
-}))
+    let taskData = window.parent.getTaskData();
+    if (taskData == null || taskData == undefined) {
+        var url = "untreated/infoList";
+        initTable(url);
+        initListener();
+        // doQuery();
+    }
+    else {
+        loadDetailTask();
+    }
+}));
 
 function doQuery() {
     var url = "untreated/infoList";
@@ -102,7 +108,9 @@ function saveAgreement() {
             function (result) {
                 activeTabBodyRefresh();
                 if (result.status) {
-                    layer.msg(result.msg, {icon: 1, time: 2000})
+                    layer.msg(result.msg, {icon: 1, time: 2000});
+                    window.top.loadTasks();
+                    window.location.reload();
                 }
                 else {
                     window.Ewin.alert({message: result.msg});

@@ -149,27 +149,27 @@ public class HzWorkProcessController extends BaseController {
 //        List<HzWorkProcessRespDTO> list = page.getResult();
 //        Map<String, Object> ret = new HashMap<>();
 //        List<Map<String, Object>> _list = new ArrayList<>();
-//        list.forEach(dto -> {
+//        list.forEach(ProcessReciveDto -> {
 //            Map<String, Object> _res = new HashMap<>();
-//            _res.put("No", dto.getNo());
-//            _res.put("materielId", dto.getMaterielId());
-//            _res.put("pMaterielCode", dto.getpMaterielCode());
-//            _res.put("pMaterielDesc", dto.getpMaterielDesc());
-//            _res.put("factoryCode", dto.getFactoryCode());
-//            _res.put("purpose", dto.getPurpose());
-//            _res.put("state", dto.getState());
-//            _res.put("pProcedureCode", dto.getpProcedureCode());
-//            _res.put("pWorkCode", dto.getpWorkCode());
-//            _res.put("pWorkDesc", dto.getpWorkDesc());
-//            _res.put("controlCode", dto.getControlCode());
-//            _res.put("pProcedureDesc", dto.getpProcedureDesc());
-//            _res.put("pCount", dto.getpCount());
-//            _res.put("pDirectLabor", dto.getpDirectLabor());
-//            _res.put("pIndirectLabor", dto.getpIndirectLabor());
-//            _res.put("pMachineLabor", dto.getpMachineLabor());
-//            _res.put("pBurn", dto.getpBurn());
-//            _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
-//            _res.put("pOtherCost", dto.getpOtherCost());
+//            _res.put("No", ProcessReciveDto.getNo());
+//            _res.put("materielId", ProcessReciveDto.getMaterielId());
+//            _res.put("pMaterielCode", ProcessReciveDto.getpMaterielCode());
+//            _res.put("pMaterielDesc", ProcessReciveDto.getpMaterielDesc());
+//            _res.put("factoryCode", ProcessReciveDto.getFactoryCode());
+//            _res.put("purpose", ProcessReciveDto.getPurpose());
+//            _res.put("state", ProcessReciveDto.getState());
+//            _res.put("pProcedureCode", ProcessReciveDto.getpProcedureCode());
+//            _res.put("pWorkCode", ProcessReciveDto.getpWorkCode());
+//            _res.put("pWorkDesc", ProcessReciveDto.getpWorkDesc());
+//            _res.put("controlCode", ProcessReciveDto.getControlCode());
+//            _res.put("pProcedureDesc", ProcessReciveDto.getpProcedureDesc());
+//            _res.put("pCount", ProcessReciveDto.getpCount());
+//            _res.put("pDirectLabor", ProcessReciveDto.getpDirectLabor());
+//            _res.put("pIndirectLabor", ProcessReciveDto.getpIndirectLabor());
+//            _res.put("pMachineLabor", ProcessReciveDto.getpMachineLabor());
+//            _res.put("pBurn", ProcessReciveDto.getpBurn());
+//            _res.put("pMachineMaterialLabor", ProcessReciveDto.getpMachineMaterialLabor());
+//            _res.put("pOtherCost", ProcessReciveDto.getpOtherCost());
 //
 //            _list.add(_res);
 //        });

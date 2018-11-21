@@ -52,7 +52,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      */
     @Override
     public boolean configuration(Long orderId, Object... params) {
-        return false;
+        return true;
     }
 
     /**
@@ -65,6 +65,8 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      */
     @Override
     public boolean bom(Long orderId, Object... params) {
-        return false;
+        return true;
     }
+
+
 }

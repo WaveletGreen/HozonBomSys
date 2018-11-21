@@ -12,7 +12,7 @@ public interface IProcessManagerService {
     /**
      * 流程开始，启动流程，修改数据
      *
-     * @param orderId
+     * @param orderId 传入的表单ID
      * @param param
      * @return
      */
@@ -20,14 +20,26 @@ public interface IProcessManagerService {
 
     /**
      * 发布，审核通过
+     * 根据传入的orderId，调用实现回调的{@link com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack}进行数据的发布操作
+     * 目前直接使用{@link com.connor.hozon.bom.process.service.ReleaseEntity}实现进行流程结束后的数据发布
      *
+     * @param orderId 表单的ID
+     * @param param   配置用的参数，可选
      * @return
      */
     Object release(long orderId, Object... param);
+
     /**
-     * 流程中断，审核不同意
+     * 发布，审核通过
+     * 根据传入的orderId，调用实现回调的{@link com.connor.hozon.bom.bomSystem.iservice.process.IInterruptionCallBack}进行数据的回到上一个版本的操作
+     * 目前直接使用{@link com.connor.hozon.bom.process.service.ReleaseEntity}实现进行流程结束后的数据回版操作
      *
+     * @param orderId 表单的ID
+     * @param param   配置用的参数，可选
      * @return
      */
     Object interrupt(long orderId, Object... param);
+
+    int PROCESS_OK = 1;
+    int PROCESS_NOT_OK = 0;
 }

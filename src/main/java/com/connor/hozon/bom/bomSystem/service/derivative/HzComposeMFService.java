@@ -499,7 +499,7 @@ public class HzComposeMFService {
     /**
      * DTO转成Pojo，pojo自动生成PUID
      *
-     * @param hzComposeMFDTO dto
+     * @param hzComposeMFDTO ProcessReciveDto
      * @param feature        pojo
      * @return pojo
      */

@@ -13,7 +13,10 @@ import com.connor.hozon.bom.bomSystem.iservice.task.IHzTaskService;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
+import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.service.TreeService;
@@ -53,6 +56,8 @@ public class HzTasksService implements IHzTaskService {
     @Autowired
     private HzWorkListDAO hzWorkListDAO;
 
+    @Autowired
+    HzChangeOrderService hzChangeOrderService;
     private final static Logger LOGGER = LoggerFactory.getLogger(HzTasksService.class);
 
     /**
@@ -200,7 +205,7 @@ public class HzTasksService implements IHzTaskService {
                     dto.setId(dbTree.getId());
                 }
                 switch (task.getTaskFormType()) {
-                    case 1:
+                    case TaskOptions.FORM_TYPE_VWO:
                         HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
                         dto.setText(info.getVwoNum());
                         dto.setTargetId(info.getId());
@@ -209,10 +214,18 @@ public class HzTasksService implements IHzTaskService {
                         dto.setFormType(task.getTaskFormType());
                         break;
                     //预留给EWO表单用
-                    case 2:
+                    case TaskOptions.FORM_TYPE_EWO:
                         break;
                     //预留该MWO表单用
-                    case 3:
+                    case TaskOptions.FORM_TYPE_MWO:
+                        break;
+                    case TaskOptions.FORM_TYPE_CHANGE:
+                        HzChangeOrderRespDTO hzcor= hzChangeOrderService.getHzChangeOrderRecordById(task.getTaskTargetId());
+                        dto.setText(hzcor.getChangeNo());
+                        dto.setTargetId(hzcor.getId());
+                        dto.setTargetName(hzcor.getChangeNo() + "表单");
+                        dto.setTargetType(task.getTaskTargetType());
+                        dto.setFormType(task.getTaskFormType());
                         break;
                     default:
                         break;

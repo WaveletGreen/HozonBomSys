@@ -37,7 +37,6 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
          */
         return configuration(orderId, params) && bom(orderId, params);
     }
-
     /**
      * 在这里写配置管理部分数据的回到上一个版本的代码
      *
@@ -48,7 +47,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
      */
     @Override
     public boolean configuration(Long orderId, Object... params) {
-        return false;
+        return true;
     }
 
     /**
@@ -61,6 +60,6 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
      */
     @Override
     public boolean bom(Long orderId, Object... params) {
-        return false;
+        return true;
     }
 }

@@ -196,12 +196,12 @@ function initTable(url) {
                     // var myData = JSON.stringify({
                     //     "puids":puids,
                     // });
-                    if (rows.length == 0) {
-                        window.Ewin.alert({message: '请选择一条需要发起流程的数据!'});
+                    if (rows.length == 0 || rows.length > 1) {
+                        window.Ewin.alert({message: '请选择<span style="color: red">一条</span>需要发起流程的数据!'});
                         return false;
                     }
                     for (let i in rows) {
-                        if ("1" == rows[i].state || 1 == rows[i].state) {
+                        if ("进行中" != rows[i].state) {
                             window.Ewin.alert({message: '已有表单完成，请取消选中已完成的表单'});
                             return;
                         }
@@ -243,6 +243,10 @@ function initTable(url) {
 
     //     }
     // })
+}
+
+function getRows() {
+    return $("#changeFormTable").bootstrapTable('getSelections');
 }
 
 function queryLou(id) {
