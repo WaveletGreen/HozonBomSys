@@ -68,9 +68,9 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
         PageRequestParam pageRequestParam = new PageRequestParam();
         pageRequestParam.setPageNumber(query.getPage());
         pageRequestParam.setPageSize(query.getPageSize());
-        map.put("changeNo",query.getChangeNo());
-        map.put("createName",query.getCreateName());
-        map.put("originator",query.getOriginator());
+        map.put("changeNo",query.getChangeNo().trim());
+        map.put("createName",query.getCreateName().trim());
+        map.put("originator",query.getOriginator().trim());
         if(Integer.valueOf(1).equals(query.getType())){
             map.put("firstCreateTime",query.getFirstCreateTime());
             map.put("lastCreateTime",query.getLastCreateTime());
@@ -79,7 +79,7 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
             map.put("lastOriginTime",query.getLastOriginTime());
         }
         map.put("state",query.getState());
-        map.put("projectId",query.getProjectId());
+        map.put("projectId",query.getProjectId().trim());
         pageRequestParam.setFilters(map);
         return super.findPage("HzChangeOrderDAOImpl_findHzChangeOrderRecordByPage","HzChangeOrderDAOImpl_findHzChangeOrderTotalCount",pageRequestParam);
     }

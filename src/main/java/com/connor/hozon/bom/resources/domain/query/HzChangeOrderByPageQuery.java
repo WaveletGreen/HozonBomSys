@@ -57,4 +57,9 @@ public class HzChangeOrderByPageQuery extends DefaultPageQuery {
      * 项目id
      */
     private String projectId;
+
+    /**
+     * 部门
+     */
+    private String deptName;
 }

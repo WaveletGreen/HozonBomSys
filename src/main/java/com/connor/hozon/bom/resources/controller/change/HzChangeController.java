@@ -132,6 +132,7 @@ public class HzChangeController extends BaseController {
             object.put("deptName",hzChangeOrderRespDTO.getDeptName());
             list.add(object);
         });
+        jsonObject.put("totalCount",page.getTotalCount());
         jsonObject.put("result",list);
         return jsonObject;
     }
