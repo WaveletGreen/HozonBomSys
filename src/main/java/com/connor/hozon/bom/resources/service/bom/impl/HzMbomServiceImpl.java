@@ -1053,6 +1053,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                             HzMbomTreeQuery ebomTreeQuery = new HzMbomTreeQuery();
                             ebomTreeQuery.setProjectId(reqDTO.getProjectId());
                             ebomTreeQuery.setPuid(r.geteBomPuid());
+                            ebomTreeQuery.setColorId(r.getColorId());
                             List<HzMbomLineRecord> l = hzMbomRecordDAO.getHzMbomTree(ebomTreeQuery);
                             if(ListUtil.isNotEmpty(l))
                                 set.addAll(l);
