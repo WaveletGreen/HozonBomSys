@@ -35,11 +35,11 @@ public class FeatureProcessManager implements IInterruptionCallBack, IReleaseCal
      * 中断操作
      *
      * @param vwoId      vwo变更流程ID
-     * @param projectUId 项目UID
+     * @param params 项目UID
      * @return
      */
     @Override
-    public boolean interrupt(Long vwoId, String projectUId) {
+    public boolean interrupt(Long vwoId, Object...params) {
         interruptionFunctionDesc();
         return updateFeatureAndVwoInfo(0,899,vwoId);
     }
@@ -48,11 +48,11 @@ public class FeatureProcessManager implements IInterruptionCallBack, IReleaseCal
      * 数据发布
      *
      * @param vwoId      vwo流程编号ID
-     * @param projectUId 项目UID
+     * @param params 项目UID
      * @return
      */
     @Override
-    public boolean release(Long vwoId, String projectUId) {
+    public boolean release(Long vwoId, Object...params) {
         releaseFunctionDesc();
         return updateFeatureAndVwoInfo(1,999,vwoId);
     }

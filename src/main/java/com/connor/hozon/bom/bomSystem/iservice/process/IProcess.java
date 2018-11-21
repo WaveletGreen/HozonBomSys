@@ -23,9 +23,9 @@ public interface IProcess {
     /**
      * 执行回调操作
      *
-     * @param projectUId
+     * @param params
      * @param vwoId
      * @return
      */
-    boolean execute(Long vwoId, String projectUId);
+    boolean execute(Long vwoId, Object ... params);
 }

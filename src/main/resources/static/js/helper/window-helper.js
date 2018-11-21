@@ -14,6 +14,9 @@ function getActiveTab() {
     return $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow;
 }
 
+function getActiveDiv(){
+    return $(window.parent.document).contents().find(".tab-pane.fade.active.in");
+}
 /**
  * 因弹窗造成的body卡死情况，将当前激活的iframe下的body样式modal-open去除
  */

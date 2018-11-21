@@ -10,7 +10,8 @@
 <div class="panel-body" style="padding-bottom:0px;">
     <div class="panel panel-default" style="margin-top: 10px;">
         <div class="panel-body">
-            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"id="queryChangeForm">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryChangeForm">
                 <div class="form-group">
                     <label for="changeNo">变更单号:</label>
                     <input type="text" style="width: 150px;" class="form-control" name="changeNo" id="changeNo"
@@ -27,9 +28,9 @@
                            placeholder="请输入发起人"/>
                 </div>
                 <!--<div class="form-group">-->
-                    <!--<label for="VWOnum1">开始日期:</label>-->
-                    <!--<input class="form-control head-input-set" name="startdate" id="startdate" type="date"/>~-->
-                    <!--<input class="form-control head-input-set" name="startdate" id="enddate" type="date"/>~-->
+                <!--<label for="VWOnum1">开始日期:</label>-->
+                <!--<input class="form-control head-input-set" name="startdate" id="startdate" type="date"/>~-->
+                <!--<input class="form-control head-input-set" name="startdate" id="enddate" type="date"/>~-->
                 <!--</div>-->
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
@@ -41,6 +42,6 @@
 <table class="table table-striped tableNormalStyle" id="changeFormTable"></table>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
-    <script th:src="@{/js/change/changeForm/changeForm.js}"></script>
+<script th:src="@{/js/change/changeForm/changeForm.js}"></script>
 </body>
 </html>

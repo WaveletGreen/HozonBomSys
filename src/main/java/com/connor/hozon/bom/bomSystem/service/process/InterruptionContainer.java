@@ -36,12 +36,11 @@ public class InterruptionContainer implements IProcess {
      * 执行回调操作
      *
      * @param vwoId
-     * @param projectUId
+     * @param params
      * @return
      */
     @Override
-    public boolean execute(Long vwoId, String projectUId) {
-        return this.callBack.interrupt(vwoId, projectUId);
+    public boolean execute(Long vwoId, Object ... params) {
+        return this.callBack.interrupt(vwoId, params);
     }
-
 }
