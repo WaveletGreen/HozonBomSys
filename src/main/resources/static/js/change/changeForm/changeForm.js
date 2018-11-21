@@ -45,16 +45,13 @@ function initTable(url) {
         field: '',
         title: '序号',
         align: 'center',
-        width:50,
+        width: 50,
         formatter: function (value, row, index) {
             //return index+1;
             // var temp = $('#changeFormTable').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
             // return temp + index;
-            if (index != NaN) {
-                var options = $table.bootstrapTable('getOptions');
-                return options.pageSize * (options.pageNumber - 1) + index + 1;
-            }
-
+            var options = $table.bootstrapTable('getOptions');
+            return options.pageSize * (options.pageNumber - 1) + index + 1;
         }
     }),
         column.push({
@@ -129,7 +126,7 @@ function initTable(url) {
                     }
                     window.Ewin.dialog({
                         title: "修改",
-                        url: "change/updatePage?id="+rows[0].id,
+                        url: "change/updatePage?id=" + rows[0].id,
                         gridId: "gridId",
                         width: 500,
                         height: 500
