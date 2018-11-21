@@ -26,7 +26,6 @@ function formatDate() {
 function initTable(url) {
     var $table = $("#untreatedTable");
     var column = [];
-    column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
         field: 'changeNo',
         title: '变更单号',

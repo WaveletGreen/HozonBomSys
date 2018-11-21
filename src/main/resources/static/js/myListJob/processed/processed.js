@@ -27,9 +27,8 @@ function initTable(url) {
     var projectId = $("#project", window.top.document).val();
     var $table = $("#processedTable");
     var column = [];
-    column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
-        field: 'ewoNo',
+        field: 'changeNo',
         title: '变更单号',
         align: 'center',
         valign: 'middle',
