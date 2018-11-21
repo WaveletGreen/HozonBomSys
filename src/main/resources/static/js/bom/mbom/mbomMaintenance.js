@@ -1744,6 +1744,32 @@ function initTable2(productionUrl) {
                     }
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $productionTable.bootstrapTable({
                 url: productionUrl,
                 method: 'GET',
@@ -2153,6 +2179,32 @@ function initTable22(productionUrl, lineIds, colorIds) {
                     }
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $productionTable.bootstrapTable({
                 url: productionUrl + "&colorIds=" + colorIds + "&eBomPuids=" + lineIds + "&showBomStructure=1",
                 method: 'GET',
@@ -2576,6 +2628,32 @@ function initTable3(financialUrl) {
                     }
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $financialTable.bootstrapTable({
                 url: financialUrl,
                 method: 'GET',
@@ -2985,6 +3063,32 @@ function initTable33(financialUrl, lineIds, colorIds) {
                     }
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $financialTable.bootstrapTable({
                 url: financialUrl + "&colorIds=" + colorIds + "&eBomPuids=" + lineIds + "&showBomStructure=1",
                 method: 'GET',

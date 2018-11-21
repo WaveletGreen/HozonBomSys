@@ -242,6 +242,7 @@ public class HzMbomRecordFactory {
         mbomLineRecord.setIsColorPart(record.getIsColorPart());
         mbomLineRecord.setpFactoryId(record.getpFactoryId());
         mbomLineRecord.setCreateName(record.getCreateName());
+        mbomLineRecord.setSortNum(record.getSortNum());
         return mbomLineRecord;
     }
 

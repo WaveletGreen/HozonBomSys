@@ -124,10 +124,18 @@
                 data: myData,
                 contentType: "application/json",
                 success: function (result) {
-                    // $('.modal-dialog', window.top.document).parent('div').remove()
-                    // $('body', window.top.document).find('.modal-backdrop').remove();
-                    // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                    activeTabBodyRefresh();
+                    $('.modal-dialog', window.top.document).parent('div').remove()
+                    $('body', window.top.document).find('.modal-backdrop').remove();
+                    if (type==""||type==null){
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    }
+                    else if (type==1||type=="1"){
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery1();
+                    }
+                    else if (type==6||type=="6"){
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery2();
+                    }
+                    // activeTabBodyRefresh();
                     // if (result.status) {
                     if (result.success) {
                         layer.msg(result.errMsg, {icon: 1, time: 2000});
