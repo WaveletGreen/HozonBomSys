@@ -107,10 +107,16 @@
 
 <!--select-->
   <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordById" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from HZ_CHANGE_ORDER_RECORD
-    where ID = #{id,jdbcType=DOUBLE}
+       SELECT
+        t1.*, t2.user_name as CREATE_NAME,
+        t3.user_name as ORIGINATOR,
+        t4. NAME as DEPT_NAME
+    FROM
+        HZ_CHANGE_ORDER_RECORD t1
+    LEFT JOIN USERRECORD t2 ON t1.create_ID = t2. ID
+    LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+    LEFT JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
+    where t1.ID = #{id,jdbcType=DOUBLE}
   </select>
 
   <!--<select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds" parameterType="java.util.Map" resultMap="BaseResultMap">-->
@@ -194,61 +200,38 @@
   <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     select * FROM
     (SELECT u.*,rownum as rn from
-    (SELECT
-        t1.*, T2.USER_NAME as CREATE_NAME,
-        t3.USER_NAME as ORIGINATOR,
-        t4. NAME as DEPT_NAME
+    (SELECT t1.*
     FROM
         HZ_CHANGE_ORDER_RECORD t1
-    LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
-    LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
-    JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
     <where>
       1=1
       <if test="projectId != null">
         and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
       </if>
-      <if test="changeNo != null">
+      <if test="changeNo != null and changeNo !=''">
         and t1.CHANGE_NO=#{changeNo,jdbcType=VARCHAR}
-      </if>
-      <if test="createName != null">
-        and t2.user_name = #{createName,jdbcType=VARCHAR}
-      </if>
-      <if test="originator != null and isHas==1">
-        and t3.user_name = #{originator,jdbcType=VARCHAR}
       </if>
       <if test="state != null" >
         and t1.STATE=#{state,jdbcType=INTEGER}
       </if>
+      order by t1.CREATE_TIME desc
       )u
     </where>
     WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
   </select>
 
-  <select id="">
-    select  t1.*,t2.user_name
-  </select>
 
   <select id="HzChangeOrderDAOImpl_findHzChangeOrderTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
    SELECT count(*)
     FROM
     HZ_CHANGE_ORDER_RECORD t1
-    LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
-    left JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
-    JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
     <where>
       1=1
       <if test="projectId != null">
         and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
       </if>
-      <if test="changeNo != null">
+      <if test="changeNo != null and changeNo !=''">
         and t1.CHANGE_NO=#{changeNo,jdbcType=VARCHAR}
-      </if>
-      <if test="createName != null">
-        and t2.user_name = #{createName,jdbcType=VARCHAR}
-      </if>
-      <if test="originator != null and isHas==1">
-        and t3.user_name = #{originator,jdbcType=VARCHAR}
       </if>
       <if test="state != null" >
         and t1.STATE=#{state,jdbcType=INTEGER}

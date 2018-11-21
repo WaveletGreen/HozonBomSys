@@ -125,7 +125,15 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
             }
             List<HzChangeOrderRecord> records = page.getResult();
             for(HzChangeOrderRecord record :records){
-                respDTOS.add(HzChangeOrderFactory.changeOrderRecordToRespDTO(record));
+                if(1==record.getFromTc()){
+                    HzChangeOrderRespDTO respDTO = HzChangeOrderFactory.changeOrderRecordToRespDTO(record);
+                    respDTO.setDeptName(record.getDeptNameTC());
+                    respDTO.setCreateName(record.getCreateNameTC());
+                    respDTOS.add(respDTO);
+                }else {
+                    respDTOS.add(getHzChangeOrderRecordById(record.getId()));
+                }
+//                respDTOS.add(HzChangeOrderFactory.changeOrderRecordToRespDTO(record));
             }
             return new Page<>(page.getPageNumber(), page.getPageSize(), page.getTotalCount(), respDTOS);
         } catch (Exception e) {
