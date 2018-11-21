@@ -11,9 +11,9 @@ $(document).ready((function () {
 }))
 
 function doQuery() {
+    $('#untreatedTable').bootstrapTable('destroy');
     var url = "untreated/infoList";
     initTable(url);
-    $('#untreatedTable').bootstrapTable('destroy');
 }
 
 function formatDate() {

@@ -11,9 +11,9 @@ $(document).ready((function () {
 }))
 
 function doQuery() {
+    $('#myApplicationTable').bootstrapTable('destroy');
     var url = "myApplication/infoList";
     initTable(url);
-    $('#myApplicationTable').bootstrapTable('destroy');
 }
 
 function formatDate() {
