@@ -123,25 +123,22 @@
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiBomMngOpinion">意见</label>
                         <textarea class="form-control" style="resize: none;width: 100%;" rows="2"disabled="disabled" cols="30"
-                                  name="opiBomMngOpinion" id="opiBomMngOpinion">
-                        </textarea>
+                                  th:placeholder="${result.auditSugg}" name="opiBomMngOpinion" id="opiBomMngOpinion"></textarea>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiBomMngAgreement">结论</label>
-                        <select class="form-control" name="opiBomMngAgreement" id="opiBomMngAgreement"disabled="disabled"
-                        >
-                            <option>
-                                不同意
-                            </option>
-                            <option>
-                                同意
-                            </option>
+                        <select class="form-control" name="opiBomMngAgreement" id="opiBomMngAgreement"disabled="disabled">
+                            <!--<option>不同意</option>-->
+                            <!--<option>同意</option>-->
+                            <option th:selected="${result.auditResult==1?true:false}">同意</option>
+                            <option th:selected="${result.auditResult==0?true:false}">不同意</option>
+
                         </select>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 50px">
                         <label for="opiBomMngOptionDate">日期</label>
                         <input class="form-control" id="opiBomMngOptionDate" type="text"
-                               disabled="disabled"/>
+                               th:value="${result.auditTime}" disabled="disabled"/>
                     </div>
                 </div>
             </form>
@@ -174,6 +171,6 @@
 <script th:src="@{/js/helper/taskHelper.js}"></script>
 <script th:src="@{/js/helper/jsonHelper.js}"></script>
 <script th:src="@{/js/helper/renderingTableColorHelper.js}"></script>
-<script th:src="@{/js/myListJob/untreated/handled/handled.js}"></script>
+<script th:src="@{/js/myListJob/processed/processed.js}"></script>
 </body>
 </html>

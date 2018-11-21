@@ -30,7 +30,7 @@ function initTable(url) {
     $('#processedTable').bootstrapTable('destroy');
     column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
-        field: 'ewoNo',
+        field: 'changeNo',
         title: '变更单号',
         align: 'center',
         valign: 'middle',

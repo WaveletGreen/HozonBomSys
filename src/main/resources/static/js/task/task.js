@@ -22,35 +22,37 @@ function loadTasks() {
         success: function (data) {
             var _data = data.data;
             taskData = null;
-            let count = data.count;
+            //let count = data.count;
+            let count = 0;
             //alert(count);
 
             if (_data) {
                 $("#myTasks li").remove();
-                // if ((null != _data || _data != undefined) && _data.length != 0) {
-                //     $("#myTasks").append(
-                //         "<li>" +
-                //         "<a href='javascript:void(0)' class='project' onclick='loadTab(" + JSON.stringify(null).replace(/\'/g, "\"") + ")'>取消选择任务</a>" +
-                //         "</li>" +
-                //         "<li class='divider'></li>"
-                //     );
-                // }
-                for (var i in _data) {
+                if ((null != _data || _data != undefined) && _data.length != 0) {
                     $("#myTasks").append(
                         "<li>" +
-                        "<a href='javascript:void(0)' class='project' onclick='loadTab(" + JSON.stringify(_data[i]).replace(/\'/g, "\"") + ")'>" + _data[i].targetName + "</a>" +
+                        "<a href='javascript:void(0)' class='project' onclick='loadTab(" + JSON.stringify(null).replace(/\'/g, "\"") + ")'>取消选择任务</a>" +
                         "</li>" +
                         "<li class='divider'></li>"
                     );
-                    // count++;
+                }
+                for (var i in _data) {
+                    $("#myTasks").append(
+                        "<li>" +
+                        "<a href='javascript:void(0)' class='project' onclick='loadTab(" + JSON.stringify(_data[i]).replace(/\'/g, "\"") + ")'>" + _data[i].changeNo + "</a>" +
+                        "</li>" +
+                        "<li class='divider'></li>"
+                    );
+                    count++;
                 }
                 $("#myCurrentTask").html("");
                 if (count == 0) {
                     $("#myCurrentTask").append("<span style='color: gray'>任务数:无</span>");
                 }
                 else {
-                    $("#myCurrentTask").append("<span style='color: red'><a href='javascript:void(0)' class='project' onclick='f()'>" +
-                        "任务数:" + count + "</a></span>");
+                    // $("#myCurrentTask").append("<span style='color: red'><a href='javascript:void(0)' class='project' onclick='f()'>" +
+                    //     "任务数:" + count + "</a></span>");
+                    $("#myCurrentTask").append("<span style='color: red'>任务数:" + count + "</a></span>");
                 }
             }
         },
@@ -61,6 +63,19 @@ function loadTasks() {
 }
 
 function loadTab(data) {
+    // var showObj = $(top.document.body).find(".nav-tabs li a[href='#untreated/ToUntreatedForm?id=" + data.formId + "']");
+    // // 增加一个页面的时候判断当前的标签页是否已经打开过了，若打开过则不再重新生成新的tab标签页，而是直接显示打开过的标签页
+    // if ($(showObj).html() == undefined) {
+    //     //window.location.href = "untreated/ToUntreatedForm?id=" + data.formId;
+    //     $("#tabContainer").data("tabs").addTabMy({
+    //         id: data.formId,
+    //         text: data.changeNo,
+    //         closeable: true,
+    //         url: "untreated/ToUntreatedForm?id=" + data.formId
+    //     });
+    // }
+    //window.location.href = "untreated/ToUntreatedForm?id=" + data.formId;
+
     taskData = data;
     if (null == taskData) {
         $.ajax({
@@ -69,11 +84,12 @@ function loadTab(data) {
             success: function (data) {
                 var _data = data.data;
                 taskData = null;
-                let count = 0;
+                //let count = 0;
+                let count = data.count;
                 if (_data) {
-                    for (var i in _data) {
-                        count++;
-                    }
+                    // for (var i in _data) {
+                    //     count++;
+                    // }
                     $("#myCurrentTask").html("");
                     if (count == 0) {
                         $("#myCurrentTask").append("<span style='color: gray'>任务数:无</span>");
@@ -86,32 +102,33 @@ function loadTab(data) {
         });
         return;
     }
-    var showObj = $(top.document.body).find(".nav-tabs li a[href='#" + (data.targetName + data.targetId) + "']");
+    var showObj = $(top.document.body).find(".nav-tabs li a[href='#" + (data.formId) + "']");
     // 增加一个页面的时候判断当前的标签页是否已经打开过了，若打开过则不再重新生成新的tab标签页，而是直接显示打开过的标签页
     if ($(showObj).html() == undefined) {
+        //window.location.href = "untreated/ToUntreatedForm?id=" + data.formId;
         $("#tabContainer").data("tabs").addTab({
-            id: data.targetName + data.targetId,
-            text: data.targetName,
+            id: data.changeNo,
+            text: data.changeNo,
             closeable: true,
-            url: data.url
+            url: "untreated/ToUntreatedForm?id=" + data.formId
         });
     }
-    switch (data.formType) {
-        case 1:
-            vwoForm = {};
-            vwoForm.id = data.id;
-            vwoForm.url = data.url;
-            break;
-        case 2:
-            ewoForm.id = data.id;
-            ewoForm.url = data.url;
-            break;
-        case 3:
-            mwoForm.id = data.id;
-            mwoForm.url = data.url;
-            break;
-    }
-    $("#myCurrentTask").text(data.targetName);
+    // switch (data.formType) {
+    //     case 1:
+    //         vwoForm = {};
+    //         vwoForm.id = data.id;
+    //         vwoForm.url = data.url;
+    //         break;
+    //     case 2:
+    //         ewoForm.id = data.id;
+    //         ewoForm.url = data.url;
+    //         break;
+    //     case 3:
+    //         mwoForm.id = data.id;
+    //         mwoForm.url = data.url;
+    //         break;
+    // }
+    $("#myCurrentTask").text(data.changeNo);
 }
 
 /**
