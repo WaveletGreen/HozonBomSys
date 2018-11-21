@@ -2,13 +2,11 @@ package com.connor.hozon.bom.resources.controller.myListJob.untreated;
 
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzWorkListBasicInfoRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzWorkListBasicInfoQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzAuditorChangeRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +35,15 @@ public class HzUntreatedContrller {
     @Autowired
     private HzChangeOrderService hzChangeOrderService;
 
+    @Autowired
+    private HzChangeOrderDAO hzChangeOrderDAO;
+
     @RequestMapping(value = "ToUntreatedForm",method = RequestMethod.GET)
     public String getToUntreatedFormToPage(Long id,Model model){
         HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
+        //HzChangeOrderByPageQuery query = new HzChangeOrderByPageQuery();
+        //HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,id);
+
         if(respDTO != null){
             model.addAttribute("data",respDTO);
         }
