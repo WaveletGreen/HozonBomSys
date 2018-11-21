@@ -292,7 +292,7 @@ function initTable1(mBomUrl) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $mBomTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -1097,7 +1097,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $mBomTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -1861,7 +1861,7 @@ function initTable2(productionUrl) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $productionTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -2270,7 +2270,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $productionTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -2693,7 +2693,7 @@ function initTable3(financialUrl) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $financialTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -3107,7 +3107,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $financialTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";

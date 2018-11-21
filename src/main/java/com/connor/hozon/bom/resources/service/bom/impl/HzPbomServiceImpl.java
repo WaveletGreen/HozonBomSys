@@ -50,6 +50,7 @@ import sql.pojo.change.HzChangeDataRecord;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 
@@ -91,10 +92,6 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
 
-    @Autowired
-    private HzAuditorChangeDAO hzAuditorChangeDAO;
-
-    private ExecutorService pool = Executors.newFixedThreadPool(5);
     @Override
     public WriteResultRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
         WriteResultRespDTO respDTO = new WriteResultRespDTO();
@@ -216,15 +213,10 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public WriteResultRespDTO deleteHzPbomRecordByForeignId(DeleteHzPbomReqDTO reqDTO) {
-        WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
-            if (!PrivilegeUtil.writePrivilege()) {
-                return WriteResultRespDTO.getFailPrivilege();
-            }
-            if (reqDTO.getPuids() == null || reqDTO.getPuids().equals("") || reqDTO.getProjectId() == null || reqDTO.getProjectId().equals("")) {
-                respDTO.setErrMsg("非法参数！");
-                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-                return respDTO;
+
+            if (StringUtils.isBlank(reqDTO.getProjectId())|| StringUtils.isBlank(reqDTO.getProjectId())) {
+                return WriteResultRespDTO.IllgalArgument();
             }
             String bomPuids[] = reqDTO.getPuids().trim().split(",");
             for (String puid : bomPuids) {
@@ -1294,13 +1286,27 @@ public class HzPbomServiceImpl implements HzPbomService {
             StringBuffer deletePuids = new StringBuffer();
             List<HzPbomLineRecord> updateRecords = new ArrayList<>();
             List<HzPbomLineRecord> updateList = new ArrayList<>();
-            pool.submit(()->{
+            Set<HzPbomLineRecord> set = new HashSet<>();
                 List<HzPbomLineRecord> list = hzPbomRecordDAO.getPbomRecordsByPuids(query);
                 //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
                 if(ListUtil.isNotEmpty(list)){
-                    list.forEach(record -> {
+                    list.forEach(r->{
+                        if(1==r.getIsHas()){
+                            HzPbomTreeQuery ebomTreeQuery = new HzPbomTreeQuery();
+                            ebomTreeQuery.setProjectId(reqDTO.getProjectId());
+                            ebomTreeQuery.setPuid(r.geteBomPuid());
+                            List<HzPbomLineRecord> l = hzPbomRecordDAO.getHzPbomTree(ebomTreeQuery);
+                            if(ListUtil.isNotEmpty(l))
+                                set.addAll(l);
+                        }else {
+                            set.add(r);
+                        }
+                    });
+                }
+                if(ListUtil.isNotEmpty(set)){
+                    set.forEach(record -> {
                         if(StringUtils.isBlank(record.getRevision())){
-                            deletePuids.append(record.geteBomPuid()+",");
+                            deletePuids.append(record.getPuid()+",");
                         }else {
                             updateRecords.add(record);
                         }
@@ -1319,17 +1325,14 @@ public class HzPbomServiceImpl implements HzPbomService {
                             updateList.add(HzPbomRecordFactory.bomLineRecordToBomRecord(manageRecord));
                         }
                     });
-
-                    if(ListUtil.isNotEmpty(updateList)){
-                        hzPbomRecordDAO.updateList(updateList);
-                    }
-                    if(StringUtils.isNotBlank(deletePuids.toString())){
-                        hzPbomRecordDAO.deleteByPuids(deletePuids.toString());
-                    }
-
                 }
-            });
-            return WriteResultRespDTO.getSuccessResult();
+                if(ListUtil.isNotEmpty(updateList)){
+                    hzPbomRecordDAO.updateList(updateList);
+                }
+                if(StringUtils.isNotBlank(deletePuids.toString())){
+                    hzPbomRecordDAO.deleteListByPuids(deletePuids.toString());
+                }
+                return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
             return WriteResultRespDTO.getFailResult();

@@ -53,6 +53,7 @@ import sql.redis.SerializeUtil;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * Created by haozt on 2018/06/06
@@ -60,8 +61,6 @@ import java.util.concurrent.Executors;
 @Service("HzEbomService")
 @Transactional(rollbackFor={IllegalArgumentException.class})
 public class HzEbomServiceImpl implements HzEbomService {
-
-    private ExecutorService pool = Executors.newFixedThreadPool(5);
 
     @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
@@ -2030,41 +2029,53 @@ public class HzEbomServiceImpl implements HzEbomService {
             List<String> deletePuids = new ArrayList<>();
             List<HzEPLManageRecord> updateRecords = new ArrayList<>();
             List<HzBomLineRecord> updateList = new ArrayList<>();
-            pool.submit(()->{
-                List<HzEPLManageRecord> list = hzEbomRecordDAO.getEbomRecordsByPuids(query);
-                //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
-                if(ListUtil.isNotEmpty(list)){
-                    list.forEach(record -> {
-                        if(StringUtils.isBlank(record.getRevision())){
-                            deletePuids.add(record.getPuid());
-                        }else {
-                            updateRecords.add(record);
-                        }
-                    });
-                }
-                if(ListUtil.isNotEmpty(updateRecords)){
-                    HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-                    dataDetailQuery.setRevision(true);
-                    dataDetailQuery.setProjectId(reqDTO.getProjectId());
-                    dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());
-                    dataDetailQuery.setStatus(1);
-                    updateRecords.forEach(record -> {
-                        dataDetailQuery.setRevisionNo(record.getRevision());
-                        HzEPLManageRecord manageRecord = hzEbomRecordDAO.getEBomRecordByPuidAndRevision(dataDetailQuery);
-                        if(manageRecord!=null){
-                            updateList.add(HzEbomRecordFactory.eplRecordToBomLineRecord(manageRecord));
-                        }
-                    });
-
-                    if(ListUtil.isNotEmpty(updateList)){
-                        hzBomLineRecordDao.updateBatch(updateList);
+            Set<HzEPLManageRecord> set = new HashSet<>();
+            List<HzEPLManageRecord> list = hzEbomRecordDAO.getEbomRecordsByPuids(query);
+            //带子层撤销
+            //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
+            if(ListUtil.isNotEmpty(list)){
+                list.forEach(r->{
+                    if(1==r.getIsHas()){
+                        HzEbomTreeQuery ebomTreeQuery = new HzEbomTreeQuery();
+                        ebomTreeQuery.setProjectId(reqDTO.getProjectId());
+                        ebomTreeQuery.setPuid(r.getPuid());
+                        List<HzEPLManageRecord> l = hzEbomRecordDAO.getHzBomLineChildren(ebomTreeQuery);
+                        if(ListUtil.isNotEmpty(l))
+                        set.addAll(l);
+                    }else {
+                       set.add(r);
                     }
-                    if(ListUtil.isNotEmpty(deletePuids)){
-                        hzEbomRecordDAO.deleteByPuids(deletePuids);
+                });
+            }
+            if(ListUtil.isNotEmpty(set)){
+                set.forEach(record -> {
+                    if(StringUtils.isBlank(record.getRevision())){
+                        deletePuids.add(record.getPuid());
+                    }else {
+                        updateRecords.add(record);
                     }
-
-                }
-            });
+                });
+            }
+            if(ListUtil.isNotEmpty(updateRecords)){
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setRevision(true);
+                dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());
+                dataDetailQuery.setStatus(1);
+                updateRecords.forEach(record -> {
+                    dataDetailQuery.setRevisionNo(record.getRevision());
+                    HzEPLManageRecord manageRecord = hzEbomRecordDAO.getEBomRecordByPuidAndRevision(dataDetailQuery);
+                    if(manageRecord!=null){
+                        updateList.add(HzEbomRecordFactory.eplRecordToBomLineRecord(manageRecord));
+                    }
+                });
+            }
+            if(ListUtil.isNotEmpty(updateList)){
+                hzEbomRecordDAO.updateList(updateList);
+            }
+            if(ListUtil.isNotEmpty(deletePuids)){
+                hzEbomRecordDAO.deleteByPuids(deletePuids);
+            }
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
