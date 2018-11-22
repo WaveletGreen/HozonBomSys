@@ -6,6 +6,9 @@
 <title>代办事项详情页面</title>
 </head>
 <body>
+<div class="form-group">
+    <button type="button"class="btn btn-primary"onclick="doReturn();" style="float: right">返回上一步</button>
+</div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
 <div class="panel-body" style="padding:0px;">
     <form id="basicForm" role="form" method="post" action="">
@@ -60,11 +63,10 @@
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
                             <!--<select class="form-control" name="platform" id="ewoNo8" placeholder="请选择上市类型">-->
-                            <!--<option>上市前</option>-->
-                            <!--<option>上市后</option>-->
+                                <!--<option>上市前</option>-->
+                                <!--<option>上市后</option>-->
                             <!--</select>-->
-                            <select class="form-control" name="marketType" id="marketType" disabled="disabled"
-                                    placeholder="请选择上市类型">
+                            <select class="form-control" name="marketType" id="marketType"disabled="disabled" placeholder="请选择上市类型">
                                 <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
                                 <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
                             </select>
@@ -84,12 +86,11 @@
                         <div class="form-group after_the">
                             <label for="state">变更状态</label>
                             <!--<select class="form-control" name="platform" id="ewoNo11" placeholder="请选择变更状态">-->
-                            <!--<option>进行中</option>-->
-                            <!--<option>完成</option>-->
-                            <!--<option>取消</option>-->
+                                <!--<option>进行中</option>-->
+                                <!--<option>完成</option>-->
+                                <!--<option>取消</option>-->
                             <!--</select>-->
-                            <select class="form-control" name="state" id="state" placeholder="请选择变更状态"
-                                    disabled="disabled">
+                            <select class="form-control" name="state" id="state" placeholder="请选择变更状态"disabled="disabled">
                                 <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
                                 <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
                                 <option th:selected="${data.getState()=='取消 '?true:false}">取消</option>
@@ -139,15 +140,17 @@
                             </option>
                         </select>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 50px">
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 10px">
                         <label for="opiBomMngOptionDate">日期</label>
                         <input class="form-control" id="opiBomMngOptionDate" type="text"
                                disabled="disabled"/>
                     </div>
                     <div class="form-group">
-                        <button type="button" id="saveBtn" onclick="doSave();" class="btn btn-primary"
-                                style="width: 400px;margin-left: 35px">保存
-                        </button>
+                        <center>
+                            <button type="button" id="saveBtn" onclick="doSave();" class="btn btn-primary"
+                                    style="width: 400px;">保存
+                            </button>
+                        </center>
                     </div>
                 </div>
             </form>
@@ -176,6 +179,9 @@
         $("#untreatedFormTable").html(table);
     })
 
+    function doReturn() {
+        window.location.href="javascript:history.go(-1);"
+    }
     function doSave() {
 
     }

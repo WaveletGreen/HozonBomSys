@@ -24,7 +24,7 @@ public class HzApplicantChangeDAOImpl extends BaseSQLUtil implements HzApplicant
     }
 
     @Override
-    public List<HzApplicantChangeRecord> findAuditorList(HzApplicantChangeRecord record) {
+    public List<HzApplicantChangeRecord> findApplicantionList(HzApplicantChangeRecord record) {
         Map<String,Object> map = new HashMap<>();
         //map.put("id",query.getId());
         //map.put("auditResult","");

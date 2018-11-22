@@ -18,9 +18,9 @@ $(document).ready((function () {
 }));
 
 function doQuery() {
+    $('#untreatedTable').bootstrapTable('destroy');
     var url = "untreated/infoList";
     initTable(url);
-    $('#untreatedTable').bootstrapTable('destroy');
 }
 
 function formatDate() {
@@ -33,7 +33,6 @@ function formatDate() {
 function initTable(url) {
     var $table = $("#untreatedTable");
     var column = [];
-    column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
         field: 'changeNo',
         title: '变更单号',
@@ -50,7 +49,7 @@ function initTable(url) {
     column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
-    column.push({field: 'originator', title: '项目', align: 'center', valign: 'middle'});
+    column.push({field: 'projectName', title: '项目', align: 'center', valign: 'middle'});
     $table.bootstrapTable({
         url: url,
         method: 'get',

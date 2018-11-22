@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.myListJob.myApplication;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
+import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzApplicationChangeService;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
@@ -55,9 +56,46 @@ public class HzMyApplicationContrller {
 //        if(StringUtil.isEmpty(query.getProjectId())){
 //            return new JSONObject();
 //        }
+        HzChangeOrderByPageQuery pageQuery = query;
+        try {
+            pageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+        }
 
-        List<HzChangeOrderRespDTO> respDTOs = hzApplicationChangeService.findChangeOrderList(query,record);
+        Page<HzChangeOrderRespDTO> page = hzApplicationChangeService.getHzChangeOrderPage(pageQuery,record);
+        if(ListUtil.isEmpty(page.getResult())){
+            return new JSONObject();
+        }
 
+        List<HzChangeOrderRespDTO> respDTOS = page.getResult();
+        JSONObject jsonObject = new JSONObject();
+        List<JSONObject> list = new ArrayList<>();
+        respDTOS.forEach(hzChangeOrderRespDTO -> {
+            JSONObject object = new JSONObject();
+            object.put("createName",hzChangeOrderRespDTO.getCreateName());
+            object.put("marketType",hzChangeOrderRespDTO.getMarketType());
+            object.put("createNo",hzChangeOrderRespDTO.getChangeNo());
+            object.put("tel",hzChangeOrderRespDTO.getTel());
+            object.put("state",hzChangeOrderRespDTO.getState());
+            object.put("relationChangeNo",hzChangeOrderRespDTO.getRelationChangeNo());
+            object.put("createTime",hzChangeOrderRespDTO.getCreateTime());
+            object.put("remark",hzChangeOrderRespDTO.getRemark());
+            object.put("projectState",hzChangeOrderRespDTO.getProjectStage());
+
+            object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
+            object.put("originTime",hzChangeOrderRespDTO.getOriginTime());
+            object.put("id",hzChangeOrderRespDTO.getId());
+            object.put("deptName",hzChangeOrderRespDTO.getDeptName());
+            object.put("changeType",hzChangeOrderRespDTO.getChangeType());
+            object.put("originator",hzChangeOrderRespDTO.getOriginator());
+            object.put("projectName",hzChangeOrderRespDTO.getProjectName());
+            list.add(object);
+        });
+        jsonObject.put("totalCount",page.getTotalCount());
+        jsonObject.put("result",list);
+        return jsonObject;
+
+        /*List<HzChangeOrderRespDTO> respDTOs = hzApplicationChangeService.findChangeOrderList(query,record);
         if(ListUtil.isEmpty(respDTOs)){
             return new JSONObject();
         }
@@ -71,9 +109,10 @@ public class HzMyApplicationContrller {
             object.put("deptName",hzChangeOrderRespDTO.getDeptName());
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
+            object.put("projectName",hzChangeOrderRespDTO.getProjectName());
             list.add(object);
         });
         jsonObject.put("result",list);
-        return jsonObject;
+        return jsonObject;*/
     }
 }

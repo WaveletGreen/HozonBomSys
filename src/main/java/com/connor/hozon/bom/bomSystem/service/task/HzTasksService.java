@@ -15,8 +15,14 @@ import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
+import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
+import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.service.TreeService;
@@ -26,6 +32,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.vwo.HzVwoInfo;
+import sql.pojo.change.HzAuditorChangeRecord;
+import sql.pojo.change.HzChangeDataRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.task.HzTasks;
 
 import java.util.ArrayList;
@@ -55,6 +64,12 @@ public class HzTasksService implements IHzTaskService {
 
     @Autowired
     private HzWorkListDAO hzWorkListDAO;
+
+    @Autowired
+    private HzAuditorChangeDAO hzAuditorChangeDAO;
+
+    @Autowired
+    private HzAuditorChangeService hzAuditorChangeService;
 
     @Autowired
     HzChangeOrderService hzChangeOrderService;
@@ -182,6 +197,28 @@ public class HzTasksService implements IHzTaskService {
     public JSONObject loadUserTask() {
         User user = UserInfo.getUser();
         JSONObject result = new JSONObject();
+        /*HzChangeOrderByPageQuery query=new HzChangeOrderByPageQuery();
+        HzAuditorChangeRecord record=new HzAuditorChangeRecord();
+        List<HzChangeOrderRespDTO> respDTOs = hzAuditorChangeService.findChangeOrderList(query,record);
+        if(ListUtil.isEmpty(respDTOs)){
+            return result;
+        }
+        if (respDTOs != null && !respDTOs.isEmpty()) {
+            JSONObject jsonObject = new JSONObject();
+            List<JSONObject> list = new ArrayList<>();
+            respDTOs.forEach(hzChangeOrderRespDTO -> {
+                JSONObject object = new JSONObject();
+                object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
+                object.put("formId",hzChangeOrderRespDTO.getId());
+                list.add(object);
+            });
+            //统计任务个数
+            int counts = hzAuditorChangeDAO.count(user.getId());
+            jsonObject.put("count", counts);
+            jsonObject.put("data",list);
+            return jsonObject;
+        }
+        return result;*/
         List<HzTaskPostDto> dtoList = new ArrayList<>();
         List<HzTasks> tasks = doSelectUserExecutingTasks(Long.valueOf(user.getId()));
         Tree tree = new Tree();
@@ -246,6 +283,9 @@ public class HzTasksService implements IHzTaskService {
                 dtoList.add(dto);
             }
         }
+        //统计任务个数
+        int count = hzAuditorChangeDAO.count(user.getId());
+        result.put("count", count);
         result.put("data", dtoList);
         return result;
     }

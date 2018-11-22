@@ -23,7 +23,10 @@ function loadTasks() {
         success: function (data) {
             var _data = data.data;
             taskData = null;
+            //let count = data.count;
             let count = 0;
+            //alert(count);
+
             if (_data) {
                 $("#myTasks li").remove();
                 if ((null != _data || _data != undefined) && _data.length != 0) {
@@ -38,6 +41,7 @@ function loadTasks() {
                     $("#myTasks").append(
                         "<li>" +
                         "<a href='javascript:void(0)' class='project' onclick='loadTab(" + JSON.stringify(_data[i]).replace(/\'/g, "\"") + ")'>" + _data[i].targetName + "</a>" +
+                        //"<a href='javascript:void(0)' class='project' onclick='loadTab(" + JSON.stringify(_data[i]).replace(/\'/g, "\"") + ")'>" + _data[i].changeNo + "</a>" +
                         "</li>" +
                         "<li class='divider'></li>"
                     );
@@ -48,6 +52,8 @@ function loadTasks() {
                     $("#myCurrentTask").append("<span style='color: gray'>任务数:无</span>");
                 }
                 else {
+                    // $("#myCurrentTask").append("<span style='color: red'><a href='javascript:void(0)' class='project' onclick='f()'>" +
+                    //     "任务数:" + count + "</a></span>");
                     $("#myCurrentTask").append("<span style='color: red'>任务数:" + count + "</span>");
                 }
             }
@@ -59,6 +65,19 @@ function loadTasks() {
 }
 
 function loadTab(data) {
+    // var showObj = $(top.document.body).find(".nav-tabs li a[href='#untreated/ToUntreatedForm?id=" + data.formId + "']");
+    // // 增加一个页面的时候判断当前的标签页是否已经打开过了，若打开过则不再重新生成新的tab标签页，而是直接显示打开过的标签页
+    // if ($(showObj).html() == undefined) {
+    //     //window.location.href = "untreated/ToUntreatedForm?id=" + data.formId;
+    //     $("#tabContainer").data("tabs").addTabMy({
+    //         id: data.formId,
+    //         text: data.changeNo,
+    //         closeable: true,
+    //         url: "untreated/ToUntreatedForm?id=" + data.formId
+    //     });
+    // }
+    //window.location.href = "untreated/ToUntreatedForm?id=" + data.formId;
+
     taskData = data;
     if (null == taskData) {
         $.ajax({
@@ -68,6 +87,7 @@ function loadTab(data) {
                 var _data = data.data;
                 taskData = null;
                 let count = 0;
+                //let count = data.count;
                 if (_data) {
                     for (var i in _data) {
                         count++;
@@ -84,15 +104,23 @@ function loadTab(data) {
         });
         return;
     }
+    //var showObj = $(top.document.body).find(".nav-tabs li a[href='#" + (data.formId) + "']");
     var showObj = $(top.document.body).find(".nav-tabs li a[href='#" + (data.targetName + data.targetId) + "']");
     // 增加一个页面的时候判断当前的标签页是否已经打开过了，若打开过则不再重新生成新的tab标签页，而是直接显示打开过的标签页
     if ($(showObj).html() == undefined) {
+        //window.location.href = "untreated/ToUntreatedForm?id=" + data.formId;
         $("#tabContainer").data("tabs").addTab({
             id: data.targetName + data.targetId,
             text: data.targetName,
             closeable: true,
             url: data.url
         });
+        // $("#tabContainer").data("tabs").addTab({
+        //     id: data.changeNo,
+        //     text: data.changeNo,
+        //     closeable: true,
+        //     url: "untreated/ToUntreatedForm?id=" + data.formId
+        // });
     }
     switch (data.formType) {
         case 1:
@@ -166,13 +194,13 @@ function f() {
     //var showObj = $(top.document.body).find(".nav-tabs li a[href='#" + (data.targetName + data.targetId) + "']");
     // 增加一个页面的时候判断当前的标签页是否已经打开过了，若打开过则不再重新生成新的tab标签页，而是直接显示打开过的标签页
     //if ($(showObj).html() == undefined) {
-    $("#tabContainer").data("tabs").addTab({
-        //id: data.targetName + data.targetId,
-        id: "待办事项" + "122",
-        text: "待办事项",//data.targetName
-        closeable: true,
-        url: "untreated",//data.url
-    });
+        $("#tabContainer").data("tabs").addTab({
+            //id: data.targetName + data.targetId,
+            id:"待办事项"+"122",
+            text: "待办事项",//data.targetName
+            closeable: true,
+            url:"untreated",//data.url
+        });
     //}
 
 }

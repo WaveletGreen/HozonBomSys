@@ -11,9 +11,9 @@ $(document).ready((function () {
 }))
 
 function doQuery() {
+    $('#processedTable').bootstrapTable('destroy');
     var url = "processed/infoList";
     initTable(url);
-    $('#processedTable').bootstrapTable('destroy');
 }
 
 function formatDate() {
@@ -27,9 +27,8 @@ function initTable(url) {
     var projectId = $("#project", window.top.document).val();
     var $table = $("#processedTable");
     var column = [];
-    column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
-        field: 'ewoNo',
+        field: 'changeNo',
         title: '变更单号',
         align: 'center',
         valign: 'middle',
@@ -44,7 +43,7 @@ function initTable(url) {
     column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
-    column.push({field: 'originator', title: '项目', align: 'center', valign: 'middle'});
+    column.push({field: 'projectName', title: '项目', align: 'center', valign: 'middle'});
     $table.bootstrapTable({
         url: url,
         method: 'get',
@@ -59,7 +58,7 @@ function initTable(url) {
         sidePagination: "server",          //分页方式：client客户端分页，server服务端分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         showExport: false,
-        formId: "formId",
+        formId: "queryHandled",
         columns: column,                     //列信息，需要预先定义好
         sortable: false,                     //是否启用排序
         sortOrder: "asc",                   //排序方式
