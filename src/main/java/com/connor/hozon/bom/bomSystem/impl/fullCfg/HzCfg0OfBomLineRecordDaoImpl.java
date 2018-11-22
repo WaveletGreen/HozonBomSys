@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0OfBomLineRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzCfg0OfBomLineRecordDaoImpl extends BasicDaoImpl<HzCfg0OfBomLineRecord> implements HzCfg0OfBomLineRecordDao {
 
     private final static HzCfg0OfBomLineRecord RECORD = new HzCfg0OfBomLineRecord();

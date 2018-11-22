@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 
 import java.math.BigDecimal;
@@ -18,7 +19,7 @@ import java.math.BigDecimal;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements HzFullCfgMainDao {
     private static final HzFullCfgMain HZ_FULL_CFG_MAIN = new HzFullCfgMain();
 

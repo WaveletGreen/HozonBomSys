@@ -6,7 +6,6 @@
 
 package com.connor.hozon.bom.bomSystem.dao.derivative;
 
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.derivative.HzMaterielCfgBean;
 
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzMaterielCfgBeanDao {
     /**
      * 根据项目UID或车型模型的UID获取到整车物料属性

@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0BomLineOfModelDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * @Modified By:
  */
 //@Service("hzCfg0BomLineOfModelDao")
-@Configuration
+@Repository
 public class HzCfg0BomLineOfModelDaoImpl extends BasicDaoImpl<HzCfg0BomLineOfModel> implements HzCfg0BomLineOfModelDao {
 
     private final static HzCfg0BomLineOfModel BOM_LINE_OF_MODEL = new HzCfg0BomLineOfModel();

@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.dao.color.HzCfg0ColorSetDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.color.HzCfg0ColorSet;
 
@@ -21,8 +22,9 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service("hzCfg0ColorSetDaox")
+//@Service("hzCfg0ColorSetDaox")
 //@Configuration
+@Repository
 public class HzCfg0ColorSetDaoImpl extends BasicDaoImpl<HzCfg0ColorSet> implements HzCfg0ColorSetDao {
 
     private final static HzCfg0ColorSet SET = new HzCfg0ColorSet();

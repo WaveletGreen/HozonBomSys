@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.dao.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HzBomLineRecord;
 
@@ -21,7 +21,6 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzBomDataDao extends BasicDao<HzBomLineRecord>{
     /**
      * Author: Fancyears·Maylos·Mayways

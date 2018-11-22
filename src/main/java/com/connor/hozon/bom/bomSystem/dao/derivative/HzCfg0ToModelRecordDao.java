@@ -19,7 +19,7 @@ import java.util.List;
  * @Modified By:
  */
 @Deprecated
-@Configuration
+//@Configuration
 public interface HzCfg0ToModelRecordDao  extends BasicDao<HzCfg0ToModelRecord>{
 
     int deleteByPrimaryKey(String puid);

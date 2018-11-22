@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.derivative;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.Map;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeMaterielBasic> implements HzDerivativeMaterielBasicDao {
 
     private final static HzDerivativeMaterielBasic BASIC = new HzDerivativeMaterielBasic();

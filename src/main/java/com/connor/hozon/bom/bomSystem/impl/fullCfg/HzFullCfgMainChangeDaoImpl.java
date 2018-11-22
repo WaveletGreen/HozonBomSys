@@ -4,9 +4,10 @@ import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
 
-@Configuration
+@Repository
 public class HzFullCfgMainChangeDaoImpl  extends BasicDaoImpl<HzFullCfgMainChange> implements HzFullCfgMainChangeDao {
 
     public HzFullCfgMainChangeDaoImpl() {

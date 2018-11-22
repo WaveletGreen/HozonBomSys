@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.dao.project.HzPlatformRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.project.HzPlatformRecord;
@@ -23,7 +24,7 @@ import java.util.List;
  * @Modified By:
  */
 //@Service("hzPlatformRecordDao")
-@Configuration
+@Repository
 public class HzPlatformRecordDaoImpl extends BasicDaoImpl<HzPlatformRecord> implements HzPlatformRecordDao {
 
     private final static HzPlatformRecord PLATFORM = new HzPlatformRecord();

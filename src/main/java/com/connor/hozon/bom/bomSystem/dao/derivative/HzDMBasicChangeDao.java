@@ -7,13 +7,9 @@
 package com.connor.hozon.bom.bomSystem.dao.derivative;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
-import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
-import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: zhuDB
@@ -21,7 +17,6 @@ import java.util.Map;
  * @Date: Created in 2018/11/9 10:49
  * @Modified By:
  */
-@Configuration
 public interface HzDMBasicChangeDao extends BasicDao<HzDMBasicChangeBean> {
 
     int insertList(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);

@@ -43,7 +43,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      *
      * @param orderId 变更表单的ID
      * @param params  配置参数，预留
-     * @return
+     * @return 发布成功返回true，反之返回false
      */
     @Override
     public boolean release(Long orderId, Object... params) {

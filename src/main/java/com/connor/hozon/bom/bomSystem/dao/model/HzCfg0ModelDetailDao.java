@@ -7,7 +7,6 @@
 package com.connor.hozon.bom.bomSystem.dao.model;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.model.HzCfg0ModelDetail;
 
 import java.util.List;
@@ -17,7 +16,6 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzCfg0ModelDetailDao  extends BasicDao<HzCfg0ModelDetail>{
 
     /**

@@ -11,6 +11,7 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.modelColor.HzColorLvl2Model;
 
@@ -22,7 +23,7 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzColorLvl2ModelDaoImpl extends BasicDaoImpl<HzColorLvl2Model> implements HzColorLvl2ModelDao {
     private final static HzColorLvl2Model lvl2Model = new HzColorLvl2Model();
 

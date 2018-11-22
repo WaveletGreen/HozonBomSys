@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.derivative;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzMaterielCfgBeanDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.derivative.HzMaterielCfgBean;
 
@@ -21,7 +22,7 @@ import java.util.Map;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzMaterielCfgBeanDaoImpl implements HzMaterielCfgBeanDao {
     @Autowired
     IBaseSQLUtil baseSQLUtil;

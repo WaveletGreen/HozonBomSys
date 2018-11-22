@@ -8,7 +8,6 @@ package com.connor.hozon.bom.bomSystem.dao.color;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.color.HzCfg0ColorSet;
 
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzCfg0ColorSetDao extends BasicDao<HzCfg0ColorSet>{
     /**
      * @return

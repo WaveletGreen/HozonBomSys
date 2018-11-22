@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.dao.bom;
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.bom.HZBomMainRecord;
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -16,7 +17,7 @@ import sql.pojo.bom.HZBomMainRecord;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
+@Repository
 public interface HzBomMainRecordDao extends BasicDao<HZBomMainRecord> {
     /**
      * 根据项目查找BOM主配置

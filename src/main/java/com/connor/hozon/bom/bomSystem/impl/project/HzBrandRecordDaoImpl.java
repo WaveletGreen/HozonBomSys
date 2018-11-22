@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.dao.project.HzBrandRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.project.HzBrandRecord;
@@ -23,7 +24,7 @@ import java.util.List;
  * @Modified By:
  */
 //@Service("hzBrandRecordDao")
-@Configuration
+@Repository
 public class HzBrandRecordDaoImpl extends BasicDaoImpl<HzBrandRecord> implements HzBrandRecordDao {
     private final static HzBrandRecord BRAND = new HzBrandRecord();
 

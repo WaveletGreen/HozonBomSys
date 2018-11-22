@@ -7,11 +7,9 @@
 package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.fullCfg.HzFullCfgModel;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
 
-import java.math.BigDecimal;
 import java.util.List;
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -19,7 +17,6 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzFullCfgModelDao extends BasicDao<HzFullCfgModel> {
 
     int deleteByPrimaryKey(Long id);

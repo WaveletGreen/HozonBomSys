@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.vwo;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.vwo.HzVwoOpiBom;
 
@@ -19,7 +20,7 @@ import sql.pojo.cfg.vwo.HzVwoOpiBom;
  * @Modified By:
  */
 //@Service("hzVwoOpiBomDao")
-@Configuration
+@Repository
 public class HzVwoOpiBomDaoImpl extends BasicDaoImpl<HzVwoOpiBom> implements HzVwoOpiBomDao {
     private final static HzVwoOpiBom BOM = new HzVwoOpiBom();
 

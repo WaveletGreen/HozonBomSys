@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.derivative;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.derivative.HzCfg0ModelGroup;
 
 /**
@@ -17,7 +18,7 @@ import sql.pojo.cfg.derivative.HzCfg0ModelGroup;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzCfg0ModelGroupDaoImpl extends BasicDaoImpl<HzCfg0ModelGroup> implements HzCfg0ModelGroupDao {
     private static final HzCfg0ModelGroup GROUP = new HzCfg0ModelGroup();
 

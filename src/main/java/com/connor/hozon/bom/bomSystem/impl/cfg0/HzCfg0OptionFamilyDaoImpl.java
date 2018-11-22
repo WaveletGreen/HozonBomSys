@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.cfg0;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @Modified By:
  */
 //@Service("hzCfg0OptionFamilyDao")
-@Configuration
+@Repository
 public class HzCfg0OptionFamilyDaoImpl extends BasicDaoImpl<HzCfg0OptionFamily> implements HzCfg0OptionFamilyDao {
     private final static HzCfg0OptionFamily FAMILY = new HzCfg0OptionFamily();
 

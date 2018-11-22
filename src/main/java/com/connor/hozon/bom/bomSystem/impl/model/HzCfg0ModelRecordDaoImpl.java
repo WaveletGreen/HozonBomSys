@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.fullCfg.HzFullCfgModelChange;
@@ -24,7 +25,7 @@ import java.util.List;
  * @Modified By:
  */
 //@Service("hzCfg0ModelRecordDao")
-@Configuration
+@Repository
 public class HzCfg0ModelRecordDaoImpl extends BasicDaoImpl<HzCfg0ModelRecord> implements HzCfg0ModelRecordDao {
 
     private final static HzCfg0ModelRecord RECORD = new HzCfg0ModelRecord();

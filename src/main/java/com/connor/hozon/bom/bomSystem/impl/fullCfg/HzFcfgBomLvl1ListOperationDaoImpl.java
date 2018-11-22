@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFcfgBomLvl1ListOperationDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
 /**
@@ -18,7 +19,8 @@ import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
  * @Modified By:
  */
 @Deprecated
-@Configuration
+//@Configuration
+@Repository
 public class HzFcfgBomLvl1ListOperationDaoImpl implements HzFcfgBomLvl1ListOperationDao {
     private final IBaseSQLUtil baseSQLUtil;
 

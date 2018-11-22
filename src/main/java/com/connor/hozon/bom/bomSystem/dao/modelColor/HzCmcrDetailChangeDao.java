@@ -7,7 +7,6 @@
 package com.connor.hozon.bom.bomSystem.dao.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 
@@ -18,7 +17,6 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzCmcrDetailChangeDao extends BasicDao<HzCmcrDetailChange>{
     /**
      * 插入变更后数据

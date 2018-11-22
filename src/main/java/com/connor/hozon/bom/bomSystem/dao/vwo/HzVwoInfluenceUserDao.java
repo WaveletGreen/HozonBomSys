@@ -8,7 +8,6 @@ package com.connor.hozon.bom.bomSystem.dao.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.vwo.HzVwoInfluenceUser;
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -16,7 +15,6 @@ import sql.pojo.cfg.vwo.HzVwoInfluenceUser;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzVwoInfluenceUserDao  extends BasicDao<HzVwoInfluenceUser>{
     /**
      * 主键删除

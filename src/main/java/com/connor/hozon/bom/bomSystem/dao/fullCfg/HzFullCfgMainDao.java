@@ -7,17 +7,13 @@
 package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
-
-import java.math.BigDecimal;
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 全配置BOM一级清单主数据dao层
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzFullCfgMainDao extends BasicDao<HzFullCfgMain>{
 
     int deleteByPrimaryKey(Long id);

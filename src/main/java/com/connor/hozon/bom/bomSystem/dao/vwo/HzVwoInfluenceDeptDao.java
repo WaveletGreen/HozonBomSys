@@ -16,7 +16,6 @@ import sql.pojo.cfg.vwo.HzVwoInfluenceDept;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzVwoInfluenceDeptDao  extends BasicDao<HzVwoInfluenceDept>{
     /**
      * 主键删除

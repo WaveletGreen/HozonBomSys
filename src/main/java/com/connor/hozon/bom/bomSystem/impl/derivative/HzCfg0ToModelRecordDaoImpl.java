@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.derivative;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzCfg0ToModelRecordDaoImpl extends BasicDaoImpl<HzCfg0ToModelRecord> implements HzCfg0ToModelRecordDao {
     public HzCfg0ToModelRecordDaoImpl() {
         clz = HzCfg0ToModelRecordDao.class;

@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.vwo;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoExecuteDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.vwo.HzVwoExecute;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * @Modified By:
  */
 //@Service("hzVwoExecuteDao")
-@Configuration
+@Repository
 public class HzVwoExecuteDaoImpl extends BasicDaoImpl<HzVwoExecute> implements HzVwoExecuteDao {
     private final static HzVwoExecute EXECUTE = new HzVwoExecute();
 

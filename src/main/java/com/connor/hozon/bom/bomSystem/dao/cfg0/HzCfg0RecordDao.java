@@ -10,8 +10,6 @@ import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.List;
@@ -23,7 +21,6 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
 
     /***

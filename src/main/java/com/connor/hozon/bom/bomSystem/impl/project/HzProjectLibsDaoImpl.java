@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.project;
 import com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.project.HzProjectLibs;
 
@@ -21,7 +22,7 @@ import java.util.List;
  * @Modified By:
  */
 //@Service("hzProjectLibsDao")
-@Configuration
+@Repository
 public class HzProjectLibsDaoImpl extends BasicDaoImpl<HzProjectLibs> implements HzProjectLibsDao {
     private final static HzProjectLibs PROJECT = new HzProjectLibs();
 

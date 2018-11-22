@@ -6,12 +6,15 @@
 
 package com.connor.hozon.bom.bomSystem.dao;
 
+import org.springframework.stereotype.Repository;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: dao层基础
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
  */
+@Repository
 public interface BasicDao<T> {
     /**
      * 主键删除

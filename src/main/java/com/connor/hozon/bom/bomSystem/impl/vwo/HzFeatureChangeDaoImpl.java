@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.vwo;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import java.util.Map;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> implements HzFeatureChangeDao {
 
     public HzFeatureChangeDaoImpl() {

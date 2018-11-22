@@ -12,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.option.ChangeCmcrOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 
@@ -26,7 +27,7 @@ import java.util.Map;
  * @Modified By:
  */
 //@Service("hzCmcrChange")
-@Configuration
+@Repository
 public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements HzCmcrChangeDao {
 
     private final static HzCmcrChange CHANGE_POJO = new HzCmcrChange();

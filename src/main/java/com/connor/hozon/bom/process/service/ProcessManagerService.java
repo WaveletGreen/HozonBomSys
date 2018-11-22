@@ -14,6 +14,7 @@ import com.connor.hozon.bom.process.iservice.IProcessManagerService;
 import com.connor.hozon.bom.process.iservice.IProcessStart;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.task.HzTasks;
 

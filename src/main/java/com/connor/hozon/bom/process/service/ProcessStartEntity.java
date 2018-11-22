@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ import java.util.Map;
  * @Date: Created in  2018/11/22 11:55
  * @Modified By:
  */
-@Service
+@Component
 @EnableTransactionManagement(proxyTargetClass = true)
 @Transactional(rollbackFor = {IllegalArgumentException.class, RuntimeException.class, Exception.class})
 @PropertySource({"classpath:myresource.properties"})

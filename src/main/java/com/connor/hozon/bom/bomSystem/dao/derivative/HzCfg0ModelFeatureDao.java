@@ -8,7 +8,6 @@ package com.connor.hozon.bom.bomSystem.dao.derivative;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzCfg0ModelFeatureDao extends BasicDao<HzCfg0ModelFeature> {
     /**
      * 根据主键删除模型特性数据

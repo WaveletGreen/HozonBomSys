@@ -4,12 +4,13 @@ import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
 import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
 
 import java.util.List;
 
-@Configuration
+@Repository
 public class HzDMDetailChangeDaoImpl extends BasicDaoImpl<HzDMDetailChangeBean> implements HzDMDetailChangeDao {
 
     private final static HzDMDetailChangeBean BASIC = new HzDMDetailChangeBean();

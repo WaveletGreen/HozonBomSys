@@ -11,6 +11,7 @@ import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.relevance.HzRelevanceBasic;
 
@@ -23,7 +24,7 @@ import java.util.List;
  * @Modified By:
  */
 //@Service
-@Configuration
+@Repository
 public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> implements HzRelevanceBasicDao {
     private final static HzRelevanceBasic BASIC = new HzRelevanceBasic();
     private final static HzRelevanceQueryResultBean BEAN = new HzRelevanceQueryResultBean();

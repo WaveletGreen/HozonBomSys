@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.impl;
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.IBaseSQLUtil;
 
 /**
@@ -11,7 +12,8 @@ import sql.IBaseSQLUtil;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+//@Configuration
+@Repository
 public class BasicDaoImpl<T> implements BasicDao<T> {
     /**
      * 目标类
@@ -31,7 +33,7 @@ public class BasicDaoImpl<T> implements BasicDao<T> {
      * @return
      */
     @Override
-    public int deleteByPrimaryKey(T t)  {
+    public int deleteByPrimaryKey(T t) {
         System.out.println("---------->" + clz.getCanonicalName() + "<------deleteByPrimaryKey--------");
         return baseSQLUtil.executeDelete(t, clz.getCanonicalName() + ".deleteByPrimaryKey");
     }
