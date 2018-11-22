@@ -74,6 +74,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         } catch (Exception e) {
 //            sqlSessionTemplate.rollback(true);
             e.printStackTrace();
+            throw e;
         } finally {
         }
         return result;
@@ -165,6 +166,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 //                sqlSessionTemplate.rollback(true);
 //            }
             e.printStackTrace();
+            throw e;
 
         } finally {
         }
@@ -185,6 +187,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         } catch (Exception e) {
 //            sqlSessionTemplate.rollback(true);
             e.printStackTrace();
+            throw e;
         } finally {
         }
         return result;
@@ -205,6 +208,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         } catch (Exception e) {
 //            sqlSessionTemplate.rollback(true);
             e.printStackTrace();
+            throw e;
         } finally {
         }
         return result;
@@ -224,6 +228,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         } catch (Exception e) {
 //            sqlSessionTemplate.rollback(true);
             e.printStackTrace();
+            throw e;
         } finally {
         }
         return result;
@@ -245,6 +250,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         } catch (Exception e) {
 //            sqlSessionTemplate.rollback(true);
             e.printStackTrace();
+            throw e;
         } finally {
         }
         return result;
@@ -383,6 +389,7 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 
     /**
      * 分页查询 逻辑分页
+     *
      * @param sqlMapId         mybatis映射id
      * @param pageRequestParam 分页请求参数信息
      * @return

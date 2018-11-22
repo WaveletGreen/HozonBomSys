@@ -14,10 +14,13 @@ import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
+import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.Tree;
@@ -60,11 +63,16 @@ public class HzTasksService implements IHzTaskService {
     HzVwoInfoService hzVwoInfoService;
 
     @Autowired
+    private HzWorkListDAO hzWorkListDAO;
+
+    @Autowired
     private HzAuditorChangeDAO hzAuditorChangeDAO;
 
     @Autowired
     private HzAuditorChangeService hzAuditorChangeService;
 
+    @Autowired
+    HzChangeOrderService hzChangeOrderService;
     private final static Logger LOGGER = LoggerFactory.getLogger(HzTasksService.class);
 
     /**
@@ -189,7 +197,6 @@ public class HzTasksService implements IHzTaskService {
     public JSONObject loadUserTask() {
         User user = UserInfo.getUser();
         JSONObject result = new JSONObject();
-
         /*HzChangeOrderByPageQuery query=new HzChangeOrderByPageQuery();
         HzAuditorChangeRecord record=new HzAuditorChangeRecord();
         List<HzChangeOrderRespDTO> respDTOs = hzAuditorChangeService.findChangeOrderList(query,record);
@@ -212,64 +219,68 @@ public class HzTasksService implements IHzTaskService {
             return jsonObject;
         }
         return result;*/
-
-
         List<HzTaskPostDto> dtoList = new ArrayList<>();
         List<HzTasks> tasks = doSelectUserExecutingTasks(Long.valueOf(user.getId()));
-        //List<HzChangeOrderRespDTO> dtoList = new ArrayList<>();
-        //List<HzChangeOrderRecord> tasks = doSelectUserExecutingChangeOrder(Long.valueOf(user.getId()));
-
         Tree tree = new Tree();
         if (tasks != null && !tasks.isEmpty()) {
             Map<Integer, Tree> maoOfForm = new HashMap<>();
             Tree dbTree = null;
             for (int i = 0; i < tasks.size(); i++) {
-//                HzChangeOrderRecord task = tasks.get(i);
-//                tree.setId(task.getId());
+                HzTasks task = tasks.get(i);
+                tree.setId(task.getTaskFormId());
                 //缓存树地址
                 if (maoOfForm.containsKey(tree.getId())) {
                     dbTree = maoOfForm.get(tree.getId());
                 } else {
                     dbTree = treeService.get(tree);
                 }
-                HzChangeOrderRespDTO dto = new HzChangeOrderRespDTO();
-//                if (dbTree != null) {
-//                    //设置URL
-//                    dto.setUrl(dbTree.getUrl());
-//                    //设置表单ID
-//                    dto.setId(dbTree.getId());
-//                }
-                //switch (task.getTaskFormType()) {
-//                    case 1:
-                        //HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
-                        //dto.setText(info.getVwoNum());
-                        //dto.setTargetId(info.getId());
-                        //dto.setTargetName(info.getVwoNum() + "表单");
-                        //dto.setTargetType(task.getTaskTargetType());
-                        //dto.setFormType(task.getTaskFormType());
-//                        break;
+                HzTaskPostDto dto = new HzTaskPostDto();
+                if (dbTree != null) {
+                    //设置URL
+                    dto.setUrl(dbTree.getUrl());
+                    //设置表单ID
+                    dto.setId(dbTree.getId());
+                }
+                switch (task.getTaskFormType()) {
+                    case TaskOptions.FORM_TYPE_VWO:
+                        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
+                        dto.setText(info.getVwoNum());
+                        dto.setTargetId(info.getId());
+                        dto.setTargetName(info.getVwoNum() + "表单");
+                        dto.setTargetType(task.getTaskTargetType());
+                        dto.setFormType(task.getTaskFormType());
+                        break;
                     //预留给EWO表单用
-//                    case 2:
-//                        break;
+                    case TaskOptions.FORM_TYPE_EWO:
+                        break;
                     //预留该MWO表单用
-//                    case 3:
-//                        break;
-//                    default:
-//                        break;
-                //}
+                    case TaskOptions.FORM_TYPE_MWO:
+                        break;
+                    case TaskOptions.FORM_TYPE_CHANGE:
+                        HzChangeOrderRespDTO hzcor= hzChangeOrderService.getHzChangeOrderRecordById(task.getTaskTargetId());
+                        dto.setText(hzcor.getChangeNo());
+                        dto.setTargetId(hzcor.getId());
+                        dto.setTargetName(hzcor.getChangeNo() + "表单");
+                        dto.setTargetType(task.getTaskTargetType());
+                        dto.setFormType(task.getTaskFormType());
+                        break;
+                    default:
+                        break;
+                }
                 //HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
                 //int count = hzWorkListDAO.count(user.getLogin(),info.getProjectUid());
-//                dto.setReserve("");
-//                dto.setReserve2("");
-//                dto.setReserve3("");
-//                dto.setReserve4("");
-//                dto.setReserve5("");
-//                dto.setReserve6("");
-//                dto.setReserve7("");
-//                dto.setReserve8("");
-//                dto.setReserve9("");
-//                dto.setReserve10("");
-//                dtoList.add(dto);
+
+                dto.setReserve("");
+                dto.setReserve2("");
+                dto.setReserve3("");
+                dto.setReserve4("");
+                dto.setReserve5("");
+                dto.setReserve6("");
+                dto.setReserve7("");
+                dto.setReserve8("");
+                dto.setReserve9("");
+                dto.setReserve10("");
+                dtoList.add(dto);
             }
         }
         //统计任务个数

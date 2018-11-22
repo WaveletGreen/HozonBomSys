@@ -43,12 +43,12 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
      * 中断操作
      * 将src主数据的状态设置为草稿状态(0)，清除vwo号
      *
-     * @param vwoId      vwo变更流程ID
-     * @param projectUId 项目UID
+     * @param vwoId  vwo变更流程ID
+     * @param params 项目UID
      * @return
      */
     @Override
-    public boolean interrupt(Long vwoId, String projectUId) {
+    public boolean interrupt(Long vwoId, Object... params) {
         interruptionFunctionDesc();
         return updateModelColorAndVwoInfo("0", 899, vwoId);
     }
@@ -57,12 +57,12 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
      * 数据发布
      * 将src主数据的状态设置为发布状态(99)，清除vwo号
      *
-     * @param vwoId      vwo流程编号ID
-     * @param projectUId 项目UID
+     * @param vwoId  vwo流程编号ID
+     * @param params 项目UID
      * @return
      */
     @Override
-    public boolean release(Long vwoId, String projectUId) {
+    public boolean release(Long vwoId, Object... params) {
         releaseFunctionDesc();
         return updateModelColorAndVwoInfo("999", 999, vwoId);
     }
