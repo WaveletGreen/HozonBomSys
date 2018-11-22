@@ -1,9 +1,14 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
-
+/**
+ * @Author: Fancyears·Maylos·Malvis
+ * @Description:  
+ * @Date: Created in  2018/11/22 11:14
+ * @Modified By:
+ */
 /**
  * 格式化日期，根据毫秒数进行格式化，时间转为字符串
  * @param cellval

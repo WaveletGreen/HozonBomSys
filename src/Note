@@ -31,3 +31,24 @@
     var lineUid3=parent[0].getAttribute("data-uid-coach");
     //JS 通过dataset属性访问，需要注意的是，dataset中大小写的问题。带连字符连接的名称在使用的时候需要命名驼峰化。例如data-my-name对应的是dataset.myName的值
     var lineUid3=parent[0].dataset.uidCoach;
+
+8.    //@Autowired是根据类型进行自动装配的，如果需要按名称进行装配，则需要配合@Qualifier
+      //@Autowired 和 @Qualifier 结合使用时，自动注入的策略就从 byType 转变成 byName 了
+      //@Autowired有个属性为required，可以配置为false，如果配置为false之后，当没有找到相应bean的时候，系统不会抛错。
+      //@Inject是根据类型进行自动装配的，如果需要按名称进行装配，则需要配合@Named；
+      //@Inject和 @Named结合使用时，自动注入的策略就从 byType 转变成 byName 了
+      //    @Resource 一般会指定一个name属性
+      //    1.Matches by Name
+      //    2.Matches by Type
+      //    3.Restricts by Qualifiers (ignored if match is found by name)
+9.
+@Repository注解可以标记在任何的类上，用来表明该类是用来执行与数据库相关的操作（即dao对象），
+    并支持自动处理数据库操作产生的异常
+@Component是一个通用的Spring容器管理的单例bean组件。
+而@Repository, @Service, @Controller就是针对不同的使用场景所采取的特定功能化的注解组件。
+因此，当你的一个类被@Component所注解，那么就意味着同样可以用@Repository, @Service, @Controller来替代它，同时这些注解会具备有更多的功能，而且功能各异。
+如果你不知道要在项目的业务层采用@Service还是@Component注解。那么，@Service是一个更好的选择。
+
+10.
+@Service和@Repository放到实现类上面而不是接口类上面，接口只是一个规范，
+需要各种实现类去实现这个接口，我们要用的就是这些实用类的方法。

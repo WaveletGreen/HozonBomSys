@@ -1,9 +1,14 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
-
+/**
+ * @Author: Fancyears·Maylos·Malvis
+ * @Description:
+ * @Date: Created in  2018/11/22 11:04
+ * @Modified By:
+ */
 /**父层*/
 var parent = {};
 /**子层*/

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -28,7 +28,7 @@ import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 import java.util.*;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 预研时用到的controller，已不再符合正式业务要求，可以删除
  * @Date: Created in 2018/8/30 18:53
  * @Modified By:
