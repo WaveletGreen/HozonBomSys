@@ -57,6 +57,12 @@ public class HzChangeOrderFactory {
         respDTO.setStatus(record.getState());
         respDTO.setTel(record.getTel());
         respDTO.setIsFromTc(record.getFromTc());
+        if(record.getFromTc()==0){
+            respDTO.setSource("BOM");
+        }else{
+            respDTO.setSource("TC");
+        }
+        respDTO.setProjectName(record.getProjectName());
         return respDTO;
     }
 

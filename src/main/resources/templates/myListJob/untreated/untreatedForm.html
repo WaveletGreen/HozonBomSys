@@ -137,8 +137,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiBomMngOpinion">意见</label>
                         <textarea class="form-control" style="resize: none;width: 100%;" rows="2" cols="30"
-                                  name="opiBomMngOpinion" id="opiBomMngOpinion">
-                        </textarea>
+                                  name="opiBomMngOpinion" id="opiBomMngOpinion"></textarea>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="agreement">结论</label>
@@ -193,19 +192,53 @@
     function doReturn() {
         window.location.href="javascript:history.go(-1);"
     }
+    var changeList = [[${changeList}]];
     $(document).ready(function () {
-        $.ajax({
-            url:"",
-            type:"",
-            success:function (result) {
-                var data = result.data;
-                var temp = "<tr>"+
-                    "<td>零件号</td><td>版本</td></tr>"+
-                    "<tr><td>"+data+"</td><td>"+data+"</td>" +
-                    "</tr>";
-                $("#changeTCTable").html(temp);
-            }
-        })
+        var $table = $("#untreatedTCTable");//变更清单
+        var column = [];
+        column.push({
+            field : "itemId",
+            title : "零件号",
+            align : "center",
+            valign : "middle"
+        });
+        column.push({
+            field : "itemRevision",
+            title : "版本",
+            align : "center",
+            valign : "middle"
+        });
+
+        $table.bootstrapTable({
+            method: 'GET',
+            data:changeList,
+            // dataType: 'json',
+            //cache: false,
+            // striped: true,                              //是否显示行间隔色
+            height: $(window.parent.document).find("#wrapper").height() - 150,
+            width: $(window).width(),
+            formId: 'processedTCTable',
+            undefinedText: "",//当数据为 undefined 时显示的字符
+            pagination: false,
+            //showExport: true,
+            //exportDataType: 'all',
+            columns: column,
+            toolbar: "#toolbar",
+            //sortName: 'id',
+            // sortable: true,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            clickToSelect: false,// 单击某一行的时候选中某一条记录
+            //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+            showColumns: false, //是否显示所有的列
+            // resizable:true,
+            // fixedColumns: true,
+            // fixedNumber:3,
+            showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+            showRefresh: false,                  //是否显示刷新按钮
+            //minimumCountColumns:4,
+        });
+
+        alert(JSON.stringify(changeList));
     })
 </script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>

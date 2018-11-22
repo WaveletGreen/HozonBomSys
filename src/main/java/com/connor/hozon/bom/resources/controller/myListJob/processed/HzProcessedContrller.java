@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
@@ -17,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzAuditorChangeRecord;
+import sql.pojo.change.HzChangeListRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,6 +49,9 @@ public class HzProcessedContrller {
     @Autowired
     private HzAuditorChangeDAO hzAuditorChangeDAO;
 
+    @Autowired
+    private HzChangeListDAO hzChangeListDAO;
+
     @RequestMapping(value = "ToProcessedForm",method = RequestMethod.GET)
     public String getToProcessedFormToPage(Long id,Model model){
         HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
@@ -52,6 +59,19 @@ public class HzProcessedContrller {
 //        HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,id);
         HzAuditorChangeRecord record = new HzAuditorChangeRecord();
         List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList2(record);
+
+        List<HzChangeListRecord> changeList = hzChangeListDAO.findChangeList(respDTO.getChangeNo());
+
+        if(changeList.size()>0){
+            List<Map<String,String>> resultMaps = new ArrayList<>();
+            for(HzChangeListRecord hzChangeListRecord : changeList){
+                Map<String,String> map = new HashMap<>();
+                map.put("itemId",hzChangeListRecord.getItemId());
+                map.put("itemRevision",hzChangeListRecord.getItemRevision());
+                resultMaps.add(map);
+            }
+            model.addAttribute("changeList",resultMaps);
+        }
 
         if(respDTO != null){
             model.addAttribute("data",respDTO);
@@ -61,7 +81,6 @@ public class HzProcessedContrller {
                     model.addAttribute("timeString",DateUtil.formatTimestampDate(infos.get(i).getAuditTime()));
                     model.addAttribute("result",infos.get(i));
                 }
-
             }
         }
         return "myListJob/processed/processedForm";
@@ -87,6 +106,7 @@ public class HzProcessedContrller {
         List<JSONObject> list = new ArrayList<>();
         respDTOs.forEach(hzChangeOrderRespDTO -> {
             JSONObject object = new JSONObject();
+            object.put("source",hzChangeOrderRespDTO.getSource());
             object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
             object.put("originTime",hzChangeOrderRespDTO.getOriginTime());
             object.put("id",hzChangeOrderRespDTO.getId());

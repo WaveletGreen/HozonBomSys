@@ -40,6 +40,7 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                         HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,infos.get(i).getOrderId());
                         if(rec!=null){
                             HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
+                            respDTO.setSource("BOM");
                             respDTO.setProjectId(rec.getProjectId());
                             respDTO.setChangeNo(rec.getChangeNo());//changeNo
                             respDTO.setId(rec.getId());
@@ -57,6 +58,7 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                         HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordByIdTC(query,infos.get(i).getOrderId());
                         if(rec!=null){
                             HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
+                            respDTO.setSource("TC");
                             respDTO.setProjectId(rec.getProjectId());
                             respDTO.setChangeNo(rec.getChangeNo());//changeNo
                             respDTO.setId(rec.getId());
@@ -123,6 +125,8 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                             respDTO.setChangeType(rec.getChangeType());//变更类型
                             respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
                             respDTO.setProjectName(rec.getProjectName());//项目名
+                            respDTO.setSource("BOM");
+
                             auditorList.add(respDTO);
                         }
                     }else{
@@ -142,6 +146,7 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                             respDTO.setChangeType(rec.getChangeType());//变更类型
                             respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
                             respDTO.setProjectName(rec.getProjectName());//项目名
+                            respDTO.setSource("TC");
                             auditorList.add(respDTO);
                         }
                     }
