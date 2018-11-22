@@ -189,6 +189,22 @@
     function doSave() {
 
     }
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url:"",
+            type:"",
+            success:function (result) {
+                var data = result.data;
+                var temp = "<tr>"+
+                    "<td>零件号</td><td>版本</td></tr>"+
+                    "<tr><td>"+data+"</td><td>"+data+"</td>" +
+                    "</tr>";
+                $("#changeTCTable").html(temp);
+            }
+        })
+    })
 </script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:src="@{/js/helper/taskHelper.js}"></script>
