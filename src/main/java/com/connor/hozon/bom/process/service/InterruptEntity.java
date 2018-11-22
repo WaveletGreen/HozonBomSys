@@ -52,7 +52,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
 
     /**
      * 在这里写BOM管理部分数据的回到上一个版本的代码
-     *
+     * BOM 端变更表单数据审核不通过
      * @param orderId 变更表单的ID
      * @param params 配置参数，预留
      * @return

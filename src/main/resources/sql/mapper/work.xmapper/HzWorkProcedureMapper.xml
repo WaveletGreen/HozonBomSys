@@ -676,7 +676,7 @@
           P_PURPOSE, P_STATE, P_CONTROL_CODE,
           P_MATERIEL_CODE, P_MATERIEL_DESC,
           P_FACTORYID, P_REVISION,
-          P_ORDER_ID)
+          P_ORDER_ID,P_EFFECT_TIME)
     <foreach collection="list" item="item" index="index" separator="UNION ALL">
       select
       #{item.puid, jdbcType=VARCHAR},#{item.pWorkPuid, jdbcType=VARCHAR},#{item.pProcedureCode, jdbcType=VARCHAR},
@@ -689,7 +689,7 @@
       #{item.state, jdbcType=VARCHAR},#{item.controlCode, jdbcType=VARCHAR},
       #{item.pMaterielCode, jdbcType=VARCHAR},#{item.pMaterielDesc, jdbcType=VARCHAR},
       #{item.pFactoryId, jdbcType=VARCHAR},#{item.revision, jdbcType=VARCHAR},
-      #{item.orderId, jdbcType=DOUBLE}
+      #{item.orderId, jdbcType=DOUBLE},#{item.effectTime, jdbcType=TIMESTAMP}
       from DUAL
     </foreach>
   </insert>

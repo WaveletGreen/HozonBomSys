@@ -942,11 +942,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     HzMbomLineRecord lineRecord = new HzMbomLineRecord();
                     lineRecord.setLineId(record.getLineId());
                     lineRecord.setBomDigifaxId(record.getBomDigifaxId());
-                    if(Integer.valueOf(2).equals(record.getStatus())){//草稿状态---->审核状态
-                        lineRecord.setStatus(5);
-                    }else if(Integer.valueOf(4).equals(record.getStatus())){// 删除状态----->审核状态
-                        lineRecord.setStatus(6);
-                    }
+                    lineRecord.setStatus(5);
                     lineRecord.setTableName(ChangeTableNameEnum.getMbomTableName(type,"M"));
                     bomLineRecords.add(lineRecord);
                 }
@@ -983,9 +979,8 @@ public class HzMbomServiceImpl implements HzMbomService{
 
 
                 //启动线程进行插入操作
-                List<ExecutorServices> services = new ArrayList<>();
                 for(Map.Entry<String,Object> entry:map.entrySet()){
-                    ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                     new ExecutorServices(1) {
                         @Override
                         public void action() {
                             switch (entry.getKey()){
@@ -1007,14 +1002,8 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 default:break;
                             }
                         }
-                    };
-                    services.add(executorServices);
-                }
+                    }.execute();
 
-                if(ListUtil.isNotEmpty(services)){
-                    for(ExecutorServices s:services){
-                        s.execute();
-                    }
                 }
 
             }

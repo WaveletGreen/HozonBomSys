@@ -755,11 +755,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 List<HzWorkProcedure> bomLineRecords = new ArrayList<>();
                 for(HzWorkProcedure record:records){
                     HzWorkProcedure lineRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
-                    if(Integer.valueOf(2).equals(record.getpStatus())){//草稿状态---->审核状态
-                        lineRecord.setpStatus(5);
-                    }else if(Integer.valueOf(4).equals(record.getpStatus())){// 删除状态----->审核状态
-                        lineRecord.setpStatus(6);
-                    }
+                    //审核状态
+                    lineRecord.setpStatus(5);
+
 //                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
                     bomLineRecords.add(lineRecord);
                 }
@@ -798,7 +796,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 //启动线程进行插入操作
                 List<ExecutorServices> services = new ArrayList<>();
                 for(Map.Entry<String,Object> entry:map.entrySet()){
-                    ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                     new ExecutorServices(1) {
                         @Override
                         public void action() {
                             switch (entry.getKey()){
@@ -820,14 +818,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                                 default:break;
                             }
                         }
-                    };
-                    services.add(executorServices);
-                }
-
-                if(ListUtil.isNotEmpty(services)){
-                    for(ExecutorServices s:services){
-                        s.execute();
-                    }
+                    }.execute();
                 }
             }
 
