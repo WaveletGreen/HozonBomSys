@@ -44,10 +44,14 @@ function initTable(url) {
     column.push({
         field: '',
         title: '序号',
+        align: 'center',
+        width: 50,
         formatter: function (value, row, index) {
             //return index+1;
-            var temp = $('#changeFormTable').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
-            return temp + index;
+            // var temp = $('#changeFormTable').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
+            // return temp + index;
+            var options = $table.bootstrapTable('getOptions');
+            return options.pageSize * (options.pageNumber - 1) + index + 1;
         }
     }),
         column.push({
@@ -79,14 +83,14 @@ function initTable(url) {
     $table.bootstrapTable({
         url: url,
         method: 'get',
-        height: $(window.parent.document).find("#wrapper").height() - 90,
+        height: $(window.parent.document).find("#wrapper").height() - 200,
         width: $(window).width(),
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
         pagination: true,                   //是否显示分页（*）
         pageSize: 20,
         pageNumber: 1,
-        pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
+        pageList: [/*'ALL', */20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
         sidePagination: "server",          //分页方式：client客户端分页，server服务端分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         showExport: false,
