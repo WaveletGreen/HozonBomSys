@@ -13,7 +13,7 @@ public class QueryOrgGroup extends QueryBase {
 	private String node;
 	private Long num;
 	private String parentNode;
-	private String groupId;//todo haozt on 2018/8/13
+	private String groupId;
 
 	public String getGroupId() {
 		return groupId;

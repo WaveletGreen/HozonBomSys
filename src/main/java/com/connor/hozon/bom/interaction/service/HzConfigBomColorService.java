@@ -33,6 +33,7 @@ public class HzConfigBomColorService implements IHzConfigBomColorService {
      *
      * @param bomline    2Y主键
      * @param projectUid 项目主键
+     * @modify haozt 返回油漆物料信息
      * @return
      */
     @Override

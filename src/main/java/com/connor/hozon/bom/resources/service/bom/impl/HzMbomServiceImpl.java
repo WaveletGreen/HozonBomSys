@@ -967,12 +967,12 @@ public class HzMbomServiceImpl implements HzMbomService{
 
                 map.put("changeData",dataRecords);
                 //申请人
-                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
-                applicantChangeRecord.setApplicantId(applicantId);
-                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
-                applicantChangeRecord.setTableName(tableName);
-
-                map.put("applicant",applicantChangeRecord);
+//                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
+//                applicantChangeRecord.setApplicantId(applicantId);
+//                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
+//                applicantChangeRecord.setTableName(tableName);
+//
+//                map.put("applicant",applicantChangeRecord);
                 //审核人
 //                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
 //                auditorChangeRecord.setAuditorId(auditorId);
@@ -998,9 +998,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 case "changeData":
                                     hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
                                     break;
-                                case "applicant":
-                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
-                                    break;
+//                                case "applicant":
+//                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+//                                    break;
 //                                case "auditor" :
 //                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
 //                                    break;
@@ -1243,9 +1243,11 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 }
 
                                 //白车身添加完后 添加对应的油漆物料
-                                List<HzAccessoriesLibs> libs = bean.getMaterielList();
-                                if(ListUtil.isNotEmpty(libs)){
-                                    superMboms.addAll(HzMbomRecordFactory.generateMaterielPaint(pbomLineRecord,superMboms.size(),lineIndex,libs,i));
+                                if(null != bean){
+                                    List<HzAccessoriesLibs> libs = bean.getMaterielList();
+                                    if(ListUtil.isNotEmpty(libs)){
+                                        superMboms.addAll(HzMbomRecordFactory.generateMaterielPaint(pbomLineRecord,superMboms.size(),lineIndex,libs,i));
+                                    }
                                 }
                             }
                         } else {

@@ -75,6 +75,7 @@ function initTable(url) {
     column.push({field: 'marketType', title: '上市类型', align: 'center', valign: 'middle'});
     column.push({field: 'projectStage', title: '项目所属阶段', align: 'center', valign: 'middle'});
     column.push({field: 'remark', title: '备注', align: 'center', valign: 'middle'});
+    column.push({field: 'resource', title: '来源', align: 'center', valign: 'middle'});
     $table.bootstrapTable({
         url: url,
         method: 'get',

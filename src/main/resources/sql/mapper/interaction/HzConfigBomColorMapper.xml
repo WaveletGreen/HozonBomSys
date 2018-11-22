@@ -26,7 +26,7 @@
             t3.p_cfg0_family_name,
             t9.p_desc_of_colorful_model,
             t99.p_color_code,
-            t99.puid as colorUid
+            t99.puid as colorUid,
             t99.CS_PAINT_MATERIEL_CODES as materielCodes
             from Hz_Full_Cfg_Withcfg_Record t
             left join Hz_Bom_Line_Record t2 on t.cfg_bomline_uid=t2.puid
