@@ -424,15 +424,20 @@ function initTable(eBomUrl) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
-                            for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                            // var puids = "";
+                            // for (var i = 0; i < rows.length; i++) {
+                            //     puids += rows[i].puid + ",";
+                            // }
+                            // ;
+                            var puids = [];
+
+                            for (vari = 0; i < rows.length; i++) {
+                                puids.push(rows[i].puid)
                             }
-                            ;
-                            // var myData = JSON.stringify({
-                            //     "projectId": $("#project", window.top.document).val(),
-                            //     "puids": puids,
-                            // });
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                            });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
@@ -447,7 +452,9 @@ function initTable(eBomUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "ebom/order/choose?projectId="+projectPuid+"&puids="+puids,
+                                // url: "ebom/order/choose?projectId="+projectPuid+"&puids="+puids,
+                                url :"ebom/order/choose",
+                                data:myData,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
