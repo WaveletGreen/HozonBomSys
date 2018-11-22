@@ -134,4 +134,8 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     int updateByVwoid(HzCfg0Record hzCfg0Record);
 
     List<HzCfg0Record> selectByPuids(List<String> puidList);
+
+    int updateStatus(List<HzCfg0Record> hzCfg0RecordListDelete);
+
+    int updateListAll(List<HzCfg0Record> hzCfg0RecordListUpdata);
 }

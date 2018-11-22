@@ -303,4 +303,25 @@
             #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
         </foreach>
     </select>
+
+    <update id="updateByDetailAll" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="hzDerivativeMaterielDetails" open="begin" close=";end;" separator=";">
+            update HZ_DERIVATIVE_MATERIEL_DETAIL
+            set
+            DMD_CFG0_UID = #{hzDerivativeMaterielDetails.dmdCfg0Uid,jdbcType=VARCHAR},
+            DMD_CFG0_FAMILY_UID =#{hzDerivativeMaterielDetails.dmdCfg0FamilyUid,jdbcType=VARCHAR},
+            DMD_FEATURE_VALUE=#{hzDerivativeMaterielDetails.dmdFeatureValue,jdbcType=VARCHAR}
+            where
+            ID = #{hzDerivativeMaterielDetails.id,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <delete id="deleteByBasicIds" parameterType="java.util.List">
+        delete from HZ_DERIVATIVE_MATERIEL_DETAIL
+        where
+        DMD_DMB_ID in
+        <foreach collection="list" index="index" item="hzComposeDelDto" open="(" separator="," close=")">
+            #{hzComposeDelDto.basicId,jdbcType=DECIMAL}
+        </foreach>
+    </delete>
 </mapper>

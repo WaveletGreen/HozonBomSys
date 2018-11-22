@@ -497,16 +497,23 @@ $(document).ready(
                     width: 450,
                     height: 450
                 });
-                // $.ajax({
-                //     type : "GET",
-                //     url : "bomAllCfg/getVwo?projectId="+getProjectUid(),
-                //     success : function (result) {
-                //         window.location.reload();
-                //     },
-                //     error : function (result) {
-                //
-                //     }
-                // });
+            }),
+            $("#goBackData").click(function () {
+                window.Ewin.confirm({title: '提示', message: '是否要撤销您所选择的记录？', width: 500}).on(function (e) {
+                    if(e){
+                        $.ajax({
+                           type : "POST", 
+                           url : "bomAllCfg/goBackData?projectUid="+getProjectUid(),
+                           success : function(result){
+                               layer.msg(result.msg, {icon: 1, time: 2000});
+                               window.location.reload();
+                           } ,
+                            error : function (result) {
+                                window.Ewin.alert({message: "撤销失败:" + result.msg});
+                            }
+                        });
+                    }
+                })
             })
         // ,
         // $("#export").click(function(){

@@ -231,4 +231,15 @@ public class HzBomAllCfgController {
     public JSONObject getVwo(String projectId, Integer changeFromId){
         return hzBomAllCfgService.getVwo(projectId, changeFromId);
     }
+
+    /**
+     * 撤销
+     * @param projectUid
+     * @return
+     */
+    @RequestMapping("goBackData")
+    @ResponseBody
+    public JSONObject goBackData(@RequestParam String projectUid){
+        return hzBomAllCfgService.goBackData(projectUid);
+    }
 }

@@ -207,4 +207,29 @@
         where
           t.CMCR_CHANGE_ORDER_UID = #{cmcrVwoId}
     </update>
+
+    <update id="updateStatus" parameterType="java.util.List">
+        update HZ_CFG0_MODEL_COLOR_RECORD
+        set CMCR_STATUS =
+    <foreach collection="list" index="index" item="hzCfg0ModelColors" open="case"  close="end">
+        when PUID = #{hzCfg0ModelColors.puid,jdbcType=VARCHAR}
+        then #{hzCfg0ModelColors.cmcrStatus,jdbcType=INTEGER}
+    </foreach>
+      where
+        PUID in
+        <foreach collection="list" index="index" item="hzCfg0ModelColors" open="("  close=")" separator=",">
+            #{hzCfg0ModelColors.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <update id="updateListAll" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="hzCfg0ModelColors" open="begin" close=";end;" separator=";">
+            update
+            HZ_CFG0_MODEL_COLOR_RECORD
+            set
+            P_DESC_OF_COLORFUL_MODEL = #{hzCfg0ModelColors.cmcrSrcDescOfColorMod,jdbcType=VARCHAR}
+            where
+            PUID = #{hzCfg0ModelColors.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
 </mapper>

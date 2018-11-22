@@ -8,6 +8,7 @@ package com.connor.hozon.bom.bomSystem.dao.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 
 import java.util.List;
@@ -148,4 +149,6 @@ public interface HzCmcrChangeDao extends BasicDao<HzCmcrChange> {
     List<HzCmcrChange> doQueryCmcrChangeAfterFirst(Long vwoId);
 
     List<HzCmcrChange> doQueryCmcrChangeAfter(Long vwoId);
+
+    List<HzCmcrChange> doQueryCmcrChangeByModelColorId(List<HzCfg0ModelColor> hzCfg0ModelColors);
 }

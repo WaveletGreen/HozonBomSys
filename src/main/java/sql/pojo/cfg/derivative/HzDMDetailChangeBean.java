@@ -97,6 +97,10 @@ public class HzDMDetailChangeBean {
     private Long dmbChangeBasicId;
 
     private String title;
+    /**
+     * 源从数据ID
+     */
+    private Long dbdSrcDetailId;
 
     public Long getId() {
         return id;
@@ -274,10 +278,19 @@ public class HzDMDetailChangeBean {
         this.title = title;
     }
 
+    public Long getDbdSrcDetailId() {
+        return dbdSrcDetailId;
+    }
+
+    public void setDbdSrcDetailId(Long dbdSrcDetailId) {
+        this.dbdSrcDetailId = dbdSrcDetailId;
+    }
+
     public void srcSetChange(HzDerivativeMaterielDetail hzDerivativeMaterielDetail) {
         Date date = new Date();
         User user = UserInfo.getUser();
 
+        this.setDbdSrcDetailId(hzDerivativeMaterielDetail.getId());
         this.setDmdDmbId(hzDerivativeMaterielDetail.getDmdDmbId());
         this.setDmdCfg0Uid(hzDerivativeMaterielDetail.getDmdCfg0Uid());
         this.setDmdCfg0FamilyUid(hzDerivativeMaterielDetail.getDmdCfg0FamilyUid());
@@ -296,5 +309,14 @@ public class HzDMDetailChangeBean {
         this.setDmdReserved5(hzDerivativeMaterielDetail.getDmdReserved5());
         this.setDmdFeatureValue(hzDerivativeMaterielDetail.getDmdFeatureValue());
         this.setCfg0Record(hzDerivativeMaterielDetail.getCfg0Record());
+    }
+
+    public HzDerivativeMaterielDetail getHzDerivativeMaterielDetail() {
+        HzDerivativeMaterielDetail hzDerivativeMaterielDetail = new HzDerivativeMaterielDetail();
+        hzDerivativeMaterielDetail.setId(this.getDbdSrcDetailId());
+        hzDerivativeMaterielDetail.setDmdCfg0Uid(this.getDmdCfg0Uid());
+        hzDerivativeMaterielDetail.setDmdCfg0FamilyUid(this.getDmdCfg0FamilyUid());
+        hzDerivativeMaterielDetail.setDmdFeatureValue(this.getDmdFeatureValue());
+        return hzDerivativeMaterielDetail;
     }
 }

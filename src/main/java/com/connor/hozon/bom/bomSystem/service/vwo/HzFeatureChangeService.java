@@ -325,6 +325,12 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         bean.setVwoId(vwoId);
         return hzFeatureChangeDao.selectCfgUidsByVwoId(bean);
     }
+
+    @Override
+    public List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records) {
+        return hzFeatureChangeDao.doSelectHasEffect(records);
+    }
+
     /**
      * 查询变更前的数据和当前数据
      * @param cfgPuid

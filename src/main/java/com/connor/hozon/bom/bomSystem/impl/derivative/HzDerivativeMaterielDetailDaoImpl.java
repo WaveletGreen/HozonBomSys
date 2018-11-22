@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.impl.derivative;
 
+import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielDetailDao;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +44,16 @@ public class HzDerivativeMaterielDetailDaoImpl
     @Override
     public List<HzDerivativeMaterielDetail> selectByBasics(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics) {
         return baseSQLUtil.executeQueryByPass(new HzDerivativeMaterielDetail(), hzDerivativeMaterielBasics, clz.getCanonicalName() + ".selectByBasics");
+    }
+
+    @Override
+    public int updateByDetailAll(List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetailsUpdate) {
+        return baseSQLUtil.executeUpdate(hzDerivativeMaterielDetailsUpdate,clz.getCanonicalName()+".updateByDetailAll");
+    }
+
+    @Override
+    public int deleteByBasicIds(List<HzComposeDelDto> delDtos) {
+        return baseSQLUtil.executeDelete(delDtos,clz.getCanonicalName()+".deleteByBasicIds");
     }
 
 }

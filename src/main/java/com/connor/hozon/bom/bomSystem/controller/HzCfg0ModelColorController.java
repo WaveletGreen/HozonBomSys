@@ -7,6 +7,9 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
@@ -34,9 +37,7 @@ import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import sql.pojo.cfg.color.HzCfg0ColorSet;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
-import sql.pojo.cfg.modelColor.HzColorLvl2Model;
+import sql.pojo.cfg.modelColor.*;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
@@ -86,6 +87,12 @@ public class HzCfg0ModelColorController {
     HzChangeOrderDAO hzChangeOrderDAO;
     @Autowired
     HzCfg0ModelColorDao hzCfg0ModelColorDao;
+    @Autowired
+    HzCmcrChangeDao hzCmcrChangeDao;
+    @Autowired
+    HzCmcrDetailChangeDao hzCmcrDetailChangeDao;
+    @Autowired
+    HzColorModelDao hzColorModelDao;
     /*** 日志*/
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0ModelColorController.class);
 
@@ -326,6 +333,69 @@ public class HzCfg0ModelColorController {
     }
 
     /**
+     * 伪删除配色方案，将其状态改为删除状态
+     * @param colors
+     * @return
+     */
+    @RequestMapping("/deleteFake")
+    @ResponseBody
+    public JSONObject deleteFake(@RequestBody List<HzCfg0ModelColor> colors){
+        JSONObject result = new JSONObject();
+        for (HzCfg0ModelColor hzCfg0ModelColor : colors) {
+            if ("10".equals(hzCfg0ModelColor.getCmcrStatus())) {
+                result.put("status", false);
+                result.put("msg", hzCfg0ModelColor.getpCodeOfColorfulModel() + "已在VWO流程中，不能删除");
+                return result;
+            }
+        }
+        List<HzCmcrChange> hzCmcrChanges = hzCmcrChangeDao.doQueryCmcrChangeByModelColorId(colors);
+        if(hzCmcrChanges!=null&&hzCmcrChanges.size()>0){
+            List<HzCfg0ModelColor> hzCfg0ModelColorsUpdate = new ArrayList<>();
+            List<HzCfg0ModelColor> hzCfg0ModelColorsDelete = new ArrayList<>();
+
+            for(HzCfg0ModelColor hzCfg0ModelColor : colors){
+                boolean flag = false;
+                for(HzCmcrChange hzCmcrChange : hzCmcrChanges){
+                    if(hzCfg0ModelColor.getPuid().equals(hzCmcrChange.getCmcrSrcPuid())){
+                        flag = true;
+                        break;
+                    }
+                }
+                if(flag){
+                    hzCfg0ModelColorsUpdate.add(hzCfg0ModelColor);
+                }else {
+                    hzCfg0ModelColorsDelete.add(hzCfg0ModelColor);
+                }
+            }
+
+            if(hzCfg0ModelColorsUpdate!=null&&hzCfg0ModelColorsUpdate.size()>0){
+                try {
+                    for(HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColorsUpdate){
+                        hzCfg0ModelColor.setCmcrStatus("2");
+                    }
+                    hzCfg0ModelColorService.doUpdateStatus(hzCfg0ModelColorsUpdate);
+                }catch (Exception e){
+                    result.put("status", false);
+                    result.put("msg","删除失败");
+                    return result;
+                }
+            }
+            if(hzCfg0ModelColorsDelete!=null&&hzCfg0ModelColorsDelete.size()>0){
+                try {
+                    hzCfg0ModelColorService.doDelete(hzCfg0ModelColorsDelete);
+                }catch (Exception e){
+                    result.put("status", false);
+                    result.put("msg","删除失败");
+                    return result;
+                }
+            }
+        }else {
+            hzCfg0ModelColorService.doDelete(colors);
+        }
+        return result;
+    }
+
+    /**
      * 添加新增的配色方案
      *
      * @param form
@@ -487,6 +557,14 @@ public class HzCfg0ModelColorController {
         return hzCfg0ModelColorService.getVWO(rows, projectPuid, dynamicTitle, changeFromId);
     }
 
+    /**
+     * 跳转到变更表单页面
+     * @param projectUid
+     * @param puids
+     * @param titles
+     * @param model
+     * @return
+     */
     @RequestMapping("/setChangeFromPage")
     public String setChangeFromPage(String projectUid, String puids, String titles, Model model){
         List<HzCfg0ModelColor> puidList = new ArrayList<>();
@@ -510,6 +588,95 @@ public class HzCfg0ModelColorController {
         return "cfg/modelColorCfg/modelColorSetChangeFrom";
     }
 
+    @RequestMapping("/goBackData")
+    @ResponseBody
+    public JSONObject goBackData(@RequestBody List<HzCfg0ModelColor> hzCfg0ModelColors){
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("msg","撤销成功");
+        Iterator<HzCfg0ModelColor> hzCfg0ModelColorIterator = hzCfg0ModelColors.iterator();
+
+        /********找出所有删除状态的配色方案并改为草稿状态***********/
+        List<HzCfg0ModelColor> hzCfg0ModelColorsDelete = new ArrayList<>();
+        while (hzCfg0ModelColorIterator.hasNext()){
+            HzCfg0ModelColor hzCfg0ModelColor = hzCfg0ModelColorIterator.next();
+            if(Integer.valueOf(hzCfg0ModelColor.getCmcrStatus())==2){
+                hzCfg0ModelColor.setCmcrStatus("0");
+                hzCfg0ModelColorsDelete.add(hzCfg0ModelColor);
+                hzCfg0ModelColorIterator.remove();
+            }
+        }
+        int deleteNum = hzCfg0ModelColorDao.updateStatus(hzCfg0ModelColorsDelete);
+        /*********查找出所有修改状态的配色方案并将其回退到修改前的数据*******************/
+        if(hzCfg0ModelColors==null||hzCfg0ModelColors.size()==0){
+            return result;
+        }
+        //修改主数据的结果集
+        List<HzCfg0ModelColor> hzCfg0ModelColorsUpdate = new ArrayList<>();
+        //修改从数据的结果集
+        List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetailsUpdate = new ArrayList<>();
+        //查询变更表查出最近一次的生效数据
+        //主数据
+        List<HzCmcrChange> hzCmcrChange = hzCmcrChangeDao.doQueryCmcrChangeByModelColorId(hzCfg0ModelColors);
+        List<HzCmcrDetailChange> hzCmcrDetailChanges = new ArrayList<>();
+        if(hzCmcrChange!=null&&hzCmcrChange.size()!=0){
+            //从数据
+            hzCmcrDetailChanges = hzCmcrDetailChangeDao.doQueryCmcrDetailByMainChange(hzCmcrChange);
+        }
+        //为主数据的结果集加值
+        for(HzCmcrChange hzCmcrChange1 : hzCmcrChange){
+            HzCfg0ModelColor hzCfg0ModelColor = new HzCfg0ModelColor();
+            hzCfg0ModelColor.setPuid(hzCmcrChange1.getCmcrSrcPuid());
+            hzCfg0ModelColor.setpDescOfColorfulModel(hzCmcrChange1.getCmcrSrcDescOfColorMod());
+            hzCfg0ModelColorsUpdate.add(hzCfg0ModelColor);
+        }
+        for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChanges){
+            HzCfg0ModelColorDetail hzCfg0ModelColorDetail = new HzCfg0ModelColorDetail();
+            hzCfg0ModelColorDetail.setPuid(hzCmcrDetailChange.getCmcrDetailSrcPuid());
+            hzCfg0ModelColorDetail.setModelUid(hzCmcrDetailChange.getCmcrDetailSrcModelPuid());
+            hzCfg0ModelColorDetail.setCfgUid(hzCmcrDetailChange.getCmcrDetailSrcCfgUid());
+            hzCfg0ModelColorDetail.setColorUid(hzCmcrDetailChange.getCmcrDetailSrcColorUid());
+            hzCfg0ModelColorDetailsUpdate.add(hzCfg0ModelColorDetail);
+        }
+
+        if(hzCfg0ModelColorsUpdate!=null&&hzCfg0ModelColorsUpdate.size()!=0){
+            int updateMainNum = hzCfg0ModelColorDao.updateListAll(hzCfg0ModelColorsUpdate);
+            if(updateMainNum<=0){
+                result.put("status",false);
+                result.put("msg","撤销修改主数据失败");
+                return result;
+            }
+        }
+        if(hzCfg0ModelColorDetailsUpdate!=null&&hzCfg0ModelColorDetailsUpdate.size()!=0){
+            int updateDetailNum = hzColorModelDao.updateListAll(hzCfg0ModelColorDetailsUpdate);
+            if(updateDetailNum<=0){
+                result.put("status",false);
+                result.put("msg","撤销修改从数据失败");
+                return result;
+            }
+        }
+        //从配色方案数据集中删除修改的数据，只留下新增的数据
+        while (hzCfg0ModelColorIterator.hasNext()) {
+            HzCfg0ModelColor hzCfg0ModelColor = hzCfg0ModelColorIterator.next();
+            for(HzCmcrChange hzCmcrChange1 : hzCmcrChange){
+                if(hzCfg0ModelColor.getPuid().equals(hzCmcrChange1.getCmcrSrcPuid())){
+                    hzCfg0ModelColorIterator.remove();
+                    break;
+                }
+            }
+        }
+        /**********查找出所有新增的数据，并将其删除*********************/
+        if(hzCfg0ModelColors==null||hzCfg0ModelColors.size()==0){
+            return result;
+        }
+        int addNum = hzCfg0ModelColorDao.deleteByBatch(hzCfg0ModelColors);
+        if(addNum<=0){
+            result.put("status",false);
+            result.put("msg","撤销新增数据失败");
+            return result;
+        }
+        return result;
+    }
     /**********************************************废除方法****************************************/
 
     /**

@@ -141,6 +141,25 @@
         </foreach>
         )A
     </insert>
+    <insert id="insertAll" parameterType="java.util.List">
+        insert into HZ_FULL_CFG_WITHCFG_RECORD
+        (ID, CFG_CFG0_UID, CFG_BOMLINE_UID,FL_CFG_CREATE_DATE,FL_CFG_UPDATE_DATE,
+        FL_CFG_CREATOR,
+        FL_CFG_UPDATOR, FL_CFG_BOMLINE_NAME,FL_CFG_VERSION,FL_OPERATION_TYPE,FL_COMMENT
+        )
+        select SEQ_HZ_FL_CFG_CFG0_ID.NEXTVAL ,A.* from(
+        <foreach collection="list" index="index" item="hzFullCfgWithCfg" separator="union">
+            select
+            #{hzFullCfgWithCfg.cfgCfg0Uid,jdbcType=VARCHAR},#{hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR},
+            #{hzFullCfgWithCfg.flCfgCreateDate,jdbcType=DATE},#{hzFullCfgWithCfg.flCfgUpdateDate,jdbcType=DATE},
+            #{hzFullCfgWithCfg.flCfgCreator,jdbcType=VARCHAR},#{hzFullCfgWithCfg.flCfgUpdator,jdbcType=VARCHAR},
+            #{hzFullCfgWithCfg.flCfgBomlineName,jdbcType=VARCHAR},#{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL},
+            #{hzFullCfgWithCfg.flOperationType,jdbcType=DECIMAL},#{hzFullCfgWithCfg.flComment,jdbcType=VARCHAR}
+            from
+            dual
+        </foreach>
+        )A
+    </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg">
         insert into HZ_FULL_CFG_WITHCFG_RECORD
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -282,6 +301,6 @@
         from
         HZ_FULL_CFG_WITHCFG_RECORD
         where
-        CFG_BOMLINE_UID = {hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR}
+        CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR}
     </select>
 </mapper>

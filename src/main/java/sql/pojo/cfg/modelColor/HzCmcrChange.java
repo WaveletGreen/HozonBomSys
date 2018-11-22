@@ -138,4 +138,7 @@ public class HzCmcrChange {
      * 变更状态，0为审核中，1为生效
      */
     private Integer cmcrChangeStatus;
+
+    private Integer cmcrSrcStatus;
+
 }

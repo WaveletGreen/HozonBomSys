@@ -49,6 +49,8 @@
         <result column="DMB_SPECIAL_FEATURE_UID" jdbcType="VARCHAR" property="dmbSpecialFeatureUid"/>
         <!--变更状态，0为流程中，1为生效-->
         <result column="DMB_CHANGE_STATUS" jdbcType="DECIMAL" property="dmbChangeStatus"/>
+        <!--源数据状态-->
+        <result column="DMB_SRC_STATUS" jdbcType="DECIMAL" property="dmbSrcStatus"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -72,7 +74,8 @@
         DMB_RESERVED_4,
         DMB_RESERVED_5,
         DMB_SPECIAL_FEATURE_UID,
-        DMB_CHANGE_STATUS
+        DMB_CHANGE_STATUS,
+        DMB_SRC_STATUS
     </sql>
     <insert id="insertList" parameterType="java.util.List">
         insert into
@@ -100,7 +103,8 @@
               #{hzDMBasicChangeBean.dmbReserved5,jdbcType=VARCHAR},
               #{hzDMBasicChangeBean.dmbModelFeatureUid,jdbcType=VARCHAR},
               #{hzDMBasicChangeBean.dmbSpecialFeatureUid,jdbcType=VARCHAR},
-              #{hzDMBasicChangeBean.dmbChangeStatus,jdbcType=DECIMAL}
+              #{hzDMBasicChangeBean.dmbChangeStatus,jdbcType=DECIMAL},
+              #{hzDMBasicChangeBean.dmbSrcStatus,jdbcType=DECIMAL}
             from
               dual
         </foreach>
@@ -114,6 +118,7 @@
           HZ_DM_BASIC_CHANGE
         where
         FORMID = #{changeFromId,jdbcType=DECIMAL}
+        and DMB_CHANGE_STATUS=0
     </select>
 
     <select id="selectBefor" parameterType="java.util.List" resultMap="BaseResultMap">
@@ -130,5 +135,21 @@
           group by DMB_SRC_ID
         )
         order by ID
+    </select>
+
+    <select id="selectLastByPuid" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_DM_BASIC_CHANGE
+        where
+        ID in (
+        select Max(ID) from HZ_DM_BASIC_CHANGE where DMB_SRC_ID in
+        <foreach collection="list" index="index" item="hzComposeDelDto" open="(" separator="," close=")">
+            #{hzComposeDelDto.basicId,jdbcType=DECIMAL}
+        </foreach>
+        and DMB_CHANGE_STATUS =1
+        group by DMB_SRC_ID
+        )
     </select>
 </mapper>

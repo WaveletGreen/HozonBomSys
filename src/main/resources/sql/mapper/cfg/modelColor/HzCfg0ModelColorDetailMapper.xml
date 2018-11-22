@@ -231,4 +231,15 @@
             #{hzCfg0ModelColor.puid}
         </foreach>
     </select>
+
+    <update id="updateListAll" parameterType="java.util.List">
+      <foreach collection="list" index="index" item="hzCfg0ModelColorDetails" open="begin" close=";end;" separator=";">
+          update HZ_CFG0_MODEL_COLOR_DETAIL
+          set MODEL_UID = #{hzCfg0ModelColorDetails.modelUid,jdbcType=VARCHAR},
+          P_CFG_UID = #{hzCfg0ModelColorDetails.cfgUid,jdbcType=VARCHAR},
+          P_COLOR_UID = #{hzCfg0ModelColorDetails.colorUid,jdbcType=VARCHAR}
+          where
+          PUID = #{hzCfg0ModelColorDetails.puid,jdbcType=VARCHAR}
+      </foreach>
+    </update>
 </mapper>

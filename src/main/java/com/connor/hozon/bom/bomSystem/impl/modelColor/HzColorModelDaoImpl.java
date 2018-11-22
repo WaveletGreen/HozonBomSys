@@ -99,6 +99,11 @@ public class HzColorModelDaoImpl extends BasicDaoImpl<HzCfg0ModelColorDetail> im
                 clzName + ".selectByModelColors");
     }
 
+    @Override
+    public int updateListAll(List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetailsUpdate) {
+        return baseSQLUtil.executeUpdate(hzCfg0ModelColorDetailsUpdate,clzName+".updateListAll");
+    }
+
     /**
      * 根据项目ID查找
      *

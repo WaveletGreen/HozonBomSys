@@ -25,7 +25,6 @@ public interface HzFullCfgWithCfgChangeDao {
 
     int insertList(List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChanges);
 
-    HzFullCfgWithCfg selectBy2Yid(HzFullCfgWithCfg hzFullCfgWithCfg);
 
     List<HzFullCfgWithCfgChange> selectByMainId(Integer id);
 }

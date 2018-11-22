@@ -43,4 +43,6 @@ public interface HzFullCfgModelDao extends BasicDao<HzFullCfgModel> {
     List<HzFullCfgModel> selectByModelUidWithMarks(HzFullCfgModel withCfg);
 
     int updateByHzFullCfgModelListCfg(List<HzFullCfgModel> hzFullCfgModels);
+
+    int insertListAll(List<HzFullCfgModel> hzFullCfgModels);
 }

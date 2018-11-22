@@ -8,6 +8,7 @@ package com.connor.hozon.bom.bomSystem.dao.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.List;
@@ -47,4 +48,6 @@ public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
     List<HzFeatureChangeBean> selectCfgUidsByVwoId(HzFeatureChangeBean bean);
 
     List<HzFeatureChangeBean> doQueryLastTwoChange(HzFeatureChangeBean hzFeatureChangeBean);
+
+    List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records);
 }

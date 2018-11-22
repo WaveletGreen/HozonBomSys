@@ -50,4 +50,15 @@ public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements
         HZ_FULL_CFG_MAIN.setProjectUid(id);
         return baseSQLUtil.executeQueryById(HZ_FULL_CFG_MAIN, clzName + ".selectByProjectId");
     }
+
+    @Override
+    public int deleteByProjectUid(String projectUid) {
+        return baseSQLUtil.executeDelete(projectUid,clzName+".deleteByProjectUid");
+    }
+
+    @Override
+    public Long insertSeqAll(HzFullCfgMain hzFullCfgMain) {
+         baseSQLUtil.executeInsert(hzFullCfgMain,clzName+".insertSeqAll");
+        return hzFullCfgMain.getId();
+    }
 }

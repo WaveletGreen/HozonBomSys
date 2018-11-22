@@ -2,6 +2,7 @@ package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 
 import org.springframework.context.annotation.Configuration;
+import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
 
 @Configuration
@@ -13,4 +14,6 @@ public interface HzFullCfgMainChangeDao {
     HzFullCfgMainChange selectByChangeId(Integer orderChangeId);
 
     HzFullCfgMainChange selectLast(Long srcMainId);
+
+    HzFullCfgMainChange selectLastByProjectUid(String projectUid);
 }

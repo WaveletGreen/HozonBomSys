@@ -224,6 +224,28 @@
         )A
     </insert>
 
+    <insert id="insertListAll" parameterType="java.util.List">
+        insert into
+        HZ_FULL_CFG_MODEL_RECORD
+        (ID,MOD_MODEL_UID,MOD_CFG0_UID, MOD_POINT_TYPE, FL_MOD_CREATE_DATE,FL_MOD_UPDATE_DATE,FL_MOD_CREATOR, FL_MOD_LAST_UPDATER, FL_MOD_VERSION,FL_MODEL_BOMLINE_UID)
+        select SEQ_HZ_FL_CFG_MODEL_ID.NEXTVAL , A.* from(
+        <foreach collection="list" index="index" item="hzFullCfgModel" separator="union">
+            select
+            #{hzFullCfgModel.modModelUid,jdbcType=VARCHAR},
+            #{hzFullCfgModel.modCfg0Uid,jdbcType=VARCHAR},
+            #{hzFullCfgModel.modPointType,jdbcType=INTEGER},
+            #{hzFullCfgModel.flModCreateDate,jdbcType=DATE},
+            #{hzFullCfgModel.flModUpdateDate,jdbcType=DATE},
+            #{hzFullCfgModel.flModCreator,jdbcType=VARCHAR},
+            #{hzFullCfgModel.flModLastUpdater,jdbcType=VARCHAR},
+            #{hzFullCfgModel.flModVersion,jdbcType=DOUBLE},
+            #{hzFullCfgModel.flModelBomlineUid,jdbcType=VARCHAR}
+            from
+            dual
+        </foreach>
+        )A
+    </insert>
+
     <select id="selectByMainPuid" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgModel" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -261,7 +283,7 @@
             FL_MODEL_BOMLINE_UID = #{hzFullCfgModel.flModelBomlineUid,jdbcType=VARCHAR}
             then
             #{hzFullCfgModel.modCfg0Uid,jdbcType=VARCHAR}
-        </foreach>,
+        </foreach>
         where MOD_MODEL_UID in
         <foreach collection="list" item="hzFullCfgModel" open="(" separator="," close=")">
             #{hzFullCfgModel.modModelUid,jdbcType=VARCHAR}

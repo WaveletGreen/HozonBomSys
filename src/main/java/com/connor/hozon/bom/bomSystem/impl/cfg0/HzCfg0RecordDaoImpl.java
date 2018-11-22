@@ -168,4 +168,14 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         return baseSQLUtil.executeQueryByPass(new HzCfg0Record(), puidList, clzName+".selectByPuids");
     }
 
+    @Override
+    public int updateStatus(List<HzCfg0Record> hzCfg0RecordListDelete) {
+        return baseSQLUtil.executeUpdate(hzCfg0RecordListDelete,clzName+".updateStatus");
+    }
+
+    @Override
+    public int updateListAll(List<HzCfg0Record> hzCfg0RecordListUpdata) {
+        return baseSQLUtil.executeUpdate(hzCfg0RecordListUpdata,clzName+".updateListAll");
+    }
+
 }

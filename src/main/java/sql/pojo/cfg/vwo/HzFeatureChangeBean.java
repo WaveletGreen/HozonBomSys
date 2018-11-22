@@ -8,6 +8,7 @@ package sql.pojo.cfg.vwo;
 
 import lombok.Getter;
 import lombok.Setter;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.Date;
 
@@ -376,5 +377,22 @@ public class HzFeatureChangeBean {
 
     public void setProcessStatus(Integer processStatus) {
         this.processStatus = processStatus;
+    }
+
+    public HzCfg0Record getHzCfg0Record() {
+        HzCfg0Record hzCfg0Record = new HzCfg0Record();
+        hzCfg0Record.setPuid(this.getCfgPuid());
+        hzCfg0Record.setpCfg0ObjectId(this.getFeatureValueName());
+        hzCfg0Record.setpCfg0Desc(this.getFeatureValueDesc());
+        hzCfg0Record.setpCfg0FamilyName(this.getFeatureName());
+        hzCfg0Record.setpCfg0FamilyPuid(this.getFeaturePuid());
+        hzCfg0Record.setpCfg0MainItemPuid(this.getCfg0MainItemPuid());
+        hzCfg0Record.setpH9featureenname(this.getH9featureenname());
+        hzCfg0Record.setpCfg0FamilyDesc(this.getFeatureDesc());
+        hzCfg0Record.setpCfg0Relevance(this.getCfg0Relevance());
+        hzCfg0Record.setCfgStatus(0);
+        hzCfg0Record.setCfgIsInProcess(0);
+        hzCfg0Record.setVwoId(null);
+        return hzCfg0Record;
     }
 }
