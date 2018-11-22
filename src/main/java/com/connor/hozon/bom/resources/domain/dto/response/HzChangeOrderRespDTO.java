@@ -84,6 +84,18 @@ public class HzChangeOrderRespDTO {
      * 部门名称
      */
     private String deptName;
+    /**
+     * 来源(TC/BOM)
+     */
+    private String source;
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
 
     public String getProjectName() {
         return projectName;

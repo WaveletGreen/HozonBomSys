@@ -61,7 +61,12 @@ public class HzChangeOrderFactory {
             respDTO.setState("已取消");
         }
         respDTO.setTel(record.getTel());
-
+        if(record.getFromTc()==0){
+            respDTO.setSource("BOM");
+        }else{
+            respDTO.setSource("TC");
+        }
+        respDTO.setProjectName(record.getProjectName());
         return respDTO;
     }
 

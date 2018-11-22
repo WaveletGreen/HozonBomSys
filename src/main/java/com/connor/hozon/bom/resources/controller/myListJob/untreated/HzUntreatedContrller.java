@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.myListJob.untreated;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
@@ -14,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzAuditorChangeRecord;
+import sql.pojo.change.HzChangeListRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,11 +42,26 @@ public class HzUntreatedContrller {
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;
 
+    @Autowired
+    private HzChangeListDAO hzChangeListDAO;
+
     @RequestMapping(value = "ToUntreatedForm",method = RequestMethod.GET)
     public String getToUntreatedFormToPage(Long id,Model model){
         HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
         //HzChangeOrderByPageQuery query = new HzChangeOrderByPageQuery();
         //HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,id);
+        List<HzChangeListRecord> changeList = hzChangeListDAO.findChangeList(respDTO.getChangeNo());
+
+        if(changeList.size()>0){
+            List<Map<String,String>> resultMaps = new ArrayList<>();
+            for(HzChangeListRecord hzChangeListRecord : changeList){
+                Map<String,String> map = new HashMap<>();
+                map.put("itemId",hzChangeListRecord.getItemId());
+                map.put("itemRevision",hzChangeListRecord.getItemRevision());
+                resultMaps.add(map);
+            }
+            model.addAttribute("changeList",resultMaps);
+        }
 
         if(respDTO != null){
             model.addAttribute("data",respDTO);
@@ -77,6 +96,7 @@ public class HzUntreatedContrller {
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
             object.put("projectName",hzChangeOrderRespDTO.getProjectName());
+            object.put("source",hzChangeOrderRespDTO.getSource());
             list.add(object);
         });
         jsonObject.put("result",list);

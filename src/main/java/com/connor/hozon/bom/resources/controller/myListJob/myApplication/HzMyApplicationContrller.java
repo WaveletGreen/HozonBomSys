@@ -89,6 +89,7 @@ public class HzMyApplicationContrller {
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
             object.put("projectName",hzChangeOrderRespDTO.getProjectName());
+            object.put("source",hzChangeOrderRespDTO.getSource());
             list.add(object);
         });
         jsonObject.put("totalCount",page.getTotalCount());
