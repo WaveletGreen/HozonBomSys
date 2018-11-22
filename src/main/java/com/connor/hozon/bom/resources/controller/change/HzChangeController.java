@@ -115,6 +115,9 @@ public class HzChangeController extends BaseController {
         List<JSONObject> list = new ArrayList<>();
         respDTOS.forEach(hzChangeOrderRespDTO -> {
             JSONObject object = new JSONObject();
+            object.put("resource",hzChangeOrderRespDTO.getOrderResource());
+            object.put("isFromTc",hzChangeOrderRespDTO.getIsFromTc());
+            object.put("status",hzChangeOrderRespDTO.getStatus());
             object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("createName",hzChangeOrderRespDTO.getCreateName());

@@ -3,12 +3,8 @@ package com.connor.hozon.bom.resources.util;
 import org.apache.commons.lang.StringUtils;
 
 import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 /**
  * Created by haozt on 2018/5/22

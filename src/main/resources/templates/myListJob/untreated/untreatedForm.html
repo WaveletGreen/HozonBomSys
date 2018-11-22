@@ -63,10 +63,11 @@
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
                             <!--<select class="form-control" name="platform" id="ewoNo8" placeholder="请选择上市类型">-->
-                                <!--<option>上市前</option>-->
-                                <!--<option>上市后</option>-->
+                            <!--<option>上市前</option>-->
+                            <!--<option>上市后</option>-->
                             <!--</select>-->
-                            <select class="form-control" name="marketType" id="marketType"disabled="disabled" placeholder="请选择上市类型">
+                            <select class="form-control" name="marketType" id="marketType" disabled="disabled"
+                                    placeholder="请选择上市类型">
                                 <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
                                 <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
                             </select>
@@ -86,11 +87,12 @@
                         <div class="form-group after_the">
                             <label for="state">变更状态</label>
                             <!--<select class="form-control" name="platform" id="ewoNo11" placeholder="请选择变更状态">-->
-                                <!--<option>进行中</option>-->
-                                <!--<option>完成</option>-->
-                                <!--<option>取消</option>-->
+                            <!--<option>进行中</option>-->
+                            <!--<option>完成</option>-->
+                            <!--<option>取消</option>-->
                             <!--</select>-->
-                            <select class="form-control" name="state" id="state" placeholder="请选择变更状态"disabled="disabled">
+                            <select class="form-control" name="state" id="state" placeholder="请选择变更状态"
+                                    disabled="disabled">
                                 <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
                                 <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
                                 <option th:selected="${data.getState()=='取消 '?true:false}">取消</option>
@@ -101,6 +103,17 @@
             </div>
         </div>
     </form>
+</div>
+<h4><i class="fa fa-minus-square" aria-hidden="true">变更清单</i></h4>
+<div class="panel-body" style="padding:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="content col-lg-12 col-md-12" style="padding:0px;">
+                <table class="table table-striped tableNormalStyle" id="untreatedTCTable">
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
 <div class="panel-body" style="padding:0px;">
@@ -146,9 +159,11 @@
                                disabled="disabled"/>
                     </div>
                     <div class="form-group">
-                        <center><button type="button" id="saveBtn" onclick="doSave();" class="btn btn-primary"
-                                style="width: 400px;">保存
-                        </button></center>
+                        <center>
+                            <button type="button" id="saveBtn" onclick="doSave();" class="btn btn-primary"
+                                    style="width: 400px;">保存
+                            </button>
+                        </center>
                     </div>
                 </div>
             </form>
@@ -162,21 +177,20 @@
         var id = $("#id").val();
         var projectId = $("#project", window.top.document).val();
         var table = "<tr>";
-        table +="<th><a href='../change/data/feature/page?orderId="+id+"'>特性变更</a></th>";
-        table +="<th><a href='../change/data/bomCfg/page?orderId="+id+"'>全BOM配置</a></th>";
-        table +="<th><a href='../change/data/modelColorCfg/page?orderId="+id+"'>配色方案</a></th>";
-        table +="<th><a href='../change/data/materielFeature/page?orderId="+id+"'>配置物料</a></th>";
-        table +="<th><a href='../change/data/ebom/page?orderId="+id+"'>EBOM管理</a></th>";
-        table +="<th><a href='../change/data/pbom/page?orderId="+id+"'>PBOM管理</a></th>";
-        table +="<th><a href='../change/data/mbom/page?orderId="+id+"'>超级MBOM</a></th>";
-        table +="<th><a href='../change/data/mbom/page?orderId="+id+"&type=1"+"'>白车身生产</a></th>";
-        table +="<th><a href='../change/data/mbom/page?orderId="+id+"&type=6"+"'>白车身财务</a></th>";
-        table +="<th><a href='../change/data/material/page?orderId="+id+"'>物料数据</a></th>";
-        table +="<th><a href='../change/data/routing/page?orderId="+id+"'>工艺路线</a></th>";
-        table +="</tr>"
-        $("#untreatedFormTable").html(table) ;
+        table += "<th><a href='../change/data/feature/page?orderId=" + id + "'>特性变更</a></th>";
+        table += "<th><a href='../change/data/bomCfg/page?orderId=" + id + "'>全BOM配置</a></th>";
+        table += "<th><a href='../change/data/modelColorCfg/page?orderId=" + id + "'>配色方案</a></th>";
+        table += "<th><a href='../change/data/materielFeature/page?orderId=" + id + "'>配置物料</a></th>";
+        table += "<th><a href='../change/data/ebom/page?orderId=" + id + "'>EBOM管理</a></th>";
+        table += "<th><a href='../change/data/pbom/page?orderId=" + id + "'>PBOM管理</a></th>";
+        table += "<th><a href='../change/data/mbom/page?orderId=" + id + "'>超级MBOM</a></th>";
+        table += "<th><a href='../change/data/mbom/page?orderId=" + id + "&type=1" + "'>白车身生产</a></th>";
+        table += "<th><a href='../change/data/mbom/page?orderId=" + id + "&type=6" + "'>白车身财务</a></th>";
+        table += "<th><a href='../change/data/material/page?orderId=" + id + "'>物料数据</a></th>";
+        table += "<th><a href='../change/data/routing/page?orderId=" + id + "'>工艺路线</a></th>";
+        table += "</tr>"
+        $("#untreatedFormTable").html(table);
     })
-
 
     function doReturn() {
         window.location.href="javascript:history.go(-1);"
@@ -184,6 +198,22 @@
     function doSave() {
 
     }
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url:"",
+            type:"",
+            success:function (result) {
+                var data = result.data;
+                var temp = "<tr>"+
+                    "<td>零件号</td><td>版本</td></tr>"+
+                    "<tr><td>"+data+"</td><td>"+data+"</td>" +
+                    "</tr>";
+                $("#changeTCTable").html(temp);
+            }
+        })
+    })
 </script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:src="@{/js/helper/taskHelper.js}"></script>

@@ -80,9 +80,9 @@ public class ProcessController {
             return result;
         }
         switch (params.get("agreement")) {
-            case "1":
+            case "1"://同意
                 return processManagerService.release(Long.parseLong(params.get("id")), params.get("opiBomMngOpinion"));
-            case "0":
+            case "0"://不同意
                 return processManagerService.interrupt(Long.parseLong(params.get("id")), params.get("opiBomMngOpinion"));
             default:
                 result.put("status", false);

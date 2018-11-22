@@ -1,9 +1,11 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzChangeOrderFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
+import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzApplicationChangeService;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -53,4 +55,47 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
         }
         return null;
     }
+
+    @Override
+    public Page<HzChangeOrderRespDTO> getHzChangeOrderPage(HzChangeOrderByPageQuery query, HzApplicantChangeRecord rec) {
+        try {
+            //List<HzChangeOrderRespDTO> respDTOs = hzApplicationChangeService.findChangeOrderList(query,record);
+            //List<HzApplicantChangeRecord> infos =  hzApplicantChangeDAO.findApplicantionList(rec);
+
+                    List<HzChangeOrderRespDTO> respDTOS = new ArrayList<>();
+                    Page<HzChangeOrderRecord> page = hzChangeOrderDAO.findHzChangeOrderRecordByPageId(query);
+                    if (page == null || page.getResult() == null || page.getResult().size() == 0) {
+                        return new Page<>(page.getPageNumber(), page.getPageSize(), 0);
+                    }
+                    List<HzChangeOrderRecord> records = page.getResult();
+                    for(HzChangeOrderRecord record :records){
+//                        if(1==record.getFromTc()){
+//                            HzChangeOrderRespDTO respDTO = HzChangeOrderFactory.changeOrderRecordToRespDTO(record);
+//                            respDTO.setDeptName(record.getDeptNameTC());
+//                            respDTO.setCreateName(record.getCreateNameTC());
+//                            respDTOS.add(respDTO);
+//                        }else {
+                            respDTOS.add(getHzChangeOrderRecordById(record.getId()));
+//                        }
+                    }
+                    return new Page<>(page.getPageNumber(), page.getPageSize(), page.getTotalCount(), respDTOS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Page<>(query.getPage(), query.getPageSize(), 0);
+        }
+    }
+
+    public HzChangeOrderRespDTO getHzChangeOrderRecordById(Long id) {
+        try {
+            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(id);
+            if(record != null){
+                return HzChangeOrderFactory.changeOrderRecordToRespDTO(record);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        return null;
+    }
+
 }

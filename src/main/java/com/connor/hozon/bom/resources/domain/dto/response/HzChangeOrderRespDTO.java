@@ -8,6 +8,11 @@ import java.util.Date;
  * @Description:
  */
 public class HzChangeOrderRespDTO {
+
+    private static final String ORDER_FROM_TC="TC端";
+
+    private static final String ORDER_FROM_BOM="BOM端";
+
     /**
      * 主键id
      */
@@ -91,6 +96,28 @@ public class HzChangeOrderRespDTO {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+    /**
+     * 表单来源 BOM端 TC端
+     */
+    private String orderResource;
+
+    /**
+     * 表单来源
+     */
+    private Integer isFromTc;
+
+    /**
+     * 表单状态值
+     */
+    private Integer Status;
+
+    public Integer getIsFromTc() {
+        return isFromTc;
+    }
+
+    public void setIsFromTc(Integer isFromTc) {
+        this.isFromTc = isFromTc;
     }
 
     public Long getId() {
@@ -193,8 +220,17 @@ public class HzChangeOrderRespDTO {
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setState(Integer status) {
+        if(status!=null){
+            switch (status){
+                case 1:this.state="已完成";break;
+                case 2:this.state="进行中";break;
+                case 3:this.state="流程中";break;
+                default:this.state="已取消";break;
+            }
+        }else {
+            this.state="未知";
+        }
     }
 
     public String getProjectId() {
@@ -229,4 +265,19 @@ public class HzChangeOrderRespDTO {
         this.deptName = deptName;
     }
 
+    public String getOrderResource() {
+        return orderResource;
+    }
+
+    public void setOrderResource(Integer from) {
+        this.orderResource = 1==from?ORDER_FROM_TC:ORDER_FROM_BOM;
+    }
+
+    public Integer getStatus() {
+        return Status;
+    }
+
+    public void setStatus(Integer status) {
+        Status = status;
+    }
 }

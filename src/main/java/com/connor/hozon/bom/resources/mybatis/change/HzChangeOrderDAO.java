@@ -53,7 +53,12 @@ public interface HzChangeOrderDAO {
      * @return
      */
     HzChangeOrderRecord findHzChangeOrderRecordById(HzChangeOrderByPageQuery query,Long id);
-
+    /**
+     * 分页获取“我的申请”表单记录
+     * @param query
+     * @return
+     */
+    Page<HzChangeOrderRecord> findHzChangeOrderRecordByPageId(HzChangeOrderByPageQuery query);
     /**
      * 查询变更清单 根据项目id+id（TC同步）
      * @param

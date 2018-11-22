@@ -780,12 +780,12 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
 
                 map.put("changeData",dataRecords);
                 //申请人
-                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
-                applicantChangeRecord.setApplicantId(applicantId);
-                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
-                applicantChangeRecord.setTableName(tableName);
-
-                map.put("applicant",applicantChangeRecord);
+//                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
+//                applicantChangeRecord.setApplicantId(applicantId);
+//                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
+//                applicantChangeRecord.setTableName(tableName);
+//
+//                map.put("applicant",applicantChangeRecord);
                 //审核人
 //                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
 //                auditorChangeRecord.setAuditorId(auditorId);
@@ -811,9 +811,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                                 case "changeData":
                                     hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
                                     break;
-                                case "applicant":
-                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
-                                    break;
+//                                case "applicant":
+//                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+//                                    break;
 //                                case "auditor" :
 //                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
 //                                    break;

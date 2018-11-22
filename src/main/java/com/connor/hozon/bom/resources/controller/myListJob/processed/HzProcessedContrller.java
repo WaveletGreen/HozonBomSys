@@ -7,6 +7,7 @@ import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
+import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +53,16 @@ public class HzProcessedContrller {
         HzAuditorChangeRecord record = new HzAuditorChangeRecord();
         List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList2(record);
 
-//        for(){
-//            model.addAttribute("result",infos);
-//        }
         if(respDTO != null){
             model.addAttribute("data",respDTO);
-            model.addAttribute("result",infos.get(0));
+            for(int i=0;i<infos.size();i++){
+                if(id==infos.get(i).getOrderId()){
+                    //infos.get(i).setAuditTime(DateUtil.formatTimestampDate(infos.get(i).getAuditTime()));
+                    model.addAttribute("timeString",DateUtil.formatTimestampDate(infos.get(i).getAuditTime()));
+                    model.addAttribute("result",infos.get(i));
+                }
+
+            }
         }
         return "myListJob/processed/processedForm";
     }

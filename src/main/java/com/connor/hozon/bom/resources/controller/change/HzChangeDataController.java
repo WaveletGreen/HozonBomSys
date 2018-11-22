@@ -3,16 +3,19 @@ package com.connor.hozon.bom.resources.controller.change;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzChangeListRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -32,6 +35,8 @@ public class HzChangeDataController extends BaseController {
     @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
 
+    @Autowired
+    private HzChangeListDAO hzChangeListDAO;
     @RequestMapping(value = "ebom/title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
@@ -112,7 +117,7 @@ public class HzChangeDataController extends BaseController {
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("station", "工位");
         //获取该项目下的所有车型模型
-        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle("1c128c60-84a2-4076-9b1c-f7093e56e4df"));
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         toJSONResponse(Result.build(tableTitle), response);
     }
 
@@ -210,7 +215,7 @@ public class HzChangeDataController extends BaseController {
             toJSONResponse(respDTOS,response);
             return;
         }
-        toJSONResponse(null,response);
+        toJSONResponse(Result.build(respDTOS),response);
     }
 
 
@@ -259,6 +264,16 @@ public class HzChangeDataController extends BaseController {
     public String bomCfgDataTOPage(Model model,Long orderId){
         model.addAttribute("orderId",orderId);
         return "change/changeOrder/changeBomCfgTable";
+    }
+
+    @RequestMapping(value = "data/tc",method = RequestMethod.GET)
+    public void getDataDetailForTc(String formId,HttpServletResponse response){
+        if(StringUtils.isBlank(formId)){
+            toJSONResponse(Result.build(false,"表单信息不能为空!"),response);
+            return;
+        }
+        List<HzChangeListRecord> list = hzChangeListDAO.findItemListByFormId(formId);
+        toJSONResponse(Result.build(list),response);
     }
 
 
