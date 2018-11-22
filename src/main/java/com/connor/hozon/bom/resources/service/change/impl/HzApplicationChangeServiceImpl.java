@@ -25,7 +25,7 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
     public List<HzChangeOrderRespDTO> findChangeOrderList(HzChangeOrderByPageQuery query, HzApplicantChangeRecord record) {
         List<HzChangeOrderRespDTO> auditorList = new ArrayList<>();
         try{
-            List<HzApplicantChangeRecord> infos =  hzApplicantChangeDAO.findAuditorList(record);
+            List<HzApplicantChangeRecord> infos =  hzApplicantChangeDAO.findApplicantionList(record);
 
             if(ListUtil.isNotEmpty(infos)){
                 for(int i=0;i<infos.size();i++){
@@ -40,7 +40,7 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
                         respDTO.setDeptName(rec.getDeptName());//部门-deptName
                         respDTO.setChangeType(rec.getChangeType());//变更类型
                         respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
-                        //respDTO.setLaunchTime(rec.getLaunchTime());
+                        respDTO.setProjectName(rec.getProjectName());
                         auditorList.add(respDTO);
                     }
 

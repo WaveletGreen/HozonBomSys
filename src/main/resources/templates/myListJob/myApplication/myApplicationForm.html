@@ -6,6 +6,9 @@
 <title>我的申请详情页面</title>
 </head>
 <body>
+<div class="form-group">
+    <button type="button"class="btn btn-primary"onclick="doReturn();" style="float: right">返回上一步</button>
+</div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
 <div class="panel-body" style="padding:0px;">
     <form id="basicForm" role="form" method="post" action="">
@@ -130,11 +133,14 @@
         table +="</tr>"
         $("#myApplicationFormTable").html(table) ;
     })
+    function doReturn() {
+        window.location.href="javascript:history.go(-1);"
+    }
 </script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>
 <script th:src="@{/js/helper/taskHelper.js}"></script>
 <script th:src="@{/js/helper/jsonHelper.js}"></script>
 <script th:src="@{/js/helper/renderingTableColorHelper.js}"></script>
-<script th:src="@{/js/myListJob/untreated/application/application.js}"></script>
+<!--<script th:src="@{/js/myListJob/myApplication/myApplication.js}"></script>-->
 </body>
 </html>

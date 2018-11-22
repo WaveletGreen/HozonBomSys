@@ -3,6 +3,8 @@ package com.connor.hozon.bom.resources.controller.myListJob.processed;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzAuditorChangeRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +38,26 @@ public class HzProcessedContrller {
     @Autowired
     private HzChangeOrderService hzChangeOrderService;
 
+    @Autowired
+    private HzChangeOrderDAO hzChangeOrderDAO;
+
+    @Autowired
+    private HzAuditorChangeDAO hzAuditorChangeDAO;
+
     @RequestMapping(value = "ToProcessedForm",method = RequestMethod.GET)
     public String getToProcessedFormToPage(Long id,Model model){
         HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
+//        HzChangeOrderByPageQuery query = new HzChangeOrderByPageQuery();
+//        HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,id);
+        HzAuditorChangeRecord record = new HzAuditorChangeRecord();
+        List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList2(record);
+
+//        for(){
+//            model.addAttribute("result",infos);
+//        }
         if(respDTO != null){
             model.addAttribute("data",respDTO);
+            model.addAttribute("result",infos.get(0));
         }
         return "myListJob/processed/processedForm";
     }
@@ -69,6 +88,7 @@ public class HzProcessedContrller {
             object.put("deptName",hzChangeOrderRespDTO.getDeptName());
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
+            object.put("projectName",hzChangeOrderRespDTO.getProjectName());
             list.add(object);
         });
         jsonObject.put("result",list);

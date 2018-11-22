@@ -67,6 +67,11 @@ public class HzChangeOrderRespDTO {
     private String projectId;
 
     /**
+     * 项目name
+     */
+    private String projectName;
+
+    /**
      * 表单创建者
      */
     private String createName;
@@ -80,6 +85,13 @@ public class HzChangeOrderRespDTO {
      */
     private String deptName;
 
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public Long getId() {
         return id;

@@ -18,5 +18,5 @@ public interface HzApplicantChangeDAO {
     int insert(HzApplicantChangeRecord record);
 
     //我的申请
-    List<HzApplicantChangeRecord> findAuditorList(HzApplicantChangeRecord record);
+    List<HzApplicantChangeRecord> findApplicantionList(HzApplicantChangeRecord record);
 }
