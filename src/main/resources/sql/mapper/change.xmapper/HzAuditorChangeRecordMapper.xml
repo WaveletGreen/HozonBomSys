@@ -58,11 +58,15 @@
     </select>
 
     <!--根据变更表单的ID查询一个审核意见数据-->
-    <select id="HzAuditorChangeDAOImpl_findByOrderId" parameterType="sql.pojo.change.HzAuditorChangeRecord" resultMap="BaseResultMap">
+    <!--    既然一个 表单只能有一个人审核，则表单在审核的时候没有审核结果，有审核结果的不应该再被审核
+        因此前提是AUDIT_RESULT is null-->
+    <select id="HzAuditorChangeDAOImpl_findByOrderId" parameterType="sql.pojo.change.HzAuditorChangeRecord"
+            resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM HZ_AUDITOR_CHANGE_RECORD
         where ORDER_ID = #{orderId,jdbcType=DOUBLE} and AUDITOR_ID=#{auditorId,jdbcType=DOUBLE}
+        and AUDIT_RESULT is null
     </select>
 
     <insert id="insertSelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
@@ -117,7 +121,8 @@
 
 
     <!--update-->
-    <update id="HzAuditorChangeDAOImpl_updateByPrimaryKeySelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+    <update id="HzAuditorChangeDAOImpl_updateByPrimaryKeySelective"
+            parameterType="sql.pojo.change.HzAuditorChangeRecord">
         update HZ_AUDITOR_CHANGE_RECORD
         <set>
             <if test="auditorId != null">

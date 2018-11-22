@@ -12,8 +12,8 @@ $(document).ready((function () {
 
 function doQuery() {
     var url = "processed/infoList";
-    initTable(url);
     $('#processedTable').bootstrapTable('destroy');
+    initTable(url);
 }
 
 function formatDate() {
@@ -29,7 +29,7 @@ function initTable(url) {
     var column = [];
     column.push({field: 'ck', checkbox: true, width: 50});
     column.push({
-        field: 'ewoNo',
+        field: 'changeNo',
         title: '变更单号',
         align: 'center',
         valign: 'middle',
@@ -59,7 +59,7 @@ function initTable(url) {
         sidePagination: "server",          //分页方式：client客户端分页，server服务端分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         showExport: false,
-        formId: "formId",
+        formId: "queryHandled",
         columns: column,                     //列信息，需要预先定义好
         sortable: false,                     //是否启用排序
         sortOrder: "asc",                   //排序方式

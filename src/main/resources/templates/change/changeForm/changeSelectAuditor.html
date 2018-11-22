@@ -103,7 +103,7 @@
                     success: function (result) {
                         activeTabBodyReset();
                         if (result.status) {
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet(result.type, result.name);//.find('#' + result.type).text(result.name);
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet(result.type, result.name);//.find('#' + result.type).text(result.name);
                             layer.msg(result.msg, {icon: 1, time: 2000});
                         }
                         else {
