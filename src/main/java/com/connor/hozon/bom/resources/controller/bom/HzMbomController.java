@@ -124,7 +124,7 @@ public class HzMbomController extends BaseController {
             _res.put("No", dto.getNo());
             _res.put("rank",dto.getRank());
             _res.put("level", dto.getLevel());
-//            _res.put("lineNo",ProcessReciveDto.getLineNo());
+//            _res.put("lineNo",ProcessReceiveDto.getLineNo());
             _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
             _res.put("pBomLinePartName", dto.getpBomLinePartName());

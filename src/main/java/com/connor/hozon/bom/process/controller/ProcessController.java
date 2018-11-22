@@ -1,38 +1,64 @@
+/*
+ * Copyright (c) 2018.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.process.controller;
 
-import com.connor.hozon.bom.process.dto.ProcessReciveDto;
+import com.connor.hozon.bom.process.dto.ProcessReceiveDto;
+import com.connor.hozon.bom.process.iservice.IProcessManagerService;
 import com.connor.hozon.bom.process.service.ProcessManagerService;
+import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 流程控制
+ * @Author: Fancyears·Maylos·Malvis
+ * @Description: 流程控制
+ * @Date: Created in  2018/11/22 11:09
+ * @Modified By:
  */
 @Controller
 @RequestMapping("process")
 public class ProcessController {
     @Autowired
-    ProcessManagerService processManagerService;
+    IProcessManagerService processManagerService;
 
+    /**
+     * 获取选择审核人员的页面
+     *
+     * @return
+     */
     @RequestMapping("getAuditorPage")
-    public String getAuditorPage() {
-        return "change/changeForm/changeSelectAuditor";
+    public String getAuditorPage(@RequestParam Long orderId, Model model) {
+        User user = null;
+        if ((user = processManagerService.checkOrderAuditor(orderId)) != null) {
+            model.addAttribute("msg", "该表单已选择审核人:" + user.getUserName());
+            return "errorWithEntity";
+        } else {
+            return "change/changeForm/changeSelectAuditor";
+        }
     }
 
     /**
      * 开始发起流程
+     * 记录审核人信息
+     * 更新表单的审核开始和审核人
+     * 创建审核人任务，并启动任务
      *
-     * @param processReciveDto
+     * @param processReceiveDto 前端传回的审核数据对象
      * @return
      */
     @RequestMapping(value = "doStartProcess", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> doStartProcess(@RequestBody ProcessReciveDto processReciveDto) {
-        return (Map<String, Object>) processManagerService.start(processReciveDto.getOrderId(), processReciveDto.getUserId());
+    public Map<String, Object> doStartProcess(@RequestBody ProcessReceiveDto processReceiveDto) {
+        return (Map<String, Object>) processManagerService.start(processReceiveDto.getOrderId(), processReceiveDto.getUserId());
     }
 
     /**
