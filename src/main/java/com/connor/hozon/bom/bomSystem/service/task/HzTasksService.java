@@ -189,52 +189,20 @@ public class HzTasksService implements IHzTaskService {
     public JSONObject loadUserTask() {
         User user = UserInfo.getUser();
         JSONObject result = new JSONObject();
-        //List<HzChangeOrderRespDTO> dtoList = new ArrayList<>();
-        //List<HzChangeOrderRecord> tasks = doSelectUserExecutingChangeOrder(Long.valueOf(user.getId()));
 
-        HzChangeOrderByPageQuery query=new HzChangeOrderByPageQuery();
+        /*HzChangeOrderByPageQuery query=new HzChangeOrderByPageQuery();
         HzAuditorChangeRecord record=new HzAuditorChangeRecord();
         List<HzChangeOrderRespDTO> respDTOs = hzAuditorChangeService.findChangeOrderList(query,record);
-
         if(ListUtil.isEmpty(respDTOs)){
             return result;
         }
-        //Tree tree = new Tree();
-        //HzChangeOrderRespDTO dto = new HzChangeOrderRespDTO();
         if (respDTOs != null && !respDTOs.isEmpty()) {
-//            Map<Integer, Tree> maoOfForm = new HashMap<>();
-//            Tree dbTree = null;
-//            for (int i = 0; i < respDTOs.size(); i++) {
-//                HzChangeOrderRespDTO task = respDTOs.get(i);
-//                //tree.setId(task.getId());
-//                tree.setId(123);
-//                //缓存树地址
-//                if (maoOfForm.containsKey(tree.getId())) {
-//                    dbTree = maoOfForm.get(tree.getId());
-//                } else {
-//                    dbTree = treeService.get(tree);
-//                }
-//                //HzChangeOrderRespDTO dto = new HzChangeOrderRespDTO();
-//                if (dbTree != null) {
-//                    //设置URL
-//                    //dto.setUrl(dbTree.getUrl());
-//                    //设置表单ID
-//                    //dto.setId(dbTree.getId());
-//                }
-//            }
             JSONObject jsonObject = new JSONObject();
             List<JSONObject> list = new ArrayList<>();
             respDTOs.forEach(hzChangeOrderRespDTO -> {
                 JSONObject object = new JSONObject();
                 object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
                 object.put("formId",hzChangeOrderRespDTO.getId());
-//                object.put("id",dto.getId());//treeID
-//                object.put("url",dto.getUrl());
-//            object.put("originTime",hzChangeOrderRespDTO.getOriginTime());
-//            object.put("deptName",hzChangeOrderRespDTO.getDeptName());
-//            object.put("changeType",hzChangeOrderRespDTO.getChangeType());
-//            object.put("originator",hzChangeOrderRespDTO.getOriginator());
-//            object.put("projectName",hzChangeOrderRespDTO.getProjectName());
                 list.add(object);
             });
             //统计任务个数
@@ -243,19 +211,21 @@ public class HzTasksService implements IHzTaskService {
             jsonObject.put("data",list);
             return jsonObject;
         }
+        return result;*/
 
-        return result;
 
-        /*
-        //List<HzTaskPostDto> dtoList = new ArrayList<>();
-        //List<HzTasks> tasks = doSelectUserExecutingTasks(Long.valueOf(user.getId()));
+        List<HzTaskPostDto> dtoList = new ArrayList<>();
+        List<HzTasks> tasks = doSelectUserExecutingTasks(Long.valueOf(user.getId()));
+        //List<HzChangeOrderRespDTO> dtoList = new ArrayList<>();
+        //List<HzChangeOrderRecord> tasks = doSelectUserExecutingChangeOrder(Long.valueOf(user.getId()));
+
         Tree tree = new Tree();
         if (tasks != null && !tasks.isEmpty()) {
             Map<Integer, Tree> maoOfForm = new HashMap<>();
             Tree dbTree = null;
             for (int i = 0; i < tasks.size(); i++) {
-                HzChangeOrderRecord task = tasks.get(i);
-                tree.setId(task.getId());
+//                HzChangeOrderRecord task = tasks.get(i);
+//                tree.setId(task.getId());
                 //缓存树地址
                 if (maoOfForm.containsKey(tree.getId())) {
                     dbTree = maoOfForm.get(tree.getId());
@@ -263,12 +233,12 @@ public class HzTasksService implements IHzTaskService {
                     dbTree = treeService.get(tree);
                 }
                 HzChangeOrderRespDTO dto = new HzChangeOrderRespDTO();
-                if (dbTree != null) {
-                    //设置URL
-                    dto.setUrl(dbTree.getUrl());
-                    //设置表单ID
-                    dto.setId(dbTree.getId());
-                }
+//                if (dbTree != null) {
+//                    //设置URL
+//                    dto.setUrl(dbTree.getUrl());
+//                    //设置表单ID
+//                    dto.setId(dbTree.getId());
+//                }
                 //switch (task.getTaskFormType()) {
 //                    case 1:
                         //HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
@@ -299,13 +269,13 @@ public class HzTasksService implements IHzTaskService {
 //                dto.setReserve8("");
 //                dto.setReserve9("");
 //                dto.setReserve10("");
-                dtoList.add(dto);
+//                dtoList.add(dto);
             }
         }
         //统计任务个数
         int count = hzAuditorChangeDAO.count(user.getId());
         result.put("count", count);
         result.put("data", dtoList);
-        return result;*/
+        return result;
     }
 }
