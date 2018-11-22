@@ -1,11 +1,19 @@
+/*
+ * Copyright (c) 2018.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.process.iservice;
 
+import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * 流程中断和发布回调，在这里统一进行流程的中断与发布
  * 当审核人员同意，执行发布操作{@link IProcessManagerService#release}
  * 当审核人员不同意，执行中断操作{@link IProcessManagerService#interrupt(long, Object...)}
+ * 流程的结束节点自动根据审核人的操作进行
  */
 @Configuration
 public interface IProcessManagerService {
@@ -42,4 +50,6 @@ public interface IProcessManagerService {
 
     int PROCESS_OK = 1;
     int PROCESS_NOT_OK = 0;
+
+    User checkOrderAuditor(Long orderId);
 }

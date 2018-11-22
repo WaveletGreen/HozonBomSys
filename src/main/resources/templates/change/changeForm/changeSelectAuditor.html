@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <html xmlns:th="http://www.thymeleaf.org">
@@ -101,12 +101,14 @@
                     data: JSON.stringify(data),
                     url: "./process/doStartProcess",
                     success: function (result) {
-                        activeTabBodyReset();
                         if (result.status) {
                             // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet(result.type, result.name);//.find('#' + result.type).text(result.name);
+                            activeTabBodyRefresh();
+                            window.top.loadTasks();
                             layer.msg(result.msg, {icon: 1, time: 2000});
                         }
                         else {
+                            activeTabBodyReset();
                             window.Ewin.alert({message: result.msg});
                         }
                     },

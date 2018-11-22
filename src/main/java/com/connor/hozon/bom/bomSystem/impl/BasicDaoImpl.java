@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import sql.IBaseSQLUtil;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 基础dao层基本实现类
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:

@@ -272,7 +272,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReciveDto.getState());
+//                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("lineId",dto.getLineId() );
                 _res.put("pBomLinePartName",dto.getpBomLinePartName() );
@@ -340,7 +340,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReciveDto.getState());
+//                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("level", dto.getLevel());
                 _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
@@ -377,7 +377,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReciveDto.getState());
+//                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("rank",dto.getRank());
                 _res.put("level", dto.getLevel());
@@ -420,7 +420,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReciveDto.getState());
+//                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("resource",dto.getResource());
                 _res.put("pMaterielCode",dto.getpMaterielCode());

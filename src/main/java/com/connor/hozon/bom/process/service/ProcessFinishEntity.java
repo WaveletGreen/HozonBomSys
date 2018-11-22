@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.process.service;
 
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
@@ -65,7 +71,7 @@ public class ProcessFinishEntity implements IProcessFinish {
         HzChangeOrderRecord hzChangeOrderRecord = new HzChangeOrderRecord();
         hzChangeOrderRecord.setId(orderId);
         //根据审核人同意与否进行设置状态
-        hzChangeOrderRecord.setState(IProcessManagerService.PROCESS_OK == (Integer) params[0] ? 1 : 3);
+        hzChangeOrderRecord.setState(IProcessManagerService.PROCESS_OK == (Integer) params[0] ? 1 : 4);
         return hzChangeOrderDAO.update(hzChangeOrderRecord) > 0 ? true : false;
     }
 

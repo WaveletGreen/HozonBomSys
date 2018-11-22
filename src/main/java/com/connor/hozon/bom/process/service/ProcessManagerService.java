@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.process.service;
 
 import com.connor.hozon.bom.bomSystem.iservice.process.IProcess;
@@ -6,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.service.process.ReleaseContainer;
 import com.connor.hozon.bom.process.iservice.IProcessFinish;
 import com.connor.hozon.bom.process.iservice.IProcessManagerService;
 import com.connor.hozon.bom.process.iservice.IProcessStart;
+import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -70,5 +77,9 @@ public class ProcessManagerService implements IProcessManagerService {
         container.setCallBackEntity(entity);
         boolean status = container.execute(orderId, param);
         return status;
+    }
+
+    public User checkOrderAuditor(Long orderId) {
+        return processStartEntity.checkOrderAuditor(orderId);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 var taskData = null;
@@ -16,7 +16,7 @@ $(function () {
 var projectId = $("#project", window.top.document).val();
 
 function loadTasks() {
-    console.log("加载个人任务");
+    log("加载个人任务");
     $.ajax({
         url: "./task/loadTasks",
         type: "POST",
@@ -53,7 +53,7 @@ function loadTasks() {
             }
         },
         error: function (err) {
-            console.log(err.status);
+            log(err.status);
         }
     })
 }
@@ -161,7 +161,6 @@ function getTaskData() {
 function clearTaskData() {
     taskData = null;
 }
-
 function f() {
     //var showObj = $(top.document.body).find(".nav-tabs li a[href='#" + (data.targetName + data.targetId) + "']");
     // 增加一个页面的时候判断当前的标签页是否已经打开过了，若打开过则不再重新生成新的tab标签页，而是直接显示打开过的标签页
@@ -174,5 +173,4 @@ function f() {
         url: "untreated",//data.url
     });
     //}
-
 }

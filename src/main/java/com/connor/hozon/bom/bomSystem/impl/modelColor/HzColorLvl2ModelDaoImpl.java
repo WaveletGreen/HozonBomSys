@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -17,7 +17,7 @@ import sql.pojo.cfg.modelColor.HzColorLvl2Model;
 import java.util.List;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:

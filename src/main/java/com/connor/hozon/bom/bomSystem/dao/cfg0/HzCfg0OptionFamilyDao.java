@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 获取到啊配置器的系统层，系统层是从TC来，不允许更改，所有的配置数据都不应该修改TC的数据为准
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:

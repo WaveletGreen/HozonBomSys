@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -25,7 +25,7 @@ import java.util.UUID;
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 基本车型controller
  * 每一个车型模型都与主配置关联，主配置关联项目，因此每一个车型模型都与项目间接关联，从而获取到项目数据
  * 配置管理controller的所有返回消息字段key都是msg

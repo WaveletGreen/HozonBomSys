@@ -3,7 +3,7 @@ package sql.pojo.interaction;
 import lombok.Data;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description:
  * @Date: Created in 2018/9/25 13:18
  * @Modified By:单车解算用，特性+2++颜色

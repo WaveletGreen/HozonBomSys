@@ -7,7 +7,7 @@ import sql.pojo.interaction.HzSingleVehicleBomLineBean;
 import java.util.List;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description:
  * @Date: Created in 2018/9/25 13:25
  * @Modified By:

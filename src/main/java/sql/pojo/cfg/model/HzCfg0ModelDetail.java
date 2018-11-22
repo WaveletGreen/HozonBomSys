@@ -1,13 +1,13 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
 package sql.pojo.cfg.model;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 全配置BOM一级清单中用到的基本车型模型
  * @Date: Created in 2018/8/10 13:55
  * @Modified By:

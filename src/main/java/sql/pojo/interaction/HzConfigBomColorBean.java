@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description:
  * @Date: Created in 2018/9/19 12:10
  * @Modified By: 配置+2Y+颜色对应的bean，超级BOM计算用
