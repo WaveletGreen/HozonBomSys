@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.mybatis.work.impl;
 
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.work.HzWorkProcedure;
@@ -248,7 +250,25 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
 
     @Override
     public int deleteByPuids(List<String> puids) {
-        return super.delete("HzWorkProcedureDAOImpl_deleteByPuids",new HashMap<>().put("puids",puids));
+        int size = puids.size();
+        Map<String,Object> m = new HashMap<>();
+        try {
+            if(size>1000){
+                HzBomSysFactory<String> factory = new HzBomSysFactory();
+                Map<Integer,List<String>> map = factory.spiltList(puids);
+                for(List<String> v:map.values()){
+                    m.put("puids",v);
+                    super.delete("HzWorkProcedureDAOImpl_deleteByPuids",m);
+                }
+            }else {
+                m.put("puids",puids);
+                super.delete("HzWorkProcedureDAOImpl_deleteByPuids",m);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return 1;
     }
 
 }

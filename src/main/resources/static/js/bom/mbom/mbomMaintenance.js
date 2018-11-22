@@ -292,7 +292,7 @@ function initTable1(mBomUrl) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $mBomTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -303,12 +303,16 @@ function initTable1(mBomUrl) {
                                 "puids": puids,
                             });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择需要删除的数据!'});
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
-                                return false;
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
                             }
                             // var _table = '<p>是否要删除您所选择的记录？</p>' +
                             //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
@@ -321,7 +325,7 @@ function initTable1(mBomUrl) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -337,7 +341,7 @@ function initTable1(mBomUrl) {
                                             } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
-                                            $table.bootstrapTable("refresh");
+                                            $mBomTable.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: ":" + info.status});
@@ -1093,7 +1097,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $mBomTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -1104,12 +1108,16 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                                 "puids": puids,
                             });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择需要删除的数据!'});
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
-                                return false;
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
                             }
                             // var _table = '<p>是否要删除您所选择的记录？</p>' +
                             //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
@@ -1122,7 +1130,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -1138,7 +1146,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                                             } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
-                                            $table.bootstrapTable("refresh");
+                                            $mBomTable.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: ":" + info.status});
@@ -1853,7 +1861,7 @@ function initTable2(productionUrl) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $productionTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -1862,14 +1870,19 @@ function initTable2(productionUrl) {
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
+                                "type": 1,
                             });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择需要删除的数据!'});
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
-                                return false;
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
                             }
                             // var _table = '<p>是否要删除您所选择的记录？</p>' +
                             //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
@@ -1882,7 +1895,7 @@ function initTable2(productionUrl) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -1898,7 +1911,7 @@ function initTable2(productionUrl) {
                                             } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
-                                            $table.bootstrapTable("refresh");
+                                            $productionTable.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: ":" + info.status});
@@ -2257,7 +2270,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $productionTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -2266,14 +2279,19 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
+                                "type": 1,
                             });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择需要删除的数据!'});
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
-                                return false;
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
                             }
                             // var _table = '<p>是否要删除您所选择的记录？</p>' +
                             //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
@@ -2286,7 +2304,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -2302,7 +2320,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                                             } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
-                                            $table.bootstrapTable("refresh");
+                                            $productionTable.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: ":" + info.status});
@@ -2675,7 +2693,7 @@ function initTable3(financialUrl) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $financialTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -2684,14 +2702,19 @@ function initTable3(financialUrl) {
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
+                                "type": 6,
                             });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择需要删除的数据!'});
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
-                                return false;
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
                             }
                             // var _table = '<p>是否要删除您所选择的记录？</p>' +
                             //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
@@ -2704,7 +2727,7 @@ function initTable3(financialUrl) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -2720,7 +2743,7 @@ function initTable3(financialUrl) {
                                             } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
-                                            $table.bootstrapTable("refresh");
+                                            $financialTable.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: ":" + info.status});
@@ -3084,7 +3107,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                         text: '撤销',
                         iconCls: 'glyphicon glyphicon-share-alt',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
+                            var rows = $financialTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
@@ -3093,14 +3116,19 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
+                                "type": 6,
                             });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择需要删除的数据!'});
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
-                                return false;
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
                             }
                             // var _table = '<p>是否要删除您所选择的记录？</p>' +
                             //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
@@ -3113,7 +3141,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "ebom/delete/ebom",
+                                        url: "mbom/cancel",
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
@@ -3129,7 +3157,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                                             } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
-                                            $table.bootstrapTable("refresh");
+                                            $financialTable.bootstrapTable("refresh");
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: ":" + info.status});

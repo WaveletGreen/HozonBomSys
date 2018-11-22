@@ -41,7 +41,8 @@ public class HzChangeOrderFactory {
         HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
         respDTO.setChangeNo(record.getChangeNo());
         respDTO.setChangeType(record.getChangeType());
-        respDTO.setCreateName(record.getCreateName());
+        respDTO.setCreateName(1==record.getFromTc()?record.getCreateNameTC():record.getCreateName());
+        respDTO.setDeptName(1==record.getFromTc()?record.getDeptNameTC():record.getDeptName());
         respDTO.setCreateNo(record.getCreateNo());
         respDTO.setCreateTime(DateUtil.formatTimestampDate(record.getCreateTime()));
         respDTO.setId(record.getId());
@@ -60,7 +61,7 @@ public class HzChangeOrderFactory {
             respDTO.setState("已取消");
         }
         respDTO.setTel(record.getTel());
-        respDTO.setDeptName(record.getDeptName());
+
         return respDTO;
     }
 

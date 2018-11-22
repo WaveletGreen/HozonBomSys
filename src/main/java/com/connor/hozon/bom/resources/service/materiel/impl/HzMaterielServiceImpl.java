@@ -59,10 +59,6 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
 
-    @Autowired
-    private HzAuditorChangeDAO hzAuditorChangeDAO;
-
-    private ExecutorService pool = Executors.newFixedThreadPool(5);
     @Override
     public WriteResultRespDTO editHzMateriel(EditHzMaterielReqDTO editHzMaterielReqDTO) {
         WriteResultRespDTO respDTO = new WriteResultRespDTO();
@@ -159,10 +155,6 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 respDTO.setErrMsg("请选择一条需要删除的数据！");
                 return respDTO;
-            }
-            boolean b = PrivilegeUtil.writePrivilege();
-            if(!b){
-                return WriteResultRespDTO.getFailPrivilege();
             }
             int i = hzMaterielDAO.delete(puid);
             if(i>0){
@@ -362,41 +354,38 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             List<HzMaterielRecord> deleteRecords = new ArrayList<>();
             List<HzMaterielRecord> updateRecords = new ArrayList<>();
             List<HzMaterielRecord> updateList = new ArrayList<>();
-            pool.submit(()->{
-                List<HzMaterielRecord> list = hzMaterielDAO.getMaterialRecordsByPuids(query);
-                //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
-                if(ListUtil.isNotEmpty(list)){
-                    list.forEach(record -> {
-                        if(StringUtils.isBlank(record.getRevision())){
-                            deleteRecords.add(record);
-                        }else {
-                            updateRecords.add(record);
-                        }
-                    });
-                }
-                if(ListUtil.isNotEmpty(updateRecords)){
-                    HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-                    dataDetailQuery.setRevision(true);
-                    dataDetailQuery.setProjectId(reqDTO.getProjectId());
-                    dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_BEFORE.getTableName());
-                    dataDetailQuery.setStatus(1);
-                    updateRecords.forEach(record -> {
-                        dataDetailQuery.setRevisionNo(record.getRevision());
-                        HzMaterielRecord manageRecord = hzMaterielDAO.getMaterialRecordByPuidAndRevision(dataDetailQuery);
-                        if(manageRecord!=null){
-                            updateList.add(HzMaterielFactory.hzMaterielRecordToMaterielRecord(manageRecord));
-                        }
-                    });
 
-                    if(ListUtil.isNotEmpty(updateList)){
-                        hzMaterielDAO.updateList(updateList);
+            List<HzMaterielRecord> list = hzMaterielDAO.getMaterialRecordsByPuids(query);
+            //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
+            if(ListUtil.isNotEmpty(list)){
+                list.forEach(record -> {
+                    if(StringUtils.isBlank(record.getRevision())){
+                        deleteRecords.add(record);
+                    }else {
+                        updateRecords.add(record);
                     }
-                    if(ListUtil.isNotEmpty(deleteRecords)){
-                        hzMaterielDAO.deleteMaterielList(deleteRecords);
+                });
+            }
+            if(ListUtil.isNotEmpty(updateRecords)){
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setRevision(true);
+                dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_BEFORE.getTableName());
+                dataDetailQuery.setStatus(1);
+                updateRecords.forEach(record -> {
+                    dataDetailQuery.setRevisionNo(record.getRevision());
+                    HzMaterielRecord manageRecord = hzMaterielDAO.getMaterialRecordByPuidAndRevision(dataDetailQuery);
+                    if(manageRecord!=null){
+                        updateList.add(HzMaterielFactory.hzMaterielRecordToMaterielRecord(manageRecord));
                     }
-
-                }
-            });
+                });
+            }
+            if(ListUtil.isNotEmpty(updateList)){
+                hzMaterielDAO.updateList(updateList);
+            }
+            if(ListUtil.isNotEmpty(deleteRecords)){
+                hzMaterielDAO.deleteMaterielList(deleteRecords);
+            }
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();

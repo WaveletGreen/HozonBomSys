@@ -1,7 +1,9 @@
 package sql.pojo.interaction;
 
 import lombok.Data;
+import sql.pojo.accessories.HzAccessoriesLibs;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -43,6 +45,16 @@ public class HzConfigBomColorBean {
      * 特性代码
      */
     private String featureCode;
+
+    /**
+     * 油漆物料集合 @Author haozt
+     */
+    private String materielCodes;
+
+    /**
+     * 油漆物料和油漆物料名称 @Author haozt
+     */
+    private List<HzAccessoriesLibs> materielList;
 
     @Override
     public boolean equals(Object o) {

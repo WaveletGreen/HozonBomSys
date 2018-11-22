@@ -68,7 +68,7 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
         PageRequestParam pageRequestParam = new PageRequestParam();
         pageRequestParam.setPageNumber(query.getPage());
         pageRequestParam.setPageSize(query.getPageSize());
-        map.put("changeNo",query.getChangeNo());
+        map.put("changeNo",query.getChangeNo().trim());
         map.put("createName",query.getCreateName());
         map.put("originator",query.getOriginator());
         if(Integer.valueOf(1).equals(query.getType())){
