@@ -3,7 +3,7 @@ package com.connor.hozon.bom.interaction.inquirer;
 import lombok.Data;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 单车配置查询器
  * @Date: Created in 2018/9/25 12:14
  * @Modified By:

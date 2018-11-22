@@ -151,8 +151,8 @@ $(document).ready(function () {
         {text: '关闭其他标签页', href: 'javascript:void(0)', func: "closeOthers()"},
         {divider: true},
         {text: '关闭左边所有标签页', href: 'javascript:void(0)', func: "closeLeft()"},
-        // {divider: true},
-        // {text: '关闭右边所有标签页', href: 'javascript:void(0)', func: "closeRigth()"},
+        {divider: true},
+        {text: '关闭右边所有标签页', href: 'javascript:void(0)', func: "closeRigth()"},
         {divider: true},      //控制实线
         {text: '关闭所有标签页', href: 'javascript:void(0)', func: "closeAll()"},
     ]);
@@ -223,8 +223,9 @@ function closeTab(direction) {
                         current = true;
                         continue;
                     }
+                    //@Modified by Fancyears·Maylos·Malvis in 2018/11/22 15:00  缺少传参
                     if (current) {
-                        doClose()
+                        doClose(target)
                     }
                 }
                 else if (3 == direction) {

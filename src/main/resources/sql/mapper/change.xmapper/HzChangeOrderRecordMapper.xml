@@ -41,8 +41,9 @@
     REMARK, STATE, UPDATE_TIME, UPDATE_ID, PROJECT_ID, DEPT_ID,IS_FROM_TC,CREATE_NAME_TC,DEPT_NAME_TC
   </sql>
 
-  <!--insert-->
-  <insert id="HzChangeOrderDAOImpl_insert" parameterType="sql.pojo.change.HzChangeOrderRecord">
+
+    <!--insert-->
+    <insert id="HzChangeOrderDAOImpl_insert" parameterType="sql.pojo.change.HzChangeOrderRecord">
     insert into HZ_CHANGE_ORDER_RECORD (ID, CHANGE_NO, CREATE_ID, 
       CREATE_TIME, CREATE_NO, TEL, CHANGE_TYPE,
       HAS_RELATED_CHANGE, RELATION_CHANGE_NO, MARKET_TYPE, 

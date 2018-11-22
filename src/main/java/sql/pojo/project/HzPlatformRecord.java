@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -11,7 +11,7 @@ import com.connor.hozon.bom.bomSystem.service.project.IProject;
 import java.util.Date;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 平台
  * @Date: Created in 2018/10/10 13:29
  * @Modified By:

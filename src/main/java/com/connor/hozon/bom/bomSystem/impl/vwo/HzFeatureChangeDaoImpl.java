@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.vwo;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.HashMap;
@@ -16,12 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> implements HzFeatureChangeDao {
 
     public HzFeatureChangeDaoImpl() {
