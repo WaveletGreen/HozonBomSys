@@ -149,8 +149,8 @@ function saveAgreement() {
     })
 }
 
-//@Author: Fancyears·Maylos·Malvis  in 2018/11/22 13:06  重新加载任务和刷新整个页面
+//@Author: Fancyears·Maylos·Malvis  in 2018/11/22 13:06  重新加载任务，按钮禁用
 function reload() {
     window.top.loadTasks();
-    window.location.reload();
+    $('#saveBtn').attr('disabled',"true");
 }

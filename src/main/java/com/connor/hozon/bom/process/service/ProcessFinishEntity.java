@@ -28,19 +28,29 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 流程结束节点，修改任务状态和表单状态
+ * @Author: Fancyears·Maylos·Malvis
+ * @Description: 流程结束节点，修改任务状态和表单状态
+ * @Date: Created in  2018/11/22 15:10
+ * @Modified By:
  */
 @Service
 @EnableTransactionManagement(proxyTargetClass = true)
 @Transactional(rollbackFor = {IllegalArgumentException.class, RuntimeException.class, Exception.class})
 public class ProcessFinishEntity implements IProcessFinish {
+    /**
+     * 任务驱动服务
+     */
     @Autowired
     HzTasksService hzTasksService;
+    /***审核人记录*/
     @Autowired
     HzAuditorChangeDAO hzAuditorChangeDAO;
+    /***变更表单记录*/
     @Autowired
     HzChangeOrderDAO hzChangeOrderDAO;
+    /***审核人对象，减少查询User*/
     private HzAuditorChangeRecord hzAuditorChangeRecord;
+    /***是否能重复审核，不允许审核则审核不通过，审核不通过不影响修改配置和BOM的数据*/
     private static boolean signAgain = true;
     private final static Logger LOGGER = LoggerFactory.getLogger(ProcessFinishEntity.class);
 

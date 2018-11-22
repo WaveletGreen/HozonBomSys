@@ -50,10 +50,10 @@ public class ProcessManagerService implements IProcessManagerService {
         JSONObject result = new JSONObject();
         boolean status = executeProcess(releaseEntity, new ReleaseContainer(), orderId, param);
         if (status) {
-            result.put("msg", "发布成功");
+            result.put("msg", "同意变更，审核已完成");
             processFinishEntity.doFinish(orderId, PROCESS_OK, param[0]);
         } else {
-            result.put("msg", "发布失败");
+            result.put("msg", "流程审核发布失败");
         }
         result.put("status", status);
         return result;
@@ -64,10 +64,10 @@ public class ProcessManagerService implements IProcessManagerService {
         JSONObject result = new JSONObject();
         boolean status = executeProcess(interruptEntity, new InterruptionContainer(), orderId, param);
         if (status) {
-            result.put("msg", "流程终止成功");
+            result.put("msg", "不同意变更，审核已完成");
             processFinishEntity.doFinish(orderId, PROCESS_NOT_OK, param[0]);
         } else {
-            result.put("msg", "流程终止失败");
+            result.put("msg", "流程审核终止失败");
         }
         result.put("status", status);
         return result;

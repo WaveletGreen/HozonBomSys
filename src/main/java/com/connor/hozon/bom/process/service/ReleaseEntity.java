@@ -14,6 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @Author: Fancyears·Maylos·Malvis
+ * @Description: 流程通过，进行数据发布，这里写具体的修改数据的逻辑
+ * @Date: Created in  2018/11/22 15:15
+ * @Modified By:
+ */
 @Component
 @EnableTransactionManagement(proxyTargetClass = true)
 //要在事务的类中抛出RuntimeException异常，而不是抛出Exception，也不知道对不对
@@ -73,6 +79,4 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     public boolean bom(Long orderId, Object... params) {
         return true;
     }
-
-
 }

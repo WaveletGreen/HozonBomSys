@@ -207,10 +207,10 @@ function initTable(url) {
                     }
                     for (let i in rows) {
                         if ("进行中" != rows[i].state) {
-                            if ("流程中" != rows[i].state) {
+                            if ("流程中" == rows[i].state) {
                                 window.Ewin.alert({message: '表单已在流程中，不允许再发起流程'});
                             } else {
-                                window.Ewin.alert({message: '已有表单完成，请取消选中已完成的表单'});
+                                window.Ewin.alert({message: '表单已审核完成'});
                             }
                             return;
                         }

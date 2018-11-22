@@ -25,5 +25,10 @@ public interface IProcessStart {
      */
     Object doStart(long orderId, Object... param) throws Exception;
 
+    /**
+     * 检查当前表单是否已存在审核任务，如果已存在，则不允许继续发流程，并返回第一个审核人对象提供给前端展示
+     * @param orderId 变更表单ID
+     * @return 表单已存在审核任务，则返回当前审核的User对象，照理拉说一个表单只有1个审核的用户
+     */
     User checkOrderAuditor(Long orderId);
 }

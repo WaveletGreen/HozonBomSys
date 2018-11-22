@@ -76,7 +76,7 @@ public class ProcessStartEntity implements IProcessStart {
 
     @Override
     public User checkOrderAuditor(Long orderId) {
-        List<HzTasks> tasks = iHzTaskService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_CHANGE, TaskOptions.TASK_TARGET_TYPE_CHANE, orderId, null, TaskOptions.TASK_STATUS_EXECUTING);
+        List<HzTasks> tasks = iHzTaskService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_CHANGE, TaskOptions.TASK_TARGET_TYPE_CHANE, orderId, null, null);
         if (null == tasks || tasks.size() != 1) {
             return null;
         } else {
