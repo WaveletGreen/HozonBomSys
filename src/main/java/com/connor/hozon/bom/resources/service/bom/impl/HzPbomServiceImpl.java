@@ -1191,11 +1191,9 @@ public class HzPbomServiceImpl implements HzPbomService {
                 List<HzPbomLineRecord> bomLineRecords = new ArrayList<>();
                 for(HzPbomLineRecord record:records){
                     HzPbomLineRecord lineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
-                    if(Integer.valueOf(2).equals(record.getStatus())){//草稿状态---->审核状态
-                        lineRecord.setStatus(5);
-                    }else if(Integer.valueOf(4).equals(record.getStatus())){// 删除状态----->审核状态
-                        lineRecord.setStatus(6);
-                    }
+                   //状态改为审核中
+                    lineRecord.setStatus(5);
+
 //                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
                     bomLineRecords.add(lineRecord);
                 }
@@ -1232,9 +1230,8 @@ public class HzPbomServiceImpl implements HzPbomService {
 
 
                 //启动线程进行插入操作
-                List<ExecutorServices> services = new ArrayList<>();
                 for(Map.Entry<String,Object> entry:map.entrySet()){
-                    ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                    new ExecutorServices(1) {
                         @Override
                         public void action() {
                             switch (entry.getKey()){
@@ -1256,16 +1253,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                                 default:break;
                             }
                         }
-                    };
-                    services.add(executorServices);
+                    }.execute();
                 }
-
-                if(ListUtil.isNotEmpty(services)){
-                    for(ExecutorServices s:services){
-                        s.execute();
-                    }
-                }
-
             }
         }catch (Exception e){
             e.printStackTrace();

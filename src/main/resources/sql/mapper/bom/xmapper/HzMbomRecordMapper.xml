@@ -1056,13 +1056,13 @@
         and P_MBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
-    <insert id="HzMbomRecordDAOImpl_insertVO" useGeneratedKeys="false" parameterType="java.util.HashMap">
+    <insert id="HzMbomRecordDAOImpl_insertVO" parameterType="java.util.HashMap">
         insert  into ${tableName} (PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_BOM_PUID,
         P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
         P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
         P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_MBOM_STATUS,
         P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,
-        P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION)
+        P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
@@ -1075,7 +1075,7 @@
             #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
             #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},
             sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.updateName,jdbcType=VARCHAR},#{item.colorId,jdbcType=VARCHAR},
-            #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR}
+            #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR},#{item.effectTime,jdbcType=TIMESTAMP}
             from DUAL
         </foreach>
     </insert>
@@ -1157,7 +1157,19 @@
                     P_FACTORY_ID = #{item.pFactoryId,jdbcType=VARCHAR},
                 </if>
                 <if test="item.colorId != null">
-                    P_COLOR_PUID = #{item.colorId,jdbcType=VARCHAR}
+                    P_COLOR_PUID = #{item.colorId,jdbcType=VARCHAR},
+                </if>
+                <if test="item.orderId != null">
+                    P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.effectTime != null">
+                    P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.revision != null">
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR},
+                </if>
+                <if test="item.status != null">
+                    P_MBOM_STATUS = #{item.status,jdbcType=VARCHAR}
                 </if>
             </set>
             where PUID = #{item.puid,jdbcType=VARCHAR}
