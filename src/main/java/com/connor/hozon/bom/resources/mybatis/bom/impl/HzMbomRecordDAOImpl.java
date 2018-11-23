@@ -112,8 +112,8 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public int update(HzMbomLineRecord record) {
-        if(record.getTableName() == null || "".equals(record.getTableName())){
-            record.setTableName("HZ_MBOM_RECORD");
+        if(StringUtils.isBlank(record.getTableName())){
+            record.setTableName(MbomTableNameEnum.HZ_MBOM_RECORD.getTableName());
         }
         return super.update("HzMbomRecordDAOImpl_update",record);
     }
@@ -175,7 +175,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     @Override
     public List<HzMbomLineRecord> findHzMbomByPuid(Map<String, Object> map) {
         if(map.get("tableName")==null || map.get("tableName") == ""){
-            map.put("tableName","HZ_MBOM_RECORD");
+            map.put("tableName",MbomTableNameEnum.HZ_MBOM_RECORD.getTableName());
         }
         return  super.findForList("HzMbomRecordDAOImpl_findHzMbomByPuid",map);
     }

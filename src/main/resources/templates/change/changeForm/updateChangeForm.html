@@ -43,9 +43,12 @@
     <div class="form-group">
         <label for="state">变更单状态<span>*</span></label>
         <select class="form-control" name="state" id="state"disabled="disabled" placeholder="请选择变更单状态">
+            <!--<option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>-->
+            <!--<option th:selected="${data.getState()=='完成'?true:false}">完成</option>-->
+            <!--<option th:selected="${data.getState()=='取消'?true:false}">取消</option>-->
             <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
-            <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
-            <option th:selected="${data.getState()=='取消'?true:false}">取消</option>
+            <option th:selected="${data.getState()=='流程中'?true:false}">流程中</option>
+            <option th:selected="${data.getState()=='已完成'?true:false}">已完成</option>
         </select>
     </div>
     <div class="form-group">
@@ -125,13 +128,13 @@
                 var myData = JSON.stringify({
                     "id":$("#id").val(),
                     "changeNo": $("#changeNo").val(),
-                    "createTime":$("#createTime").val(),
-                    "originTime":$("#originTime").val(),
-                    "deptName":$("#deptName").val(),
-                    "originator":$("#originator").val(),
-                    "createName":$("#createName").val(),
+                    // "createTime":$("#createTime").val(),
+                    // "originTime":$("#originTime").val(),
+                    // "deptName":$("#deptName").val(),
+                    // "originator":$("#originator").val(),
+                    // "createName":$("#createName").val(),
                     "tel": $("#tel").val(),
-                    "state": $("state").val(),
+                    "state": $("#state").val(),
                     "changeType": $("#changeType").val(),
                     "relationChangeNo": $("#relationChangeNo").val(),
                     "marketType": $("#marketType").val(),

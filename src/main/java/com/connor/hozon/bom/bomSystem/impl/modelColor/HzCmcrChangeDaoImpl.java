@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -12,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.option.ChangeCmcrOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
@@ -21,13 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 //@Service("hzCmcrChange")
-@Configuration
+@Repository
 public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements HzCmcrChangeDao {
 
     private final static HzCmcrChange CHANGE_POJO = new HzCmcrChange();

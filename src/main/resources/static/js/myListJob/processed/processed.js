@@ -56,13 +56,14 @@ function initTable(url) {
     column.push({field: 'originTime', title: '发起时间', align: 'center', valign: 'middle'});
     column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
+    column.push({field: 'state', title: '变更单状态', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
     column.push({field: 'projectName', title: '项目', align: 'center', valign: 'middle'});
-    column.push({field: 'projectName', title: '来源', align: 'center', valign: 'middle'});
+    column.push({field: 'source', title: '来源', align: 'center', valign: 'middle'});
     $table.bootstrapTable({
         url: url,
         method: 'get',
-        height: $(window.parent.document).find("#wrapper").height() - 90,
+        height: $(window.parent.document).find("#wrapper").height() - 170,
         width: $(window).width(),
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮

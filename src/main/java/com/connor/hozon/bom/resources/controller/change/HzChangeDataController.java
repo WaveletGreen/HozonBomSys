@@ -211,10 +211,6 @@ public class HzChangeDataController extends BaseController {
     @RequestMapping(value = "order/hyper",method = RequestMethod.GET)
     public void getChangeOrderData(HzChangeDataQuery query,HttpServletResponse response){
         List<HzChangeDataRespDTO> respDTOS = hzChangeDataService.getChangeDataHyperRecord(query);
-        if(ListUtil.isNotEmpty(respDTOS)){
-            toJSONResponse(respDTOS,response);
-            return;
-        }
         toJSONResponse(Result.build(respDTOS),response);
     }
 
@@ -266,7 +262,7 @@ public class HzChangeDataController extends BaseController {
         return "change/changeOrder/changeBomCfgTable";
     }
 
-    @RequestMapping(value = "data/tc",method = RequestMethod.GET)
+    @RequestMapping(value = "tc",method = RequestMethod.GET)
     public void getDataDetailForTc(String formId,HttpServletResponse response){
         if(StringUtils.isBlank(formId)){
             toJSONResponse(Result.build(false,"表单信息不能为空!"),response);
@@ -287,7 +283,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReciveDto.getState());
+//                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("lineId",dto.getLineId() );
                 _res.put("pBomLinePartName",dto.getpBomLinePartName() );
@@ -355,7 +351,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReciveDto.getState());
+//                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("level", dto.getLevel());
                 _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
@@ -392,7 +388,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReciveDto.getState());
+//                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("rank",dto.getRank());
                 _res.put("level", dto.getLevel());
@@ -435,7 +431,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReciveDto.getState());
+//                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("resource",dto.getResource());
                 _res.put("pMaterielCode",dto.getpMaterielCode());

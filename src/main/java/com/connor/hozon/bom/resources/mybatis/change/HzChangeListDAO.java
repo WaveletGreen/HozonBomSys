@@ -16,4 +16,7 @@ public interface HzChangeListDAO {
      * @return
      */
     List<HzChangeListRecord> findItemListByFormId(String fromId);
+
+    //引用对象
+    List<HzChangeListRecord> findChangeList(String formID);
 }

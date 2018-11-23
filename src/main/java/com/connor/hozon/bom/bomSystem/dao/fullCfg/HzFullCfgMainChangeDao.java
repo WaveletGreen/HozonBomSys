@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
 
-@Configuration
 public interface HzFullCfgMainChangeDao {
     int insert(HzFullCfgMainChange record);
 

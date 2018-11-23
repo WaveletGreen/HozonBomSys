@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.dto.cfg.compose;
 import lombok.Data;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 配置物料特性传输对象，用于接收前端回传的配置物料 x
  * @Date: Created in 2018/8/30 14:15
  * @Modified By:

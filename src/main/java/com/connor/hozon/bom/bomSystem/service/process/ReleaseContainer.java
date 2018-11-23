@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -10,7 +10,7 @@ import com.connor.hozon.bom.bomSystem.iservice.process.IProcess;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/10/16 13:44
  * @Modified By:

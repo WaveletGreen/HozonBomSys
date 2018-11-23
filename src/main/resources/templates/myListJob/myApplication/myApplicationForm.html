@@ -102,17 +102,6 @@
         </div>
     </form>
 </div>
-<h4><i class="fa fa-minus-square" aria-hidden="true">变更清单</i></h4>
-<div class="panel-body" style="padding:0px;">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="content col-lg-12 col-md-12" style="padding:0px;">
-                <table class="table table-striped tableNormalStyle" id="myApplicationTCTable">
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
@@ -122,6 +111,43 @@
 
                 </table>
             </div>
+        </div>
+    </div>
+</div>
+<h4><i class="fa fa-minus-square" aria-hidden="true">评估意见</i></h4>
+<div class="panel-body" style="padding-bottom:0;">
+    <div class="panel panel-default panel-body col-lg-12 col-md-12">
+        <div class="col-lg-3 col-md-3 col-sm-3">
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <form class="form-horizontal" id="bomLeaderOpinion" role="form">
+                <div class="panel panel-default panel-body col-lg-12 col-md-12 col-sm-12">
+                    <h4>评审:</h4>
+                    <!--<input type="hidden" id='BomUserId' th:value="${hzVwoOpiBom.getOpiBomMngUserId()}">-->
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <label for="opiBomMngOpinion">意见</label>
+                        <textarea class="form-control" style="resize: none;width: 100%;" rows="2"disabled="disabled" cols="30"
+                                  th:placeholder="${result.auditSugg}" name="opiBomMngOpinion" id="opiBomMngOpinion"></textarea>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <label for="opiBomMngAgreement">结论</label>
+                        <select class="form-control" name="opiBomMngAgreement" id="opiBomMngAgreement"disabled="disabled">
+                            <!--<option>不同意</option>-->
+                            <!--<option>同意</option>-->
+                            <option th:selected="${result.auditResult==1?true:false}">同意</option>
+                            <option th:selected="${result.auditResult==0?true:false}">不同意</option>
+
+                        </select>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 10px">
+                        <label for="opiBomMngOptionDate">日期</label>
+                        <input class="form-control" id="opiBomMngOptionDate" type="text"
+                               th:value="${timeString}" disabled="disabled"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3">
         </div>
     </div>
 </div>

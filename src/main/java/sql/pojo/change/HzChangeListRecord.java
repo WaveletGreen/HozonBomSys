@@ -15,17 +15,47 @@ public class HzChangeListRecord {
     private Long id;
 
     /**
-     * 表单号
+     * 变更流程表单的变更号（change_no）或TC里的item_id
      */
     private String formId;
-
     /**
-     * 零件号
+     * TC里的流程变更单引用的对象ID
      */
     private String itemId;
-
     /**
-     * 零件版本
+     * TC里的流程变更单引用的对象版本
      */
     private String itemRevision;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getItemRevision() {
+        return itemRevision;
+    }
+
+    public void setItemRevision(String itemRevision) {
+        this.itemRevision = itemRevision;
+    }
 }

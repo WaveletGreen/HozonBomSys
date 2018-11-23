@@ -7,7 +7,7 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 import java.util.Date;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: x
  * @Date: Created in 2018/9/21 12:20
  * @Modified By:

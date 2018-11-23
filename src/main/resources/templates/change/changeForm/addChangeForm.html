@@ -42,9 +42,12 @@
     <div class="form-group">
         <label for="state">变更单状态<span>*</span></label>
         <select class="form-control" name="state" id="state"disabled="disabled" placeholder="请选择变更单状态">
+            <!--<option>进行中</option>-->
+            <!--<option>完成</option>-->
+            <!--<option>取消</option>-->
             <option>进行中</option>
-            <option>完成</option>
-            <option>取消</option>
+            <option>流程中</option>
+            <option>已完成</option>
         </select>
     </div>
     <div class="form-group">
@@ -123,13 +126,13 @@
                 // var projectId= $("#project", window.top.document).val();
                 var myData = JSON.stringify({
                     "changeNo": $("#changeNo").val(),
-                    "createTime":$("#createTime").val(),
-                    "originTime":$("#originTime").val(),
-                    "deptName":$("#deptName").val(),
-                    "originator":$("#originator").val(),
-                    "createName":$("#createName").val(),
+                    // "createTime":$("#createTime").val(),
+                    // "originTime":$("#originTime").val(),
+                    // "deptName":$("#deptName").val(),
+                    // "originator":$("#originator").val(),
+                    // "createName":$("#createName").val(),
                     "tel": $("#tel").val(),
-                    "state": $("state").val(),
+                    "state": $("#state").val(),
                     "changeType": $("#changeType").val(),
                     "relationChangeNo": $("#relationChangeNo").val(),
                     "marketType": $("#marketType").val(),

@@ -3,6 +3,7 @@ package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.fullCfg.HzFullCfgModelChange;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange;
@@ -11,7 +12,7 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Configuration
+@Repository
 public class HzFullCfgWithCfgChangeDaoImpl extends BasicDaoImpl<HzFullCfgWithCfgChange> implements HzFullCfgWithCfgChangeDao {
 
     public HzFullCfgWithCfgChangeDaoImpl() {
