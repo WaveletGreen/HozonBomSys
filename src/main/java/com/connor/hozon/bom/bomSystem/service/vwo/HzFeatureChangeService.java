@@ -14,7 +14,9 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -329,6 +331,18 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
     @Override
     public List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records) {
         return hzFeatureChangeDao.doSelectHasEffect(records);
+    }
+
+    @Override
+    public boolean updateStatusByOrderId(Long orderId, int status) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("status",status);
+        int updateNum = hzFeatureChangeDao.updateStatusByOrderId(map);
+        if(updateNum<=0){
+            return false;
+        }
+        return true;
     }
 
     /**

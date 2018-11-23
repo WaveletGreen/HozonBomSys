@@ -152,4 +152,11 @@
         group by DMB_SRC_ID
         )
     </select>
+
+    <update id="updateStatusByOrderId" parameterType="java.util.Map">
+        update HZ_DM_BASIC_CHANGE
+        set DMB_CHANGE_STATUS = #{status,jdbcType=DECIMAL}
+        where
+        FORMID = #{orderId,jdbcType=DECIMAL}
+    </update>
 </mapper>

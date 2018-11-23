@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,5 +84,13 @@ public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeM
     @Override
     public int deleteByIds(List<HzComposeDelDto> delDtos) {
         return baseSQLUtil.executeDelete(delDtos,clz.getCanonicalName()+".deleteByIds");
+    }
+
+    @Override
+    public int updateStatusByOrderId(Long orderId, int status) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("status",status);
+        return baseSQLUtil.executeUpdate(map,clz.getCanonicalName()+".updateStatusByOrderId");
     }
 }

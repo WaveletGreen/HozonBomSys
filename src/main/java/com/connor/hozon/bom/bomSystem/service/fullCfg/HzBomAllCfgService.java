@@ -1087,7 +1087,7 @@ public class HzBomAllCfgService {
         HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
         hzChangeDataRecord.setApplicantId(Long.valueOf(user.getId()));
         hzChangeDataRecord.setOrderId(Long.valueOf(changeFromId));
-        hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName());
+        hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName());
         int insertNum = hzChangeDataRecordDAO.insert(hzChangeDataRecord);
         if(insertNum<=0){
             result.put("status", false);

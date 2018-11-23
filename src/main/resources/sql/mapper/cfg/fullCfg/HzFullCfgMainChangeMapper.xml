@@ -177,4 +177,10 @@
     where
     ID = (select Max(ID) from HZ_FULL_CFG_MAIN_RECORD_CHANGE where PROJECT_UID = #{projectUid,jdbcType=VARCHAR} and CHANGE_STATUS = 1)
   </select>
+
+  <update id="updateStatusByOrderId" parameterType="java.util.Map">
+    update HZ_FULL_CFG_MAIN_RECORD_CHANGE
+    set CHANGE_STATUS = #{status,jdbcType=DECIMAL}
+    where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+  </update>
 </mapper>

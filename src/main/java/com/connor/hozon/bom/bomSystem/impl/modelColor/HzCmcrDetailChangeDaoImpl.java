@@ -241,6 +241,7 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     }
 
 
+
     private List<HzCmcrDetailChange> executeSelectLast(List<HzCmcrDetailChange> hzCmcrDetailChangeList, String by) {
         Map<String,Object> map = new HashMap<String, Object>();
         map.put("whichTable",hzCmcrDetailChangeList.get(0).getWhichTable());

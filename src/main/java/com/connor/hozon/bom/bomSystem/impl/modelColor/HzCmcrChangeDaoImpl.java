@@ -230,6 +230,14 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     }
 
     @Override
+    public int updateStatusByOrderId(Long orderId, int status) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("status",status);
+        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
+    @Override
     public List<HzCmcrChange> selectLastAfter(List<HzCmcrChange> hzCmcrChangesLastAfter) throws Exception{
         preSetAfterList(hzCmcrChangesLastAfter);
         return executeSelectLast(hzCmcrChangesLastAfter, "selectLastAfter");

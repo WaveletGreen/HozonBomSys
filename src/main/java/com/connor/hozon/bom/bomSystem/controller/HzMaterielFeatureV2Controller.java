@@ -551,7 +551,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
         hzChangeDataRecord.setApplicantId(Long.valueOf(user.getId()));
         hzChangeDataRecord.setOrderId(changeFromId);
-        hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName());
+        hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName());
         int insertNum = hzChangeDataRecordDAO.insert(hzChangeDataRecord);
         if(insertNum<=0){
             result.put("status", false);
