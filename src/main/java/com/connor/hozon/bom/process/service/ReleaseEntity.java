@@ -348,6 +348,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         bomLineRecord.setStatus(1);
                         bomLineRecord.setEffectTime(date);
                         bomLineRecord.setRevision(revision);
+                        bomLineRecord.setTableName(ChangeTableNameEnum.HZ_MBOM.getTableName());
 
                         record.setStatus(1);
                         record.setRevision(revision);
@@ -366,10 +367,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 hzMbomRecordDAO.deleteMbomList(vo);
             }
             if (ListUtil.isNotEmpty(updateList)) {
-                HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-                vo.setTableName(ChangeTableNameEnum.HZ_MBOM.getTableName());
-                vo.setRecordList(updateList);
-                hzMbomRecordDAO.updateVO(vo);
+                hzMbomRecordDAO.updateList(updateList);
             }
             if (ListUtil.isNotEmpty(addList)) {
                 HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
@@ -416,6 +414,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         bomLineRecord.setStatus(1);
                         bomLineRecord.setEffectTime(date);
                         bomLineRecord.setRevision(revision);
+                        bomLineRecord.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE.getTableName());
 
                         record.setStatus(1);
                         record.setRevision(revision);
@@ -434,10 +433,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 hzMbomRecordDAO.deleteMbomList(vo);
             }
             if (ListUtil.isNotEmpty(updateList)) {
-                HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-                vo.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE.getTableName());
-                vo.setRecordList(updateList);
-                hzMbomRecordDAO.updateVO(vo);
+                hzMbomRecordDAO.updateList(updateList);
             }
             if (ListUtil.isNotEmpty(addList)) {
                 HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
@@ -486,6 +482,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         bomLineRecord.setStatus(1);
                         bomLineRecord.setEffectTime(date);
                         bomLineRecord.setRevision(revision);
+                        bomLineRecord.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT.getTableName());
 
                         record.setStatus(1);
                         record.setRevision(revision);
@@ -504,10 +501,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 hzMbomRecordDAO.deleteMbomList(vo);
             }
             if (ListUtil.isNotEmpty(updateList)) {
-                HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-                vo.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT.getTableName());
-                vo.setRecordList(updateList);
-                hzMbomRecordDAO.updateVO(vo);
+                hzMbomRecordDAO.updateList(updateList);
             }
             if (ListUtil.isNotEmpty(addList)) {
                 HzMbomLineRecordVO vo = new HzMbomLineRecordVO();

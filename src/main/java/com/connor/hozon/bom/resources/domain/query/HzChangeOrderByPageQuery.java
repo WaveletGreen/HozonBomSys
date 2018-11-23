@@ -29,7 +29,7 @@ public class HzChangeOrderByPageQuery extends DefaultPageQuery {
      */
     private String lastOriginTime;
     /**
-     *当前变更表单状态（1 已完成 2进行中 3已取消）
+     *当前变更表单状态（1 已完成 2进行中 3流程中 4已取消）
      */
     private Integer state;
 
