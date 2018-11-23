@@ -293,7 +293,7 @@
     P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
     P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
     P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_PBOM_STATUS,P_IS_NEW_PART,
-    P_ORDER_ID,P_REVISION
+    P_ORDER_ID,P_REVISION,P_EFFECT_TIME
     )
     <foreach collection="list" item="item" index="index" separator="UNION ALL">
       select
@@ -307,7 +307,7 @@
       #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
       #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
       #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},#{item.isNewPart,jdbcType=INTEGER},
-      #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR}
+      #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR},#{item.effectTime,jdbcType=TIMESTAMP}
       from DUAL
     </foreach>
   </insert>
@@ -769,7 +769,16 @@
           P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR},
         </if>
         <if test="item.status != null">
-          P_PBOM_STATUS = #{item.status,jdbcType=VARCHAR}
+          P_PBOM_STATUS = #{item.status,jdbcType=VARCHAR},
+        </if>
+        <if test="item.orderId != null">
+          P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+        </if>
+        <if test="item.effectTime != null">
+          P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.revision != null">
+          P_REVISION = #{item.revision,jdbcType=VARCHAR}
         </if>
       </set>
       where P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR}

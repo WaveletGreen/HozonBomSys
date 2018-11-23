@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 
 import java.util.HashMap;
@@ -221,6 +222,11 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     @Override
     public List<HzCmcrChange> doQueryCmcrChangeAfter(Long vwoId) {
         return baseSQLUtil.executeQueryByPass(new HzCmcrChange(), vwoId, clzName+".doQueryCmcrChangeAfter");
+    }
+
+    @Override
+    public List<HzCmcrChange> doQueryCmcrChangeByModelColorId(List<HzCfg0ModelColor> hzCfg0ModelColors) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrChange(),hzCfg0ModelColors,clzName+".doQueryCmcrChangeByModelColorId");
     }
 
     @Override

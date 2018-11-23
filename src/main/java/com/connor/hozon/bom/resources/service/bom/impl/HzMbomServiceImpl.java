@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
+import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
@@ -34,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import sql.pojo.accessories.HzAccessoriesLibs;
+import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
@@ -90,6 +92,8 @@ public class HzMbomServiceImpl implements HzMbomService{
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
 
+    @Autowired
+    private HzBomMainRecordDao hzBomMainRecordDao;
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
@@ -200,6 +204,10 @@ public class HzMbomServiceImpl implements HzMbomService{
     public WriteResultRespDTO updateMbomRecord(UpdateMbomReqDTO reqDTO) {
         try {
             User user = UserInfo.getUser();
+            if(StringUtils.isBlank(reqDTO.getProjectId())){
+                return WriteResultRespDTO.IllgalArgument();
+            }
+            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzMbomLineRecord record = new HzMbomLineRecord();
             record.setTableName(MbomTableNameEnum.tableName(reqDTO.getType()));
             record.setUpdateName(user.getUserName());
@@ -240,9 +248,11 @@ public class HzMbomServiceImpl implements HzMbomService{
             } else if ("财务".equals(reqDTO.getpBomType())) {
                 record.setpBomType(6);
             } else {
-                record.setpBomType(0);
+                record.setpBomType(null);
             }
             record.setpStockLocation(reqDTO.getpStockLocation());
+            record.setBomDigifaxId(hzBomMainRecord.getPuid());
+            record.setLineId(reqDTO.getLineId());
             int i = hzMbomRecordDAO.update(record);
             if (i > 0) {
                 //更新后传输到SAP
@@ -942,11 +952,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     HzMbomLineRecord lineRecord = new HzMbomLineRecord();
                     lineRecord.setLineId(record.getLineId());
                     lineRecord.setBomDigifaxId(record.getBomDigifaxId());
-                    if(Integer.valueOf(2).equals(record.getStatus())){//草稿状态---->审核状态
-                        lineRecord.setStatus(5);
-                    }else if(Integer.valueOf(4).equals(record.getStatus())){// 删除状态----->审核状态
-                        lineRecord.setStatus(6);
-                    }
+                    lineRecord.setStatus(5);
                     lineRecord.setTableName(ChangeTableNameEnum.getMbomTableName(type,"M"));
                     bomLineRecords.add(lineRecord);
                 }
@@ -983,9 +989,8 @@ public class HzMbomServiceImpl implements HzMbomService{
 
 
                 //启动线程进行插入操作
-                List<ExecutorServices> services = new ArrayList<>();
                 for(Map.Entry<String,Object> entry:map.entrySet()){
-                    ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                     new ExecutorServices(1) {
                         @Override
                         public void action() {
                             switch (entry.getKey()){
@@ -1007,14 +1012,8 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 default:break;
                             }
                         }
-                    };
-                    services.add(executorServices);
-                }
+                    }.execute();
 
-                if(ListUtil.isNotEmpty(services)){
-                    for(ExecutorServices s:services){
-                        s.execute();
-                    }
                 }
 
             }

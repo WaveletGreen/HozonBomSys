@@ -58,5 +58,11 @@ public class Test {
 //        System.out.println((o-p)+"ms");
 //        String s = ChangeTableNameEnum.getMbomTableName(1,"M");
 //        System.out.println(s);
+
+        String s ="00";
+        int i = Integer.valueOf(s+1);
+        String s1 = String.format("%02d",Integer.valueOf(s+1));
+        System.out.println(s1);
+        System.out.println(i);
     }
 }

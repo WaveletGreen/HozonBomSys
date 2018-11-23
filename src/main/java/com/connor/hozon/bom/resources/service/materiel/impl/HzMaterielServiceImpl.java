@@ -259,11 +259,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 List<HzMaterielRecord> bomLineRecords = new ArrayList<>();
                 for(HzMaterielRecord record:records){
                     HzMaterielRecord lineRecord = HzMaterielFactory.hzMaterielRecordToMaterielRecord(record);
-                    if(Integer.valueOf(2).equals(record.getpValidFlag())){//草稿状态---->审核状态
-                        lineRecord.setpValidFlag(5);
-                    }else if(Integer.valueOf(4).equals(record.getpValidFlag())){// 删除状态----->审核状态
-                        lineRecord.setpValidFlag(6);
-                    }
+                    //审核状态
+                    lineRecord.setpValidFlag(5);
+
 //                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
                     bomLineRecords.add(lineRecord);
                 }
@@ -300,9 +298,8 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 
 
                 //启动线程进行插入操作
-                List<ExecutorServices> services = new ArrayList<>();
                 for(Map.Entry<String,Object> entry:map.entrySet()){
-                    ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                     new ExecutorServices(1) {
                         @Override
                         public void action() {
                             switch (entry.getKey()){
@@ -324,14 +321,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                                 default:break;
                             }
                         }
-                    };
-                    services.add(executorServices);
-                }
-
-                if(ListUtil.isNotEmpty(services)){
-                    for(ExecutorServices s:services){
-                        s.execute();
-                    }
+                    }.execute();
                 }
             }
 

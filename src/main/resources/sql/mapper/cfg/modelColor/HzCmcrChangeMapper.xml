@@ -64,6 +64,8 @@
         <result column="CMCR_SRC_DESC_OF_COLOR_MOD" jdbcType="VARCHAR" property="cmcrSrcDescOfColorMod"/>
         <!--变更状态标志，0为审核中，1为生效-->
         <result column="CMCR_CHANGE_STATUS" jdbcType="DECIMAL" property="cmcrChangeStatus"/>
+        <!--源数据状态-->
+        <result column="CMCR_SRC_STATUS" jdbcType="DECIMAL" property="cmcrSrcStatus"/>
     </resultMap>
     <sql id="Base_Column_List">
     CMCR_CG_ID,
@@ -93,7 +95,8 @@
     CMCR_SRC_UPDATER,
     CMCR_SRC_CODE_OF_COLOR_MOD,
     CMCR_SRC_DESC_OF_COLOR_MOD,
-    CMCR_CHANGE_STATUS
+    CMCR_CHANGE_STATUS,
+    CMCR_SRC_STATUS
   </sql>
     <!--**************************************select**************************************-->
     <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="BaseResultMap">
@@ -126,7 +129,8 @@
         #{cmcrSrcColorUid,jdbcType=VARCHAR}, #{cmcrSrcShellCfg0Puid,jdbcType=VARCHAR},
         #{cmcrSrcColorIsMultiply,jdbcType=VARCHAR}, #{cmcrSrcCreateDate,jdbcType=TIMESTAMP},
         #{cmcrSrcCreator,jdbcType=VARCHAR}, #{cmcrSrcUpdateDate,jdbcType=TIMESTAMP}, #{cmcrSrcUpdater,jdbcType=VARCHAR},
-        #{cmcrSrcCodeOfColorMod,jdbcType=VARCHAR}, #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR},#{cmcrChangeStatus,jdbcType=DECIMAL}
+        #{cmcrSrcCodeOfColorMod,jdbcType=VARCHAR}, #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR},#{cmcrChangeStatus,jdbcType=DECIMAL},
+        #{cmcrSrcStatus,jdbcType=DECIMAL}
         )
     </insert>
 
@@ -160,6 +164,7 @@
         CMCR_SRC_CODE_OF_COLOR_MOD,
         CMCR_SRC_DESC_OF_COLOR_MOD,
         CMCR_CHANGE_STATUS,
+        CMCR_SRC_STATUS,
         CMCR_CG_CREATE_DATE,
         CMCR_CG_UPDATE_DATE
         )
@@ -175,7 +180,8 @@
                 #{hzCmcrChange.cmcrSrcColorUid,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcShellCfg0Puid,jdbcType=VARCHAR},
                 #{hzCmcrChange.cmcrSrcColorIsMultiply,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcCreateDate,jdbcType=TIMESTAMP},
                 #{hzCmcrChange.cmcrSrcCreator,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcUpdateDate,jdbcType=TIMESTAMP}, #{hzCmcrChange.cmcrSrcUpdater,jdbcType=VARCHAR},
-                #{hzCmcrChange.cmcrSrcCodeOfColorMod,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcDescOfColorMod,jdbcType=VARCHAR},#{hzCmcrChange.cmcrChangeStatus,jdbcType=DECIMAL}
+                #{hzCmcrChange.cmcrSrcCodeOfColorMod,jdbcType=VARCHAR}, #{hzCmcrChange.cmcrSrcDescOfColorMod,jdbcType=VARCHAR},#{hzCmcrChange.cmcrChangeStatus,jdbcType=DECIMAL},
+                #{hzCmcrChange.cmcrSrcStatus,jdbcType=DECIMAL}
             from
               dual
         </foreach>
@@ -272,6 +278,9 @@
             <if test="cmcrChangeStatus != null">
                 CMCR_CHANGE_STATUS,
             </if>
+            <if test="cmcrSrcStatus != null">
+                CMCR_SRC_STATUS,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="cmcrCgId != null">
@@ -357,6 +366,9 @@
             </if>
             <if test="cmcrChangeStatus != null">
                 #{cmcrChangeStatus,jdbcType=DECIMAL}
+            </if>
+            <if test="cmcrSrcStatus != null">
+                #{cmcrSrcStatus,jdbcType=DECIMAL}
             </if>
         </trim>
     </insert>
@@ -445,6 +457,9 @@
             <if test="cmcrChangeStatus != null">
                 CMCR_CHANGE_STATUS =  #{cmcrChangeStatus,jdbcType=DECIMAL},
             </if>
+            <if test="cmcrSrcStatus != null">
+                CMCR_SRC_STATUS = #{cmcrSrcStatus,jdbcType=DECIMAL},
+            </if>
         </set>
         where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
     </update>
@@ -476,7 +491,8 @@
       CMCR_SRC_UPDATER = #{cmcrSrcUpdater,jdbcType=VARCHAR},
       CMCR_SRC_CODE_OF_COLOR_MOD = #{cmcrSrcCodeOfColorMod,jdbcType=VARCHAR},
       CMCR_SRC_DESC_OF_COLOR_MOD = #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR},
-      CMCR_CHANGE_STATUS =  #{cmcrChangeStatus,jdbcType=DECIMAL}
+      CMCR_CHANGE_STATUS =  #{cmcrChangeStatus,jdbcType=DECIMAL},
+      CMCR_SRC_STATUS = #{cmcrSrcStatus,jdbcType=DECIMAL}
     where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
   </update>
 
@@ -576,7 +592,7 @@
         WHERE
         CMCR_CHANGE_ORDER_UID = #{vwoId,jdbcType=INTEGER}
         ) and CMCR_CHANGE_STATUS=1 GROUP BY CMCR_SRC_PUID) t )
-
+        order by CMCR_SRC_PUID
     </select>
 
     <select id="doQueryCmcrChangeBeforFirst" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -624,5 +640,22 @@
         WHERE
         CMCR_CHANGE_ORDER_UID = #{vwoId,jdbcType=INTEGER}
         ) and CMCR_CHANGE_STATUS=0 GROUP BY CMCR_SRC_PUID) t )
+        order by CMCR_SRC_PUID
+    </select>
+
+    <select id="doQueryCmcrChangeByModelColorId" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM
+        HZ_CMCR_AFTER_CHANGE
+        WHERE
+        CMCR_CG_ID in(
+        SELECT MAX(CMCR_CG_ID) FROM HZ_CMCR_AFTER_CHANGE WHERE CMCR_SRC_PUID in
+        <foreach collection="list" index="index" item="hzCfg0ModelColor" open="(" separator="," close=")">
+            #{hzCfg0ModelColor.puid,jdbcType=VARCHAR}
+        </foreach>
+        and CMCR_CHANGE_STATUS =1
+        group by CMCR_SRC_PUID
+        )
     </select>
 </mapper>

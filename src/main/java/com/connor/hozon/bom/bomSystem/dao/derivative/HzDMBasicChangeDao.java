@@ -7,6 +7,8 @@
 package com.connor.hozon.bom.bomSystem.dao.derivative;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
+import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
 
 import java.util.List;
@@ -27,4 +29,6 @@ public interface HzDMBasicChangeDao extends BasicDao<HzDMBasicChangeBean> {
 
 
     List<HzDMBasicChangeBean> selectAfter(Long formId);
+
+    List<HzDMBasicChangeBean> selectLastByPuid(List<HzComposeDelDto> delDtos);
 }

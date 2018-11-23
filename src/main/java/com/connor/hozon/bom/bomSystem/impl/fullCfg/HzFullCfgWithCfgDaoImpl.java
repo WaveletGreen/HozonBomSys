@@ -119,5 +119,15 @@ public class HzFullCfgWithCfgDaoImpl extends BasicDaoImpl<HzFullCfgWithCfg> impl
                 clzName + ".selectByBLOutWithCfgAndBL");
     }
 
+    @Override
+    public int insertAll(List<HzFullCfgWithCfg> hzFullCfgWithCfgs) {
+        return baseSQLUtil.executeInsert(hzFullCfgWithCfgs,clzName+".insertAll");
+    }
+
+    @Override
+    public HzFullCfgWithCfg selectBy2Yid(HzFullCfgWithCfg hzFullCfgWithCfg) {
+        return baseSQLUtil.executeQueryById(hzFullCfgWithCfg,clzName+".selectBy2Yid");
+    }
+
 
 }

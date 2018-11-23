@@ -285,4 +285,20 @@
         order by
           te.id
     </select>
+
+    <select id="doSelectHasEffect" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CFG0_AFTER_CHANGE_RECORD
+        where
+        ID in (
+        select Max(ID) from HZ_CFG0_AFTER_CHANGE_RECORD where CFG_PUID in
+        <foreach collection="list" index="index" item="hzCfg0Record" open="(" separator="," close=")">
+            #{hzCfg0Record.puid,jdbcType=VARCHAR}
+        </foreach>
+        and PROCESS_STATUS = 1
+        group by CFG_PUID
+        )
+    </select>
 </mapper>

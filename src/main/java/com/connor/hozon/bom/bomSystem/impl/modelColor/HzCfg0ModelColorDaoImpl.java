@@ -81,4 +81,14 @@ public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> impl
     public int updateByVwoId(HzCfg0ModelColor hzCfg0ModelColor) {
         return baseSQLUtil.executeUpdate(hzCfg0ModelColor,clzName + ".updateByVwoId");
     }
+
+    @Override
+    public int updateStatus(List<HzCfg0ModelColor> hzCfg0ModelColorsUpdate) {
+        return baseSQLUtil.executeUpdate(hzCfg0ModelColorsUpdate,clzName+".updateStatus");
+    }
+
+    @Override
+    public int updateListAll(List<HzCfg0ModelColor> hzCfg0ModelColorsUpdate) {
+        return baseSQLUtil.executeUpdate(hzCfg0ModelColorsUpdate,clzName+".updateListAll");
+    }
 }

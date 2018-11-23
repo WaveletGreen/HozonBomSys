@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.impl.derivative;
 
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
+import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
@@ -45,5 +46,10 @@ public class HzDMBasicChangeDaoImpl extends BasicDaoImpl<HzDMBasicChangeBean> im
         map.put("formId",formId);
         map.put("status",0L);
         return baseSQLUtil.executeQueryByPass(new HzDMBasicChangeBean(), map, clz.getCanonicalName() + ".selectBefor");
+    }
+
+    @Override
+    public List<HzDMBasicChangeBean> selectLastByPuid(List<HzComposeDelDto> delDtos) {
+        return baseSQLUtil.executeQueryByPass(new HzDMBasicChangeBean(),delDtos,clz.getCanonicalName()+".selectLastByPuid");
     }
 }

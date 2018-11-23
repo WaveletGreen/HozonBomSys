@@ -24,4 +24,8 @@ public interface HzFullCfgMainDao extends BasicDao<HzFullCfgMain>{
     HzFullCfgMain selectByPrimaryKey(Long id);
 
     HzFullCfgMain selectByProjectId(String id);
+
+    int deleteByProjectUid(String projectUid);
+
+    Long insertSeqAll(HzFullCfgMain hzFullCfgMain);
 }

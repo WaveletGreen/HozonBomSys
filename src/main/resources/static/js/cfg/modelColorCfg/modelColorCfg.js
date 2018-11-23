@@ -60,6 +60,9 @@ var toolbar = [
                 if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
                     window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许删除'});
                     return false;
+                }else if(2 == rows[i].cmcrStatus  || "2" == rows[i].cmcrStatus){
+                    window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已是删除状态，不允许删除'});
+                    return false;
                 }
             }
             //测试数据
@@ -72,7 +75,7 @@ var toolbar = [
                     $.ajax({
                         type: "POST",
                         //ajax需要添加打包名
-                        url: "./modelColor/delete",
+                        url: "./modelColor/deleteFake",
                         data: JSON.stringify(rows),
                         contentType: "application/json",
                         success: function (result) {
@@ -94,6 +97,53 @@ var toolbar = [
             });
         }
     },
+    // {
+    //     text: '删除',
+    //     iconCls: 'glyphicon glyphicon-remove',
+    //     handler: function () {
+    //         var rows = $table.bootstrapTable('getSelections');
+    //         if (rows.length == 0) {
+    //             window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+    //             return false;
+    //         }
+    //         for (let i in rows) {
+    //             if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
+    //                 window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许删除'});
+    //                 return false;
+    //             }
+    //         }
+    //         //测试数据
+    //         window.Ewin.confirm({
+    //             title: '提示',
+    //             message: '是否要删除您所选择的记录？',
+    //             width: 500
+    //         }).on(function (e) {
+    //             if (e) {
+    //                 $.ajax({
+    //                     type: "POST",
+    //                     //ajax需要添加打包名
+    //                     url: "./modelColor/delete",
+    //                     data: JSON.stringify(rows),
+    //                     contentType: "application/json",
+    //                     success: function (result) {
+    //                         if (result) {
+    //                             layer.msg("删除时数据成功", {icon: 1, time: 2000})
+    //                             // window.Ewin.alert({message: "删除时数据成功"});
+    //                             //刷新，会重新申请数据库数据
+    //                         }
+    //                         else {
+    //                             window.Ewin.alert({message: "操作删除失败:" + result.msg});
+    //                         }
+    //                         $table.bootstrapTable("refresh");
+    //                     },
+    //                     error: function (info) {
+    //                         window.Ewin.alert({message: "操作删除:" + info.status});
+    //                     }
+    //                 })
+    //             }
+    //         });
+    //     }
+    // },
     {
         text: '发起VWO流程',
         iconCls: 'glyphicon glyphicon-remove',
@@ -108,7 +158,10 @@ var toolbar = [
                     window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许再次发起VWO流程'});
                     return false;
                 }
-                i
+                if(1 == rows[i].cmcrStatus || "1" == rows[i].cmcrStatus){
+                    window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已生效，不允许再次发起VWO流程'});
+                    return false;
+                }
             }
 
             var data = {};
@@ -146,27 +199,58 @@ var toolbar = [
                         width: 450,
                         height: 450
                     });
-                    // $.ajax({
-                    //     type: "POST",
-                    //     //ajax需要添加打包名
-                    //     url: "./modelColor/getVWO",
-                    //     data: /*data*/JSON.stringify(data),
-                    //     contentType: "application/json",
-                    //     success: function (result) {
-                    //         if (result.status) {
-                    //             layer.msg("发起VWO流程成功", {icon: 1, time: 2000})
-                    //             // window.Ewin.alert({message: "删除时数据成功"});
-                    //             //刷新，会重新申请数据库数据
-                    //         }
-                    //         else {
-                    //             window.Ewin.alert({message: "发起VWO流程失败:" + result.msg});
-                    //         }
-                    //         $table.bootstrapTable("refresh");
-                    //     },
-                    //     error: function (info) {
-                    //         window.Ewin.alert({message: "发起VWO流程:" + info.status});
-                    //     }
-                    // })
+                }
+            });
+        }
+    },
+    {
+        text: '撤销',
+        iconCls: 'glyphicon glyphicon-share-alt',
+        handler: function () {
+            var rows = $table.bootstrapTable('getSelections');
+            if (rows.length == 0) {
+                window.Ewin.alert({message: '请选择一条需要撤销的数据!'});
+                return false;
+            }
+
+            for (let i in rows) {
+                if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
+                    window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许撤销'});
+                    return false;
+                }
+                if(1 == rows[i].cmcrStatus || "1" == rows[i].cmcrStatus){
+                    window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已生效，不允许撤销'});
+                    return false;
+                }
+            }
+            //测试数据
+            window.Ewin.confirm({
+                title: '提示',
+                message: '是否要撤销您所选择的记录？',
+                width: 500
+            }).on(function (e) {
+                if (e) {
+                    $.ajax({
+                        type: "POST",
+                        //ajax需要添加打包名
+                        url: "./modelColor/goBackData",
+                        data: JSON.stringify(rows),
+                        contentType: "application/json",
+                        success: function (result) {
+                            if (result) {
+                                layer.msg("撤销数据成功", {icon: 1, time: 2000})
+                                // window.Ewin.alert({message: "删除时数据成功"});
+                                //刷新，会重新申请数据库数据
+                            }
+                            else {
+                                window.Ewin.alert({message: "操作撤销失败:" + result.msg});
+                            }
+                            $table.bootstrapTable("refresh");
+                        },
+                        error: function (info) {
+                            window.Ewin.alert({message: "操作撤销:" + info.status});
+                        }
+                    })
                 }
             });
         }
@@ -293,6 +377,8 @@ function loadData(_projectPuid) {
                     }
                     else if (10 == value || "10" == value) {
                         return "<span style='color: #e69800'>VWO审核中<br>("+row.cmcrVwoNum+")</span>";
+                    }else if(2 == value || "2" == value){
+                        return "<span style='color: #0c8fe2'>已删除</span>";
                     }
                     else {
                         return "<span style='color: #a90009'>未知状态</span>";

@@ -7,6 +7,8 @@
 package com.connor.hozon.bom.bomSystem.dao.derivative;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
+import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 
 import java.util.List;
@@ -40,4 +42,10 @@ public interface HzDerivativeMaterielBasicDao extends BasicDao<HzDerivativeMater
     int updateByBasicList(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics);
 
     int updateByBasicListChangId(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics);
+
+    int updateStatus(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics);
+
+    int updateByBasicAll(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasicsUpdate);
+
+    int deleteByIds(List<HzComposeDelDto> delDtos);
 }
