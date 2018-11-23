@@ -7,6 +7,7 @@
 $(document).ready(function () {
     var id = $("#id").val();
     var isFromTc = $("#isFromTc").val();
+    var projectId = $("#project", window.top.document).val();
     var TCForm = document.getElementById("TCForm");
     var BOMForm = document.getElementById("BOMForm");
     if (isFromTc == 0) {
@@ -16,7 +17,13 @@ $(document).ready(function () {
         TCForm.style.display = "block";
         BOMForm.style.display = "none";
     }
-    var projectId = $("#project", window.top.document).val();
+    $.ajax({
+        url:"../change/data/order/hyper?orderId=" + id,
+        type:"GET",
+        success: function (result) {
+
+        }
+    })
     var table = "<tr>";
     table += "<th><a href='../change/data/feature/page?projectId=" + projectId + "&orderId=" + id + "'>特性变更</a></th>";
     table += "<th><a href='../change/data/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>全BOM配置</a></th>";
