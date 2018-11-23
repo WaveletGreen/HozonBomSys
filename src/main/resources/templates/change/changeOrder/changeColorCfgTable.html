@@ -38,6 +38,18 @@
         var $table = $("#colorCfg_table");
         var column = [];
         var orderId = $("#orderId").val();
+        column.push({field: 'ck', checkbox: true, Width: 50});
+        column.push({
+            field: '',
+            title: '序号',
+            align: 'center',
+            Width: 50,
+            formatter: function (value, row, index) {
+                var options = $table.bootstrapTable('getOptions');
+                return options.pageSize * (options.pageNumber - 1) + index + 1;
+
+            }
+        }),
         column.push({
             field: 'headDesc',
             title: '变更类型',
@@ -107,6 +119,52 @@
                     showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                     showRefresh: false,                  //是否显示刷新按钮
                     //minimumCountColumns:4,
+                    toolbars: [
+                        {
+                            text: '删除',
+                            iconCls: 'glyphicon glyphicon-remove',
+                            handler: function () {
+                                var rows = $table.bootstrapTable('getSelections');
+                                if (rows.length == 0) {
+                                    window.Ewin.alert({message: '请至少一条需要删除的数据!'});
+                                    return false;
+                                }
+                                // else if (rows[0].status == 5 || rows[0].status == 6) {
+                                //     window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
+                                //     return false;
+                                // }
+
+                                // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                                //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                                // for (var index in rows) {
+                                //     _table += '<tr><td>' + rows[index].pMaterielCode + '</td></tr>';
+                                // }
+                                // _table += '</table></div>';
+                                window.Ewin.confirm({title: '提示', message: '确定要删除数据吗?', width: 500}).on(function (e) {
+                                    if (e) {
+                                        $.ajax({
+                                            type: "POST",
+                                            //ajax需要添加打包名
+                                            url: "" ,
+                                            //data: JSON.stringify(rows),
+                                            contentType: "application/json",
+                                            success: function (result) {
+                                                if (result.success) {
+                                                    layer.msg('删除成功', {icon: 1, time: 2000})
+                                                } else if (!result.success) {
+                                                    window.Ewin.alert({message: result.errMsg});
+                                                }
+                                                $table.bootstrapTable("refresh");
+                                            },
+                                            error: function (info) {
+                                                window.Ewin.alert({message: "操作失败:" + info.status});
+                                            }
+                                        })
+                                    }
+                                });
+                            }
+                        },
+                    ]
                 });
 
             }
