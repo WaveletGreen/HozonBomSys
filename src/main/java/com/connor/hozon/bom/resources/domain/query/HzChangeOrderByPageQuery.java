@@ -31,7 +31,7 @@ public class HzChangeOrderByPageQuery extends DefaultPageQuery {
     /**
      *当前变更表单状态（1 已完成 2进行中 3流程中 4已取消）
      */
-    private Integer state;
+    private String state;
 
     /**
      * 表单创建者
@@ -67,4 +67,17 @@ public class HzChangeOrderByPageQuery extends DefaultPageQuery {
      * 返回项目名称
      */
     private String projectName;
+
+    public Integer getState() {
+        if(state == null){
+            return null;
+        }
+        switch (state){
+            case "进行中":return 2;
+            case "已完成":return 1;
+            case "已取消":return 4;
+            case "流程中":return 3;
+            default:return null;
+        }
+    }
 }
