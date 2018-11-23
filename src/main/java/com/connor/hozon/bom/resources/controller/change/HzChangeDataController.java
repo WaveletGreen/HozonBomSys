@@ -211,10 +211,6 @@ public class HzChangeDataController extends BaseController {
     @RequestMapping(value = "order/hyper",method = RequestMethod.GET)
     public void getChangeOrderData(HzChangeDataQuery query,HttpServletResponse response){
         List<HzChangeDataRespDTO> respDTOS = hzChangeDataService.getChangeDataHyperRecord(query);
-        if(ListUtil.isNotEmpty(respDTOS)){
-            toJSONResponse(respDTOS,response);
-            return;
-        }
         toJSONResponse(Result.build(respDTOS),response);
     }
 
