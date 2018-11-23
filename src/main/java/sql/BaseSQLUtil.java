@@ -22,6 +22,7 @@ import java.util.Map;
 //@Configuration
 public class BaseSQLUtil implements IBaseSQLUtil {
     private static final Logger logger = LoggerFactory.getLogger(BaseSQLUtil.class);
+    //DefaultSqlSession这个类不是线程安全的，所以DefaultSqlSession这个类不可以被设置成单例模式的
     private static SqlSession session;
     private static SqlSessionTemplate sqlSessionTemplate;
     //    锁对象，保证能进入双重校验锁结构语句
