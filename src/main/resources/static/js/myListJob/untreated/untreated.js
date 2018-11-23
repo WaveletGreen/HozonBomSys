@@ -35,6 +35,7 @@ function formatDate() {
 function initTable(url) {
     var $table = $("#untreatedTable");
     var column = [];
+    column.push({field: 'ck', checkbox: true});
     column.push({
         field: '',
         title: '序号',
@@ -96,16 +97,16 @@ function initTable(url) {
                     var rows = $table.bootstrapTable('getSelections');
                     //只能选一条
                     if (rows.length != 1) {
-                        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                        window.Ewin.alert({message: '请选择一条需要修改的变更表单!'});
                         return false;
                     }
-                    else if (rows[0].status == 5 || rows[0].status == 6) {
-                        window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                    else if (rows[0].isFromTc == 0) {
+                        window.Ewin.alert({message: '只能选择来源是TC端的表单进行修改!'});
                         return false;
                     }
                     window.Ewin.dialog({
                         title: "修改",
-                        url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
+                        url: "" ,
                         gridId: "gridId",
                         width: 500,
                         height: 500
