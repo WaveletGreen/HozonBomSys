@@ -60,6 +60,9 @@ var toolbar = [
                 if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
                     window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许删除'});
                     return false;
+                }else if(2 == rows[i].cmcrStatus  || "2" == rows[i].cmcrStatus){
+                    window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已是删除状态，不允许删除'});
+                    return false;
                 }
             }
             //测试数据
@@ -155,7 +158,10 @@ var toolbar = [
                     window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许再次发起VWO流程'});
                     return false;
                 }
-                i
+                if(1 == rows[i].cmcrStatus || "1" == rows[i].cmcrStatus){
+                    window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已生效，不允许再次发起VWO流程'});
+                    return false;
+                }
             }
 
             var data = {};
@@ -206,9 +212,14 @@ var toolbar = [
                 window.Ewin.alert({message: '请选择一条需要撤销的数据!'});
                 return false;
             }
+
             for (let i in rows) {
                 if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
                     window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许撤销'});
+                    return false;
+                }
+                if(1 == rows[i].cmcrStatus || "1" == rows[i].cmcrStatus){
+                    window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已生效，不允许撤销'});
                     return false;
                 }
             }

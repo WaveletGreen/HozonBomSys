@@ -210,6 +210,9 @@ public class HzFullCfgMainChange {
 
 
     public String getStageString(){
+        if(this.stage==null){
+            return "";
+        }
         switch (this.stage){
             case 1 :
                 return "P0-P1阶段";

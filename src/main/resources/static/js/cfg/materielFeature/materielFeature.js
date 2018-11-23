@@ -296,6 +296,11 @@ function modifyBasicDataDialog() {
         window.Ewin.alert({message: '请选择一条需要修改的数据!'});
         return;
     }
+    var status = rows[0].status;
+    if(status!=0&&status!=1){
+        window.Ewin.alert({message:rows[0].modeBasicDetail+"状态不能修改"});
+        return false
+    }
     window.Ewin.dialog({
         // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
         title: "修改基本信息",
@@ -315,6 +320,16 @@ function goBackData() {
     if (rows.length <= 0) {
         window.Ewin.alert({message: '请至少选择一条需要撤销的数据!'});
         return;
+    }
+
+    for(let i in rows){
+        if(10 == rows[i].status || "10" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已在变更流程中，不可撤销"});
+            return false;
+        }else if(1 == rows[i].status  || "1" == rows[i].status ){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已生效，不可撤销"});
+            return false;
+        }
     }
     window.Ewin.confirm({title: '提示', message: '是否要撤销您所选择的记录？', width: 500}).on(function (e) {
         if (e) {
@@ -353,6 +368,15 @@ function deleteVehicleFake() {
     if (rows.length <= 0) {
         window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
         return;
+    }
+    for(let i in rows){
+        if(2 == rows[i].status || "2" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已删除，不可重复删除"});
+            return false;
+        }else if(10 == rows[i].status || "10" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已在变更流程中，不可删除"});
+            return false;
+        }
     }
     window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
         if (e) {
@@ -427,6 +451,15 @@ function launchChangeForm() {
     if (rows.length == 0) {
         window.Ewin.alert({message: '请选择一条需要发起变更的数据!'});
         return false;
+    }
+    for(let i in rows){
+        if(1 == rows[i].status || "1" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已生效，不可发起变更表单"});
+            return false;
+        }else if(10 == rows[i].status || "10" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已在变更流程中，不可发起流程"});
+            return false;
+        }
     }
 
     let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
