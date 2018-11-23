@@ -666,4 +666,15 @@ public class HzComposeMFService {
         }
         return result;
     }
+
+    public int deleteVehicleFake(List<HzComposeDelDto> delDtos) {
+        List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics = new ArrayList<>();
+        for(HzComposeDelDto hzComposeDelDto : delDtos){
+            HzDerivativeMaterielBasic hzDerivativeMaterielBasic = new HzDerivativeMaterielBasic();
+            hzDerivativeMaterielBasic.setId(hzComposeDelDto.getBasicId());
+            hzDerivativeMaterielBasic.setDmbStatus(2);
+            hzDerivativeMaterielBasics.add(hzDerivativeMaterielBasic);
+        }
+        return hzDerivativeMaterielBasicDao.updateStatus(hzDerivativeMaterielBasics);
+    }
 }

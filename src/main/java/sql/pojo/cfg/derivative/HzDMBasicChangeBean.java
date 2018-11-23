@@ -95,6 +95,11 @@ public class HzDMBasicChangeBean {
      */
     private Integer dmbChangeStatus;
 
+    /**
+     * 源数据状态
+     */
+    private Integer dmbSrcStatus;
+
     public Long getId() {
         return id;
     }
@@ -263,6 +268,14 @@ public class HzDMBasicChangeBean {
         this.dmbChangeStatus = dmbChangeStatus;
     }
 
+    public Integer getDmbSrcStatus() {
+        return dmbSrcStatus;
+    }
+
+    public void setDmbSrcStatus(Integer dmbSrcStatus) {
+        this.dmbSrcStatus = dmbSrcStatus;
+    }
+
     public void srcSetChange(HzDerivativeMaterielBasic hzDerivativeMaterielBasic){
         Date date = new Date();
         User user = UserInfo.getUser();
@@ -284,5 +297,16 @@ public class HzDMBasicChangeBean {
         this.setDmbReserved5(hzDerivativeMaterielBasic.getDmbReserved5());
         this.setDmbModelFeatureUid(hzDerivativeMaterielBasic.getDmbModelFeatureUid());
         this.setDmbSpecialFeatureUid(hzDerivativeMaterielBasic.getDmbSpecialFeatureUid());
+        this.setDmbSrcStatus(hzDerivativeMaterielBasic.getDmbStatus());
+    }
+
+    public HzDerivativeMaterielBasic getHzDerivativeMaterielBasic() {
+        HzDerivativeMaterielBasic hzDerivativeMaterielBasic = new HzDerivativeMaterielBasic();
+        hzDerivativeMaterielBasic.setId(this.getDmbSrcId());
+        hzDerivativeMaterielBasic.setDmbModelUid(this.getDmbModelUid());
+        hzDerivativeMaterielBasic.setDmbColorModelUid(this.getDmbColorModelUid());
+        hzDerivativeMaterielBasic.setDmbSpecialFeatureUid(this.getDmbSpecialFeatureUid());
+        hzDerivativeMaterielBasic.setDmbModelFeatureUid(this.getDmbModelFeatureUid());
+        return hzDerivativeMaterielBasic;
     }
 }

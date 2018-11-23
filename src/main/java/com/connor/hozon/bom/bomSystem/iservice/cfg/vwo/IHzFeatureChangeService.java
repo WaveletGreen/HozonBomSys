@@ -148,4 +148,6 @@ public interface IHzFeatureChangeService {
     List<HzFeatureChangeBean> doQueryLastTwoChange(String cfgPuid, Long vwoId);
 
     List<HzFeatureChangeBean> doSelectCfgUidsByVwoId(Long vwoId);
+
+    List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records);
 }

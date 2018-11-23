@@ -21,7 +21,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="content col-lg-12 col-md-12" style="padding:0px;">
-                <table class="table table-striped tableNormalStyle" id="materielFeature_table">
+                <table class="table table-striped tableNormalStyle" id="materielFeature_table" style="text-align: center">
                 </table>
             </div>
         </div>
@@ -38,10 +38,13 @@
         var $table = $("#materielFeature_table");
         var orderId = $("#orderId").val();
         var column = [];
+        column.push({field: 'headDesc', title: '基本信息代码'});
         column.push({field: 'modeBasicDetail', title: '基本信息代码'});
         column.push({field: 'factory', title: '工厂'});
         column.push({field: 'modeBasicDetailDesc', title: '基本信息'});
         column.push({field: 'superMateriel', title: '超级物料'});
+        column.push({field: 's0', title: '车身颜色<br/>HZCSYS'});
+        column.push({field: 's1', title: '油漆车身总成<br/>HZYQCS'});
         $.ajax({
             url: "../../../vwo/getMaterielFeatureTable?formId="+orderId+"&projectUid="+projectPuid,
             type: "POST",

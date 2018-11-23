@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.dao.derivative;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
 
@@ -28,4 +29,8 @@ public interface HzDerivativeMaterielDetailDao extends BasicDao<HzDerivativeMate
     List<HzDerivativeMaterielDetail> selectByBasicWithCfg(HzDerivativeMaterielDetail detail);
 
     List<HzDerivativeMaterielDetail> selectByBasics(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics);
+
+    int updateByDetailAll(List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetailsUpdate);
+
+    int deleteByBasicIds(List<HzComposeDelDto> delDtos);
 }
