@@ -62,7 +62,7 @@ function initTable(url) {
     $table.bootstrapTable({
         url: url,
         method: 'get',
-        height: $(window.parent.document).find("#wrapper").height() - 90,
+        height: $(window.parent.document).find("#wrapper").height() - 170,
         width: $(window).width(),
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
