@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.dao.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.List;
