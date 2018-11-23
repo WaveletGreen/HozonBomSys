@@ -24,9 +24,9 @@ public class HzFullCfgModelChange {
 
     private Date flModUpdateDate;
 
-    private Object flModCreator;
+    private String flModCreator;
 
-    private Object flModLastUpdater;
+    private String flModLastUpdater;
 
     private Date flModCreateDateChange;
 
@@ -113,19 +113,19 @@ public class HzFullCfgModelChange {
         this.flModUpdateDate = flModUpdateDate;
     }
 
-    public Object getFlModCreator() {
+    public String getFlModCreator() {
         return flModCreator;
     }
 
-    public void setFlModCreator(Object flModCreator) {
+    public void setFlModCreator(String flModCreator) {
         this.flModCreator = flModCreator;
     }
 
-    public Object getFlModLastUpdater() {
+    public String getFlModLastUpdater() {
         return flModLastUpdater;
     }
 
-    public void setFlModLastUpdater(Object flModLastUpdater) {
+    public void setFlModLastUpdater(String flModLastUpdater) {
         this.flModLastUpdater = flModLastUpdater;
     }
 
@@ -253,4 +253,17 @@ public class HzFullCfgModelChange {
     }
 
 
+    public HzFullCfgModel getHzFullCfgModel(Long mainId) {
+        HzFullCfgModel hzFullCfgModel = new HzFullCfgModel();
+        hzFullCfgModel.setModModelUid(this.getModModelUid());
+        hzFullCfgModel.setModCfg0Uid(this.getModCfg0Uid());
+        hzFullCfgModel.setModPointType(this.getModPointType());
+        hzFullCfgModel.setFlModCreateDate(this.getFlModCreateDate());
+        hzFullCfgModel.setFlModUpdateDate(this.getFlModUpdateDate());
+        hzFullCfgModel.setFlModCreator(this.getFlModCreator());
+        hzFullCfgModel.setFlModLastUpdater(this.getFlModLastUpdater());
+        hzFullCfgModel.setFlModVersion(mainId);
+        hzFullCfgModel.setFlModelBomlineUid(this.getFlModelBomlineUid());
+        return hzFullCfgModel;
+    }
 }

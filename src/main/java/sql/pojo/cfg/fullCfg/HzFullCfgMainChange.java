@@ -17,7 +17,7 @@ public class HzFullCfgMainChange {
     //阶段
     private Integer stage;
     //版本
-    private Object version;
+    private String version;
     //生效时间
     private Date effectiveDate;
     //源数据创建时间
@@ -25,9 +25,9 @@ public class HzFullCfgMainChange {
     //源数据更新时间
     private Date updateDate;
     //源数据创建人
-    private Object creator;
+    private String creator;
     //源数据更新人
-    private Object updater;
+    private String updater;
     //创建时间
     private Date createDateChange;
     //更新时间
@@ -83,11 +83,11 @@ public class HzFullCfgMainChange {
         this.stage = stage;
     }
 
-    public Object getVersion() {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion(Object version) {
+    public void setVersion(String version) {
         this.version = version;
     }
 
@@ -115,19 +115,19 @@ public class HzFullCfgMainChange {
         this.updateDate = updateDate;
     }
 
-    public Object getCreator() {
+    public String getCreator() {
         return creator;
     }
 
-    public void setCreator(Object creator) {
+    public void setCreator(String creator) {
         this.creator = creator;
     }
 
-    public Object getUpdater() {
+    public String getUpdater() {
         return updater;
     }
 
-    public void setUpdater(Object updater) {
+    public void setUpdater(String updater) {
         this.updater = updater;
     }
 
@@ -210,6 +210,9 @@ public class HzFullCfgMainChange {
 
 
     public String getStageString(){
+        if(this.stage==null){
+            return "";
+        }
         switch (this.stage){
             case 1 :
                 return "P0-P1阶段";
@@ -234,5 +237,20 @@ public class HzFullCfgMainChange {
                 default:
                     return "";
         }
+    }
+
+    public HzFullCfgMain geteHzFullCfgMain() {
+        HzFullCfgMain hzFullCfgMain = new HzFullCfgMain();
+        hzFullCfgMain.setProjectUid(this.getProjectUid());
+        hzFullCfgMain.setStatus("编辑");
+        hzFullCfgMain.setStage(this.getStage());
+        hzFullCfgMain.setVersion(this.getVersion());
+        hzFullCfgMain.setEffectiveDate(this.getEffectiveDate());
+        hzFullCfgMain.setCreateDate(this.getCreateDate());
+        hzFullCfgMain.setUpdateDate(this.getUpdateDate());
+        hzFullCfgMain.setCreator(this.getCreator());
+        hzFullCfgMain.setUpdater(this.getUpdater());
+        hzFullCfgMain.setFmIsRelease(this.getFmIsRelease());
+        return hzFullCfgMain;
     }
 }

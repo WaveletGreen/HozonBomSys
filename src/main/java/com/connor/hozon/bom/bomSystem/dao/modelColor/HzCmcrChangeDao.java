@@ -146,4 +146,6 @@ public interface HzCmcrChangeDao extends BasicDao<HzCmcrChange> {
     List<HzCmcrChange> doQueryCmcrChangeAfterFirst(Long vwoId);
 
     List<HzCmcrChange> doQueryCmcrChangeAfter(Long vwoId);
+
+    List<HzCmcrChange> doQueryCmcrChangeByModelColorId(List<HzCfg0ModelColor> hzCfg0ModelColors);
 }

@@ -6,9 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
-import com.connor.hozon.bom.bomSystem.controller.HzProjectLibsController;
 import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelFeatureDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
@@ -42,7 +40,9 @@ import com.connor.hozon.bom.bomSystem.service.task.HzTasksService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.dao.OrgGroupDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
@@ -64,19 +64,18 @@ import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
 import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
 import sql.pojo.cfg.fullCfg.HzFullCfgModelChange;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange;
-import sql.pojo.cfg.model.HzCfg0ModelDetail;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.vwo.*;
+import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.*;
 import sql.pojo.task.HzTasks;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -216,6 +215,10 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     @Autowired
     HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
+    //变更人员关系dao
+    @Autowired
+    HzChangeDataRecordDAO hzChangeDataRecordDAO
+            ;
     /**
      * 日志
      */
@@ -443,7 +446,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     //废止时间
                     hzFeatureChangeBeanAfter.setCfgAbolishDate(hzCfg0Record.getCfgAbolishDate());
                     //状态0
-                    hzFeatureChangeBeanAfter.setCfgStatus(0);
+                    hzFeatureChangeBeanAfter.setCfgStatus(hzCfg0Record.getCfgStatus());
                     //是否在流程中1
                     hzFeatureChangeBeanAfter.setCfgIsInProcess(1);
                     //当前的特性值的主键
@@ -453,7 +456,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                     //流程发起人
                     hzFeatureChangeBeanAfter.setProcessStarter(user.getLogin());
                     //流程状态
-                    hzFeatureChangeBeanAfter.setProcessStatus(10);
+                    hzFeatureChangeBeanAfter.setProcessStatus(0);
                     //变更创建时间
                     hzFeatureChangeBeanAfter.setChangeCreateDate(now);
                     //vwo变更号ID
@@ -493,6 +496,17 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                         result.put("msg", "修改源数据失败");
                         return result;
                     }
+                }
+                //流程绑定人员
+                HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
+                hzChangeDataRecord.setApplicantId(Long.valueOf(user.getId()));
+                hzChangeDataRecord.setOrderId(changeFromId);
+                hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName());
+                int insertNum = hzChangeDataRecordDAO.insert(hzChangeDataRecord);
+                if(insertNum<=0){
+                    result.put("status", false);
+                    result.put("msg", "绑定人员失败");
+                    return result;
                 }
             }
         } else {
@@ -793,12 +807,12 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     List<HzCmcrDetailChange> hzCmcrDetailChangesAfter = new ArrayList<HzCmcrDetailChange>();
     //循环查看源主数据是否以发布流程,如已发布过则直接返回错误提示
     for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
-        if (hzCfg0ModelColor.getCmcrStatus() != null && !"0".equals(hzCfg0ModelColor.getCmcrStatus())) {
+        if (hzCfg0ModelColor.getCmcrStatus() != null && !"0".equals(hzCfg0ModelColor.getCmcrStatus())&&!"2".equals(hzCfg0ModelColor.getCmcrStatus())) {
             result.put("status", false);
             result.put("msg", hzCfg0ModelColor.getpDescOfColorfulModel() + "已发起了VWO流程");
             return result;
         }
-        hzCfg0ModelColor.setCmcrStatus("10");
+
     }
     //为源主数据添加变更编码
     for (HzCfg0ModelColor hzCfg0ModelColor : hzCfg0ModelColors) {
@@ -810,6 +824,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         HzCmcrChange hzCmcrChangeQuery = new HzCmcrChange();
         hzCmcrChangeQuery.setCmcrSrcMainCfg(hzCfg0ModelColor.getpCfg0MainRecordOfMC());
         hzCmcrChangeQuery.setCmcrSrcPuid(hzCfg0ModelColor.getPuid());
+        hzCmcrChangeQuery.setCmcrSrcStatus(Integer.valueOf(hzCfg0ModelColor.getCmcrStatus()));
         hzCmcrChangesLastAfterQuery.add(hzCmcrChangeQuery);
     }
     List<HzCmcrChange> hzCmcrChangesLastAfter = null;
@@ -857,6 +872,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 hzCmcrChange.setCmcrCgVwoId(changeFromId);
                 //变更状态
                 hzCmcrChange.setCmcrChangeStatus(1);
+                hzCmcrChange.setCmcrSrcStatus(hzCmcrChangeAfterQuery.getCmcrSrcStatus());
                 hzCmcrChangesAfter.add(hzCmcrChange);
 
                 //生成变更从数据
@@ -915,6 +931,8 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         hzCmcrChangeAfter.setCmcrSrcDescOfColorMod(hzCfg0ModelColor.getpDescOfColorfulModel());
         //变更状态
         hzCmcrChangeAfter.setCmcrChangeStatus(0);
+        hzCmcrChangeAfter.setCmcrSrcStatus(Integer.valueOf(hzCfg0ModelColor.getCmcrStatus()));
+        hzCfg0ModelColor.setCmcrStatus("10");
         hzCmcrChangesAfter.add(hzCmcrChangeAfter);
     }
     Map<String,Long> changeAfterId = new HashMap<>();
@@ -1007,6 +1025,18 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         if (hzCmcrDetailChangeDao.insertDetailAfterList(hzCmcrDetailChangesAfter) != hzCmcrDetailChangesAfter.size()) {
             result.put("status", false);
             result.put("msg", "变更后从数据失败");
+        }
+
+        //流程绑定人员
+        HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
+        hzChangeDataRecord.setApplicantId(Long.valueOf(user.getId()));
+        hzChangeDataRecord.setOrderId(changeFromId);
+        hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_CMCR_AFTER_CHANGE.getTableName());
+        int insertNum = hzChangeDataRecordDAO.insert(hzChangeDataRecord);
+        if(insertNum<=0){
+            result.put("status", false);
+            result.put("msg", "绑定人员失败");
+            return result;
         }
 //            //跟新变更前主数据
 //            if (hzCmcrChangesLastAfter != null && hzCmcrChangesLastAfter.size() != 0) {
@@ -2013,12 +2043,22 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         if (beans != null && !beans.isEmpty()) {
             for (int i = 0; i < beans.size(); i++) {
                 List<HzFeatureChangeBean> bs = iHzFeatureChangeService.doQueryLastTwoChange(beans.get(i).getCfgPuid(), vwoId);
-                bs.get(0).setHeadDesc(bs.get(1).getFeatureValueName() + "变更前");
-                bs.get(1).setHeadDesc(bs.get(1).getFeatureValueName() + "变更后");
-                HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(0));
-                HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
-                list.add(before);
-                list.add(after);
+                if(bs.get(0).getFeatureName()==null){
+                    bs.get(1).setHeadDesc("新增<br>"+bs.get(1).getFeatureValueName());
+                    HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
+                    list.add(after);
+                }else if(bs.get(1).getCfgStatus()==2){
+                    bs.get(0).setHeadDesc("删除<br>"+bs.get(1).getFeatureValueName());
+                    HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(0));
+                    list.add(before);
+                }else {
+                    bs.get(0).setHeadDesc("变更前<br>"+ bs.get(1).getFeatureValueName());
+                    bs.get(1).setHeadDesc("变更后<br>"+ bs.get(1).getFeatureValueName());
+                    HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(0));
+                    HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
+                    list.add(before);
+                    list.add(after);
+                }
             }
         }
         result.put("totalCount", list.size());
@@ -2537,8 +2577,19 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 }
                 titleNum++;
             }
-            result.add(beforMap);
-            result.add(afterMap);
+            if(hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null){
+                afterMap.put("headDesc","新增<br>"+hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
+                result.add(afterMap);
+            }else if(hzCmcrChangeListAfter.get(i).getCmcrSrcStatus() == 2){
+                beforMap.put("headDesc","删除<br>"+hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
+                result.add(beforMap);
+            }else {
+                beforMap.put("headDesc","修改前<br>"+hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
+                afterMap.put("headDesc","修改后<br>"+hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
+                result.add(beforMap);
+                result.add(afterMap);
+            }
+
         }
         map.put("titleSet", titleSet);
         map.put("result", result);
@@ -2592,79 +2643,180 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansAfter){
             titleSet.add(hzDMDetailChangeBean.getTitle());
         }
+
+
+
         /******整理变更前后主数据*******/
-        for(int i=0;i<hzDMBasicChangeBeansAfter.size();i++){
-            Map<String,String> basicBefor = new HashMap<>();
-            Map<String,String> basicAfter= new HashMap<>();
-            if(hzDMBasicChangeBeansBefor.size()!=0&&hzDMBasicChangeBeansAfter!=null){
-                HzDMBasicChangeBean hzDMBasicChangeBeanBefor = hzDMBasicChangeBeansBefor.get(i);
-                HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBeanBefor.getDmbModelUid(),hzDMBasicChangeBeanBefor.getDmbColorModelUid());
-                basicBefor.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
-                if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
-                    HzFactory factory = hzFactoryDAO.findFactory(hzCfg0ModelFeature.getFactoryCode(), null);
-                    factoryMap.put(hzCfg0ModelFeature.getFactoryCode(),factory);
-                }
-                basicBefor.put("factory",factoryMap.get(hzCfg0ModelFeature.getFactoryCode()).getpFactoryCode());
-                basicBefor.put("modeBasicDetailDesc",hzCfg0ModelFeature.getpFeatureCnDesc());
-                if (superMateriel != null) {
-                    basicBefor.put("superMateriel", superMateriel.getpMaterielCode());
-                } else {
-                    basicBefor.put("superMateriel", "");
-                }
-            }else {
-                basicBefor.put("modeBasicDetail","-");
-                basicBefor.put("factory","-");
-                basicBefor.put("modeBasicDetailDesc","-");
-                basicBefor.put("superMateriel","-");
+        //将所有删除数据过滤出来
+        Iterator<HzDMBasicChangeBean> IteratorDelete = hzDMBasicChangeBeansAfter.iterator();
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeansDelete = new ArrayList<>();
+        while (IteratorDelete.hasNext()){
+            HzDMBasicChangeBean hzDMBasicChangeBean = IteratorDelete.next();
+            if(hzDMBasicChangeBean.getDmbSrcStatus()!=null&&hzDMBasicChangeBean.getDmbSrcStatus()==2){
+                hzDMBasicChangeBeansDelete.add(hzDMBasicChangeBean);
+                IteratorDelete.remove();
             }
-            HzDMBasicChangeBean hzDMBasicChangeBeanAfter = hzDMBasicChangeBeansAfter.get(i);
-            HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBeanAfter.getDmbModelUid(),hzDMBasicChangeBeanAfter.getDmbColorModelUid());
-            basicAfter.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
-            if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
-                HzFactory factory = hzFactoryDAO.findFactory(hzCfg0ModelFeature.getFactoryCode(), null);
-                factoryMap.put(hzCfg0ModelFeature.getFactoryCode(),factory);
+        }
+        if(hzDMBasicChangeBeansDelete.size()>0){
+            List<HzDMDetailChangeBean> hzDMDetailChangeBeansDelete = hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeansDelete);
+            for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeansDelete){
+                Map<String,String> basicMap = new HashMap<>();
+                setMaterielFeatureBasicDate(hzDMBasicChangeBean,basicMap,"删除",factoryMap,superMateriel);
+                setMaterielFeatureDetailDate(titleSet,hzDMDetailChangeBeansDelete,hzDMBasicChangeBean,basicMap);
+                result.add(basicMap);
             }
-            basicAfter.put("factory",factoryMap.get(hzCfg0ModelFeature.getFactoryCode()).getpFactoryCode());
-            basicAfter.put("modeBasicDetailDesc",hzCfg0ModelFeature.getpFeatureCnDesc());
-            if (superMateriel != null) {
-                basicAfter.put("superMateriel", superMateriel.getpMaterielCode());
-            } else {
-                basicAfter.put("superMateriel", "");
-            }
-            /**********整理变更前后从数据***********/
-            Iterator<String> iterator = titleSet.iterator();
-            int titleNum = 0;
-            while (iterator.hasNext()){
-                String title = iterator.next();
-                boolean beforTitleFlag = false;
-                if(hzDMDetailChangeBeansBefor!=null&&hzDMDetailChangeBeansBefor.size()!=0){
-                    for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansBefor){
-                        if (title.equals(hzDMDetailChangeBean.getTitle())) {
-                            basicBefor.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
-                            beforTitleFlag = true;
+        }
+
+        //将所有新增的数据过滤出来
+        if(hzDMBasicChangeBeansAfter.size()>0) {
+            Iterator<HzDMBasicChangeBean> IteratorAdd = hzDMBasicChangeBeansAfter.iterator();
+            List<HzDMBasicChangeBean> hzDMBasicChangeBeansAdd = new ArrayList<>();
+            while (IteratorAdd.hasNext()) {
+                HzDMBasicChangeBean hzDMBasicChangeBeanAfter = IteratorAdd.next();
+                boolean flag = true;
+                if(hzDMBasicChangeBeansBefor.size()==0){
+                    flag = true;
+                }else {
+                    for (HzDMBasicChangeBean hzDMBasicChangeBeanBefor : hzDMBasicChangeBeansBefor) {
+                        if (hzDMBasicChangeBeanAfter.getDmbSrcId().equals(hzDMBasicChangeBeanBefor.getDmbSrcId())) {
+                            flag = false;
                             break;
                         }
                     }
                 }
-                if(!beforTitleFlag){
-                    basicBefor.put("s" + titleNum,"-");
+                if (flag) {
+                    hzDMBasicChangeBeansAdd.add(hzDMBasicChangeBeanAfter);
+                    IteratorAdd.remove();
                 }
-
-                boolean afterTitleFlag = false;
-                for (HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansAfter) {
-                    if (title.equals(hzDMDetailChangeBean.getTitle())) {
-                        basicAfter.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
-                        afterTitleFlag = true;
+            }
+            if(hzDMBasicChangeBeansAdd.size()>0) {
+                List<HzDMDetailChangeBean> hzDMDetailChangeBeansAdd = hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeansAdd);
+                for (HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeansAdd) {
+                    Map<String, String> basicMap = new HashMap<>();
+                    setMaterielFeatureBasicDate(hzDMBasicChangeBean, basicMap, "新增", factoryMap, superMateriel);
+                    setMaterielFeatureDetailDate(titleSet,hzDMDetailChangeBeansAdd,hzDMBasicChangeBean,basicMap);
+                    result.add(basicMap);
+                }
+            }
+        }
+        //整理修改数据，将其变更前后放入一个list中
+        if(hzDMBasicChangeBeansAfter.size()>0) {
+            List<HzDMBasicChangeBean> hzDMBasicChangeBeansUpdate = new ArrayList<>();
+            for(HzDMBasicChangeBean hzDMBasicChangeBeanBefor : hzDMBasicChangeBeansBefor){
+                for(HzDMBasicChangeBean hzDMBasicChangeBeanAfter : hzDMBasicChangeBeansAfter){
+                    if (hzDMBasicChangeBeanBefor.getDmbSrcId().equals(hzDMBasicChangeBeanAfter.getDmbSrcId())){
+                        hzDMBasicChangeBeansUpdate.add(hzDMBasicChangeBeanBefor);
+                        hzDMBasicChangeBeansUpdate.add(hzDMBasicChangeBeanAfter);
                         break;
                     }
                 }
-                if(!afterTitleFlag){
-                    basicAfter.put("s" + titleNum,"-");
-                }
-                titleNum++;
             }
-            result.add(basicBefor);
-            result.add(basicAfter);
+            if(hzDMBasicChangeBeansUpdate.size()>0) {
+                List<HzDMDetailChangeBean> hzDMDetailChangeBeansUpdate = hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeansUpdate);
+                for (int i = 0; i < hzDMBasicChangeBeansUpdate.size(); i++) {
+                    Map<String, String> basicMapBefor = new HashMap<>();
+                    Map<String, String> basicMapAfter = new HashMap<>();
+                    setMaterielFeatureBasicDate(hzDMBasicChangeBeansUpdate.get(i), basicMapBefor, "变更前", factoryMap, superMateriel);
+                    setMaterielFeatureDetailDate(titleSet,hzDMDetailChangeBeansUpdate,hzDMBasicChangeBeansUpdate.get(i),basicMapBefor);
+                    setMaterielFeatureBasicDate(hzDMBasicChangeBeansUpdate.get(i + 1), basicMapAfter, "变更后", factoryMap, superMateriel);
+                    setMaterielFeatureDetailDate(titleSet,hzDMDetailChangeBeansUpdate,hzDMBasicChangeBeansUpdate.get(i+1),basicMapAfter);
+                    result.add(basicMapBefor);
+                    result.add(basicMapAfter);
+                    i++;
+                }
+            }
+        }
+
+
+//        for(int i=0;i<hzDMBasicChangeBeansAfter.size();i++){
+//            Map<String,String> basicBefor = new HashMap<>();
+//            Map<String,String> basicAfter= new HashMap<>();
+//            if(hzDMBasicChangeBeansBefor.size()!=0&&hzDMBasicChangeBeansAfter!=null){
+//                HzDMBasicChangeBean hzDMBasicChangeBeanBefor = hzDMBasicChangeBeansBefor.get(i);
+//                HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBeanBefor.getDmbModelUid(),hzDMBasicChangeBeanBefor.getDmbColorModelUid());
+//                basicBefor.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+//                if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
+//                    HzFactory factory = hzFactoryDAO.findFactory(hzCfg0ModelFeature.getFactoryCode(), null);
+//                    factoryMap.put(hzCfg0ModelFeature.getFactoryCode(),factory);
+//                }
+//                basicBefor.put("factory",factoryMap.get(hzCfg0ModelFeature.getFactoryCode()).getpFactoryCode());
+//                basicBefor.put("modeBasicDetailDesc",hzCfg0ModelFeature.getpFeatureCnDesc());
+//                if (superMateriel != null) {
+//                    basicBefor.put("superMateriel", superMateriel.getpMaterielCode());
+//                } else {
+//                    basicBefor.put("superMateriel", "");
+//                }
+//            }else {
+//                basicBefor.put("modeBasicDetail","-");
+//                basicBefor.put("factory","-");
+//                basicBefor.put("modeBasicDetailDesc","-");
+//                basicBefor.put("superMateriel","-");
+//            }
+//            HzDMBasicChangeBean hzDMBasicChangeBeanAfter = hzDMBasicChangeBeansAfter.get(i);
+//            HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBeanAfter.getDmbModelUid(),hzDMBasicChangeBeanAfter.getDmbColorModelUid());
+//            basicAfter.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+//            if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
+//                HzFactory factory = hzFactoryDAO.findFactory(hzCfg0ModelFeature.getFactoryCode(), null);
+//                factoryMap.put(hzCfg0ModelFeature.getFactoryCode(),factory);
+//            }
+//            basicAfter.put("factory",factoryMap.get(hzCfg0ModelFeature.getFactoryCode()).getpFactoryCode());
+//            basicAfter.put("modeBasicDetailDesc",hzCfg0ModelFeature.getpFeatureCnDesc());
+//            if (superMateriel != null) {
+//                basicAfter.put("superMateriel", superMateriel.getpMaterielCode());
+//            } else {
+//                basicAfter.put("superMateriel", "");
+//            }
+//            /**********整理变更前后从数据***********/
+////            Iterator<String> iterator = titleSet.iterator();
+////            int titleNum = 0;
+////            while (iterator.hasNext()){
+////                String title = iterator.next();
+////                boolean beforTitleFlag = false;
+////                if(hzDMDetailChangeBeansBefor!=null&&hzDMDetailChangeBeansBefor.size()!=0){
+////                    for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansBefor){
+////                        if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId().equals(hzDMBasicChangeBeansBefor.get(i).getId())) {
+////                            basicBefor.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+////                            beforTitleFlag = true;
+////                            break;
+////                        }
+////                    }
+////                }
+////                if(!beforTitleFlag){
+////                    basicBefor.put("s" + titleNum,"-");
+////                }
+////
+////                boolean afterTitleFlag = false;
+////                for (HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansAfter) {
+////                    if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId().equals(hzDMBasicChangeBeansAfter.get(i).getId())) {
+////                        basicAfter.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+////                        afterTitleFlag = true;
+////                        break;
+////                    }
+////                }
+////                if(!afterTitleFlag){
+////                    basicAfter.put("s" + titleNum,"-");
+////                }
+////                titleNum++;
+////            }
+//            if("-".equals(basicBefor.get("modeBasicDetail"))){
+//                basicAfter.put("headDesc","新增<br>"+basicAfter.get("modeBasicDetail"));
+//                result.add(basicAfter);
+//            }else if("-".equals(basicAfter.get("modeBasicDetail"))){
+//                basicBefor.put("headDesc","删除<br>"+basicBefor.get("modeBasicDetail"));
+//                result.add(basicBefor);
+//            }else {
+//                basicBefor.put("headDesc","修改前<br>"+basicBefor.get("modeBasicDetail"));
+//                basicAfter.put("headDesc","修改后<br>"+basicAfter.get("modeBasicDetail"));
+//                result.add(basicBefor);
+//                result.add(basicAfter);
+//            }
+//        }
+        Iterator<String> iterator = titleSet.iterator();
+        while (iterator.hasNext()){
+            String title = iterator.next();
+            if("车身颜色<br/>HZCSYS".equals(title)||"油漆车身总成<br/>HZYQCS".equals(title)){
+                iterator.remove();
+            }
         }
         map.put("titleSet",titleSet);
         map.put("result",result);
@@ -2909,7 +3061,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesOrderAfter){
                     for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesAfter){
                         if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getModModelUid().equals(hzFullCfgModelChange.getModModelUid())){
-                            cfgMap.put(hzFullCfgModelChange1.getFlModelBomlineUid(),hzFullCfgModelChange1.getModPointType()==0?"-()":hzFullCfgModelChange1.getModPointType()==1?"○()":"●()");
+                            cfgMap.put(hzFullCfgModelChange1.getFlModelBomlineUid(),hzFullCfgModelChange1.getModPointType()==0?"-()":hzFullCfgModelChange1.getModPointType()==1?"○":"●");
                         }
                     }
                 }
@@ -2923,7 +3075,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 for(HzFullCfgWithCfgChange hzFullCfgWithCfgChange : hzFullCfgWithCfgChangesOrderBefor){
                     for(HzFullCfgModelChange hzFullCfgModelChange1: hzFullCfgModelChangesAfter){
                         if(hzFullCfgModelChange1.getFlModelBomlineUid().equals(hzFullCfgWithCfgChange.getCfgBomlineUid())&&hzFullCfgModelChange1.getModModelUid().equals(hzFullCfgModelChange.getModModelUid())){
-                            cfgMap.put(hzFullCfgModelChange1.getFlModelBomlineUid(),cfgMap.get(hzFullCfgModelChange1.getFlModelBomlineUid())+(hzFullCfgModelChange1.getModPointType()==0?"-()":hzFullCfgModelChange1.getModPointType()==1?"○()":"●()"));
+                            cfgMap.put(hzFullCfgModelChange1.getFlModelBomlineUid(),cfgMap.get(hzFullCfgModelChange1.getFlModelBomlineUid())+"("+(hzFullCfgModelChange1.getModPointType()==0?"-":hzFullCfgModelChange1.getModPointType()==1?"○":"●")+")");
                         }
                     }
                 }
@@ -3175,4 +3327,68 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         resultMap.put("pointResult",pointMap);
         return resultMap;
     }
+
+
+    /**
+     * 衍生物料展示填充主数据方法
+     * @param hzDMBasicChangeBean  变更主数据
+     * @param basicMap                填充结果集
+     * @param headDesc              变更类型
+     * @param factoryMap            工厂Map
+     * @param superMateriel         超级物料
+     */
+    public void setMaterielFeatureBasicDate(HzDMBasicChangeBean hzDMBasicChangeBean, Map<String,String> basicMap, String headDesc, Map<String,HzFactory> factoryMap, HzMaterielRecord superMateriel){
+        HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBean.getDmbModelUid(),hzDMBasicChangeBean.getDmbColorModelUid());
+        basicMap.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+        if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
+            HzFactory factory = hzFactoryDAO.findFactory(hzCfg0ModelFeature.getFactoryCode(), null);
+            factoryMap.put(hzCfg0ModelFeature.getFactoryCode(),factory);
+        }
+        basicMap.put("factory",factoryMap.get(hzCfg0ModelFeature.getFactoryCode()).getpFactoryCode());
+        basicMap.put("modeBasicDetailDesc",hzCfg0ModelFeature.getpFeatureCnDesc());
+        if (superMateriel != null) {
+            basicMap.put("superMateriel", superMateriel.getpMaterielCode());
+        } else {
+            basicMap.put("superMateriel", "");
+        }
+        basicMap.put("headDesc",headDesc+"<br>"+hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+    }
+
+    /**
+     * 衍生物料展示填充从数据方法
+     * @param titleSet                  从数据总集
+     * @param hzDMDetailChangeBeans     从数据集合
+     * @param hzDMBasicChangeBeans      从数据关联的主数据
+     * @param basicMap                  结果集
+     */
+    public void setMaterielFeatureDetailDate(Set<String> titleSet,List<HzDMDetailChangeBean> hzDMDetailChangeBeans,HzDMBasicChangeBean hzDMBasicChangeBeans, Map<String,String> basicMap){
+        Iterator<String> iterator = titleSet.iterator();
+        int titleNum = 2;
+        while (iterator.hasNext()){
+            String title = iterator.next();
+            boolean beforTitleFlag = true;
+            for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeans){
+                if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId()==hzDMBasicChangeBeans.getId()) {
+                    if("车身颜色<br/>HZCSYS".equals(title)){
+                        basicMap.put("s0", hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+                        beforTitleFlag = false;
+                        break;
+                    }else if("油漆车身总成<br/>HZYQCS".equals(title)){
+                        basicMap.put("s1", hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+                        beforTitleFlag = false;
+                        break;
+                    }else {
+                        basicMap.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+                        titleNum++;
+                        beforTitleFlag = false;
+                        break;
+                    }
+                }
+            }
+            if(beforTitleFlag){
+                basicMap.put("s" + titleNum,"-");
+            }
+        }
+    }
 }
+

@@ -27,6 +27,7 @@ var toolbar = [
         iconCls: 'glyphicon glyphicon-pencil',
         handler: modifyBasicDataDialog
     },
+
     // {
     //     text: '修改超级物料',
     //     iconCls: 'glyphicon glyphicon-pencil',
@@ -50,12 +51,17 @@ var toolbar = [
     {
         text: '删除衍生物料',
         iconCls: 'glyphicon glyphicon-pencil',
-        handler: deleteVehicle
+        handler: deleteVehicleFake
     },
     {
         text: '发起变更表单',
         iconCls: 'glyphicon glyphicon-pencil',
         handler: launchChangeForm
+    },
+    {
+        text: '撤销',
+        iconCls: 'glyphicon glyphicon-share-alt',
+        handler: goBackData
     }
 
     // ,
@@ -290,6 +296,11 @@ function modifyBasicDataDialog() {
         window.Ewin.alert({message: '请选择一条需要修改的数据!'});
         return;
     }
+    var status = rows[0].status;
+    if(status!=0&&status!=1){
+        window.Ewin.alert({message:rows[0].modeBasicDetail+"状态不能修改"});
+        return false
+    }
     window.Ewin.dialog({
         // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
         title: "修改基本信息",
@@ -301,21 +312,78 @@ function modifyBasicDataDialog() {
 }
 
 /**
+ * 撤销
+ */
+function goBackData() {
+    var rows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (rows.length <= 0) {
+        window.Ewin.alert({message: '请至少选择一条需要撤销的数据!'});
+        return;
+    }
+
+    for(let i in rows){
+        if(10 == rows[i].status || "10" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已在变更流程中，不可撤销"});
+            return false;
+        }else if(1 == rows[i].status  || "1" == rows[i].status ){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已生效，不可撤销"});
+            return false;
+        }
+    }
+    window.Ewin.confirm({title: '提示', message: '是否要撤销您所选择的记录？', width: 500}).on(function (e) {
+        if (e) {
+            $.ajax({
+                type: "POST",
+                //ajax需要添加打包名
+                url: "./materielV2/goBackData",
+                data: JSON.stringify(rows),
+                contentType: "application/json",
+                success: function (result) {
+                    if (result.status) {
+                        layer.msg(result.msg, {icon: 1, time: 2000});
+                        doQuery();
+                        //$(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                        // window.Ewin.alert({message: });
+                        //刷新，会重新申请数据库数据
+                    }
+                    else {
+                        window.Ewin.alert({message: "操作撤销失败:" + result.msg});
+                    }
+                    $table.bootstrapTable("refresh");
+                },
+                error: function (info) {
+                    window.Ewin.alert({message: "操作撤销:" + info.status});
+                }
+            })
+        }
+    })
+}
+/**
  * 删除衍生物料
  */
-function deleteVehicle() {
+function deleteVehicleFake() {
     var rows = $table.bootstrapTable('getSelections');
     //只能选一条
     if (rows.length <= 0) {
         window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
         return;
     }
+    for(let i in rows){
+        if(2 == rows[i].status || "2" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已删除，不可重复删除"});
+            return false;
+        }else if(10 == rows[i].status || "10" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已在变更流程中，不可删除"});
+            return false;
+        }
+    }
     window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
         if (e) {
             $.ajax({
                 type: "POST",
                 //ajax需要添加打包名
-                url: "./materielV2/deleteCompose",
+                url: "./materielV2/deleteVehicleFake",
                 data: JSON.stringify(rows),
                 contentType: "application/json",
                 success: function (result) {
@@ -338,6 +406,44 @@ function deleteVehicle() {
         }
     })
 }
+// /**
+//  * 删除衍生物料
+//  */
+// function deleteVehicle() {
+//     var rows = $table.bootstrapTable('getSelections');
+//     //只能选一条
+//     if (rows.length <= 0) {
+//         window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
+//         return;
+//     }
+//     window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+//         if (e) {
+//             $.ajax({
+//                 type: "POST",
+//                 //ajax需要添加打包名
+//                 url: "./materielV2/deleteCompose",
+//                 data: JSON.stringify(rows),
+//                 contentType: "application/json",
+//                 success: function (result) {
+//                     if (result.status) {
+//                         layer.msg(result.msg, {icon: 1, time: 2000});
+//                         doQuery();
+//                         //$(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+//                         // window.Ewin.alert({message: });
+//                         //刷新，会重新申请数据库数据
+//                     }
+//                     else {
+//                         window.Ewin.alert({message: "操作删除失败:" + result.msg});
+//                     }
+//                     $table.bootstrapTable("refresh");
+//                 },
+//                 error: function (info) {
+//                     window.Ewin.alert({message: "操作删除:" + info.status});
+//                 }
+//             })
+//         }
+//     })
+// }
 
 /******发起变更表单****/
 function launchChangeForm() {
@@ -346,10 +452,19 @@ function launchChangeForm() {
         window.Ewin.alert({message: '请选择一条需要发起变更的数据!'});
         return false;
     }
+    for(let i in rows){
+        if(1 == rows[i].status || "1" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已生效，不可发起变更表单"});
+            return false;
+        }else if(10 == rows[i].status || "10" == rows[i].status){
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已在变更流程中，不可发起流程"});
+            return false;
+        }
+    }
 
     let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
     for (let i in rows) {
-        if (0 != rows[i].status && "0" != rows[i].status && null != rows[i].status && "null" != rows[i].status) {
+        if (0 != rows[i].status && "0" != rows[i].status && null != rows[i].status && "null" != rows[i].status&&2!=rows[i].status&&"2"!=rows[i].status) {
             window.Ewin.alert({message: rows[i].modeBasicDetail + "该衍生物料不是草稿状态，不能发起变更"});
             return false;
         }
@@ -463,14 +578,17 @@ function gotIt(result) {
         valign: 'middle',
         formatter: function (value, row, index) {
             var status = row.status;
-        if (status == 999 || "999" == status) {
+        if (status == 1 || "1" == status) {
             return "<span style='color: #00B83F'>已生效</span>";
         }
-        if (status == 10 || "10" == status) {
+        else if (status == 10 || "10" == status) {
                 return "<span style='color: #e69800'>VWO审核中("+row.changeOrderNo+")</span>";
         }
-        if (0 == status|| "0" == status||"null" == status || null == status) {
+        else if (0 == status|| "0" == status||"null" == status || null == status) {
             return "<span style='color: #a97f89'>草稿状态</span>";
+        }
+        else if(2 == status || "2" == status){
+            return "<span style='color: #0c8fe2'>已删除</span>";
         }
         else {
             return "<span style='color: #a90009'>未知状态</span>";

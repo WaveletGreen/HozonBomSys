@@ -244,4 +244,19 @@ public class HzFullCfgWithCfgChange {
             return "选配";
         }
     }
+
+    public HzFullCfgWithCfg getHzFullCfgWithCfg(Long mainId) {
+        HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
+        hzFullCfgWithCfg.setCfgCfg0Uid(this.getCfgCfg0Uid());
+        hzFullCfgWithCfg.setCfgBomlineUid(this.getCfgBomlineUid());
+        hzFullCfgWithCfg.setFlCfgCreateDate(this.getFlCfgCreateDate());
+        hzFullCfgWithCfg.setFlCfgUpdateDate(this.getFlCfgUpdateDate());
+        hzFullCfgWithCfg.setFlCfgCreator(this.getFlCfgCreator());
+        hzFullCfgWithCfg.setFlCfgUpdator(this.getFlCfgUpdator());
+        hzFullCfgWithCfg.setFlCfgBomlineName(this.getFlCfgBomlineName());
+        hzFullCfgWithCfg.setFlCfgVersion(mainId);
+        hzFullCfgWithCfg.setFlOperationType(this.getFlOperationType());
+        hzFullCfgWithCfg.setFlComment(this.getFlComment());
+        return hzFullCfgWithCfg;
+    }
 }

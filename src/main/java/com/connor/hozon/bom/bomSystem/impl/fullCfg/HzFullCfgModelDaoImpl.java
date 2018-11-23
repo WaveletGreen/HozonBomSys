@@ -95,4 +95,9 @@ public class HzFullCfgModelDaoImpl extends BasicDaoImpl<HzFullCfgModel> implemen
     public int updateByHzFullCfgModelListCfg(List<HzFullCfgModel> hzFullCfgModels) {
         return  baseSQLUtil.executeUpdate(hzFullCfgModels, clzName+".updateByHzFullCfgModelListCfg");
     }
+
+    @Override
+    public int insertListAll(List<HzFullCfgModel> hzFullCfgModels) {
+        return baseSQLUtil.executeInsert(hzFullCfgModels,clzName+".insertListAll");
+    }
 }

@@ -33,11 +33,6 @@ public class HzFullCfgWithCfgChangeDaoImpl extends BasicDaoImpl<HzFullCfgWithCfg
     }
 
     @Override
-    public HzFullCfgWithCfg selectBy2Yid(HzFullCfgWithCfg hzFullCfgWithCfg) {
-        return baseSQLUtil.executeQueryById(hzFullCfgWithCfg, clzName+"selectBy2Yid");
-    }
-
-    @Override
     public List<HzFullCfgWithCfgChange> selectByMainId(Integer id) {
         return baseSQLUtil.executeQueryByPass(new HzFullCfgWithCfgChange(), id,clzName+"selectByMainId");
     }

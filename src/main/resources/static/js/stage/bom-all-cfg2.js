@@ -489,6 +489,25 @@ $(document).ready(
                 });
             }),
             $("#getVwo").click(function () {
+                for (var i = 0; i < cfgSize; i++) {
+                    var msgDivId = 'msg' + i;
+                    var msgVal = $("#" + msgDivId).text();
+                    if (msgVal == "" || msgVal == null) {
+                        window.Ewin.alert({message: "请确认备注是否全部填写！"});
+                        flag = true;
+                        break;
+                    }
+                }
+                var stage = $("#row1").html();
+                if(stage=="阶段："){
+                    window.Ewin.alert({message: "请设置完阶段后再发起变更"});
+                    return false;
+                }
+                var status = $("#row4").html();
+                if(status!="状态：编辑"&&status!="状态：更新"){
+                    window.Ewin.alert({message: "非编辑状态不能发起变更"});
+                    return false;
+                }
                 window.Ewin.dialog({
                     // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
                     title: "选择变更表单",
@@ -497,16 +516,28 @@ $(document).ready(
                     width: 450,
                     height: 450
                 });
-                // $.ajax({
-                //     type : "GET",
-                //     url : "bomAllCfg/getVwo?projectId="+getProjectUid(),
-                //     success : function (result) {
-                //         window.location.reload();
-                //     },
-                //     error : function (result) {
-                //
-                //     }
-                // });
+            }),
+            $("#goBackData").click(function () {
+                var status = $("#row4").text();
+                if(status!="状态：编辑"&&status!="状态：更新"){
+                    window.Ewin.alert({message: "非编辑状态不能撤销"});
+                }else {
+                    window.Ewin.confirm({title: '提示', message: '是否要撤销您所选择的记录？', width: 500}).on(function (e) {
+                        if (e) {
+                            $.ajax({
+                                type: "POST",
+                                url: "bomAllCfg/goBackData?projectUid=" + getProjectUid(),
+                                success: function (result) {
+                                    layer.msg(result.msg, {icon: 1, time: 2000});
+                                    window.location.reload();
+                                },
+                                error: function (result) {
+                                    window.Ewin.alert({message: "撤销失败:" + result.msg});
+                                }
+                            });
+                        }
+                    })
+                }
             })
         // ,
         // $("#export").click(function(){

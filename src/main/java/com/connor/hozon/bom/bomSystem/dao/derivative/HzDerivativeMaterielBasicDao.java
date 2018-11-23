@@ -40,4 +40,10 @@ public interface HzDerivativeMaterielBasicDao extends BasicDao<HzDerivativeMater
     int updateByBasicList(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics);
 
     int updateByBasicListChangId(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics);
+
+    int updateStatus(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics);
+
+    int updateByBasicAll(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasicsUpdate);
+
+    int deleteByIds(List<HzComposeDelDto> delDtos);
 }
