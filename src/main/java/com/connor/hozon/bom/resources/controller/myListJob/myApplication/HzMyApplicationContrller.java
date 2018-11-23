@@ -3,10 +3,13 @@ package com.connor.hozon.bom.resources.controller.myListJob.myApplication;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzApplicationChangeService;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
+import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +20,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzApplicantChangeRecord;
 import sql.pojo.change.HzAuditorChangeRecord;
+import sql.pojo.change.HzChangeListRecord;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,9 +43,43 @@ public class HzMyApplicationContrller {
     @Autowired
     private HzChangeOrderService hzChangeOrderService;
 
+    @Autowired
+    private HzAuditorChangeDAO hzAuditorChangeDAO;
+
+    @Autowired
+    private HzChangeListDAO hzChangeListDAO;
+
     @RequestMapping(value = "ToMyApplicationForm",method = RequestMethod.GET)
     public String getToMyApplicationFormToPage(Long id,Model model){
         HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
+        HzAuditorChangeRecord record = new HzAuditorChangeRecord();
+        List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList2(record);
+        for(int i=0;i<infos.size();i++){
+            if(id==infos.get(i).getOrderId()){
+                //infos.get(i).setAuditTime(DateUtil.formatTimestampDate(infos.get(i).getAuditTime()));
+                model.addAttribute("timeString",DateUtil.formatTimestampDate(infos.get(i).getAuditTime()));
+                model.addAttribute("result",infos.get(i));
+                break;
+            }else{
+                if(i==infos.size()-1){
+                    //我的申请还未审批情况
+                    model.addAttribute("timeString","");
+                    model.addAttribute("result",record);
+                }
+            }
+        }
+//        List<HzChangeListRecord> changeList = hzChangeListDAO.findChangeList(respDTO.getChangeNo());
+//
+//        if(changeList.size()>0){
+//            List<Map<String,String>> resultMaps = new ArrayList<>();
+//            for(HzChangeListRecord hzChangeListRecord : changeList){
+//                Map<String,String> map = new HashMap<>();
+//                map.put("itemId",hzChangeListRecord.getItemId());
+//                map.put("itemRevision",hzChangeListRecord.getItemRevision());
+//                resultMaps.add(map);
+//            }
+//            model.addAttribute("changeList",resultMaps);
+//        }
         if(respDTO != null){
             model.addAttribute("data",respDTO);
         }
