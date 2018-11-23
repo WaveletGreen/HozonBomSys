@@ -145,7 +145,7 @@
                 and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
             </if>
             <if test="originator != null and originator!=''">
-                and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+                and t1.CREATE_NAME_TC = #{originator,jdbcType=VARCHAR}
             </if>
             <if test="projectId != null">
                 and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
@@ -213,7 +213,7 @@
       and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
       </if>
       <if test="originator != null and originator!=''">
-      and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+      and t3.USER_NAME = #{originator,jdbcType=VARCHAR}
       </if>
       <if test="projectId != null">
         and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
@@ -258,7 +258,7 @@
                 and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
             </if>
             <if test="originator != null and originator!=''">
-                and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+                and t3.USER_NAME = #{originator,jdbcType=VARCHAR}
             </if>
             <if test="projectId != null">
                 and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}

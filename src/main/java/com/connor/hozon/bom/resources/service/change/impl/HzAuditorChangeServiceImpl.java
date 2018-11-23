@@ -112,9 +112,10 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                 for(int i=0;i<infos.size();i++){
                     HzChangeOrderRecord temp = hzChangeOrderDAO.findHzChangeOrderRecordById(infos.get(i).getOrderId());
 
+                    //根据返回的OrderId到ChangeOrder表中查数据
+                    HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,infos.get(i).getOrderId());
+
                     if(temp.getFromTc()==0){//变更单从BOM系统创建
-                        //根据返回的OrderId到ChangeOrder表中查数据
-                        HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,infos.get(i).getOrderId());
                         if(rec!=null){
                             HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
                             respDTO.setProjectId(rec.getProjectId());
@@ -133,8 +134,9 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                         //变更单从TC同步
                         //重写个服务
                         //根据返回的OrderId到ChangeOrder表中查数据
-                        HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordByIdTC(query,infos.get(i).getOrderId());
-                        if(rec!=null){
+                        //HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordByIdTC(query,infos.get(i).getOrderId());
+                        if(rec==null){
+                            rec = hzChangeOrderDAO.findHzChangeOrderRecordByIdTC(query,infos.get(i).getOrderId());
                             HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
                             respDTO.setProjectId(rec.getProjectId());
                             respDTO.setChangeNo(rec.getChangeNo());//changeNo
