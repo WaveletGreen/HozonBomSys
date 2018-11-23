@@ -1,0 +1,115 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/11/23 Time: 10:52-->
+<body>
+<form id="updateUntreatedForm" role="form" method="post" action="">
+    <input type="hidden" id="id" th:value="${data.id}">
+    <div class="form-group">
+        <label for="state">变更单状态<span>*</span></label>
+        <select class="form-control" name="state" id="state"placeholder="请选择变更单状态">
+            <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
+            <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
+            <option th:selected="${data.getState()=='取消'?true:false}">取消</option>
+            <!--<option th:selected="${data.getState()=='已完成'?true:false}">已完成</option>-->
+            <!--<option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>-->
+            <!--<option th:selected="${data.getState()=='流程中'?true:false}">流程中</option>-->
+        </select>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#updateUntreatedForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            // fields: {
+            //     changeNo: {
+            //         message: '变更单号验证失败',
+            //         validators: {
+            //             notEmpty: {
+            //                 message: '变更单号不能为空'
+            //             },
+                        // stringLength: {
+                        //     min: 12,
+                        //     max: 12,
+                        //     message: '变更单号长度必须是12位'
+                        // },
+                        // threshold: 12,
+                        // remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+                        //     url: "change/exist",//验证地址
+                        //     data: function (validator) {// 获取需要传送到后台的验证的数据
+                        //         return {
+                        //             changeNo: $('#changeNo').val()
+                        //         }
+                        //     },
+                        //     message: '变更单号已存在',//提示消息
+                        //     // delay :  500,
+                        //     type: 'POST'//请求方式，
+                        // },
+                //     }
+                //
+                // }
+            // }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#updateUntreatedForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#updateUntreatedForm", window.top.document).attr('action');
+                // var projectId= $("#project", window.top.document).val();
+                var myData = JSON.stringify({
+                    "id":$("#id").val(),
+                    "state": $("state").val(),
+                    // "projectId": $("#project", window.top.document).val(),
+                });
+
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            // $('.modal-dialog', window.top.document).parent('div').remove()
+                            // $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            activeTabBodyRefresh();
+                            /*if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                            // window.Ewin.alert({message:result.errMsg});
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>
