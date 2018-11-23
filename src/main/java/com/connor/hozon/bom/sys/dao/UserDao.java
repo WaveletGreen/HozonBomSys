@@ -56,7 +56,7 @@ public interface UserDao extends GenericDao<User, QueryUser> {
 	 */
 	int updateLogin(User user);
 
-	//TODO by haozt on 7/23/2018
+	//by haozt on 7/23/2018
 	//更改用户密码
 	int updatePassword(User user);
 
@@ -64,14 +64,14 @@ public interface UserDao extends GenericDao<User, QueryUser> {
 	 * 根据部门id 获取当前部门下的用户
 	 * @param groupId
 	 * @return
-	 *  todo by haozt on 8/17/2018
+	 *  by haozt on 8/17/2018
 	 */
 	List<User> findUserByGroupId(String groupId);
 
 	/**
 	 * 获取当前全部用户
 	 * @return
-	 *  todo by haozt on 8/20/2018
+	 * by haozt on 8/20/2018
 	 */
 	List<User> findAllUser();
 
@@ -80,7 +80,7 @@ public interface UserDao extends GenericDao<User, QueryUser> {
 	 * param state 账户状态 启用 禁用
 	 * param id 用户id
 	 * @return
-	 *  todo by haozt on 8/21/2018
+	 * by haozt on 8/21/2018
 	 */
 	User findUserById(Map<String,Object> map);
 }

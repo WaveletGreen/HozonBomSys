@@ -215,4 +215,19 @@
       and
           P_STATUS = 1
   </select>
+
+  <select id="HzAccessoriesLibsDAOImpl_queryAccessoriesByMaterielCodes" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select
+    *
+    from
+    HZ_ACCESSORIES_LIBS
+    where
+    P_MATERIEL_CODE in
+    <foreach collection="materielCodes" index="index" item="item" open="(" separator="," close=")">
+      #{item,jdbcType=VARCHAR}
+    </foreach>
+    and
+    P_STATUS = 1
+  </select>
+
 </mapper>

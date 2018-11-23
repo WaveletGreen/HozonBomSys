@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * ALL RIGHTS RESERVED.
+ */
+
 package com.connor.hozon.bom.process.service;
 
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
@@ -8,6 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * @Author: Fancyears·Maylos·Malvis
+ * @Description: 流程通过，进行数据发布，这里写具体的修改数据的逻辑
+ * @Date: Created in  2018/11/22 15:15
+ * @Modified By:
+ */
 @Component
 @EnableTransactionManagement(proxyTargetClass = true)
 //要在事务的类中抛出RuntimeException异常，而不是抛出Exception，也不知道对不对
@@ -31,7 +43,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      *
      * @param orderId 变更表单的ID
      * @param params  配置参数，预留
-     * @return
+     * @return 发布成功返回true，反之返回false
      */
     @Override
     public boolean release(Long orderId, Object... params) {
@@ -67,6 +79,4 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     public boolean bom(Long orderId, Object... params) {
         return true;
     }
-
-
 }

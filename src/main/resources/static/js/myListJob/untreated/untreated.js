@@ -4,6 +4,8 @@
  * Date: 2018/11/8
  * Time: 15:17
  */
+//@Modified by Fancyears·Maylos·Malvis in 2018/11/22 11:05
+// 对于直接从任务跳转到列表页面的，需要在页面加载的时候判断是否要直接加载到详情页面中
 $(document).ready((function () {
     let taskData = window.parent.getTaskData();
     if (taskData == null || taskData == undefined) {
@@ -86,7 +88,6 @@ function initTable(url) {
         striped: true,                      //是否显示行间隔色
         search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
         showColumns: false,                 //是否显示所有的列
-
     });
 }
 
@@ -95,7 +96,10 @@ function queryLou(id) {
 }
 
 /**
- *添加监听
+ * @Author: Fancyears·Maylos·Malvis
+ * @Description: 初始化监听
+ * @Date: Created in  2018/11/22 11:06
+ * @Modified By:
  */
 function initListener() {
     $("#saveBtn").click(function () {
@@ -103,6 +107,8 @@ function initListener() {
     })
 }
 
+//@Author: Fancyears·Maylos·Malvis  in 2018/11/22 11:07 保存审核意见，参数必须要有agreement
+//agreement用于直接驱动流程的中断还是发布
 function saveAgreement() {
     let data = {};
     var _d = $("#bomLeaderOpinion").serializeArray();
@@ -111,27 +117,40 @@ function saveAgreement() {
     }
     data.id = $("#id").val();
     log(data);
-    $.ajax({
-        contentType:
-            "application/json",
-        type:
-            'POST',
-        url: "../process/doCheck",
-        data: JSON.stringify(data),
-        success:
-            function (result) {
-                activeTabBodyRefresh();
-                if (result.status) {
-                    layer.msg(result.msg, {icon: 1, time: 2000});
-                    window.top.loadTasks();
-                    window.location.reload();
+    window.Ewin.confirm({
+        title: '审核结果',
+        message: "<span style='color: red'>" + (data.agreement == '1' ? "同意" : "不同意") + "</span>",
+        width: 500
+    }).on(function (e) {
+        if (e) {
+            $.ajax({
+                contentType:
+                    "application/json",
+                type:
+                    'POST',
+                url: "../process/doCheck",
+                data: JSON.stringify(data),
+                success:
+                    function (result) {
+                        activeTabBodyRefresh();
+                        if (result.status) {
+                            layer.msg(result.msg, {icon: 1, time: 2000});
+                            window.setTimeout(reload, 2000);
+                        }
+                        else {
+                            window.Ewin.alert({message: result.msg});
+                        }
+                    },
+                error: function (status) {
+                    window.Ewin.alert({message: "提交失败:" + status.status});
                 }
-                else {
-                    window.Ewin.alert({message: result.msg});
-                }
-            },
-        error: function (status) {
-            window.Ewin.alert({message: "提交失败:" + status.status});
+            })
         }
     })
+}
+
+//@Author: Fancyears·Maylos·Malvis  in 2018/11/22 13:06  重新加载任务，按钮禁用
+function reload() {
+    window.top.loadTasks();
+    $('#saveBtn').attr('disabled',"true");
 }

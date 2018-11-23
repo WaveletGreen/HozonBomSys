@@ -52,15 +52,11 @@ public class HzChangeOrderFactory {
         respDTO.setProjectStage(record.getProjectStage());
         respDTO.setRelationChangeNo(record.getRelationChangeNo());
         respDTO.setRemark(record.getRemark());
-        Integer state = record.getState();
-        if(Integer.valueOf(1).equals(state)){
-            respDTO.setState("已完成");
-        }else if(Integer.valueOf(2).equals(state)){
-            respDTO.setState("进行中");
-        }else {
-            respDTO.setState("已取消");
-        }
+        respDTO.setOrderResource(record.getFromTc());
+        respDTO.setState(record.getState());
+        respDTO.setStatus(record.getState());
         respDTO.setTel(record.getTel());
+        respDTO.setIsFromTc(record.getFromTc());
         if(record.getFromTc()==0){
             respDTO.setSource("BOM");
         }else{

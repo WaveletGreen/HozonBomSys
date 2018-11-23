@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -13,13 +13,13 @@ import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
 
 import java.util.List;
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 0.0.1版TC同步数据，应该不再使用
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
 @Deprecated
-@Configuration
+//@Configuration
 public interface HzCfg0ToModelRecordDao  extends BasicDao<HzCfg0ToModelRecord>{
 
     int deleteByPrimaryKey(String puid);

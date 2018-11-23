@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -27,7 +27,7 @@ import java.util.*;
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 工艺合件
  * 作为子：筛选所有需要进行合成的源，同时找到所有源的父层的查找编号比源大的兄弟层，将兄弟层的查找编号进行重新排序
  * 作为父：查找已合成源为基准，递归查找源下的所有子层，作为合成结果，合成结果挂载到合成目标下，对合成结果的每一份进行复制，

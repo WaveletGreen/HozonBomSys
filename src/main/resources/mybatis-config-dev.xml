@@ -148,7 +148,7 @@
         <mapper resource="sql/mapper/change.xmapper/HzApplicantChangeRecordMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzAuditorChangeRecordMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzChangeDataRecordMapper.xml"/>
-
+        <mapper resource="sql/mapper/change.xmapper/HzChangeListMapper.xml"/>
         <!--字典库-->
         <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
         <!--VPPS库-->
@@ -163,5 +163,7 @@
         <!--derivative变更 -->
         <mapper resource="sql/mapper/cfg/derivative/HzMDBasicChangeBeanMapper.xml"/>
         <mapper resource="sql/mapper/cfg/derivative/HzMDDetailChangeBeanMapper.xml"/>
+        <!--changeList-->
+        <mapper resource="sql/mapper/change.xmapper/HzChangeListRecordMapper.xml"/>
     </mappers>
 </configuration>

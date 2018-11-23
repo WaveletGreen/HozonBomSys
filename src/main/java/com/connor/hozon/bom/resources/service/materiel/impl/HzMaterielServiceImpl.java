@@ -284,12 +284,12 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 
                 map.put("changeData",dataRecords);
                 //申请人
-                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
-                applicantChangeRecord.setApplicantId(applicantId);
-                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
-                applicantChangeRecord.setTableName(tableName);
-
-                map.put("applicant",applicantChangeRecord);
+//                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
+//                applicantChangeRecord.setApplicantId(applicantId);
+//                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
+//                applicantChangeRecord.setTableName(tableName);
+//
+//                map.put("applicant",applicantChangeRecord);
                 //审核人
 //                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
 //                auditorChangeRecord.setAuditorId(auditorId);
@@ -315,9 +315,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                                 case "changeData":
                                     hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
                                     break;
-                                case "applicant":
-                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
-                                    break;
+//                                case "applicant":
+//                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+//                                    break;
 //                                case "auditor" :
 //                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
 //                                    break;

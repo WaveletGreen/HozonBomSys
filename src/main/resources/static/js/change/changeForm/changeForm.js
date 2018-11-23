@@ -79,6 +79,7 @@ function initTable(url) {
     column.push({field: 'marketType', title: '上市类型', align: 'center', valign: 'middle'});
     column.push({field: 'projectStage', title: '项目所属阶段', align: 'center', valign: 'middle'});
     column.push({field: 'remark', title: '备注', align: 'center', valign: 'middle'});
+    column.push({field: 'resource', title: '来源', align: 'center', valign: 'middle'});
     $table.bootstrapTable({
         url: url,
         method: 'get',
@@ -200,19 +201,23 @@ function initTable(url) {
                     // var myData = JSON.stringify({
                     //     "puids":puids,
                     // });
-                    if (rows.length == 0 || rows.length > 1) {
+                    if (rows.length == 0 || rows.length != 1) {
                         window.Ewin.alert({message: '请选择<span style="color: red">一条</span>需要发起流程的数据!'});
                         return false;
                     }
                     for (let i in rows) {
                         if ("进行中" != rows[i].state) {
-                            window.Ewin.alert({message: '已有表单完成，请取消选中已完成的表单'});
+                            if ("流程中" == rows[i].state) {
+                                window.Ewin.alert({message: '表单已在流程中，不允许再发起流程'});
+                            } else {
+                                window.Ewin.alert({message: '表单已审核完成'});
+                            }
                             return;
                         }
                     }
                     window.Ewin.dialog({
                         title: "选择审核人",
-                        url: "process/getAuditorPage",
+                        url: "process/getAuditorPage?orderId="+rows[0].id,
                         gridId: "getAuditorPage",
                         width: 500,
                         height: 500
@@ -249,6 +254,7 @@ function initTable(url) {
     // })
 }
 
+//@Modified by Fancyears·Maylos·Malvis in 2018/11/22 13:30  获取选中行
 function getRows() {
     return $("#changeFormTable").bootstrapTable('getSelections');
 }
