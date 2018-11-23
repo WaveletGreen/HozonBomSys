@@ -34,6 +34,7 @@ import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,9 @@ import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeDataRecord;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 
@@ -87,9 +91,6 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
-
-    @Autowired
-    private HzAuditorChangeDAO hzAuditorChangeDAO;
 
     @Override
     public WriteResultRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
@@ -212,15 +213,10 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public WriteResultRespDTO deleteHzPbomRecordByForeignId(DeleteHzPbomReqDTO reqDTO) {
-        WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
-            if (!PrivilegeUtil.writePrivilege()) {
-                return WriteResultRespDTO.getFailPrivilege();
-            }
-            if (reqDTO.getPuids() == null || reqDTO.getPuids().equals("") || reqDTO.getProjectId() == null || reqDTO.getProjectId().equals("")) {
-                respDTO.setErrMsg("非法参数！");
-                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-                return respDTO;
+
+            if (StringUtils.isBlank(reqDTO.getProjectId())|| StringUtils.isBlank(reqDTO.getProjectId())) {
+                return WriteResultRespDTO.IllgalArgument();
             }
             String bomPuids[] = reqDTO.getPuids().trim().split(",");
             for (String puid : bomPuids) {
@@ -381,7 +377,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     public Page<HzPbomLineRespDTO> getHzPbomRecordPage(HzPbomByPageQuery query) {
 
         String level = query.getLevel();
-        if (level != null && level != "") {
+        if (StringUtils.isNotBlank(level)) {
             if (level.trim().toUpperCase().endsWith("Y")) {
                 int length = Integer.valueOf(level.replace("Y", ""));
                 query.setIsHas(1);
@@ -1166,7 +1162,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             Long orderId = reqDTO.getOrderId();
 
             //获取审核人信息
-            Long auditorId = reqDTO.getAuditorId();
+//            Long auditorId = reqDTO.getAuditorId();
             //数据库表名
             String tableName = ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName();
             //获取数据信息
@@ -1189,84 +1185,75 @@ public class HzPbomServiceImpl implements HzPbomService {
                     afterRecords.add(manageRecord);
                 });
                 map.put("pbomAfter",afterRecords);
-            }
 
-            //修改发起流程后状态值
-            List<HzPbomLineRecord> bomLineRecords = new ArrayList<>();
-            for(HzPbomLineRecord record:records){
-                HzPbomLineRecord lineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
-                if(Integer.valueOf(2).equals(record.getStatus())){//草稿状态---->审核状态
+
+                //修改发起流程后状态值
+                List<HzPbomLineRecord> bomLineRecords = new ArrayList<>();
+                for(HzPbomLineRecord record:records){
+                    HzPbomLineRecord lineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
+                   //状态改为审核中
                     lineRecord.setStatus(5);
-                }else if(Integer.valueOf(4).equals(record.getStatus())){// 删除状态----->审核状态
-                    lineRecord.setStatus(6);
-                }
+
 //                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
-                bomLineRecords.add(lineRecord);
-            }
+                    bomLineRecords.add(lineRecord);
+                }
 
 
-            map.put("pbomBefore",bomLineRecords);
-            //保存以上获取信息
-            //变更数据
-            List<HzChangeDataRecord> dataRecords = new ArrayList<>();
-            puids.forEach(s -> {
-                HzChangeDataRecord record = new HzChangeDataRecord();
-                record.setApplicantId(applicantId);
-                record.setOrderId(reqDTO.getOrderId());
-                record.setPuid(s);
-                record.setTableName(tableName);
-                dataRecords.add(record);
-            });
+                map.put("pbomBefore",bomLineRecords);
+                //保存以上获取信息
+                //变更数据
+                List<HzChangeDataRecord> dataRecords = new ArrayList<>();
+                puids.forEach(s -> {
+                    HzChangeDataRecord record = new HzChangeDataRecord();
+                    record.setApplicantId(applicantId);
+                    record.setOrderId(reqDTO.getOrderId());
+                    record.setPuid(s);
+                    record.setTableName(tableName);
+                    dataRecords.add(record);
+                });
 
-            map.put("changeData",dataRecords);
-            //申请人
-            HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
-            applicantChangeRecord.setApplicantId(applicantId);
-            applicantChangeRecord.setOrderId(reqDTO.getOrderId());
-            applicantChangeRecord.setTableName(tableName);
+                map.put("changeData",dataRecords);
+                //申请人
+//                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
+//                applicantChangeRecord.setApplicantId(applicantId);
+//                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
+//                applicantChangeRecord.setTableName(tableName);
+//
+//                map.put("applicant",applicantChangeRecord);
+                //审核人
+//                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
+//                auditorChangeRecord.setAuditorId(auditorId);
+//                auditorChangeRecord.setOrderId(reqDTO.getOrderId());
+//                auditorChangeRecord.setTableName(tableName);
+//
+//                map.put("auditor",auditorChangeRecord);
 
-            map.put("applicant",applicantChangeRecord);
-            //审核人
-            HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
-            auditorChangeRecord.setAuditorId(auditorId);
-            auditorChangeRecord.setOrderId(reqDTO.getOrderId());
-            auditorChangeRecord.setTableName(tableName);
 
-            map.put("auditor",auditorChangeRecord);
-
-
-            //启动线程进行插入操作
-            List<ExecutorServices> services = new ArrayList<>();
-            for(Map.Entry<String,Object> entry:map.entrySet()){
-                ExecutorServices executorServices = new ExecutorServices(map.size()) {
-                    @Override
-                    public void action() {
-                        switch (entry.getKey()){
-                            case "pbomAfter":
-                                hzPbomRecordDAO.insertListForChange((List<HzPbomLineRecord>) entry.getValue(),tableName);
-                                break;
-                            case "pbomBefore":
-                                hzPbomRecordDAO.updateList((List<HzPbomLineRecord>) entry.getValue());
-                                break;
-                            case "changeData":
-                                hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
-                                break;
-                            case "applicant":
-                                hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
-                                break;
-                            case "auditor" :
-                                hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
-                                break;
-                            default:break;
+                //启动线程进行插入操作
+                for(Map.Entry<String,Object> entry:map.entrySet()){
+                    new ExecutorServices(1) {
+                        @Override
+                        public void action() {
+                            switch (entry.getKey()){
+                                case "pbomAfter":
+                                    hzPbomRecordDAO.insertListForChange((List<HzPbomLineRecord>) entry.getValue(),tableName);
+                                    break;
+                                case "pbomBefore":
+                                    hzPbomRecordDAO.updateList((List<HzPbomLineRecord>) entry.getValue());
+                                    break;
+                                case "changeData":
+                                    hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
+                                    break;
+//                                case "applicant":
+//                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+//                                    break;
+//                                case "auditor" :
+//                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
+//                                    break;
+                                default:break;
+                            }
                         }
-                    }
-                };
-                services.add(executorServices);
-            }
-
-            if(ListUtil.isNotEmpty(services)){
-                for(ExecutorServices s:services){
-                    s.execute();
+                    }.execute();
                 }
             }
         }catch (Exception e){
@@ -1275,6 +1262,70 @@ public class HzPbomServiceImpl implements HzPbomService {
             return WriteResultRespDTO.getFailResult();
         }
         return WriteResultRespDTO.getSuccessResult();
+    }
+
+    @Override
+    public WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO) {
+        try{
+            List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
+            HzChangeDataDetailQuery query = new HzChangeDataDetailQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuids(puids);
+            query.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+            StringBuffer deletePuids = new StringBuffer();
+            List<HzPbomLineRecord> updateRecords = new ArrayList<>();
+            List<HzPbomLineRecord> updateList = new ArrayList<>();
+            Set<HzPbomLineRecord> set = new HashSet<>();
+                List<HzPbomLineRecord> list = hzPbomRecordDAO.getPbomRecordsByPuids(query);
+                //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
+                if(ListUtil.isNotEmpty(list)){
+                    list.forEach(r->{
+                        if(1==r.getIsHas()){
+                            HzPbomTreeQuery ebomTreeQuery = new HzPbomTreeQuery();
+                            ebomTreeQuery.setProjectId(reqDTO.getProjectId());
+                            ebomTreeQuery.setPuid(r.geteBomPuid());
+                            List<HzPbomLineRecord> l = hzPbomRecordDAO.getHzPbomTree(ebomTreeQuery);
+                            if(ListUtil.isNotEmpty(l))
+                                set.addAll(l);
+                        }else {
+                            set.add(r);
+                        }
+                    });
+                }
+                if(ListUtil.isNotEmpty(set)){
+                    set.forEach(record -> {
+                        if(StringUtils.isBlank(record.getRevision())){
+                            deletePuids.append(record.getPuid()+",");
+                        }else {
+                            updateRecords.add(record);
+                        }
+                    });
+                }
+                if(ListUtil.isNotEmpty(updateRecords)){
+                    HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                    dataDetailQuery.setRevision(true);
+                    dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                    dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_BEFORE.getTableName());
+                    dataDetailQuery.setStatus(1);
+                    updateRecords.forEach(record -> {
+                        dataDetailQuery.setRevisionNo(record.getRevision());
+                        HzPbomLineRecord manageRecord = hzPbomRecordDAO.getPBomRecordByPuidAndRevision(dataDetailQuery);
+                        if(manageRecord!=null){
+                            updateList.add(HzPbomRecordFactory.bomLineRecordToBomRecord(manageRecord));
+                        }
+                    });
+                }
+                if(ListUtil.isNotEmpty(updateList)){
+                    hzPbomRecordDAO.updateList(updateList);
+                }
+                if(StringUtils.isNotBlank(deletePuids.toString())){
+                    hzPbomRecordDAO.deleteListByPuids(deletePuids.toString());
+                }
+                return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
     }
 
     /**

@@ -11,11 +11,11 @@ import lombok.Data;
 @Data
 public abstract class BaseChangeRespDTO {
     /**
-     * 变更类型
+     * 变更类型（A D U）
      */
     private String changeType;
     /**
      * 状态即将要执行的操作（A D U）  新增 删除 修改
      */
-    private String state;
+//    private String state;
 }

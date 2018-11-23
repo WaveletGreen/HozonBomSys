@@ -23,7 +23,7 @@
             '</div>';
         var dialogdHtml = '<div id="[Id]" class="modal fade" data-backdrop="static" role="dialog" aria-labelledby="modalLabel" style="margin-top: 10px;">' +
             '<div class="modal-dialog" >' +
-            '<div class="modal-content" style="'+'width:[Width]px;height:[Height]px'+';">' +
+            '<div class="modal-content" style="' + 'width:[Width]px;height:[Height]px' + ';">' +
             '<div class="modal-header">' +
             '<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>' +
             '<h4 class="modal-title" id="modalLabel">[Title]</h4>' +
@@ -91,7 +91,9 @@
                     id: id,
                     on: function (callback) {
                         if (callback && callback instanceof Function) {
-                            modal.find('.ok').click(function () { callback(true); });
+                            modal.find('.ok').click(function () {
+                                callback(true);
+                            });
                         }
                     },
                     hide: function (callback) {
@@ -112,8 +114,12 @@
                     id: id,
                     on: function (callback) {
                         if (callback && callback instanceof Function) {
-                            modal.find('.ok').click(function () { callback(true); });
-                            modal.find('.cancel').click(function () { callback(false); });
+                            modal.find('.ok').click(function () {
+                                callback(true);
+                            });
+                            modal.find('.cancel').click(function () {
+                                callback(false);
+                            });
                         }
                     },
                     hide: function (callback) {
@@ -132,15 +138,17 @@
                     width: 800,
                     height: 550,
                     gridId: '',
-                    onReady: function () { },
-                    onShown: function (e) { },
-                    onSubmit:function(){
+                    onReady: function () {
+                    },
+                    onShown: function (e) {
+                    },
+                    onSubmit: function () {
                         return false;
                     }
                 }, options || {});
                 var modalId = generateId();
                 var gridId = options.gridId;
-                options.onSubmit = function(){
+                options.onSubmit = function () {
                     return false;
                 }
 
@@ -148,9 +156,9 @@
                     return {
                         Id: modalId,
                         Title: options.title,
-                        Width : options.width,
-                        Height : options.height,
-                        ModalHeight :options.height - 130
+                        Width: options.width,
+                        Height: options.height,
+                        ModalHeight: options.height - 130
                     }[key];
                 });
                 $('body', window.top.document).append(content);
@@ -161,7 +169,7 @@
                     options.onReady.call(target);
                 target.modal();
                 target.on('shown.bs.modal', function (e) {
-                    if (options.onReady(e)){
+                    if (options.onReady(e)) {
                         options.onReady.call(target, e);
                     }
                 });
@@ -170,8 +178,60 @@
                     $('body', window.top.document).find('.modal-backdrop').remove();
                 });
                 $('body').find('.modal-backdrop').removeClass('modal-backdrop');
-                $('body', window.top.document).find('.modal-footer').find('.btn-primary').bind('click',options.onSubmit);
-               // alert($('body', window.top.document).find('.modal-footer').html())
+                $('body', window.top.document).find('.modal-footer').find('.btn-primary').bind('click', options.onSubmit);
+                // alert($('body', window.top.document).find('.modal-footer').html())
+            },
+            ///新加一个发送数据的dialog，上面那个没有数据
+            postDialog: function (options) {
+                options = $.extend({}, {
+                    title: 'title',
+                    url: '',
+                    width: 800,
+                    height: 550,
+                    gridId: '',
+                    data: {},
+                    onReady: function () {
+                    },
+                    onShown: function (e) {
+                    },
+                    onSubmit: function () {
+                        return false;
+                    }
+                }, options || {});
+                var modalId = generateId();
+                var gridId = options.gridId;
+                options.onSubmit = function () {
+                    return false;
+                }
+
+                var content = dialogdHtml.replace(reg, function (node, key) {
+                    return {
+                        Id: modalId,
+                        Title: options.title,
+                        Width: options.width,
+                        Height: options.height,
+                        ModalHeight: options.height - 130
+                    }[key];
+                });
+                $('body', window.top.document).append(content);
+                $('body', window.top.document).append("<div class='modal-backdrop fade in' ></div>");
+                var target = $('#' + modalId, window.top.document);
+                target.find('.modal-body').load(options.url, option.data);
+                if (options.onReady())
+                    options.onReady.call(target);
+                target.modal();
+                target.on('shown.bs.modal', function (e) {
+                    if (options.onReady(e)) {
+                        options.onReady.call(target, e);
+                    }
+                });
+                target.on('hide.bs.modal', function (e) {
+                    $('body', window.top.document).find(target).remove();
+                    $('body', window.top.document).find('.modal-backdrop').remove();
+                });
+                $('body').find('.modal-backdrop').removeClass('modal-backdrop');
+                $('body', window.top.document).find('.modal-footer').find('.btn-primary').bind('click', options.onSubmit);
+                // alert($('body', window.top.document).find('.modal-footer').html())
             }
         }
     }();

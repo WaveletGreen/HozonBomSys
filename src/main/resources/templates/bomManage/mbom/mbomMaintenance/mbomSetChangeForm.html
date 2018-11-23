@@ -10,7 +10,7 @@
                 <input id="puids" type="hidden" th:value="${puids}">
                 <input id="type" type="hidden" th:value="${type}">
                 <div class="form-group">
-                    <label for="stage">阶段</label>
+                    <label for="stage">选择变更表单</label>
                     <select class="form-control" id="stage" name="stage">
                         <option th:each="model:${data}"
                                 th:value="${model.getId()}"
@@ -126,18 +126,26 @@
                 success: function (result) {
                     $('.modal-dialog', window.top.document).parent('div').remove()
                     $('body', window.top.document).find('.modal-backdrop').remove();
-                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    if (type==""||type==null){
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    }
+                    else if (type==1||type=="1"){
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery1();
+                    }
+                    else if (type==6||type=="6"){
+                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery2();
+                    }
+                    // activeTabBodyRefresh();
                     // if (result.status) {
-                    if (result.status) {
-                        layer.msg(result.msg, {icon: 1, time: 2000});
+                    if (result.success) {
+                        layer.msg(result.errMsg, {icon: 1, time: 2000});
                     }
                     // window.Ewin.alert({message: result, width: 800});
                     //刷新，会重新申请数据库数据
                     // }
                     else {
-                        window.Ewin.alert({message: result.msg});
+                        window.Ewin.alert({message: result.errMsg});
                     }
-                    $table.bootstrapTable("refresh");
                 },
                 error: function (info) {
                     window.Ewin.alert({message: "操作发送失败:" + info.status});

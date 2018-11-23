@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
  * @Date: 2018/9/6
  * @Description:
  */
-public class HzBomSysFactory {
+public class HzBomSysFactory<T> {
     /**
      * 获取bom系统的层级和级别 和查找编号
      * @param lineIndex
@@ -96,4 +96,32 @@ public class HzBomSysFactory {
         return result;
     }
 
+    /**
+     * 当list.size比较大时，对list进行分割
+     * 整理为每个list 大小为1000
+     * 以map的形式返回
+     * @param list
+     * @return
+     */
+    public  Map<Integer,List<T>> spiltList(List<T> list){
+        Map<Integer,List<T>> map = new HashMap<>();
+        int size = list.size();
+        int mapIndex =1;
+        int i=0;
+        while (size>1000){
+            List<T> l = new ArrayList<>();
+            for(;i<mapIndex*1000;i++){
+                l.add(list.get(i));
+                size--;
+            }
+            map.put(mapIndex,l);
+            mapIndex++;
+        }
+        List<T> l = new ArrayList<>();
+        for(;i<list.size();i++){
+            l.add(list.get(i));
+        }
+        map.put(mapIndex,l);
+        return map;
+    }
 }

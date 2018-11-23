@@ -22,3 +22,22 @@ $(document).ready(function () {
     table +="</tr>"
     $("#changeOrderTable").html(table) ;
 })
+
+function doReturn() {
+    window.location.href="javascript:history.go(-1);"
+}
+
+$(document).ready(function () {
+    $.ajax({
+        url:"",
+        type:"",
+        success:function (result) {
+            var data = result.data;
+            var temp = "<tr>"+
+                "<td>零件号</td><td>版本</td></tr>"+
+                "<tr><td>"+data+"</td><td>"+data+"</td>" +
+            "</tr>";
+            $("#changeTCTable").html(temp);
+        }
+    })
+})

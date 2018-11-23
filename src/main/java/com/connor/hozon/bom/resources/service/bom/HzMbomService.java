@@ -89,4 +89,11 @@ public interface HzMbomService {
      * @return
      */
     WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
+
+    /**
+     * BOM数据撤销
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO);
 }

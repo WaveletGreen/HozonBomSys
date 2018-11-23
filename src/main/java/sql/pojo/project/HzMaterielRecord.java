@@ -6,6 +6,8 @@
 
 package sql.pojo.project;
 
+import sql.pojo.BaseChangePOJO;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -15,7 +17,7 @@ import java.util.Objects;
  * @Date: Created in 2018/10/10 13:29
  * @Modified By:
  */
-public class HzMaterielRecord {
+public class HzMaterielRecord extends BaseChangePOJO {
     /**
      * 主键id
      */
@@ -121,6 +123,9 @@ public class HzMaterielRecord {
      */
     private String resource;
 
+    /**
+     * 状态标志位（1 已生效 0 删除  2草稿状态  3废除状态 4删除状态 5草稿状态->审核中   6删除状态->审核中）
+     */
     private Integer pValidFlag;
 
     /**

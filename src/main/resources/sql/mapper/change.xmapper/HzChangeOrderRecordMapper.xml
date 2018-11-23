@@ -31,6 +31,8 @@
 
     <result column="ORIGINATOR" jdbcType="VARCHAR" property="originator" />
 
+    <result column="PROJECT_NAME" jdbcType="VARCHAR" property="projectName" />
+
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -38,8 +40,6 @@
     CHANGE_TYPE, HAS_RELATED_CHANGE, RELATION_CHANGE_NO, MARKET_TYPE, PROJECT_STAGE, 
     REMARK, STATE, UPDATE_TIME, UPDATE_ID, PROJECT_ID, DEPT_ID,IS_FROM_TC,CREATE_NAME_TC,DEPT_NAME_TC
   </sql>
-
-
 
   <!--insert-->
   <insert id="HzChangeOrderDAOImpl_insert" parameterType="sql.pojo.change.HzChangeOrderRecord">
@@ -103,14 +103,104 @@
     where ID = #{id,jdbcType=DOUBLE}
   </delete>
 
-
-
 <!--select-->
   <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordById" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from HZ_CHANGE_ORDER_RECORD
-    where ID = #{id,jdbcType=DOUBLE}
+       SELECT
+        t1.*, t2.user_name as CREATE_NAME,
+        t3.user_name as ORIGINATOR,
+        t4. NAME as DEPT_NAME
+    FROM
+        HZ_CHANGE_ORDER_RECORD t1
+    LEFT JOIN USERRECORD t2 ON t1.create_ID = t2. ID
+    LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+    LEFT JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
+    where t1.ID = #{id,jdbcType=DOUBLE}
+  </select>
+
+  <!--<select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds" parameterType="java.util.Map" resultMap="BaseResultMap">-->
+    <!--select-->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from HZ_CHANGE_ORDER_RECORD-->
+    <!--where ID = #{id,jdbcType=DOUBLE}-->
+    <!--and PROJECT_ID = #{projectId,jdbcType=VARCHAR}-->
+  <!--</select>-->
+
+
+    <!--待办事项列表从TC同步的数据-->
+    <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIdsTC" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select * FROM
+        (SELECT u.*,rownum as rn from
+        (SELECT
+        t1.*,
+        t5.p_project_name as PROJECT_NAME
+        FROM
+        HZ_CHANGE_ORDER_RECORD t1
+        LEFT JOIN HZ_PROJECT_LIBS t5 ON t1.project_id = t5. PUID
+        <where>
+            1=1
+            <if test="id != null">
+                and t1.ID = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="changeNo != null and changeNo!=''">
+                and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
+            </if>
+            <if test="originator != null and originator!=''">
+                and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+            </if>
+            <if test="projectId != null">
+                and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+            <!--发起时间比较-->
+            <if test="firstOriginTime != null and firstOriginTime !=''">
+                <!--and (ORIGIN_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+                and (t1.ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+                and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+            </if>
+            )u
+            )
+        </where>
+        <!--WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}-->
+    </select>
+
+    <!--待办事项列表-->
+  <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * FROM
+    (SELECT u.*,rownum as rn from
+    (SELECT
+    t1.*, T2.USER_NAME as CREATE_NAME,
+    t3.USER_NAME as ORIGINATOR,
+    t4. NAME as DEPT_NAME,
+    t5.p_project_name as PROJECT_NAME
+    FROM
+    HZ_CHANGE_ORDER_RECORD t1
+    LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
+    LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+    LEFT JOIN HZ_PROJECT_LIBS t5 ON t1.project_id = t5. PUID
+    JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
+    <where>
+      1=1
+      <if test="id != null">
+      and t1.ID = #{id,jdbcType=INTEGER}
+      </if>
+      <if test="changeNo != null and changeNo!=''">
+      and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
+      </if>
+      <if test="originator != null and originator!=''">
+      and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+      </if>
+      <if test="projectId != null">
+        and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
+      <!--发起时间比较-->
+      <if test="firstOriginTime != null and firstOriginTime !=''">
+      <!--and (ORIGIN_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+      and (t1.ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+      and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+      </if>
+      )u
+      )
+    </where>
+    <!--WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}-->
   </select>
 
 
@@ -121,36 +211,81 @@
         where CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
     </select>
 
+    <!--我的申请分页-->
+    <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByPageId" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select * FROM
+        (SELECT u.*,rownum as rn from
+        (SELECT
+        t1.*, T2.USER_NAME as CREATE_NAME,
+        t3.USER_NAME as ORIGINATOR,
+        t4. NAME as DEPT_NAME,
+        t5.p_project_name as PROJECT_NAME
+        FROM
+        HZ_CHANGE_ORDER_RECORD t1
+        LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
+        LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+        LEFT JOIN HZ_PROJECT_LIBS t5 ON t1.project_id = t5. PUID
+        JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
+        <where>
+            1=1
+            and t1.ID in (select
+            DISTINCT
+            ORDER_ID
+            from HZ_APPLICANT_CHANGE_RECORD
+            where 1=1
+            and APPLICANT_ID =#{id,jdbcType=INTEGER})
+
+            <if test="changeNo != null and changeNo!=''">
+                and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
+            </if>
+            <if test="originator != null and originator!=''">
+                and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+            </if>
+            <if test="projectId != null">
+                and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+            <!--发起时间比较-->
+            <if test="firstOriginTime != null and firstOriginTime !=''">
+                <!--and (ORIGIN_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+                and (t1.ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+                and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+            </if>
+            )u
+        </where>
+        WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+    </select>
+
+    <!--我的申请记录count-->
+    <select id="HzChangeOrderDAOImpl_findApplicantTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        SELECT count(*) from (
+        select
+        DISTINCT
+        ORDER_ID
+        from HZ_APPLICANT_CHANGE_RECORD
+        where 1=1
+        and APPLICANT_ID =#{id,jdbcType=INTEGER}
+        )
+    </select>
+
 
   <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     select * FROM
     (SELECT u.*,rownum as rn from
-    (SELECT
-        t1.*, T2.USER_NAME as CREATE_NAME,
-        t3.USER_NAME as ORIGINATOR,
-        t4. NAME as DEPT_NAME
+    (SELECT t1.*
     FROM
         HZ_CHANGE_ORDER_RECORD t1
-    LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
-    LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
-    JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
     <where>
       1=1
       <if test="projectId != null">
         and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
       </if>
-      <if test="changeNo != null">
+      <if test="changeNo != null and changeNo !=''">
         and t1.CHANGE_NO=#{changeNo,jdbcType=VARCHAR}
-      </if>
-      <if test="createName != null">
-        and t2.user_name = #{createName,jdbcType=VARCHAR}
-      </if>
-      <if test="originator != null and isHas==1">
-        and t3.user_name = #{originator,jdbcType=VARCHAR}
       </if>
       <if test="state != null" >
         and t1.STATE=#{state,jdbcType=INTEGER}
       </if>
+      order by t1.CREATE_TIME desc
       )u
     </where>
     WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -161,22 +296,13 @@
    SELECT count(*)
     FROM
     HZ_CHANGE_ORDER_RECORD t1
-    LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
-    left JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
-    JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
     <where>
       1=1
       <if test="projectId != null">
         and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
       </if>
-      <if test="changeNo != null">
+      <if test="changeNo != null and changeNo !=''">
         and t1.CHANGE_NO=#{changeNo,jdbcType=VARCHAR}
-      </if>
-      <if test="createName != null">
-        and t2.user_name = #{createName,jdbcType=VARCHAR}
-      </if>
-      <if test="originator != null and isHas==1">
-        and t3.user_name = #{originator,jdbcType=VARCHAR}
       </if>
       <if test="state != null" >
         and t1.STATE=#{state,jdbcType=INTEGER}

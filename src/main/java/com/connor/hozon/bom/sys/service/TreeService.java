@@ -53,4 +53,6 @@ public class TreeService extends GenericService<Tree, QueryTree> {
 	public List<Tree> loadUserTree(User user){
 		return treeDao.loadUserTree(user);
 	}
+
+
 }

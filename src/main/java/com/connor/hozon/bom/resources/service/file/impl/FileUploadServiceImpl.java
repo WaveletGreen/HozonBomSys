@@ -68,10 +68,6 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public WriteResultRespDTO uploadEbomToDB(MultipartFile file, String projectId) {
         try {
-            //判断权限
-            if(!PrivilegeUtil.writePrivilege()){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
             //判断文件格式
             boolean preCheck = ExcelUtil.preReadCheck(file.getOriginalFilename());
             if(!preCheck){

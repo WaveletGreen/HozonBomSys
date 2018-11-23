@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
  */
 public class StringUtil {
 
-    public static boolean isEmpty(String input) {
-        return input == null || input.trim().isEmpty();
+    public static boolean isEmpty(String str) {
+        return str == null || str.trim().isEmpty();
     }
 
 }

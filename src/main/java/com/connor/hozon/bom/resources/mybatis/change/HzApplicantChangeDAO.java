@@ -2,6 +2,8 @@ package com.connor.hozon.bom.resources.mybatis.change;
 
 import sql.pojo.change.HzApplicantChangeRecord;
 
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/11/14
@@ -14,4 +16,7 @@ public interface HzApplicantChangeDAO {
      * @return
      */
     int insert(HzApplicantChangeRecord record);
+
+    //我的申请
+    List<HzApplicantChangeRecord> findApplicantionList(HzApplicantChangeRecord record);
 }

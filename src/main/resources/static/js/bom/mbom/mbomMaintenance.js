@@ -212,6 +212,10 @@ function initTable1(mBomUrl) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
@@ -237,6 +241,10 @@ function initTable1(mBomUrl) {
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -274,6 +282,69 @@ function initTable1(mBomUrl) {
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: "操作失败:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
+                        text: '撤销',
+                        iconCls: 'glyphicon glyphicon-share-alt',
+                        handler: function () {
+                            var rows = $mBomTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "mbom/cancel",
+                                        data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            // if (result.status) {
+                                            //     window.Ewin.alert({message: result.errMsg});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({messabge: + result.errMsg});
+                                            // }
+                                            if (result.success) {
+                                                layer.msg('撤销成功', {icon: 1, time: 2000})
+                                            } else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $mBomTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: ":" + info.status});
                                         }
                                     })
                                 }
@@ -477,6 +548,10 @@ function initTable1(mBomUrl) {
                             var confirm = undefined;
                             var localUrl = "";
                             var datas = null;
+                            if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
+                                return false;
+                            }
                             if (rows.length == 0) {
                                 window.Ewin.confirm({
                                     title: '提示',
@@ -549,6 +624,10 @@ function initTable1(mBomUrl) {
                             var confirm = undefined;
                             var localUrl = "";
                             var datas = null;
+                            if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
+                                return false;
+                            }
                             if (rows.length != 1) {
                                 // window.Ewin.confirm({
                                 //     title: '提示',
@@ -650,7 +729,7 @@ function initTable1(mBomUrl) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
@@ -671,7 +750,7 @@ function initTable1(mBomUrl) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
                                                 //下载EBOM导入模板
-                                                window.location.href =  result.path;//V1.1.0.log
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
                                                 window.Ewin.alert({message: "操作导出失败:" + result.msg});
@@ -709,7 +788,7 @@ function initTable1(mBomUrl) {
                             //     "puids": puids,
                             // });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
@@ -722,7 +801,7 @@ function initTable1(mBomUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "mbom/order/choose?projectId="+projectPuid+"&puids="+puids+"&type="+0,
+                                url: "mbom/order/choose?projectId=" + projectPuid + "&puids=" + puids + "&type=" + 0,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -938,6 +1017,10 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
@@ -963,6 +1046,10 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -1000,6 +1087,69 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                                         },
                                         error: function (info) {
                                             window.Ewin.alert({message: "操作失败:" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
+                        text: '撤销',
+                        iconCls: 'glyphicon glyphicon-share-alt',
+                        handler: function () {
+                            var rows = $mBomTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "mbom/cancel",
+                                        data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            // if (result.status) {
+                                            //     window.Ewin.alert({message: result.errMsg});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({messabge: + result.errMsg});
+                                            // }
+                                            if (result.success) {
+                                                layer.msg('撤销成功', {icon: 1, time: 2000})
+                                            } else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $mBomTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: ":" + info.status});
                                         }
                                     })
                                 }
@@ -1203,6 +1353,10 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             var confirm = undefined;
                             var localUrl = "";
                             var datas = null;
+                            if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
+                                return false;
+                            }
                             if (rows.length == 0) {
                                 window.Ewin.confirm({
                                     title: '提示',
@@ -1275,6 +1429,10 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             var confirm = undefined;
                             var localUrl = "";
                             var datas = null;
+                            if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
+                                return false;
+                            }
                             if (rows.length != 1) {
                                 // window.Ewin.confirm({
                                 //     title: '提示',
@@ -1364,7 +1522,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
@@ -1385,7 +1543,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
                                                 //下载EBOM导入模板
-                                                window.location.href =  result.path;//V1.1.0.log
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
                                                 window.Ewin.alert({message: "操作导出失败:" + result.msg});
@@ -1423,7 +1581,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             //     "puids": puids,
                             // });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
@@ -1436,7 +1594,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "mbom/order/choose?projectId="+projectPuid+"&puids="+puids+"&type="+0,
+                                url: "mbom/order/choose?projectId=" + projectPuid + "&puids=" + puids + "&type=" + 0,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -1586,6 +1744,32 @@ function initTable2(productionUrl) {
                     }
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $productionTable.bootstrapTable({
                 url: productionUrl,
                 method: 'GET',
@@ -1622,6 +1806,10 @@ function initTable2(productionUrl) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "mbom/updateProduction?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid + "&type=" + 1,
@@ -1648,6 +1836,10 @@ function initTable2(productionUrl) {
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -1692,6 +1884,70 @@ function initTable2(productionUrl) {
                         }
                     },
                     {
+                        text: '撤销',
+                        iconCls: 'glyphicon glyphicon-share-alt',
+                        handler: function () {
+                            var rows = $productionTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                                "type": 1,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "mbom/cancel",
+                                        data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            // if (result.status) {
+                                            //     window.Ewin.alert({message: result.errMsg});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({messabge: + result.errMsg});
+                                            // }
+                                            if (result.success) {
+                                                layer.msg('撤销成功', {icon: 1, time: 2000})
+                                            } else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $productionTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: ":" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
                         text: '显示子层',
                         iconCls: 'glyphicon glyphicon-eye-open',
                         handler: function () {
@@ -1728,7 +1984,7 @@ function initTable2(productionUrl) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
@@ -1749,7 +2005,7 @@ function initTable2(productionUrl) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
                                                 //下载EBOM导入模板
-                                                window.location.href =  result.path;//V1.1.0.log
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
                                                 window.Ewin.alert({message: "操作导出失败:" + result.msg});
@@ -1787,7 +2043,7 @@ function initTable2(productionUrl) {
                             //     "puids": puids,
                             // });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
@@ -1800,7 +2056,7 @@ function initTable2(productionUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "mbom/order/choose?projectId="+projectId+"&puids="+puids+"&type="+1,
+                                url: "mbom/order/choose?projectId=" + projectId + "&puids=" + puids + "&type=" + 1,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -1923,6 +2179,32 @@ function initTable22(productionUrl, lineIds, colorIds) {
                     }
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $productionTable.bootstrapTable({
                 url: productionUrl + "&colorIds=" + colorIds + "&eBomPuids=" + lineIds + "&showBomStructure=1",
                 method: 'GET',
@@ -1959,6 +2241,10 @@ function initTable22(productionUrl, lineIds, colorIds) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "mbom/updateProduction?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid + "&type=" + 1,
@@ -1985,6 +2271,10 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -2029,6 +2319,70 @@ function initTable22(productionUrl, lineIds, colorIds) {
                         }
                     },
                     {
+                        text: '撤销',
+                        iconCls: 'glyphicon glyphicon-share-alt',
+                        handler: function () {
+                            var rows = $productionTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                                "type": 1,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "mbom/cancel",
+                                        data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            // if (result.status) {
+                                            //     window.Ewin.alert({message: result.errMsg});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({messabge: + result.errMsg});
+                                            // }
+                                            if (result.success) {
+                                                layer.msg('撤销成功', {icon: 1, time: 2000})
+                                            } else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $productionTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: ":" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
                         text: '取消显示子层',
                         iconCls: 'glyphicon glyphicon-eye-open',
                         handler: function () {
@@ -2053,7 +2407,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
@@ -2074,7 +2428,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
                                                 //下载EBOM导入模板
-                                                window.location.href =  result.path;//V1.1.0.log
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
                                                 window.Ewin.alert({message: "操作导出失败:" + result.msg});
@@ -2112,7 +2466,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             //     "puids": puids,
                             // });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
@@ -2125,7 +2479,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "mbom/order/choose?projectId="+projectId+"&puids="+puids+"&type="+1,
+                                url: "mbom/order/choose?projectId=" + projectId + "&puids=" + puids + "&type=" + 1,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -2274,6 +2628,32 @@ function initTable3(financialUrl) {
                     }
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $financialTable.bootstrapTable({
                 url: financialUrl,
                 method: 'GET',
@@ -2310,6 +2690,10 @@ function initTable3(financialUrl) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "mbom/updateFinancial?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid + "&type=" + 6,
@@ -2336,6 +2720,10 @@ function initTable3(financialUrl) {
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -2380,6 +2768,70 @@ function initTable3(financialUrl) {
                         }
                     },
                     {
+                        text: '撤销',
+                        iconCls: 'glyphicon glyphicon-share-alt',
+                        handler: function () {
+                            var rows = $financialTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                                "type": 6,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "mbom/cancel",
+                                        data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            // if (result.status) {
+                                            //     window.Ewin.alert({message: result.errMsg});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({messabge: + result.errMsg});
+                                            // }
+                                            if (result.success) {
+                                                layer.msg('撤销成功', {icon: 1, time: 2000})
+                                            } else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $financialTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: ":" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
                         text: '显示子层',
                         iconCls: 'glyphicon glyphicon-eye-open',
                         handler: function () {
@@ -2416,7 +2868,7 @@ function initTable3(financialUrl) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
@@ -2437,7 +2889,7 @@ function initTable3(financialUrl) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
                                                 //下载EBOM导入模板
-                                                window.location.href =  result.path;//V1.1.0.log
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
                                                 window.Ewin.alert({message: "操作导出失败:" + result.msg});
@@ -2474,7 +2926,7 @@ function initTable3(financialUrl) {
                             //     "puids": puids,
                             // });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
@@ -2487,7 +2939,7 @@ function initTable3(financialUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "mbom/order/choose?projectId="+projectId+"&puids="+puids+"&type="+6,
+                                url: "mbom/order/choose?projectId=" + projectId + "&puids=" + puids + "&type=" + 6,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -2611,6 +3063,32 @@ function initTable33(financialUrl, lineIds, colorIds) {
                     }
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $financialTable.bootstrapTable({
                 url: financialUrl + "&colorIds=" + colorIds + "&eBomPuids=" + lineIds + "&showBomStructure=1",
                 method: 'GET',
@@ -2652,6 +3130,10 @@ function initTable33(financialUrl, lineIds, colorIds) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "mbom/updateFinancial?projectId=" + projectId + "&eBomPuid=" + rows[0].eBomPuid + "&type=" + 6,
@@ -2678,6 +3160,10 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
                             var _table = '<p>是否要删除您所选择的记录？</p>' +
@@ -2722,6 +3208,70 @@ function initTable33(financialUrl, lineIds, colorIds) {
                         }
                     },
                     {
+                        text: '撤销',
+                        iconCls: 'glyphicon glyphicon-share-alt',
+                        handler: function () {
+                            var rows = $financialTable.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            ;
+                            var myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puids": puids,
+                                "type": 6,
+                            });
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
+                                return false;
+                            }
+                            else {
+                                for (var i = 0; i < rows.length; i++) {
+                                    if (rows[i].status != 4 && rows[i].status != 2) {
+                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                                        return false;
+                                    }
+                                }
+                            }
+                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                            // for (var index in rows) {
+                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
+                            // }
+                            // _table += '</table></div>';
+                            window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "mbom/cancel",
+                                        data: myData,
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            // if (result.status) {
+                                            //     window.Ewin.alert({message: result.errMsg});
+                                            //     //刷新，会重新申请数据库数据
+                                            // }
+                                            // else {
+                                            //     window.Ewin.alert({messabge: + result.errMsg});
+                                            // }
+                                            if (result.success) {
+                                                layer.msg('撤销成功', {icon: 1, time: 2000})
+                                            } else if (!result.success) {
+                                                window.Ewin.alert({message: result.errMsg});
+                                            }
+                                            $financialTable.bootstrapTable("refresh");
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: ":" + info.status});
+                                        }
+                                    })
+                                }
+                            });
+                        }
+                    },
+                    {
                         text: '取消显示子层',
                         iconCls: 'glyphicon glyphicon-eye-open',
                         handler: function () {
@@ -2746,7 +3296,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
@@ -2767,7 +3317,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
 
                                                 //下载EBOM导入模板
-                                                window.location.href =  result.path;//V1.1.0.log
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
                                                 window.Ewin.alert({message: "操作导出失败:" + result.msg});
@@ -2804,7 +3354,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             //     "puids": puids,
                             // });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
@@ -2817,7 +3367,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "mbom/order/choose?projectId="+projectId+"&puids="+puids+"&type="+6,
+                                url: "mbom/order/choose?projectId=" + projectId + "&puids=" + puids + "&type=" + 6,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450

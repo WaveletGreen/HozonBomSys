@@ -2,9 +2,7 @@ package com.connor.hozon.bom.resources.controller.work;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
 
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -151,27 +149,27 @@ public class HzWorkProcessController extends BaseController {
 //        List<HzWorkProcessRespDTO> list = page.getResult();
 //        Map<String, Object> ret = new HashMap<>();
 //        List<Map<String, Object>> _list = new ArrayList<>();
-//        list.forEach(dto -> {
+//        list.forEach(ProcessReciveDto -> {
 //            Map<String, Object> _res = new HashMap<>();
-//            _res.put("No", dto.getNo());
-//            _res.put("materielId", dto.getMaterielId());
-//            _res.put("pMaterielCode", dto.getpMaterielCode());
-//            _res.put("pMaterielDesc", dto.getpMaterielDesc());
-//            _res.put("factoryCode", dto.getFactoryCode());
-//            _res.put("purpose", dto.getPurpose());
-//            _res.put("state", dto.getState());
-//            _res.put("pProcedureCode", dto.getpProcedureCode());
-//            _res.put("pWorkCode", dto.getpWorkCode());
-//            _res.put("pWorkDesc", dto.getpWorkDesc());
-//            _res.put("controlCode", dto.getControlCode());
-//            _res.put("pProcedureDesc", dto.getpProcedureDesc());
-//            _res.put("pCount", dto.getpCount());
-//            _res.put("pDirectLabor", dto.getpDirectLabor());
-//            _res.put("pIndirectLabor", dto.getpIndirectLabor());
-//            _res.put("pMachineLabor", dto.getpMachineLabor());
-//            _res.put("pBurn", dto.getpBurn());
-//            _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
-//            _res.put("pOtherCost", dto.getpOtherCost());
+//            _res.put("No", ProcessReciveDto.getNo());
+//            _res.put("materielId", ProcessReciveDto.getMaterielId());
+//            _res.put("pMaterielCode", ProcessReciveDto.getpMaterielCode());
+//            _res.put("pMaterielDesc", ProcessReciveDto.getpMaterielDesc());
+//            _res.put("factoryCode", ProcessReciveDto.getFactoryCode());
+//            _res.put("purpose", ProcessReciveDto.getPurpose());
+//            _res.put("state", ProcessReciveDto.getState());
+//            _res.put("pProcedureCode", ProcessReciveDto.getpProcedureCode());
+//            _res.put("pWorkCode", ProcessReciveDto.getpWorkCode());
+//            _res.put("pWorkDesc", ProcessReciveDto.getpWorkDesc());
+//            _res.put("controlCode", ProcessReciveDto.getControlCode());
+//            _res.put("pProcedureDesc", ProcessReciveDto.getpProcedureDesc());
+//            _res.put("pCount", ProcessReciveDto.getpCount());
+//            _res.put("pDirectLabor", ProcessReciveDto.getpDirectLabor());
+//            _res.put("pIndirectLabor", ProcessReciveDto.getpIndirectLabor());
+//            _res.put("pMachineLabor", ProcessReciveDto.getpMachineLabor());
+//            _res.put("pBurn", ProcessReciveDto.getpBurn());
+//            _res.put("pMachineMaterialLabor", ProcessReciveDto.getpMachineMaterialLabor());
+//            _res.put("pOtherCost", ProcessReciveDto.getpOtherCost());
 //
 //            _list.add(_res);
 //        });
@@ -272,6 +270,7 @@ public class HzWorkProcessController extends BaseController {
         list.forEach(dto -> {
             Map<String, Object> _res = new HashMap<>();
             _res.put("No", dto.getNo());
+            _res.put("puid",dto.getPuid());
             _res.put("materielId", dto.getMaterielId());
             _res.put("pMaterielCode", dto.getpMaterielCode());
             _res.put("pMaterielDesc", dto.getpMaterielDesc());
@@ -290,6 +289,7 @@ public class HzWorkProcessController extends BaseController {
             _res.put("pBurn", dto.getpBurn());
             _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
             _res.put("pOtherCost", dto.getpOtherCost());
+            _res.put("status",dto.getStatus());
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -405,5 +405,28 @@ public class HzWorkProcessController extends BaseController {
             model.addAttribute("puids",puids);
         }
         return "bomManage/mbom/routingData/routingSetChangeForm";
+    }
+
+    /**
+     * 工艺路线发起变更数据到变更单
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "data/change",method = RequestMethod.POST)
+    public void workProcessDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzWorkProcessService.dataToChangeOrder(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+
+    /**
+     * EBOM撤销
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "cancel",method = RequestMethod.POST)
+    public void workProcessCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzWorkProcessService.backBomUtilLastValidState(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 }

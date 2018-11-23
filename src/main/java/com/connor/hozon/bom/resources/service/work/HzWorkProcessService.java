@@ -1,8 +1,6 @@
 package com.connor.hozon.bom.resources.service.work;
 
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzProcessReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.ApplyMbomDataTOHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
@@ -64,6 +62,7 @@ public interface HzWorkProcessService {
 
     HzWorkProcessRespDTO findHzWorkProcess2(String materielId,String projectId, String procedureDesc);
 
+    @Deprecated
     WriteResultRespDTO applyMbomDataToHzMaterielOneKey(ApplyMbomDataTOHzMaterielReqDTO reqDTO);
 
     int doUpdateByBatch(Map<String,Object> map);
@@ -77,4 +76,18 @@ public interface HzWorkProcessService {
     List<String> queryProcessDesc( List<String> puidList);
 
     List<HzWorkProcedure> queryProcedures(List<HzWorkProcedure> hzWorkProcedureList);
+
+    /**
+     * 工艺路线发起流程
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
+
+    /**
+     * 数据撤销
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO);
 }

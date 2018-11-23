@@ -6,6 +6,9 @@
 <title>我的申请详情页面</title>
 </head>
 <body>
+<div class="form-group">
+    <button type="button"class="btn btn-primary"onclick="doReturn();" style="float: right">返回上一步</button>
+</div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
 <div class="panel-body" style="padding:0px;">
     <form id="basicForm" role="form" method="post" action="">
@@ -13,22 +16,23 @@
             <div class="panel-body" style="padding:0px;">
                 <div class="col-lg-12 col-md-12" style="padding:0px;">
                     <div class="col-lg-3 col-md-3">
+                        <input type="hidden" id="id" th:value="${data.id}">
                         <div class="form-group after_the">
                             <label for="ewoNo1">变更单号</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo1"
-                                   value="EC18AS00001" disabled="disabled"
+                                   th:value="${data.changeNo}" disabled="disabled"
                                    placeholder="请输入变更单号"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo2">创建时间</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo2"
-                                   disabled="disabled"
+                                   th:value="${data.createTime}" disabled="disabled"
                                    placeholder="请输入创建时间"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo3">部门</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo3"
-                                   disabled="disabled"
+                                   th:value="${data.deptName}" disabled="disabled"
                                    placeholder="请输入部门"/>
                         </div>
                     </div>
@@ -36,51 +40,60 @@
                         <div class="form-group after_the">
                             <label for="ewoNo4">发起人</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo4"
-                                   disabled="disabled"
+                                   th:value="${data.originator}" disabled="disabled"
                                    placeholder="请输入发起人"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo5">联系电话</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo5"
-                                   placeholder="请输入联系电话"/>
+                                   th:value="${data.tel}" disabled="disabled" placeholder="请输入联系电话"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo6">变更类型</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo6"
-                                   placeholder="请输入变更类型"/>
+                                   th:value="${data.changeType}" disabled="disabled" placeholder="请输入变更类型"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo7">是否关联变更</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
-                                   placeholder="请输入部门关联变更号"/>
+                                   th:value="${data.hasRelatedChange}" disabled="disabled" placeholder="请输入部门关联变更号"/>
                         </div>
                         <div class="form-group after_the">
-                            <label for="ewoNo8">上市类型</label>
-                            <select class="form-control" name="platform" id="ewoNo8" placeholder="请选择上市类型">
-                                <option>上市前</option>
-                                <option>上市后</option>
+                            <label for="marketType">上市类型</label>
+                            <!--<select class="form-control" name="platform" id="ewoNo8" placeholder="请选择上市类型">-->
+                                <!--<option>上市前</option>-->
+                                <!--<option>上市后</option>-->
+                            <!--</select>-->
+                            <select class="form-control" name="marketType" id="marketType"disabled="disabled" placeholder="请选择上市类型">
+                                <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
+                                <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
                             </select>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo9">项目所属阶段</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo9"
-                                   placeholder="请输入项目所属阶段"/>
+                                   th:value="${data.projectStage}" disabled="disabled" placeholder="请输入项目所属阶段"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo10">备注</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo10"
-                                   placeholder="请输入备注"/>
+                                   th:value="${data.remark}" disabled="disabled" placeholder="请输入备注"/>
                         </div>
                         <div class="form-group after_the">
-                            <label for="ewoNo11">变更状态</label>
-                            <select class="form-control" name="platform" id="ewoNo11" placeholder="请选择变更状态">
-                                <option>进行中</option>
-                                <option>完成</option>
-                                <option>取消</option>
+                            <label for="state">变更状态</label>
+                            <!--<select class="form-control" name="platform" id="ewoNo11" placeholder="请选择变更状态">-->
+                                <!--<option>进行中</option>-->
+                                <!--<option>完成</option>-->
+                                <!--<option>取消</option>-->
+                            <!--</select>-->
+                            <select class="form-control" name="state" id="state" placeholder="请选择变更状态"disabled="disabled">
+                                <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
+                                <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
+                                <option th:selected="${data.getState()=='取消 '?true:false}">取消</option>
                             </select>
                         </div>
                     </div>
@@ -88,6 +101,17 @@
             </div>
         </div>
     </form>
+</div>
+<h4><i class="fa fa-minus-square" aria-hidden="true">变更清单</i></h4>
+<div class="panel-body" style="padding:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="content col-lg-12 col-md-12" style="padding:0px;">
+                <table class="table table-striped tableNormalStyle" id="myApplicationTCTable">
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
 <div class="panel-body" style="padding:0px;">
@@ -106,20 +130,44 @@
         var id = $("#id").val();
         var projectId = $("#project", window.top.document).val();
         var table = "<tr>";
-        table +="<th><a href='../change/texing?projectId="+projectId+"&id="+id+"'>特性变更</a></th>";
-        table +="<th><a href=''>全BOM配置</a></th>";
-        table +="<th><a href=''>配色方案</a></th>";
-        table +="<th><a href=''>配置物料</a></th>";
-        table +="<th><a href='../change/data/ebom/page?projectId="+projectId+"&orderId="+id+"'>EBOM管理</a></th>";
-        table +="<th><a href=''>PBOM管理</a></th>";
-        table +="<th><a href=''>超级MBOM</a></th>";
-        table +="<th><a href=''>白车身生产</a></th>";
-        table +="<th><a href=''>白车身财务</a></th>";
-        table +="<th><a href=''>物料数据</a></th>";
-        table +="<th><a href=''>工艺路线</a></th>";
+        table +="<th><a href='../change/data/feature/page?orderId="+id+"'>特性变更</a></th>";
+        table +="<th><a href='../change/data/bomCfg/page?orderId="+id+"'>全BOM配置</a></th>";
+        table +="<th><a href='../change/data/modelColorCfg/page?orderId="+id+"'>配色方案</a></th>";
+        table +="<th><a href='../change/data/materielFeature/page?orderId="+id+"'>配置物料</a></th>";
+        table +="<th><a href='../change/data/ebom/page?orderId="+id+"'>EBOM管理</a></th>";
+        table +="<th><a href='../change/data/pbom/page?orderId="+id+"'>PBOM管理</a></th>";
+        table +="<th><a href='../change/data/mbom/page?orderId="+id+"'>超级MBOM</a></th>";
+        table +="<th><a href='../change/data/mbom/page?orderId="+id+"&type=1"+"'>白车身生产</a></th>";
+        table +="<th><a href='../change/data/mbom/page?orderId="+id+"&type=6"+"'>白车身财务</a></th>";
+        table +="<th><a href='../change/data/material/page?orderId="+id+"'>物料数据</a></th>";
+        table +="<th><a href='../change/data/routing/page?orderId="+id+"'>工艺路线</a></th>";
         table +="</tr>"
         $("#myApplicationFormTable").html(table) ;
     })
+    function doReturn() {
+        window.location.href="javascript:history.go(-1);"
+    }
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url:"",
+            type:"",
+            success:function (result) {
+                var data = result.data;
+                var temp = "<tr>"+
+                    "<td>零件号</td><td>版本</td></tr>"+
+                    "<tr><td>"+data+"</td><td>"+data+"</td>" +
+                    "</tr>";
+                $("#changeTCTable").html(temp);
+            }
+        })
+    })
 </script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/helper/taskHelper.js}"></script>
+<script th:src="@{/js/helper/jsonHelper.js}"></script>
+<script th:src="@{/js/helper/renderingTableColorHelper.js}"></script>
+<!--<script th:src="@{/js/myListJob/myApplication/myApplication.js}"></script>-->
 </body>
 </html>

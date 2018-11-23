@@ -1,15 +1,16 @@
 package sql.pojo.work;
 
 import io.swagger.models.auth.In;
+import sql.pojo.BaseChangePOJO;
 
 import java.util.Date;
 
 /**
  * @Author: haozt
  * @Date: 2018/6/29
- * @Description: 加工工序
+ * @Description: 工艺路线
  */
-public class HzWorkProcedure {
+public class HzWorkProcedure extends BaseChangePOJO {
     /**
      * 主键id
      */
@@ -105,6 +106,71 @@ public class HzWorkProcedure {
      * 工厂ID
      */
     private String pFactoryId;
+
+    /**
+     * 类型 （1 半成品工艺路线 2整车工艺路线）
+     */
+    private Integer pType;
+
+    /**
+     * 工厂代码
+     */
+    private String factoryCode;
+
+    /**
+     * 工作中心代码
+     */
+    private String workCenterCode;
+
+    /**
+     * 工作中心描述
+     */
+    private String workCenterDesc;
+
+    /**
+     * 是否已发送过SAP
+     */
+    private Integer isSent;
+
+    public String getFactoryCode() {
+        return factoryCode;
+    }
+
+    public void setFactoryCode(String factoryCode) {
+        this.factoryCode = factoryCode;
+    }
+
+    public String getWorkCenterCode() {
+        return workCenterCode;
+    }
+
+    public void setWorkCenterCode(String workCenterCode) {
+        this.workCenterCode = workCenterCode;
+    }
+
+    public String getWorkCenterDesc() {
+        return workCenterDesc;
+    }
+
+    public void setWorkCenterDesc(String workCenterDesc) {
+        this.workCenterDesc = workCenterDesc;
+    }
+
+    public Integer getIsSent() {
+        return isSent;
+    }
+
+    public void setIsSent(Integer isSent) {
+        this.isSent = isSent;
+    }
+
+    public Integer getpType() {
+        return pType;
+    }
+
+    public void setpType(Integer pType) {
+        this.pType = pType;
+    }
 
     public String getControlCode() {
         return controlCode;

@@ -36,11 +36,11 @@ public class ReleaseContainer implements IProcess {
      * 执行回调操作
      *
      * @param vwoId
-     * @param projectUId
+     * @param params
      * @return
      */
     @Override
-    public boolean execute(Long vwoId, String projectUId) {
-        return callBack.release(vwoId, projectUId);
+    public boolean execute(Long vwoId, Object...params) {
+        return callBack.release(vwoId, params);
     }
 }

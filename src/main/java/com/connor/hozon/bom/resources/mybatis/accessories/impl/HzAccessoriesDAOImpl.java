@@ -18,7 +18,7 @@ import java.util.Map;
  * @Date: 2018/7/16
  * @Description:
  */
-@Service("HzAccessoriesDAO")
+@Service("hzAccessoriesDAO")
 public class HzAccessoriesDAOImpl  extends BaseSQLUtil implements HzAccessoriesDAO {
     @Override
     public int insert(HzAccessoriesLib accessoriesLib) {

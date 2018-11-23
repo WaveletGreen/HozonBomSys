@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
@@ -109,6 +110,29 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     @Override
     public int delete(String puid) {
         return super.delete("HzEbomRecordDAOImpl_delete",puid);
+    }
+
+    @Override
+    public int deleteByPuids(List<String> puids) {
+        int size = puids.size();
+        Map<String,Object> m = new HashMap<>();
+        try {
+            if(size>1000){
+                HzBomSysFactory<String> factory = new HzBomSysFactory();
+                Map<Integer,List<String>> map = factory.spiltList(puids);
+                for(List<String> v:map.values()){
+                    m.put("puids",v);
+                    super.delete("HzEbomRecordDAOImpl_deleteByPuids",m);
+                }
+            }else {
+                m.put("puids",puids);
+                super.delete("HzEbomRecordDAOImpl_deleteByPuids",m);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return 1;
     }
 
     @Override
@@ -322,7 +346,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     @Override
     public HzEPLManageRecord getEBomRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
         Map<String,Object> map = new HashMap<>();
-        map.put("puids", query.getPuids());
+        map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
             map.put("revision",query.getRevision()?null:query.getRevisionNo());

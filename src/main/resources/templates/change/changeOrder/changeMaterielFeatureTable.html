@@ -7,6 +7,9 @@
 <title>配置物料特性表变更</title>
 </head>
 <body>
+<div class="form-group">
+    <button type="button"class="btn btn-primary"onclick="doReturn();" style="float: right">返回上一步</button>
+</div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">配置物料特性变更</i></h4>
 <div class="panel-body" style="padding-bottom: 0;">
     <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
@@ -93,6 +96,9 @@
 
             }
         });
+    }
+    function doReturn() {
+        window.location.href="javascript:history.go(-1);"
     }
 </script>
 </body>
