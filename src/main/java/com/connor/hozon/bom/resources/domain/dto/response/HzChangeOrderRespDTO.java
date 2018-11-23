@@ -1,7 +1,5 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
-import java.util.Date;
-
 /**
  * @Author: haozt
  * @Date: 2018/11/12
