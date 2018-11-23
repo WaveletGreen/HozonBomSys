@@ -138,4 +138,6 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     int updateStatus(List<HzCfg0Record> hzCfg0RecordListDelete);
 
     int updateListAll(List<HzCfg0Record> hzCfg0RecordListUpdata);
+
+    int updateStatusByOrderId(Long orderId, int status);
 }

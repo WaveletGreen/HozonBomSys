@@ -74,5 +74,10 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
         return baseSQLUtil.executeQueryByPass(new HzFeatureChangeBean(),records,clzName+".doSelectHasEffect");
     }
 
+    @Override
+    public int updateStatusByOrderId(Map<String, Object> map) {
+        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
 
 }

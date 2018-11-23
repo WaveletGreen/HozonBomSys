@@ -1,5 +1,15 @@
 package com.connor.hozon.bom.process.service;
 
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.process.iservice.IDataModifier;
@@ -70,6 +80,28 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     @Autowired
     private HzWorkProcedureDAO hzWorkProcedureDAO;
 
+    @Autowired
+    private IHzFeatureChangeService iHzFeatureChangeService;
+    @Autowired
+    private HzCfg0RecordDao hzCfg0RecordDao;
+
+    @Autowired
+    private HzCmcrDetailChangeDao hzCmcrDetailChangeDao;
+    @Autowired
+    private HzCmcrChangeDao hzCmcrChangeDao;
+    @Autowired
+    private HzCfg0ModelColorDao hzCfg0ModelColorDao;
+
+    @Autowired
+    private HzDMBasicChangeDao hzDMBasicChangeDao;
+    @Autowired
+    private HzDerivativeMaterielBasicDao hzDerivativeMaterielBasicDao;
+
+    @Autowired
+    private HzFullCfgMainDao hzFullCfgMainDao;
+    @Autowired
+    private HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
+
     @Override
     public void interruptionFunctionDesc() {
 
@@ -97,7 +129,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     }
 
     /**
-     * 在这里写BOM管理部分数据的发布代码
+     * 在这里写配置部分数据的发布代码
      *
      * @param orderId 变更表单的ID
      * @param params  配置参数，预留
@@ -106,6 +138,57 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      */
     @Override
     public boolean configuration(Long orderId, Object... params) {
+        //根据表单id 获取全部的变更数据
+        HzChangeDataQuery hzChangeDataQuery = new HzChangeDataQuery();
+        hzChangeDataQuery.setOrderId(orderId);
+        //项目id
+        HzChangeOrderRecord hzChangeOrderRecord = hzChangeOrderDAO.findHzChangeOrderRecordById(orderId);
+        if (hzChangeOrderRecord == null) {
+            return false;
+        }
+        String projectId = hzChangeOrderRecord.getProjectId();
+        //查询变更关系表数据
+        List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(hzChangeDataQuery);
+        if(list!=null&&list.size()>0){
+            for(HzChangeDataRecord hzChangeDataRecord : list){
+                //特性变更批准
+                if(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    //将变更数据的状态修改为以生效
+                    if(!iHzFeatureChangeService.updateStatusByOrderId(orderId,1)){
+                        return false;
+                    }
+                    //将源数据修改为已生效
+                    if(hzCfg0RecordDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                        return false;
+                    }
+                //配色方案变更批准
+                }else if(ChangeTableNameEnum.HZ_CMCR_AFTER_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    //修改配色方案变更状态为已生效
+                    if(hzCmcrChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                        return false;
+                    }
+                    if(hzCfg0ModelColorDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                        return false;
+                    }
+                //衍生物料变更批准
+                }else if(ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    if(hzDMBasicChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                        return false;
+                    }
+                    if(hzDerivativeMaterielBasicDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                        return false;
+                    }
+                //全配置变更批准
+                }else if(ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    if(hzFullCfgMainDao.updateStatusByOrderId(orderId,"已生效")<=0?true:false){
+                        return false;
+                    }
+                    if(hzFullCfgMainChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                        return false;
+                    }
+                }
+            }
+        }
         return true;
     }
 

@@ -366,7 +366,7 @@ function loadData(_projectPuid) {
                 valign:
                     'middle',
                 formatter: function (value, row, index) {
-                    if (value == 999 || "999" == value) {
+                    if (value == 1 || "1" == value) {
                         return "<span style='color: #00B83F'>已生效</span>";
                     }
                     else if (value == 0 || "0" == value) {

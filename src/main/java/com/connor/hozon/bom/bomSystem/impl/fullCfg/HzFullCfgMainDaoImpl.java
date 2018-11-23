@@ -12,6 +12,9 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: fuck
@@ -60,5 +63,13 @@ public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements
     public Long insertSeqAll(HzFullCfgMain hzFullCfgMain) {
          baseSQLUtil.executeInsert(hzFullCfgMain,clzName+".insertSeqAll");
         return hzFullCfgMain.getId();
+    }
+
+    @Override
+    public int updateStatusByOrderId(Long orderId, String stutas) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("stutas",stutas);
+        map.put("orderId",orderId);
+        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
     }
 }

@@ -190,4 +190,13 @@
         #{updater,jdbcType=VARCHAR},
         #{fmIsRelease,jdbcType=DECIMAL})
     </insert>
+
+    <update id="updateStatusByOrderId" parameterType="java.util.Map">
+        update HZ_FULL_CFG_MAIN_RECORD
+        set STATUS = #{stutas,jdbcType=VARCHAR}
+        where
+        ID in (
+          select SRC_MAIN_ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+        )
+    </update>
 </mapper>

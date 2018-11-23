@@ -12,6 +12,8 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * @Author: Fancyears·Maylos·Maywas
  * @Description: 特性变更dao
@@ -50,4 +52,6 @@ public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
     List<HzFeatureChangeBean> doQueryLastTwoChange(HzFeatureChangeBean hzFeatureChangeBean);
 
     List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records);
+
+    int updateStatusByOrderId(Map<String,Object> map);
 }

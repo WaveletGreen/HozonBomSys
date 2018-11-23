@@ -51,4 +51,12 @@ public class HzDMBasicChangeDaoImpl extends BasicDaoImpl<HzDMBasicChangeBean> im
     public List<HzDMBasicChangeBean> selectLastByPuid(List<HzComposeDelDto> delDtos) {
         return baseSQLUtil.executeQueryByPass(new HzDMBasicChangeBean(),delDtos,clz.getCanonicalName()+".selectLastByPuid");
     }
+
+    @Override
+    public int updateStatusByOrderId(Long orderId, int status) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("status",status);
+        return baseSQLUtil.executeUpdate(map,clz.getCanonicalName()+".updateStatusByOrderId");
+    }
 }

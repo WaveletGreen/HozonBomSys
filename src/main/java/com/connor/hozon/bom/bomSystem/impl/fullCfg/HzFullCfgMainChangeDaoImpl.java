@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Configuration
 public class HzFullCfgMainChangeDaoImpl  extends BasicDaoImpl<HzFullCfgMainChange> implements HzFullCfgMainChangeDao {
 
@@ -34,5 +37,13 @@ public class HzFullCfgMainChangeDaoImpl  extends BasicDaoImpl<HzFullCfgMainChang
         HzFullCfgMainChange hzFullCfgMainChange = new HzFullCfgMainChange();
         hzFullCfgMainChange.setProjectUid(projectUid);
         return baseSQLUtil.executeQueryById(hzFullCfgMainChange,clzName+"selectLastByProjectUid");
+    }
+
+    @Override
+    public int updateStatusByOrderId(Long orderId, int status) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("status",status);
+        map.put("orderId",orderId);
+        return baseSQLUtil.executeUpdate(map,clzName+"updateStatusByOrderId");
     }
 }

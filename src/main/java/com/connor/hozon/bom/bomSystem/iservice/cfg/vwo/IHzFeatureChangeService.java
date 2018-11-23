@@ -150,4 +150,6 @@ public interface IHzFeatureChangeService {
     List<HzFeatureChangeBean> doSelectCfgUidsByVwoId(Long vwoId);
 
     List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records);
+
+    boolean updateStatusByOrderId(Long orderId, int status);
 }

@@ -375,4 +375,11 @@
           #{hzComposeDelDto.basicId,jdbcType=DECIMAL}
         </foreach>
     </delete>
+
+    <update id="updateStatusByOrderId" parameterType="java.util.Map">
+        update HZ_DERIVATIVE_MATERIEL_BASIC
+        set DMB_STATUS = #{status,jdbcType=DECIMAL}
+        where
+        CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+    </update>
 </mapper>
