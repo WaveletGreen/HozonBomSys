@@ -67,16 +67,20 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
     public List<HzChangeDataRespDTO> getChangeDataHyperRecord(HzChangeDataQuery query) {
         try {
             List<HzChangeDataRecord> records = hzChangeDataRecordDAO.getChangeDataTableName(query);
-            List<HzChangeDataRespDTO> respDTOS = new ArrayList<>();
+            HzChangeDataRespDTO respDTO = new HzChangeDataRespDTO();
             if(ListUtil.isNotEmpty(records)){
-                for(HzChangeDataRecord record : records){
-                    HzChangeDataRespDTO respDTO = new HzChangeDataRespDTO();
-                    respDTO.setOrderId(record.getOrderId());
-                    respDTO.setHyperLinkName(TableNameToHyperLinkNameEnum.getHyperLinkName(record.getTableName()));
-                    respDTOS.add(respDTO);
+                List<HzChangeDataRespDTO> respDTOS = respDTO.init();
+                for(HzChangeDataRespDTO dto:respDTOS){
+                    dto.setOrderId(query.getOrderId());
+                    for(HzChangeDataRecord record : records){
+                        if(dto.getName().equals(TableNameToHyperLinkNameEnum.getHyperLinkName(record.getTableName()))){
+                            dto.setStatus(1);
+                            break;
+                        }
+                    }
                 }
+                return respDTOS;
             }
-            return respDTOS;
         }catch (Exception e){
             e.printStackTrace();
         }
