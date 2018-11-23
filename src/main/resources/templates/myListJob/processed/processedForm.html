@@ -16,6 +16,7 @@
             <div class="panel-body" style="padding:0px;">
                 <div class="col-lg-12 col-md-12" style="padding:0px;">
                     <div class="col-lg-3 col-md-3">
+                        <input id="isFromTc" type="hidden" th:value="${data.isFromTc}">
                         <input type="hidden" id="id" th:value="${data.id}">
                         <div class="form-group after_the">
                             <label for="ewoNo1">变更单号</label>
@@ -102,6 +103,7 @@
         </div>
     </form>
 </div>
+<div id="TCForm">
 <h4><i class="fa fa-minus-square" aria-hidden="true">变更清单</i></h4>
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
@@ -113,6 +115,8 @@
         </div>
     </div>
 </div>
+</div>
+<div id="BOMForm">
 <h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
@@ -123,6 +127,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">评估意见</i></h4>
 <div class="panel-body" style="padding-bottom:0;">
@@ -162,9 +167,21 @@
     </div>
 </div>
 <script th:inline="javascript">
+
     $(document).ready(function () {
         var id = $("#id").val();
+        var isFromTc = $("#isFromTc").val();
         var projectId = $("#project", window.top.document).val();
+        var TCForm = document.getElementById("TCForm");
+        var BOMForm = document.getElementById("BOMForm");
+        if (isFromTc == 0) {
+            TCForm.style.display = "none";
+            BOMForm.style.display = "block";
+        } else if (isFromTc == 1) {
+            TCForm.style.display = "block";
+            BOMForm.style.display = "none";
+        }
+
         var table = "<tr>";
         table +="<th><a href='../change/data/feature/page?orderId="+id+"'>特性变更</a></th>";
         table +="<th><a href='../change/data/bomCfg/page?orderId="+id+"'>全BOM配置</a></th>";
@@ -184,20 +201,53 @@
         window.location.href="javascript:history.go(-1);"
     }
 
-
+    var changeList = [[${changeList}]];
     $(document).ready(function () {
-        $.ajax({
-            url:"",
-            type:"",
-            success:function (result) {
-                var data = result.data;
-                var temp = "<tr>"+
-                    "<td>零件号</td><td>版本</td></tr>"+
-                    "<tr><td>"+data+"</td><td>"+data+"</td>" +
-                    "</tr>";
-                $("#changeTCTable").html(temp);
-            }
-        })
+        var $table = $("#processedTCTable");//变更清单
+        var column = [];
+        column.push({
+            field : "itemId",
+            title : "零件号",
+            align : "center",
+            valign : "middle"
+        });
+        column.push({
+            field : "itemRevision",
+            title : "版本",
+            align : "center",
+            valign : "middle"
+        });
+
+        $table.bootstrapTable({
+            method: 'GET',
+            data:changeList,
+            // dataType: 'json',
+            //cache: false,
+            // striped: true,                              //是否显示行间隔色
+            height: $(window.parent.document).find("#wrapper").height() - 250,
+            width: $(window).width(),
+            formId: 'processedTCTable',
+            undefinedText: "",//当数据为 undefined 时显示的字符
+            pagination: false,
+            //showExport: true,
+            //exportDataType: 'all',
+            columns: column,
+            toolbar: "#toolbar",
+            //sortName: 'id',
+            // sortable: true,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            clickToSelect: false,// 单击某一行的时候选中某一条记录
+            //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+            showColumns: false, //是否显示所有的列
+            // resizable:true,
+            // fixedColumns: true,
+            // fixedNumber:3,
+            showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+            showRefresh: false,                  //是否显示刷新按钮
+            //minimumCountColumns:4,
+        });
+
+        //alert(JSON.stringify(changeList));
     })
 </script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>

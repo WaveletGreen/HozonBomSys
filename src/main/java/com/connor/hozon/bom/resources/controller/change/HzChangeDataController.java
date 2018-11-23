@@ -266,7 +266,7 @@ public class HzChangeDataController extends BaseController {
         return "change/changeOrder/changeBomCfgTable";
     }
 
-    @RequestMapping(value = "data/tc",method = RequestMethod.GET)
+    @RequestMapping(value = "tc",method = RequestMethod.GET)
     public void getDataDetailForTc(String formId,HttpServletResponse response){
         if(StringUtils.isBlank(formId)){
             toJSONResponse(Result.build(false,"表单信息不能为空!"),response);

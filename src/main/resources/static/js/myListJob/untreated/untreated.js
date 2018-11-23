@@ -66,7 +66,7 @@ function initTable(url) {
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
     column.push({field: 'projectName', title: '项目', align: 'center', valign: 'middle'});
-    column.push({field: 'projectName', title: '来源', align: 'center', valign: 'middle'});
+    column.push({field: 'source', title: '来源', align: 'center', valign: 'middle'});
     $table.bootstrapTable({
         url: url,
         method: 'get',
@@ -88,6 +88,31 @@ function initTable(url) {
         striped: true,                      //是否显示行间隔色
         search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
         showColumns: false,                 //是否显示所有的列
+        toolbars: [
+            {
+                text: '修改',
+                iconCls: 'glyphicon glyphicon-pencil',
+                handler: function () {
+                    var rows = $table.bootstrapTable('getSelections');
+                    //只能选一条
+                    if (rows.length != 1) {
+                        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                        return false;
+                    }
+                    else if (rows[0].status == 5 || rows[0].status == 6) {
+                        window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                        return false;
+                    }
+                    window.Ewin.dialog({
+                        title: "修改",
+                        url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
+                        gridId: "gridId",
+                        width: 500,
+                        height: 500
+                    });
+                }
+            },
+        ],
     });
 }
 
