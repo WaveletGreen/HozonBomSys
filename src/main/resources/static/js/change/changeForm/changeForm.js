@@ -22,6 +22,12 @@ function doQuery() {
     $('#changeFormTable').bootstrapTable('destroy');
     var projectId = $("#project", window.top.document).val();
     var url = "change/order/list?projectId=" + projectId;
+    var state = $("#state").val();
+    if (state == "请选择变更单状态") {
+        url += "&state=" + "";
+    } else {
+        url += "&state=" + state;
+    }
     initTable(url);
 
 }
@@ -29,8 +35,8 @@ function doQuery() {
 function formatDate() {
     let startdate = stringToDateFormat($('#startdate').data("time"));
     let enddate = stringToDateFormat($('#enddate').data("time"));
-    $('#startdate').val(finishTime);
-    $('#enddate').val(vwoEndEffectiveTime);
+    $('#startdate').val(startdate);
+    $('#enddate').val(enddate);
 }
 
 function initTable(url) {
