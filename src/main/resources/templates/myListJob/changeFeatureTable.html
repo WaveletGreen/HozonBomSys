@@ -7,17 +7,21 @@
 <title>特性变更列表</title>
 </head>
 <body>
+<div class="form-group">
+    <button type="button"class="btn btn-primary"onclick="doReturn();" style="float: right">返回上一步</button>
+</div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">特性变更数据</i></h4>
 <div class="panel-body" style="padding-bottom: 0;">
     <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
           id="ebomChangeData">
+        <input type="hidden" id="orderId" th:value="${orderId}">
     </form>
 </div>
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="content col-lg-12 col-md-12" style="padding:0px;">
-                <table class="table table-striped tableNormalStyle" id="ebom_table">
+                <table class="table table-striped tableNormalStyle" id="feature_table">
                 </table>
             </div>
         </div>
@@ -31,57 +35,131 @@
 
     function initTable() {
         var projectPuid = $("#project", window.top.document).val();
-        var $table = $("#ebom_table");
+        var $table = $("#feature_table");
         var column = [];
-        $.ajax({
-            url: "../../../change/data/ebom/title",
-            type: "GET",
-            success: function (result) {
-                var data = result.data;
-                for (var key in data) {
-                    if (data.hasOwnProperty(key)) {
-                        var json = {
-                            field: key,
-                            title: data[key],
-                            // align: 'center',
-                            valign: 'middle',
-                        };
-                        column.push(json);
+        var orderId = $("#orderId").val();
+        // $.ajax({
+        //     url: "../../../change/data/ebom/title",
+        //     type: "GET",
+        //     success: function (result) {
+        //         var data = result.data;
+        //         for (var key in data) {
+        //             if (data.hasOwnProperty(key)) {
+        //                 var json = {
+        //                     field: key,
+        //                     title: data[key],
+        //                     // align: 'center',
+        //                     valign: 'middle',
+        //                 };
+        //                 column.push(json);
+        //             }
+        //         }
+
+        $table.bootstrapTable({
+            url: "../../../vwo/getFeatureTable?vwoId="+orderId,
+            method: 'POST',
+            dataType: 'json',
+            //cache: false,
+            // striped: true,                              //是否显示行间隔色
+            height: $(window.parent.document).find("#wrapper").height() - 150,
+            width: $(window).width(),
+            formId: 'ebomChangeData',
+            undefinedText: "",//当数据为 undefined 时显示的字符
+            pagination: false,
+            //showExport: true,
+            //exportDataType: 'all',
+            // columns: column,
+            toolbar: "#toolbar",
+            //sortName: 'id',
+            // sortable: true,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            clickToSelect: false,// 单击某一行的时候选中某一条记录
+            //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+            showColumns: false, //是否显示所有的列
+            // resizable:true,
+            // fixedColumns: true,
+            // fixedNumber:3,
+            showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+            showRefresh: false,                  //是否显示刷新按钮
+            //minimumCountColumns:4,
+            columns: [
+                {field: 'ck', checkbox: true, Width: 50},
+                {
+                    field: '',
+                    title: '序号',
+                    align: 'center',
+                    Width: 50,
+                    formatter: function (value, row, index) {
+                        var options = $table.bootstrapTable('getOptions');
+                        return options.pageSize * (options.pageNumber - 1) + index + 1;
+
+                    }
+                },
+                {
+                    field: 'headDesc',
+                    title: '变更类型',
+                },
+                {
+                    field: 'featureName',
+                    title: '特性名称',
+                },
+                {
+                    field: 'featureDesc',
+                    title: '特性描述',
+                    align: 'center',
+                    valign: 'middle',
+                },
+                {
+                    field: 'h9featureenname',
+                    title: '特性英文名称',
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
+                    field: 'featureValueName',
+                    title: '特性值/配置代码',
+                    align: 'center',
+                    valign: 'middle',
+                },
+                {
+                    field: 'featureValueDesc',
+                    title: '特性值/配置(描述)',
+                    align: 'center',
+                    valign: 'middle',
+                },
+                {
+                    field: 'cfgEffectedDate',
+                    title: '生效时间',
+                    align: 'center',
+                    valign: 'middle',
+                    //——修改——获取日期列的值进行转换
+                    formatter: function (value, row, index) {
+                        return dateToStringFormat(value)
+                    }
+                },
+                {
+                    field: 'cfgAbolishDate',
+                    title: '废止时间',
+                    align: 'center',
+                    valign: 'middle',
+                    //——修改——获取日期列的值进行转换
+                    formatter: function (value, row, index) {
+                        return dateToStringFormat(value)
                     }
                 }
-                $table.bootstrapTable({
-                    url: "../../../change/data/ebom/data?projectId="+projectPuid+"&orderId="+1,
-                    method: 'GET',
-                    dataType: 'json',
-                    //cache: false,
-                    // striped: true,                              //是否显示行间隔色
-                    height: $(window.parent.document).find("#wrapper").height() - 150,
-                    width: $(window).width(),
-                    formId: 'ebomChangeData',
-                    undefinedText: "",//当数据为 undefined 时显示的字符
-                    pagination: false,
-                    //showExport: true,
-                    //exportDataType: 'all',
-                    columns: column,
-                    toolbar: "#toolbar",
-                    //sortName: 'id',
-                    // sortable: true,                     //是否启用排序
-                    sortOrder: "asc",                   //排序方式
-                    clickToSelect: false,// 单击某一行的时候选中某一条记录
-                    //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
-                    showColumns: false, //是否显示所有的列
-                    // resizable:true,
-                    // fixedColumns: true,
-                    // fixedNumber:3,
-                    showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-                    showRefresh: false,                  //是否显示刷新按钮
-                    //minimumCountColumns:4,
-
-                });
-
-            }
+            ],
         });
+
+        //     }
+        // });
+    }
+    function doReturn() {
+        window.location.href="javascript:history.go(-1);"
     }
 </script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/helper/taskHelper.js}"></script>
+<script th:src="@{/js/helper/jsonHelper.js}"></script>
+<script th:src="@{/js/helper/renderingTableColorHelper.js}"></script>
 </body>
 </html>

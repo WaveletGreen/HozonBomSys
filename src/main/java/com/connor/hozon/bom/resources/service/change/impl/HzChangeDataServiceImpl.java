@@ -68,8 +68,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         try {
             List<HzChangeDataRecord> records = hzChangeDataRecordDAO.getChangeDataTableName(query);
             HzChangeDataRespDTO respDTO = new HzChangeDataRespDTO();
+            List<HzChangeDataRespDTO> respDTOS = respDTO.init();
             if(ListUtil.isNotEmpty(records)){
-                List<HzChangeDataRespDTO> respDTOS = respDTO.init();
                 for(HzChangeDataRespDTO dto:respDTOS){
                     dto.setOrderId(query.getOrderId());
                     for(HzChangeDataRecord record : records){
@@ -79,8 +79,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                         }
                     }
                 }
-                return respDTOS;
             }
+            return respDTOS;
         }catch (Exception e){
             e.printStackTrace();
         }
