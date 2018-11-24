@@ -23,4 +23,9 @@ public class BomBackReqDTO {
      * 类型 1生产 6财务
      */
     Integer type;
+
+    /**
+     * 表单id
+     */
+    private Long orderId;
 }

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
+import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.model.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
@@ -16,6 +17,7 @@ import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -528,5 +530,48 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
             return null;
         }
         return respDTOs;
+    }
+
+    @Override
+    public WriteResultRespDTO deleteEBOMChangeDataDetail(BomBackReqDTO reqDTO) {
+        if(StringUtils.isBlank(reqDTO.getPuids())){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+        List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
+        //删除变更后表中的数据
+        //更新原来表中的状态
+        //如果变更后表中的数据为空 则表示全部删除 这时需要清空中间表数据
+
+        return null;
+    }
+
+    @Override
+    public WriteResultRespDTO deletePBOMChangeDataDetail(BomBackReqDTO reqDTO) {
+        return null;
+    }
+
+    @Override
+    public WriteResultRespDTO deleteMBOMChangeDataDetail(BomBackReqDTO reqDTO) {
+        return null;
+    }
+
+    @Override
+    public WriteResultRespDTO deleteFinanceMBOMChangeDataDetail(BomBackReqDTO reqDTO) {
+        return null;
+    }
+
+    @Override
+    public WriteResultRespDTO deleteProductMBOMChangeDataDetail(BomBackReqDTO reqDTO) {
+        return null;
+    }
+
+    @Override
+    public WriteResultRespDTO deleteMaterielChangeDataDetail(BomBackReqDTO reqDTO) {
+        return null;
+    }
+
+    @Override
+    public WriteResultRespDTO deleteWorkProcedureChangeDataDetail(BomBackReqDTO reqDTO) {
+        return null;
     }
 }
