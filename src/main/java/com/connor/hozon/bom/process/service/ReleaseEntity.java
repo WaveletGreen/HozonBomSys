@@ -161,44 +161,41 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
         String projectId = hzChangeOrderRecord.getProjectId();
         //查询变更关系表数据
         List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(hzChangeDataQuery);
-        if (list != null && list.size() > 0) {
-            for (HzChangeDataRecord hzChangeDataRecord : list) {
+        if(list!=null&&list.size()>0){
+            for(HzChangeDataRecord hzChangeDataRecord : list){
                 //特性变更批准
-                if (ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName().equals(hzChangeDataRecord.getTableName())) {
+                if(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName().equals(hzChangeDataRecord.getTableName())){
                     //将变更数据的状态修改为以生效
-                    if (!iHzFeatureChangeService.updateStatusByOrderId(orderId, 1)) {
+                    if(!iHzFeatureChangeService.updateStatusByOrderId(orderId,1)){
                         return false;
                     }
                     //将源数据修改为已生效
-                    if (hzCfg0RecordDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                    if(hzCfg0RecordDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
-                    //配色方案变更批准
-                } else if (ChangeTableNameEnum.HZ_CMCR_AFTER_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())) {
+                //配色方案变更批准
+                }else if(ChangeTableNameEnum.HZ_CMCR_AFTER_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
                     //修改配色方案变更状态为已生效
-                    if (hzCmcrChangeDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                    if(hzCmcrChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
-                    if (hzCfg0ModelColorDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                    if(hzCfg0ModelColorDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
-                    //衍生物料变更批准
-                } else if (ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())) {
-                    if (hzDMBasicChangeDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                //衍生物料变更批准
+                }else if(ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    if(hzDMBasicChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
-                    if (hzDerivativeMaterielBasicDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                    if(hzDerivativeMaterielBasicDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
-                    //全配置变更批准
-                } else if (ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())) {
-                    if (hzFullCfgMainDao.updateStatusByOrderId(orderId, "已生效") <= 0 ? true : false) {
                 //全配置变更批准
                 }else if(ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
                     if(hzFullCfgMainDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
-                    if (hzFullCfgMainChangeDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                    if(hzFullCfgMainChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
                 }
