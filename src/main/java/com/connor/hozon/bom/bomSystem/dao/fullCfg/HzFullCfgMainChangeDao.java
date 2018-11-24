@@ -17,4 +17,6 @@ public interface HzFullCfgMainChangeDao {
     HzFullCfgMainChange selectLastByProjectUid(String projectUid);
 
     int updateStatusByOrderId(Long orderId, int status);
+
+    int deleteById(Long mainId);
 }

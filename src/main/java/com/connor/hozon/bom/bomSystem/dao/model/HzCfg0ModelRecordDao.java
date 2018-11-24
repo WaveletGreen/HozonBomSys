@@ -57,4 +57,5 @@ public interface HzCfg0ModelRecordDao extends BasicDao<HzCfg0ModelRecord> {
     int deleteModelById(String puid);
 
     List<HzCfg0ModelRecord> selectByFullCfgModel(Integer orderChangeId);
+
 }

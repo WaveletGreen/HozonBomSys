@@ -20,6 +20,10 @@ import java.util.Date;
 @Data
 public class HzVwoFeatureTableDto {
     /**
+     *变更ID
+     */
+    private Long id;
+    /**
      * 特性名称
      */
     private String featureName;
@@ -62,5 +66,6 @@ public class HzVwoFeatureTableDto {
         this.cfgEffectedDate = bean.getCfgEffectedDate();
         this.cfgAbolishDate = bean.getCfgAbolishDate();
         this.headDesc = bean.getHeadDesc();
+        this.id = bean.getId();
     }
 }

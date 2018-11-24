@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -345,6 +342,16 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         return true;
     }
 
+    @Override
+    public int doDeleteByPrimaryKeys(List<Long> changeFeatureIds) {
+        return hzFeatureChangeDao.doDeleteByPrimaryKeys(changeFeatureIds);
+    }
+
+    @Override
+    public List<HzFeatureChangeBean> doselectByChangeId(Long orderId) {
+        return hzFeatureChangeDao.doselectByChangeId(orderId);
+    }
+
     /**
      * 查询变更前的数据和当前数据
      * @param cfgPuid
@@ -355,6 +362,12 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         HzFeatureChangeBean hzFeatureChangeBean = new HzFeatureChangeBean();
         hzFeatureChangeBean.setCfgPuid(cfgPuid);
         hzFeatureChangeBean.setVwoId(vwoId);
-        return hzFeatureChangeDao.doQueryLastTwoChange(hzFeatureChangeBean);
+        HzFeatureChangeBean hzFeatureChangeBeanBefor = hzFeatureChangeDao.selectLast(hzFeatureChangeBean);
+        HzFeatureChangeBean hzFeatureChangeBeanAfter = hzFeatureChangeDao.selectByChangeIdAndCfgid(hzFeatureChangeBean);
+        List<HzFeatureChangeBean> hzFeatureChangeBeans = new ArrayList<>();
+        hzFeatureChangeBeans.add(hzFeatureChangeBeanBefor);
+        hzFeatureChangeBeans.add(hzFeatureChangeBeanAfter);
+        return hzFeatureChangeBeans;
+//        return hzFeatureChangeDao.doQueryLastTwoChange(hzFeatureChangeBean);
     }
 }

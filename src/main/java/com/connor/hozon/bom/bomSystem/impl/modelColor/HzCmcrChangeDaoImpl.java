@@ -238,6 +238,11 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     }
 
     @Override
+    public int doDeleteIds(List<Long> changeColorModelIds) {
+        return baseSQLUtil.executeDelete(changeColorModelIds,clzName+".doDeleteIds");
+    }
+
+    @Override
     public List<HzCmcrChange> selectLastAfter(List<HzCmcrChange> hzCmcrChangesLastAfter) throws Exception{
         preSetAfterList(hzCmcrChangesLastAfter);
         return executeSelectLast(hzCmcrChangesLastAfter, "selectLastAfter");

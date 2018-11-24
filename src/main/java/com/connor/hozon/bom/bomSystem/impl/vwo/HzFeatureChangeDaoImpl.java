@@ -80,5 +80,25 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
         return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
     }
 
+    @Override
+    public int doDeleteByPrimaryKeys(List<Long> changeFeatureIds) {
+        return baseSQLUtil.executeDelete(changeFeatureIds,clzName+".doDeleteByPrimaryKeys");
+    }
+
+    @Override
+    public HzFeatureChangeBean selectLast(HzFeatureChangeBean hzFeatureChangeBean) {
+        return baseSQLUtil.executeQueryById(hzFeatureChangeBean,clzName+".selectLast");
+    }
+
+    @Override
+    public HzFeatureChangeBean selectByChangeIdAndCfgid(HzFeatureChangeBean hzFeatureChangeBean) {
+        return baseSQLUtil.executeQueryById(hzFeatureChangeBean,clzName+".selectByChangeIdAndCfgid");
+    }
+
+    @Override
+    public List<HzFeatureChangeBean> doselectByChangeId(Long orderId) {
+        return baseSQLUtil.executeQueryByPass(new HzFeatureChangeBean(),orderId,clzName+".doselectByChangeId");
+    }
+
 
 }

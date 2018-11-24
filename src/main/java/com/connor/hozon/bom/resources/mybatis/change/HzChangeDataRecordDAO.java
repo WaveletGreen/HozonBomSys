@@ -34,4 +34,6 @@ public interface HzChangeDataRecordDAO {
 
 
     List<String> getChangeDataPuids(HzChangeDataQuery query);
+
+    int deleteByOrderIdAndTableName(HzChangeDataRecord hzChangeDataRecord);
 }
