@@ -80,5 +80,10 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
         return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
     }
 
+    @Override
+    public int doDeleteByPrimaryKeys(List<Long> changeFeatureIds) {
+        return baseSQLUtil.executeDelete(changeFeatureIds,clzName+".doDeleteByPrimaryKeys");
+    }
+
 
 }

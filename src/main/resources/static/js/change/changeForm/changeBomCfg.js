@@ -6,6 +6,8 @@ function loadTable(result) {
     var withCfgResult = result.withCfgResult;
     var pointResult = result.pointResult;
 
+    mainId = mainResult.mainId;
+
     var rowCount = 10;
 
     $table.html("");
@@ -121,4 +123,24 @@ function modelAppend(index,data) {
         tdStr += "<td style='text-align: center;background:#b7bc31' class='edit'>" + data[i] + "</td>";
     }
     $("#tr"+index).append(tdStr);
+}
+
+
+function deleteBom(){
+    $.ajax({
+        type: "POST",
+        url: "/hozon/vwo/deleteChangeBomAll?mainId="+mainId,
+        contentType: "application/json",
+        success: function (result) {
+            if (result.status) {
+                layer.msg('删除成功', {icon: 1, time: 2000})
+            } else if (!result.status) {
+                window.Ewin.alert({message: result.msg});
+            }
+            $table.bootstrapTable("refresh");
+        },
+        error: function (info) {
+            window.Ewin.alert({message: "操作失败:" + info.status});
+        }
+    })
 }

@@ -46,4 +46,9 @@ public class HzFullCfgMainChangeDaoImpl  extends BasicDaoImpl<HzFullCfgMainChang
         map.put("orderId",orderId);
         return baseSQLUtil.executeUpdate(map,clzName+"updateStatusByOrderId");
     }
+
+    @Override
+    public int deleteById(Long mainId) {
+        return baseSQLUtil.executeDelete(mainId,clzName+"deleteById");
+    }
 }

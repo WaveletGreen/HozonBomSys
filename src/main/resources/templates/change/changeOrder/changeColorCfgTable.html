@@ -129,24 +129,17 @@
                                     window.Ewin.alert({message: '请至少一条需要删除的数据!'});
                                     return false;
                                 }
-                                // else if (rows[0].status == 5 || rows[0].status == 6) {
-                                //     window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
-                                //     return false;
-                                // }
-
-                                // var _table = '<p>是否要删除您所选择的记录？</p>' +
-                                //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                                // for (var index in rows) {
-                                //     _table += '<tr><td>' + rows[index].pMaterielCode + '</td></tr>';
-                                // }
-                                // _table += '</table></div>';
+                                var ids = [];
+                                for(let i in rows){
+                                    ids.push(rows[i].id);
+                                }
                                 window.Ewin.confirm({title: '提示', message: '确定要删除数据吗?', width: 500}).on(function (e) {
                                     if (e) {
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "" ,
-                                            //data: JSON.stringify(rows),
+                                            url: "/hozon/vwo/deleteChangeColorModel" ,
+                                            data: JSON.stringify(ids),
                                             contentType: "application/json",
                                             success: function (result) {
                                                 if (result.success) {

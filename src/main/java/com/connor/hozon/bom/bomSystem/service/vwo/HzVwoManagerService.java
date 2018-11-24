@@ -7,8 +7,10 @@
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
 import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMDetailChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao;
@@ -107,6 +109,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     @Autowired
     IHzFeatureChangeService iHzFeatureChangeService;
 
+    @Autowired
+    HzCfg0RecordDao hzCfg0RecordDao;
     /**
      * 成员所在组
      */
@@ -198,6 +202,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     //超级物料
     @Autowired
     HzSuperMaterielService hzSuperMaterielService;
+
+    @Autowired
+    HzDerivativeMaterielBasicDao hzDerivativeMaterielBasicDao;
 
 
     /*****全配置BOM的DAO******/
@@ -409,6 +416,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                         hzFeatureChangeBeanAfter.setCfg0MainItemPuid(hzCfg0Record.getpCfg0MainItemPuid());
                         hzFeatureChangeBeanAfter.setFeatureValueName(hzCfg0Record.getpCfg0ObjectId());
                         hzFeatureChangeBeanAfter.setCfgPuid(hzCfg0Record.getPuid());
+                        hzFeatureChangeBeanAfter.setCfgStatus(1);
                         hzFeatureChangeBeanListAfter.add(hzFeatureChangeBeanAfter);
                     }
                     //根据源数据生成变更后的数据
@@ -2539,10 +2547,12 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             beforMap.put("codeOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod() == null ? "" : hzCmcrChangeListBefor.get(i).getCmcrSrcCodeOfColorMod());
             beforMap.put("descOfColorModel",hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod() == null ? "" : hzCmcrChangeListBefor.get(i).getCmcrSrcDescOfColorMod());
             beforMap.put("modelShell",hzCmcrChangeListBefor.get(i).getCmcrCgShellCode() == null ? "" : hzCmcrChangeListBefor.get(i).getCmcrCgShellCode());
+            beforMap.put("id",hzCmcrChangeListBefor.get(i).getCmcrCgId() == null ? "" : String.valueOf(hzCmcrChangeListBefor.get(i).getCmcrCgId()));
             //变更后主数据
             afterMap.put("codeOfColorModel",hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcCodeOfColorMod());
             afterMap.put("descOfColorModel",hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrSrcDescOfColorMod());
             afterMap.put("modelShell",hzCmcrChangeListAfter.get(i).getCmcrCgShellCode() == null ? "-" : hzCmcrChangeListAfter.get(i).getCmcrCgShellCode());
+            afterMap.put("id",hzCmcrChangeListAfter.get(i).getCmcrCgId() == null ? "-" : String.valueOf(hzCmcrChangeListAfter.get(i).getCmcrCgId()));
             //根据变更前主数据id从srcPuidBeforMap中获取变更前从数据
             String srcPuid = hzCmcrChangeListAfter.get(i).getCmcrSrcPuid();
             List<HzCmcrDetailChange> hzCmcrDetailChangesBefor = srcPuidBeforMap.get(srcPuid);
@@ -2640,6 +2650,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             }
         }
         //变更后
+        if(hzDMDetailChangeBeansAfter==null||hzDMDetailChangeBeansAfter.size()<=0){
+            return map;
+        }
         for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansAfter){
             titleSet.add(hzDMDetailChangeBean.getTitle());
         }
@@ -2844,6 +2857,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChangesAfter = null;
 
         hzFullCfgMainChangeAfter = hzFullCfgMainChangeDao.selectByChangeId(orderChangeId);
+        if(hzFullCfgMainChangeAfter==null){
+            return resultMap;
+        }
         hzFullCfgModelChangesAfter = hzFullCfgModelChangeDao.selectByMainId(hzFullCfgMainChangeAfter.getId());
         hzFullCfgWithCfgChangesAfter = hzFullCfgWithCfgChangeDao.selectByMainId(hzFullCfgMainChangeAfter.getId());
         /********初始化车型模型数据************/
@@ -2872,6 +2888,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             mainMap.put("stage",hzFullCfgMainChangeAfter.getStageString()+"("+hzFullCfgMainChangeBefor.getStageString()+")");
             mainMap.put("version",hzFullCfgMainChangeAfter.getVersion()+"("+hzFullCfgMainChangeBefor.getVersion()+")");
             mainMap.put("effectiveDate",hzFullCfgMainChangeAfter.getEffectiveDate()+"("+hzFullCfgMainChangeBefor.getEffectiveDate()+")");
+            mainMap.put("mainId",String.valueOf(hzFullCfgMainChangeAfter.getId()));
          /***********整理车辆模型数据**************/
             //查询变更前后存在的车辆模型
             List<HzCfg0ModelRecord> hzCfg0ModelRecordsBefor =hzCfg0ModelRecordDao.selectByFullCfgModel(hzFullCfgMainChangeBefor.getId());
@@ -3174,6 +3191,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 mainMap.put("stage",hzFullCfgMainChangeAfter.getStageString()+"()");
                 mainMap.put("version",hzFullCfgMainChangeAfter.getVersion()+"()");
                 mainMap.put("effectiveDate",hzFullCfgMainChangeAfter.getEffectiveDate()+"()");
+                mainMap.put("mainId",String.valueOf(hzFullCfgMainChangeAfter.getId()));
                 /***********整理车辆模型数据**************/
                 //查询变更前存在的车辆模型
                 List<HzCfg0ModelRecord> hzCfg0ModelRecordsAfter =hzCfg0ModelRecordDao.selectByFullCfgModel(hzFullCfgMainChangeAfter.getId());
@@ -3328,6 +3346,80 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         return resultMap;
     }
 
+    /**
+     * 删除特性变更数据
+     * @param changeFeatureIds
+     * @return
+     */
+    @Override
+    public JSONObject deleteChangeFeature(List<Long> changeFeatureIds) {
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("msg","删除成功");
+        if(hzCfg0RecordDao.updateByChangeId(changeFeatureIds)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","修改源数据状态失败");
+            return result;
+        }
+        if(iHzFeatureChangeService.doDeleteByPrimaryKeys(changeFeatureIds)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","删除变更数据失败");
+            return result;
+        }
+        return result;
+    }
+
+    @Override
+    public JSONObject deleteChangeColorModel(List<Long> changeColorModelIds) {
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("msg","修改成功");
+        //根据变更数据修改源数据状态
+        if(hzCfg0ModelColorDao.updateByChangeIds(changeColorModelIds)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","修改源数据失败");
+            return result;
+        }
+        if(hzCmcrChangeDao.doDeleteIds(changeColorModelIds)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","删除变更数据失败");
+            return result;
+        }
+        return result;
+    }
+
+    @Override
+    public JSONObject deleteChangeMaterielFeature(List<Long> changeMaterielFeatureIds) {
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("msg","修改成功");
+        //根据变更数据修改源数据状态
+        if(hzDerivativeMaterielBasicDao.updateByChangeIds(changeMaterielFeatureIds)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","修改源数据失败");
+            return result;
+        }
+        if(hzDMBasicChangeDao.updateByChangeIds(changeMaterielFeatureIds)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","修改源数据失败");
+            return result;
+        }
+        return result;
+    }
+
+    @Override
+    public JSONObject deleteChangeBomAll(Long mainId) {
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("msg","修改成功");
+        if(hzFullCfgMainChangeDao.deleteById(mainId)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","删除失败");
+            return result;
+        }
+        return result;
+    }
+
 
     /**
      * 衍生物料展示填充主数据方法
@@ -3352,6 +3444,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             basicMap.put("superMateriel", "");
         }
         basicMap.put("headDesc",headDesc+"<br>"+hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+        basicMap.put("id",String.valueOf(hzDMBasicChangeBean.getId()));
     }
 
     /**

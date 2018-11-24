@@ -382,4 +382,16 @@
         where
         CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
     </update>
+
+    <update id="updateByChangeIds" parameterType="java.util.List">
+        update HZ_DERIVATIVE_MATERIEL_BASIC
+        set CHANGE_ORDER_UID = null,
+        DMB_STATUS = 0
+        where ID in (
+        select DMB_SRC_ID from HZ_DM_BASIC_CHANGE where ID in
+        <foreach collection="list" index="index" item="item" separator="," close=")" open="(">
+            #{item,jdbcType=DECIMAL}
+        </foreach>
+        )
+    </update>
 </mapper>

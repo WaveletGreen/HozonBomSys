@@ -53,4 +53,6 @@ public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
     List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records);
 
     int updateStatusByOrderId(Map<String,Object> map);
+
+    int doDeleteByPrimaryKeys(List<Long> changeFeatureIds);
 }

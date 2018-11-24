@@ -145,7 +145,7 @@ var toolbar = [
     //     }
     // },
     {
-        text: '发起VWO流程',
+        text: '发起变更流程',
         iconCls: 'glyphicon glyphicon-remove',
         handler: function () {
             var rows = $table.bootstrapTable('getSelections');
@@ -376,7 +376,7 @@ function loadData(_projectPuid) {
                         return "<span style='color: #9492a9'>已废止</span>";
                     }
                     else if (10 == value || "10" == value) {
-                        return "<span style='color: #e69800'>VWO审核中<br>("+row.cmcrVwoNum+")</span>";
+                        return "<span style='color: #e69800'>变更审核中<br>("+row.cmcrVwoNum+")</span>";
                     }else if(2 == value || "2" == value){
                         return "<span style='color: #0c8fe2'>已删除</span>";
                     }

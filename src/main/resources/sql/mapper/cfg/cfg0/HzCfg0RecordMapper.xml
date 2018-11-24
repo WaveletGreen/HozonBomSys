@@ -595,4 +595,18 @@
         where
         PUID in (select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL})
     </update>
+
+    <update id="updateByChangeId" parameterType="java.util.List">
+        update HZ_CFG0_RECORD
+        set CFG_STATUS = 0,
+        CHANGE_ORDER_ID = null,
+        CFG_IS_IN_PROCESS = 0
+        where
+        PUID in (
+        select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where ID in
+        <foreach collection="list" index="index" item="changeFeatureId" open="(" separator="," close=")">
+            #{changeFeatureId,jdbcType=DECIMAL}
+        </foreach>
+        )
+    </update>
 </mapper>

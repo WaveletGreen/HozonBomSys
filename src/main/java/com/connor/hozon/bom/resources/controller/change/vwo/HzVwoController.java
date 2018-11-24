@@ -434,8 +434,36 @@ public class HzVwoController {
 
 
 
+    /***************删除特性变更数据*************************************/
+    @RequestMapping("/deleteChangeFeature")
+    @ResponseBody
+    public JSONObject deleteChangeFeature(@RequestBody List<Long> ids){
+        return iHzVWOManagerService.deleteChangeFeature(ids);
+    }
 
 
+    /***************删除配色方案变更数据*************************************/
+    @RequestMapping("/deleteChangeColorModel")
+    @ResponseBody
+    public JSONObject deleteChangeColorModel(@RequestBody List<Long> ids){
+        return iHzVWOManagerService.deleteChangeColorModel(ids);
+    }
+
+
+    /***************删除衍生物料变更数据*************************************/
+    @RequestMapping("/deleteChangeMaterielFeature")
+    @ResponseBody
+    public JSONObject deleteChangeMaterielFeature(@RequestBody List<Long> ids){
+        return iHzVWOManagerService.deleteChangeMaterielFeature(ids);
+    }
+
+
+    /***************删除全配置BOM变更数据*************************************/
+    @RequestMapping("/deleteChangeBomAll")
+    @ResponseBody
+    public JSONObject deleteChangeBomAll(@RequestParam Long mainId){
+        return iHzVWOManagerService.deleteChangeBomAll(mainId);
+    }
 
 
 

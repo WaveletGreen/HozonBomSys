@@ -152,4 +152,6 @@ public interface HzCmcrChangeDao extends BasicDao<HzCmcrChange> {
     List<HzCmcrChange> doQueryCmcrChangeByModelColorId(List<HzCfg0ModelColor> hzCfg0ModelColors);
 
     int updateStatusByOrderId(Long orderId, int status);
+
+    int doDeleteIds(List<Long> changeColorModelIds);
 }

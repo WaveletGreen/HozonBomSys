@@ -582,7 +582,7 @@ function gotIt(result) {
             return "<span style='color: #00B83F'>已生效</span>";
         }
         else if (status == 10 || "10" == status) {
-                return "<span style='color: #e69800'>VWO审核中("+row.changeOrderNo+")</span>";
+                return "<span style='color: #e69800'>变更审核中("+row.changeOrderNo+")</span>";
         }
         else if (0 == status|| "0" == status||"null" == status || null == status) {
             return "<span style='color: #a97f89'>草稿状态</span>";

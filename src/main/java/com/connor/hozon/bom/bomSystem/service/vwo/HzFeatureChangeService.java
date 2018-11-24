@@ -345,6 +345,11 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         return true;
     }
 
+    @Override
+    public int doDeleteByPrimaryKeys(List<Long> changeFeatureIds) {
+        return hzFeatureChangeDao.doDeleteByPrimaryKeys(changeFeatureIds);
+    }
+
     /**
      * 查询变更前的数据和当前数据
      * @param cfgPuid

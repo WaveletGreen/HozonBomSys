@@ -101,4 +101,9 @@ public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> impl
         map.put("status",status);
         return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
     }
+
+    @Override
+    public int updateByChangeIds(List<Long> changeColorModelIds) {
+        return baseSQLUtil.executeUpdate(changeColorModelIds,clzName+".updateByChangeIds");
+    }
 }

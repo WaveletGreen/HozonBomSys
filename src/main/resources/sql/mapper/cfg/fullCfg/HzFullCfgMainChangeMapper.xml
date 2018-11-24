@@ -183,4 +183,9 @@
     set CHANGE_STATUS = #{status,jdbcType=DECIMAL}
     where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
   </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from HZ_FULL_CFG_MAIN_RECORD_CHANGE
+        where ID = #{mainId,jdbcType=DECIMAL}
+    </delete>
 </mapper>

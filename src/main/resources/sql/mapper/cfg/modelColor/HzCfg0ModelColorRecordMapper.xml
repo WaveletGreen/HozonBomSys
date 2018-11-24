@@ -239,4 +239,17 @@
         where
         CMCR_CHANGE_ORDER_UID = #{orderId,jdbcType=BIGINT}
     </update>
+
+    <update id="updateByChangeIds" parameterType="java.util.List">
+        update HZ_CFG0_MODEL_COLOR_RECORD
+        set CMCR_STATUS = 0,
+        CMCR_CHANGE_ORDER_UID = null
+        where
+        PUID in(
+        select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item,jdbcType=DECIMAL}
+        </foreach>
+        )
+    </update>
 </mapper>

@@ -308,4 +308,24 @@
         where
         CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL}
     </update>
+
+    <delete id="doDeleteByPrimaryKeys" parameterType="java.util.List">
+        delete from HZ_CFG0_AFTER_CHANGE_RECORD
+        where
+        CHANGE_ORDER_ID =
+        (select DISTINCT(CHANGE_ORDER_ID) from HZ_CFG0_AFTER_CHANGE_RECORD where
+        ID in
+        <foreach collection="list" index="index" item="changeFeatureId" open="(" close=")" separator=",">
+            #{changeFeatureId,jdbcType=DECIMAL}
+        </foreach>
+        )
+        and
+        FEATURE_VALUE_NAME in
+        (select FEATURE_VALUE_NAME from HZ_CFG0_AFTER_CHANGE_RECORD where
+        ID in
+        <foreach collection="list" index="index" item="changeFeatureId" open="(" close=")" separator=",">
+            #{changeFeatureId,jdbcType=DECIMAL}
+        </foreach>
+        )
+    </delete>
 </mapper>

@@ -159,4 +159,13 @@
         where
         FORMID = #{orderId,jdbcType=DECIMAL}
     </update>
+
+    <delete id="updateByChangeIds" parameterType="java.util.List">
+        delete from HZ_DM_BASIC_CHANGE
+        where
+        ID in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item,jdbcType=DECIMAL}
+        </foreach>
+    </delete>
 </mapper>

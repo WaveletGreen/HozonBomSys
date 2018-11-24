@@ -265,4 +265,12 @@ public interface IHzVWOManagerService {
     Map<String,Object> getMaterielFeatureTable(Long formId,String projectUid);
 
     Map<String,Object> getFullCfgTable(Integer orderChangeId, String projectUid);
+
+    JSONObject deleteChangeFeature(List<Long> changeFeatureIds);
+
+    JSONObject deleteChangeColorModel(List<Long> changeColorModelIds);
+
+    JSONObject deleteChangeMaterielFeature(List<Long> changeMaterielFeatureIds);
+
+    JSONObject deleteChangeBomAll(Long mainId);
 }
