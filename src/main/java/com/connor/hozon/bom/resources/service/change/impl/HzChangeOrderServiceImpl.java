@@ -5,15 +5,20 @@ import com.connor.hozon.bom.resources.domain.dto.request.EditHzChangeOrderReqDTO
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzChangeOrderFactory;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.ArrayList;
@@ -29,6 +34,9 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
 
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;
+
+    @Autowired
+    private HzChangeDataRecordDAO hzChangeDataRecordDAO;
     @Override
     public WriteResultRespDTO insertChangeOrderRecord(EditHzChangeOrderReqDTO reqDTO) {
         if(StringUtil.isEmpty(reqDTO.getProjectId())){
@@ -55,6 +63,7 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
         try {
             //只有表单创建者 才可以修改表单信息
             HzChangeOrderRecord orderRecord = hzChangeOrderDAO.findHzChangeOrderRecordById(reqDTO.getId());
+
             WriteResultRespDTO resultRespDTO = new WriteResultRespDTO();
             if(orderRecord == null){
                 resultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
@@ -88,6 +97,16 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
         try {
             if(id == null || id<=0){
                 return WriteResultRespDTO.IllgalArgument();
+            }
+            //变更表单关联数据后不允许删除
+            HzChangeDataQuery query = new HzChangeDataQuery();
+            query.setOrderId(id);
+            List<HzChangeDataRecord> records = hzChangeDataRecordDAO.getChangeDataTableName(query);
+            if(ListUtil.isNotEmpty(records)){
+                WriteResultRespDTO respDTO = new WriteResultRespDTO();
+                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                respDTO.setErrMsg("表单中已存在关联数据,不允许删除!");
+                return respDTO;
             }
             int i = hzChangeOrderDAO.deleteById(id);
             return i>0?WriteResultRespDTO.getSuccessResult():WriteResultRespDTO.getFailResult();
