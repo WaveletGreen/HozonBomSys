@@ -232,4 +232,11 @@
             PUID = #{hzCfg0ModelColors.puid,jdbcType=VARCHAR}
         </foreach>
     </update>
+
+    <update id="updateStatusByOrderId" parameterType="java.util.Map">
+        update HZ_CFG0_MODEL_COLOR_RECORD
+        set CMCR_STATUS = #{status,jdbcType=INTEGER}
+        where
+        CMCR_CHANGE_ORDER_UID = #{orderId,jdbcType=BIGINT}
+    </update>
 </mapper>

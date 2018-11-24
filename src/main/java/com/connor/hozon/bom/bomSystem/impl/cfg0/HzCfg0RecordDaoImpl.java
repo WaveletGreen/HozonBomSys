@@ -178,4 +178,12 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         return baseSQLUtil.executeUpdate(hzCfg0RecordListUpdata,clzName+".updateListAll");
     }
 
+    @Override
+    public int updateStatusByOrderId(Long orderId, int status) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("status",status);
+        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
 }

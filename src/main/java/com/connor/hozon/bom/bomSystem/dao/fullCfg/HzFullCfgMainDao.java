@@ -28,4 +28,6 @@ public interface HzFullCfgMainDao extends BasicDao<HzFullCfgMain>{
     int deleteByProjectUid(String projectUid);
 
     Long insertSeqAll(HzFullCfgMain hzFullCfgMain);
+
+    int updateStatusByOrderId(Long orderId, String stutas);
 }
