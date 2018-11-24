@@ -512,7 +512,7 @@ public class HzBomAllCfgService {
     private Long addHzFullCfgMain(String projectPuid, User user) {
         HzFullCfgMain hzFullCfgMain1 = new HzFullCfgMain();
         hzFullCfgMain1.setProjectUid(projectPuid);
-        hzFullCfgMain1.setStatus("编辑");
+        hzFullCfgMain1.setStatus(0);
         hzFullCfgMain1.setVersion("1.0");
         hzFullCfgMain1.setCreator(user.getUserName());
         hzFullCfgMain1.setUpdater(user.getUserName());
@@ -776,7 +776,7 @@ public class HzBomAllCfgService {
                     return result;
                 }
             }
-            fullCfgMain.setStatus("更新");
+            fullCfgMain.setStatus(5);
 //            fullCfgMain.setStage(Integer.parseInt(params.get("stage")));
             fullCfgMain.setUpdater(user.getUsername());
             fullCfgMain.setUpdateDate(new Date());
@@ -806,7 +806,7 @@ public class HzBomAllCfgService {
         User user = UserInfo.getUser();
         HzFullCfgMain fullCfgMain = hzFullCfgMainDao.selectByProjectId(params.get("projectPuid"));
         if (fullCfgMain != null) {
-            fullCfgMain.setStatus("更新");
+            fullCfgMain.setStatus(5);
             fullCfgMain.setStage(Integer.parseInt(params.get("stage")));
             fullCfgMain.setUpdater(user.getUsername());
             fullCfgMain.setUpdateDate(new Date());
@@ -924,6 +924,14 @@ public class HzBomAllCfgService {
                 result.put("status", false);
                 result.put("msg", "添加列信息失败，请联系系统管理员查看日志");
             }
+        }
+        String projectUid = params.get("projectUid");
+        HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectUid);
+        hzFullCfgMain.setStatus(0);
+        if(hzFullCfgMainDao.updateStatusById(hzFullCfgMain)<=0?true:false){
+            result.put("status", false);
+            result.put("msg", "修改全配置BOM状态失败");
+            return result;
         }
         return result;
 
@@ -1079,7 +1087,7 @@ public class HzBomAllCfgService {
             return result;
         }
         //跟新主数据变更状态
-        hzFullCfgMain.setStatus("变更流程中");
+        hzFullCfgMain.setStatus(10);
         hzFullCfgMainDao.updateByPrimaryKey(hzFullCfgMain);
 
         //流程绑定人员

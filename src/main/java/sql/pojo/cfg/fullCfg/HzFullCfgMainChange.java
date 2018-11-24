@@ -13,7 +13,7 @@ public class HzFullCfgMainChange {
     //项目外键
     private String projectUid;
     //状态
-    private Object status;
+    private Integer status;
     //阶段
     private Integer stage;
     //版本
@@ -71,7 +71,7 @@ public class HzFullCfgMainChange {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
@@ -242,7 +242,7 @@ public class HzFullCfgMainChange {
     public HzFullCfgMain geteHzFullCfgMain() {
         HzFullCfgMain hzFullCfgMain = new HzFullCfgMain();
         hzFullCfgMain.setProjectUid(this.getProjectUid());
-        hzFullCfgMain.setStatus("编辑");
+        hzFullCfgMain.setStatus(0);
         hzFullCfgMain.setStage(this.getStage());
         hzFullCfgMain.setVersion(this.getVersion());
         hzFullCfgMain.setEffectiveDate(this.getEffectiveDate());

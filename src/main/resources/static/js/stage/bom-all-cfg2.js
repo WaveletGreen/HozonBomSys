@@ -16,6 +16,8 @@ var modelArr = [];
 //配置管理
 var cfgmagArr = [];
 
+
+var mainStatus ;
 function doRefresh(projectUid) {
     loadData(projectUid);
 }
@@ -57,7 +59,7 @@ function loadData(projectUid) {
             cfgSize = _ddd.cfgSize;
             array = _ddd.array;
             var main = _ddd.main;
-
+            mainStatus =  main.status;
             var versionArr = main.version.split(".");
             versionHead = parseInt(versionArr[0]);
             var $table = $("#cfg0Table");
@@ -92,7 +94,7 @@ function loadData(projectUid) {
                     temp +=
                         "<tr id='tr" + i + "'>" +
                         "<td></td>" +
-                        "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>状态：" + main.status+ "</td>" +
+                        "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>状态：" + statusIntToStr(mainStatus)+ "</td>" +
                         "</tr>";
                 }
                 else {
@@ -503,8 +505,8 @@ $(document).ready(
                     window.Ewin.alert({message: "请设置完阶段后再发起变更"});
                     return false;
                 }
-                var status = $("#row4").html();
-                if(status!="状态：编辑"&&status!="状态：更新"){
+
+                if(mainStatus!=0&&mainStatus!=5){
                     window.Ewin.alert({message: "非编辑状态不能发起变更"});
                     return false;
                 }
@@ -518,8 +520,7 @@ $(document).ready(
                 });
             }),
             $("#goBackData").click(function () {
-                var status = $("#row4").text();
-                if(status!="状态：编辑"&&status!="状态：更新"){
+                if(mainStatus!=0&&mainStatus!=5){
                     window.Ewin.alert({message: "非编辑状态不能撤销"});
                 }else {
                     window.Ewin.confirm({title: '提示', message: '是否要撤销您所选择的记录？', width: 500}).on(function (e) {
@@ -1068,5 +1069,17 @@ function cancelEditorPoint(but) {
         $("#" + pointId).parent().find("select").hide();
         var divText = $("#" + pointId).parent().find("div").text();
         $("#" + pointId).parent().find("select").val(divText);
+    }
+}
+
+function statusIntToStr(mStatus) {
+    if(mStatus==0){
+        return "编辑";
+    }else if(mStatus==1){
+        return "已生效";
+    }else if(mStatus==5){
+        return "更新";
+    }else if(mStatus==10){
+        return "变更流程中"
     }
 }

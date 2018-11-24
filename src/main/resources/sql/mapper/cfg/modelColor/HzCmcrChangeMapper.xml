@@ -669,19 +669,25 @@
     <delete id="doDeleteIds" parameterType="java.util.List">
         delete from  HZ_CMCR_AFTER_CHANGE
         where
-        CMCR_CHANGE_ORDER_UID = (
-        select CMCR_CHANGE_ORDER_UID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID in
-          <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
-              #{item,jdbcType=DECIMAL}
-          </foreach>
-        )
-        and
-        CMCR_SRC_PUID in(
-        select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID in
+        CMCR_CG_ID in
         <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
             #{item,jdbcType=DECIMAL}
         </foreach>
-        )
+        and
+        CMCR_CHANGE_STATUS = 0
+        <!--CMCR_CHANGE_ORDER_UID = (-->
+        <!--select CMCR_CHANGE_ORDER_UID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID in-->
+          <!--<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">-->
+              <!--#{item,jdbcType=DECIMAL}-->
+          <!--</foreach>-->
+        <!--)-->
+        <!--and-->
+        <!--CMCR_SRC_PUID in(-->
+        <!--select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID in-->
+        <!--<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">-->
+            <!--#{item,jdbcType=DECIMAL}-->
+        <!--</foreach>-->
+        <!--)-->
 
     </delete>
 </mapper>
