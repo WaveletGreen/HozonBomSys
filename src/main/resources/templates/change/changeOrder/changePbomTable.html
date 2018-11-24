@@ -99,6 +99,15 @@
                             iconCls: 'glyphicon glyphicon-remove',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
+                                var puids = "";
+                                for (var i = 0; i < rows.length; i++) {
+                                    puids += rows[i].puid + ",";
+                                };
+                                var myData = JSON.stringify({
+                                    "projectId": $("#project", window.top.document).val(),
+                                    "puids": puids,
+                                    "orderId":orderId,
+                                });
                                 if (rows.length == 0) {
                                     window.Ewin.alert({message: '请至少一条需要删除的数据!'});
                                     return false;
@@ -117,10 +126,10 @@
                                 window.Ewin.confirm({title: '提示', message: '确定要删除数据吗?', width: 500}).on(function (e) {
                                     if (e) {
                                         $.ajax({
-                                            type: "POST",
+                                            type: "DELETE",
                                             //ajax需要添加打包名
-                                            url: "" ,
-                                            //data: JSON.stringify(rows),
+                                            url: "../../../change/data/pbom/delete" ,
+                                            data: myData,
                                             contentType: "application/json",
                                             success: function (result) {
                                                 if (result.success) {
