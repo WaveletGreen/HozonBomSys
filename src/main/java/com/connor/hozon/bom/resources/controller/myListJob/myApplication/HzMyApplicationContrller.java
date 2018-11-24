@@ -50,10 +50,13 @@ public class HzMyApplicationContrller {
     private HzChangeListDAO hzChangeListDAO;
 
     @RequestMapping(value = "ToMyApplicationForm",method = RequestMethod.GET)
-    public String getToMyApplicationFormToPage(Long id,Model model){
+    public String getToMyApplicationFormToPage(Long id, Long auditId,Model model){
         HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
         HzAuditorChangeRecord record = new HzAuditorChangeRecord();
-        List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList2(record);
+        record.setAuditorId(auditId);
+        List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorListById(auditId);
+
+        //List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList2(record);
         for(int i=0;i<infos.size();i++){
             if(id==infos.get(i).getOrderId()){
                 //infos.get(i).setAuditTime(DateUtil.formatTimestampDate(infos.get(i).getAuditTime()));
@@ -155,6 +158,7 @@ public class HzMyApplicationContrller {
             object.put("source",hzChangeOrderRespDTO.getSource());
             object.put("auditTime",hzChangeOrderRespDTO.getAuditTime());
             object.put("state",hzChangeOrderRespDTO.getState());
+            object.put("auditId",hzChangeOrderRespDTO.getAuditId());
             list.add(object);
         });
         jsonObject.put("result",list);

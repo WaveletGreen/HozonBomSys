@@ -18,8 +18,8 @@
   <!--我的申请返回ORDER_ID-->
   <select id="HzApplicantChangeDAOImpl_findAuditorList" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
-
-    ORDER_ID
+    *
+    <!--ORDER_ID-->
     from HZ_APPLICANT_CHANGE_RECORD
     where 1=1
     <!--ID = #{id,jdbcType=DOUBLE}-->
