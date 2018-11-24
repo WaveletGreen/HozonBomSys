@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.controller.change;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
@@ -12,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -500,38 +502,38 @@ public class HzChangeDataController extends BaseController {
 
 
     @RequestMapping(value = "ebom/delete",method = RequestMethod.DELETE)
-    public void deleteEBOMChangeDataDetail(String puids){
+    public void deleteEBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
         System.out.println(111);
     }
 
     @RequestMapping(value = "pbom/delete",method = RequestMethod.DELETE)
-    public void deletePBOMChangeDataDetail(String puids){
+    public void deletePBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
         System.out.println(111);
     }
 
 
     @RequestMapping(value = "mbom/delete",method = RequestMethod.DELETE)
-    public void deleteMBOMChangeDataDetail(String puids){
+    public void deleteMBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
         System.out.println(111);
     }
 
     @RequestMapping(value = "mbom/product/delete",method = RequestMethod.DELETE)
-    public void deleteProductMBOMChangeDataDetail(String puids){
+    public void deleteProductMBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
         System.out.println(111);
     }
 
     @RequestMapping(value = "mbom/finance/delete",method = RequestMethod.DELETE)
-    public void deleteFinanceMBOMChangeDataDetail(String puids){
+    public void deleteFinanceMBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
         System.out.println(111);
     }
 
     @RequestMapping(value = "materiel/delete",method = RequestMethod.DELETE)
-    public void deleteMaterielChangeDataDetail(String puids){
+    public void deleteMaterielChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
         System.out.println(111);
     }
 
     @RequestMapping(value = "work/procedure/delete",method = RequestMethod.DELETE)
-    public void deleteWorkProcedureChangeDataDetail(String puids){
+    public void deleteWorkProcedureChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
         System.out.println(111);
     }
 
