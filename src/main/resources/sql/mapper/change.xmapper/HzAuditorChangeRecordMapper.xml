@@ -17,9 +17,13 @@
 
     <!--insert-->
     <insert id="HzAuditorChangeDAOImpl_insert" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval as id from dual
+        </selectKey>
     insert into HZ_AUDITOR_CHANGE_RECORD (ID, AUDITOR_ID,ORDER_ID,TABLE_NAME)
     values
-    (SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval,
+    (#{id,jdbcType=DOUBLE},
     #{auditorId,jdbcType=DOUBLE},
     #{orderId,jdbcType=DOUBLE},
     #{tableName,jdbcType=VARCHAR})

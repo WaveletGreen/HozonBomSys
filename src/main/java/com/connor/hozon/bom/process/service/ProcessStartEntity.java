@@ -75,6 +75,17 @@ public class ProcessStartEntity implements IProcessStart {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessStartEntity.class);
 
+
+    private Long auditRecordId;//审核记录id
+
+    public Long getAuditRecordId() {
+        return auditRecordId;
+    }
+
+    public void setAuditRecordId(Long auditRecordId) {
+        this.auditRecordId = auditRecordId;
+    }
+
     @Override
     public User checkOrderAuditor(Long orderId) {
         List<HzTasks> tasks = iHzTaskService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_CHANGE, TaskOptions.TASK_TARGET_TYPE_CHANE, orderId, null, 1);
@@ -123,8 +134,10 @@ public class ProcessStartEntity implements IProcessStart {
         record.setOrderId(orderId);
         record.setTableName("");
         record.setApplicantId(Long.valueOf(user.getId()));
+        record.setAuditRecordId(this.auditRecordId);
         record.setApplicantTime(new Date());
         boolean res;
+
         if (res = hzApplicantChangeDAO.insert(record) > 0 ? true : false) {
             LOGGER.info("保存申请人数据成功");
         } else {
@@ -217,8 +230,12 @@ public class ProcessStartEntity implements IProcessStart {
         hzAuditorChangeRecord.setAuditResult(null);
         hzAuditorChangeRecord.setAuditSugg(null);
         hzAuditorChangeRecord.setAuditTime(null);
-        boolean res;
-        if ((res = hzAuditorChangeDAO.insert(hzAuditorChangeRecord) > 0 ? true : false)) {
+        int i  = hzAuditorChangeDAO.insert(hzAuditorChangeRecord);
+        if(i>0){
+            this.auditRecordId = hzAuditorChangeRecord.getId();
+        }
+        boolean res =i>0?true:false;
+        if (res) {
             LOGGER.info("保存审核人数据成功");
         } else {
             LOGGER.error("保存审核人数据失败");

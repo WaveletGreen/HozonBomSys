@@ -90,7 +90,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     return WriteResultRespDTO.fileError();
                 }
                 Row row = sheet.getRow(0);
-                if(row.getLastCellNum()<=50){
+                if(row.getLastCellNum()<50){
                     return WriteResultRespDTO.fileFormatError();
                 }
                 if( row.getCell(row.getLastCellNum()-1).getStringCellValue().equals("是否颜色件")
@@ -680,7 +680,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
                 String lineId=ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue();
                 String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
-                String pBomLinePartResource=ExcelUtil.getCell(sheet.getRow(rowNum),39).getStringCellValue();
+                String pBomLinePartResource=ExcelUtil.getCell(sheet.getRow(rowNum),43).getStringCellValue();
                 if(StringUtil.isEmpty(lineId)){
                     stringBuffer.append("第"+(rowNum)+"行的零件名称不能为<strong>空</strong></br>") ;
                     this.errorCount++;
