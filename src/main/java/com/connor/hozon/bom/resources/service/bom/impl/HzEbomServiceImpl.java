@@ -2059,9 +2059,12 @@ public class HzEbomServiceImpl implements HzEbomService {
                 dataDetailQuery.setStatus(1);
                 updateRecords.forEach(record -> {
                     dataDetailQuery.setRevisionNo(record.getRevision());
+                    dataDetailQuery.setPuid(record.getPuid());
                     HzEPLManageRecord manageRecord = hzEbomRecordDAO.getEBomRecordByPuidAndRevision(dataDetailQuery);
                     if(manageRecord!=null){
-                        updateList.add(HzEbomRecordFactory.eplRecordToBomLineRecord(manageRecord));
+                        HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(manageRecord);
+                        hzBomLineRecord.setStatus(manageRecord.getStatus());
+                        updateList.add(hzBomLineRecord);
                     }
                 });
             }

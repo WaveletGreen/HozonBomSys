@@ -103,6 +103,7 @@ public class HzMaterielFactory {
         hzMaterielRecord.setMaterielResourceId(record.geteBomPuid());
         hzMaterielRecord.setpColorPart(record.getIsColorPart());
         hzMaterielRecord.setpFactoryPuid(record.getpFactoryId());
+        hzMaterielRecord.setpValidFlag(2);
         return hzMaterielRecord;
     }
 
