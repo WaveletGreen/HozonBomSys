@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzChangeOrderFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzApplicationChangeService;
@@ -12,8 +13,10 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.change.HzApplicantChangeRecord;
+import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,8 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
     private HzChangeOrderDAO hzChangeOrderDAO;
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
+    @Autowired
+    private HzAuditorChangeDAO hzAuditorChangeDAO;
     @Override
     public List<HzChangeOrderRespDTO> findChangeOrderList(HzChangeOrderByPageQuery query, HzApplicantChangeRecord record) {
         List<HzChangeOrderRespDTO> auditorList = new ArrayList<>();
@@ -34,7 +39,7 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
                     HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,infos.get(i).getOrderId());
                     if(rec!=null){
                         HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
-                        respDTO.setProjectId(rec.getProjectId());//?
+                        respDTO.setProjectId(rec.getProjectId());//
                         respDTO.setChangeNo(rec.getChangeNo());//changeNo
                         respDTO.setId(rec.getId());
                         respDTO.setOriginator(rec.getOriginator());
@@ -42,6 +47,18 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
                         respDTO.setChangeType(rec.getChangeType());//变更类型
                         respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
                         respDTO.setProjectName(rec.getProjectName());
+                        respDTO.setSource("BOM");
+                        respDTO.setState(rec.getState());
+                        respDTO.setAuditId(infos.get(i).getAuditRecordId());//改成auditRecordId
+                        //审批时间为空报错
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                        List<HzAuditorChangeRecord> records = hzAuditorChangeDAO.findAuditorListById(infos.get(i).getAuditRecordId());
+                        if(records.get(0).getAuditTime()!=null)
+                            respDTO.setAuditTime(formatter.format(records.get(0).getAuditTime()));
+                        else
+                            respDTO.setAuditTime("");
+
                         auditorList.add(respDTO);
                     }
                 }

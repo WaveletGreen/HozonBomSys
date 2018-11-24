@@ -483,6 +483,7 @@
   <update id="HzPbomRecordDAOImpl_update_before" parameterType="sql.pojo.bom.HzPbomLineRecord">
     update HZ_PBOM_REOCRD_BEFORE_CHANGE
     <set>
+      P_PBOM_STATUS = 2,
       <if test="resource != null">
         P_RESOURCE = #{resource,jdbcType=VARCHAR},
       </if>
@@ -585,6 +586,7 @@
   <update id="HzPbomRecordDAOImpl_updateInput" parameterType="sql.pojo.bom.HzPbomLineRecord">
     update HZ_PBOM_RECORD
     <set>
+      P_PBOM_STATUS = 2,
       <if test="resource != null">
         P_RESOURCE = #{resource,jdbcType=VARCHAR},
       </if>

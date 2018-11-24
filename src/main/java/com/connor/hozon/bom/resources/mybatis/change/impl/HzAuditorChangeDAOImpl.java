@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,13 @@ public class HzAuditorChangeDAOImpl extends BaseSQLUtil implements HzAuditorChan
     }
 
     @Override
+    public List<HzAuditorChangeRecord> findAuditorListById(Long id) {
+        //Map<String, Object> map = new HashMap<>();
+        //map.put("id", record.getId());
+        return super.findForList("HzAuditorChangeDAOImpl_findAuditorListById", id);
+    }
+
+    @Override
     public int count(int userId) {
         Map<String, Object> map = new HashMap<>();
         //User user1 = UserInfo.getUser();
@@ -62,5 +70,10 @@ public class HzAuditorChangeDAOImpl extends BaseSQLUtil implements HzAuditorChan
     @Override
     public int updateByPrimaryKeySelective(HzAuditorChangeRecord record) {
         return super.executeUpdate(record, "HzAuditorChangeDAOImpl_updateByPrimaryKeySelective");
+    }
+
+    @Override
+    public int updateAuditorRecord(HzAuditorChangeDTO reqDTO) {
+        return super.executeUpdate(reqDTO, "HzAuditorChangeDAOImpl_updateAuditorRecord");
     }
 }

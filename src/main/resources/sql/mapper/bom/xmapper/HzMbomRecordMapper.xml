@@ -480,6 +480,7 @@
     <update id="HzMbomRecordDAOImpl_update_before" parameterType="sql.pojo.bom.HzMbomLineRecord">
         update HZ_MBOM_REOCRD_BEFORE_CHANGE
         <set>
+            P_MBOM_STATUS = 2,
             <if test="sparePart != null">
                 P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
             </if>
@@ -534,6 +535,7 @@
     <update id="HzMbomRecordDAOImpl_update_after" parameterType="sql.pojo.bom.HzMbomLineRecord">
         update HZ_MBOM_REOCRD_AFTER_CHANGE
         <set>
+
             <if test="sparePart != null">
                 P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
             </if>
@@ -589,6 +591,7 @@
     <update id="HzMbomRecordDAOImpl_updateInput" parameterType="sql.pojo.bom.HzMbomLineRecord">
         update ${tableName}
         <set>
+            P_MBOM_STATUS = 2,
             <if test="sparePart != null">
                 P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
             </if>

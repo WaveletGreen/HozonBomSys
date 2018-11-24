@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.controller.myListJob.processed;
 
 import com.alibaba.fastjson.JSONObject;
+import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
@@ -12,8 +13,10 @@ import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,11 +24,9 @@ import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeListRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -52,16 +53,21 @@ public class HzProcessedContrller {
     @Autowired
     private HzChangeListDAO hzChangeListDAO;
 
+    /**
+     * 获取ChangeOrder表单详细信息-已处理事项
+     * @param
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "ToProcessedForm",method = RequestMethod.GET)
-    public String getToProcessedFormToPage(Long id,Model model){
+    public String getToProcessedFormToPage(Long id, Long auditId, Model model) {
         HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
-//        HzChangeOrderByPageQuery query = new HzChangeOrderByPageQuery();
-//        HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,id);
         HzAuditorChangeRecord record = new HzAuditorChangeRecord();
-        List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList2(record);
+
+        record.setAuditorId(auditId);
+        List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorListById(auditId);//
 
         List<HzChangeListRecord> changeList = hzChangeListDAO.findChangeList(respDTO.getChangeNo());
-
         if(changeList.size()>0){
             List<Map<String,String>> resultMaps = new ArrayList<>();
             for(HzChangeListRecord hzChangeListRecord : changeList){
@@ -87,7 +93,7 @@ public class HzProcessedContrller {
     }
 
     /**
-     * 获取ChangeOrder表单基本信息列表-已处理事项
+     * 获取ChangeOrder表单信息列表-已处理事项
      * @param query
      */
     @RequestMapping(value = "infoList",method = RequestMethod.GET)
@@ -114,6 +120,9 @@ public class HzProcessedContrller {
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
             object.put("projectName",hzChangeOrderRespDTO.getProjectName());
+            object.put("state",hzChangeOrderRespDTO.getState());
+            object.put("auditTime",hzChangeOrderRespDTO.getAuditTime());
+            object.put("auditId",hzChangeOrderRespDTO.getAuditId());
             list.add(object);
         });
         jsonObject.put("result",list);

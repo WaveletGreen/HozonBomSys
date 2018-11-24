@@ -291,10 +291,11 @@ public class FileUploadUpdataMbomServiceImpl implements FileUploadUpdataMbomServ
                     stringBuffer.append("第"+(rowNum)+"行的‘层级’填写不正确，层级尾缀应该填写为:<strong>Y</strong></br>") ;
                     this.errorCount++;
                 }
-                if(StringUtil.isEmpty(pBomLinePartResource)){
-                    this.errorCount++;
-                    stringBuffer.append("第"+(rowNum)+"行‘零部件来源’不能为<strong>空</strong></br>") ;
-                }
+                //2018.11.24注释：MBOM中油漆物料可能没有零部件来源
+//                if(StringUtil.isEmpty(pBomLinePartResource)){
+//                    this.errorCount++;
+//                    stringBuffer.append("第"+(rowNum)+"行‘零部件来源’不能为<strong>空</strong></br>") ;
+//                }
                 continue;
             }
         }

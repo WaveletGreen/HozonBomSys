@@ -2,14 +2,15 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2018/11/23 Time: 10:52-->
 <body>
-<form id="updateUntreatedForm" role="form" method="post" action="">
+<form id="updateUntreatedForm" role="form" method="post" action="untreated/updateAuditResult">
     <input type="hidden" id="id" th:value="${data.id}">
+    <input type="hidden" id="orderId" th:value="${data.orderId}">
     <div class="form-group">
-        <label for="state">变更单状态<span>*</span></label>
-        <select class="form-control" name="state" id="state"placeholder="请选择变更单状态">
-            <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
-            <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
-            <option th:selected="${data.getState()=='取消'?true:false}">取消</option>
+        <label for="auditResult">审核状态<span>*</span></label>
+        <select class="form-control" name="auditResult" id="auditResult"placeholder="请选择变更单状态">
+            <!--<option th:selected="${data.getAuditResult()==''?true:false}">进行中</option>-->
+            <option th:selected="${data.getAuditResult()=='1'?true:false}">完成</option>
+            <option th:selected="${data.getAuditResult()==''?true:false}">取消</option>
             <!--<option th:selected="${data.getState()=='已完成'?true:false}">已完成</option>-->
             <!--<option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>-->
             <!--<option th:selected="${data.getState()=='流程中'?true:false}">流程中</option>-->
@@ -64,8 +65,8 @@
                 // var projectId= $("#project", window.top.document).val();
                 var myData = JSON.stringify({
                     "id":$("#id").val(),
-                    "state": $("state").val(),
-                    // "projectId": $("#project", window.top.document).val(),
+                    "auditResult": $("#auditResult").val(),
+                    "orderId": $("#orderId").val(),
                 });
 
                 $.ajax({

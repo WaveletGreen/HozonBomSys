@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
+import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.change.HzAuditorChangeRecord;
 
@@ -25,6 +26,9 @@ public interface HzAuditorChangeDAO {
     //已处理事项
     List<HzAuditorChangeRecord> findAuditorList2(HzAuditorChangeRecord record);
 
+    //
+    List<HzAuditorChangeRecord> findAuditorListById(Long id);
+
     //统计任务个数
     int count(int userId);
 
@@ -37,4 +41,6 @@ public interface HzAuditorChangeDAO {
     HzAuditorChangeRecord findByOrderId(Long orderId, Long userId);
 
     int updateByPrimaryKeySelective(HzAuditorChangeRecord record);
+
+    int updateAuditorRecord(HzAuditorChangeDTO reqDTO);
 }
