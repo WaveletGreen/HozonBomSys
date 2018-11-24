@@ -497,4 +497,42 @@ public class HzChangeDataController extends BaseController {
         }
         return null;
     }
+
+
+    @RequestMapping(value = "ebom/delete",method = RequestMethod.DELETE)
+    public void deleteEBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "pbom/delete",method = RequestMethod.DELETE)
+    public void deletePBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+
+    @RequestMapping(value = "mbom/delete",method = RequestMethod.DELETE)
+    public void deleteMBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "mbom/product/delete",method = RequestMethod.DELETE)
+    public void deleteProductMBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "mbom/finance/delete",method = RequestMethod.DELETE)
+    public void deleteFinanceMBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "materiel/delete",method = RequestMethod.DELETE)
+    public void deleteMaterielChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "work/procedure/delete",method = RequestMethod.DELETE)
+    public void deleteWorkProcedureChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+    
 }
