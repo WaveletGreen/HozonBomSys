@@ -744,11 +744,33 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             List<HzWorkProcedure> records = hzWorkProcedureDAO.getHzWorkProcedureByPuids(query);
             List<HzWorkProcedure> afterRecords = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){//根据查询结果 记录数据
-                records.forEach(record -> {
-                    HzWorkProcedure manageRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
-                    manageRecord.setOrderId(orderId);
-                    afterRecords.add(manageRecord);
-                });
+                //到 after表中查询看是否存在记录
+                //存在记录则过滤 不存在记录则插入
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                dataDetailQuery.setOrderId(orderId);
+                dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
+                List<HzWorkProcedure> recordList = hzWorkProcedureDAO.getWorkProcedureByOrderId(dataDetailQuery);
+                if(ListUtil.isEmpty(recordList)){
+                    records.forEach(record -> {
+                        HzWorkProcedure manageRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
+                        manageRecord.setOrderId(orderId);
+                        afterRecords.add(manageRecord);
+                    });
+                }else {
+                    for(int i=0;i<records.size();i++){
+                        records.get(i).setOrderId(orderId);
+                        for(HzWorkProcedure record:recordList){
+                            if(records.get(i).equals(record)){
+                                records.remove(records.get(i));
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+                    afterRecords.addAll(records);
+                }
+
                 map.put("workProcedureAfter",afterRecords);
 
                 //修改发起流程后状态值
@@ -766,17 +788,13 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 map.put("workProcedureBefore",bomLineRecords);
                 //保存以上获取信息
                 //变更数据
-                List<HzChangeDataRecord> dataRecords = new ArrayList<>();
-                puids.forEach(s -> {
-                    HzChangeDataRecord record = new HzChangeDataRecord();
-                    record.setApplicantId(applicantId);
-                    record.setOrderId(reqDTO.getOrderId());
-                    record.setPuid(s);
-                    record.setTableName(tableName);
-                    dataRecords.add(record);
-                });
 
-                map.put("changeData",dataRecords);
+                HzChangeDataRecord record = new HzChangeDataRecord();
+                record.setApplicantId(applicantId);
+                record.setOrderId(reqDTO.getOrderId());
+                record.setTableName(tableName);
+
+                map.put("changeData",record);
                 //申请人
 //                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
 //                applicantChangeRecord.setApplicantId(applicantId);
@@ -807,7 +825,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                                     hzWorkProcedureDAO.updateList((List<HzWorkProcedure>) entry.getValue());
                                     break;
                                 case "changeData":
-                                    hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
+                                    hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
                                     break;
 //                                case "applicant":
 //                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());

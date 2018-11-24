@@ -141,4 +141,13 @@ public interface HzEbomRecordDAO {
     List<HzEPLManageRecord> getEbomRecordsByPuids(HzChangeDataDetailQuery query);
 
     HzEPLManageRecord getEBomRecordByPuidAndRevision(HzChangeDataDetailQuery query);
+
+
+    /**
+     * 根据表单id查询变更数据
+     * @param query
+     * @return
+     */
+    List<HzEPLManageRecord> getEbomRecordsByOrderId(HzChangeDataDetailQuery query);
+
 }

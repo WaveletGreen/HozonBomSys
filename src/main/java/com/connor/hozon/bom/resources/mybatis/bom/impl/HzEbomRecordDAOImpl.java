@@ -359,6 +359,21 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public List<HzEPLManageRecord> getEbomRecordsByOrderId(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        map.put("status",query.getStatus());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"1":"0");
+        }else {
+            map.put("revision",null);
+        }
+        return super.findForList("HzEbomRecordDAOImpl_getEbomRecordsByOrderId",map);
+    }
+
+    @Override
     public Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();

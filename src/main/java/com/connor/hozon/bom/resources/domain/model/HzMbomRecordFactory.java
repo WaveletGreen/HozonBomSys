@@ -255,7 +255,7 @@ public class HzMbomRecordFactory {
     public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,int i){
         List<HzMbomLineRecord> list = new ArrayList<>();
         if(ListUtil.isNotEmpty(libs)){
-            for(int j=0;i<libs.size();j++){
+            for(int j=0;j<libs.size();j++){
                 HzMbomLineRecord record = new HzMbomLineRecord();
                 record.setParentUid(pbomLineRecord.geteBomPuid());
                 record.setSortNum(String.valueOf(size*100+100*j));

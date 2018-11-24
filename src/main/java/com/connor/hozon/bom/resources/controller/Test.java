@@ -7,6 +7,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.impl.HzEbomRecordDAOImpl;
 import sql.pojo.epl.HzEPLManageRecord;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -59,10 +60,40 @@ public class Test {
 //        String s = ChangeTableNameEnum.getMbomTableName(1,"M");
 //        System.out.println(s);
 
-        String s ="00";
-        int i = Integer.valueOf(s+1);
-        String s1 = String.format("%02d",Integer.valueOf(s+1));
-        System.out.println(s1);
-        System.out.println(i);
+//        String s ="00";
+//        int i = Integer.valueOf(s+1);
+//        String s1 = String.format("%02d",Integer.valueOf(s+1));
+//        System.out.println(s1);
+//        System.out.println(i);
+        List<HzEPLManageRecord> records  = new ArrayList<>();
+        for(int i =0;i<10;i++){
+            HzEPLManageRecord record = new HzEPLManageRecord();
+            record.setPuid("sss"+i);
+            records.add(record);
+        }
+
+
+        List<HzEPLManageRecord> recordList = new ArrayList<>();
+        for(int i=0;i<8;i++){
+            HzEPLManageRecord r = new HzEPLManageRecord();
+            r.setPuid("sss"+i);
+            r.setLineID("111");
+            recordList.add(r);
+        }
+
+        List<HzEPLManageRecord> eplManageRecords = new ArrayList<>();
+        for(int i=0;i<records.size();i++){
+            records.get(i).setOrderId(1L);
+            for(HzEPLManageRecord record:recordList){
+                if(records.get(i).equals(record)){
+                    records.remove(records.get(i));
+                    i--;
+                    break;
+                }
+            }
+        }
+        eplManageRecords.addAll(records);
+        System.out.println(JSON.toJSONString(eplManageRecords));
+
     }
 }

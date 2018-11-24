@@ -68,8 +68,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         try {
             List<HzChangeDataRecord> records = hzChangeDataRecordDAO.getChangeDataTableName(query);
             HzChangeDataRespDTO respDTO = new HzChangeDataRespDTO();
+            List<HzChangeDataRespDTO> respDTOS = respDTO.init();
             if(ListUtil.isNotEmpty(records)){
-                List<HzChangeDataRespDTO> respDTOS = respDTO.init();
                 for(HzChangeDataRespDTO dto:respDTOS){
                     dto.setOrderId(query.getOrderId());
                     for(HzChangeDataRecord record : records){
@@ -101,7 +101,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         try {
             Future future = pool.submit(()->{
                 //变更数据
-                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
                 //查更新的数据 分变更前 变更后（有版本号 状态值为2）
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
@@ -109,8 +109,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 updateQuery.setStatus(2);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
-                updateQuery.setPuids(puids);
-                List<HzEPLManageRecord> afterRecords = hzEbomRecordDAO.getEbomRecordsByPuids(updateQuery);
+//                updateQuery.setPuids(puids);
+                List<HzEPLManageRecord> afterRecords = hzEbomRecordDAO.getEbomRecordsByOrderId(updateQuery);
                 if(ListUtil.isNotEmpty(afterRecords)){
                     for(HzEPLManageRecord record :afterRecords){
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
@@ -138,9 +138,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 addQuery.setStatus(2);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
-                addQuery.setPuids(puids);
+//                addQuery.setPuids(puids);
                 addQuery.setProjectId(query.getProjectId());
-                List<HzEPLManageRecord> addRecords = hzEbomRecordDAO.getEbomRecordsByPuids(addQuery);
+                List<HzEPLManageRecord> addRecords = hzEbomRecordDAO.getEbomRecordsByOrderId(addQuery);
                 if(ListUtil.isNotEmpty(addRecords)){
                     for(HzEPLManageRecord record :addRecords){
                         HzEbomRespDTO addRespDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
@@ -155,9 +155,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 deleteQuery.setStatus(4);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
-                deleteQuery.setPuids(puids);
+//                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());
-                List<HzEPLManageRecord> deleteRecords = hzEbomRecordDAO.getEbomRecordsByPuids(deleteQuery);
+                List<HzEPLManageRecord> deleteRecords = hzEbomRecordDAO.getEbomRecordsByOrderId(deleteQuery);
                 if(ListUtil.isNotEmpty(deleteRecords)){
                     for(HzEPLManageRecord record :deleteRecords){
                         HzEbomRespDTO addRespDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
@@ -190,7 +190,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         try {
             Future future = pool.submit(()->{
                 //变更数据
-                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
                 //查更新的数据 分变更前 变更后（有版本号 状态值为2）
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
@@ -198,8 +198,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 updateQuery.setStatus(2);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
-                updateQuery.setPuids(puids);
-                List<HzPbomLineRecord> afterRecords = hzPbomRecordDAO.getPbomRecordsByPuids(updateQuery);
+//                updateQuery.setPuids(puids);
+                List<HzPbomLineRecord> afterRecords = hzPbomRecordDAO.getPbomRecordsByOrderId(updateQuery);
                 if(ListUtil.isNotEmpty(afterRecords)){
                     for(HzPbomLineRecord record :afterRecords){
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
@@ -227,9 +227,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 addQuery.setStatus(2);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
-                addQuery.setPuids(puids);
+//                addQuery.setPuids(puids);
                 addQuery.setProjectId(query.getProjectId());
-                List<HzPbomLineRecord> addRecords = hzPbomRecordDAO.getPbomRecordsByPuids(addQuery);
+                List<HzPbomLineRecord> addRecords = hzPbomRecordDAO.getPbomRecordsByOrderId(addQuery);
                 if(ListUtil.isNotEmpty(addRecords)){
                     for(HzPbomLineRecord record :addRecords){
                         HzPbomLineRespDTO addRespDTO = HzPbomRecordFactory.bomLineRecordToRespDTO(record);
@@ -244,9 +244,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 deleteQuery.setStatus(4);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
-                deleteQuery.setPuids(puids);
+//                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());
-                List<HzPbomLineRecord> deleteRecords = hzPbomRecordDAO.getPbomRecordsByPuids(deleteQuery);
+                List<HzPbomLineRecord> deleteRecords = hzPbomRecordDAO.getPbomRecordsByOrderId(deleteQuery);
                 if(ListUtil.isNotEmpty(deleteRecords)){
                     for(HzPbomLineRecord record :deleteRecords){
                         HzPbomLineRespDTO addRespDTO = HzPbomRecordFactory.bomLineRecordToRespDTO(record);
@@ -280,7 +280,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         try {
             Future future = pool.submit(()->{
                 //变更数据
-                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
                 //查更新的数据 分变更前 变更后（有版本号 状态值为2）
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
@@ -288,8 +288,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 updateQuery.setStatus(2);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
-                updateQuery.setPuids(puids);
-                List<HzMbomLineRecord> afterRecords = hzMbomRecordDAO.getMbomRecordsByPuids(updateQuery);
+//                updateQuery.setPuids(puids);
+                List<HzMbomLineRecord> afterRecords = hzMbomRecordDAO.getMbomRecordsByOrderId(updateQuery);
                 if(ListUtil.isNotEmpty(afterRecords)){
                     for(HzMbomLineRecord record :afterRecords){
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
@@ -317,9 +317,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 addQuery.setStatus(2);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
-                addQuery.setPuids(puids);
+//                addQuery.setPuids(puids);
                 addQuery.setProjectId(query.getProjectId());
-                List<HzMbomLineRecord> addRecords = hzMbomRecordDAO.getMbomRecordsByPuids(addQuery);
+                List<HzMbomLineRecord> addRecords = hzMbomRecordDAO.getMbomRecordsByOrderId(addQuery);
                 if(ListUtil.isNotEmpty(addRecords)){
                     for(HzMbomLineRecord record :addRecords){
                         HzMbomRecordRespDTO addRespDTO = HzMbomRecordFactory.mbomRecordToRespDTO(record);
@@ -334,9 +334,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 deleteQuery.setStatus(4);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
-                deleteQuery.setPuids(puids);
+//                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());
-                List<HzMbomLineRecord> deleteRecords = hzMbomRecordDAO.getMbomRecordsByPuids(deleteQuery);
+                List<HzMbomLineRecord> deleteRecords = hzMbomRecordDAO.getMbomRecordsByOrderId(deleteQuery);
                 if(ListUtil.isNotEmpty(deleteRecords)){
                     for(HzMbomLineRecord record :deleteRecords){
                         HzMbomRecordRespDTO addRespDTO = HzMbomRecordFactory.mbomRecordToRespDTO(record);
@@ -368,7 +368,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         try {
             Future future = pool.submit(()->{
                 //变更数据
-                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
                 //查更新的数据 分变更前 变更后（有版本号 状态值为2）
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
@@ -376,8 +376,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 updateQuery.setStatus(2);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
-                updateQuery.setPuids(puids);
-                List<HzMaterielRecord> afterRecords = hzMaterielDAO.getMaterialRecordsByPuids(updateQuery);
+//                updateQuery.setPuids(puids);
+                List<HzMaterielRecord> afterRecords = hzMaterielDAO.getMaterielRecordsByOrderId(updateQuery);
                 if(ListUtil.isNotEmpty(afterRecords)){
                     for(HzMaterielRecord record :afterRecords){
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
@@ -405,9 +405,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 addQuery.setStatus(2);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
-                addQuery.setPuids(puids);
+//                addQuery.setPuids(puids);
                 addQuery.setProjectId(query.getProjectId());
-                List<HzMaterielRecord> addRecords = hzMaterielDAO.getMaterialRecordsByPuids(addQuery);
+                List<HzMaterielRecord> addRecords = hzMaterielDAO.getMaterielRecordsByOrderId(addQuery);
                 if(ListUtil.isNotEmpty(addRecords)){
                     for(HzMaterielRecord record :addRecords){
                         HzMaterielRespDTO addRespDTO = HzMaterielFactory.hzMaterielRecordToRespDTO(record);
@@ -422,9 +422,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 deleteQuery.setStatus(4);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
-                deleteQuery.setPuids(puids);
+//                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());
-                List<HzMaterielRecord> deleteRecords = hzMaterielDAO.getMaterialRecordsByPuids(deleteQuery);
+                List<HzMaterielRecord> deleteRecords = hzMaterielDAO.getMaterielRecordsByOrderId(deleteQuery);
                 if(ListUtil.isNotEmpty(deleteRecords)){
                     for(HzMaterielRecord record :deleteRecords){
                         HzMaterielRespDTO addRespDTO = HzMaterielFactory.hzMaterielRecordToRespDTO(record);
@@ -456,7 +456,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         try {
             Future future = pool.submit(()->{
                 //变更数据
-                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//                List<String> puids = hzChangeDataRecordDAO.getChangeDataPuids(query);
                 //查更新的数据 分变更前 变更后（有版本号 状态值为2）
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
@@ -464,8 +464,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 updateQuery.setStatus(2);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
-                updateQuery.setPuids(puids);
-                List<HzWorkProcedure> afterRecords = hzWorkProcedureDAO.getHzWorkProcedureByPuids(updateQuery);
+//                updateQuery.setPuids(puids);
+                List<HzWorkProcedure> afterRecords = hzWorkProcedureDAO.getWorkProcedureByOrderId(updateQuery);
                 if(ListUtil.isNotEmpty(afterRecords)){
                     for(HzWorkProcedure record :afterRecords){
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
@@ -493,9 +493,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 addQuery.setStatus(2);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
-                addQuery.setPuids(puids);
+//                addQuery.setPuids(puids);
                 addQuery.setProjectId(query.getProjectId());
-                List<HzWorkProcedure> addRecords = hzWorkProcedureDAO.getHzWorkProcedureByPuids(addQuery);
+                List<HzWorkProcedure> addRecords = hzWorkProcedureDAO.getWorkProcedureByOrderId(addQuery);
                 if(ListUtil.isNotEmpty(addRecords)){
                     for(HzWorkProcedure record :addRecords){
                         HzWorkProcessRespDTO addRespDTO = HzWorkProcedureFactory.workProcedureToRespDTO(record);
@@ -510,9 +510,9 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 deleteQuery.setStatus(4);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
-                deleteQuery.setPuids(puids);
+//                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());
-                List<HzWorkProcedure> deleteRecords = hzWorkProcedureDAO.getHzWorkProcedureByPuids(deleteQuery);
+                List<HzWorkProcedure> deleteRecords = hzWorkProcedureDAO.getWorkProcedureByOrderId(deleteQuery);
                 if(ListUtil.isNotEmpty(deleteRecords)){
                     for(HzWorkProcedure record :deleteRecords){
                         HzWorkProcessRespDTO addRespDTO = HzWorkProcedureFactory.workProcedureToRespDTO(record);

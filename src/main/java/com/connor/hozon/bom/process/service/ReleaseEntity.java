@@ -197,17 +197,17 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void ebomChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataQuery query = new HzChangeDataQuery();
-        query.setOrderId(orderId);
-        query.setTableName(tableName);
-        List<String> ebomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
-        if (ListUtil.isNotEmpty(ebomPuids)) {
+//        HzChangeDataQuery query = new HzChangeDataQuery();
+//        query.setOrderId(orderId);
+//        query.setTableName(tableName);
+//        List<String> ebomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//        if (ListUtil.isNotEmpty(ebomPuids)) {
             HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
             dataDetailQuery.setOrderId(orderId);
             dataDetailQuery.setTableName(tableName);
             dataDetailQuery.setProjectId(projectId);
-            dataDetailQuery.setPuids(ebomPuids);
-            List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByPuids(dataDetailQuery);
+//            dataDetailQuery.setPuids(ebomPuids);
+            List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);
             //即将要更新的数据
             List<HzBomLineRecord> updateList = new ArrayList<>();
             //即将要删除的数据
@@ -249,7 +249,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 hzEbomRecordDAO.insertList(addList, ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());
             }
 
-        }
+//        }
 
     }
 
@@ -259,17 +259,17 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void pbomChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataQuery query = new HzChangeDataQuery();
-        query.setOrderId(orderId);
-        query.setTableName(tableName);
-        List<String> pbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
-        if (ListUtil.isNotEmpty(pbomPuids)) {
+//        HzChangeDataQuery query = new HzChangeDataQuery();
+//        query.setOrderId(orderId);
+//        query.setTableName(tableName);
+//        List<String> pbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//        if (ListUtil.isNotEmpty(pbomPuids)) {
             HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
             dataDetailQuery.setOrderId(orderId);
             dataDetailQuery.setTableName(tableName);
             dataDetailQuery.setProjectId(projectId);
-            dataDetailQuery.setPuids(pbomPuids);
-            List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecordsByPuids(dataDetailQuery);
+//            dataDetailQuery.setPuids(pbomPuids);
+            List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecordsByOrderId(dataDetailQuery);
             //即将要更新的数据
             List<HzPbomLineRecord> updateList = new ArrayList<>();
             //即将要删除的数据 线程安全
@@ -310,7 +310,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             }
 
 
-        }
+//        }
     }
 
     /**
@@ -319,17 +319,17 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void mbomChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataQuery query = new HzChangeDataQuery();
-        query.setOrderId(orderId);
-        query.setTableName(tableName);
-        List<String> mbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
-        if (ListUtil.isNotEmpty(mbomPuids)) {
+//        HzChangeDataQuery query = new HzChangeDataQuery();
+//        query.setOrderId(orderId);
+//        query.setTableName(tableName);
+//        List<String> mbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//        if (ListUtil.isNotEmpty(mbomPuids)) {
             HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
             dataDetailQuery.setOrderId(orderId);
             dataDetailQuery.setTableName(tableName);
             dataDetailQuery.setProjectId(projectId);
-            dataDetailQuery.setPuids(mbomPuids);
-            List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByPuids(dataDetailQuery);
+//            dataDetailQuery.setPuids(mbomPuids);
+            List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
             //即将要更新的数据
             List<HzMbomLineRecord> updateList = new ArrayList<>();
             //即将要删除的数据
@@ -376,7 +376,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 hzMbomRecordDAO.insertVO(vo);
             }
 
-        }
+//        }
     }
 
     /**
@@ -385,17 +385,17 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void mbomFinanceChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataQuery query = new HzChangeDataQuery();
-        query.setOrderId(orderId);
-        query.setTableName(tableName);
-        List<String> mbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
-        if (ListUtil.isNotEmpty(mbomPuids)) {
+//        HzChangeDataQuery query = new HzChangeDataQuery();
+//        query.setOrderId(orderId);
+//        query.setTableName(tableName);
+//        List<String> mbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//        if (ListUtil.isNotEmpty(mbomPuids)) {
             HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
             dataDetailQuery.setOrderId(orderId);
             dataDetailQuery.setTableName(tableName);
             dataDetailQuery.setProjectId(projectId);
-            dataDetailQuery.setPuids(mbomPuids);
-            List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByPuids(dataDetailQuery);
+//            dataDetailQuery.setPuids(mbomPuids);
+            List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
             //即将要更新的数据
             List<HzMbomLineRecord> updateList = new ArrayList<>();
             //即将要删除的数据
@@ -444,7 +444,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             }
 
 
-        }
+//        }
     }
 
     /**
@@ -453,17 +453,17 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void mbomProductChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataQuery query = new HzChangeDataQuery();
-        query.setOrderId(orderId);
-        query.setTableName(tableName);
-        List<String> mbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
-        if (ListUtil.isNotEmpty(mbomPuids)) {
+//        HzChangeDataQuery query = new HzChangeDataQuery();
+//        query.setOrderId(orderId);
+//        query.setTableName(tableName);
+//        List<String> mbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//        if (ListUtil.isNotEmpty(mbomPuids)) {
             HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
             dataDetailQuery.setOrderId(orderId);
             dataDetailQuery.setTableName(tableName);
             dataDetailQuery.setProjectId(projectId);
-            dataDetailQuery.setPuids(mbomPuids);
-            List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByPuids(dataDetailQuery);
+//            dataDetailQuery.setPuids(mbomPuids);
+            List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
             //即将要更新的数据
             List<HzMbomLineRecord> updateList = new ArrayList<>();
             //即将要删除的数据
@@ -511,7 +511,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             }
 
 
-        }
+//        }
     }
 
     /**
@@ -520,17 +520,17 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void materielChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataQuery query = new HzChangeDataQuery();
-        query.setOrderId(orderId);
-        query.setTableName(tableName);
-        List<String> pbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
-        if (ListUtil.isNotEmpty(pbomPuids)) {
+//        HzChangeDataQuery query = new HzChangeDataQuery();
+//        query.setOrderId(orderId);
+//        query.setTableName(tableName);
+//        List<String> pbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//        if (ListUtil.isNotEmpty(pbomPuids)) {
             HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
             dataDetailQuery.setOrderId(orderId);
             dataDetailQuery.setTableName(tableName);
             dataDetailQuery.setProjectId(projectId);
-            dataDetailQuery.setPuids(pbomPuids);
-            List<HzMaterielRecord> records = hzMaterielDAO.getMaterialRecordsByPuids(dataDetailQuery);
+//            dataDetailQuery.setPuids(pbomPuids);
+            List<HzMaterielRecord> records = hzMaterielDAO.getMaterielRecordsByOrderId(dataDetailQuery);
             //即将要更新的数据
             List<HzMaterielRecord> updateList = new ArrayList<>();
             //即将要删除的数据 线程安全
@@ -571,7 +571,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             }
 
 
-        }
+//        }
     }
 
     /**
@@ -580,17 +580,17 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void workProduceChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataQuery query = new HzChangeDataQuery();
-        query.setOrderId(orderId);
-        query.setTableName(tableName);
-        List<String> pbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
-        if (ListUtil.isNotEmpty(pbomPuids)) {
+//        HzChangeDataQuery query = new HzChangeDataQuery();
+//        query.setOrderId(orderId);
+//        query.setTableName(tableName);
+//        List<String> pbomPuids = hzChangeDataRecordDAO.getChangeDataPuids(query);
+//        if (ListUtil.isNotEmpty(pbomPuids)) {
             HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
             dataDetailQuery.setOrderId(orderId);
             dataDetailQuery.setTableName(tableName);
             dataDetailQuery.setProjectId(projectId);
-            dataDetailQuery.setPuids(pbomPuids);
-            List<HzWorkProcedure> records = hzWorkProcedureDAO.getHzWorkProcedureByPuids(dataDetailQuery);
+//            dataDetailQuery.setPuids(pbomPuids);
+            List<HzWorkProcedure> records = hzWorkProcedureDAO.getWorkProcedureByOrderId(dataDetailQuery);
             //即将要更新的数据
             List<HzWorkProcedure> updateList = new ArrayList<>();
             //即将要删除的数据 线程安全
@@ -631,6 +631,6 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             }
 
         }
-    }
+//    }
 
 }
