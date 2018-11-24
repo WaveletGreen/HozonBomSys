@@ -38,7 +38,6 @@ function initTable(url) {
             // return temp + index;
             var options = $table.bootstrapTable('getOptions');
             return options.pageSize * (options.pageNumber - 1) + index + 1;
-
         }
     }),
         column.push({
@@ -47,13 +46,17 @@ function initTable(url) {
             align: 'center',
             valign: 'middle',
             formatter: function (value, row, index) {
-                var id = row.id
+                var id = row.id;
+                var auditId = row.auditId;
+                //alert(auditId);
                 return [
-                    '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
+                    '<a href="javascript:void(0)" onclick="queryLou(\'' + id+ '\',+\'' + auditId+'\')">' + value + '</a>'
                 ].join("");
+
             }
         });
     column.push({field: 'originTime', title: '发起时间', align: 'center', valign: 'middle'});
+    column.push({field: 'auditTime', title: '审批时间', align: 'center', valign: 'middle'});
     column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
     column.push({field: 'state', title: '变更单状态', align: 'center', valign: 'middle'});
@@ -84,6 +87,7 @@ function initTable(url) {
     });
 }
 
-function queryLou(id) {
-    window.location.href = "processed/ToProcessedForm?id=" + id;
+function queryLou(id,auditId) {
+    window.location.href = "processed/ToProcessedForm?id=" + id+"&auditId="+auditId;
 }
+

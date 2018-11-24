@@ -94,6 +94,32 @@ public class HzChangeOrderRespDTO {
      */
     private String source;
 
+    /**
+     * 审批时间
+     */
+    private String auditTime;
+
+    /**
+     * 审批表ID
+     */
+    private Long auditId;
+
+    public Long getAuditId() {
+        return auditId;
+    }
+
+    public void setAuditId(Long auditId) {
+        this.auditId = auditId;
+    }
+
+    public String getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(String auditTime) {
+        this.auditTime = auditTime;
+    }
+
     public String getSource() {
         return source;
     }

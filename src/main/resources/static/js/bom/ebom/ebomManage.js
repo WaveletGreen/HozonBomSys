@@ -631,8 +631,8 @@ function initTable(eBomUrl) {
                             //动态获取单车配置用量数据
                             for (let k in rows) {
                                 let param = {};
-
-                                for (let i = 0; i < length - eBomTitleSet; i++) {
+                                //-1是把状态列去掉
+                                for (let i = 0; i < length - eBomTitleSet-1; i++) {
                                     if (undefined == rows[k][('title' + i)] || "" == rows[k][('title' + i)] || null == rows[k][('title' + i)]) {
                                         param[('title' + i)] = "";
                                     }

@@ -101,13 +101,15 @@ function initTable(url) {
                         window.Ewin.alert({message: '请选择一条需要修改的变更表单!'});
                         return false;
                     }
-                    else if (rows[0].isFromTc == 0) {
+                    if (rows[0].isFromTc == 0) {
                         window.Ewin.alert({message: '只能选择来源是TC端的表单进行修改!'});
                         return false;
                     }
+                    var id = rows[0].id
                     window.Ewin.dialog({
                         title: "修改",
-                        url: "" ,
+                        url: "untreated/TCUntreatedUpdate?id=" + id ,
+                        //url: "untreated/update",
                         gridId: "gridId",
                         width: 500,
                         height: 500
