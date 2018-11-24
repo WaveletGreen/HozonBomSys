@@ -266,11 +266,13 @@ public interface IHzVWOManagerService {
 
     Map<String,Object> getFullCfgTable(Integer orderChangeId, String projectUid);
 
-    JSONObject deleteChangeFeature(List<Long> changeFeatureIds);
+    JSONObject deleteChangeFeature(List<Long> changeFeatureIds,Long orderId);
 
-    JSONObject deleteChangeColorModel(List<Long> changeColorModelIds);
+    JSONObject deleteChangeColorModel(List<Long> changeColorModelIds,Long orderId);
 
-    JSONObject deleteChangeMaterielFeature(List<Long> changeMaterielFeatureIds);
+    JSONObject deleteChangeMaterielFeature(List<Long> changeMaterielFeatureIds,Long orderId);
 
-    JSONObject deleteChangeBomAll(Long mainId);
+    JSONObject deleteChangeBomAll(Long mainId,Long orderId);
+
+    void doQueryCmcrDetailChangBefor2(Map<String,Object> map, Long vwoId);
 }

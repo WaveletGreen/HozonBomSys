@@ -307,25 +307,66 @@
         set PROCESS_STATUS = #{status,jdbcType=INTEGER}
         where
         CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL}
+        and
+        PROCESS_STATUS = 0
     </update>
 
     <delete id="doDeleteByPrimaryKeys" parameterType="java.util.List">
         delete from HZ_CFG0_AFTER_CHANGE_RECORD
         where
-        CHANGE_ORDER_ID =
-        (select DISTINCT(CHANGE_ORDER_ID) from HZ_CFG0_AFTER_CHANGE_RECORD where
         ID in
         <foreach collection="list" index="index" item="changeFeatureId" open="(" close=")" separator=",">
             #{changeFeatureId,jdbcType=DECIMAL}
         </foreach>
-        )
         and
-        FEATURE_VALUE_NAME in
-        (select FEATURE_VALUE_NAME from HZ_CFG0_AFTER_CHANGE_RECORD where
-        ID in
-        <foreach collection="list" index="index" item="changeFeatureId" open="(" close=")" separator=",">
-            #{changeFeatureId,jdbcType=DECIMAL}
-        </foreach>
-        )
+        PROCESS_STATUS = 0
+        <!--CHANGE_ORDER_ID =-->
+        <!--(select DISTINCT(CHANGE_ORDER_ID) from HZ_CFG0_AFTER_CHANGE_RECORD where-->
+        <!--ID in-->
+        <!--<foreach collection="list" index="index" item="changeFeatureId" open="(" close=")" separator=",">-->
+            <!--#{changeFeatureId,jdbcType=DECIMAL}-->
+        <!--</foreach>-->
+        <!--)-->
+        <!--and-->
+        <!--FEATURE_VALUE_NAME in-->
+        <!--(select FEATURE_VALUE_NAME from HZ_CFG0_AFTER_CHANGE_RECORD where-->
+        <!--ID in-->
+        <!--<foreach collection="list" index="index" item="changeFeatureId" open="(" close=")" separator=",">-->
+            <!--#{changeFeatureId,jdbcType=DECIMAL}-->
+        <!--</foreach>-->
+        <!--)-->
     </delete>
+
+    <select id="selectLast" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CFG0_AFTER_CHANGE_RECORD
+        where
+        ID = (select Max(ID) from HZ_CFG0_AFTER_CHANGE_RECORD where CFG_PUID = #{cfgPuid,jdbcType=VARCHAR} and PROCESS_STATUS = 1)
+    </select>
+
+    <select id="selectByChangeIdAndCfgid" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CFG0_AFTER_CHANGE_RECORD
+        where
+          CFG_PUID = #{cfgPuid,jdbcType=VARCHAR}
+        and
+          CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL}
+        and
+          PROCESS_STATUS = 0
+    </select>
+
+    <select id="doselectByChangeId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CFG0_AFTER_CHANGE_RECORD
+        where
+        CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL}
+        and
+        PROCESS_STATUS = 0
+    </select>
 </mapper>

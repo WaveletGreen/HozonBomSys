@@ -125,7 +125,7 @@
                                         $.ajax({
                                             type: "POST",
                                             //ajax需要添加打包名
-                                            url: "/hozon/vwo/deleteChangeMaterielFeature" ,
+                                            url: "/hozon/vwo/deleteChangeMaterielFeature?orderId="+orderId ,
                                             data: JSON.stringify(ids),
                                             contentType: "application/json",
                                             success: function (result) {

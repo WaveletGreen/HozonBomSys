@@ -76,4 +76,9 @@ public class HzChangeDataRecordDAOImpl extends BaseSQLUtil implements HzChangeDa
         map.put("orderId",query.getOrderId());
         return super.findForList("HzChangeDataRecordDAOImpl_getChangeDataPuids",map);
     }
+
+    @Override
+    public int deleteByOrderIdAndTableName(HzChangeDataRecord hzChangeDataRecord){
+        return super.executeDelete(hzChangeDataRecord,"HzChangeDataRecordDAOImpl_deleteByOrderIdAndTableName");
+    }
 }

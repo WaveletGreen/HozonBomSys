@@ -8,6 +8,16 @@ function loadTable(result) {
 
     mainId = mainResult.mainId;
 
+    // if(mainResult==null){
+    //
+    //     var tr = "<tr><td style='background-color: #00B83F'>不存在全配置BOM变更数据</td></tr>";
+    //     $table.append(tr)
+    //     return false;
+    // }
+
+
+
+
     var rowCount = 10;
 
     $table.html("");
@@ -129,7 +139,7 @@ function modelAppend(index,data) {
 function deleteBom(){
     $.ajax({
         type: "POST",
-        url: "/hozon/vwo/deleteChangeBomAll?mainId="+mainId,
+        url: "/hozon/vwo/deleteChangeBomAll?mainId="+mainId+"&orderId="+orderChangeId,
         contentType: "application/json",
         success: function (result) {
             if (result.status) {

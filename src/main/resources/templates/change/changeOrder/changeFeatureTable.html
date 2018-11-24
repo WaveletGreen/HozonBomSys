@@ -167,7 +167,7 @@
                             if (e) {
                                 $.ajax({
                                     type: "POST",
-                                    url: "/hozon/vwo/deleteChangeFeature",
+                                    url: "/hozon/vwo/deleteChangeFeature?orderId="+orderId,
                                     data: JSON.stringify(ids),
                                     contentType: "application/json",
                                     success: function (result) {
