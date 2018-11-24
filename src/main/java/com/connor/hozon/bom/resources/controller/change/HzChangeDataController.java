@@ -534,5 +534,5 @@ public class HzChangeDataController extends BaseController {
     public void deleteWorkProcedureChangeDataDetail(String puids){
         System.out.println(111);
     }
-    
+
 }
