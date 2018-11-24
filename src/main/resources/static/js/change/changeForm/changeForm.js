@@ -152,16 +152,16 @@ function initTable(url) {
                     // var myData = JSON.stringify({
                     //     "puids":puids,
                     // });
-                    if (rows.length == 0) {
+                    if (rows.length != 1) {
                         window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                         return false;
                     }
-                    var _table = '<p>是否要删除您所选择的记录？</p>' +
-                        '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                    for (var index in rows) {
-                        _table += '<tr><td>' + rows[index].pLineId + '</td></tr>';
-                    }
-                    _table += '</table></div>';
+                    // var _table = '<p>是否要删除您所选择的记录？</p>' +
+                    //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                    // for (var index in rows) {
+                    //     _table += '<tr><td>' + rows[index].pLineId + '</td></tr>';
+                    // }
+                    // _table += '</table></div>';
                     window.Ewin.confirm({title: '提示', message: "确定要删除数据么", width: 500}).on(function (e) {
                         if (e) {
                             $.ajax({
