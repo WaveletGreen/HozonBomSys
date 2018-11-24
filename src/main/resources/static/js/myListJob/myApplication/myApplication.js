@@ -53,6 +53,7 @@ function initTable(url) {
             }
         });
     column.push({field: 'originTime', title: '发起时间', align: 'center', valign: 'middle'});
+    column.push({field: 'auditTime', title: '审批时间', align: 'center', valign: 'middle'});
     column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
     column.push({field: 'state', title: '变更单状态', align: 'center', valign: 'middle'});

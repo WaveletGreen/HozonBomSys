@@ -96,7 +96,7 @@ public class HzMyApplicationContrller {
 //        if(StringUtil.isEmpty(query.getProjectId())){
 //            return new JSONObject();
 //        }
-        HzChangeOrderByPageQuery pageQuery = query;
+        /*HzChangeOrderByPageQuery pageQuery = query;
         try {
             pageQuery.setPageSize(Integer.valueOf(query.getLimit()));
         }catch (Exception e){
@@ -130,13 +130,14 @@ public class HzMyApplicationContrller {
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
             object.put("projectName",hzChangeOrderRespDTO.getProjectName());
             object.put("source",hzChangeOrderRespDTO.getSource());
+            object.put("auditTime",hzChangeOrderRespDTO.getAuditTime());
             list.add(object);
         });
         jsonObject.put("totalCount",page.getTotalCount());
         jsonObject.put("result",list);
-        return jsonObject;
+        return jsonObject;*/
 
-        /*List<HzChangeOrderRespDTO> respDTOs = hzApplicationChangeService.findChangeOrderList(query,record);
+        List<HzChangeOrderRespDTO> respDTOs = hzApplicationChangeService.findChangeOrderList(query,record);
         if(ListUtil.isEmpty(respDTOs)){
             return new JSONObject();
         }
@@ -151,9 +152,12 @@ public class HzMyApplicationContrller {
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
             object.put("projectName",hzChangeOrderRespDTO.getProjectName());
+            object.put("source",hzChangeOrderRespDTO.getSource());
+            object.put("auditTime",hzChangeOrderRespDTO.getAuditTime());
+            object.put("state",hzChangeOrderRespDTO.getState());
             list.add(object);
         });
         jsonObject.put("result",list);
-        return jsonObject;*/
+        return jsonObject;
     }
 }

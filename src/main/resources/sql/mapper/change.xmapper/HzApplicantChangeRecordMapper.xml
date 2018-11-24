@@ -18,7 +18,7 @@
   <!--我的申请返回ORDER_ID-->
   <select id="HzApplicantChangeDAOImpl_findAuditorList" parameterType="java.util.Map" resultMap="BaseResultMap">
     select
-    DISTINCT
+
     ORDER_ID
     from HZ_APPLICANT_CHANGE_RECORD
     where 1=1

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.change.HzApplicantChangeRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
                     HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,infos.get(i).getOrderId());
                     if(rec!=null){
                         HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
-                        respDTO.setProjectId(rec.getProjectId());//?
+                        respDTO.setProjectId(rec.getProjectId());//
                         respDTO.setChangeNo(rec.getChangeNo());//changeNo
                         respDTO.setId(rec.getId());
                         respDTO.setOriginator(rec.getOriginator());
@@ -42,6 +43,15 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
                         respDTO.setChangeType(rec.getChangeType());//变更类型
                         respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
                         respDTO.setProjectName(rec.getProjectName());
+                        respDTO.setSource("BOM");
+                        respDTO.setState(rec.getState());
+                        respDTO.setAuditId(infos.get(i).getId());//改成auditRecordId
+                        //审批时间为空报错
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        //infos.get(i)
+                        //respDTO.setAuditTime(formatter.format(infos.get(i).getAuditTime()));
+
+
                         auditorList.add(respDTO);
                     }
                 }

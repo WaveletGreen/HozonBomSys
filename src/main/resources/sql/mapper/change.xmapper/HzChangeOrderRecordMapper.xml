@@ -230,7 +230,7 @@
         <where>
             1=1
             and t1.ID in (select
-            DISTINCT
+            <!--DISTINCT ORDER_ID-->
             ORDER_ID
             from HZ_APPLICANT_CHANGE_RECORD
             where 1=1

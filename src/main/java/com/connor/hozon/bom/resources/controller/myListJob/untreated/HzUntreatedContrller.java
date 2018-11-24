@@ -117,6 +117,7 @@ public class HzUntreatedContrller extends BaseController {
             object.put("source",hzChangeOrderRespDTO.getSource());
             object.put("state",hzChangeOrderRespDTO.getState());
             object.put("isFromTc",hzChangeOrderRespDTO.getIsFromTc());
+            object.put("auditTime",hzChangeOrderRespDTO.getAuditTime());
             list.add(object);
         });
         jsonObject.put("result",list);
