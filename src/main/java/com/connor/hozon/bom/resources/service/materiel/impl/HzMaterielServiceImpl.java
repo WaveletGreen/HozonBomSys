@@ -390,7 +390,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 hzMaterielDAO.updateList(updateList);
             }
             if(ListUtil.isNotEmpty(deleteRecords)){
-                hzMaterielDAO.deleteMaterielList(deleteRecords);
+                hzMaterielDAO.deleteMaterielList(deleteRecords,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
             }
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){

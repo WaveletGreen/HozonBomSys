@@ -61,7 +61,7 @@ public interface HzEbomRecordDAO {
      * @param puids
      * @return
      */
-    int deleteByPuids(List<String> puids);
+    int deleteByPuids(List<String> puids,String tableName);
     /**
      * EBOM 批量更新 根据零件号来更新
      * @param records

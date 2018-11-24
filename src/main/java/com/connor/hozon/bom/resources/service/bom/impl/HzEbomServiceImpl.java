@@ -2069,7 +2069,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzEbomRecordDAO.updateList(updateList);
             }
             if(ListUtil.isNotEmpty(deletePuids)){
-                hzEbomRecordDAO.deleteByPuids(deletePuids);
+                hzEbomRecordDAO.deleteByPuids(deletePuids,ChangeTableNameEnum.HZ_EBOM.getTableName());
             }
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){

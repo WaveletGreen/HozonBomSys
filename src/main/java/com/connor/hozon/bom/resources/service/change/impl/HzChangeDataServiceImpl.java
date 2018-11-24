@@ -21,7 +21,9 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
@@ -534,44 +536,202 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
     @Override
     public WriteResultRespDTO deleteEBOMChangeDataDetail(BomBackReqDTO reqDTO) {
-        if(StringUtils.isBlank(reqDTO.getPuids())){
+        if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
         }
         List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
         //删除变更后表中的数据
-        //更新原来表中的状态
+        //更新原来表中的状态 为发起流程前的状态
         //如果变更后表中的数据为空 则表示全部删除 这时需要清空中间表数据
-
-        return null;
+        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+        dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
+        dataDetailQuery.setOrderId(reqDTO.getOrderId());
+        dataDetailQuery.setProjectId(reqDTO.getProjectId());
+        dataDetailQuery.setPuids(list);
+        List<HzBomLineRecord> updateList = new ArrayList<>();
+        List<HzEPLManageRecord> recordList =  hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);//表中记录的
+        List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByPuids(dataDetailQuery);//要删除的
+        try {
+            if(ListUtil.isNotEmpty(recordList) && ListUtil.isNotEmpty(records)){
+                records.forEach(record->{
+                    HzBomLineRecord lineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(record);
+                    lineRecord.setStatus(record.getStatus());//审核状态
+                    lineRecord.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
+                    updateList.add(lineRecord);
+                });
+                hzEbomRecordDAO.deleteByPuids(list,ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
+                hzEbomRecordDAO.updateList(updateList);
+                if(recordList.size() == records.size()){
+                    HzChangeDataRecord record = new HzChangeDataRecord();
+                    record.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
+                    record.setOrderId(reqDTO.getOrderId());
+                    hzChangeDataRecordDAO.deleteByOrderIdAndTableName(record);
+                }
+            }
+            return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
     }
 
     @Override
     public WriteResultRespDTO deletePBOMChangeDataDetail(BomBackReqDTO reqDTO) {
-        return null;
+        if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+        List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
+        //删除变更后表中的数据
+        //更新原来表中的状态 为发起流程前的状态
+        //如果变更后表中的数据为空 则表示全部删除 这时需要清空中间表数据
+        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+        dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
+        dataDetailQuery.setOrderId(reqDTO.getOrderId());
+        dataDetailQuery.setProjectId(reqDTO.getProjectId());
+        dataDetailQuery.setPuids(list);
+        List<HzPbomLineRecord> updateList = new ArrayList<>();
+        List<HzPbomLineRecord> recordList =  hzPbomRecordDAO.getPbomRecordsByOrderId(dataDetailQuery);//表中记录的
+        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecordsByPuids(dataDetailQuery);//要删除的
+        try {
+            if(ListUtil.isNotEmpty(recordList) && ListUtil.isNotEmpty(records)){
+                records.forEach(record->{
+                    record.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+                    updateList.add(record);
+                });
+                hzPbomRecordDAO.deleteListByPuids(reqDTO.getPuids(),ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
+                hzPbomRecordDAO.updateList(updateList);
+                if(recordList.size() == records.size()){
+                    HzChangeDataRecord record = new HzChangeDataRecord();
+                    record.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
+                    record.setOrderId(reqDTO.getOrderId());
+                    hzChangeDataRecordDAO.deleteByOrderIdAndTableName(record);
+                }
+            }
+            return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
     }
 
     @Override
     public WriteResultRespDTO deleteMBOMChangeDataDetail(BomBackReqDTO reqDTO) {
-        return null;
+        if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+        List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
+        //删除变更后表中的数据
+        //更新原来表中的状态 为发起流程前的状态
+        //如果变更后表中的数据为空 则表示全部删除 这时需要清空中间表数据
+        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+        dataDetailQuery.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"MA"));
+        dataDetailQuery.setOrderId(reqDTO.getOrderId());
+        dataDetailQuery.setProjectId(reqDTO.getProjectId());
+        dataDetailQuery.setPuids(list);
+        List<HzMbomLineRecord> updateList = new ArrayList<>();
+        List<HzMbomLineRecord> recordList =  hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);//表中记录的
+        List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByPuids(dataDetailQuery);//要删除的
+        try {
+            if(ListUtil.isNotEmpty(recordList) && ListUtil.isNotEmpty(records)){
+                records.forEach(record->{
+                    record.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"M"));
+                    updateList.add(record);
+                });
+                HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
+                vo.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"MA"));
+                vo.setRecordList(records);
+                hzMbomRecordDAO.deleteMbomList(vo);
+                hzMbomRecordDAO.updateList(updateList);
+                if(recordList.size() == records.size()){
+                    HzChangeDataRecord record = new HzChangeDataRecord();
+                    record.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"MA"));
+                    record.setOrderId(reqDTO.getOrderId());
+                    hzChangeDataRecordDAO.deleteByOrderIdAndTableName(record);
+                }
+            }
+            return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
     }
 
-    @Override
-    public WriteResultRespDTO deleteFinanceMBOMChangeDataDetail(BomBackReqDTO reqDTO) {
-        return null;
-    }
-
-    @Override
-    public WriteResultRespDTO deleteProductMBOMChangeDataDetail(BomBackReqDTO reqDTO) {
-        return null;
-    }
 
     @Override
     public WriteResultRespDTO deleteMaterielChangeDataDetail(BomBackReqDTO reqDTO) {
-        return null;
+        if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+        List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
+        //删除变更后表中的数据
+        //更新原来表中的状态 为发起流程前的状态
+        //如果变更后表中的数据为空 则表示全部删除 这时需要清空中间表数据
+        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+        dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
+        dataDetailQuery.setOrderId(reqDTO.getOrderId());
+        dataDetailQuery.setProjectId(reqDTO.getProjectId());
+        dataDetailQuery.setPuids(list);
+        List<HzMaterielRecord> updateList = new ArrayList<>();
+        List<HzMaterielRecord> recordList =  hzMaterielDAO.getMaterielRecordsByOrderId(dataDetailQuery);//表中记录的
+        List<HzMaterielRecord> records = hzMaterielDAO.getMaterialRecordsByPuids(dataDetailQuery);//要删除的
+        try {
+            if(ListUtil.isNotEmpty(recordList) && ListUtil.isNotEmpty(records)){
+                records.forEach(record->{
+                    record.setTableName(ChangeTableNameEnum.HZ_MATERIEL.getTableName());
+                    updateList.add(record);
+                });
+                hzMaterielDAO.deleteMaterielList(records,ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
+                hzMaterielDAO.updateList(updateList);
+                if(recordList.size() == records.size()){
+                    HzChangeDataRecord record = new HzChangeDataRecord();
+                    record.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
+                    record.setOrderId(reqDTO.getOrderId());
+                    hzChangeDataRecordDAO.deleteByOrderIdAndTableName(record);
+                }
+            }
+            return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
     }
 
     @Override
     public WriteResultRespDTO deleteWorkProcedureChangeDataDetail(BomBackReqDTO reqDTO) {
-        return null;
+        if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+        List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
+        //删除变更后表中的数据
+        //更新原来表中的状态 为发起流程前的状态
+        //如果变更后表中的数据为空 则表示全部删除 这时需要清空中间表数据
+        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+        dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
+        dataDetailQuery.setOrderId(reqDTO.getOrderId());
+        dataDetailQuery.setProjectId(reqDTO.getProjectId());
+        dataDetailQuery.setPuids(list);
+        List<HzWorkProcedure> updateList = new ArrayList<>();
+        List<HzWorkProcedure> recordList =  hzWorkProcedureDAO.getWorkProcedureByOrderId(dataDetailQuery);//表中记录的
+        List<HzWorkProcedure> records = hzWorkProcedureDAO.getHzWorkProcedureByPuids(dataDetailQuery);//要删除的
+        try {
+            if(ListUtil.isNotEmpty(recordList) && ListUtil.isNotEmpty(records)){
+                records.forEach(record->{
+                    record.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
+                    updateList.add(record);
+                });
+                hzWorkProcedureDAO.deleteByPuids(list,ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
+                hzWorkProcedureDAO.updateList(updateList);
+                if(recordList.size() == records.size()){
+                    HzChangeDataRecord record = new HzChangeDataRecord();
+                    record.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
+                    record.setOrderId(reqDTO.getOrderId());
+                    hzChangeDataRecordDAO.deleteByOrderIdAndTableName(record);
+                }
+            }
+            return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
     }
 }

@@ -74,19 +74,7 @@ public interface HzChangeDataService {
      * @return
      */
     WriteResultRespDTO deleteMBOMChangeDataDetail(BomBackReqDTO reqDTO);
-    /**
-     * 删除财务MBOM变更表单数据
-     * @param reqDTO
-     * @return
-     */
-    WriteResultRespDTO deleteFinanceMBOMChangeDataDetail(BomBackReqDTO reqDTO);
 
-    /**
-     * 删除生产MBOM变更表单数据
-     * @param reqDTO
-     * @return
-     */
-    WriteResultRespDTO deleteProductMBOMChangeDataDetail(BomBackReqDTO reqDTO);
     /**
      * 删除物料变更表单数据
      * @param reqDTO

@@ -110,7 +110,7 @@ public interface HzMaterielDAO {
 
     List<HzMaterielRecord> getAllMaterielExceptVehicleMateriel(String projectId);
 
-    int deleteMaterielList(List<HzMaterielRecord> list);
+    int deleteMaterielList(List<HzMaterielRecord> list,String tableName);
 
     int updateList(List<HzMaterielRecord> list);
 

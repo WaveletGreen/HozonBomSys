@@ -453,10 +453,10 @@
     </select>
 
     <!--批量删除物料数据-->
-    <delete id="HzMaterialDAOImpl_deleteMaterielList" parameterType="java.util.List">
+    <delete id="HzMaterialDAOImpl_deleteMaterielList" parameterType="java.util.HashMap">
 
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
-            delete HZ_MATERIEL_RECORD
+            delete ${tableName}
             where PUID = #{item.puid,jdbcType=VARCHAR}
         </foreach>
     </delete>

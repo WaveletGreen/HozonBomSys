@@ -249,9 +249,10 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     }
 
     @Override
-    public int deleteByPuids(List<String> puids) {
+    public int deleteByPuids(List<String> puids,String tableName) {
         int size = puids.size();
         Map<String,Object> m = new HashMap<>();
+        m.put("tableName",tableName);
         try {
             if(size>1000){
                 HzBomSysFactory<String> factory = new HzBomSysFactory();

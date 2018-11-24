@@ -610,7 +610,7 @@
 
     <!--批量删除 物理删 EBOM-->
     <delete id="HzEbomRecordDAOImpl_deleteByPuids" parameterType="java.util.HashMap">
-        delete HZ_BOM_LINE_RECORD where puid in
+        delete ${tableName} where puid in
         <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
             #{puids[${index}]}
         </foreach>

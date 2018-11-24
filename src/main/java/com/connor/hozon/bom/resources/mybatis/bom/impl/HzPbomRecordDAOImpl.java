@@ -401,11 +401,12 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public int deleteListByPuids(String puids) {
+    public int deleteListByPuids(String puids,String tableName) {
         List<String> list = Lists.newArrayList(puids.split(","));
         try {
             int size = list.size();
             Map<String,Object> m = new HashMap<>();
+            m.put("tableName",tableName);
             synchronized (this){
                 if(size>1000){
                     HzBomSysFactory<String> factory = new HzBomSysFactory();

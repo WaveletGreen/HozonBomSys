@@ -868,7 +868,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                             }else if(Integer.valueOf(11).equals(entry.getKey())){
                                 hzMaterielDAO.updateList(entry.getValue());
                             }else if(Integer.valueOf(12).equals(entry.getKey())){
-                                hzMaterielDAO.deleteMaterielList(entry.getValue());
+                                hzMaterielDAO.deleteMaterielList(entry.getValue(),ChangeTableNameEnum.HZ_MATERIEL.getTableName());
                             }
 
                         }

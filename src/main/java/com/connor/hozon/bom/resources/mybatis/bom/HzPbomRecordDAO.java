@@ -197,7 +197,7 @@ public interface HzPbomRecordDAO {
      * @param puids
      * @return
      */
-    int deleteListByPuids(String puids);
+    int deleteListByPuids(String puids,String tableName);
 
     HzPbomLineRecord getPBomRecordByPuidAndRevision(HzChangeDataDetailQuery query);
 

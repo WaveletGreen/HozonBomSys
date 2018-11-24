@@ -1334,7 +1334,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     hzPbomRecordDAO.updateList(updateList);
                 }
                 if(StringUtils.isNotBlank(deletePuids.toString())){
-                    hzPbomRecordDAO.deleteListByPuids(deletePuids.toString());
+                    hzPbomRecordDAO.deleteListByPuids(deletePuids.toString(),ChangeTableNameEnum.HZ_PBOM.getTableName());
                 }
                 return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){

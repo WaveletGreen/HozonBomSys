@@ -502,39 +502,36 @@ public class HzChangeDataController extends BaseController {
 
 
     @RequestMapping(value = "ebom/delete",method = RequestMethod.DELETE)
-    public void deleteEBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
-        System.out.println(111);
+    public void deleteEBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deleteEBOMChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
     }
 
     @RequestMapping(value = "pbom/delete",method = RequestMethod.DELETE)
-    public void deletePBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
-        System.out.println(111);
+    public void deletePBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deletePBOMChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
     }
 
 
     @RequestMapping(value = "mbom/delete",method = RequestMethod.DELETE)
-    public void deleteMBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
-        System.out.println(111);
+    public void deleteMBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deleteMBOMChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
     }
 
-    @RequestMapping(value = "mbom/product/delete",method = RequestMethod.DELETE)
-    public void deleteProductMBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
-        System.out.println(111);
-    }
 
-    @RequestMapping(value = "mbom/finance/delete",method = RequestMethod.DELETE)
-    public void deleteFinanceMBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
-        System.out.println(111);
-    }
 
     @RequestMapping(value = "materiel/delete",method = RequestMethod.DELETE)
-    public void deleteMaterielChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
-        System.out.println(111);
+    public void deleteMaterielChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deleteMaterielChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
     }
 
     @RequestMapping(value = "work/procedure/delete",method = RequestMethod.DELETE)
-    public void deleteWorkProcedureChangeDataDetail(@RequestBody BomBackReqDTO reqDTO){
-        System.out.println(111);
+    public void deleteWorkProcedureChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deleteWorkProcedureChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
     }
 
 }

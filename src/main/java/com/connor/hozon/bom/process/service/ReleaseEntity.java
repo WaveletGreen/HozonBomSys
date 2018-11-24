@@ -317,7 +317,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
         }
 
         if (ListUtil.isNotEmpty(deletePuids)) {
-            hzEbomRecordDAO.deleteByPuids(deletePuids);
+            hzEbomRecordDAO.deleteByPuids(deletePuids,ChangeTableNameEnum.HZ_EBOM.getTableName());
         }
         if (ListUtil.isNotEmpty(updateList)) {
             hzEbomRecordDAO.updateList(updateList);
@@ -370,7 +370,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
         }
 
         if (StringUtils.isNotBlank(stringBuffer.toString())) {
-            hzPbomRecordDAO.deleteListByPuids(stringBuffer.toString());
+            hzPbomRecordDAO.deleteListByPuids(stringBuffer.toString(),ChangeTableNameEnum.HZ_PBOM.getTableName());
         }
         if (ListUtil.isNotEmpty(updateList)) {
             hzPbomRecordDAO.updateList(updateList);
@@ -603,7 +603,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
         }
 
         if (ListUtil.isNotEmpty(deleteList)) {
-            hzMaterielDAO.deleteMaterielList(deleteList);
+            hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
         }
         if (ListUtil.isNotEmpty(updateList)) {
             hzMaterielDAO.updateList(updateList);
@@ -658,7 +658,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
         }
 
         if (ListUtil.isNotEmpty(deleteList)) {
-            hzWorkProcedureDAO.deleteByPuids(deleteList);
+            hzWorkProcedureDAO.deleteByPuids(deleteList,ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
         }
         if (ListUtil.isNotEmpty(updateList)) {
             hzWorkProcedureDAO.updateList(updateList);
