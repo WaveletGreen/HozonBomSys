@@ -637,7 +637,7 @@ public class HzBomAllCfgService {
      * @param msgVal
      * @return
      */
-    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid, Integer colorPart, String msgVal) {
+    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid, Integer colorPart, String msgVal,String projectPuid) {
         JSONObject respone = new JSONObject();
         if (cfgPuid.equals("null")) {
             respone.put("flag", false);
@@ -671,6 +671,13 @@ public class HzBomAllCfgService {
             respone.put("flag", false);
 
         }
+        HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectPuid);
+        hzFullCfgMain.setStatus(0);
+        if(hzFullCfgMainDao.updateStatusById(hzFullCfgMain)<=0?true:false){
+            respone.put("status", false);
+            respone.put("msg", "修改全配置BOM状态失败");
+            return respone;
+        }
         return respone;
     }
 
@@ -680,7 +687,7 @@ public class HzBomAllCfgService {
      * @param data model集合 格式为<车辆模型ID<特性ID,打点图状态>>
      * @return
      */
-    public JSONObject savePoint(Map<String, Map<String, String>> data) {
+    public JSONObject savePoint(Map<String, Map<String, String>> data,String projectPuid) {
         JSONObject respons = new JSONObject();
 
         //创建存储model数据集
@@ -722,6 +729,15 @@ public class HzBomAllCfgService {
         } else {
             respons.put("updateFlag", false);
         }
+
+        HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectPuid);
+        hzFullCfgMain.setStatus(0);
+        if(hzFullCfgMainDao.updateStatusById(hzFullCfgMain)<=0?true:false){
+            respons.put("updateFlag", false);
+            respons.put("msg", "修改全配置BOM状态失败");
+            return respons;
+        }
+
         return respons;
     }
 
@@ -844,6 +860,7 @@ public class HzBomAllCfgService {
                 hzFullCfgMain.setUpdater(user.getUsername());
                 hzFullCfgMain.setUpdateDate(new Date());
                 hzFullCfgMain.setEffectiveDate(new Date());
+                hzFullCfgMain.setStatus(5);
                 if (hzFullCfgMainDao.updateByPrimaryKeySelective(hzFullCfgMain) > 0) {
                     logger.info("升小版本成功");
                     result.put("status", true);

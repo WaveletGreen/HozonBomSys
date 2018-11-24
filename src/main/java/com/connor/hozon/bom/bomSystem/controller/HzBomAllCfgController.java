@@ -86,8 +86,8 @@ public class HzBomAllCfgController {
      */
     @RequestMapping("/saveOneRow")
     @ResponseBody
-    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid, Integer colorPart, String msgVal) {
-        return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid, colorPart, msgVal);
+    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid, Integer colorPart, String msgVal,String projectPuid) {
+        return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid, colorPart, msgVal,projectPuid);
     }
 
     /**
@@ -98,8 +98,8 @@ public class HzBomAllCfgController {
      */
     @RequestMapping("/savePoint")
     @ResponseBody
-    public JSONObject savePoint(@RequestBody Map<String, Map<String, String>> data) {
-        return hzBomAllCfgService.savePoint(data);
+    public JSONObject savePoint(@RequestBody Map<String, Map<String, String>> data,String projectPuid) {
+        return hzBomAllCfgService.savePoint(data,projectPuid);
     }
 
     /**

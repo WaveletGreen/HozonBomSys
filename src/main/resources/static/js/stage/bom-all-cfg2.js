@@ -795,7 +795,7 @@ function editorOrSave(but) {
         //保存2Y层对应的各数据
         $.ajax({
             type: "POST",
-            url: "bomAllCfg/saveOneRow?bomLinePuid=" + bomLinePuid + "&cfgPuid=" + cfgPuid + "&colorPart=" + colorPart + "&msgVal=" + msgVal,
+            url: "bomAllCfg/saveOneRow?bomLinePuid=" + bomLinePuid + "&cfgPuid=" + cfgPuid + "&colorPart=" + colorPart + "&msgVal=" + msgVal+"&projectPuid="+projectPuid,
             contentType: 'application/json',
             success: function (result) {
                 if (result.flag) {
@@ -992,7 +992,7 @@ function editPoint(but) {
         //传给后台保存打点图
         $.ajax({
             type: "POST",
-            url: "bomAllCfg/savePoint",
+            url: "bomAllCfg/savePoint?projectPuid="+projectPuid,
             data: json,
             dataType: 'json',
             contentType: 'application/json',

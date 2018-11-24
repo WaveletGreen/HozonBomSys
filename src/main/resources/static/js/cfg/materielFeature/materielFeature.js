@@ -54,7 +54,7 @@ var toolbar = [
         handler: deleteVehicleFake
     },
     {
-        text: '发起变更表单',
+        text: '发起流程',
         iconCls: 'glyphicon glyphicon-pencil',
         handler: launchChangeForm
     },

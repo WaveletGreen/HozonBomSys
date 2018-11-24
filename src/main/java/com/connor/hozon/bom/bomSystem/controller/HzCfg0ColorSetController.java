@@ -91,6 +91,10 @@ public class HzCfg0ColorSetController {
            /* entity.setStrColorAbolishDate(DateStringHelper.dateToString2(entity.getpColorAbolishDate()));
             entity.setStrColorEffectedDate(DateStringHelper.dateToString2(entity.getpColorEffectedDate()));*/
             model.addAttribute("entity", entity);
+            String csPaintMaterielCodes = entity.getCsPaintMaterielCodes();
+            String[] strings = csPaintMaterielCodes.split("<br>");
+
+            model.addAttribute("csPaintMaterielCodes",strings);
             return "cfg/color/colorUpdate";
         } else {
             model.addAttribute("msg", "查找不到颜色信息:" + entity.getpColorName());
