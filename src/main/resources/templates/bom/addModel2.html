@@ -129,6 +129,7 @@
                 for (var p in _d) {
                     data[_d[p].name] = _d[p].value;
                 }
+                data["projectUid"] = getProjectUid();
                 $.ajax({
                     contentType:
                         "application/json",

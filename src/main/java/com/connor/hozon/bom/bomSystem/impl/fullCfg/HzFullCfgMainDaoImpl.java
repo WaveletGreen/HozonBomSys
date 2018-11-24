@@ -67,10 +67,15 @@ public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements
     }
 
     @Override
-    public int updateStatusByOrderId(Long orderId, String stutas) {
+    public int updateStatusByOrderId(Long orderId, Integer stutas) {
         Map<String,Object> map = new HashMap<>();
         map.put("stutas",stutas);
         map.put("orderId",orderId);
         return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
+    @Override
+    public int updateStatusById(HzFullCfgMain hzFullCfgMain) {
+        return baseSQLUtil.executeUpdate(hzFullCfgMain,clzName+".updateStatusById");
     }
 }

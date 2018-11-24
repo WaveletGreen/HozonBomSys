@@ -12,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
@@ -210,6 +211,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     /*****全配置BOM的DAO******/
     @Autowired
     HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
+    @Autowired
+    HzFullCfgMainDao hzFullCfgMainDao;
     @Autowired
     HzFullCfgModelChangeDao hzFullCfgModelChangeDao;
     @Autowired
@@ -3018,7 +3021,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         if(hzFullCfgMainChangeBefor!=null){
             mainMap.put("stage",hzFullCfgMainChangeAfter.getStageString()+"("+hzFullCfgMainChangeBefor.getStageString()+")");
             mainMap.put("version",hzFullCfgMainChangeAfter.getVersion()+"("+hzFullCfgMainChangeBefor.getVersion()+")");
-            mainMap.put("effectiveDate",hzFullCfgMainChangeAfter.getEffectiveDate()+"("+hzFullCfgMainChangeBefor.getEffectiveDate()+")");
+            mainMap.put("effectiveDate",hzFullCfgMainChangeAfter.getEffectiveDate()==null?"":hzFullCfgMainChangeAfter.getEffectiveDate()+"("+hzFullCfgMainChangeBefor.getEffectiveDate()+")");
             mainMap.put("mainId",String.valueOf(hzFullCfgMainChangeAfter.getId()));
          /***********整理车辆模型数据**************/
             //查询变更前后存在的车辆模型
@@ -3525,7 +3528,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         }
         if(hzCmcrChangeDao.doDeleteIds(changeColorModelIds)<=0?true:false){
             result.put("status",false);
-            result.put("msg","删除变更数据失败");
+            result.put("msg","删除的为变更前数据或删除变更数据失败");
             return result;
         }
         return result;
@@ -3566,12 +3569,18 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     public JSONObject deleteChangeBomAll(Long mainId,Long orderId) {
         JSONObject result = new JSONObject();
         result.put("status",true);
-        result.put("msg","修改成功");
+        result.put("msg","删除成功");
+        if(hzFullCfgMainDao.updateStatusByOrderId(orderId,0)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","修改源数据失败");
+            return result;
+        }
         if(hzFullCfgMainChangeDao.deleteById(mainId)<=0?true:false){
             result.put("status",false);
             result.put("msg","删除失败");
             return result;
         }
+
         HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
         hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName());
         hzChangeDataRecord.setOrderId(orderId);

@@ -193,6 +193,9 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     //全配置变更批准
                 } else if (ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())) {
                     if (hzFullCfgMainDao.updateStatusByOrderId(orderId, "已生效") <= 0 ? true : false) {
+                //全配置变更批准
+                }else if(ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    if(hzFullCfgMainDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
                     if (hzFullCfgMainChangeDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {

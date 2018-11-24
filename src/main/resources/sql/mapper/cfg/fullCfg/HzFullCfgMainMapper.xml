@@ -10,7 +10,7 @@
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgMain">
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid"/>
-        <result column="STATUS" jdbcType="VARCHAR" property="status"/>
+        <result column="STATUS" jdbcType="DECIMAL" property="status"/>
         <result column="STAGE" jdbcType="INTEGER" property="stage"/>
         <result column="VERSION" jdbcType="VARCHAR" property="version"/>
         <result column="EFFECTIVE_DATE" jdbcType="TIMESTAMP" property="effectiveDate"/>
@@ -39,7 +39,7 @@
         </selectKey>
         insert into HZ_FULL_CFG_MAIN_RECORD (ID, PROJECT_UID, STATUS,
         VERSION, CREATOR,UPDATER)
-        values (#{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+        values (#{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=DECIMAL},
         #{version,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR}, #{updater,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
@@ -86,7 +86,7 @@
                 #{projectUid,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
-                #{status,jdbcType=VARCHAR},
+                #{status,jdbcType=DECIMAL},
             </if>
             <if test="stage != null">
                 #{stage,jdbcType=INTEGER},
@@ -118,7 +118,7 @@
                 PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
-                STATUS = #{status,jdbcType=VARCHAR},
+                STATUS = #{status,jdbcType=DECIMAL},
             </if>
             <if test="stage != null">
                 STAGE = #{stage,jdbcType=INTEGER},
@@ -147,7 +147,7 @@
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
     update HZ_FULL_CFG_MAIN_RECORD
     set PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
-      STATUS = #{status,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=DECIMAL},
       STAGE = #{stage,jdbcType=INTEGER},
       VERSION = #{version,jdbcType=VARCHAR},
       EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP},
@@ -180,7 +180,7 @@
         values (
         #{id,jdbcType=DECIMAL},
         #{projectUid,jdbcType=VARCHAR},
-        #{status,jdbcType=VARCHAR},
+        #{status,jdbcType=DECIMAL},
         #{stage,jdbcType=DECIMAL},
         #{version,jdbcType=VARCHAR},
         #{effectiveDate,jdbcType=TIMESTAMP},
@@ -193,10 +193,16 @@
 
     <update id="updateStatusByOrderId" parameterType="java.util.Map">
         update HZ_FULL_CFG_MAIN_RECORD
-        set STATUS = #{stutas,jdbcType=VARCHAR}
+        set STATUS = #{stutas,jdbcType=DECIMAL}
         where
         ID in (
           select SRC_MAIN_ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
         )
+    </update>
+
+    <update id="updateStatusById" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+        update HZ_FULL_CFG_MAIN_RECORD
+        set STATUS = #{status,jdbcType=DECIMAL}
+        where ID = #{id,jdbcType=DECIMAL}
     </update>
 </mapper>
