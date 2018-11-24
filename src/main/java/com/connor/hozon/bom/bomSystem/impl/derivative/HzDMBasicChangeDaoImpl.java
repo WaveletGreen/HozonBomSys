@@ -60,4 +60,9 @@ public class HzDMBasicChangeDaoImpl extends BasicDaoImpl<HzDMBasicChangeBean> im
         map.put("status",status);
         return baseSQLUtil.executeUpdate(map,clz.getCanonicalName()+".updateStatusByOrderId");
     }
+
+    @Override
+    public int updateByChangeIds(List<Long> changeMaterielFeatureIds) {
+        return baseSQLUtil.executeDelete(changeMaterielFeatureIds,clz.getCanonicalName()+".updateByChangeIds");
+    }
 }

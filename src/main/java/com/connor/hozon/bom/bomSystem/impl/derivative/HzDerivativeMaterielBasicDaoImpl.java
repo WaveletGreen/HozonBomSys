@@ -93,4 +93,9 @@ public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeM
         map.put("status",status);
         return baseSQLUtil.executeUpdate(map,clz.getCanonicalName()+".updateStatusByOrderId");
     }
+
+    @Override
+    public int updateByChangeIds(List<Long> changeMaterielFeatureIds) {
+        return baseSQLUtil.executeUpdate(changeMaterielFeatureIds,clz.getCanonicalName()+".updateByChangeIds");
+    }
 }

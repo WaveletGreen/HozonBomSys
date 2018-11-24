@@ -283,7 +283,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReceiveDto.getState());
+                _res.put("puid",dto.getPuid());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("lineId",dto.getLineId() );
                 _res.put("pBomLinePartName",dto.getpBomLinePartName() );
@@ -352,6 +352,7 @@ public class HzChangeDataController extends BaseController {
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
 //                _res.put("state",ProcessReceiveDto.getState());
+                _res.put("puid",dto.getPuid());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("level", dto.getLevel());
                 _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
@@ -388,6 +389,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
+                _res.put("puid",dto.getPuid());
 //                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("rank",dto.getRank());
@@ -431,6 +433,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
+                _res.put("puid",dto.getPuid());
 //                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("resource",dto.getResource());
@@ -468,6 +471,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
+                _res.put("puid",dto.getPuid());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("pMaterielCode", dto.getpMaterielCode());
                 _res.put("pMaterielDesc", dto.getpMaterielDesc());
@@ -493,4 +497,42 @@ public class HzChangeDataController extends BaseController {
         }
         return null;
     }
+
+
+    @RequestMapping(value = "ebom/delete",method = RequestMethod.DELETE)
+    public void deleteEBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "pbom/delete",method = RequestMethod.DELETE)
+    public void deletePBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+
+    @RequestMapping(value = "mbom/delete",method = RequestMethod.DELETE)
+    public void deleteMBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "mbom/product/delete",method = RequestMethod.DELETE)
+    public void deleteProductMBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "mbom/finance/delete",method = RequestMethod.DELETE)
+    public void deleteFinanceMBOMChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "materiel/delete",method = RequestMethod.DELETE)
+    public void deleteMaterielChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
+    @RequestMapping(value = "work/procedure/delete",method = RequestMethod.DELETE)
+    public void deleteWorkProcedureChangeDataDetail(String puids){
+        System.out.println(111);
+    }
+
 }

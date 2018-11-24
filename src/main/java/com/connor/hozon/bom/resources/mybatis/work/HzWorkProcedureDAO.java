@@ -84,4 +84,6 @@ public interface HzWorkProcedureDAO {
      * @return
      */
     int deleteByPuids(List<String> puids);
+
+    List<HzWorkProcedure> getWorkProcedureByOrderId(HzChangeDataDetailQuery query);
 }

@@ -105,7 +105,7 @@ var toolbar = [
     //     }
     // },
     {
-        text: '发起VWO流程',
+        text: '发起变更流程',
         iconCls: 'glyphicon glyphicon-send',
         handler: function () {
             var rows = $table.bootstrapTable('getSelections');
@@ -286,7 +286,7 @@ var column = [
             }
             else if (value == 0 || "0" == value) {
                 if (1 == row.cfgIsInProcess || "1" == row.cfgIsInProcess) {
-                    return "<span style='color: #e69800'>VWO审核中<br>("+row.vwoNum+")</span>";
+                    return "<span style='color: #e69800'>变更审核中<br>("+row.vwoNum+")</span>";
                 }
                 else {
                     return "<span style='color: #a97f89'>草稿状态</span>";

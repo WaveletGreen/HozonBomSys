@@ -441,4 +441,19 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_getEBomRecordByPuidAndRevision",map);
     }
 
+    @Override
+    public List<HzPbomLineRecord> getPbomRecordsByOrderId(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        map.put("status",query.getStatus());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"1":"0");
+        }else {
+            map.put("revision",null);
+        }
+        return super.findForList("HzPbomRecordDAOImpl_getPbomRecordsByOrderId",map);
+    }
+
 }

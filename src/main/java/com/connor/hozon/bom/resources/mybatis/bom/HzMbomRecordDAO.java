@@ -244,4 +244,7 @@ public interface HzMbomRecordDAO {
 
 
     HzMbomLineRecord getMBomRecordByPuidAndRevision(HzChangeDataDetailQuery query);
+
+
+    List<HzMbomLineRecord> getMbomRecordsByOrderId(HzChangeDataDetailQuery query);
 }

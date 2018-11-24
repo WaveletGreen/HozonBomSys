@@ -171,4 +171,11 @@
       and t.TABLE_NAME =#{tableName,jdbcType=VARCHAR}
   </select>
 
+  <delete id="HzChangeDataRecordDAOImpl_deleteByOrderIdAndTableName" parameterType="sql.pojo.change.HzChangeDataRecord">
+      delete from HZ_CHANGE_DATA_RECORD t
+      where
+        t.TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+      and
+        t.ORDER_ID = #{orderId,jdbcType=DOUBLE}
+  </delete>
 </mapper>

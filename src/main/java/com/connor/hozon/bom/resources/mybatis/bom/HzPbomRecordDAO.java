@@ -201,4 +201,7 @@ public interface HzPbomRecordDAO {
 
     HzPbomLineRecord getPBomRecordByPuidAndRevision(HzChangeDataDetailQuery query);
 
+
+
+    List<HzPbomLineRecord> getPbomRecordsByOrderId(HzChangeDataDetailQuery query);
 }

@@ -8,9 +8,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sql.redis.HzDBException;
 
 import java.util.ArrayList;
@@ -20,8 +19,10 @@ import java.util.Map;
 
 @Repository
 //@Configuration
+@Transactional
 public class BaseSQLUtil implements IBaseSQLUtil {
     private static final Logger logger = LoggerFactory.getLogger(BaseSQLUtil.class);
+    //DefaultSqlSession这个类不是线程安全的，所以DefaultSqlSession这个类不可以被设置成单例模式的
     private static SqlSession session;
     private static SqlSessionTemplate sqlSessionTemplate;
     //    锁对象，保证能进入双重校验锁结构语句

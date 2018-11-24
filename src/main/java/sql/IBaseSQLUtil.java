@@ -1,10 +1,7 @@
 package sql;
 
-import org.springframework.context.annotation.Configuration;
-
 import java.util.List;
 
-@Configuration
 public interface IBaseSQLUtil {
     /**
      * 根据ID查找对象

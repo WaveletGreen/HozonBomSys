@@ -136,4 +136,7 @@ public interface HzMaterielDAO {
      * @return
      */
     HzMaterielRecord getMaterialRecordByPuidAndRevision(HzChangeDataDetailQuery query);
+
+
+    List<HzMaterielRecord> getMaterielRecordsByOrderId(HzChangeDataDetailQuery query);
 }

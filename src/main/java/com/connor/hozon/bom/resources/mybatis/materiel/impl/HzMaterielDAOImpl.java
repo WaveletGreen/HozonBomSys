@@ -276,4 +276,19 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("tableName",query.getTableName());
         return (HzMaterielRecord)super.findForObject("HzMaterialDAOImpl_getMaterialRecordByPuidAndRevision",map);
     }
+
+    @Override
+    public List<HzMaterielRecord> getMaterielRecordsByOrderId(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        map.put("pValidFlag",query.getStatus());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"1":"0");
+        }else {
+            map.put("revision",null);
+        }
+        return super.findForList("HzMaterialDAOImpl_getMaterielRecordsByOrderId",map);
+    }
 }

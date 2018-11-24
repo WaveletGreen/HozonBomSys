@@ -42,7 +42,6 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     @Override
     public int deleteByPrimaryKey(String puid) {
         return baseSQLUtil.executeDeleteBySome(clzName + ".deleteByPrimaryKey", puid, "HZ_CFG0_RECORD");
-
     }
 
     @Override
@@ -185,6 +184,11 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         map.put("orderId",orderId);
         map.put("status",status);
         return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
+    @Override
+    public int updateByChangeId(List<Long> changeFeatureIds) {
+        return baseSQLUtil.executeUpdate(changeFeatureIds,clzName+".updateByChangeId");
     }
 
 }
