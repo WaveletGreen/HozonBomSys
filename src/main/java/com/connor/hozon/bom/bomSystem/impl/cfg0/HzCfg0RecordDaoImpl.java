@@ -42,7 +42,6 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     @Override
     public int deleteByPrimaryKey(String puid) {
         return baseSQLUtil.executeDeleteBySome(clzName + ".deleteByPrimaryKey", puid, "HZ_CFG0_RECORD");
-
     }
 
     @Override
@@ -167,6 +166,29 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     @Override
     public List<HzCfg0Record> selectByPuids(List<String> puidList) {
         return baseSQLUtil.executeQueryByPass(new HzCfg0Record(), puidList, clzName+".selectByPuids");
+    }
+
+    @Override
+    public int updateStatus(List<HzCfg0Record> hzCfg0RecordListDelete) {
+        return baseSQLUtil.executeUpdate(hzCfg0RecordListDelete,clzName+".updateStatus");
+    }
+
+    @Override
+    public int updateListAll(List<HzCfg0Record> hzCfg0RecordListUpdata) {
+        return baseSQLUtil.executeUpdate(hzCfg0RecordListUpdata,clzName+".updateListAll");
+    }
+
+    @Override
+    public int updateStatusByOrderId(Long orderId, int status) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("status",status);
+        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
+    @Override
+    public int updateByChangeId(List<Long> changeFeatureIds) {
+        return baseSQLUtil.executeUpdate(changeFeatureIds,clzName+".updateByChangeId");
     }
 
 }

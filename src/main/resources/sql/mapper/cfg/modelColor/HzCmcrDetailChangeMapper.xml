@@ -620,4 +620,5 @@
             #{hzCmcrChange.cmcrCgId,jdbcType=DECIMAL}
         </foreach>
     </select>
+
 </mapper>

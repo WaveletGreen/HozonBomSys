@@ -1155,8 +1155,8 @@ public class HzPbomServiceImpl implements HzPbomService {
 
         try {
             //获取申请人信息
-            User user = UserInfo.getUser();
-            Long applicantId = Long.valueOf(user.getId());
+//            User user = UserInfo.getUser();
+//            Long applicantId = Long.valueOf(user.getId());
 
             //表单id
             Long orderId = reqDTO.getOrderId();
@@ -1179,11 +1179,33 @@ public class HzPbomServiceImpl implements HzPbomService {
             List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecordsByPuids(query);
             List<HzPbomLineRecord> afterRecords = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){
-                records.forEach(record -> {
-                    HzPbomLineRecord manageRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
-                    manageRecord.setOrderId(orderId);
-                    afterRecords.add(manageRecord);
-                });
+                //到 after表中查询看是否存在记录
+                //存在记录则过滤 不存在记录则插入
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                dataDetailQuery.setOrderId(orderId);
+                dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
+                List<HzPbomLineRecord> recordList = hzPbomRecordDAO.getPbomRecordsByOrderId(dataDetailQuery);
+                if(ListUtil.isEmpty(recordList)){
+                    records.forEach(record -> {
+                        HzPbomLineRecord manageRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
+                        manageRecord.setOrderId(orderId);
+                        afterRecords.add(manageRecord);
+                    });
+                }else {
+                    for(int i=0;i<records.size();i++){
+                        records.get(i).setOrderId(orderId);
+                        for(HzPbomLineRecord record:recordList){
+                            if(records.get(i).equals(record)){
+                                records.remove(records.get(i));
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+                    afterRecords.addAll(records);
+                }
+
                 map.put("pbomAfter",afterRecords);
 
 
@@ -1191,11 +1213,9 @@ public class HzPbomServiceImpl implements HzPbomService {
                 List<HzPbomLineRecord> bomLineRecords = new ArrayList<>();
                 for(HzPbomLineRecord record:records){
                     HzPbomLineRecord lineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
-                    if(Integer.valueOf(2).equals(record.getStatus())){//草稿状态---->审核状态
-                        lineRecord.setStatus(5);
-                    }else if(Integer.valueOf(4).equals(record.getStatus())){// 删除状态----->审核状态
-                        lineRecord.setStatus(6);
-                    }
+                   //状态改为审核中
+                    lineRecord.setStatus(5);
+
 //                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
                     bomLineRecords.add(lineRecord);
                 }
@@ -1204,17 +1224,10 @@ public class HzPbomServiceImpl implements HzPbomService {
                 map.put("pbomBefore",bomLineRecords);
                 //保存以上获取信息
                 //变更数据
-                List<HzChangeDataRecord> dataRecords = new ArrayList<>();
-                puids.forEach(s -> {
-                    HzChangeDataRecord record = new HzChangeDataRecord();
-                    record.setApplicantId(applicantId);
-                    record.setOrderId(reqDTO.getOrderId());
-                    record.setPuid(s);
-                    record.setTableName(tableName);
-                    dataRecords.add(record);
-                });
-
-                map.put("changeData",dataRecords);
+                HzChangeDataRecord record = new HzChangeDataRecord();
+                record.setOrderId(reqDTO.getOrderId());
+                record.setTableName(tableName);
+                map.put("changeData",record);
                 //申请人
 //                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
 //                applicantChangeRecord.setApplicantId(applicantId);
@@ -1232,9 +1245,8 @@ public class HzPbomServiceImpl implements HzPbomService {
 
 
                 //启动线程进行插入操作
-                List<ExecutorServices> services = new ArrayList<>();
                 for(Map.Entry<String,Object> entry:map.entrySet()){
-                    ExecutorServices executorServices = new ExecutorServices(map.size()) {
+                    new ExecutorServices(1) {
                         @Override
                         public void action() {
                             switch (entry.getKey()){
@@ -1245,7 +1257,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                                     hzPbomRecordDAO.updateList((List<HzPbomLineRecord>) entry.getValue());
                                     break;
                                 case "changeData":
-                                    hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
+                                    hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
                                     break;
 //                                case "applicant":
 //                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
@@ -1256,16 +1268,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                                 default:break;
                             }
                         }
-                    };
-                    services.add(executorServices);
+                    }.execute();
                 }
-
-                if(ListUtil.isNotEmpty(services)){
-                    for(ExecutorServices s:services){
-                        s.execute();
-                    }
-                }
-
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -1330,7 +1334,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     hzPbomRecordDAO.updateList(updateList);
                 }
                 if(StringUtils.isNotBlank(deletePuids.toString())){
-                    hzPbomRecordDAO.deleteListByPuids(deletePuids.toString());
+                    hzPbomRecordDAO.deleteListByPuids(deletePuids.toString(),ChangeTableNameEnum.HZ_PBOM.getTableName());
                 }
                 return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){

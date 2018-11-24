@@ -5,7 +5,7 @@
     <result column="ID" jdbcType="DECIMAL" property="id" />
     <result column="CHANGE_ORDER_UID" jdbcType="DECIMAL" property="changeOrderId" />
     <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid" />
-    <result column="STATUS" jdbcType="OTHER" property="status" />
+    <result column="STATUS" jdbcType="DECIMAL" property="status" />
     <result column="STAGE" jdbcType="DECIMAL" property="stage" />
     <result column="VERSION" jdbcType="OTHER" property="version" />
     <result column="EFFECTIVE_DATE" jdbcType="TIMESTAMP" property="effectiveDate" />
@@ -40,7 +40,7 @@
       UPDATER, CREATE_DATE_CHANGE, UPDATE_DATE_CHANGE, 
       CREATOR_CHANGE, UPDATER_CHANGE, FM_IS_RELEASE,SRC_MAIN_ID,CHANGE_STATUS
       )
-    values ( #{id,jdbcType=DECIMAL},#{changeOrderId,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=OTHER},
+    values ( #{id,jdbcType=DECIMAL},#{changeOrderId,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=DECIMAL},
       #{stage,jdbcType=DECIMAL}, #{version,jdbcType=OTHER}, #{effectiveDate,jdbcType=TIMESTAMP}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{creator,jdbcType=OTHER}, 
       #{updater,jdbcType=OTHER}, #{createDateChange,jdbcType=TIMESTAMP}, #{updateDateChange,jdbcType=TIMESTAMP}, 
@@ -108,7 +108,7 @@
         #{projectUid,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=OTHER},
+        #{status,jdbcType=DECIMAL},
       </if>
       <if test="stage != null">
         #{stage,jdbcType=DECIMAL},
@@ -168,4 +168,24 @@
     where
       ID = (select Max(ID) from HZ_FULL_CFG_MAIN_RECORD_CHANGE where SRC_MAIN_ID = #{srcMainId,jdbcType=DECIMAL} and CHANGE_STATUS = 1)
   </select>
+
+  <select id="selectLastByProjectUid" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    HZ_FULL_CFG_MAIN_RECORD_CHANGE
+    where
+    ID = (select Max(ID) from HZ_FULL_CFG_MAIN_RECORD_CHANGE where PROJECT_UID = #{projectUid,jdbcType=VARCHAR} and CHANGE_STATUS = 1)
+  </select>
+
+  <update id="updateStatusByOrderId" parameterType="java.util.Map">
+    update HZ_FULL_CFG_MAIN_RECORD_CHANGE
+    set CHANGE_STATUS = #{status,jdbcType=DECIMAL}
+    where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+  </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from HZ_FULL_CFG_MAIN_RECORD_CHANGE
+        where ID = #{mainId,jdbcType=DECIMAL}
+    </delete>
 </mapper>

@@ -14,12 +14,13 @@
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="panel-body" style="padding-bottom: 0;">
-                <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
-                      id="ebomChangeData">
-                    <input type="hidden" id="Id" th:value="${Id}">
-                </form>
-            </div>
+            <!--<div class="panel-body" style="padding-bottom: 0;">-->
+            <!--<form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"-->
+            <!--id="ebomChangeData">-->
+            <!--<input type="hidden" id="Id" th:value="${Id}">-->
+            <!--</form>-->
+            <!--</div>-->
+            <button class="btn btn-default" id="delete" type="button" onclick="deleteBom()">删除</button>
             <div class="content col-lg-12 col-md-12" style="padding:0px;">
                 <input id="orderChangeId" hidden="hidden" th:value="${orderId}">
                 <table class="table table-striped tableNormalStyle" id="routingDataTable" border="1" cellspacing="0">
@@ -35,6 +36,7 @@
 <script th:src="@{/js/change/changeForm/changeOrder.js}"></script>
 <script th:src="@{/js/change/changeForm/changeBomCfg.js}"></script>
 <script th:inline="javascript">
+    var mainId = "";
     function doReturn() {
         window.location.href="javascript:history.go(-1);"
     }

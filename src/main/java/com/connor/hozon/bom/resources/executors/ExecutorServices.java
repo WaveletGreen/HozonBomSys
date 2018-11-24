@@ -18,7 +18,7 @@ public  class ExecutorServices{
     /**
      * 线程池
      */
-    private ExecutorService pool;
+    private ExecutorService pool ;
 
 
     public ExecutorServices(){
@@ -31,6 +31,9 @@ public  class ExecutorServices{
         this.pool = Executors.newFixedThreadPool(parallelNumber);
     }
 
+    public ExecutorService getPool() {
+        return pool;
+    }
 
     public int getParallelNumber() {
         return parallelNumber;
@@ -40,12 +43,12 @@ public  class ExecutorServices{
         this.parallelNumber = parallelNumber;
     }
 
+
     public  void execute(){
-        //execute 无返回值 无法判断线程的执行情况 submit方法 有返回值 可以判断每个线程执行结果
+        //execute 无返回值 无法判断线程的执行情况
         pool.execute(()-> {
             action();
         });
-
         if(pool != null){
             pool.shutdown();
         }

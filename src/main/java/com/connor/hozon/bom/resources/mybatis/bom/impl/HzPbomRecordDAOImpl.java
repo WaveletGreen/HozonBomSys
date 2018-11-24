@@ -401,11 +401,12 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public int deleteListByPuids(String puids) {
+    public int deleteListByPuids(String puids,String tableName) {
         List<String> list = Lists.newArrayList(puids.split(","));
         try {
             int size = list.size();
             Map<String,Object> m = new HashMap<>();
+            m.put("tableName",tableName);
             synchronized (this){
                 if(size>1000){
                     HzBomSysFactory<String> factory = new HzBomSysFactory();
@@ -439,6 +440,21 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("status",query.getStatus());
         map.put("tableName",query.getTableName());
         return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_getEBomRecordByPuidAndRevision",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getPbomRecordsByOrderId(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        map.put("status",query.getStatus());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"1":"0");
+        }else {
+            map.put("revision",null);
+        }
+        return super.findForList("HzPbomRecordDAOImpl_getPbomRecordsByOrderId",map);
     }
 
 }

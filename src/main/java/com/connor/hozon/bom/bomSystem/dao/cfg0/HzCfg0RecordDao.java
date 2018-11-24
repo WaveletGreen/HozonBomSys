@@ -21,6 +21,7 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+//@Service("hzCfg0RecordDao")
 public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
 
     /***
@@ -131,4 +132,12 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     int updateByVwoid(HzCfg0Record hzCfg0Record);
 
     List<HzCfg0Record> selectByPuids(List<String> puidList);
+
+    int updateStatus(List<HzCfg0Record> hzCfg0RecordListDelete);
+
+    int updateListAll(List<HzCfg0Record> hzCfg0RecordListUpdata);
+
+    int updateStatusByOrderId(Long orderId, int status);
+
+    int updateByChangeId(List<Long> changeFeatureIds);
 }

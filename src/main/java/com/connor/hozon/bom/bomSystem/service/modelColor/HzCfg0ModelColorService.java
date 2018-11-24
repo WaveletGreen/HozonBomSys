@@ -488,4 +488,8 @@ public class HzCfg0ModelColorService {
             return false;
         }
     }
+
+    public int doUpdateStatus(List<HzCfg0ModelColor> colors) {
+        return hzCfg0ModelColorDao.updateStatus(colors);
+    }
 }

@@ -13,6 +13,9 @@ import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
@@ -50,5 +53,29 @@ public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements
     public HzFullCfgMain selectByProjectId(String id) {
         HZ_FULL_CFG_MAIN.setProjectUid(id);
         return baseSQLUtil.executeQueryById(HZ_FULL_CFG_MAIN, clzName + ".selectByProjectId");
+    }
+
+    @Override
+    public int deleteByProjectUid(String projectUid) {
+        return baseSQLUtil.executeDelete(projectUid,clzName+".deleteByProjectUid");
+    }
+
+    @Override
+    public Long insertSeqAll(HzFullCfgMain hzFullCfgMain) {
+         baseSQLUtil.executeInsert(hzFullCfgMain,clzName+".insertSeqAll");
+        return hzFullCfgMain.getId();
+    }
+
+    @Override
+    public int updateStatusByOrderId(Long orderId, Integer stutas) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("stutas",stutas);
+        map.put("orderId",orderId);
+        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
+    @Override
+    public int updateStatusById(HzFullCfgMain hzFullCfgMain) {
+        return baseSQLUtil.executeUpdate(hzFullCfgMain,clzName+".updateStatusById");
     }
 }

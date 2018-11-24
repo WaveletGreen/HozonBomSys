@@ -337,4 +337,61 @@
             #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
         </foreach>
     </update>
+
+    <update id="updateStatus" parameterType="java.util.List">
+        update HZ_DERIVATIVE_MATERIEL_BASIC
+        set DMB_STATUS =
+        <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="case" close="end">
+            when
+            ID = #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
+            then
+            #{hzDerivativeMaterielBasic.dmbStatus,jdbcType=DECIMAL}
+        </foreach>
+        where
+        ID in
+        <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="(" separator="," close=")">
+            #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
+        </foreach>
+    </update>
+
+    <update id="updateByBasicAll" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="hzDerivativeMaterielBasics" open="begin" separator=";" close=";end;">
+            update HZ_DERIVATIVE_MATERIEL_BASIC
+            set
+            DMB_MODEL_UID = #{hzDerivativeMaterielBasics.dmbModelUid,jdbcType=VARCHAR},
+            DMB_COLOR_MODEL_UID = #{hzDerivativeMaterielBasics.dmbColorModelUid,jdbcType=VARCHAR},
+            DMB_MODEL_FEATURE_UID = #{hzDerivativeMaterielBasics.dmbModelFeatureUid,jdbcType=VARCHAR},
+            DMB_SPECIAL_FEATURE_UID = #{hzDerivativeMaterielBasics.dmbSpecialFeatureUid,jdbcType=VARCHAR},
+            DMB_STATUS = #{hzDerivativeMaterielBasics.dmbStatus,jdbcType=DECIMAL}
+            where
+            ID = #{hzDerivativeMaterielBasics.id,jdbcType=DECIMAL}
+        </foreach>
+    </update>
+
+    <delete id="deleteByIds" parameterType="java.util.List">
+        delete from HZ_DERIVATIVE_MATERIEL_BASIC
+        where ID in
+        <foreach collection="list" index="index" item="hzComposeDelDto" open="(" close=")" separator=",">
+          #{hzComposeDelDto.basicId,jdbcType=DECIMAL}
+        </foreach>
+    </delete>
+
+    <update id="updateStatusByOrderId" parameterType="java.util.Map">
+        update HZ_DERIVATIVE_MATERIEL_BASIC
+        set DMB_STATUS = #{status,jdbcType=DECIMAL}
+        where
+        CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateByChangeIds" parameterType="java.util.List">
+        update HZ_DERIVATIVE_MATERIEL_BASIC
+        set CHANGE_ORDER_UID = null,
+        DMB_STATUS = 0
+        where ID in (
+        select DMB_SRC_ID from HZ_DM_BASIC_CHANGE where ID in
+        <foreach collection="list" index="index" item="item" separator="," close=")" open="(">
+            #{item,jdbcType=DECIMAL}
+        </foreach>
+        )
+    </update>
 </mapper>

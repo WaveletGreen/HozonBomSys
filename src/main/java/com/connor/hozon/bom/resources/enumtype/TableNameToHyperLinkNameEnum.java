@@ -6,11 +6,21 @@ package com.connor.hozon.bom.resources.enumtype;
  * @Description: 根据数据库表名转换超链接名称
  */
 public enum TableNameToHyperLinkNameEnum {
-
-    /**
-     * EBOM
-     */
     HZ_EBOM("HZ_EBOM_REOCRD_AFTER_CHANGE","EBOM管理"),//EBOM
+    HZ_PBOM("HZ_PBOM_REOCRD_AFTER_CHANGE","PBOM管理"),
+    HZ_MBOM("HZ_MBOM_REOCRD_AFTER_CHANGE","超级MBOM"),
+    HZ_MBOM_PRODUCT("HZ_MBOM_PRODUCT_AFTER_CHANGE","白车身生产"),
+    HZ_MBOM_FINANCE("HZ_MBOM_FINANCE_AFTER_CHANGE","白车身财务"),
+    HZ_MATERIEL("HZ_MATERIEL_AFTER_CHANGE","物料数据"),
+    HZ_WORK_PROCEDURE("HZ_WORK_PROCEDURE_AFTER","工艺路线"),
+    //特性变更表
+    HZ_CFG0_AFTER_CHANGE_RECORD("HZ_CFG0_AFTER_CHANGE_RECORD","特性变更"),
+    //配色方案变更表
+    HZ_CMCR_AFTER_CHANGE("HZ_CMCR_AFTER_CHANGE","配色方案"),
+    //衍生物料变更表
+    HZ_DM_BASIC_CHANGE("HZ_DM_BASIC_CHANGE","配置物料"),
+    //全配置变更表
+    HZ_FULL_CFG_MAIN_RECORD_CHANGE("HZ_FULL_CFG_MAIN_RECORD_CHANGE","全BOM配置"),
 
     ;
 

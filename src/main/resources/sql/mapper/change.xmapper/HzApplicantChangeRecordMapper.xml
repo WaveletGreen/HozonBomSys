@@ -6,12 +6,12 @@
     <result column="APPLICANT_ID" jdbcType="DOUBLE" property="applicantId" />
     <result column="APPLICANT_TIME" jdbcType="TIMESTAMP" property="applicantTime" />
     <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId" />
-    <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName" />
+    <result column="AUDIT_RECORD_ID" jdbcType="DOUBLE" property="auditRecordId" />
   </resultMap>
 
 
   <sql id="Base_Column_List">
-    ID, APPLICANT_ID, APPLICANT_TIME, ORDER_ID, TABLE_NAME
+    ID, APPLICANT_ID, APPLICANT_TIME, ORDER_ID, AUDIT_RECORD_ID
   </sql>
 
 
@@ -30,10 +30,10 @@
 
   <!--insert-->
   <insert id="HzApplicantChangeDAOImpl_insert" parameterType="sql.pojo.change.HzApplicantChangeRecord">
-    insert into HZ_APPLICANT_CHANGE_RECORD (ID, APPLICANT_ID, APPLICANT_TIME, 
-      ORDER_ID, TABLE_NAME)
+    insert into HZ_APPLICANT_CHANGE_RECORD (ID, APPLICANT_ID, APPLICANT_TIME,
+      ORDER_ID, AUDIT_RECORD_ID)
     values (SEQ_HZ_APPLICANT_CHANGE_RECORD.nextval, #{applicantId,jdbcType=DOUBLE}, sysdate,
-      #{orderId,jdbcType=DOUBLE}, #{tableName,jdbcType=VARCHAR})
+      #{orderId,jdbcType=DOUBLE}, #{auditRecordId,jdbcType=DOUBLE})
   </insert>
 
 
@@ -52,8 +52,8 @@
       <if test="orderId != null">
         ORDER_ID,
       </if>
-      <if test="tableName != null">
-        TABLE_NAME,
+      <if test="auditRecordId != null">
+        AUDIT_RECORD_ID,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -69,30 +69,30 @@
       <if test="orderId != null">
         #{orderId,jdbcType=DECIMAL},
       </if>
-      <if test="tableName != null">
-        #{tableName,jdbcType=VARCHAR},
+      <if test="auditRecordId != null">
+        #{auditRecordId,jdbcType=DOUBLE}
       </if>
     </trim>
   </insert>
 
   <!--update-->
-  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.change.HzApplicantChangeRecord">
+  <update id="HzApplicantChangeDAOImpl_update" parameterType="sql.pojo.change.HzApplicantChangeRecord">
     update HZ_APPLICANT_CHANGE_RECORD
     <set>
       <if test="applicantId != null">
-        APPLICANT_ID = #{applicantId,jdbcType=DECIMAL},
+        APPLICANT_ID = #{applicantId,jdbcType=DOUBLE},
       </if>
       <if test="applicantTime != null">
         APPLICANT_TIME = #{applicantTime,jdbcType=DATE},
       </if>
       <if test="orderId != null">
-        ORDER_ID = #{orderId,jdbcType=DECIMAL},
+        ORDER_ID = #{orderId,jdbcType=DOUBLE},
       </if>
-      <if test="tableName != null">
-        TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+      <if test="auditRecordId != null">
+        AUDIT_RECORD_ID = #{auditRecordId,jdbcType=VARCHAR}
       </if>
     </set>
-    where ID = #{id,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DOUBLE}
   </update>
 
 

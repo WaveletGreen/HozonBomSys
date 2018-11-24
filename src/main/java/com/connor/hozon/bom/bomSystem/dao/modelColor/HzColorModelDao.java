@@ -90,4 +90,6 @@ public interface HzColorModelDao extends BasicDao<HzCfg0ModelColorDetail> {
      * @return
      */
     List<HzCfg0ModelColorDetail> selectByModelColors(List<HzCfg0ModelColor> hzCfg0ModelColors);
+
+    int updateListAll(List<HzCfg0ModelColorDetail> hzCfg0ModelColorDetailsUpdate);
 }

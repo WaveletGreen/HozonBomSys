@@ -183,11 +183,14 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     }
 
     @Override
-    public int deleteMaterielList(List<HzMaterielRecord> list) {
+    public int deleteMaterielList(List<HzMaterielRecord> list,String tableName) {
+        Map<String,Object> map =new HashMap<>();
+        map.put("tableName",tableName);
+        map.put("list",list);
         int i;
         try {
             synchronized (this){
-                i = super.delete("HzMaterialDAOImpl_deleteMaterielList",list);
+                i = super.delete("HzMaterialDAOImpl_deleteMaterielList",map);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -275,5 +278,20 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("pValidFlag",query.getStatus());
         map.put("tableName",query.getTableName());
         return (HzMaterielRecord)super.findForObject("HzMaterialDAOImpl_getMaterialRecordByPuidAndRevision",map);
+    }
+
+    @Override
+    public List<HzMaterielRecord> getMaterielRecordsByOrderId(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        map.put("pValidFlag",query.getStatus());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"1":"0");
+        }else {
+            map.put("revision",null);
+        }
+        return super.findForList("HzMaterialDAOImpl_getMaterielRecordsByOrderId",map);
     }
 }

@@ -21,7 +21,7 @@ public class HzFullCfgMain {
 
     private String projectUid;
 
-    private String status;
+    private Integer status;
 
     private Integer stage;
 
@@ -84,11 +84,11 @@ public class HzFullCfgMain {
         this.projectUid = projectUid == null ? null : projectUid.trim();
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
