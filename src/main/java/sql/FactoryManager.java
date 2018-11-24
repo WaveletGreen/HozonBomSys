@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+
 public class FactoryManager {
     static Reader reader = null;
     public static SqlSessionFactory factory = null;
