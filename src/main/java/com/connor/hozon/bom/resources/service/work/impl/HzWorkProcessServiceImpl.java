@@ -878,6 +878,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 dataDetailQuery.setStatus(1);
                 updateRecords.forEach(record -> {
                     dataDetailQuery.setRevisionNo(record.getRevision());
+                    dataDetailQuery.setPuid(record.getPuid());
                     HzWorkProcedure manageRecord = hzWorkProcedureDAO.getHzWorkProcedureByPuidAndRevision(dataDetailQuery);
                     if(manageRecord!=null){
                         updateList.add(HzWorkProcedureFactory.workProcedureToProcedure(manageRecord));

@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <title>修改颜色基础信息</title>
 </head>
-<body>
+<body onload="loadInput()">
     <button id="btnAdd" class="btn btn-success" style="position: fixed;margin-left:38%;margin-top:-60px;margin-bottom: -10px;z-index:99999;" onclick="add()">添加油漆物料</button>
 <form id="colorForm" role="form" method="post" action="./colorSet/updateWithEntity2">
     <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
@@ -71,7 +71,7 @@
     </div>
 </form>
 <script th:inline="javascript">
-
+    // var csPaintMaterielCodes = [[${csPaintMaterielCodes}]];
     <![CDATA[
     var total = 0;
     function checkMaterielCode(inp){
@@ -94,6 +94,9 @@
         });
     }
     $(
+        function (){
+            alert(222);
+        },
         function () {
             $('#colorForm').bootstrapValidator({
                 message: 'This value is not valid',
@@ -119,58 +122,6 @@
                             }
                         }
                     },
-                    /*strColorEffectedDate: {
-                         message: '生效时间验证失败',
-                         validators: {
-                             callback: {
-                                 message: '生效时间不能晚于废止时间',
-                                 callback: function (value, validator, $field) {
-                                     if (
-                                         ($('#strColorEffectedDate').val() == null ||
-                                             $('#strColorEffectedDate').val() == undefined) &&
-                                         ($('#strColorAbolishDate').val() == null ||
-                                             $('#strColorAbolishDate').val() == undefined)) {
-                                         return true;
-                                     }
-                                     else if ($('#strColorEffectedDate').val() < $('#strColorAbolishDate').val()) {
-                                         return true;
-                                     }
-                                     else if ($('#strColorEffectedDate').val() >= $('#strColorAbolishDate').val()) {
-                                         if ($('#strColorAbolishDate').val() == null || $('#strColorAbolishDate').val() == undefined) {
-                                             return true;
-                                         }
-                                         return false;
-                                     }
-                                 }
-                             }
-                         }
-                     },
-                     strColorAbolishDate: {
-                         message: '废止时间验证失败',
-                         validators: {
-                             callback: {
-                                 message: '废止时间不能早于生效时间',
-                                 callback: function (value, validator, $field) {
-                                     if (
-                                         ($('#strColorEffectedDate').val() == null ||
-                                             $('#strColorEffectedDate').val() == undefined) &&
-                                         ($('#strColorAbolishDate').val() == null ||
-                                             $('#strColorAbolishDate').val() == undefined)) {
-                                         return true;
-                                     }
-                                     else if ($('#strColorEffectedDate').val() < $('#strColorAbolishDate').val()) {
-                                         return true;
-                                     }
-                                     else if ($('#strColorEffectedDate').val() >= $('#strColorAbolishDate').val()) {
-                                         if ($('#strColorAbolishDate').val() == null || $('#strColorAbolishDate').val() == undefined) {
-                                             return true;
-                                         }
-                                         return false;
-                                     }
-                                 }
-                             }
-                         }
-                     },*/
                     pColorCode: {
                         message: '颜色代号验证失败',
                         validators: {

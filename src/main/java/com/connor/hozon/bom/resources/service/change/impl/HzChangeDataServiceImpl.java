@@ -539,6 +539,11 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
         }
+        WriteResultRespDTO resultRespDTO = deleteBeforeCheck(reqDTO.getOrderId());
+        if(StringUtils.isNotBlank(resultRespDTO.getErrMsg())){
+            resultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            return resultRespDTO;
+        }
         List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
         //删除变更后表中的数据
         //更新原来表中的状态 为发起流程前的状态
@@ -580,6 +585,11 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
         }
+        WriteResultRespDTO resultRespDTO = deleteBeforeCheck(reqDTO.getOrderId());
+        if(StringUtils.isNotBlank(resultRespDTO.getErrMsg())){
+            resultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            return resultRespDTO;
+        }
         List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
         //删除变更后表中的数据
         //更新原来表中的状态 为发起流程前的状态
@@ -618,6 +628,11 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
     public WriteResultRespDTO deleteMBOMChangeDataDetail(BomBackReqDTO reqDTO) {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
+        }
+        WriteResultRespDTO resultRespDTO = deleteBeforeCheck(reqDTO.getOrderId());
+        if(StringUtils.isNotBlank(resultRespDTO.getErrMsg())){
+            resultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            return resultRespDTO;
         }
         List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
         //删除变更后表中的数据
@@ -662,6 +677,13 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
         }
+
+        WriteResultRespDTO resultRespDTO = deleteBeforeCheck(reqDTO.getOrderId());
+        if(StringUtils.isNotBlank(resultRespDTO.getErrMsg())){
+            resultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            return resultRespDTO;
+        }
+
         List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
         //删除变更后表中的数据
         //更新原来表中的状态 为发起流程前的状态
@@ -701,6 +723,11 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
         }
+        WriteResultRespDTO resultRespDTO = deleteBeforeCheck(reqDTO.getOrderId());
+        if(StringUtils.isNotBlank(resultRespDTO.getErrMsg())){
+            resultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            return resultRespDTO;
+        }
         List<String> list = Lists.newArrayList(reqDTO.getPuids().split(","));
         //删除变更后表中的数据
         //更新原来表中的状态 为发起流程前的状态
@@ -733,5 +760,25 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
             e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
+    }
+
+
+    /**
+     * 删除数据前的判断
+     * @param id
+     * @return
+     */
+    private WriteResultRespDTO deleteBeforeCheck(Long id){
+        HzChangeOrderRecord changeOrderRecord = hzChangeOrderDAO.findHzChangeOrderRecordById(id);
+        String str = "";
+        if(changeOrderRecord == null){
+            str = WriteResultRespDTO.FAILED_MSG;
+        }
+        if(2!=changeOrderRecord.getState()){
+            str ="流程中和已完成的表单数据不允许删除!";
+        }
+        WriteResultRespDTO respDTO = new WriteResultRespDTO();
+        respDTO.setErrMsg(str);
+        return respDTO;
     }
 }

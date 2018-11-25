@@ -145,7 +145,7 @@ var toolbar = [
     //     }
     // },
     {
-        text: '发起变更流程',
+        text: '发起流程',
         iconCls: 'glyphicon glyphicon-remove',
         handler: function () {
             var rows = $table.bootstrapTable('getSelections');

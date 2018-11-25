@@ -1739,10 +1739,10 @@
             t2.puid = #{projectId,jdbcType=VARCHAR}))
             and t.puid =#{puid}
             <if test="revision!= null">
-                and P_REVISION =#{revision,jdbcType=VARCHAR}
+                and t.P_REVISION =#{revision,jdbcType=VARCHAR}
             </if>
             <if test="status != null">
-                and P_EBOM_STATUS = #{status,jdbcType=INTEGER}
+                and t.P_EBOM_STATUS = #{status,jdbcType=INTEGER}
             </if>
         </where>
     </select>

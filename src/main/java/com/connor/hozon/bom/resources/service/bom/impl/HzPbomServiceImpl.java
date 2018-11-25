@@ -1324,6 +1324,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     dataDetailQuery.setStatus(1);
                     updateRecords.forEach(record -> {
                         dataDetailQuery.setRevisionNo(record.getRevision());
+                        dataDetailQuery.setPuid(record.getPuid());
                         HzPbomLineRecord manageRecord = hzPbomRecordDAO.getPBomRecordByPuidAndRevision(dataDetailQuery);
                         if(manageRecord!=null){
                             updateList.add(HzPbomRecordFactory.bomLineRecordToBomRecord(manageRecord));

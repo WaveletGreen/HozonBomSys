@@ -73,7 +73,7 @@ public class HzMbomRecordFactory {
         }
         hzMbomLineRecord.setIsPart(record.getIsPart());
         hzMbomLineRecord.setIs2Y(record.getIs2Y());
-        hzMbomLineRecord.setStatus(1);
+        hzMbomLineRecord.setStatus(2);
         hzMbomLineRecord.setLineIndex(record.getLineIndex());
         hzMbomLineRecord.setParentUid(record.getParentUid());
         hzMbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());

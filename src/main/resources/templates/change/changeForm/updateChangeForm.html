@@ -63,7 +63,7 @@
     </div>
     <div class="form-group">
         <label for="marketType">上市类型</label>
-        <select class="form-control" name="marketType" id="marketType"disabled="disabled" placeholder="请选择上市类型">
+        <select class="form-control" name="marketType" id="marketType" placeholder="请选择上市类型">
             <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
             <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
         </select>

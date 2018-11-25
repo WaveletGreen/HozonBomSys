@@ -380,6 +380,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 dataDetailQuery.setStatus(1);
                 updateRecords.forEach(record -> {
                     dataDetailQuery.setRevisionNo(record.getRevision());
+                    dataDetailQuery.setPuid(record.getPuid());
                     HzMaterielRecord manageRecord = hzMaterielDAO.getMaterialRecordByPuidAndRevision(dataDetailQuery);
                     if(manageRecord!=null){
                         updateList.add(HzMaterielFactory.hzMaterielRecordToMaterielRecord(manageRecord));

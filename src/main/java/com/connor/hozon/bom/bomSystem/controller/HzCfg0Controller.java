@@ -201,14 +201,14 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //                iSynFeatureService.addFeature(Collections.singletonList(record));
 //            }
             record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
-                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
-            }
-            HzCfg0Record record1 = new HzCfg0Record();
-            record1.setPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
-                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
-            }
+//            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+//                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
+//            }
+//            HzCfg0Record record1 = new HzCfg0Record();
+//            record1.setPuid(record.getPuid());
+//            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
+//                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
+//            }
 
 
         } else {
