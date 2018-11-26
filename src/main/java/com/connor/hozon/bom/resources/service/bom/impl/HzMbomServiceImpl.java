@@ -1263,7 +1263,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 if(null != bean){
                                     List<HzAccessoriesLibs> libs = bean.getMaterielList();
                                     if(ListUtil.isNotEmpty(libs)){
-                                        superMboms.addAll(HzMbomRecordFactory.generateMaterielPaint(pbomLineRecord,superMboms.size(),lineIndex,libs,i));
+                                        superMboms.addAll(HzMbomRecordFactory.generateMaterielPaint(pbomLineRecord,superMboms.size(),lineIndex,libs,i,bean.getColorUid()));
                                     }
                                 }
                             }
