@@ -32,4 +32,6 @@ public interface HzFullCfgMainDao extends BasicDao<HzFullCfgMain>{
     int updateStatusByOrderId(Long orderId, Integer stutas);
 
     int updateStatusById(HzFullCfgMain hzFullCfgMain);
+
+    int updateChangeByOrderId(Long orderId);
 }

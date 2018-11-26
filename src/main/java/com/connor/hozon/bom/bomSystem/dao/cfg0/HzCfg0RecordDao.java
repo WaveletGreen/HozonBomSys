@@ -11,6 +11,7 @@ import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.List;
 import java.util.Map;
@@ -140,4 +141,6 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     int updateStatusByOrderId(Long orderId, int status);
 
     int updateByChangeId(List<Long> changeFeatureIds);
+
+    int updateStatusByChangeDate(List<HzFeatureChangeBean> hzFeatureChangeBeans);
 }

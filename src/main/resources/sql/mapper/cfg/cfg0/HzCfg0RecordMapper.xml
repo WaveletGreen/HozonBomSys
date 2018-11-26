@@ -609,4 +609,17 @@
         </foreach>
         )
     </update>
+
+    <update id="updateStatusByChangeDate" parameterType="java.util.List">
+        <foreach collection="list" item="hzFeatureChangeBean" index="index" open="begin" close=";end;" separator=";">
+            update HZ_CFG0_RECORD
+            set CHANGE_ORDER_ID = null,
+            CFG_IS_IN_PROCESS = 0,
+            CFG_STATUS = (
+            select CFG_STATUS from HZ_CFG0_AFTER_CHANGE_RECORD where ID = #{hzFeatureChangeBean.id,jdbcType=DECIMAL}
+            )
+            where
+            PUID = (select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where ID = #{hzFeatureChangeBean.id,jdbcType=DECIMAL})
+        </foreach>
+    </update>
 </mapper>

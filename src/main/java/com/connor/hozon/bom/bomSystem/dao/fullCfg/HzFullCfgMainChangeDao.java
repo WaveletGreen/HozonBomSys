@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
 
+import java.util.List;
+
 public interface HzFullCfgMainChangeDao {
     int insert(HzFullCfgMainChange record);
 
@@ -19,4 +21,6 @@ public interface HzFullCfgMainChangeDao {
     int updateStatusByOrderId(Long orderId, int status);
 
     int deleteById(Long mainId);
+
+    List<HzFullCfgMainChange> selectNotEffectByProjectUid(String projectId);
 }

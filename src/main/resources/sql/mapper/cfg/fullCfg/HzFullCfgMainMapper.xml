@@ -205,4 +205,13 @@
         set STATUS = #{status,jdbcType=DECIMAL}
         where ID = #{id,jdbcType=DECIMAL}
     </update>
+
+    <update id="updateChangeByOrderId" parameterType="java.lang.Long">
+        update HZ_FULL_CFG_MAIN_RECORD
+        set STATUS = (select STATUS from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL})
+        where
+        ID = (
+          select SRC_MAIN_ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+        )
+    </update>
 </mapper>

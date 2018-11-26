@@ -113,7 +113,7 @@ var toolbar = [
                 window.Ewin.alert({message: '请至少选择一条需要发送的数据!'});
                 return false;
             }
-            let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
+            let msg = "<div style='max-height: 350px;overflow:scroll'>";
             for (let i in rows) {
                 if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
                     window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许重复发起VWO流程"});
