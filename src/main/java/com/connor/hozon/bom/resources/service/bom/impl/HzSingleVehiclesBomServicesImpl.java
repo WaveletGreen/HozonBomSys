@@ -89,6 +89,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
                             hzMbomTreeQuery.setColorId(bean.getColorUid());
                         }
                         hzMbomTreeQuery.setPuid(bean.getBomLineUid());
+                        hzMbomTreeQuery.setStatus(1);
                         List<HzMbomLineRecord> records = hzMbomRecordDAO.getHzMbomTree(hzMbomTreeQuery);
                         if(ListUtil.isNotEmpty(records)){
                             for(HzMbomLineRecord record :records){
