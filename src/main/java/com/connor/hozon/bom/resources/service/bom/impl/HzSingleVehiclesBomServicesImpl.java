@@ -15,6 +15,7 @@ import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzMbomLineRecord;
@@ -85,7 +86,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
                         HzMbomTreeQuery hzMbomTreeQuery = new HzMbomTreeQuery();
                         hzMbomTreeQuery.setTableName(MbomTableNameEnum.tableName(0));
                         hzMbomTreeQuery.setProjectId(projectId);
-                        if(!StringUtil.isEmpty(bean.getColorUid()) && !"-".equals(bean.getColorUid())){
+                        if(StringUtils.isNotBlank(bean.getColorUid()) && !"-".equals(bean.getColorUid())){
                             hzMbomTreeQuery.setColorId(bean.getColorUid());
                         }
                         hzMbomTreeQuery.setPuid(bean.getBomLineUid());
