@@ -8,6 +8,7 @@ import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -50,5 +51,13 @@ public class HzFullCfgMainChangeDaoImpl  extends BasicDaoImpl<HzFullCfgMainChang
     @Override
     public int deleteById(Long mainId) {
         return baseSQLUtil.executeDelete(mainId,clzName+"deleteById");
+    }
+
+    @Override
+    public List<HzFullCfgMainChange> selectNotEffectByProjectUid(String projectId) {
+        HzFullCfgMainChange hzFullCfgMainChange = new HzFullCfgMainChange();
+        hzFullCfgMainChange.setProjectUid(projectId);
+        hzFullCfgMainChange.setStatus(0);
+        return baseSQLUtil.executeQuery(hzFullCfgMainChange,clzName+"selectNotEffectByProjectUid");
     }
 }

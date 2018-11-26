@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -190,6 +191,11 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     @Override
     public int updateByChangeId(List<Long> changeFeatureIds) {
         return baseSQLUtil.executeUpdate(changeFeatureIds,clzName+".updateByChangeId");
+    }
+
+    @Override
+    public int updateStatusByChangeDate(List<HzFeatureChangeBean> hzFeatureChangeBeans) {
+        return baseSQLUtil.executeUpdate(hzFeatureChangeBeans,clzName+".updateStatusByChangeDate");
     }
 
 }

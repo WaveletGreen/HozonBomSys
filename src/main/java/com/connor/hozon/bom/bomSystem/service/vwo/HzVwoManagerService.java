@@ -2063,8 +2063,8 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
                     list.add(after);
                 }else if(bs.get(1).getCfgStatus()==2){
-                    bs.get(0).setHeadDesc("删除<br>"+bs.get(1).getFeatureValueName());
-                    HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(0));
+                    bs.get(1).setHeadDesc("删除<br>"+bs.get(1).getFeatureValueName());
+                    HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(1));
                     list.add(before);
                 }else {
                     bs.get(0).setHeadDesc("变更前<br>"+ bs.get(1).getFeatureValueName());
@@ -2578,7 +2578,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         }
         //填充删除数据
         if(hzCmcrChangesDelete!=null&&hzCmcrChangesDelete.size()>0) {
-            List<HzCmcrDetailChange> hzCmcrDetailChangesDelete = hzCmcrDetailChangeDao.doQueryCmcrDetailByMainChange(hzCmcrChangesAdd);
+            List<HzCmcrDetailChange> hzCmcrDetailChangesDelete = hzCmcrDetailChangeDao.doQueryCmcrDetailByMainChange(hzCmcrChangesDelete);
             for (HzCmcrChange hzCmcrChange : hzCmcrChangesDelete) {
                 Map<String, String> deleteMap = new HashMap<>();
                 setColorModelBasicDate(hzCmcrChange, deleteMap, "删除");
@@ -2773,6 +2773,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         }
         //根据变更表单id查询变更后主数据
         hzDMBasicChangeBeansAfter = hzDMBasicChangeDao.selectAfter(formId);
+        if(hzDMBasicChangeBeansAfter==null||hzDMBasicChangeBeansAfter.size()<=0){
+            return map;
+        }
         //根据变更后主数据查询变更后从数据
         hzDMDetailChangeBeansAfter =hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeansAfter);
 
@@ -3490,7 +3493,21 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         JSONObject result = new JSONObject();
         result.put("status",true);
         result.put("msg","删除成功");
-        if(hzCfg0RecordDao.updateByChangeId(changeFeatureIds)<=0?true:false){
+        List<HzFeatureChangeBean> hzFeatureChangeBeans1 = new ArrayList<>();
+        for(Long changeFeatureId : changeFeatureIds){
+            HzFeatureChangeBean hzFeatureChangeBean = new HzFeatureChangeBean();
+            hzFeatureChangeBean.setVwoId(orderId);
+            hzFeatureChangeBean.setId(changeFeatureId);
+            hzFeatureChangeBeans1.add(hzFeatureChangeBean);
+        }
+//        if(hzCfg0RecordDao.updateByChangeId(changeFeatureIds)<=0?true:false){
+//            result.put("status",false);
+//            result.put("msg","修改源数据状态失败");
+//            return result;
+//        }
+        try {
+            hzCfg0RecordDao.updateStatusByChangeDate(hzFeatureChangeBeans1);
+        }catch (Exception e){
             result.put("status",false);
             result.put("msg","修改源数据状态失败");
             return result;
@@ -3521,7 +3538,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         result.put("status",true);
         result.put("msg","修改成功");
         //根据变更数据修改源数据状态
-        if(hzCfg0ModelColorDao.updateByChangeIds(changeColorModelIds)<=0?true:false){
+        try {
+            hzCfg0ModelColorDao.updateByChangeIds(changeColorModelIds);
+        }catch (Exception e){
             result.put("status",false);
             result.put("msg","修改源数据失败");
             return result;
@@ -3540,7 +3559,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         result.put("status",true);
         result.put("msg","修改成功");
         //根据变更数据修改源数据状态
-        if(hzDerivativeMaterielBasicDao.updateByChangeIds(changeMaterielFeatureIds)<=0?true:false){
+        try {
+            hzDerivativeMaterielBasicDao.updateByChangeIds(changeMaterielFeatureIds);
+        }catch (Exception e){
             result.put("status",false);
             result.put("msg","修改源数据失败");
             return result;
@@ -3570,7 +3591,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         JSONObject result = new JSONObject();
         result.put("status",true);
         result.put("msg","删除成功");
-        if(hzFullCfgMainDao.updateStatusByOrderId(orderId,0)<=0?true:false){
+        if(hzFullCfgMainDao.updateChangeByOrderId(orderId)<=0?true:false){
             result.put("status",false);
             result.put("msg","修改源数据失败");
             return result;

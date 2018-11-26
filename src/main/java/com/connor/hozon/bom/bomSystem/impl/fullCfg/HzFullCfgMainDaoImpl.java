@@ -78,4 +78,9 @@ public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements
     public int updateStatusById(HzFullCfgMain hzFullCfgMain) {
         return baseSQLUtil.executeUpdate(hzFullCfgMain,clzName+".updateStatusById");
     }
+
+    @Override
+    public int updateChangeByOrderId(Long orderId) {
+        return baseSQLUtil.executeUpdate(orderId,clzName+".updateChangeByOrderId");
+    }
 }
