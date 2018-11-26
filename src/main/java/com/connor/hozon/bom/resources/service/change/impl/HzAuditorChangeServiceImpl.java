@@ -52,13 +52,12 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                             respDTO.setChangeType(rec.getChangeType());//变更类型
                             respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
                             respDTO.setProjectName(rec.getProjectName());//项目名
-                            respDTO.setState(rec.getState());
-                            respDTO.setIsFromTc(rec.getFromTc());
+                            respDTO.setState(rec.getState());//变更单状态
+                            respDTO.setIsFromTc(rec.getFromTc());//是否来着TC数据，用于“待办事项”中接口人手动完成任务
                             auditorList.add(respDTO);
                         }
                     }else{
                         //变更单从TC同步
-                        //重写个服务
                         //根据返回的OrderId到ChangeOrder表中查数据
                         HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordByIdTC(query,infos.get(i).getOrderId());
                         if(rec!=null){
@@ -110,7 +109,6 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                         respDTO.setProjectName(rec.getProjectName());
                         auditorList.add(respDTO);
                     }
-
                 }
                 return auditorList;
             }*/
@@ -133,12 +131,16 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                             respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
                             respDTO.setProjectName(rec.getProjectName());//项目名
                             respDTO.setSource("BOM");
-                            respDTO.setState(rec.getState());
-                            //审批时间为空报错
+                            respDTO.setState(rec.getState());//变更单状态
+                            //审批时间
                             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            respDTO.setAuditTime(formatter.format(infos.get(i).getAuditTime()));
-                            //respDTO.setAuditTime();
-                            respDTO.setAuditId(infos.get(i).getId());
+                            //respDTO.setAuditTime(formatter.format(infos.get(i).getAuditTime()));
+                            if(infos.get(i).getAuditTime()!=null)
+                                respDTO.setAuditTime(formatter.format(infos.get(i).getAuditTime()));
+                            else
+                                respDTO.setAuditTime("");
+
+                            respDTO.setAuditId(infos.get(i).getId());//关联HzAuditorChangeRecord-ID用于“已处理事项”查看评估意见
                             auditorList.add(respDTO);
                         }
                     }else{
@@ -160,9 +162,13 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                             respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
                             respDTO.setProjectName(rec.getProjectName());//项目名
                             respDTO.setSource("TC");
-                            respDTO.setState(rec.getState());
+                            respDTO.setState(rec.getState());//变更单状态
                             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            respDTO.setAuditTime(formatter.format(infos.get(i).getAuditTime()));
+                            //respDTO.setAuditTime(formatter.format(infos.get(i).getAuditTime()));
+                            if(infos.get(i).getAuditTime()!=null)
+                                respDTO.setAuditTime(formatter.format(infos.get(i).getAuditTime()));
+                            else
+                                respDTO.setAuditTime("");
                             respDTO.setAuditId(infos.get(i).getId());
                             auditorList.add(respDTO);
                         }

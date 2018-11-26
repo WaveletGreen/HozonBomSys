@@ -42,15 +42,15 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
                         respDTO.setProjectId(rec.getProjectId());//
                         respDTO.setChangeNo(rec.getChangeNo());//changeNo
                         respDTO.setId(rec.getId());
-                        respDTO.setOriginator(rec.getOriginator());
+                        respDTO.setOriginator(rec.getOriginator());//发起人
                         respDTO.setDeptName(rec.getDeptName());//部门-deptName
                         respDTO.setChangeType(rec.getChangeType());//变更类型
-                        respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//originTime
+                        respDTO.setOriginTime(DateUtil.formatTimestampDate(rec.getOriginTime()));//发起时间
                         respDTO.setProjectName(rec.getProjectName());
                         respDTO.setSource("BOM");
-                        respDTO.setState(rec.getState());
-                        respDTO.setAuditId(infos.get(i).getAuditRecordId());//改成auditRecordId
-                        //审批时间为空报错
+                        respDTO.setState(rec.getState());//变更单状态
+                        respDTO.setAuditId(infos.get(i).getAuditRecordId());//改成auditRecordId-关联审核表ID查看审批意见
+                        //审批时间
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                         List<HzAuditorChangeRecord> records = hzAuditorChangeDAO.findAuditorListById(infos.get(i).getAuditRecordId());
