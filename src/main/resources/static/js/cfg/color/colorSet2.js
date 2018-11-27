@@ -212,7 +212,7 @@ function loadData() {
         sortName: 'pColorCode',
         sortOrder: 'asc',
         // sidePagination: "client",           //客户端/客户端分页
-        formId: "queryColor",
+        formId: "queryColorSet",
         toolbars: toolbar,
         /**列信息，需要预先定义好*/
         columns: column,
