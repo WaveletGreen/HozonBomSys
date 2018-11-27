@@ -171,8 +171,9 @@ public class HzEPLManageRecord extends BaseChangePOJO {
     /**
      * FNA信息
      */
-    private String fna;
+    private String pFnaInfo;
 
+    private String fna;
     /**
      * 单车用量
      */
@@ -323,12 +324,21 @@ public class HzEPLManageRecord extends BaseChangePOJO {
         this.number = number;
     }
 
+
     public String getFna() {
         return fna;
     }
 
     public void setFna(String fna) {
         this.fna = fna;
+    }
+
+    public String getpFnaInfo() {
+        return pFnaInfo;
+    }
+
+    public void setpFnaInfo(String pFnaInfo) {
+        this.pFnaInfo = pFnaInfo;
     }
 
     public String getPuid() {

@@ -17,9 +17,13 @@
 
     <!--insert-->
     <insert id="HzAuditorChangeDAOImpl_insert" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval as id from dual
+        </selectKey>
     insert into HZ_AUDITOR_CHANGE_RECORD (ID, AUDITOR_ID,ORDER_ID,TABLE_NAME)
     values
-    (SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval,
+    (#{id,jdbcType=DOUBLE},
     #{auditorId,jdbcType=DOUBLE},
     #{orderId,jdbcType=DOUBLE},
     #{tableName,jdbcType=VARCHAR})
@@ -48,7 +52,18 @@
         and AUDIT_RESULT is not NULL
     </select>
 
-    <!--统计待办事项-->
+
+    <select id="HzAuditorChangeDAOImpl_findAuditorListById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_AUDITOR_CHANGE_RECORD
+        where
+        ID = #{id,jdbcType=DOUBLE}
+    <!--and AUDITOR_ID = #{auditorId}-->
+    <!--and AUDIT_RESULT is not NULL-->
+    </select>
+
+<!--统计待办事项-->
     <select id="HzAuditorChangeDAOImpl_count" parameterType="java.util.Map" resultType="int">
         SELECT count(*) FROM HZ_AUDITOR_CHANGE_RECORD
         WHERE 1=1
@@ -119,6 +134,18 @@
         </trim>
     </insert>
 
+
+    <update id="HzAuditorChangeDAOImpl_updateAuditorRecord"
+            parameterType="com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO">
+        update HZ_AUDITOR_CHANGE_RECORD
+        <set>
+            <if test="auditResult != null">
+                AUDIT_RESULT = #{auditResult,jdbcType=INTEGER},
+            </if>
+            AUDIT_TIME = sysdate
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
 
     <!--update-->
     <update id="HzAuditorChangeDAOImpl_updateByPrimaryKeySelective"

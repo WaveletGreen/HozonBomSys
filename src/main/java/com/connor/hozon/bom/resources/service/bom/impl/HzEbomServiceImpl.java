@@ -1895,8 +1895,8 @@ public class HzEbomServiceImpl implements HzEbomService {
         }
 
         //获取申请人信息
-        User user = UserInfo.getUser();
-        Long applicantId = Long.valueOf(user.getId());
+//        User user = UserInfo.getUser();
+//        Long applicantId = Long.valueOf(user.getId());
 
         //表单id
         Long orderId = reqDTO.getOrderId();
@@ -1919,11 +1919,33 @@ public class HzEbomServiceImpl implements HzEbomService {
         List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByPuids(query);
         List<HzEPLManageRecord> afterRecords = new ArrayList<>();
         if(ListUtil.isNotEmpty(records)){
-            records.forEach(record -> {
-                HzEPLManageRecord manageRecord = record;
-                manageRecord.setOrderId(orderId);
-                afterRecords.add(manageRecord);
-            });
+            //到 after表中查询看是否存在记录
+            //存在记录则过滤 不存在记录则插入
+            HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+            dataDetailQuery.setProjectId(reqDTO.getProjectId());
+            dataDetailQuery.setOrderId(orderId);
+            dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
+            List<HzEPLManageRecord> recordList = hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);
+            if(ListUtil.isEmpty(recordList)){
+                records.forEach(record -> {
+                    HzEPLManageRecord manageRecord = record;
+                    manageRecord.setOrderId(orderId);
+                    afterRecords.add(manageRecord);
+                });
+            }else {
+                for(int i=0;i<records.size();i++){
+                    records.get(i).setOrderId(orderId);
+                    for(HzEPLManageRecord record:recordList){
+                        if(records.get(i).equals(record)){
+                            records.remove(records.get(i));
+                            i--;
+                            break;
+                        }
+                    }
+                }
+                afterRecords.addAll(records);
+            }
+
             map.put("ebomAfter",afterRecords);
 
             //修改发起流程后状态值
@@ -1938,48 +1960,53 @@ public class HzEbomServiceImpl implements HzEbomService {
             map.put("ebomBefore",bomLineRecords);
             //保存以上获取信息
             //变更数据
-            List<HzChangeDataRecord> dataRecords = new ArrayList<>();
-            for(String puid:puids){
-                HzChangeDataRecord record = new HzChangeDataRecord();
-                record.setApplicantId(applicantId);
-                record.setOrderId(reqDTO.getOrderId());
-                record.setPuid(puid);
-                record.setTableName(tableName);
-                dataRecords.add(record);
-            }
-            map.put("changeData",dataRecords);
+//            List<HzChangeDataRecord> dataRecords = new ArrayList<>();
+//            for(String puid:puids){
+//                HzChangeDataRecord record = new HzChangeDataRecord();
+//                record.setApplicantId(applicantId);
+//                record.setOrderId(reqDTO.getOrderId());
+//                record.setTableName(tableName);
+//                dataRecords.add(record);
+//            }
+            HzChangeDataRecord record = new HzChangeDataRecord();
+            record.setOrderId(reqDTO.getOrderId());
+            record.setTableName(tableName);
+            map.put("changeData",record);
 
-            //启动线程进行插入操作
-            ExecutorServices services1 = new ExecutorServices(map.size());
-            ExecutorService pool = services1.getPool();
             try {
+
+                //启动线程进行插入操作
                 for(Map.Entry<String,Object> entry:map.entrySet()){
-                    switch (entry.getKey()){
-                        case "ebomAfter":
-                            pool.execute(()->{
-                                hzEbomRecordDAO.insertList((List<HzEPLManageRecord>) entry.getValue(),tableName);
-                            });
-                        case "ebomBefore":
-                            pool.execute(()->{
-                                hzEbomRecordDAO.updateList((List<HzBomLineRecord>) entry.getValue());
-                            });
-                            break;
-                        case "changeData":
-                            pool.execute(()->{
-                                hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
-                            });
-                            break;
-                        default:break;
-                    }
+                    new ExecutorServices(1) {
+                        @Override
+                        public void action() {
+                            switch (entry.getKey()){
+                                case "ebomAfter":
+                                    hzEbomRecordDAO.insertList((List<HzEPLManageRecord>) entry.getValue(),tableName);
+                                    break;
+                                case "ebomBefore":
+                                    hzEbomRecordDAO.updateList((List<HzBomLineRecord>) entry.getValue());
+                                    break;
+                                case "changeData":
+                                    hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
+                                    break;
+//                                case "applicant":
+//                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+//                                    break;
+//                                case "auditor" :
+//                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
+//                                    break;
+                                default:break;
+                            }
+                        }
+                    }.execute();
+
                 }
             }catch (Exception e){
                 e.printStackTrace();
                 return WriteResultRespDTO.getFailResult();
-            }finally {
-                if(pool!=null){
-                    pool.shutdown();
-                }
             }
+
         }
         return WriteResultRespDTO.getSuccessResult();
     }
@@ -2035,9 +2062,12 @@ public class HzEbomServiceImpl implements HzEbomService {
                 dataDetailQuery.setStatus(1);
                 updateRecords.forEach(record -> {
                     dataDetailQuery.setRevisionNo(record.getRevision());
+                    dataDetailQuery.setPuid(record.getPuid());
                     HzEPLManageRecord manageRecord = hzEbomRecordDAO.getEBomRecordByPuidAndRevision(dataDetailQuery);
                     if(manageRecord!=null){
-                        updateList.add(HzEbomRecordFactory.eplRecordToBomLineRecord(manageRecord));
+                        HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(manageRecord);
+                        hzBomLineRecord.setStatus(manageRecord.getStatus());
+                        updateList.add(hzBomLineRecord);
                     }
                 });
             }
@@ -2045,7 +2075,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                 hzEbomRecordDAO.updateList(updateList);
             }
             if(ListUtil.isNotEmpty(deletePuids)){
-                hzEbomRecordDAO.deleteByPuids(deletePuids);
+                hzEbomRecordDAO.deleteByPuids(deletePuids,ChangeTableNameEnum.HZ_EBOM.getTableName());
             }
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){

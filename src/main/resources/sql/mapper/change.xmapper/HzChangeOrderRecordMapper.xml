@@ -146,7 +146,7 @@
                 and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
             </if>
             <if test="originator != null and originator!=''">
-                and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+                and t1.CREATE_NAME_TC = #{originator,jdbcType=VARCHAR}
             </if>
             <if test="projectId != null">
                 and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
@@ -187,7 +187,7 @@
       and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
       </if>
       <if test="originator != null and originator!=''">
-      and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+      and t3.USER_NAME = #{originator,jdbcType=VARCHAR}
       </if>
       <if test="projectId != null">
         and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
@@ -230,7 +230,7 @@
         <where>
             1=1
             and t1.ID in (select
-            DISTINCT
+            <!--DISTINCT ORDER_ID-->
             ORDER_ID
             from HZ_APPLICANT_CHANGE_RECORD
             where 1=1
@@ -240,7 +240,7 @@
                 and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
             </if>
             <if test="originator != null and originator!=''">
-                and t1.ORIGINATOR = #{originator,jdbcType=VARCHAR}
+                and t3.USER_NAME = #{originator,jdbcType=VARCHAR}
             </if>
             <if test="projectId != null">
                 and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}

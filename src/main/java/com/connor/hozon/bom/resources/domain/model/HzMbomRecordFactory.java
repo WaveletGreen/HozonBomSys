@@ -73,7 +73,7 @@ public class HzMbomRecordFactory {
         }
         hzMbomLineRecord.setIsPart(record.getIsPart());
         hzMbomLineRecord.setIs2Y(record.getIs2Y());
-        hzMbomLineRecord.setStatus(1);
+        hzMbomLineRecord.setStatus(2);
         hzMbomLineRecord.setLineIndex(record.getLineIndex());
         hzMbomLineRecord.setParentUid(record.getParentUid());
         hzMbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
@@ -185,7 +185,7 @@ public class HzMbomRecordFactory {
         HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
         String lineId = mbomLineRecord.getLineId();
         if(Integer.valueOf(1).equals(record.getColorPart())&& bean!=null){
-            if(bean.getColorCode().equals("-")){
+            if(!bean.getColorCode().equals("-")){
                 lineId = HzBomSysFactory.resultLineId(lineId)+bean.getColorCode();
             }
         }
@@ -252,10 +252,10 @@ public class HzMbomRecordFactory {
      * 产生油漆物料BOM
      * @return
      */
-    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,int i){
+    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,int i,String colorId){
         List<HzMbomLineRecord> list = new ArrayList<>();
         if(ListUtil.isNotEmpty(libs)){
-            for(int j=0;i<libs.size();j++){
+            for(int j=0;j<libs.size();j++){
                 HzMbomLineRecord record = new HzMbomLineRecord();
                 record.setParentUid(pbomLineRecord.geteBomPuid());
                 record.setSortNum(String.valueOf(size*100+100*j));
@@ -269,6 +269,7 @@ public class HzMbomRecordFactory {
                 record.setStatus(1);
                 record.setBomDigifaxId(pbomLineRecord.getBomDigifaxId());
                 record.seteBomPuid(UUID.randomUUID().toString());
+                record.setColorId(colorId);
                 list.add(record);
             }
         }

@@ -22,6 +22,7 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+//@Service("hzCfg0RecordDao")
 public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
 
     /***

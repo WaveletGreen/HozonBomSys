@@ -131,7 +131,7 @@ public class HzChangeController extends BaseController {
             object.put("originTime",hzChangeOrderRespDTO.getOriginTime());
             object.put("createTime",hzChangeOrderRespDTO.getCreateTime());
             object.put("remark",hzChangeOrderRespDTO.getRemark());
-            object.put("projectState",hzChangeOrderRespDTO.getProjectStage());
+            object.put("projectStage",hzChangeOrderRespDTO.getProjectStage());
             object.put("deptName",hzChangeOrderRespDTO.getDeptName());
             list.add(object);
         });

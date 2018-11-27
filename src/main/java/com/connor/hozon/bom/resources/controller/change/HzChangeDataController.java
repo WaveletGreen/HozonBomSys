@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.controller.change;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
@@ -12,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -283,7 +285,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
-//                _res.put("state",ProcessReceiveDto.getState());
+                _res.put("puid",dto.getPuid());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("lineId",dto.getLineId() );
                 _res.put("pBomLinePartName",dto.getpBomLinePartName() );
@@ -352,6 +354,7 @@ public class HzChangeDataController extends BaseController {
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
 //                _res.put("state",ProcessReceiveDto.getState());
+                _res.put("puid",dto.getPuid());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("level", dto.getLevel());
                 _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
@@ -388,6 +391,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
+                _res.put("puid",dto.getPuid());
 //                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("rank",dto.getRank());
@@ -431,6 +435,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
+                _res.put("puid",dto.getPuid());
 //                _res.put("state",ProcessReceiveDto.getState());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("resource",dto.getResource());
@@ -468,6 +473,7 @@ public class HzChangeDataController extends BaseController {
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
+                _res.put("puid",dto.getPuid());
                 _res.put("changeType",dto.getChangeType());
                 _res.put("pMaterielCode", dto.getpMaterielCode());
                 _res.put("pMaterielDesc", dto.getpMaterielDesc());
@@ -493,4 +499,39 @@ public class HzChangeDataController extends BaseController {
         }
         return null;
     }
+
+
+    @RequestMapping(value = "ebom/delete",method = RequestMethod.DELETE)
+    public void deleteEBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deleteEBOMChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
+    }
+
+    @RequestMapping(value = "pbom/delete",method = RequestMethod.DELETE)
+    public void deletePBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deletePBOMChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
+    }
+
+
+    @RequestMapping(value = "mbom/delete",method = RequestMethod.DELETE)
+    public void deleteMBOMChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deleteMBOMChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
+    }
+
+
+
+    @RequestMapping(value = "materiel/delete",method = RequestMethod.DELETE)
+    public void deleteMaterielChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deleteMaterielChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
+    }
+
+    @RequestMapping(value = "work/procedure/delete",method = RequestMethod.DELETE)
+    public void deleteWorkProcedureChangeDataDetail(@RequestBody BomBackReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO resultRespDTO = hzChangeDataService.deleteWorkProcedureChangeDataDetail(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(resultRespDTO),resultRespDTO.getErrMsg()),response);
+    }
+
 }

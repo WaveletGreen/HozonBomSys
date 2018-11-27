@@ -868,7 +868,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                             }else if(Integer.valueOf(11).equals(entry.getKey())){
                                 hzMaterielDAO.updateList(entry.getValue());
                             }else if(Integer.valueOf(12).equals(entry.getKey())){
-                                hzMaterielDAO.deleteMaterielList(entry.getValue());
+                                hzMaterielDAO.deleteMaterielList(entry.getValue(),ChangeTableNameEnum.HZ_MATERIEL.getTableName());
                             }
 
                         }
@@ -910,8 +910,8 @@ public class HzMbomServiceImpl implements HzMbomService{
 
         try {
             //获取申请人信息
-            User user = UserInfo.getUser();
-            Long applicantId = Long.valueOf(user.getId());
+//            User user = UserInfo.getUser();
+//            Long applicantId = Long.valueOf(user.getId());
             //对应的表
             Integer type = reqDTO.getType();
             //表单id
@@ -936,12 +936,35 @@ public class HzMbomServiceImpl implements HzMbomService{
 
             List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByPuids(query);
             List<HzMbomLineRecord> afterRecords = new ArrayList<>();
+
             if(ListUtil.isNotEmpty(records)){
-                records.forEach(record -> {
-                    HzMbomLineRecord manageRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
-                    manageRecord.setOrderId(orderId);
-                    afterRecords.add(manageRecord);
-                });
+                //到 after表中查询看是否存在记录
+                //存在记录则过滤 不存在记录则插入
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                dataDetailQuery.setOrderId(orderId);
+                dataDetailQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
+                List<HzMbomLineRecord> recordList = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
+                if(ListUtil.isEmpty(recordList)){
+                    records.forEach(record -> {
+                        HzMbomLineRecord manageRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
+                        manageRecord.setOrderId(orderId);
+                        afterRecords.add(manageRecord);
+                    });
+                }else {
+                    for(int i=0;i<records.size();i++){
+                        records.get(i).setOrderId(orderId);
+                        for(HzMbomLineRecord record:recordList){
+                            if(record.getPuid().equals(records.get(i).getPuid())){
+                                records.remove(records.get(i));
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+                    afterRecords.addAll(records);
+                }
+
                 HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
                 vo.setRecordList(afterRecords);
                 vo.setTableName(tableName);
@@ -961,17 +984,11 @@ public class HzMbomServiceImpl implements HzMbomService{
                 map.put("mbomBefore",bomLineRecords);
                 //保存以上获取信息
                 //变更数据
-                List<HzChangeDataRecord> dataRecords = new ArrayList<>();
-                puids.forEach(s -> {
-                    HzChangeDataRecord record = new HzChangeDataRecord();
-                    record.setApplicantId(applicantId);
-                    record.setOrderId(reqDTO.getOrderId());
-                    record.setPuid(s);
-                    record.setTableName(tableName);
-                    dataRecords.add(record);
-                });
+                HzChangeDataRecord record = new HzChangeDataRecord();
+                record.setOrderId(reqDTO.getOrderId());
+                record.setTableName(tableName);
 
-                map.put("changeData",dataRecords);
+                map.put("changeData",record);
                 //申请人
 //                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
 //                applicantChangeRecord.setApplicantId(applicantId);
@@ -1001,7 +1018,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                                     hzMbomRecordDAO.updateList((List<HzMbomLineRecord>) entry.getValue());
                                     break;
                                 case "changeData":
-                                    hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
+                                    hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
                                     break;
 //                                case "applicant":
 //                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
@@ -1072,6 +1089,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                 dataDetailQuery.setStatus(1);
                 updateRecords.forEach(record -> {
                     dataDetailQuery.setRevisionNo(record.getRevision());
+                    dataDetailQuery.setPuid(record.getPuid());
                     HzMbomLineRecord manageRecord = hzMbomRecordDAO.getMBomRecordByPuidAndRevision(dataDetailQuery);
                     if(manageRecord!=null){
                         updateList.add(HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(manageRecord));
@@ -1245,7 +1263,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 if(null != bean){
                                     List<HzAccessoriesLibs> libs = bean.getMaterielList();
                                     if(ListUtil.isNotEmpty(libs)){
-                                        superMboms.addAll(HzMbomRecordFactory.generateMaterielPaint(pbomLineRecord,superMboms.size(),lineIndex,libs,i));
+                                        superMboms.addAll(HzMbomRecordFactory.generateMaterielPaint(pbomLineRecord,superMboms.size(),lineIndex,libs,i,bean.getColorUid()));
                                     }
                                 }
                             }

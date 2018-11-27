@@ -43,7 +43,6 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     @Override
     public int deleteByPrimaryKey(String puid) {
         return baseSQLUtil.executeDeleteBySome(clzName + ".deleteByPrimaryKey", puid, "HZ_CFG0_RECORD");
-
     }
 
     @Override

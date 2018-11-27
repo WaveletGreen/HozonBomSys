@@ -24,6 +24,11 @@ public class HzApplicantChangeDAOImpl extends BaseSQLUtil implements HzApplicant
     }
 
     @Override
+    public int update(HzApplicantChangeRecord record) {
+        return super.update("HzApplicantChangeDAOImpl_update",record);
+    }
+
+    @Override
     public List<HzApplicantChangeRecord> findApplicantionList(HzApplicantChangeRecord record) {
         Map<String,Object> map = new HashMap<>();
         //map.put("id",query.getId());

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao">
+<mapper namespace="com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO">
     <resultMap id="BaseResultMap" type="sql.pojo.project.HzMaterielRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_MATERIEL_CODE" jdbcType="VARCHAR" property="pMaterielCode"/>
@@ -453,10 +453,10 @@
     </select>
 
     <!--批量删除物料数据-->
-    <delete id="HzMaterialDAOImpl_deleteMaterielList" parameterType="java.util.List">
+    <delete id="HzMaterialDAOImpl_deleteMaterielList" parameterType="java.util.HashMap">
 
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
-            delete HZ_MATERIEL_RECORD
+            delete ${tableName}
             where PUID = #{item.puid,jdbcType=VARCHAR}
         </foreach>
     </delete>
@@ -573,13 +573,13 @@
                 </foreach>
             </if>
             <if test="revision!= null">
-                and P_REVISION is not null
+                and t.P_REVISION is not null
             </if>
             <if test="pValidFlag != null">
-                and P_VALID_FLAG = #{pValidFlag,jdbcType=INTEGER}
+                and t.P_VALID_FLAG = #{pValidFlag,jdbcType=INTEGER}
             </if>
             <if test="orderId != null">
-                and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
+                and t.P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
             </if>
         </where>
     </select>
@@ -593,10 +593,31 @@
             t.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
             and t.puid =#{puid}
             <if test="revision!= null">
-                and P_REVISION =#{revision,jdbcType=VARCHAR}
+                and t.P_REVISION =#{revision,jdbcType=VARCHAR}
             </if>
             <if test="pValidFlag != null">
-                and P_VALID_FLAG = #{pValidFlag,jdbcType=INTEGER}
+                and t.P_VALID_FLAG = #{pValidFlag,jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+
+
+    <select id="HzMaterialDAOImpl_getMaterielRecordsByOrderId" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
+        select * from ${tableName} t
+        <where>
+            t.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+            <if test="orderId != null">
+                and t.P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
+            </if>
+            <if test="pValidFlag != null">
+                and t.P_VALID_FLAG = #{pValidFlag,jdbcType=INTEGER}
+            </if>
+            <if test="revision == 1">
+                and t.P_REVISION is not null
+            </if>
+            <if test="revision == 0">
+                and t.P_REVISION is null
             </if>
         </where>
     </select>

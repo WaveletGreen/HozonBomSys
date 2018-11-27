@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
@@ -92,6 +93,8 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
 
+    @Autowired
+    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
     @Override
     public WriteResultRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO) {
         WriteResultRespDTO respDTO = new WriteResultRespDTO();
@@ -389,60 +392,60 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
         }
         //数据同步  临时
-//        int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
-//        if (count <= 0) {
-//            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
-//            if (ListUtil.isNotEmpty(lineRecords)) {
-//                int size = lineRecords.size();
-//                //分批插入数据 一次1000条
-//                int i = 0;
-//                int cou = 0;
-//                if (size > 1000) {
-//                    for (i = 0; i < size / 1000; i++) {
-//                        List<HzPbomLineRecord> list = new ArrayList<>();
-//                        for (int j = 0; j < 1000; j++) {
-//                            HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
-//                            if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
-//                                boolean findChildren = false;
-//                                for(HzBomLineRecord r :lineRecords){
-//                                    if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
-//                                        findChildren = true;
-//                                        break;
-//                                    }
-//                                }
-//                                if(!findChildren){
-//                                    hzPbomLineRecord.setIsHas(0);
-//                                }
-//                            }
-//                            list.add(hzPbomLineRecord);
-//                            cou++;
-//                        }
-//                        hzPbomRecordDAO.insertList(list);
-//                    }
-//                }
-//                if (i * 1000 < size) {
-//                    List<HzPbomLineRecord> list = new ArrayList<>();
-//                    for (int j = 0; j < size - i * 1000; j++) {
-//                        HzPbomLineRecord hzPbomLineRecord = bomLineToPbomLine(lineRecords.get(cou));
-//                        if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
-//                            boolean findChildren = false;
-//                            for(HzBomLineRecord r :lineRecords){
-//                                if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
-//                                    findChildren = true;
-//                                    break;
-//                                }
-//                            }
-//                            if(!findChildren){
-//                                hzPbomLineRecord.setIsHas(0);
-//                            }
-//                        }
-//                        list.add(hzPbomLineRecord);
-//                        cou++;
-//                    }
-//                    hzPbomRecordDAO.insertList(list);
-//                }
-//            }
-//        }
+        int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
+        if (count <= 0) {
+            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
+            if (ListUtil.isNotEmpty(lineRecords)) {
+                int size = lineRecords.size();
+                //分批插入数据 一次1000条
+                int i = 0;
+                int cou = 0;
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzPbomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.bomLineAllToPbomRecord(lineRecords.get(cou));
+                            if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
+                                boolean findChildren = false;
+                                for(HzBomLineRecord r :lineRecords){
+                                    if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
+                                        findChildren = true;
+                                        break;
+                                    }
+                                }
+                                if(!findChildren){
+                                    hzPbomLineRecord.setIsHas(0);
+                                }
+                            }
+                            list.add(hzPbomLineRecord);
+                            cou++;
+                        }
+                        hzPbomRecordDAO.insertList(list);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzPbomLineRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.bomLineAllToPbomRecord(lineRecords.get(cou));
+                        if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
+                            boolean findChildren = false;
+                            for(HzBomLineRecord r :lineRecords){
+                                if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
+                                    findChildren = true;
+                                    break;
+                                }
+                            }
+                            if(!findChildren){
+                                hzPbomLineRecord.setIsHas(0);
+                            }
+                        }
+                        list.add(hzPbomLineRecord);
+                        cou++;
+                    }
+                    hzPbomRecordDAO.insertList(list);
+                }
+            }
+        }
         try {
             Page<HzPbomLineRecord> recordPage;
             if(Integer.valueOf(1).equals(query.getShowBomStructure())){
@@ -1155,8 +1158,8 @@ public class HzPbomServiceImpl implements HzPbomService {
 
         try {
             //获取申请人信息
-            User user = UserInfo.getUser();
-            Long applicantId = Long.valueOf(user.getId());
+//            User user = UserInfo.getUser();
+//            Long applicantId = Long.valueOf(user.getId());
 
             //表单id
             Long orderId = reqDTO.getOrderId();
@@ -1179,11 +1182,33 @@ public class HzPbomServiceImpl implements HzPbomService {
             List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecordsByPuids(query);
             List<HzPbomLineRecord> afterRecords = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){
-                records.forEach(record -> {
-                    HzPbomLineRecord manageRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
-                    manageRecord.setOrderId(orderId);
-                    afterRecords.add(manageRecord);
-                });
+                //到 after表中查询看是否存在记录
+                //存在记录则过滤 不存在记录则插入
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setProjectId(reqDTO.getProjectId());
+                dataDetailQuery.setOrderId(orderId);
+                dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
+                List<HzPbomLineRecord> recordList = hzPbomRecordDAO.getPbomRecordsByOrderId(dataDetailQuery);
+                if(ListUtil.isEmpty(recordList)){
+                    records.forEach(record -> {
+                        HzPbomLineRecord manageRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
+                        manageRecord.setOrderId(orderId);
+                        afterRecords.add(manageRecord);
+                    });
+                }else {
+                    for(int i=0;i<records.size();i++){
+                        records.get(i).setOrderId(orderId);
+                        for(HzPbomLineRecord record:recordList){
+                            if(records.get(i).equals(record)){
+                                records.remove(records.get(i));
+                                i--;
+                                break;
+                            }
+                        }
+                    }
+                    afterRecords.addAll(records);
+                }
+
                 map.put("pbomAfter",afterRecords);
 
 
@@ -1202,17 +1227,10 @@ public class HzPbomServiceImpl implements HzPbomService {
                 map.put("pbomBefore",bomLineRecords);
                 //保存以上获取信息
                 //变更数据
-                List<HzChangeDataRecord> dataRecords = new ArrayList<>();
-                puids.forEach(s -> {
-                    HzChangeDataRecord record = new HzChangeDataRecord();
-                    record.setApplicantId(applicantId);
-                    record.setOrderId(reqDTO.getOrderId());
-                    record.setPuid(s);
-                    record.setTableName(tableName);
-                    dataRecords.add(record);
-                });
-
-                map.put("changeData",dataRecords);
+                HzChangeDataRecord record = new HzChangeDataRecord();
+                record.setOrderId(reqDTO.getOrderId());
+                record.setTableName(tableName);
+                map.put("changeData",record);
                 //申请人
 //                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
 //                applicantChangeRecord.setApplicantId(applicantId);
@@ -1242,7 +1260,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                                     hzPbomRecordDAO.updateList((List<HzPbomLineRecord>) entry.getValue());
                                     break;
                                 case "changeData":
-                                    hzChangeDataRecordDAO.insertList((List<HzChangeDataRecord>) entry.getValue());
+                                    hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
                                     break;
 //                                case "applicant":
 //                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
@@ -1309,6 +1327,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     dataDetailQuery.setStatus(1);
                     updateRecords.forEach(record -> {
                         dataDetailQuery.setRevisionNo(record.getRevision());
+                        dataDetailQuery.setPuid(record.getPuid());
                         HzPbomLineRecord manageRecord = hzPbomRecordDAO.getPBomRecordByPuidAndRevision(dataDetailQuery);
                         if(manageRecord!=null){
                             updateList.add(HzPbomRecordFactory.bomLineRecordToBomRecord(manageRecord));
@@ -1319,7 +1338,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     hzPbomRecordDAO.updateList(updateList);
                 }
                 if(StringUtils.isNotBlank(deletePuids.toString())){
-                    hzPbomRecordDAO.deleteListByPuids(deletePuids.toString());
+                    hzPbomRecordDAO.deleteListByPuids(deletePuids.toString(),ChangeTableNameEnum.HZ_PBOM.getTableName());
                 }
                 return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){

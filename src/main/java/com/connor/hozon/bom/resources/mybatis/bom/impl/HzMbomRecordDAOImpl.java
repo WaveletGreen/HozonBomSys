@@ -292,11 +292,12 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("projectId",query.getProjectId());
         map.put("puid",query.getPuid());
         if(StringUtils.isBlank(query.getTableName())){
-            map.put("tableName","HZ_MBOM_RECORD");
+            map.put("tableName",MbomTableNameEnum.HZ_MBOM_RECORD.getTableName());
         }else {
             map.put("tableName",query.getTableName());
         }
         map.put("colorId",query.getColorId());
+        map.put("status",query.getStatus());
         return super.findForList("HzMbomRecordDAOImpl_getHzMbomTree",map);
     }
 
@@ -514,4 +515,18 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         return (HzMbomLineRecord)super.findForObject("HzMbomRecordDAOImpl_getMBomRecordByPuidAndRevision",map);
     }
 
+    @Override
+    public List<HzMbomLineRecord> getMbomRecordsByOrderId(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        map.put("status",query.getStatus());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"1":"0");
+        }else {
+            map.put("revision",null);
+        }
+        return super.findForList("HzMbomRecordDAOImpl_getMbomRecordsByOrderId",map);
+    }
 }

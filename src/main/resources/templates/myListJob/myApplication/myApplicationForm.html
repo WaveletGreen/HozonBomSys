@@ -21,19 +21,19 @@
                             <label for="ewoNo1">变更单号</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo1"
                                    th:value="${data.changeNo}" disabled="disabled"
-                                   placeholder="请输入变更单号"/>
+                                  />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo2">创建时间</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo2"
                                    th:value="${data.createTime}" disabled="disabled"
-                                   placeholder="请输入创建时间"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo3">部门</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo3"
                                    th:value="${data.deptName}" disabled="disabled"
-                                   placeholder="请输入部门"/>
+                                   />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
@@ -41,60 +41,57 @@
                             <label for="ewoNo4">发起人</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo4"
                                    th:value="${data.originator}" disabled="disabled"
-                                   placeholder="请输入发起人"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo5">联系电话</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo5"
-                                   th:value="${data.tel}" disabled="disabled" placeholder="请输入联系电话"/>
+                                   th:value="${data.tel}" disabled="disabled" />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo6">变更类型</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo6"
-                                   th:value="${data.changeType}" disabled="disabled" placeholder="请输入变更类型"/>
+                                   th:value="${data.changeType}" disabled="disabled" />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo7">是否关联变更</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
-                                   th:value="${data.hasRelatedChange}" disabled="disabled" placeholder="请输入部门关联变更号"/>
+                                   th:value="${data.hasRelatedChange}" disabled="disabled" />
                         </div>
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
-                            <!--<select class="form-control" name="platform" id="ewoNo8" placeholder="请选择上市类型">-->
-                                <!--<option>上市前</option>-->
-                                <!--<option>上市后</option>-->
+
+                            <!--<select class="form-control" name="marketType" id="marketType"disabled="disabled" placeholder="请选择上市类型">-->
+                                <!--<option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>-->
+                                <!--<option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>-->
                             <!--</select>-->
-                            <select class="form-control" name="marketType" id="marketType"disabled="disabled" placeholder="请选择上市类型">
-                                <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
-                                <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
-                            </select>
+                            <input type="text" class="form-control" name="marketType" id="marketType"
+                                   th:value="${data.marketType}" disabled="disabled" />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo9">项目所属阶段</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo9"
-                                   th:value="${data.projectStage}" disabled="disabled" placeholder="请输入项目所属阶段"/>
+                                   th:value="${data.projectStage}" disabled="disabled" />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo10">备注</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo10"
-                                   th:value="${data.remark}" disabled="disabled" placeholder="请输入备注"/>
+                                   th:value="${data.remark}" disabled="disabled" />
                         </div>
                         <div class="form-group after_the">
                             <label for="state">变更状态</label>
-                            <!--<select class="form-control" name="platform" id="ewoNo11" placeholder="请选择变更状态">-->
-                                <!--<option>进行中</option>-->
-                                <!--<option>完成</option>-->
-                                <!--<option>取消</option>-->
+
+                            <!--<select class="form-control" name="state" id="state" placeholder="请选择变更状态"disabled="disabled">-->
+                                <!--<option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>-->
+                                <!--<option th:selected="${data.getState()=='完成'?true:false}">完成</option>-->
+                                <!--<option th:selected="${data.getState()=='取消 '?true:false}">取消</option>-->
                             <!--</select>-->
-                            <select class="form-control" name="state" id="state" placeholder="请选择变更状态"disabled="disabled">
-                                <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
-                                <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
-                                <option th:selected="${data.getState()=='取消 '?true:false}">取消</option>
-                            </select>
+                            <input type="text" class="form-control" name="state" id="state"
+                                   th:value="${data.state}" disabled="disabled" />
                         </div>
                     </div>
                 </div>
@@ -155,20 +152,71 @@
     $(document).ready(function () {
         var id = $("#id").val();
         var projectId = $("#project", window.top.document).val();
-        var table = "<tr>";
-        table +="<th><a href='../change/data/feature/page?orderId="+id+"'>特性变更</a></th>";
-        table +="<th><a href='../change/data/bomCfg/page?orderId="+id+"'>全BOM配置</a></th>";
-        table +="<th><a href='../change/data/modelColorCfg/page?orderId="+id+"'>配色方案</a></th>";
-        table +="<th><a href='../change/data/materielFeature/page?orderId="+id+"'>配置物料</a></th>";
-        table +="<th><a href='../change/data/ebom/page?orderId="+id+"'>EBOM管理</a></th>";
-        table +="<th><a href='../change/data/pbom/page?orderId="+id+"'>PBOM管理</a></th>";
-        table +="<th><a href='../change/data/mbom/page?orderId="+id+"'>超级MBOM</a></th>";
-        table +="<th><a href='../change/data/mbom/page?orderId="+id+"&type=1"+"'>白车身生产</a></th>";
-        table +="<th><a href='../change/data/mbom/page?orderId="+id+"&type=6"+"'>白车身财务</a></th>";
-        table +="<th><a href='../change/data/material/page?orderId="+id+"'>物料数据</a></th>";
-        table +="<th><a href='../change/data/routing/page?orderId="+id+"'>工艺路线</a></th>";
-        table +="</tr>"
-        $("#myApplicationFormTable").html(table) ;
+        $.ajax({
+            url: "../change/data/order/hyper?orderId=" + id,
+            type: "GET",
+            success: function (result) {
+                var data = result.data;
+                var table = "<tr>";
+                table += "<th><a id='featureId' href='../toMyListJob/feature/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[7].name+"</a></th>";
+                table += "<th><a id='bomCfgId' href='../toMyListJob/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[10].name+"</a></th>";
+                table += "<th><a id='modelColorCfgId' href='../toMyListJob/modelColorCfg/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[8].name+"</a></th>";
+                table += "<th><a id='materielFeatureId' href='../toMyListJob/materielFeature/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[9].name+"</a></th>";
+                table += "<th><a id='ebomId' href='../toMyListJob/ebom/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[0].name+"</a></th>";
+                table += "<th><a id='pbomId' href='../toMyListJob/pbom/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[1].name+"</a></th>";
+                table += "<th><a id='mbomId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[2].name+"</a></th>";
+                table += "<th><a id='productionId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=1" + "'>"+data[3].name+"</a></th>";
+                table += "<th><a id='financialId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=6" + "'>"+data[4].name+"</a></th>";
+                table += "<th><a id='materialId' href='../toMyListJob/material/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[5].name+"</a></th>";
+                table += "<th><a id='routingId' href='../toMyListJob/routing/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[6].name+"</a></th>";
+                table += "</tr>"
+                $("#myApplicationFormTable").html(table);
+                var featureId = document.getElementById("featureId");
+                var bomCfgId = document.getElementById("bomCfgId");
+                var modelColorCfgId = document.getElementById("modelColorCfgId");
+                var materielFeatureId = document.getElementById("materielFeatureId");
+                var ebomId = document.getElementById("ebomId");
+                var pbomId = document.getElementById("pbomId");
+                var mbomId = document.getElementById("mbomId");
+                var productionId = document.getElementById("productionId");
+                var financialId = document.getElementById("financialId");
+                var materialId = document.getElementById("materialId");
+                var routingId = document.getElementById("routingId");
+                if (data[7].status == 0) {
+                    featureId.style.display = "none";
+                }
+                if (data[10].status == 0) {
+                    bomCfgId.style.display = "none";
+                }
+                if (data[8].status == 0) {
+                    modelColorCfgId.style.display = "none";
+                }
+                if (data[9].status == 0) {
+                    materielFeatureId.style.display = "none";
+                }
+                if (data[0].status == 0) {
+                    ebomId.style.display = "none";
+                }
+                if (data[1].status == 0) {
+                    pbomId.style.display = "none";
+                }
+                if (data[2].status == 0) {
+                    mbomId.style.display = "none";
+                }
+                if (data[3].status == 0) {
+                    productionId.style.display = "none";
+                }
+                if (data[4].status == 0) {
+                    financialId.style.display = "none";
+                }
+                if (data[5].status == 0) {
+                    materialId.style.display = "none";
+                }
+                if (data[6].status == 0) {
+                    routingId.style.display = "none";
+                }
+            }
+        })
     })
     function doReturn() {
         window.location.href="javascript:history.go(-1);"

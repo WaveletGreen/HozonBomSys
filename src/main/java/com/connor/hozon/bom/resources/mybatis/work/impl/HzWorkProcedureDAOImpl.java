@@ -249,9 +249,10 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     }
 
     @Override
-    public int deleteByPuids(List<String> puids) {
+    public int deleteByPuids(List<String> puids,String tableName) {
         int size = puids.size();
         Map<String,Object> m = new HashMap<>();
+        m.put("tableName",tableName);
         try {
             if(size>1000){
                 HzBomSysFactory<String> factory = new HzBomSysFactory();
@@ -269,6 +270,21 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
             throw new RuntimeException(e);
         }
         return 1;
+    }
+
+    @Override
+    public List<HzWorkProcedure> getWorkProcedureByOrderId(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        map.put("status",query.getStatus());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"1":"0");
+        }else {
+            map.put("revision",null);
+        }
+        return super.findForList("HzWorkProcedureDAOImpl_getWorkProcedureByOrderId",map);
     }
 
 }

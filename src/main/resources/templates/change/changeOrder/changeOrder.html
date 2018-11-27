@@ -23,19 +23,19 @@
                             <label for="changeNo">变更单号</label>
                             <input type="text" class="form-control" name="changeNo" id="changeNo"
                                    th:value="${data.changeNo}" disabled="disabled"
-                                   placeholder="请输入变更单号"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="createTime">创建时间</label>
                             <input type="text" class="form-control" name="createTime" id="createTime"
                                    th:value="${data.createTime}" disabled="disabled"
-                                   placeholder="请输入创建时间"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="deptName">部门</label>
                             <input type="text" class="form-control" name="deptName" id="deptName"
                                    th:value="${data.deptName}" disabled="disabled"
-                                   placeholder="请输入部门"/>
+                                   />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
@@ -43,19 +43,19 @@
                             <label for="originator">发起人</label>
                             <input type="text" class="form-control" name="originator" id="originator"
                                    th:value="${data.originator}" disabled="disabled"
-                                   placeholder="请输入发起人"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="tel">联系电话</label>
                             <input type="text" class="form-control" name="tel" id="tel"
                                    th:value="${data.tel}" disabled="disabled"
-                                   placeholder="请输入联系电话"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="changeType">变更类型</label>
                             <input type="text" class="form-control" name="changeType" id="changeType"
                                    th:value="${data.changeType}" disabled="disabled"
-                                   placeholder="请输入变更类型"/>
+                                   />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
@@ -63,12 +63,12 @@
                             <label for="relationChangeNo">是否关联变更</label>
                             <input type="text" class="form-control" name="relationChangeNo" id="relationChangeNo"
                                    th:value="${data.relationChangeNo}" disabled="disabled"
-                                   placeholder="请输入部门关联变更号"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
                             <select class="form-control" name="marketType" id="marketType" disabled="disabled"
-                                    placeholder="请选择上市类型">
+                                    >
                                 <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
                                 <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
                             </select>
@@ -77,7 +77,7 @@
                             <label for="projectStage">项目所属阶段</label>
                             <input type="text" class="form-control" name="projectStage" id="projectStage"
                                    th:value="${data.projectStage}" disabled="disabled"
-                                   placeholder="请输入项目所属阶段"/>
+                                   />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
@@ -85,7 +85,7 @@
                             <label for="remark">备注</label>
                             <input type="text" class="form-control" name="remark" id="remark"
                                    th:value="${data.remark}" disabled="disabled"
-                                   placeholder="请输入备注"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="state">变更状态</label>
@@ -97,7 +97,7 @@
                             <!--</select>-->
                             <input type="text" class="form-control" name="state" id="state"
                                    th:value="${data.state}" disabled="disabled"
-                                   placeholder=""/>
+                                   />
                         </div>
                     </div>
                 </div>
