@@ -221,7 +221,6 @@ public class HzPbomController extends BaseController {
 
     /**
      * 获取一条PBOM 信息
-     *
      * @param reqDTO
      * @param response
      */
@@ -432,7 +431,7 @@ public class HzPbomController extends BaseController {
     }
 
     /**
-     * EBOM撤销
+     * PBOM撤销
      * @param reqDTO
      * @param response
      */

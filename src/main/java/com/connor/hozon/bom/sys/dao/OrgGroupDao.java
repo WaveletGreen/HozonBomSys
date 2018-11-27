@@ -45,4 +45,6 @@ public interface OrgGroupDao extends GenericDao<OrgGroup, QueryOrgGroup> {
 	 * @return
 	 */
 	Integer queryOrgGroupUserCount(Long groupId);
+
+	Integer queryOrgGroupNameExist(String deptName);
 }
