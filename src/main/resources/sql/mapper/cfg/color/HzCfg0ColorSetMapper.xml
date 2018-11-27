@@ -119,7 +119,7 @@
             and P_COLOR_NAME like concat(concat('%',#{pColorName,jdbcType=VARCHAR}),'%')
         </if>
         <if test="pColorCode!=null and  pColorCode!=''">
-            and P_COLOR_CODE like concat(concat('%',#{pColorCode,jdbcType=VARCHAR}),'%')
+            and P_COLOR_CODE like concat(concat('%',upper(#{pColorCode,jdbcType=VARCHAR})),'%')
         </if>
         <if test="pColorPlate!=null and  pColorPlate!=''">
             and P_COLOR_PLATE like concat(concat('%',#{pColorPlate,jdbcType=VARCHAR}),'%')
@@ -199,7 +199,7 @@
             and P_COLOR_NAME like concat(concat('%',#{pColorName,jdbcType=VARCHAR}),'%')
         </if>
         <if test="pColorCode!=null and  pColorCode!=''">
-            and P_COLOR_CODE like concat(concat('%',#{pColorCode,jdbcType=VARCHAR}),'%')
+            and P_COLOR_CODE like concat(concat('%',upper(#{pColorCode,jdbcType=VARCHAR})),'%')
         </if>
         <if test="pColorPlate!=null and  pColorPlate!=''">
             and P_COLOR_PLATE like concat(concat('%',#{pColorPlate,jdbcType=VARCHAR}),'%')
