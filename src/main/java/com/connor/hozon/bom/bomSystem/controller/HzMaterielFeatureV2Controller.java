@@ -608,7 +608,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasicsDelete = new ArrayList<>();
         for(HzDerivativeMaterielBasic hzDerivativeMaterielBasic : hzDerivativeMaterielBasics){
             if(hzDerivativeMaterielBasic.getDmbStatus()!=null&&2==hzDerivativeMaterielBasic.getDmbStatus()){
-                hzDerivativeMaterielBasic.setDmbStatus(0);
+                hzDerivativeMaterielBasic.setDmbStatus(1);
                 hzDerivativeMaterielBasicsDelete.add(hzDerivativeMaterielBasic);
                 while (iterator.hasNext()){
                     HzComposeDelDto hzComposeDelDto = iterator.next();

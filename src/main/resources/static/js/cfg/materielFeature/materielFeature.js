@@ -55,7 +55,7 @@ var toolbar = [
     },
     {
         text: '发起流程',
-        iconCls: 'glyphicon glyphicon-pencil',
+        iconCls: 'glyphicon glyphicon-log-out',
         handler: launchChangeForm
     },
     {
@@ -454,10 +454,10 @@ function launchChangeForm() {
     }
     for(let i in rows){
         if(1 == rows[i].status || "1" == rows[i].status){
-            window.Ewin.alert({message:rows[i].modeBasicDetail+"已生效，不可发起变更表单"});
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已生效，不可发起流程"});
             return false;
         }else if(10 == rows[i].status || "10" == rows[i].status){
-            window.Ewin.alert({message:rows[i].modeBasicDetail+"已在变更流程中，不可发起流程"});
+            window.Ewin.alert({message:rows[i].modeBasicDetail+"已在流程中，不可发起流程"});
             return false;
         }
     }
@@ -465,7 +465,7 @@ function launchChangeForm() {
     let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
     for (let i in rows) {
         if (0 != rows[i].status && "0" != rows[i].status && null != rows[i].status && "null" != rows[i].status&&2!=rows[i].status&&"2"!=rows[i].status) {
-            window.Ewin.alert({message: rows[i].modeBasicDetail + "该衍生物料不是草稿状态，不能发起变更"});
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "该衍生物料不是草稿状态，不能发起流程"});
             return false;
         }
         msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
@@ -482,7 +482,7 @@ function launchChangeForm() {
     // data.projectPuid = projectUid;
     window.Ewin.confirm({
         title: '提示',
-        message: '是否要发起变更？',
+        message: '是否要发起流程？',
         width: 500
     }).on(function (e) {
         if (e) {
@@ -588,7 +588,7 @@ function gotIt(result) {
             return "<span style='color: #a97f89'>草稿状态</span>";
         }
         else if(2 == status || "2" == status){
-            return "<span style='color: #0c8fe2'>已删除</span>";
+            return "<span style='color: #0c8fe2'>删除状态</span>";
         }
         else {
             return "<span style='color: #a90009'>未知状态</span>";

@@ -42,7 +42,7 @@
     <div class="form-group">
         <label>是否拼色</label>
         <select class="form-control input-small" data-style="btn-info"
-                id="pColorIsMultiply">
+                id="pColorIsMultiply" name="pColorIsMultiply">
             <option th:value="N" th:text="否" th:selected="${entity.pColorIsMultiply=='N'?true:false}">
             </option>
             <option th:value="Y" th:text="是" th:selected="${entity.pColorIsMultiply=='Y'?true:false}">
@@ -265,6 +265,9 @@
             total++;
         })
     );
+    function delInput(delButtton){
+        $(delButtton).parent().remove();
+    }
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>
