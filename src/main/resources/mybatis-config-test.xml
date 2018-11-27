@@ -164,5 +164,7 @@
         <mapper resource="sql/mapper/interaction/HzSingleVehiclesMapper.xml"/>
         <!--任务-->
         <mapper resource="sql/mapper/task/HzTaskMapper.xml"/>
+        <!--changeList-->
+        <mapper resource="sql/mapper/change.xmapper/HzChangeListRecordMapper.xml"/>
     </mappers>
 </configuration>

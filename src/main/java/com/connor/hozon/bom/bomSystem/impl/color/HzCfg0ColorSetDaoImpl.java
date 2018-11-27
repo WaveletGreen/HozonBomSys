@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.impl.color;
 
 import com.connor.hozon.bom.bomSystem.dao.color.HzCfg0ColorSetDao;
+import com.connor.hozon.bom.bomSystem.dto.HzColorSetQueryDto;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.context.annotation.Configuration;
@@ -103,7 +104,8 @@ public class HzCfg0ColorSetDaoImpl extends BasicDaoImpl<HzCfg0ColorSet> implemen
      * @return
      */
     @Override
-    public int tellMeHowManyOfIt() {
-        return baseSQLUtil.executeQueryById(new Integer(0), clzName + ".tellMeHowManyOfIt");
+    public int tellMeHowManyOfIt(HzColorSetQueryDto hzColorSetQueryDto) {
+        List<Integer> count = baseSQLUtil.executeQueryByPass(new Integer(0), hzColorSetQueryDto, clzName + ".tellMeHowManyOfIt");
+        return count.get(0);
     }
 }
