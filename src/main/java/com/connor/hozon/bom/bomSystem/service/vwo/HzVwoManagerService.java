@@ -3703,6 +3703,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             if(titleFlag){
                 basicMap.put("s" + titleNum,"-");
             }
+            titleNum++;
         }
     }
 }

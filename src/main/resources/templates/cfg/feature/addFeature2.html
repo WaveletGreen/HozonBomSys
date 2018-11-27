@@ -97,23 +97,23 @@
                         }
                     }
                 },
-                pCfg0ObjectId: {
-                    message: '特性值/配置代码验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '特性值/配置代码不能为空'
-                        },
-                        //正则校验
-                        regexp: {
-                            regexp: /[a-zA-Z0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
-                            message: '特性值只能以数字/英文开头，加英文和数字，不允许有英文和数字以外的字符'
-                        },
-                        stringLength: {
-                            max: 10,
-                            message: '特性值最长长度为10'
-                        },
-                    }
-                },
+                // pCfg0ObjectId: {
+                //     message: '特性值/配置代码验证失败',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '特性值/配置代码不能为空'
+                //         },
+                //         //正则校验
+                //         regexp: {
+                //             regexp: /[a-zA-Z0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                //             message: '特性值只能以数字/英文开头，加英文和数字，不允许有英文和数字以外的字符'
+                //         },
+                //         stringLength: {
+                //             max: 10,
+                //             message: '特性值最长长度为10'
+                //         },
+                //     }
+                // },
                 pCfg0Desc: {
                     message: '特性值/配置(描述)验证失败',
                     validators: {
@@ -204,6 +204,8 @@
                         $(pCfg0FamilyDesc).val(libraryJson.famillyCh);
                         $("#pH9featureenname").val(libraryJson.famillyEn);
                         $("#pCfg0Desc").val(libraryJson.valueDescCh);
+                }else {
+
                 }
             },
             error: function (result) {
