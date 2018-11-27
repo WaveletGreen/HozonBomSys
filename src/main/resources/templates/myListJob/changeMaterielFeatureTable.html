@@ -58,7 +58,7 @@
             }
         }),
             $.ajax({
-                url: "../../../vwo/getMaterielFeatureTable?formId="+orderId+"&projectUid="+projectPuid,
+                url: "../../vwo/getMaterielFeatureTable?formId="+orderId+"&projectUid="+projectPuid,
                 type: "POST",
                 success: function (result) {
                     var data = result.result;

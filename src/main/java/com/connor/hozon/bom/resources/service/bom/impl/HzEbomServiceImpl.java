@@ -1973,37 +1973,40 @@ public class HzEbomServiceImpl implements HzEbomService {
             record.setTableName(tableName);
             map.put("changeData",record);
 
-            //启动线程进行插入操作
-            ExecutorServices services1 = new ExecutorServices(map.size());
-            ExecutorService pool = services1.getPool();
             try {
+
+                //启动线程进行插入操作
                 for(Map.Entry<String,Object> entry:map.entrySet()){
-                    switch (entry.getKey()){
-                        case "ebomAfter":
-                            pool.execute(()->{
-                                hzEbomRecordDAO.insertList((List<HzEPLManageRecord>) entry.getValue(),tableName);
-                            });
-                        case "ebomBefore":
-                            pool.execute(()->{
-                                hzEbomRecordDAO.updateList((List<HzBomLineRecord>) entry.getValue());
-                            });
-                            break;
-                        case "changeData":
-                            pool.execute(()->{
-                                hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
-                            });
-                            break;
-                        default:break;
-                    }
+                    new ExecutorServices(1) {
+                        @Override
+                        public void action() {
+                            switch (entry.getKey()){
+                                case "ebomAfter":
+                                    hzEbomRecordDAO.insertList((List<HzEPLManageRecord>) entry.getValue(),tableName);
+                                    break;
+                                case "ebomBefore":
+                                    hzEbomRecordDAO.updateList((List<HzBomLineRecord>) entry.getValue());
+                                    break;
+                                case "changeData":
+                                    hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
+                                    break;
+//                                case "applicant":
+//                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
+//                                    break;
+//                                case "auditor" :
+//                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
+//                                    break;
+                                default:break;
+                            }
+                        }
+                    }.execute();
+
                 }
             }catch (Exception e){
                 e.printStackTrace();
                 return WriteResultRespDTO.getFailResult();
-            }finally {
-                if(pool!=null){
-                    pool.shutdown();
-                }
             }
+
         }
         return WriteResultRespDTO.getSuccessResult();
     }

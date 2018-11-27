@@ -185,7 +185,7 @@ public class HzMbomRecordFactory {
         HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
         String lineId = mbomLineRecord.getLineId();
         if(Integer.valueOf(1).equals(record.getColorPart())&& bean!=null){
-            if(bean.getColorCode().equals("-")){
+            if(!bean.getColorCode().equals("-")){
                 lineId = HzBomSysFactory.resultLineId(lineId)+bean.getColorCode();
             }
         }
@@ -252,7 +252,7 @@ public class HzMbomRecordFactory {
      * 产生油漆物料BOM
      * @return
      */
-    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,int i){
+    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,int i,String colorId){
         List<HzMbomLineRecord> list = new ArrayList<>();
         if(ListUtil.isNotEmpty(libs)){
             for(int j=0;j<libs.size();j++){
@@ -269,6 +269,7 @@ public class HzMbomRecordFactory {
                 record.setStatus(1);
                 record.setBomDigifaxId(pbomLineRecord.getBomDigifaxId());
                 record.seteBomPuid(UUID.randomUUID().toString());
+                record.setColorId(colorId);
                 list.add(record);
             }
         }

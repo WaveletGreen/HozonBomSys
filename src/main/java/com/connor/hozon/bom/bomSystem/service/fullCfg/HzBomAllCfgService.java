@@ -941,14 +941,46 @@ public class HzBomAllCfgService {
                 result.put("status", false);
                 result.put("msg", "添加列信息失败，请联系系统管理员查看日志");
             }
-        }
-        String projectUid = params.get("projectUid");
-        HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectUid);
-        hzFullCfgMain.setStatus(0);
-        if(hzFullCfgMainDao.updateStatusById(hzFullCfgMain)<=0?true:false){
-            result.put("status", false);
-            result.put("msg", "修改全配置BOM状态失败");
-            return result;
+
+            String projectUid = params.get("projectUid");
+            HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectUid);
+            hzFullCfgMain.setStatus(0);
+            if(hzFullCfgMainDao.updateStatusById(hzFullCfgMain)<=0?true:false){
+                result.put("status", false);
+                result.put("msg", "修改全配置BOM状态失败");
+                return result;
+            }
+
+            /************为车辆模型生成默认打点图*****************/
+            //查找出所有WithCfg
+            List<HzFullCfgWithCfg> hzFullCfgWithCfgs = hzFullCfgWithCfgDao.selectByMainID(hzFullCfgMain.getId());
+            List<HzFullCfgModel> hzFullCfgModels = new ArrayList<>();
+            Date date = new Date();
+            User user = UserInfo.getUser();
+            for(HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs){
+                HzFullCfgModel hzFullCfgModel = new HzFullCfgModel();
+                hzFullCfgModel.setModModelUid(modelRecord.getPuid());
+                hzFullCfgModel.setModCfg0Uid(hzFullCfgWithCfg.getCfgCfg0Uid());
+                hzFullCfgModel.setFlModVersion(hzFullCfgMain.getId());
+                hzFullCfgModel.setFlModelBomlineUid(hzFullCfgWithCfg.getCfgBomlineUid());
+                hzFullCfgModel.setFlModCreateDate(date);
+                hzFullCfgModel.setFlModCreator(user.getLogin());
+                hzFullCfgModel.setFlModUpdateDate(date);
+                hzFullCfgModel.setFlModLastUpdater(user.getLogin());
+                if("1".equals(hzFullCfgWithCfg.getFlComment())){
+                    Short point = 2;
+                    hzFullCfgModel.setModPointType(point);
+                }else {
+                    Short point = 1;
+                    hzFullCfgModel.setModPointType(point);
+                }
+                hzFullCfgModels.add(hzFullCfgModel);
+            }
+            if(hzFullCfgModelDao.insertListAll(hzFullCfgModels)<=0?true:false){
+                result.put("status", false);
+                result.put("msg", "添加打点图信息失败");
+                return result;
+            }
         }
         return result;
 
@@ -1016,8 +1048,16 @@ public class HzBomAllCfgService {
         return respons;
     }
 
-    public JSONObject getVwo(String projectId, Integer changeFromId) {
+    public synchronized JSONObject getVwo(String projectId, Integer changeFromId) {
         JSONObject result = new JSONObject();
+        /***********防止重复发起流程后端校验****************/
+        List<HzFullCfgMainChange> hzFullCfgMainChangeHas = hzFullCfgMainChangeDao.selectNotEffectByProjectUid(projectId);
+        if(hzFullCfgMainChangeHas!=null&&hzFullCfgMainChangeHas.size()>0){
+            result.put("status",false);
+            result.put("msg","数据已发起流程，不可重复发起");
+            return result;
+        }
+
         //main表数据集
         HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectId);
         //获取该项目下的所有车型模型
@@ -1149,6 +1189,7 @@ public class HzBomAllCfgService {
         List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChanges = hzFullCfgWithCfgChangeDao.selectByMainId(hzFullCfgMainChange.getId());
 
         HzFullCfgMain hzFullCfgMain = hzFullCfgMainChange.geteHzFullCfgMain();
+        hzFullCfgMain.setStatus(1);
         Long mainid = hzFullCfgMainDao.insertSeqAll(hzFullCfgMain);
 
         List<HzFullCfgModel> hzFullCfgModels = new ArrayList<>();

@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  ~ 线上环境
+  -->
+
 <!DOCTYPE configuration
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
@@ -21,7 +28,7 @@
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="oracle.jdbc.OracleDriver"/>
-                <property name="url" value="jdbc:oracle:thin:@10.1.0.231:1521:TC10"/>
+                <property name="url" value="jdbc:oracle:thin:@10.0.6.6:1521:TC10"/>
                 <property name="username" value="HOZON"/>
                 <property name="password" value="HOZON"/>
                 <!--最大的活动连接数，活动连接，就是正在与数据库交互的连接，默认是10-->
@@ -78,6 +85,11 @@
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainMapper.xml"/>
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelMapper.xml"/>
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgMapper.xml"/>
+
+        <!--fullCfg变更-->
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgChangeMapper.xml"/>
         <!--main-->
         <mapper resource="sql/mapper/cfg/main/HzCfg0MainRecordMapper.xml"/>
         <!--model-->
@@ -131,6 +143,12 @@
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactReferenceMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptEmpMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzChangeOrderRecordMapper.xml"/>
+
+        <mapper resource="sql/mapper/change.xmapper/HzApplicantChangeRecordMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzAuditorChangeRecordMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzChangeDataRecordMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzChangeListMapper.xml"/>
         <!--字典库-->
         <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
         <!--VPPS库-->
@@ -142,5 +160,10 @@
         <mapper resource="sql/mapper/interaction/HzSingleVehiclesMapper.xml"/>
         <!--任务-->
         <mapper resource="sql/mapper/task/HzTaskMapper.xml"/>
+        <!--derivative变更 -->
+        <mapper resource="sql/mapper/cfg/derivative/HzMDBasicChangeBeanMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/derivative/HzMDDetailChangeBeanMapper.xml"/>
+        <!--changeList-->
+        <mapper resource="sql/mapper/change.xmapper/HzChangeListRecordMapper.xml"/>
     </mappers>
 </configuration>

@@ -75,7 +75,7 @@
             valign: 'middle'
         })
         $.ajax({
-            url: "../../../vwo/getModelColorTable?vwoId=" + orderId,
+            url: "../../vwo/getModelColorTable?vwoId=" + orderId,
             type: "POST",
             success: function (data) {
                 let titles = data.titleSet;

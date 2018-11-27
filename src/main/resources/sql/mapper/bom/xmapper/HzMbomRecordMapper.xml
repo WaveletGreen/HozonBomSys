@@ -909,11 +909,23 @@
         <where>
             t2.puid = #{projectId,jdbcType=VARCHAR}))
         </where>
-        start with t.P_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_MBOM_STATUS <![CDATA[ <> ]]>0
+        start with t.P_BOM_PUID = #{puid,jdbcType=VARCHAR}
+        <if test="status != null">
+            and P_MBOM_STATUS = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null">
+            and t.P_MBOM_STATUS <![CDATA[ <> ]]>0
+        </if>
         <if test="colorId != null and colorId !='' " >
             and t.P_COLOR_PUID =#{colorId,jdbcType=VARCHAR}
         </if>
-        connect by prior t.P_BOM_PUID = t.p_parent_uid and t.P_MBOM_STATUS <![CDATA[ <> ]]>0
+        connect by prior t.P_BOM_PUID = t.p_parent_uid
+        <if test="status != null">
+            and P_MBOM_STATUS = #{status,jdbcType=INTEGER}
+        </if>
+        <if test="status == null">
+            and t.P_MBOM_STATUS <![CDATA[ <> ]]>0
+        </if>
         <if test="colorId != null and colorId !='' " >
             and t.P_COLOR_PUID =#{colorId,jdbcType=VARCHAR}
         </if>

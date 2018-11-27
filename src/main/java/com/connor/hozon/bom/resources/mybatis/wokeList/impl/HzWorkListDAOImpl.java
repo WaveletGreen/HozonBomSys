@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service("HzWorkListDAO")
+@Service("hzWorkListDAO")
 public class HzWorkListDAOImpl extends BaseSQLUtil implements HzWorkListDAO {
 
     @Override

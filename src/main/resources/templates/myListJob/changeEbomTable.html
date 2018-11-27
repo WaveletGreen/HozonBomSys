@@ -54,7 +54,7 @@
             }
         }),
             $.ajax({
-                url: "../../../change/data/ebom/title",
+                url: "../../change/data/ebom/title",
                 type: "GET",
                 success: function (result) {
                     var data = result.data;
@@ -70,7 +70,7 @@
                         }
                     }
                     $table.bootstrapTable({
-                        url: "../../../change/data/ebom/data?projectId="+projectPuid+"&orderId="+orderId,
+                        url: "../../change/data/ebom/data?projectId="+projectPuid+"&orderId="+orderId,
                         method: 'GET',
                         dataType: 'json',
                         //cache: false,

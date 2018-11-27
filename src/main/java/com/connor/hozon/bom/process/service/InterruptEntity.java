@@ -124,63 +124,64 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
      */
     @Override
     public boolean bom(Long orderId, Object... params) {
-        //根据表单id 获取全部的变更数据
-        HzChangeDataQuery hzChangeDataQuery = new HzChangeDataQuery();
-        hzChangeDataQuery.setOrderId(orderId);
-        //项目id
-        HzChangeOrderRecord hzChangeOrderRecord = hzChangeOrderDAO.findHzChangeOrderRecordById(orderId);
-        if (hzChangeOrderRecord == null) {
-            return false;
-        }
-        String projectId = hzChangeOrderRecord.getProjectId();
-
-        List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(hzChangeDataQuery);
-        //EBOM  PBOM  MBOM  物料  工艺路线 BOM端 目前就这5种类型
-        if (ListUtil.isNotEmpty(list)) {
-            ExecutorServices executorServices = new ExecutorServices(list.size());
-            ExecutorService service = executorServices.getPool();
-            try {
-                for (HzChangeDataRecord record : list) {
-                    if (ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
-                            ebomChangeInterrupt(record.getTableName(), orderId, projectId);
-                        });
-                    } else if (ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
-                            pbomChangeInterrupt(record.getTableName(), orderId, projectId);
-                        });
-                    } else if (ChangeTableNameEnum.HZ_MBOM_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
-                            mbomChangeInterrupt(record.getTableName(), orderId, projectId);
-                        });
-                    } else if (ChangeTableNameEnum.HZ_MBOM_PRODUCT_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
-                            mbomProductChangeInterrupt(record.getTableName(), orderId, projectId);
-                        });
-                    } else if (ChangeTableNameEnum.HZ_MBOM_FINANCE_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
-                            mbomFinanceChangeInterrupt(record.getTableName(), orderId, projectId);
-                        });
-                    } else if (ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
-                            materielChangeInterrupt(record.getTableName(), orderId, projectId);
-                        });
-                    } else if (ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
-                            workProduceChangeInterrupt(record.getTableName(), orderId, projectId);
-                        });
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            } finally {
-                if (service != null) {
-                    service.shutdown();
-                }
-            }
-        }
         return true;
+        //根据表单id 获取全部的变更数据
+//        HzChangeDataQuery hzChangeDataQuery = new HzChangeDataQuery();
+//        hzChangeDataQuery.setOrderId(orderId);
+//        //项目id
+//        HzChangeOrderRecord hzChangeOrderRecord = hzChangeOrderDAO.findHzChangeOrderRecordById(orderId);
+//        if (hzChangeOrderRecord == null) {
+//            return false;
+//        }
+//        String projectId = hzChangeOrderRecord.getProjectId();
+//
+//        List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(hzChangeDataQuery);
+//        //EBOM  PBOM  MBOM  物料  工艺路线 BOM端 目前就这5种类型
+//        if (ListUtil.isNotEmpty(list)) {
+//            ExecutorServices executorServices = new ExecutorServices(list.size());
+//            ExecutorService service = executorServices.getPool();
+//            try {
+//                for (HzChangeDataRecord record : list) {
+//                    if (ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName().equals(record.getTableName())) {
+//                        service.submit(() -> {
+//                            ebomChangeInterrupt(record.getTableName(), orderId, projectId);
+//                        });
+//                    } else if (ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName().equals(record.getTableName())) {
+//                        service.submit(() -> {
+//                            pbomChangeInterrupt(record.getTableName(), orderId, projectId);
+//                        });
+//                    } else if (ChangeTableNameEnum.HZ_MBOM_AFTER.getTableName().equals(record.getTableName())) {
+//                        service.submit(() -> {
+//                            mbomChangeInterrupt(record.getTableName(), orderId, projectId);
+//                        });
+//                    } else if (ChangeTableNameEnum.HZ_MBOM_PRODUCT_AFTER.getTableName().equals(record.getTableName())) {
+//                        service.submit(() -> {
+//                            mbomProductChangeInterrupt(record.getTableName(), orderId, projectId);
+//                        });
+//                    } else if (ChangeTableNameEnum.HZ_MBOM_FINANCE_AFTER.getTableName().equals(record.getTableName())) {
+//                        service.submit(() -> {
+//                            mbomFinanceChangeInterrupt(record.getTableName(), orderId, projectId);
+//                        });
+//                    } else if (ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName().equals(record.getTableName())) {
+//                        service.submit(() -> {
+//                            materielChangeInterrupt(record.getTableName(), orderId, projectId);
+//                        });
+//                    } else if (ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName().equals(record.getTableName())) {
+//                        service.submit(() -> {
+//                            workProduceChangeInterrupt(record.getTableName(), orderId, projectId);
+//                        });
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return false;
+//            } finally {
+//                if (service != null) {
+//                    service.shutdown();
+//                }
+//            }
+//        }
+//        return true;
     }
 
 

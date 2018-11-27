@@ -22,7 +22,7 @@ import java.util.Map;
  * @Date: 2018/7/2
  * @Description:
  */
-@Service("HzMaterielDAO")
+@Service("hzMaterielDAO")
 public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
 
     @Override
