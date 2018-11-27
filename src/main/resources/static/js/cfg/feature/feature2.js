@@ -31,7 +31,7 @@ var toolbar = [
             }
             for (let i in rows) {
                 if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
-                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许删除"});
+                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在流程中，不允许删除"});
                     return false;
                 }
             }
@@ -106,7 +106,7 @@ var toolbar = [
     // },
     {
         text: '发起流程',
-        iconCls: 'glyphicon glyphicon-send',
+        iconCls: 'glyphicon glyphicon-log-out',
         handler: function () {
             var rows = $table.bootstrapTable('getSelections');
             if (rows.length == 0) {
@@ -122,7 +122,7 @@ var toolbar = [
                 msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
             }
             msg += "</div>";
-            window.Ewin.confirm({title: '请确认发起VWO流程的特性值', message: msg, width: 500}).on(function (e) {
+            window.Ewin.confirm({title: '请确认发起流程的特性值', message: msg, width: 500}).on(function (e) {
                 if (e) {
                     var puids = "";
                     for(let i in rows){
@@ -293,7 +293,7 @@ var column = [
                 }
             }
             else if (2 == row.cfgStatus || "2" == row.cfgStatus) {
-                return "<span style='color: #0c8fe2'>已删除</span>";
+                return "<span style='color: #0c8fe2'>删除状态</span>";
             }
             else if (-1 == value || "-1" == value) {
                 return "<span style='color: #9492a9'>已废止</span>";
