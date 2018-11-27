@@ -40,7 +40,7 @@
     }
     var orderChangeId  = $("#orderChangeId").val();
     $.ajax({
-        url : "../../../vwo/getFullCfgTable?orderChangeId="+orderChangeId+"&projectUid="+getProjectUid(),
+        url : "../../vwo/getFullCfgTable?orderChangeId="+orderChangeId+"&projectUid="+getProjectUid(),
         type : "POST",
         success : function (result) {
             loadTable(result);

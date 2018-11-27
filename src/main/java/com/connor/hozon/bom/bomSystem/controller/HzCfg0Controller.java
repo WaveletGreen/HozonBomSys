@@ -247,7 +247,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
                     return result;
                 }
             }
-            if (record.getCfgIsInProcess()!=null&&record.getCfgIsInProcess() == 1) {
+            if (record.getCfgIsInProcess() != null&&record.getCfgIsInProcess() == 1) {
                 result.put("status", false);
                 result.put("msg", "已在流程中，不允许删除");
                 return result;

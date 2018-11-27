@@ -94,7 +94,7 @@ public class HzVWOProcessController {
         while (hzCfg0RecordIterator.hasNext()){
             HzCfg0Record hzCfg0Record = hzCfg0RecordIterator.next();
             if(hzCfg0Record.getCfgStatus()==2){
-                hzCfg0Record.setCfgStatus(0);
+                hzCfg0Record.setCfgStatus(1);
                 hzCfg0RecordListDelete.add(hzCfg0Record);
                 hzCfg0RecordIterator.remove();
             }

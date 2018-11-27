@@ -601,7 +601,7 @@ public class HzCfg0ModelColorController {
         while (hzCfg0ModelColorIterator.hasNext()){
             HzCfg0ModelColor hzCfg0ModelColor = hzCfg0ModelColorIterator.next();
             if(Integer.valueOf(hzCfg0ModelColor.getCmcrStatus())==2){
-                hzCfg0ModelColor.setCmcrStatus("0");
+                hzCfg0ModelColor.setCmcrStatus("1");
                 hzCfg0ModelColorsDelete.add(hzCfg0ModelColor);
                 hzCfg0ModelColorIterator.remove();
             }

@@ -146,20 +146,20 @@ var toolbar = [
     // },
     {
         text: '发起流程',
-        iconCls: 'glyphicon glyphicon-remove',
+        iconCls: 'glyphicon glyphicon-log-out',
         handler: function () {
             var rows = $table.bootstrapTable('getSelections');
             if (rows.length == 0) {
-                window.Ewin.alert({message: '请选择一条需要发起VWO流程的数据!'});
+                window.Ewin.alert({message: '请选择一条需要发起流程的数据!'});
                 return false;
             }
             for (let i in rows) {
                 if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
-                    window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许再次发起VWO流程'});
+                    window.Ewin.alert({message: rows[i].codeOfColorModel + '已在流程中，不允许再次发起流程'});
                     return false;
                 }
                 if(1 == rows[i].cmcrStatus || "1" == rows[i].cmcrStatus){
-                    window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已生效，不允许再次发起VWO流程'});
+                    window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已生效，不允许再次发起流程'});
                     return false;
                 }
             }
@@ -173,7 +173,7 @@ var toolbar = [
             //测试数据
             window.Ewin.confirm({
                 title: '提示',
-                message: '是否要发起VWO流程？',
+                message: '是否要发起流程？',
                 width: 500
             }).on(function (e) {
                 if (e) {
@@ -378,7 +378,7 @@ function loadData(_projectPuid) {
                     else if (10 == value || "10" == value) {
                         return "<span style='color: #e69800'>变更审核中<br>("+row.cmcrVwoNum+")</span>";
                     }else if(2 == value || "2" == value){
-                        return "<span style='color: #0c8fe2'>已删除</span>";
+                        return "<span style='color: #0c8fe2'>删除状态</span>";
                     }
                     else {
                         return "<span style='color: #a90009'>未知状态</span>";
