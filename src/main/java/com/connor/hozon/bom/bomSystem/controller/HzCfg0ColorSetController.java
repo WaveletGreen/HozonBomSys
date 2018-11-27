@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 
+import com.connor.hozon.bom.bomSystem.dto.HzColorSetQueryDto;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
@@ -62,14 +63,19 @@ public class HzCfg0ColorSetController {
     /**
      * 颜色库分页查询
      *
-     * @param queryBase 分页描述对象，采用bootstrap table自带的分页，从前端table定义分页对象。
+     * @param hzColorSetQueryDto 分页描述对象，采用bootstrap table自带的分页，从前端table定义分页对象。
      *                  采用POST方法回传的是普通JSON对象包含{@link QueryBase}的各个字段即可
      * @return 一组颜色对象
      */
+//    @RequestMapping(value = "/queryAll2", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Map<String, Object> queryAll2(QueryBase queryBase) {
+//        return colorSerService.queryAll2(queryBase);
+//    }
     @RequestMapping(value = "/queryAll2", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> queryAll2(QueryBase queryBase) {
-        return colorSerService.queryAll2(queryBase);
+    public Map<String, Object> queryAll2(HzColorSetQueryDto hzColorSetQueryDto) {
+        return colorSerService.queryAll3(hzColorSetQueryDto);
     }
 
     @RequestMapping(value = "/getAllColorSet", method = RequestMethod.GET)

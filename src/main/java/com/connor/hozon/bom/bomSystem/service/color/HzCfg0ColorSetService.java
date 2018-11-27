@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.service.color;
 
 import com.connor.hozon.bom.bomSystem.dao.color.HzCfg0ColorSetDao;
+import com.connor.hozon.bom.bomSystem.dto.HzColorSetQueryDto;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,24 +26,46 @@ public class HzCfg0ColorSetService {
     @Autowired
     private HzCfg0ColorSetDao hzCfg0ColorSetDao;
 
-    /**
-     * @param queryBase
-     * @return 颜色集合
-     * Description: 搜索出所有的颜色信息
-     * Date: 2018/5/21 17:08
-     */
-    public Map<String, Object> queryAll2(QueryBase queryBase) {
+//    /**
+//     * @param queryBase
+//     * @return 颜色集合
+//     * Description: 搜索出所有的颜色信息
+//     * Date: 2018/5/21 17:08
+//     */
+//    public Map<String, Object> queryAll2(QueryBase queryBase) {
+//        Date now = new Date();
+//        Map<String, Object> result = new HashMap<>();
+//        List<HzCfg0ColorSet> colorSet = hzCfg0ColorSetDao.queryAll2(queryBase);
+//        List<HzCfg0ColorSet> toUpdate = new ArrayList<>();
+////        colorSet.stream().filter(
+////                set -> now.after(set.getpColorAbolishDate())).filter(
+////                set -> set != null).forEach(
+////                set -> {
+////                    set.setpColorStatus(0);
+////                    toUpdate.add(set);
+////                });
+//        for (HzCfg0ColorSet set : colorSet) {
+//            if (set.getpColorAbolishDate() == null) {
+//                continue;
+//            }
+//            if (now.after(set.getpColorAbolishDate())) {
+//                toUpdate.add(set);
+//            }
+//        }
+//        //更新废止的颜色信息状态，设置为不可用状态
+//        toUpdate.forEach(set -> {
+//            hzCfg0ColorSetDao.updateStatusByPrimaryKey(set);
+//        });
+//        result.put("totalCount", hzCfg0ColorSetDao.tellMeHowManyOfIt());
+//        result.put("result", colorSet);
+//        return result;
+//    }
+    public Map<String, Object> queryAll3(HzColorSetQueryDto hzColorSetQueryDto) {
         Date now = new Date();
         Map<String, Object> result = new HashMap<>();
-        List<HzCfg0ColorSet> colorSet = hzCfg0ColorSetDao.queryAll2(queryBase);
+        Map<String,String> queryMap = new HashMap<>();
+        List<HzCfg0ColorSet> colorSet = hzCfg0ColorSetDao.queryAll2(hzColorSetQueryDto);
         List<HzCfg0ColorSet> toUpdate = new ArrayList<>();
-//        colorSet.stream().filter(
-//                set -> now.after(set.getpColorAbolishDate())).filter(
-//                set -> set != null).forEach(
-//                set -> {
-//                    set.setpColorStatus(0);
-//                    toUpdate.add(set);
-//                });
         for (HzCfg0ColorSet set : colorSet) {
             if (set.getpColorAbolishDate() == null) {
                 continue;
@@ -55,7 +78,7 @@ public class HzCfg0ColorSetService {
         toUpdate.forEach(set -> {
             hzCfg0ColorSetDao.updateStatusByPrimaryKey(set);
         });
-        result.put("totalCount", hzCfg0ColorSetDao.tellMeHowManyOfIt());
+        result.put("totalCount", hzCfg0ColorSetDao.tellMeHowManyOfIt(hzColorSetQueryDto));
         result.put("result", colorSet);
         return result;
     }
