@@ -9,6 +9,8 @@
 <div class="form-group">
     <button type="button" class="btn btn-primary" onclick="doReturn();" style="float: right">返回上一步</button>
 </div>
+<div class="panel-body" style="padding-bottom: 0;">
+</div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
 <div class="panel-body" style="padding:0px;">
     <form id="basicForm" role="form" method="post" action="">
@@ -22,19 +24,19 @@
                             <label for="ewoNo1">变更单号</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo1"
                                    th:value="${data.changeNo}" disabled="disabled"
-                                   />
+                            />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo2">创建时间</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo2"
                                    th:value="${data.createTime}" disabled="disabled"
-                                   />
+                            />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo3">部门</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo3"
                                    th:value="${data.deptName}" disabled="disabled"
-                                   />
+                            />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
@@ -42,59 +44,59 @@
                             <label for="ewoNo4">发起人</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo4"
                                    th:value="${data.originator}" disabled="disabled"
-                                   />
+                            />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo5">联系电话</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo5"
-                                   th:value="${data.tel}" disabled="disabled" />
+                                   th:value="${data.tel}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo6">变更类型</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo6"
-                                   th:value="${data.changeType}" disabled="disabled" />
+                                   th:value="${data.changeType}" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo7">是否关联变更</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
-                                   th:value="${data.hasRelatedChange}" disabled="disabled" />
+                                   th:value="${data.hasRelatedChange}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
 
                             <!--<select class="form-control" name="marketType" id="marketType" disabled="disabled"-->
-                                    <!--placeholder="请选择上市类型">-->
-                                <!--<option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>-->
-                                <!--<option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>-->
+                            <!--placeholder="请选择上市类型">-->
+                            <!--<option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>-->
+                            <!--<option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>-->
                             <!--</select>-->
                             <input type="text" class="form-control" name="marketType" id="marketType"
-                                   th:value="${data.marketType}" disabled="disabled" />
+                                   th:value="${data.marketType}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo9">项目所属阶段</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo9"
-                                   th:value="${data.projectStage}" disabled="disabled" />
+                                   th:value="${data.projectStage}" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo10">备注</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo10"
-                                   th:value="${data.remark}" disabled="disabled" />
+                                   th:value="${data.remark}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="state">变更状态</label>
 
                             <!--<select class="form-control" name="state" id="state" placeholder="请选择变更状态"-->
-                                    <!--disabled="disabled">-->
-                                <!--<option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>-->
-                                <!--<option th:selected="${data.getState()=='完成'?true:false}">完成</option>-->
-                                <!--<option th:selected="${data.getState()=='取消 '?true:false}">取消</option>-->
+                            <!--disabled="disabled">-->
+                            <!--<option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>-->
+                            <!--<option th:selected="${data.getState()=='完成'?true:false}">完成</option>-->
+                            <!--<option th:selected="${data.getState()=='取消 '?true:false}">取消</option>-->
                             <!--</select>-->
                             <input type="text" class="form-control" name="state" id="state"
-                                   th:value="${data.state}" disabled="disabled" />
+                                   th:value="${data.state}" disabled="disabled"/>
                         </div>
                     </div>
                 </div>
@@ -196,17 +198,17 @@
                 console.log(data)
                 var data = result.data;
                 var table = "<tr>";
-                table += "<th><a id='featureId' href='../toMyListJob/feature/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[7].name+"</a></th>";
-                table += "<th><a id='bomCfgId' href='../toMyListJob/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[10].name+"</a></th>";
-                table += "<th><a id='modelColorCfgId' href='../toMyListJob/modelColorCfg/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[8].name+"</a></th>";
-                table += "<th><a id='materielFeatureId' href='../toMyListJob/materielFeature/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[9].name+"</a></th>";
-                table += "<th><a id='ebomId' href='../toMyListJob/ebom/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[0].name+"</a></th>";
-                table += "<th><a id='pbomId' href='../toMyListJob/pbom/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[1].name+"</a></th>";
-                table += "<th><a id='mbomId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[2].name+"</a></th>";
-                table += "<th><a id='productionId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=1" + "'>"+data[3].name+"</a></th>";
-                table += "<th><a id='financialId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=6" + "'>"+data[4].name+"</a></th>";
-                table += "<th><a id='materialId' href='../toMyListJob/material/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[5].name+"</a></th>";
-                table += "<th><a id='routingId' href='../toMyListJob/routing/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[6].name+"</a></th>";
+                table += "<th><a id='featureId' href='../toMyListJob/feature/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[7].name + "</a></th>";
+                table += "<th><a id='bomCfgId' href='../toMyListJob/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[10].name + "</a></th>";
+                table += "<th><a id='modelColorCfgId' href='../toMyListJob/modelColorCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[8].name + "</a></th>";
+                table += "<th><a id='materielFeatureId' href='../toMyListJob/materielFeature/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[9].name + "</a></th>";
+                table += "<th><a id='ebomId' href='../toMyListJob/ebom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[0].name + "</a></th>";
+                table += "<th><a id='pbomId' href='../toMyListJob/pbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[1].name + "</a></th>";
+                table += "<th><a id='mbomId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[2].name + "</a></th>";
+                table += "<th><a id='productionId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=1" + "'>" + data[3].name + "</a></th>";
+                table += "<th><a id='financialId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=6" + "'>" + data[4].name + "</a></th>";
+                table += "<th><a id='materialId' href='../toMyListJob/material/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[5].name + "</a></th>";
+                table += "<th><a id='routingId' href='../toMyListJob/routing/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[6].name + "</a></th>";
                 table += "</tr>"
                 $("#untreatedFormTable").html(table);
                 // var featureId = document.getElementById("featureId");
