@@ -639,7 +639,7 @@
         HZ_CMCR_AFTER_CHANGE
         WHERE
         CMCR_CHANGE_ORDER_UID = #{vwoId,jdbcType=INTEGER}
-        ) and CMCR_CHANGE_STATUS=0 GROUP BY CMCR_SRC_PUID) t )
+        )GROUP BY CMCR_SRC_PUID) t )
         order by CMCR_SRC_PUID
     </select>
 
@@ -690,4 +690,16 @@
         <!--)-->
 
     </delete>
+
+    <select id="doQueryCmcrChangeBeforByAfter" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CMCR_AFTER_CHANGE
+        where
+        CMCR_CG_ID =
+        (
+        select Max(CMCR_CG_ID) from HZ_CMCR_AFTER_CHANGE where CMCR_SRC_PUID = #{cmcrSrcPuid,jdbcType=VARCHAR} and CMCR_CHANGE_STATUS=1 and  CMCR_CG_ID&lt;#{cmcrCgId,jdbcType=DECIMAL}
+        )
+    </select>
 </mapper>

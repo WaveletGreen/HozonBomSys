@@ -110,6 +110,21 @@
         <if test="limit!=null and  page!=null">
             and ROWNUM &lt;= ${page}*${limit}
         </if>
+
+        <!--****************query3新增********************-->
+        <if test="pColorOfSet!=null and  pColorOfSet!=''">
+            and P_COLOR_OF_SET like concat(concat('%',#{pColorOfSet,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pColorName!=null and  pColorName!=''">
+            and P_COLOR_NAME like concat(concat('%',#{pColorName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pColorCode!=null and  pColorCode!=''">
+            and P_COLOR_CODE like concat(concat('%',upper(#{pColorCode,jdbcType=VARCHAR})),'%')
+        </if>
+        <if test="pColorPlate!=null and  pColorPlate!=''">
+            and P_COLOR_PLATE like concat(concat('%',#{pColorPlate,jdbcType=VARCHAR}),'%')
+        </if>
+        <!--************************************/-->
         ) temp
         <if test="offset!=null">
             where temp.rowno &gt;= ${offset}+1
@@ -175,8 +190,20 @@
         )
     </delete>
     <!--查询总数-->
-    <select id="tellMeHowManyOfIt" resultType="java.lang.Integer">
+    <select id="tellMeHowManyOfIt" parameterType="com.connor.hozon.bom.common.base.entity.QueryBase" resultType="java.lang.Integer">
     select count(puid) from HZ_CFG0_COLORSET where p_defualt is null
+        <if test="pColorOfSet!=null and  pColorOfSet!=''">
+            and P_COLOR_OF_SET like concat(concat('%',#{pColorOfSet,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pColorName!=null and  pColorName!=''">
+            and P_COLOR_NAME like concat(concat('%',#{pColorName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="pColorCode!=null and  pColorCode!=''">
+            and P_COLOR_CODE like concat(concat('%',upper(#{pColorCode,jdbcType=VARCHAR})),'%')
+        </if>
+        <if test="pColorPlate!=null and  pColorPlate!=''">
+            and P_COLOR_PLATE like concat(concat('%',#{pColorPlate,jdbcType=VARCHAR}),'%')
+        </if>
     </select>
 
 </mapper>

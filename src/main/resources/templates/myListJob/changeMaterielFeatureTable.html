@@ -38,14 +38,7 @@
         var $table = $("#materielFeature_table");
         var orderId = $("#orderId").val();
         var column = [];
-        column.push({field: 'headDesc', title: '基本信息代码'});
-        column.push({field: 'modeBasicDetail', title: '基本信息代码'});
-        column.push({field: 'factory', title: '工厂'});
-        column.push({field: 'modeBasicDetailDesc', title: '基本信息'});
-        column.push({field: 'superMateriel', title: '超级物料'});
-        column.push({field: 's0', title: '车身颜色<br/>HZCSYS'});
-        column.push({field: 's1', title: '油漆车身总成<br/>HZYQCS'});
-        column.push({field: 'ck', checkbox: true, Width: 50});
+        // column.push({field: 'ck', checkbox: true, Width: 50});
         column.push({
             field: '',
             title: '序号',
@@ -57,8 +50,15 @@
 
             }
         }),
+        column.push({field: 'headDesc', title: '基本信息代码'});
+        column.push({field: 'modeBasicDetail', title: '基本信息代码'});
+        column.push({field: 'factory', title: '工厂'});
+        column.push({field: 'modeBasicDetailDesc', title: '基本信息'});
+        column.push({field: 'superMateriel', title: '超级物料'});
+        column.push({field: 's0', title: '车身颜色<br/>HZCSYS'});
+        column.push({field: 's1', title: '油漆车身总成<br/>HZYQCS'});
             $.ajax({
-                url: "../../vwo/getMaterielFeatureTable?formId="+orderId+"&projectUid="+projectPuid,
+                url: "../../vwo/getMaterielFeatureTable?formId="+orderId,
                 type: "POST",
                 success: function (result) {
                     var data = result.result;
@@ -94,7 +94,7 @@
                         //sortName: 'id',
                         // sortable: true,                     //是否启用排序
                         sortOrder: "asc",                   //排序方式
-                        clickToSelect: false,// 单击某一行的时候选中某一条记录
+                        clickToSelect: true,// 单击某一行的时候选中某一条记录
                         //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                         showColumns: false, //是否显示所有的列
                         // resizable:true,

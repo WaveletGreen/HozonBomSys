@@ -159,8 +159,6 @@
         HZ_FULL_CFG_MAIN_RECORD_CHANGE
       where
         CHANGE_ORDER_UID = #{changeOrderId,jdbcType=DECIMAL}
-    and
-    CHANGE_STATUS = 0
   </select>
 
   <select id="selectLastFullCfg" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap">
@@ -169,7 +167,7 @@
     from
       HZ_FULL_CFG_MAIN_RECORD_CHANGE
     where
-      ID = (select Max(ID) from HZ_FULL_CFG_MAIN_RECORD_CHANGE where SRC_MAIN_ID = #{srcMainId,jdbcType=DECIMAL} and CHANGE_STATUS = 1)
+      ID = (select Max(ID) from HZ_FULL_CFG_MAIN_RECORD_CHANGE where SRC_MAIN_ID = #{srcMainId,jdbcType=DECIMAL} and CHANGE_STATUS = 1 and ID&lt;#{id,jdbcType=DECIMAL})
   </select>
 
   <select id="selectLastByProjectUid" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap">
@@ -200,6 +198,6 @@
     where
     PROJECT_UID = #{projectUid,jdbcType=VARCHAR}
     and
-    STATUS = #{status,jdbcType=DECIMAL}
+    CHANGE_STATUS = #{status,jdbcType=DECIMAL}
   </select>
 </mapper>

@@ -40,7 +40,7 @@
         var column = [];
         var orderId = $("#orderId").val();
         var type = $("#type").val();
-        column.push({field: 'ck', checkbox: true, Width: 50});
+        // column.push({field: 'ck', checkbox: true, Width: 50});
         column.push({
             field: '',
             title: '序号',
@@ -69,7 +69,7 @@
                         }
                     }
                     $table.bootstrapTable({
-                        url: "../../../change/data/mbom/data?projectId="+projectPuid+"&orderId="+orderId + "&type="+type,
+                        url: "../../change/data/mbom/data?orderId="+orderId + "&type="+type,
                         method: 'GET',
                         dataType: 'json',
                         //cache: false,
@@ -86,7 +86,7 @@
                         //sortName: 'id',
                         // sortable: true,                     //是否启用排序
                         sortOrder: "asc",                   //排序方式
-                        clickToSelect: false,// 单击某一行的时候选中某一条记录
+                        clickToSelect: true,// 单击某一行的时候选中某一条记录
                         //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                         showColumns: false, //是否显示所有的列
                         // resizable:true,

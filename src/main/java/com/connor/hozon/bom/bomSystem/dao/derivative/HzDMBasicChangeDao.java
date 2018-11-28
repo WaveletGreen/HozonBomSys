@@ -25,7 +25,7 @@ public interface HzDMBasicChangeDao extends BasicDao<HzDMBasicChangeBean> {
 
     List<HzDMBasicChangeBean> selectByFormid(Long changeFromId);
 
-    List<HzDMBasicChangeBean> selectBefor(Long formId);
+    HzDMBasicChangeBean selectBefor(HzDMBasicChangeBean hzDMBasicChangeBeanAfter);
 
 
     List<HzDMBasicChangeBean> selectAfter(Long formId);
