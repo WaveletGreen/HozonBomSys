@@ -35,7 +35,7 @@ public class ToChangePageController {
     @RequestMapping(value = "feature/page")
     public String featureDataTOPage(Model model,Long orderId){
         model.addAttribute("orderId",orderId);
-        return "cmyListJob/changeFeatureTable";
+        return "myListJob/changeFeatureTable";
     }
     @RequestMapping(value = "modelColorCfg/page")
     public String modelColorCfgDataTOPage(Model model,Long orderId){
