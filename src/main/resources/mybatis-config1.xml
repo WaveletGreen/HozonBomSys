@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  ~ 开发阶段的配置
+  -->
+
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/> <!--最好是放在最上面即紧跟configuration节点,注意顺序-->
+        <setting name="cacheEnabled" value="false"></setting>
+    </settings>
+    <!--该文件请放到resource下，便于单独读到，不需要配置-->
+    <typeAliases>
+        <typeAlias type="java.lang.String" alias="String"/>
+        <typeAlias type="java.lang.Integer" alias="Integer"/>
+        <typeAlias type="java.lang.Long" alias="Long"/>
+        <typeAlias type="java.util.List" alias="List"/>
+        <typeAlias type="java.util.Map" alias="Map"/>
+    </typeAliases>
+    <!--映射文件：描述某个实体和数据库表的对应关系 -->
+    <mappers>
+        <!--共有项-->
+        <mapper resource="sql/mapper/bom/xmapper/HzPreferenceSettingMapper.xml"/>
+        <!--bom-->
+        <mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzMbomRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzMBomToERPMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzSingleVehiclesBomRecordMapper.xml"/>
+        <!--<mapper resource="sql/mapper/bom/xmapper/HzSingleVehicleDosageMapper.xml"/>-->
+
+        <!--配置-->
+        <!--cfg0-->
+        <mapper resource="sql/mapper/cfg/cfg0/HzCfg0OptionFamilyMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/cfg0/HzCfg0RecordMapper.xml"/>
+        <!--color-->
+        <mapper resource="sql/mapper/cfg/color/HzCfg0ColorSetMapper.xml"/>
+        <!--derivative-->
+        <mapper resource="sql/mapper/cfg/derivative/HzCfg0ModelFeatureMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/derivative/HzCfg0ModelGroupMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/derivative/HzCfg0ToModelRecordMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/derivative/HzDerivativeMaterielBasicMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/derivative/HzDerivativeMaterielDetailMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/derivative/HzMaterielCfgBeanMapper.xml"/>
+        <!--fullCfg-->
+        <mapper resource="sql/mapper/cfg/fullCfg/HzCfg0BomLineOfModelMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzCfg0OfBomLineRecordMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFcfgBomLvl1ListOperationMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgMapper.xml"/>
+
+        <!--fullCfg变更-->
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgChangeMapper.xml"/>
+        <!--main-->
+        <mapper resource="sql/mapper/cfg/main/HzCfg0MainRecordMapper.xml"/>
+        <!--model-->
+        <mapper resource="sql/mapper/cfg/model/HzCfg0ModelDetailMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/model/HzCfg0ModelRecordMapper.xml"/>
+        <!--modelColor-->
+        <mapper resource="sql/mapper/cfg/modelColor/HzCfg0ModelColorDetailMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/modelColor/HzCfg0ModelColorRecordMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/modelColor/HzCmcrChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/modelColor/HzCmcrDetailBeforeChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/modelColor/HzCmcrDetailChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/modelColor/HzColorLvl2ModelMapper.xml"/>
+        <!--relevance-->
+        <mapper resource="sql/mapper/cfg/relevance/HzRelevanceBasicMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/relevance/HzRelevanceRelationMapper.xml"/>
+        <!--流程-->
+        <!--VWO-->
+        <mapper resource="sql/mapper/cfg/vwo/HzFeatureChangeMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoInfluenceDeptMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoInfluenceUserMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoInfoMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoInformChangesMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoExecuteMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoOpiBomMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoOpiPmtMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/vwo/HzVwoOpiProjMapper.xml"/>
+        <!--CODPWO表单-->
+        <mapper resource="sql/mapper/change.xmapper/HzBreakPointMapper.xml"/>
+
+        <!--项目-->
+        <mapper resource="sql/mapper/project.xmapper/HzMaterielMapper.xml"/>
+        <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
+        <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>
+        <mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>
+        <mapper resource="sql/mapper/project.xmapper/HzVehicleRecordMapper.xml"/>
+        <!--EPL-->
+        <mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
+        <!--flow 流程-->
+        <mapper resource="sql/mapper/flow.xmapper/HzFlowManageMapper.xml"/>
+        <mapper resource="sql/mapper/flow.xmapper/HzFlowPointInfoMapper.xml"/>
+        <!--工厂-->
+        <mapper resource="sql/mapper/factory.xmapper/HzFactoryMapper.xml"/>
+        <!--工作中心-->
+        <mapper resource="sql/mapper/work.xmapper/HzWorkCenterMapper.xml"/>
+        <mapper resource="sql/mapper/work.xmapper/HzWorkProcedureMapper.xml"/>
+        <!--工艺辅料库-->
+        <mapper resource="sql/mapper/accessories.xmapper/HzAccessoriesLibMapper.xml"/>
+        <mapper resource="sql/mapper/accessories.xmapper/HzAccessoriesLibsMapper.xml"/>
+        <!--变更管理-->
+        <mapper resource="sql/mapper/change.xmapper/HzEWOBasicInfoMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzEWOImpactReferenceMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptEmpMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzEWOImpactDeptMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzChangeOrderRecordMapper.xml"/>
+
+        <mapper resource="sql/mapper/change.xmapper/HzApplicantChangeRecordMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzAuditorChangeRecordMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzChangeDataRecordMapper.xml"/>
+        <mapper resource="sql/mapper/change.xmapper/HzChangeListMapper.xml"/>
+        <!--字典库-->
+        <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
+        <!--VPPS库-->
+        <mapper resource="sql/mapper/resourcesLibrary/VPPSLibrary.xmapper/HzVPPSLibraryMapper.xml"/>
+
+        <!--配置和BOM进行交互的映射文件-->
+        <mapper resource="sql/mapper/interaction/HzConfigBomColorMapper.xml"/>
+        <mapper resource="sql/mapper/interaction/HzSingleVehiclesBomLineMapper.xml"/>
+        <mapper resource="sql/mapper/interaction/HzSingleVehiclesMapper.xml"/>
+        <!--任务-->
+        <mapper resource="sql/mapper/task/HzTaskMapper.xml"/>
+        <!--derivative变更 -->
+        <mapper resource="sql/mapper/cfg/derivative/HzMDBasicChangeBeanMapper.xml"/>
+        <mapper resource="sql/mapper/cfg/derivative/HzMDDetailChangeBeanMapper.xml"/>
+        <!--changeList-->
+        <mapper resource="sql/mapper/change.xmapper/HzChangeListRecordMapper.xml"/>
+        <!--sys-->
+        <mapper resource="mybatis/mapper/mybatis_dict.xml"/>
+        <mapper resource="mybatis/mapper/mybatis_orgGroup.xml"/>
+        <mapper resource="mybatis/mapper/mybatis_roleAssociateTree.xml"/>
+        <mapper resource="mybatis/mapper/mybatis_roleWriteAssociateTree.xml"/>
+        <mapper resource="mybatis/mapper/mybatis_tree.xml"/>
+        <mapper resource="mybatis/mapper/mybatis_user.xml"/>
+        <mapper  resource="mybatis/mapper/mybatis_userAssociateRole.xml"/>
+        <mapper resource="mybatis/mapper/mybatis_userRole.xml"/>
+    </mappers>
+</configuration>
