@@ -170,7 +170,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     public Page<HzMaterielRespDTO> findHzMaterielForPage(HzMaterielByPageQuery query) {
         //先找出对应的物料类型，添加到物料类型表，将其数据自动带出
         /**
-         * 物料类型  严格按照注释来读写数据
+         * 物料类型
          * （11 整车超级物料主数据
          * 21 整车衍生物料主数据
          * 31 虚拟件物料主数据

@@ -175,4 +175,11 @@
         AND t1.group_id = #{groupId}
     </select>
 
+    <!--查询部门名称存在否-->
+    <select id="queryOrgGroupNameExist"  parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(*) from org_group
+        where name = #{deptName}
+    </select>
+
+
 </mapper>

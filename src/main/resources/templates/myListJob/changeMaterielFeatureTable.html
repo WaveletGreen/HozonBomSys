@@ -57,9 +57,8 @@
         column.push({field: 'superMateriel', title: '超级物料'});
         column.push({field: 's0', title: '车身颜色<br/>HZCSYS'});
         column.push({field: 's1', title: '油漆车身总成<br/>HZYQCS'});
-
             $.ajax({
-                url: "../../vwo/getMaterielFeatureTable?formId="+orderId+"&projectUid="+projectPuid,
+                url: "../../vwo/getMaterielFeatureTable?formId="+orderId,
                 type: "POST",
                 success: function (result) {
                     var data = result.result;
