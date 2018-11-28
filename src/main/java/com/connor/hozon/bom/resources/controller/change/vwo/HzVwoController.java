@@ -427,22 +427,18 @@ public class HzVwoController {
     /**************************衍生物料变更描述表单***************************/
     @RequestMapping(value = "getMaterielFeatureTable", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> getMaterielFeatureTable(@RequestParam Long formId,@RequestParam String projectUid){
-        if(projectUid==null||"".equals(projectUid)){
-            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(formId);
-            projectUid = record.getProjectId();
-        }
+    public Map<String,Object> getMaterielFeatureTable(@RequestParam Long formId){
+        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(formId);
+        String projectUid = record.getProjectId();
         return iHzVWOManagerService.getMaterielFeatureTable(formId,projectUid);
     }
 
     /**************************全配置BOM变更描述表单*************************************/
     @RequestMapping(value = "getFullCfgTable", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> getFullCfgTable(@RequestParam Integer orderChangeId,@RequestParam String projectUid){
-        if(projectUid==null||"".equals(projectUid)){
-            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(Long.valueOf(orderChangeId));
-            projectUid = record.getProjectId();
-        }
+    public Map<String,Object> getFullCfgTable(@RequestParam Integer orderChangeId){
+        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(Long.valueOf(orderChangeId));
+        String projectUid = record.getProjectId();
         return  iHzVWOManagerService.getFullCfgTable(orderChangeId,projectUid);
     }
 
