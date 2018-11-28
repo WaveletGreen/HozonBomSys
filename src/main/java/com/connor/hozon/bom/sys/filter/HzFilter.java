@@ -68,6 +68,14 @@ public class HzFilter implements Filter {
 //                map.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
 //                map.put(SystemStaticConst.MSG,"暂无权限！");
 //                writer.write(JSON.toJSONString(map,SerializerFeature.DisableCircularReferenceDetect));
+//                    writer.write(resultRespDTO.getErrMsg());
+
+//                    writer.println("<html>");
+//                    writer.println("<script>");
+//                    writer.println("window.Ewin.alert({message: '没权限!'});");
+//                    writer.println("</script>");
+//                    writer.println("</html>");
+//
                     writer.write(JSON.toJSONString(Result.build(false,resultRespDTO.getErrMsg()),SerializerFeature.DisableCircularReferenceDetect));
                 }finally {
                     writer.flush();

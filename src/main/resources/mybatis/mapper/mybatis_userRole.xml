@@ -50,8 +50,12 @@
 
 	<!--保存-->
 	<insert id="save" parameterType="com.connor.hozon.bom.sys.entity.UserRole" useGeneratedKeys="false" keyProperty="id">
-		INSERT INTO user_role(name,role_name)
-		VALUES(#{name},#{roleName})
+		<selectKey order="BEFORE"
+				   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+			select SEQ_HZ_USER_ROLE.nextval as id from dual
+		</selectKey>
+		INSERT INTO user_role(id,name,role_name)
+		VALUES(#{id},#{name},#{roleName})
 	</insert>
 
 	<!--修改-->

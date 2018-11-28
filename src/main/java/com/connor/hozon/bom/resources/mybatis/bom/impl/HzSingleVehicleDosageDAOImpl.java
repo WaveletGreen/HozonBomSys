@@ -16,7 +16,7 @@ import java.util.Map;
  * @Date: 2018/10/16
  * @Description:
  */
-@Service("HzSingleVehicleDosageDAO")
+@Service("hzSingleVehicleDosageDAO")
 public class HzSingleVehicleDosageDAOImpl extends BaseSQLUtil implements HzSingleVehicleDosageDAO {
 
     @Override

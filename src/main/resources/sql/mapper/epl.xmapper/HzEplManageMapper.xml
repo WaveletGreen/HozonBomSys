@@ -1266,6 +1266,152 @@
 
 
 
+    <select id="HzEplManageRecordDAOImpl_findTotalCount3" resultType="java.lang.Integer" parameterType="java.util.HashMap">
+        select count(*) FROM(
+        SELECT
+        u.*,rownum as rn
+        from(
+        select * from (
+        <!-- 两表UNION-->
+        select
+        t.PUID PUID,
+        <include refid="EPL_COLUMN1"/>,
+        <include refid="EPL_COLUMN2"/>
+        from (
+        select
+        t.PUID PUID,
+        <include refid="EPL_COLUMN1"/>
+        from
+        HZ_BOM_LINE_RECORD t
+        where
+        t.P_BOM_LINE_ID in(
+        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(
+        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
+        SELECT t2.puid FROM Hz_project_libs t2 where
+        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)
+        AND
+        rowid  in(
+        SELECT min(rowid) FROM(
+        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (
+        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
+        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
+        )
+        )t
+        LEFT OUTER JOIN HZ_PBOM_RECORD t2 on t.PUID=t2.P_E_BOM_PUID
+        UNION ALL
+        select
+        t2.PUID		PUID,
+        <include refid="EPL_COLUMN1"/>,
+        <include refid="EPL_COLUMN2"/>
+        from
+        HZ_BOM_LINE_RECORD t
+        RIGHT  OUTER JOIN
+        (
+        select
+        t2.PUID		PUID,
+        t2.P_BOM_LINE_ID		P_BOM_LINE_ID,
+        t2.P_E_BOM_PUID		P_E_BOM_PUID ,
+        <include refid="EPL_COLUMN2"/>
+        from
+        HZ_PBOM_RECORD t2
+        where
+        t2.P_BOM_LINE_ID in(
+        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(
+        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
+        SELECT t2.puid FROM Hz_project_libs t2 where
+        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)
+        AND
+        rowid  in(
+        SELECT min(rowid) FROM(
+        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (
+        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
+        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
+        )
+        )t2
+        on
+        t.PUID=t2.P_E_BOM_PUID
+        )
+        where
+        PUID in(
+        select
+        MAX(PUID)
+        from (
+        select
+        t.PUID PUID,
+        t.P_BOM_LINE_ID
+        from (
+        select
+        t1.PUID PUID,
+        t1.P_BOM_LINE_ID
+        from
+        HZ_BOM_LINE_RECORD t1
+        where
+        t1.P_BOM_LINE_ID in(
+        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(
+        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
+        SELECT t2.puid FROM Hz_project_libs t2 where
+        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID
+        )
+        AND
+        rowid  in(
+        SELECT min(rowid) FROM(
+        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (
+        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
+        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
+        )
+        )t
+        LEFT OUTER JOIN HZ_PBOM_RECORD t3 on t.PUID=t3.P_E_BOM_PUID
+        UNION ALL
+        select
+        t3.PUID		PUID,
+        t3.P_BOM_LINE_ID
+        from
+        HZ_BOM_LINE_RECORD t
+        RIGHT  OUTER JOIN
+        (
+        select
+        t1.PUID		PUID,
+        t1.P_BOM_LINE_ID,
+        t1.P_E_BOM_PUID		P_E_BOM_PUID
+        from
+        HZ_PBOM_RECORD t1
+        where
+        t1.P_BOM_LINE_ID in(
+        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(
+        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
+        SELECT t2.puid FROM Hz_project_libs t2 where
+        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID
+        )
+        AND
+        rowid  in(
+        SELECT min(rowid) FROM(
+        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (
+        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
+        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
+        )
+        )t3	on t.PUID=t3.P_E_BOM_PUID
+        )t
+        GROUP BY t.P_BOM_LINE_ID
+        )
+        )u
+        where
+        1=1
+        <if test="lineId != null and lineId!='' ">
+            and P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">
+            and P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
+        </if>
+        <if test="pFastener==1">
+            and P_FASTENER is not null and P_FASTENER!='/'
+        </if>
+        <if test="pFastener==2">
+            and (P_FASTENER is null or P_FASTENER='/')
+        </if>
+        )
+    </select>
+
+
 
     <!--分页查询 EBOM全信息-->
     <select id="HzEbomRecordDAOImpl_getHzEbomList" resultMap="BaseResultMap" parameterType="java.util.HashMap">

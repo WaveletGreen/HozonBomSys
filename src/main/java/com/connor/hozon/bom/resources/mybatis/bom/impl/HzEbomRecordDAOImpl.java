@@ -11,6 +11,7 @@ import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
+import sql.BaseDAO;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
@@ -24,8 +25,9 @@ import java.util.Map;
 /**
  * Created by haozt on 2018/06/06
  */
-@Service("HzEbomRecordDAO")
+@Service("hzEbomRecordDAO")
 public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO {
+
 
     @Override
     public Page<HzEPLManageRecord> getHzEbomPage(HzEbomByPageQuery query) {
