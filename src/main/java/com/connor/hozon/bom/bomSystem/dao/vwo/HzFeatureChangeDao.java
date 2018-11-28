@@ -61,4 +61,5 @@ public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
     HzFeatureChangeBean selectByChangeIdAndCfgid(HzFeatureChangeBean hzFeatureChangeBean);
 
     List<HzFeatureChangeBean> doselectByChangeId(Long orderId);
+
 }

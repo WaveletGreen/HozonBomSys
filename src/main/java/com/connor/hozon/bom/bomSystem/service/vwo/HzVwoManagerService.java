@@ -46,6 +46,7 @@ import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.dao.OrgGroupDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
@@ -74,6 +75,7 @@ import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.vwo.*;
 import sql.pojo.change.HzChangeDataRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.*;
@@ -227,8 +229,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
     //变更人员关系dao
     @Autowired
-    HzChangeDataRecordDAO hzChangeDataRecordDAO
-            ;
+    HzChangeDataRecordDAO hzChangeDataRecordDAO;
+
+    //变更表单Dao层
+    @Autowired
+    HzChangeOrderDAO hzChangeOrderDAO;
     /**
      * 日志
      */
@@ -2051,6 +2056,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         Map<String, Object> result = new HashMap<>();
         List<HzFeatureChangeBean> beans = iHzFeatureChangeService.doSelectCfgUidsByVwoId(vwoId);
         List<HzVwoFeatureTableDto> list = new ArrayList<>();
+
         //临近的两个，前一个为变更前数据，后一个为变更后数据
         if (beans != null && !beans.isEmpty()) {
             for (int i = 0; i < beans.size(); i++) {

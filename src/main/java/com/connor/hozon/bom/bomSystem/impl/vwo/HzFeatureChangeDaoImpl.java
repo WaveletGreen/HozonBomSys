@@ -100,5 +100,4 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
         return baseSQLUtil.executeQueryByPass(new HzFeatureChangeBean(),orderId,clzName+".doselectByChangeId");
     }
 
-
 }
