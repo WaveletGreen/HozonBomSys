@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("HzApplicationChangeService")
+@Service("hzApplicationChangeService")
 public class HzApplicationChangeServiceImpl implements HzApplicationChangeService {
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;

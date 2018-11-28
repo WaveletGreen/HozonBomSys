@@ -22,7 +22,7 @@ import java.util.UUID;
  * Date: 2018/9/4
  * Time: 19:54
  */
-@Service("HzVPPSLibraryService")
+@Service("hzVPPSLibraryService")
 public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
 
     @Autowired

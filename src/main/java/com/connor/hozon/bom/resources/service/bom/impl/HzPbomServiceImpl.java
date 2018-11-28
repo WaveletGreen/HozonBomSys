@@ -58,7 +58,7 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
 /**
  * Created by haozt on 2018/5/24
  */
-@Service("HzPbomService")
+@Service("hzPbomService")
 public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;

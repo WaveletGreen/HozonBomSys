@@ -22,7 +22,7 @@ import sql.pojo.factory.HzFactory;
 
 import java.util.*;
 
-@Service("FileUploadUpdataMbom3Service")
+@Service("fileUploadUpdataMbom3Service")
 public class FileUploadUpdataMbom3ServiceImpl implements FileUploadUpdataMbom3Service {
     @Autowired
     private HzMbomRecordDAO hzMbomRecordDAO;

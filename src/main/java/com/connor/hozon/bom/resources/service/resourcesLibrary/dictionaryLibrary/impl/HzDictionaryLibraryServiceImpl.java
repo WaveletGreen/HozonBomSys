@@ -22,7 +22,7 @@ import java.util.*;
  * Date: 2018/8/30
  * Time: 15:23
  */
-@Service("HzDictionaryLibraryService")
+@Service("hzDictionaryLibraryService")
 public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryService {
     @Autowired
     HzDictionaryLibraryDao hzDictionaryLibraryDao;

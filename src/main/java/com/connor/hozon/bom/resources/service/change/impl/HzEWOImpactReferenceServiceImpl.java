@@ -19,7 +19,7 @@ import java.util.Set;
  * @Date: 2018/8/15
  * @Description:
  */
-@Service("HzEWOImpactReferenceService")
+@Service("hzEWOImpactReferenceService")
 public class HzEWOImpactReferenceServiceImpl implements HzEWOImpactReferenceService {
     @Autowired
     private HzEWOImpactReferenceDAO hzEWOImpactReferenceDAO;
