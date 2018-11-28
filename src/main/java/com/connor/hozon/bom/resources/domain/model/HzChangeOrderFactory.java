@@ -48,7 +48,12 @@ public class HzChangeOrderFactory {
         respDTO.setId(record.getId());
         respDTO.setMarketType(Integer.valueOf(1).equals(record.getMarketType())?"上市前":"上市后");
         respDTO.setOriginator(record.getOriginator());
-        respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getOriginTime()));
+        //respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getOriginTime()));
+        if(record.getApplicantTime()==null)
+            respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getOriginTime()));
+        else
+            respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getApplicantTime()));//申请时间
+        respDTO.setAuditTime(DateUtil.formatTimestampDate(record.getAuditTime()));//审核时间
         respDTO.setProjectStage(record.getProjectStage());
         respDTO.setRelationChangeNo(record.getRelationChangeNo());
         respDTO.setRemark(record.getRemark());
@@ -63,6 +68,10 @@ public class HzChangeOrderFactory {
             respDTO.setSource("TC");
         }
         respDTO.setProjectName(record.getProjectName());
+        if(record.getAuditRecordId()!=null)
+            respDTO.setAuditId(Long.parseLong(record.getAuditRecordId()));
+        if(record.getAuditId()!=null)
+            respDTO.setAuditId(Long.parseLong(record.getAuditId()));
         return respDTO;
     }
 

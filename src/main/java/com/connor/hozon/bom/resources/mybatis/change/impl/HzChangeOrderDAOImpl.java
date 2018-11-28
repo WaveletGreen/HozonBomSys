@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -80,6 +81,42 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
         pageRequestParam.setFilters(map);
 
         return super.findPage("HzChangeOrderDAOImpl_findHzChangeOrderRecordByPageId","HzChangeOrderDAOImpl_findApplicantTotalCount",pageRequestParam);
+    }
+
+    @Override
+    public Page<HzChangeOrderRecord> findHzChangeOrderRecordByPageUn(HzChangeOrderByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        PageRequestParam pageRequestParam = new PageRequestParam();
+        pageRequestParam.setPageNumber(query.getPage());
+        pageRequestParam.setPageSize(query.getPageSize());
+        map.put("changeNo",query.getChangeNo());
+        map.put("projectId",query.getProjectId());
+        map.put("originator",query.getOriginator());
+        map.put("firstOriginTime",query.getFirstOriginTime());
+        map.put("lastOriginTime",query.getLastOriginTime());
+        User user = UserInfo.getUser();
+        map.put("id",user.getId());
+        pageRequestParam.setFilters(map);
+
+        return super.findPage("HzChangeOrderDAOImpl_findHzChangeOrderRecordByPageUn","HzChangeOrderDAOImpl_findUntreatedTotalCount",pageRequestParam);
+    }
+
+    @Override
+    public Page<HzChangeOrderRecord> findHzChangeOrderRecordByPagePr(HzChangeOrderByPageQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        PageRequestParam pageRequestParam = new PageRequestParam();
+        pageRequestParam.setPageNumber(query.getPage());
+        pageRequestParam.setPageSize(query.getPageSize());
+        map.put("changeNo",query.getChangeNo());
+        map.put("projectId",query.getProjectId());
+        map.put("originator",query.getOriginator());
+        map.put("firstOriginTime",query.getFirstOriginTime());
+        map.put("lastOriginTime",query.getLastOriginTime());
+        User user = UserInfo.getUser();
+        map.put("id",user.getId());
+        pageRequestParam.setFilters(map);
+
+        return super.findPage("HzChangeOrderDAOImpl_findHzChangeOrderRecordByPagePr","HzChangeOrderDAOImpl_findProcessedTotalCount",pageRequestParam);
     }
 
     @Override

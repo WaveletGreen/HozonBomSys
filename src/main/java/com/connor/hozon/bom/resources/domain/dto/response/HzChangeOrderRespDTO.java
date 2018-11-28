@@ -102,6 +102,19 @@ public class HzChangeOrderRespDTO {
      */
     private Long auditId;
 
+    /**
+     * 流程发起时间（多条记录获取申请表的申请时间）
+     */
+    private String applicantTime;
+
+    public String getApplicantTime() {
+        return applicantTime;
+    }
+
+    public void setApplicantTime(String applicantTime) {
+        this.applicantTime = applicantTime;
+    }
+
     public Long getAuditId() {
         return auditId;
     }

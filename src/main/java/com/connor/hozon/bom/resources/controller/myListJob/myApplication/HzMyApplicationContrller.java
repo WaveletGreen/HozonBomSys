@@ -99,7 +99,7 @@ public class HzMyApplicationContrller {
 //        if(StringUtil.isEmpty(query.getProjectId())){
 //            return new JSONObject();
 //        }
-        /*HzChangeOrderByPageQuery pageQuery = query;
+        HzChangeOrderByPageQuery pageQuery = query;
         try {
             pageQuery.setPageSize(Integer.valueOf(query.getLimit()));
         }catch (Exception e){
@@ -119,7 +119,6 @@ public class HzMyApplicationContrller {
             object.put("marketType",hzChangeOrderRespDTO.getMarketType());
             object.put("createNo",hzChangeOrderRespDTO.getChangeNo());
             object.put("tel",hzChangeOrderRespDTO.getTel());
-            object.put("state",hzChangeOrderRespDTO.getState());
             object.put("relationChangeNo",hzChangeOrderRespDTO.getRelationChangeNo());
             object.put("createTime",hzChangeOrderRespDTO.getCreateTime());
             object.put("remark",hzChangeOrderRespDTO.getRemark());
@@ -134,13 +133,15 @@ public class HzMyApplicationContrller {
             object.put("projectName",hzChangeOrderRespDTO.getProjectName());
             object.put("source",hzChangeOrderRespDTO.getSource());
             object.put("auditTime",hzChangeOrderRespDTO.getAuditTime());
+            object.put("state",hzChangeOrderRespDTO.getState());
+            object.put("auditId",hzChangeOrderRespDTO.getAuditId());
             list.add(object);
         });
         jsonObject.put("totalCount",page.getTotalCount());
         jsonObject.put("result",list);
-        return jsonObject;*/
+        return jsonObject;
 
-        List<HzChangeOrderRespDTO> respDTOs = hzApplicationChangeService.findChangeOrderList(query,record);
+        /*List<HzChangeOrderRespDTO> respDTOs = hzApplicationChangeService.findChangeOrderList(query,record);
         if(ListUtil.isEmpty(respDTOs)){
             return new JSONObject();
         }
@@ -162,6 +163,6 @@ public class HzMyApplicationContrller {
             list.add(object);
         });
         jsonObject.put("result",list);
-        return jsonObject;
+        return jsonObject;*/
     }
 }

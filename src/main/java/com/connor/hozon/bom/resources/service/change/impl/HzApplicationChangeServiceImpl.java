@@ -74,9 +74,6 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
     @Override
     public Page<HzChangeOrderRespDTO> getHzChangeOrderPage(HzChangeOrderByPageQuery query, HzApplicantChangeRecord rec) {
         try {
-            //List<HzChangeOrderRespDTO> respDTOs = hzApplicationChangeService.findChangeOrderList(query,record);
-            //List<HzApplicantChangeRecord> infos =  hzApplicantChangeDAO.findApplicantionList(rec);
-
             List<HzChangeOrderRespDTO> respDTOS = new ArrayList<>();
             Page<HzChangeOrderRecord> page = hzChangeOrderDAO.findHzChangeOrderRecordByPageId(query);
             if (page == null || page.getResult() == null || page.getResult().size() == 0) {

@@ -42,9 +42,21 @@ public class HzChangeOrderRecord extends BasePOJO {
      */
     private String originator;
     /**
+     * 申请人表对应审核表ID
+     */
+    private String auditRecordId;
+    /**
+     * 审核表ID
+     */
+    private String auditId;
+    /**
      *流程发起时间
      */
     private Date originTime;
+    /**
+     *流程审核时间
+     */
+    private Date auditTime;
     /**
      *联系电话
      */
@@ -82,18 +94,14 @@ public class HzChangeOrderRecord extends BasePOJO {
      * 项目id
      */
     private String projectId;
-
     /**
      * 项目名
      */
     private String projectName;
-
     /**
      * 表单信息是否同步自TC
      */
     private Integer fromTc;
-
-
     /**
      * 部门名称 来自TC
      */
@@ -102,6 +110,42 @@ public class HzChangeOrderRecord extends BasePOJO {
      * 创建者 来自TC
      */
     private String createNameTC;
+    /**
+     * 流程发起时间（多条记录获取申请表的申请时间）
+     */
+    private Date applicantTime;
+
+    public Date getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(Date auditTime) {
+        this.auditTime = auditTime;
+    }
+
+    public Date getApplicantTime() {
+        return applicantTime;
+    }
+
+    public void setApplicantTime(Date applicantTime) {
+        this.applicantTime = applicantTime;
+    }
+
+    public String getAuditId() {
+        return auditId;
+    }
+
+    public void setAuditId(String auditId) {
+        this.auditId = auditId;
+    }
+
+    public String getAuditRecordId() {
+        return auditRecordId;
+    }
+
+    public void setAuditRecordId(String auditRecordId) {
+        this.auditRecordId = auditRecordId;
+    }
 
     public String getProjectName() {
         return projectName;
