@@ -243,6 +243,11 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     }
 
     @Override
+    public HzCmcrChange doQueryCmcrChangeBeforByAfter(HzCmcrChange hzCmcrChangeAfter) {
+        return baseSQLUtil.executeQueryById(hzCmcrChangeAfter,clzName+".doQueryCmcrChangeBeforByAfter");
+    }
+
+    @Override
     public List<HzCmcrChange> selectLastAfter(List<HzCmcrChange> hzCmcrChangesLastAfter) throws Exception{
         preSetAfterList(hzCmcrChangesLastAfter);
         return executeSelectLast(hzCmcrChangesLastAfter, "selectLastAfter");

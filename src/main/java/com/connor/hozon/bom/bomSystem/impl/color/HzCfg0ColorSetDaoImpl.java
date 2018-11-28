@@ -51,7 +51,7 @@ public class HzCfg0ColorSetDaoImpl extends BasicDaoImpl<HzCfg0ColorSet> implemen
      */
     @Override
     public List<HzCfg0ColorSet> queryAll2() {
-        List<HzCfg0ColorSet> colorSet = baseSQLUtil.executeQueryByPass(SET, new QueryBase(), clzName + ".selectAll");
+        List<HzCfg0ColorSet> colorSet = baseSQLUtil.executeQueryByPass(SET, new HzColorSetQueryDto(), clzName + ".selectAll");
         return colorSet;
     }
 

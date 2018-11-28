@@ -129,10 +129,10 @@
                                             data: JSON.stringify(ids),
                                             contentType: "application/json",
                                             success: function (result) {
-                                                if (result.success) {
+                                                if (result.status) {
                                                     layer.msg('删除成功', {icon: 1, time: 2000})
-                                                } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                } else if (!result.status) {
+                                                    window.Ewin.alert({message: result.msg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },

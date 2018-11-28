@@ -2481,8 +2481,8 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     public void doQueryCmcrDetailChangBefor2(Map<String, Object> map, Long vwoId){
         List<Map<String,String>> result = new ArrayList<>();
         //变更前后主数据
-        List<HzCmcrChange> hzCmcrChangeListBefor = null;
-        List<HzCmcrChange> hzCmcrChangeListAfter = null;
+        List<HzCmcrChange> hzCmcrChangeListBefor = new ArrayList<>();
+        List<HzCmcrChange> hzCmcrChangeListAfter = new ArrayList<>();
         //变更前后从数据
         List<HzCmcrDetailChange> hzCmcrDetailChangeListBefor = new ArrayList<>();
         List<HzCmcrDetailChange> hzCmcrDetailChangeListAfter = new ArrayList<HzCmcrDetailChange>();
@@ -2495,10 +2495,17 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         Map<String, List<HzCmcrDetailChange>> srcPuidAfterMap = new HashMap<String, List<HzCmcrDetailChange>>();
 
 
-        //查询变更前主数据（vwo号小于变更后的vwo号）
-        hzCmcrChangeListBefor = hzCmcrChangeDao.doQueryCmcrChangeBefor(vwoId);
         //查询变更后主数据
         hzCmcrChangeListAfter = hzCmcrChangeDao.doQueryCmcrChangeAfter(vwoId);
+        //查询变更前主数据（vwo号小于变更后的vwo号）
+        if(hzCmcrChangeListAfter!=null){
+            for(HzCmcrChange hzCmcrChange : hzCmcrChangeListAfter){
+                HzCmcrChange  hzCmcrChange1 = hzCmcrChangeDao.doQueryCmcrChangeBeforByAfter(hzCmcrChange);
+                if(hzCmcrChange1!=null){
+                    hzCmcrChangeListBefor.add(hzCmcrChange1);
+                }
+            }
+        }
 
         //查询变更前后从数据
         if(hzCmcrChangeListBefor==null||hzCmcrChangeListBefor.size()<=0){
@@ -2509,6 +2516,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             }
         }else {
             hzCmcrDetailChangeListBefor = hzCmcrDetailChangeDao.doQueryCmcrDetailByMainChange(hzCmcrChangeListBefor);
+            hzCmcrDetailChangeListAfter = hzCmcrDetailChangeDao.doQueryCmcrDetailByMainChange(hzCmcrChangeListAfter);
         }
 
 
@@ -2562,12 +2570,12 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 for(HzCmcrChange hzCmcrChangeBefor : hzCmcrChangeListBefor){
                     if(hzCmcrChangeBefor.getCmcrSrcPuid().equals(hzCmcrChangeAfter.getCmcrSrcPuid())){
                         flag = false;
-                        iteratorAdd.remove();
                         break;
                     }
                 }
                 if(flag){
                     hzCmcrChangesAdd.add(hzCmcrChangeAfter);
+                    iteratorAdd.remove();
                 }
             }
         }
@@ -2762,26 +2770,35 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 
 
         //变更前主数据
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeansBefor = null;
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeansBefor = new ArrayList<>();
         //变更前从数据
-        List<HzDMDetailChangeBean> hzDMDetailChangeBeansBefor = null;
+        List<HzDMDetailChangeBean> hzDMDetailChangeBeansBefor = new ArrayList<>();
         //变更后主数据
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeansAfter = null;
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeansAfter = new ArrayList<>();
         //变更后从数据
-        List<HzDMDetailChangeBean> hzDMDetailChangeBeansAfter = null;
+        List<HzDMDetailChangeBean> hzDMDetailChangeBeansAfter = new ArrayList<>();
 
         /********查询变更前后主从数据*********/
-        //根据变更表单查询最近一次变更主数据
-        hzDMBasicChangeBeansBefor = hzDMBasicChangeDao.selectBefor(formId);
+        //根据变更表单id查询变更后主数据
+            hzDMBasicChangeBeansAfter = hzDMBasicChangeDao.selectAfter(formId);
+        if(hzDMBasicChangeBeansAfter==null||hzDMBasicChangeBeansAfter.size()<=0){
+            return map;
+        }
+
+        //根据变更后数据查询最近一次变更主数据
+        if(hzDMBasicChangeBeansAfter!=null&&hzDMBasicChangeBeansAfter.size()>0){
+            for(HzDMBasicChangeBean hzDMBasicChangeBeanAfter : hzDMBasicChangeBeansAfter){
+                HzDMBasicChangeBean hzDMBasicChangeBeanBefor = hzDMBasicChangeDao.selectBefor(hzDMBasicChangeBeanAfter);
+                if(hzDMBasicChangeBeanBefor!=null) {
+                    hzDMBasicChangeBeansBefor.add(hzDMBasicChangeBeanBefor);
+                }
+            }
+        }
         if(hzDMBasicChangeBeansBefor!=null&&hzDMBasicChangeBeansBefor.size()!=0){
             //根据最近一次变更主数据查询变更从数据
             hzDMDetailChangeBeansBefor = hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeansBefor);
         }
-        //根据变更表单id查询变更后主数据
-        hzDMBasicChangeBeansAfter = hzDMBasicChangeDao.selectAfter(formId);
-        if(hzDMBasicChangeBeansAfter==null||hzDMBasicChangeBeansAfter.size()<=0){
-            return map;
-        }
+
         //根据变更后主数据查询变更后从数据
         hzDMDetailChangeBeansAfter =hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeansAfter);
 
@@ -2830,7 +2847,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             while (IteratorAdd.hasNext()) {
                 HzDMBasicChangeBean hzDMBasicChangeBeanAfter = IteratorAdd.next();
                 boolean flag = true;
-                if(hzDMBasicChangeBeansBefor.size()==0){
+                if(hzDMBasicChangeBeansBefor==null||hzDMBasicChangeBeansBefor.size()==0){
                     flag = true;
                 }else {
                     for (HzDMBasicChangeBean hzDMBasicChangeBeanBefor : hzDMBasicChangeBeansBefor) {
@@ -3574,7 +3591,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         }
         if(hzDMBasicChangeDao.updateByChangeIds(changeMaterielFeatureIds)<=0?true:false){
             result.put("status",false);
-            result.put("msg","修改源数据失败");
+            result.put("msg","删除变更数据失败,请确定数据是否存在变更前数据");
             return result;
         }
         //判断是否还有变更数据

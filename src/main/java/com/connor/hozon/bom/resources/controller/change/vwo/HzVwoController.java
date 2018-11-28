@@ -13,6 +13,7 @@ import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.vwo.*;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +42,9 @@ public class HzVwoController {
     /***VWO表单服务层*/
     @Autowired
     IHzVWOManagerService iHzVWOManagerService;
+
+    @Autowired
+    HzChangeOrderDAO hzChangeOrderDAO;
     /***日志*/
     private static Logger logger = LoggerFactory.getLogger(HzVwoController.class);
 
@@ -423,6 +428,10 @@ public class HzVwoController {
     @RequestMapping(value = "getMaterielFeatureTable", method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> getMaterielFeatureTable(@RequestParam Long formId,@RequestParam String projectUid){
+        if(projectUid==null||"".equals(projectUid)){
+            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(formId);
+            projectUid = record.getProjectId();
+        }
         return iHzVWOManagerService.getMaterielFeatureTable(formId,projectUid);
     }
 
@@ -430,6 +439,10 @@ public class HzVwoController {
     @RequestMapping(value = "getFullCfgTable", method = RequestMethod.POST)
     @ResponseBody
     public Map<String,Object> getFullCfgTable(@RequestParam Integer orderChangeId,@RequestParam String projectUid){
+        if(projectUid==null||"".equals(projectUid)){
+            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(Long.valueOf(orderChangeId));
+            projectUid = record.getProjectId();
+        }
         return  iHzVWOManagerService.getFullCfgTable(orderChangeId,projectUid);
     }
 
