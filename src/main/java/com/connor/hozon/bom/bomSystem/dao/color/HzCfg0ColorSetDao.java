@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.dao.color;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import com.connor.hozon.bom.bomSystem.dto.HzColorSetQueryDto;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import sql.pojo.cfg.color.HzCfg0ColorSet;
 
@@ -81,5 +82,5 @@ public interface HzCfg0ColorSetDao extends BasicDao<HzCfg0ColorSet>{
      * 查询全部的颜色数量
      * @return
      */
-    int tellMeHowManyOfIt();
+    int tellMeHowManyOfIt(HzColorSetQueryDto hzColorSetQueryDto);
 }

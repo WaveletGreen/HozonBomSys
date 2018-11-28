@@ -7,12 +7,14 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 需要告知扫描的包名
  * 启动事物扫描
  */
+@ImportResource(locations={"classpath:mybatis/datasource-config.xml"})
 @SpringBootApplication(
         scanBasePackages = {"sql", "integration.service",
                 "com.connor.hozon"})

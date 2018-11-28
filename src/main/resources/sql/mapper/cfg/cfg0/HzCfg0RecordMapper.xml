@@ -247,10 +247,10 @@
         where t2.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
         )
         <if test="featureValue!=null">
-            and t.p_cfg0_object_id like upper(#{featureValue})||'%'
+            and t.p_cfg0_object_id like '%'||upper(#{featureValue})||'%'
         </if>
         <if test="feature!=null">
-            and t.p_cfg0_family_name like upper(#{feature})||'%'
+            and t.p_cfg0_family_name like '%'||upper(#{feature})||'%'
         </if>
     </select>
     <!--**************************************delete**************************************-->

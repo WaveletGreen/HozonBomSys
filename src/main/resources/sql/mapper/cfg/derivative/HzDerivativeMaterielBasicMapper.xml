@@ -399,6 +399,8 @@
             set CHANGE_ORDER_UID = null,
             DMB_STATUS = (select DMB_SRC_STATUS from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})
             where ID = (select DMB_SRC_ID from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})
+            and DMB_STATUS = 10
+            and 0 = (select DMB_CHANGE_STATUS from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})
         </foreach>
     </update>
 </mapper>

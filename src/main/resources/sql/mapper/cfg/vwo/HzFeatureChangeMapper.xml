@@ -343,7 +343,9 @@
         from
           HZ_CFG0_AFTER_CHANGE_RECORD
         where
-        ID = (select Max(ID) from HZ_CFG0_AFTER_CHANGE_RECORD where CFG_PUID = #{cfgPuid,jdbcType=VARCHAR} and PROCESS_STATUS = 1)
+        ID = (select Max(ID) from HZ_CFG0_AFTER_CHANGE_RECORD where CFG_PUID = #{cfgPuid,jdbcType=VARCHAR} and PROCESS_STATUS = 1
+            and ID &lt;(select ID from HZ_CFG0_AFTER_CHANGE_RECORD where CFG_PUID = #{cfgPuid,jdbcType=VARCHAR} and CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL})
+        )
     </select>
 
     <select id="selectByChangeIdAndCfgid" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
@@ -355,8 +357,6 @@
           CFG_PUID = #{cfgPuid,jdbcType=VARCHAR}
         and
           CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL}
-        and
-          PROCESS_STATUS = 0
     </select>
 
     <select id="doselectByChangeId" parameterType="java.lang.Long" resultMap="BaseResultMap">

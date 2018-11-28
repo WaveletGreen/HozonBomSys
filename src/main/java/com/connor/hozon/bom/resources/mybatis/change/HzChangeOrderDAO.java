@@ -88,4 +88,6 @@ public interface HzChangeOrderDAO {
     Page<HzChangeOrderRecord> findHzChangeOrderRecordByPage(HzChangeOrderByPageQuery query);
 
     List<HzChangeOrderRecord> findHzChangeOrderRecordByProjectId(String projectUid);
+
+    HzChangeOrderRecord selectById(Long vwoId);
 }

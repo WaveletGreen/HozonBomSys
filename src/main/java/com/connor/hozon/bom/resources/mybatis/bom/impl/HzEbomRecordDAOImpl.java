@@ -24,8 +24,9 @@ import java.util.Map;
 /**
  * Created by haozt on 2018/06/06
  */
-@Service("HzEbomRecordDAO")
+@Service("hzEbomRecordDAO")
 public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO {
+
 
     @Override
     public Page<HzEPLManageRecord> getHzEbomPage(HzEbomByPageQuery query) {

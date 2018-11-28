@@ -8,10 +8,12 @@ package com.connor.hozon.bom.bomSystem.service.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.*;
 
@@ -26,6 +28,8 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
     @Autowired
     HzFeatureChangeDao hzFeatureChangeDao;
 
+    @Autowired
+    HzChangeOrderDAO hzChangeOrderDAO;
     /**
      * 主键删除
      *
@@ -362,8 +366,11 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         HzFeatureChangeBean hzFeatureChangeBean = new HzFeatureChangeBean();
         hzFeatureChangeBean.setCfgPuid(cfgPuid);
         hzFeatureChangeBean.setVwoId(vwoId);
+
+
         HzFeatureChangeBean hzFeatureChangeBeanBefor = hzFeatureChangeDao.selectLast(hzFeatureChangeBean);
         HzFeatureChangeBean hzFeatureChangeBeanAfter = hzFeatureChangeDao.selectByChangeIdAndCfgid(hzFeatureChangeBean);
+
         List<HzFeatureChangeBean> hzFeatureChangeBeans = new ArrayList<>();
         hzFeatureChangeBeans.add(hzFeatureChangeBeanBefor);
         hzFeatureChangeBeans.add(hzFeatureChangeBeanAfter);

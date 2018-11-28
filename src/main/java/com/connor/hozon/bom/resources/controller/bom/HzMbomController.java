@@ -63,7 +63,7 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
     public void mbomTitle(HttpServletResponse response) {
-        //LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
@@ -89,6 +89,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("pFactoryCode", "工厂代码");
         tableTitle.put("pStockLocation", "发货料库存地点");
         tableTitle.put("pBomType", "BOM类型");
+        this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
 
@@ -399,12 +400,12 @@ public class HzMbomController extends BaseController {
     }
 
     /**
-     * EBOM撤销
+     * MBOM撤销
      * @param reqDTO
      * @param response
      */
     @RequestMapping(value = "cancel",method = RequestMethod.POST)
-    public void pbomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
+    public void mbomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO respDTO = hzMbomService.backBomUtilLastValidState(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }

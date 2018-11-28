@@ -161,4 +161,11 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
     public List<HzChangeOrderRecord> findHzChangeOrderRecordByProjectId(String projectUid) {
         return super.findForList("HzChangeOrderDAOImpl_findHzChangeOrderRecordByProjectId",projectUid);
     }
+
+    @Override
+    public HzChangeOrderRecord selectById(Long vwoId) {
+        HzChangeOrderRecord hzChangeOrderRecord = new HzChangeOrderRecord();
+        hzChangeOrderRecord.setId(vwoId);
+        return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_selectById",hzChangeOrderRecord);
+    }
 }

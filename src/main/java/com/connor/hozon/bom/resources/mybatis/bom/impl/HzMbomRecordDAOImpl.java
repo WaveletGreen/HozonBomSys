@@ -28,7 +28,7 @@ import java.util.Map;
  * Created by haozt on 2018/5/24
  */
 
-@Service("HzMbomRecordDAO")
+@Service("hzMbomRecordDAO")
 public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO {
 
     @Override

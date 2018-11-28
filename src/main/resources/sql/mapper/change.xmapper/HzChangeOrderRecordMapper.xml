@@ -454,4 +454,13 @@
         and
         STATE = 2
   </select>
+
+    <select id="HzChangeOrderDAOImpl_selectById" parameterType="sql.pojo.change.HzChangeOrderRecord" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CHANGE_ORDER_RECORD
+        where
+        ID = #{id,jdbcType=DOUBLE}
+    </select>
 </mapper>

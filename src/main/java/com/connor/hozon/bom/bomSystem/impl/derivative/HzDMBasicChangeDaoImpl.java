@@ -33,19 +33,15 @@ public class HzDMBasicChangeDaoImpl extends BasicDaoImpl<HzDMBasicChangeBean> im
     }
 
     @Override
-    public List<HzDMBasicChangeBean> selectBefor(Long formId) {
-        Map<String,Long> map = new HashMap<>();
-        map.put("formId",formId);
-        map.put("status",1L);
-        return baseSQLUtil.executeQueryByPass(new HzDMBasicChangeBean(), map, clz.getCanonicalName() + ".selectBefor");
+    public HzDMBasicChangeBean selectBefor(HzDMBasicChangeBean hzDMBasicChangeBeanAfter) {
+        return baseSQLUtil.executeQueryById(hzDMBasicChangeBeanAfter, clz.getCanonicalName() + ".selectBefor");
     }
 
     @Override
     public List<HzDMBasicChangeBean> selectAfter(Long formId) {
-        Map<String,Long> map = new HashMap<>();
-        map.put("formId",formId);
-        map.put("status",0L);
-        return baseSQLUtil.executeQueryByPass(new HzDMBasicChangeBean(), map, clz.getCanonicalName() + ".selectBefor");
+        HzDMBasicChangeBean hzDMBasicChangeBean = new HzDMBasicChangeBean();
+        hzDMBasicChangeBean.setFormId(formId);
+        return baseSQLUtil.executeQuery(hzDMBasicChangeBean, clz.getCanonicalName() + ".selectAfter");
     }
 
     @Override

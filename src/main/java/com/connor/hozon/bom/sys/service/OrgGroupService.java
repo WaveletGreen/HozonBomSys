@@ -56,4 +56,13 @@ public class OrgGroupService extends GenericService<OrgGroup, QueryOrgGroup> {
 	public Integer findOrgGroupUserCount(Long id){
 		return orgGroupDao.queryOrgGroupUserCount(id);
 	}
+
+	/**
+	 * 查询部门名称是否已存在
+	 * @param deptName
+	 * @return
+	 */
+	public boolean deptNameIsRepeat(String deptName){
+		return orgGroupDao.queryOrgGroupNameExist(deptName)>0;
+	}
 }

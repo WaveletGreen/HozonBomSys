@@ -124,17 +124,18 @@ public class HzSingleVehiclesFactory {
         respDTO.setPStockLocation(record.getPStockLocation());
         respDTO.setEBomPuid(record.getEBomPuid());
         respDTO.setSingleVehiclesId(record.getSingleVehiclesId());
-        if(null == record.getPFactoryId()){
+        //todo 待处理
+//        if(null == record.getPFactoryId()){
             respDTO.setPFactoryCode("1001");
-        }else {
-            HzFactoryDAO hzFactoryDAO = new HzFactoryDAOImpl();
-            HzFactory factory = hzFactoryDAO.findFactory(record.getPFactoryId(),"");
-            if(factory!= null){
-                respDTO.setPFactoryCode(factory.getpFactoryCode());
-            }else {
-                respDTO.setPFactoryCode("1001");
-            }
-        }
+//        }else {
+//            HzFactoryDAO hzFactoryDAO = new HzFactoryDAOImpl();
+//            HzFactory factory = hzFactoryDAO.findFactory(record.getPFactoryId(),"");
+//            if(factory!= null){
+//                respDTO.setPFactoryCode(factory.getpFactoryCode());
+//            }else {
+//                respDTO.setPFactoryCode("1001");
+//            }
+//        }
         return respDTO;
     }
 

@@ -54,11 +54,11 @@
                 property="number"/>
     </resultMap>
 
-    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
-               type="sql.pojo.bom.HzMBomToERPBean">
-        <result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"
-                property="bomLineBlock"/>
-    </resultMap>
+    <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"-->
+               <!--type="sql.pojo.bom.HzMBomToERPBean">-->
+        <!--<result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"-->
+                <!--property="bomLineBlock"/>-->
+    <!--</resultMap>-->
     <!--没有大对象类型-->
     <sql id="Base_Column_List">
         PUID,
@@ -93,7 +93,9 @@
         T3.P_BOM_LINE_ID,/*物料编码*/
         T.P_BOM_ORDER_NUM,/*BOM顺序号*/
         T.P_BOM_LINE_IS_2Y,/**是否2Yceng*/
-        T3.P_BOM_LINE_BLOCK, /* 从这里找单位*/
+        <!--
+         T3.P_BOM_LINE_BLOCK, /* 从这里找单位*/
+        -->
         T3.P_LINE_INDEX,/**真实顺序号*/
         T.P_STOCK_LOCATION,/*发料库存地点*/
         T8.P_CFG0_RELEVANCE, /*相关性*/
@@ -104,7 +106,7 @@
     </sql>
     <select id="selectByBatch"
             parameterType="java.util.Map"
-            resultMap="ResultMapWithBLOBs">
+            resultMap="BaseResultMap">
 
         select
 
@@ -137,7 +139,7 @@
     </select>
     <select id="selectByProjectUidWithCondition"
             parameterType="java.util.Map"
-            resultMap="ResultMapWithBLOBs">
+            resultMap="BaseResultMap">
         select
         t.PUID,t.P_PARENT_UID,t.P_BOM_PUID
         from Hz_Mbom_Record t where t.p_bom_digifax_id=(

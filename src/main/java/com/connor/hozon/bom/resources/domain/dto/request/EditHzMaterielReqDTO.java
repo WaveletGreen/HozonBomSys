@@ -30,7 +30,7 @@ public class EditHzMaterielReqDTO {
      */
     private String pLoosePartFlag;
     /**
-     * 物料类型  严格按照注释来读写数据
+     * 物料类型
      * （11 整车超级物料主数据
      * 21 整车衍生物料主数据
      * 31 虚拟件物料主数据

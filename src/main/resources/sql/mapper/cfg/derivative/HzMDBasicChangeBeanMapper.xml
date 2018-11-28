@@ -121,20 +121,30 @@
         and DMB_CHANGE_STATUS=0
     </select>
 
-    <select id="selectBefor" parameterType="java.util.List" resultMap="BaseResultMap">
+    <select id="selectBefor" parameterType="sql.pojo.cfg.derivative.HzDMBasicChangeBean" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from
         HZ_DM_BASIC_CHANGE
         where
-        ID in (
-          select Max(ID)from HZ_DM_BASIC_CHANGE where DMB_SRC_ID  in (
-            select DMB_SRC_ID from HZ_DM_BASIC_CHANGE where FORMID = #{formId,jdbcType=DECIMAL}
-            )
-          and DMB_CHANGE_STATUS =#{status,jdbcType=DECIMAL}
-          group by DMB_SRC_ID
+        ID = (
+          select Max(ID)from HZ_DM_BASIC_CHANGE where DMB_SRC_ID  = #{dmbSrcId,jdbcType=DECIMAL}
+          and DMB_CHANGE_STATUS =1
+          and ID &lt; #{id,jdbcType=DECIMAL}
         )
         order by ID
+    </select>
+
+    <select id="selectAfter" parameterType="sql.pojo.cfg.derivative.HzDMBasicChangeBean" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_DM_BASIC_CHANGE
+        where
+        ID in(
+          select ID from HZ_DM_BASIC_CHANGE where FORMID =  #{formId,jdbcType=DECIMAL}
+        )
+
     </select>
 
     <select id="selectLastByPuid" parameterType="java.util.List" resultMap="BaseResultMap">
@@ -167,5 +177,9 @@
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
             #{item,jdbcType=DECIMAL}
         </foreach>
+        and
+        DMB_CHANGE_STATUS = 0
     </delete>
+
+
 </mapper>
