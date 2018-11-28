@@ -620,6 +620,8 @@
             )
             where
             PUID = (select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where ID = #{hzFeatureChangeBean.id,jdbcType=DECIMAL})
+            and
+            0 = (select PROCESS_STATUS from HZ_CFG0_AFTER_CHANGE_RECORD where ID = #{hzFeatureChangeBean.id,jdbcType=DECIMAL})
         </foreach>
     </update>
 </mapper>

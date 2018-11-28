@@ -249,6 +249,8 @@
             PUID = (
             select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL}
             )
+            and
+              0=(select CMCR_CHANGE_STATUS from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL})
         </foreach>
     </update>
 </mapper>

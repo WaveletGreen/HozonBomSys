@@ -213,5 +213,7 @@
         ID = (
           select SRC_MAIN_ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
         )
+        and
+        0=(select CHANGE_STATUS from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL})
     </update>
 </mapper>
