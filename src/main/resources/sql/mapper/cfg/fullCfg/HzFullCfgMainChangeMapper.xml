@@ -200,6 +200,6 @@
     where
     PROJECT_UID = #{projectUid,jdbcType=VARCHAR}
     and
-    STATUS = #{status,jdbcType=DECIMAL}
+    CHANGE_STATUS = #{status,jdbcType=DECIMAL}
   </select>
 </mapper>
