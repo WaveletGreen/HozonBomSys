@@ -1,5 +1,8 @@
 package sql;
 
+import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.page.PageRequestParam;
+
 import java.util.List;
 
 public interface IBaseSQLUtil {
@@ -119,7 +122,6 @@ public interface IBaseSQLUtil {
 
     /**
      * 查询数据 返回list
-     *
      * @param sqlMapId
      * @param param
      * @return
@@ -127,10 +129,54 @@ public interface IBaseSQLUtil {
     List findForList(final String sqlMapId, final Object param);
 
     /**
-     * 查询获取一个对象
+     * 分页查询
+     * @param sqlMapId
+     * @param totalMapId
+     * @param pageRequestParam
+     * @return
+     */
+    Page findPage(final String sqlMapId, final String totalMapId, PageRequestParam pageRequestParam);
+
+    /**
+     * 获取一个对象
+     * @param sqlMapId
+     * @param param
+     * @param <T>
+     * @return
+     */
+    <T> T findForObject(final String sqlMapId, final Object param);
+
+    /**
+     * 插入记录
      * @param sqlMapId
      * @param param
      * @return
      */
-    Object findForObject(final String sqlMapId, final Object param);
+    int insert(final String sqlMapId, final Object param);
+
+    /**
+     * 更新记录
+     * @param sqlMapId
+     * @param param
+     * @return
+     */
+    int update(final String sqlMapId, final Object param);
+
+    /**
+     * 删除记录
+     * @param sqlMapId
+     * @param param
+     * @return
+     */
+    int delete(final String sqlMapId, final Object param);
+
+    /**
+     * 查询list
+     * @param sqlMapId
+     * @param param
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List findForList(final String sqlMapId, final Object param, final int offset, final int limit);
 }

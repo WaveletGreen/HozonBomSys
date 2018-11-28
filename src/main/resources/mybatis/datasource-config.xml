@@ -49,12 +49,12 @@
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="configLocation" value="classpath:mybatis-config1.xml" />
+        <property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
     </bean>
 
 
     <!-- 数据接口 -->
-    <bean id="baseDAO" class="sql.BaseDAO">
+    <bean id="baseSQLUtil" class="sql.BaseSQLUtil">
         <property name="sqlSessionFactory" ref="sqlSessionFactory" />
     </bean>
 
