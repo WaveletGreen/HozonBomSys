@@ -22,7 +22,7 @@ import java.util.List;
  * @Date: 2018/8/8
  * @Description:
  */
-@Service("HzEWOBasicInfoService")
+@Service("hzEWOBasicInfoService")
 public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
 
     @Autowired

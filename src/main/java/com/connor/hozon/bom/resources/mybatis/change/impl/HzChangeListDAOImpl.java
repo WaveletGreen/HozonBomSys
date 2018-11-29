@@ -7,7 +7,7 @@ import sql.pojo.change.HzChangeListRecord;
 
 import java.util.List;
 
-@Service("HzChangeListDAO")
+@Service("hzChangeListDAO")
 public class HzChangeListDAOImpl extends BaseSQLUtil implements HzChangeListDAO {
     @Override
     public List<HzChangeListRecord> findChangeList(String formID) {

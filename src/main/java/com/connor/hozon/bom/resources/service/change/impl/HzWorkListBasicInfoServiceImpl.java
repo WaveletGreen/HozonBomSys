@@ -15,7 +15,7 @@ import sql.pojo.workList.HzWorkListRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("HzWorkListBasicInfoService")
+@Service("hzWorkListBasicInfoService")
 public class HzWorkListBasicInfoServiceImpl implements HzWorkListBasicInfoService {
     @Autowired
     private HzWorkListDAO hzWorkListDAO;

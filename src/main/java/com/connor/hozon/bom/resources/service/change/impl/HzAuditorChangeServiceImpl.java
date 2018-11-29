@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("HzAuditorChangeService")
+@Service("hzAuditorChangeService")
 public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
     @Autowired
     private HzAuditorChangeDAO hzAuditorChangeDAO;

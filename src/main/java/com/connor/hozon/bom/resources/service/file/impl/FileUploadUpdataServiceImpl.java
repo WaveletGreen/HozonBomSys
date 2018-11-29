@@ -21,7 +21,7 @@ import sql.pojo.bom.HzPbomLineRecord;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Service("FileUploadUpdataService")
+@Service("fileUploadUpdataService")
 public class FileUploadUpdataServiceImpl implements FileUploadUpdataService {
 
     @Autowired

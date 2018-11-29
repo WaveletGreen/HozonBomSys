@@ -17,7 +17,7 @@ import sql.pojo.change.HzChangeOrderRecord;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("HzChangeListService")
+@Service("hzChangeListService")
 public class HzChangeListServiceImpl implements HzChangeListService {
     @Autowired
     private HzChangeListDAO hzChangeListDAO;

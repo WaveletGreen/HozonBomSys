@@ -32,7 +32,7 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
  * @Description:
  */
 
-@Service("HzEWOService")
+@Service("hzEWOService")
 public class HzEWOServiceImpl implements HzEWOService {
 
     @Autowired

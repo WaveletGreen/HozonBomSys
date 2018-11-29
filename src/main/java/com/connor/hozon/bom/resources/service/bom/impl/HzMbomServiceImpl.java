@@ -59,7 +59,7 @@ import java.util.concurrent.Future;
  * @Date: 2018/6/20
  * @Description:
  */
-@Service("HzMbomService")
+@Service("hzMbomService")
 public class HzMbomServiceImpl implements HzMbomService{
 
     @Autowired

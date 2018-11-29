@@ -32,7 +32,7 @@ import java.util.List;
  * @Date: 2018/9/27
  * @Description:
  */
-@Service("HzSingleVehiclesBomServices")
+@Service("hzSingleVehiclesBomServices")
 public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServices {
 
     @Autowired
