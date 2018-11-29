@@ -27,6 +27,7 @@ $(document).ready(function () {
             table += "<th><a id='bomCfgId' href='../change/data/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[10].name + "</a></th>";
             table += "<th><a id='modelColorCfgId' href='../change/data/modelColorCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[8].name + "</a></th>";
             table += "<th><a id='materielFeatureId' href='../change/data/materielFeature/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[9].name + "</a></th>";
+            table += "<th><a id='relevanceId' href='../change/data/relevance/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[11].name+"</a></th>"
             table += "<th><a id='ebomId' href='../change/data/ebom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[0].name + "</a></th>";
             table += "<th><a id='pbomId' href='../change/data/pbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[1].name + "</a></th>";
             table += "<th><a id='mbomId' href='../change/data/mbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[2].name + "</a></th>";
