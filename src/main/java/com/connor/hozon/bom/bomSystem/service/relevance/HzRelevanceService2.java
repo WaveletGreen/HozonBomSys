@@ -245,9 +245,17 @@ public class HzRelevanceService2 {
             result.put("msg","该项目下不存在相关性，请生成相关性后再发起流程");
             return result;
         }
+        //根据项目查询该项目下的相关性最大版本
+        HzRelevanceBasicChange maxVersion = hzRelevanceBasicChangeDao.selectMaxVersionByProject(projectPuid);
         List<HzRelevanceBasicChange> hzRelevanceBasicChanges = new ArrayList<>();
         for(HzRelevanceBasic hzRelevanceBasic : hzRelevanceBasics){
             HzRelevanceBasicChange hzRelevanceBasicChange = new HzRelevanceBasicChange(hzRelevanceBasic);
+            if(maxVersion==null){
+                hzRelevanceBasicChange.setChangeVersion(0);
+            }else {
+                hzRelevanceBasicChange.setChangeVersion(maxVersion.getChangeVersion()+1);
+            }
+            hzRelevanceBasicChange.setChangeOrderId(changeFromId);
             hzRelevanceBasicChanges.add(hzRelevanceBasicChange);
         }
 

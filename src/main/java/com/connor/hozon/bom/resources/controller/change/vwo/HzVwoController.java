@@ -445,8 +445,8 @@ public class HzVwoController {
     /****************************相关性变更描述变更表单********************************/
     @RequestMapping(value = "getRelevance")
     @ResponseBody
-    public Map<String,Object> getRelevance(@RequestParam Integer orderChangeId){
-        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(Long.valueOf(orderChangeId));
+    public Map<String,Object> getRelevance(@RequestParam Long orderChangeId){
+        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(orderChangeId);
         String projectUid = record.getProjectId();
         return  iHzVWOManagerService.getRelevance(orderChangeId,projectUid);
     }

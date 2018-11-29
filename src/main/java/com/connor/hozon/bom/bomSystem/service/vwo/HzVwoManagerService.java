@@ -17,6 +17,7 @@ import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
@@ -58,6 +59,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import springfox.documentation.spring.web.json.Json;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import org.springframework.ui.Model;
@@ -73,6 +75,7 @@ import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
+import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
 import sql.pojo.cfg.vwo.*;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
@@ -234,6 +237,10 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     //变更表单Dao层
     @Autowired
     HzChangeOrderDAO hzChangeOrderDAO;
+
+    //相关性
+    @Autowired
+    HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
     /**
      * 日志
      */
@@ -2637,10 +2644,98 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
      * @return
      */
     @Override
-    public Map<String, Object> getRelevance(Integer orderChangeId, String projectUid) {
+    public Map<String, Object> getRelevance(Long orderChangeId, String projectUid) {
+        Map<String, Object> map = new HashMap<>();
+        List<Map<String,String>> result = new ArrayList<>();
 
-        //根据项目ID获取变更前
-        return null;
+        List<HzRelevanceBasicChange> hzRelevanceBasicChangesAdd = new ArrayList<>();
+        List<HzRelevanceBasicChange> hzRelevanceBasicChangesUpdate = new ArrayList<>();
+        List<HzRelevanceBasicChange> hzRelevanceBasicChangesDelete = new ArrayList<>();
+        /*********************根据变更单Id获取变更后数据***********************/
+        List<HzRelevanceBasicChange> hzRelevanceBasicChangesAfter = hzRelevanceBasicChangeDao.selectByOrderChangeId(orderChangeId);
+        /*****************根据变更后的数据获取变更前的数据******************/
+        //根据变更后版本找到最近的版本，并根据其版本找到变更前数据
+        if(hzRelevanceBasicChangesAfter==null||hzRelevanceBasicChangesAfter.size()<=0){
+            return map;
+        }
+        Integer version = hzRelevanceBasicChangesAfter.get(0).getChangeVersion();
+        //如果当前变更是否为第一次变更
+        if(version>0){
+            HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor = new HzRelevanceBasicChange();
+            hzRelevanceBasicChangeQueryBefor.setChangeVersion(version-1);
+            hzRelevanceBasicChangeQueryBefor.setRbProjectUid(projectUid);
+            List<HzRelevanceBasicChange> hzRelevanceBasicChangesBefor = hzRelevanceBasicChangeDao.selectByVersionAndProjectId(hzRelevanceBasicChangeQueryBefor);
+
+            Iterator<HzRelevanceBasicChange> iteratorBefor = hzRelevanceBasicChangesBefor.iterator();
+
+            while (iteratorBefor.hasNext()){
+                boolean deleteFlag = true;
+                HzRelevanceBasicChange hzRelevanceBasicChangeBefor = iteratorBefor.next();
+                Iterator<HzRelevanceBasicChange> iteratorAfter = hzRelevanceBasicChangesAfter.iterator();
+                while (iteratorAfter.hasNext()){
+                    HzRelevanceBasicChange hzRelevanceBasicChangeAfter = iteratorAfter.next();
+                    if(hzRelevanceBasicChangeBefor.getRbRelevance().equals(hzRelevanceBasicChangeAfter.getRbRelevance())&&hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
+                        deleteFlag = false;
+                        hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeBefor);
+                        hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeAfter);
+                        iteratorAfter.remove();
+                        break;
+                    }
+                }
+                if (deleteFlag){
+                    hzRelevanceBasicChangesDelete.add(hzRelevanceBasicChangeBefor);
+                    iteratorBefor.remove();
+                }
+            }
+            hzRelevanceBasicChangesAdd.addAll(hzRelevanceBasicChangesAfter);
+        }else {
+            hzRelevanceBasicChangesAdd.addAll(hzRelevanceBasicChangesAfter);
+        }
+        //填充新增数据
+        if(hzRelevanceBasicChangesAdd!=null&&hzRelevanceBasicChangesAdd.size()>0){
+            for(HzRelevanceBasicChange hzRelevanceBasicChange : hzRelevanceBasicChangesAdd){
+                Map<String,String> addMap = new HashMap<>();
+                addMap.put("headDesc","新增");
+                addMap.put("rbRelevance",hzRelevanceBasicChange.getRbRelevance());
+                addMap.put("rbRelevanceDesc",hzRelevanceBasicChange.getRbRelevanceDesc());
+                addMap.put("rbRelevanceCode",hzRelevanceBasicChange.getRbRelevanceCode());
+                result.add(addMap);
+            }
+        }
+        //填充删除数据
+        if(hzRelevanceBasicChangesDelete!=null&&hzRelevanceBasicChangesDelete.size()>0){
+            for(HzRelevanceBasicChange hzRelevanceBasicChange : hzRelevanceBasicChangesDelete){
+                Map<String,String> deleteMap = new HashMap<>();
+                deleteMap.put("headDesc","删除");
+                deleteMap.put("rbRelevance",hzRelevanceBasicChange.getRbRelevance());
+                deleteMap.put("rbRelevanceDesc",hzRelevanceBasicChange.getRbRelevanceDesc());
+                deleteMap.put("rbRelevanceCode",hzRelevanceBasicChange.getRbRelevanceCode());
+                result.add(deleteMap);
+            }
+        }
+        //填充修改数据
+        if(hzRelevanceBasicChangesUpdate!=null&&hzRelevanceBasicChangesUpdate.size()>0){
+            for(int i=0;i<hzRelevanceBasicChangesUpdate.size();i++){
+                Map<String,String> beforMap = new HashMap<>();
+                Map<String,String> afterMap = new HashMap<>();
+                beforMap.put("headDesc","修改前");
+                beforMap.put("rbRelevance",hzRelevanceBasicChangesUpdate.get(i).getRbRelevance());
+                beforMap.put("rbRelevanceDesc",hzRelevanceBasicChangesUpdate.get(i).getRbRelevanceDesc());
+                beforMap.put("rbRelevanceCode",hzRelevanceBasicChangesUpdate.get(i).getRbRelevanceCode());
+
+                i++;
+
+                afterMap.put("headDesc","修改后");
+                afterMap.put("rbRelevance",hzRelevanceBasicChangesUpdate.get(i).getRbRelevance());
+                afterMap.put("rbRelevanceDesc",hzRelevanceBasicChangesUpdate.get(i).getRbRelevanceDesc());
+                afterMap.put("rbRelevanceCode",hzRelevanceBasicChangesUpdate.get(i).getRbRelevanceCode());
+
+                result.add(beforMap);
+                result.add(afterMap);
+            }
+        }
+        map.put("result",result);
+        return map;
     }
 
 
@@ -3741,5 +3836,6 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             titleNum++;
         }
     }
+
 }
 
