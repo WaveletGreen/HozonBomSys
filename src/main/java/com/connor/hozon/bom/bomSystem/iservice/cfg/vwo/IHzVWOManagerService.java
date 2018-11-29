@@ -277,4 +277,6 @@ public interface IHzVWOManagerService {
     void doQueryCmcrDetailChangBefor2(Map<String,Object> map, Long vwoId);
 
     Map<String,Object> getRelevance(Long orderChangeId, String projectUid);
+
+    JSONObject deleteChangeRelevance(Long orderChangeId);
 }

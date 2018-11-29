@@ -289,4 +289,38 @@ public class HzRelevanceService2 {
         }
         return result;
     }
+
+    /**
+     * 撤销
+     * @param projectPuid
+     * @return
+     */
+    public JSONObject goBackData(String projectPuid) {
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("msg","撤销成功");
+        //删除原数据
+        if(hzRelevanceBasicDao.deleteByProjectUid(projectPuid)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","删除草稿数据失败");
+            return result;
+        }
+
+        //查找最近一次变更数据
+        List<HzRelevanceBasicChange> hzRelevanceBasicChanges = hzRelevanceBasicChangeDao.selectLastexecutedByProjectId(projectPuid);
+        if(hzRelevanceBasicChanges!=null&&hzRelevanceBasicChanges.size()>0){
+            List<HzRelevanceBasic> hzRelevanceBasics = new ArrayList<>();
+            for(HzRelevanceBasicChange hzRelevanceBasicChange : hzRelevanceBasicChanges){
+                HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic(hzRelevanceBasicChange);
+                hzRelevanceBasics.add(hzRelevanceBasic);
+            }
+            if(hzRelevanceBasicDao.insertByBatch(hzRelevanceBasics)<=0?true:false){
+                result.put("status",false);
+                result.put("msg","撤销变更数据失败");
+                return result;
+            }
+        }
+
+        return result;
+    }
 }

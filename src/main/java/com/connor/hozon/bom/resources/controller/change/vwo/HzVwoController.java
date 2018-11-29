@@ -486,6 +486,14 @@ public class HzVwoController {
     }
 
 
+    /***************删除相关性变更数据*************************************/
+    @RequestMapping("/deleteChangeRelevance")
+    @ResponseBody
+    public JSONObject deleteChangeRelevance(Long orderChangeId){
+        return iHzVWOManagerService.deleteChangeRelevance(orderChangeId);
+    }
+
+
 
 
 

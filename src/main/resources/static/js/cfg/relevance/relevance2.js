@@ -107,6 +107,9 @@ var column = [
             else if (value == 10 || "10" == value) {
                 return "<span style='color: #e69800'>变更审核中</span>";
             }
+            else if (value == 0 || "0" == value) {
+                return "<span style='color: #a97f89'>草稿状态</span>";
+            }
             else if (2 == row.cfgStatus || "2" == row.cfgStatus) {
                 return "<span style='color: #0c8fe2'>删除状态</span>";
             }
@@ -202,6 +205,9 @@ $(document).ready(
     }),
     $("#getChange").click(function () {
         getChange();
+    }),
+    $("#goBackData").click(function () {
+        goBackData();
     })
 );
 
@@ -256,6 +262,31 @@ function getChange() {
             //         window.Ewin.alert({message: "操作发送失败:" + info.status});
             //     }
             // })
+        }
+    })
+}
+
+function goBackData() {
+    var msg = "您确定撤销吗！";
+    var projectPuid = $("#project", window.top.document).val();
+    window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
+        if (e) {
+            $.ajax({
+                type: "GET",
+                url: "./relevance/goBackData?projectPuid=" + projectPuid,
+                contentType: "application/json",
+                success: function (result) {
+                    if (result.status) {
+                        layer.msg("撤销数据成功", {icon: 1, time: 2000})
+                        window.location.reload();
+                    }else {
+                        window.Ewin.alert({message: "操作撤销失败:" + result.msg});
+                    }
+                },
+                error: function (info) {
+                    window.Ewin.alert({message: "操作发送失败:" + info.status});
+                }
+            })
         }
     })
 }

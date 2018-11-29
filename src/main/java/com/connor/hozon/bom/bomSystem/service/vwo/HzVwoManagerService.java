@@ -18,6 +18,7 @@ import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
@@ -75,6 +76,7 @@ import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
+import sql.pojo.cfg.relevance.HzRelevanceBasic;
 import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
 import sql.pojo.cfg.vwo.*;
 import sql.pojo.change.HzChangeDataRecord;
@@ -241,6 +243,8 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     //相关性
     @Autowired
     HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
+    @Autowired
+    HzRelevanceBasicDao hzRelevanceBasicDao;
     /**
      * 日志
      */
@@ -2674,7 +2678,14 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 Iterator<HzRelevanceBasicChange> iteratorAfter = hzRelevanceBasicChangesAfter.iterator();
                 while (iteratorAfter.hasNext()){
                     HzRelevanceBasicChange hzRelevanceBasicChangeAfter = iteratorAfter.next();
-                    if(hzRelevanceBasicChangeBefor.getRbRelevance().equals(hzRelevanceBasicChangeAfter.getRbRelevance())&&hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
+//                    if(hzRelevanceBasicChangeBefor.getRbRelevance().equals(hzRelevanceBasicChangeAfter.getRbRelevance())&&hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
+                    if(hzRelevanceBasicChangeBefor.getRbRelevance().equals(hzRelevanceBasicChangeAfter.getRbRelevance())){
+                        if(hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
+                            deleteFlag = false;
+                            iteratorAfter.remove();
+                            iteratorBefor.remove();
+                            break;
+                        }
                         deleteFlag = false;
                         hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeBefor);
                         hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeAfter);
@@ -2736,6 +2747,39 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         }
         map.put("result",result);
         return map;
+    }
+
+    @Override
+    public JSONObject deleteChangeRelevance(Long orderChangeId) {
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("status","删除失败");
+        //修改源数据
+        HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
+        hzRelevanceBasic.setRbVwoId(orderChangeId);
+        hzRelevanceBasic.setRelevanceStatus(0);
+        if(hzRelevanceBasicDao.updateStatusByOrderChangeId(hzRelevanceBasic)<=0?true:false){
+            result.put("status",false);
+            result.put("status","修改源数据状态失败");
+            return  result;
+        }
+        //删除变更数据
+        if(hzRelevanceBasicChangeDao.deleteByChangeOrderid(orderChangeId)<=0?true:false){
+            result.put("status",false);
+            result.put("status","删除变更数据失败");
+            return  result;
+        }
+        //删除关系表单
+        HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
+        hzChangeDataRecord.setOrderId(orderChangeId);
+        hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_RELEVANCE_BASIC_CHANGE.getTableName());
+
+        if(hzChangeDataRecordDAO.deleteByOrderIdAndTableName(hzChangeDataRecord)<=0?true:false){
+            result.put("status",false);
+            result.put("status","删除关系表数据失败");
+            return  result;
+        }
+        return null;
     }
 
 

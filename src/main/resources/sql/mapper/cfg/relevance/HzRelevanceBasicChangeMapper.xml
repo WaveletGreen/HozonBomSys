@@ -351,4 +351,29 @@
     and
     CHANGE_VERSION = #{changeVersion,jdbcType=VARCHAR}
   </select>
+
+  <delete id="deleteByChangeOrderid" parameterType="java.lang.Long">
+    delete from
+    HZ_RELEVANCE_BASIC_CHANGE
+    where
+    CHANGE_ORDER_ID = #{changeOrderId,jdbcType=DECIMAL}
+  </delete>
+
+  <select id="selectLastexecutedByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from HZ_RELEVANCE_BASIC_CHANGE
+    where
+    RB_PROJECT_UID = #{projectPuid,jdbcType=VARCHAR}
+    and
+    CHANGE_VERSION = (select MAX(CHANGE_VERSION) from HZ_RELEVANCE_BASIC_CHANGE where RB_PROJECT_UID = #{projectPuid,jdbcType=VARCHAR} and CHANGE_STATUS=1 group by CHANGE_VERSION)
+  </select>
+
+  <update id="updateStatusByIOrderId" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange">
+    update HZ_RELEVANCE_BASIC_CHANGE
+    set CHANGE_STATUS = #{changeStatus,jdbcType=DECIMAL}
+    where
+    CHANGE_ORDER_ID = #{changeOrderId,jdbcType=DECIMAL}
+  </update>
+
 </mapper>

@@ -65,4 +65,19 @@ public class HzRelevanceBasicChangeDaoImpl extends BasicDaoImpl<HzRelevanceBasic
     public List<HzRelevanceBasicChange> selectByVersionAndProjectId(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor) {
         return baseSQLUtil.executeQuery(hzRelevanceBasicChangeQueryBefor,clzName+"selectByVersionAndProjectId");
     }
+
+    @Override
+    public int deleteByChangeOrderid(Long orderChangeId) {
+        return baseSQLUtil.executeDelete(orderChangeId,clzName+"deleteByChangeOrderid");
+    }
+
+    @Override
+    public List<HzRelevanceBasicChange> selectLastexecutedByProjectId(String projectPuid) {
+        return baseSQLUtil.executeQueryByPass(new HzRelevanceBasicChange(), projectPuid,clzName+"selectLastexecutedByProjectId");
+    }
+
+    @Override
+    public int updateStatusByIOrderId(HzRelevanceBasicChange hzRelevanceBasicChange) {
+        return baseSQLUtil.executeUpdate(hzRelevanceBasicChange,clzName+"updateStatusByIOrderId");
+    }
 }

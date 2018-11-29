@@ -17,4 +17,10 @@ public interface HzRelevanceBasicChangeDao {
     HzRelevanceBasicChange selectMaxVersionByProject(String projectPuid);
 
     List<HzRelevanceBasicChange> selectByVersionAndProjectId(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor);
+
+    int deleteByChangeOrderid(Long orderChangeId);
+
+    List<HzRelevanceBasicChange> selectLastexecutedByProjectId(String projectPuid);
+
+    int updateStatusByIOrderId(HzRelevanceBasicChange hzRelevanceBasicChange);
 }

@@ -924,6 +924,7 @@ public class HzBomAllCfgService {
             modelRecord.setpCfg0ModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
             //归属主配置
             modelRecord.setpCfg0ModelOfMainRecord(mainRecord.getPuid());
+            modelRecord.setpCfg0ModelBasicDetail(params.get("pModelCfgMng"));
             //没有设置归属的颜色车型
             if (hzCfg0ModelRecordService.doInsert(Collections.singletonList(modelRecord))) {
                 if (hzCfg0ModelDetailDao.insert(modelDetail) > 0) {
