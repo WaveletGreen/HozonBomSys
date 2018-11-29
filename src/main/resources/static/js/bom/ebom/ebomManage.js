@@ -199,7 +199,7 @@ function initTable(eBomUrl) {
                                 window.Ewin.alert({message: '只能选择一个父级!'});
                                 return false;
                             }
-                            else if (rows.length == 1) {
+                            if (rows.length == 1) {
                                 window.Ewin.dialog({
                                     title: "添加",
                                     url: "ebom/addEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
@@ -233,6 +233,8 @@ function initTable(eBomUrl) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
                                 return false;
                             }
+                            var url = "ebom/updateEbom";
+
                             window.Ewin.dialog({
                                 title: "修改",
                                 url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
@@ -279,7 +281,7 @@ function initTable(eBomUrl) {
                                         data: myData,
                                         contentType: "application/json",
                                         success: function (result) {
-                                            if(typeof (result) == 'string'){
+                                            if (typeof (result) == 'string') {
                                                 result = JSON.parse(result);
                                             }
                                             if (result.success) {
@@ -447,7 +449,7 @@ function initTable(eBomUrl) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "ebom/order/choose?projectId="+projectPuid+"&puids="+puids,
+                                url: "ebom/order/choose?projectId=" + projectPuid + "&puids=" + puids,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -615,24 +617,25 @@ function initTable(eBomUrl) {
                         iconCls: 'glyphicon glyphicon-export',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');//选中行数据
-                            var length=-1;
+                            var length = -1;
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
                                         return false;
                                     }
-                                    rows[index].map={};
-                                }    length=getLengthOfJson(rows[0]);
+                                    rows[index].map = {};
+                                }
+                                length = getLengthOfJson(rows[0]);
                             }
                             //动态获取单车配置用量数据
                             for (let k in rows) {
                                 let param = {};
                                 //-1是把状态列去掉
-                                for (let i = 0; i < length - eBomTitleSet-1; i++) {
+                                for (let i = 0; i < length - eBomTitleSet - 1; i++) {
                                     if (undefined == rows[k][('title' + i)] || "" == rows[k][('title' + i)] || null == rows[k][('title' + i)]) {
                                         param[('title' + i)] = "";
                                     }
@@ -1110,7 +1113,7 @@ function initTable1(eBomUrl, puids) {
                             }
                             window.Ewin.dialog({
                                 title: "选择变更表单",
-                                url: "ebom/order/choose?projectId="+projectPuid+"&puids="+puids,
+                                url: "ebom/order/choose?projectId=" + projectPuid + "&puids=" + puids,
                                 gridId: "gridId",
                                 width: 450,
                                 height: 450
@@ -1269,29 +1272,29 @@ function initTable1(eBomUrl, puids) {
                         iconCls: 'glyphicon glyphicon-export',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');//选中行数据
-                            var length=-1;
+                            var length = -1;
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                                 return false;
-                            }else{
+                            } else {
                                 for (var index in rows) {
                                     if (rows[index].status == 5 || rows[index].status == 6) {
                                         window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
                                         return false;
                                     }
-                                    rows[index].map={};
+                                    rows[index].map = {};
                                 }
-                                length=getLengthOfJson(rows[0]);
+                                length = getLengthOfJson(rows[0]);
                             }
                             //动态获取单车配置用量数据
-                            for(let k in rows){
-                                let param={};
+                            for (let k in rows) {
+                                let param = {};
 
-                                for(let i =0;i<length-eBomTitleSet;i++){
-                                    if(rows[k][('title'+i)]==null||rows[k][('title'+i)]=='')
-                                        param[('title'+i)]="";
+                                for (let i = 0; i < length - eBomTitleSet; i++) {
+                                    if (rows[k][('title' + i)] == null || rows[k][('title' + i)] == '')
+                                        param[('title' + i)] = "";
                                     else
-                                        param[('title'+i)]=rows[k][('title'+i)];
+                                        param[('title' + i)] = rows[k][('title' + i)];
                                 }
                                 rows[k].map = param;//单车配置用量写进对象的Map
                                 // console.log(param);
@@ -1310,7 +1313,7 @@ function initTable1(eBomUrl, puids) {
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
                                                 //下载EBOM导入模板
-                                                window.location.href =  result.path;//V1.1.0.log
+                                                window.location.href = result.path;//V1.1.0.log
                                             }
                                             else {
                                                 window.Ewin.alert({message: "操作导出失败:" + result.msg});
