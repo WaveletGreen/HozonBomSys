@@ -16,6 +16,16 @@ public class UserRole {
     // 临时采访菜单数集合的数据
 	private String treeArray;
 
+	private Long userId;
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
 	public String getTreeArray() {
 		return treeArray;
 	}

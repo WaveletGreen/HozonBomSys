@@ -61,6 +61,24 @@
         });
     }
 
+
+    // 账号禁用和启用
+    function resetPassWord(id){
+        var confirmTitle = "是否重置该账户密码为系统默认密码？";
+        window.Ewin.confirm({title: '提示', message: confirmTitle, width: 500}).on(function (e) {
+            if (e) {
+                $.post("./user//reset/password",{id:id},function(data){
+                    if(data.result){
+                        layer.msg('操作成功', {icon: 1, time: 2000});
+                        doQuery();
+                    }else{
+                        window.Ewin.alert({message:data.msg});
+                    }
+                })
+            }
+        });
+    }
+
     function initTable(){
         var $table = $("#user-table");
         $table.bootstrapTable({
@@ -150,7 +168,7 @@
                 },
                 {
                     field : 'login',
-                    title : '账号/登录名',
+                    title : '账号/工号',
                     align : 'center',
                     valign : 'middle',
                     sortable : true
@@ -168,12 +186,12 @@
                     align : 'center',
                     valign : 'middle',
                 },
-                {
-                    field : 'userNo',
-                    title : '工号',
-                    align : 'center',
-                    valign : 'middle',
-                },
+                // {
+                //     field : 'userNo',
+                //     title : '工号',
+                //     align : 'center',
+                //     valign : 'middle',
+                // },
                 /*{
                     field : 'address',
                     title : '用户地址',
@@ -209,7 +227,18 @@
                             return '<a href="#" onclick="userControl(1,'+row.id+')" >启用</a>';
                         }
                     }
-                }]
+                },
+                {
+                    field : 'resetPassWord',
+                    title : '密码重置',
+                    align : 'center',
+                    valign : 'middle',
+                    // sortable : true,
+                    formatter: function (value, row, index) {
+                        return '<a href="#" onclick="resetPassWord('+row.id+')" >重置</a>';
+                    }
+                }
+            ]
         });
     }
 

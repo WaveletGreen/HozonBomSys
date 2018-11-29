@@ -147,4 +147,13 @@ public class UserService extends GenericService<User, QueryUser> {
 		map.put("state",state);
 		return userDao.findUserById(map);
 	}
+
+	public boolean updatePassWord(User user){
+		try {
+			return userDao.updatePassword(user)>0;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 }

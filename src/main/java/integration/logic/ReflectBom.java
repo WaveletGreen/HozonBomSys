@@ -112,6 +112,10 @@ public class ReflectBom {
 
     private HzMBomToERPBean bomToERPBean;
 
+    /**
+     * 从这里更换传递的字段映射
+     * @param bomToERPBean
+     */
     public ReflectBom(HzMBomToERPBean bomToERPBean) {
         this.bomToERPBean = bomToERPBean;
         zpptci005 = new ZPPTCI005();
@@ -154,13 +158,17 @@ public class ReflectBom {
         //数量，也默认1条条传
         setNumber(bomToERPBean.getNumber() == null ? "1" : bomToERPBean.getNumber().toString());
         //单位，如果没有则默认设为EA
-        Object obj = SerializeUtil.unserialize(bomToERPBean.getBomLineBlock());
-        if (obj instanceof LinkedHashMap) {
-            String unit = (String) ((LinkedHashMap) obj).get("h9_Gross_Unit");
-            setUnit((unit == null || "".equals(unit) ? "EA" : unit));
-        } else {
-            setUnit("EA");
-        }
+        //todo 大对象没有了，直接从？？？，单位呢?，单位在哪？单位直接在EBOM中存 单独的字段
+        //todo 级联查询一下
+//        Object obj = SerializeUtil.unserialize(bomToERPBean.getBomLineBlock());
+        String unit =  bomToERPBean.getUnit();/*(String) ((LinkedHashMap) obj).get("h9_Gross_Unit");*/
+        setUnit((unit == null || "".equals(unit) ? "EA" : unit));
+//        if (obj instanceof LinkedHashMap) {
+//            String unit =  bomToERPBean.getUnit();/*(String) ((LinkedHashMap) obj).get("h9_Gross_Unit");*/
+//            setUnit((unit == null || "".equals(unit) ? "EA" : unit));
+//        } else {
+//            setUnit("EA");
+//        }
         //发料库存地点，默认传个空格
         setStockLocation(bomToERPBean.getStockLocation() == null ? "ZP03" : bomToERPBean.getStockLocation());
         //相关性（选配条件）

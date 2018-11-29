@@ -14,5 +14,7 @@ public class SystemStaticConst {
      */
     public final static String ORIGINAL_PASSWORD = "123456";
     public final static String DCPROXY="dcproxy";
+    public final static String INFODBA="infodba";
+
 
 }

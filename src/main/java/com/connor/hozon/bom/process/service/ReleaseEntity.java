@@ -16,6 +16,7 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.process.iservice.IDataModifier;
@@ -37,6 +38,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -116,6 +118,9 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     @Autowired
     private HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
 
+    @Autowired
+    @Qualifier("synBomService")
+    private ISynBomService synBomService;
     @Override
     public void interruptionFunctionDesc() {
 
@@ -215,6 +220,10 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @return
      * @InChage haozt
      */
+
+    //这里是流程审核完成后 要传输的全部数据
+    // tell me  hao  to  do
+    //传输数据 包括 物料 MBOM 和工艺路线
     @Override
     @Transactional(rollbackFor = HzBomException.class)
     public boolean bom(Long orderId, Object... params) {
@@ -426,6 +435,10 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             });
         }
 
+        //需要发送数据 给 sap？
+//        synBomService.updateByUids();//更新
+//        synBomService.addOne();//新增
+//        synBomService.deleteByUids();//删除
         if (ListUtil.isNotEmpty(deleteMbom)) {
             HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
             vo.setTableName(ChangeTableNameEnum.HZ_MBOM.getTableName());

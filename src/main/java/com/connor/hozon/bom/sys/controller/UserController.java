@@ -8,6 +8,7 @@ import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateUserPasswordReqDTO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
@@ -22,6 +23,7 @@ import com.connor.hozon.bom.sys.service.UserService;
 import com.google.common.collect.Lists;
 import net.sf.json.JSONObject;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -120,6 +122,55 @@ public class UserController extends GenericController<User,QueryUser> {
         return result;
     }
 
+
+
+    /**
+     * 功能描述：
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value="/reset/password",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> resetPassWord(User entity){
+        Map<String,Object> result = new HashMap<>();
+        User user = UserInfo.getUser();
+        User loginUser = userService.findByLogin(user.getLogin());
+        if(entity.getId() == null){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"非法参数！");
+            return result;
+        }
+        User u = userService.findByUserId(Long.valueOf(entity.getId()),"1");//系统中的用户
+        if(null == u){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"用户不存在！");
+            return result;
+        }
+        if(SystemStaticConst.DCPROXY.equals(u.getLogin()) && !SystemStaticConst.INFODBA.equals(loginUser.getLogin()) ){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"dcproxy账号密码无法重置！");
+            return result;
+        }
+        if(!PrivilegeUtil.hasAdministratorPrivilege(loginUser)){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"对不起，暂时没有权限进行此操作！");
+            return result;
+        }
+        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+        String newPassWord = encoder.encodePassword(SystemStaticConst.ORIGINAL_PASSWORD,"hyll");
+        User userInfo = new User();
+        userInfo.setId(entity.getId());
+        userInfo.setPassword(newPassWord);
+        if(userService.updatePassWord(userInfo)){
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+            result.put(SystemStaticConst.MSG,"操作成功！");
+//            result.put("entity",entity);
+        }else{
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+            result.put(SystemStaticConst.MSG,"操作失败！");
+        }
+        return result;
+    }
     /**
      * 功能描述：跳转到更新用户的页面
      * @param entity
@@ -256,7 +307,21 @@ public class UserController extends GenericController<User,QueryUser> {
                     return map;
                 }
             }
+            List<String> list = Lists.newArrayList(ids.split(","));
+            List<UserRole> userRoleList = userRoleService.findUserRoleAndUserByRoleName("变更接口人");
+            if(ListUtil.isNotEmpty(userRoleList) && ListUtil.isNotEmpty(list)){//系统中只能存在一个变更接口人
+                for(UserRole userRole : userRoleList){
+                    String id = String.valueOf(userRole.getId());
+                    if(list.contains(id)){
+                        Map<String, Object> map = new HashMap<>();
+                        map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+                        map.put(SystemStaticConst.MSG, "只能设置一个变更接口人！");
+                        return map;
+                    }
+                }
+            }
         }
+
         boolean success  = userService.update(entity);
         Map<String,Object> result = new HashMap<>();
         if(success){
@@ -277,7 +342,7 @@ public class UserController extends GenericController<User,QueryUser> {
      */
     @RequestMapping(value = "/save",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String,Object> save(User entity) throws Exception{
+    public Map<String,Object> save(User entity){
         //新增用户时，初始密码全部为123456
         User user = UserInfo.getUser();
         User u = userService.findByLogin(user.getLogin());
@@ -286,12 +351,30 @@ public class UserController extends GenericController<User,QueryUser> {
             map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
             map.put(SystemStaticConst.MSG,"只有系统管理员权限账户才能增加员工信息！");
         }
-        boolean success = getService().save(entity);
         Map<String,Object> result = new HashMap<>();
-        if(success){
-            result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
-            result.put(SystemStaticConst.MSG,"增加数据成功！");
-        }else{
+        List<String> list = Lists.newArrayList(entity.getRoleArray().split(","));
+        List<UserRole> userRoleList = userRoleService.findUserRoleAndUserByRoleName("变更接口人");
+        if(ListUtil.isNotEmpty(userRoleList) && ListUtil.isNotEmpty(list)){//系统中只能存在一个变更接口人
+            for(UserRole userRole : userRoleList){
+                String id = String.valueOf(userRole.getId());
+                if(list.contains(id)){
+                    Map<String, Object> map = new HashMap<>();
+                    map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+                    map.put(SystemStaticConst.MSG, "系统中已存在变更接口人！");
+                    return map;
+                }
+            }
+        }
+        try {
+            boolean success = getService().save(entity);
+            if(success){
+                result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
+                result.put(SystemStaticConst.MSG,"增加数据成功！");
+            }else{
+                result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
+                result.put(SystemStaticConst.MSG,"增加数据失败！");
+            }
+        }catch (Exception e){
             result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
             result.put(SystemStaticConst.MSG,"增加数据失败！");
         }
@@ -328,4 +411,54 @@ public class UserController extends GenericController<User,QueryUser> {
         result.put(SystemStaticConst.MSG,"删除数据成功！");
         return result;
     }
+
+
+        /**
+         * 功能描述：更改账户密码
+         * @param reqDTO
+         * @return
+         */
+        @RequestMapping(value = "/update/password",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+        @ResponseBody
+        public Map<String,Object> updateUserPassWord(@RequestBody UpdateUserPasswordReqDTO reqDTO){
+        User user = UserInfo.getUser();
+        Map<String,Object> map = new HashMap<>();
+        if(user ==null || user.getUserName() == null){
+            map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+            map.put(SystemStaticConst.MSG,"当前账户不存在！");
+            return map;
+        }
+        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
+        String oldPassWord = reqDTO.getOldPassWord();
+        String oldPassWordInDB = user.getPassword();
+        if(!encoder.encodePassword(oldPassWord,"hyll").equals(oldPassWordInDB)){//加密 盐 最好还是随机产生
+            map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+            map.put(SystemStaticConst.MSG,"原始密码输入不正确！");
+            return map;
+        }
+
+        String newPassWord = reqDTO.getNewPassWord();
+        newPassWord = encoder.encodePassword(newPassWord,"hyll");
+        User userInfo = new User();
+        userInfo.setId(user.getId());
+        userInfo.setPassword(newPassWord);
+        if(userService.updatePassWord(userInfo)){
+            map.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
+            map.put(SystemStaticConst.MSG,"操作成功！");
+            return map;
+        }
+        map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
+        map.put(SystemStaticConst.MSG,"操作失败！");
+        return map;
+    }
+
+
+    @RequestMapping(value = "/getUser",method = RequestMethod.GET)
+    public String get(Model model){
+        User user = UserInfo.getUser();
+        model.addAttribute("data",user);
+        return "sys/user/updatePassword";
+    }
+
+
 }

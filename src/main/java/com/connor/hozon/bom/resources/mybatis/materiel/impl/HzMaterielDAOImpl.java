@@ -160,7 +160,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("list", list);
         map.put("tableName", tableName);
         map.put("field", field);
-        return super.executeUpdate(map, "com.connor.hozon.bom.bomSystem.dao.project.HzSuperMaterielDao.updateByBatch");
+        return super.executeUpdate(map, "HzMaterialDAOImpl_updateByBatch");
     }
 
     @Override
