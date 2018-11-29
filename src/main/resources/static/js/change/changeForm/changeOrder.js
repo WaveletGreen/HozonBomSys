@@ -15,7 +15,7 @@ $(document).ready(function () {
         BOMForm.style.display = "block";
     } else if (isFromTc == 1) {
         TCForm.style.display = "block";
-        BOMForm.style.display = "none";
+        BOMForm.style.display = "block";
     }
     $.ajax({
         url: "../change/data/order/hyper?orderId=" + id,
@@ -27,6 +27,7 @@ $(document).ready(function () {
             table += "<th><a id='bomCfgId' href='../change/data/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[10].name + "</a></th>";
             table += "<th><a id='modelColorCfgId' href='../change/data/modelColorCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[8].name + "</a></th>";
             table += "<th><a id='materielFeatureId' href='../change/data/materielFeature/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[9].name + "</a></th>";
+            table += "<th><a id='relevanceId' href='../change/data/relevance/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[11].name+"</a></th>";
             table += "<th><a id='ebomId' href='../change/data/ebom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[0].name + "</a></th>";
             table += "<th><a id='pbomId' href='../change/data/pbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[1].name + "</a></th>";
             table += "<th><a id='mbomId' href='../change/data/mbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[2].name + "</a></th>";
@@ -62,6 +63,10 @@ $(document).ready(function () {
             if (data[9].status == 0) {
                 // materielFeatureId.style.display = "none";
                 $("#materielFeatureId").hide();
+            }
+            if (data[11].status == 0) {
+                // materielFeatureId.style.display = "none";
+                $("#relevanceId").hide();
             }
             if (data[0].status == 0) {
                 // ebomId.style.display = "none";
