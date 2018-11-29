@@ -48,9 +48,9 @@
                         <div class="form-group after_the">
                             <label for="BOM">发起人</label>
                             <input type="text" class="form-control" name="ewoNo" id="BOM"
-                                   th:value="${data.originator}" style="display: none" disabled="disabled"/>
-                            <input type="text" class="form-control" name="ewoNo" id="TC"
-                                   th:value="${data.createName}" style="display: none" disabled="disabled"/>
+                                   th:value="${data.originator}"  disabled="disabled"/>
+                            <!--<input type="text" class="form-control" name="ewoNo" id="TC"-->
+                                   <!--th:value="${data.createName}" style="display: none" disabled="disabled"/>-->
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo5">联系电话</label>
@@ -64,6 +64,12 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
+                        <div class="form-group after_the">
+                            <label for="createName">表单创建者</label>
+                            <input type="text" class="form-control" name="createName" id="createName"
+                                   th:value="${data.createName}" disabled="disabled"
+                            />
+                        </div>
                         <div class="form-group after_the">
                             <label for="ewoNo7">是否关联变更</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
@@ -101,6 +107,11 @@
                             <!--</select>-->
                             <input type="text" class="form-control" name="state" id="state"
                                    th:value="${data.state}" disabled="disabled" />
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="ewoNo7">是否关联变更</label>
+                            <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
+                                   th:value="${data.hasRelatedChange}" disabled="disabled" />
                         </div>
                     </div>
                 </div>
@@ -182,11 +193,11 @@
         if (isFromTc == 0) {
             TCForm.style.display = "none";
             BOMForm.style.display = "block";
-            $("#BOM").show();
+            // $("#BOM").show();
         } else if (isFromTc == 1) {
             TCForm.style.display = "block";
             BOMForm.style.display = "block";
-            $("#TC").show();
+            // $("#TC").show();
         }
 
         $.ajax({

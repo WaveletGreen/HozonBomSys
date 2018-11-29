@@ -62,10 +62,10 @@
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
-                            <label for="relationChangeNo">是否关联变更</label>
-                            <input type="text" class="form-control" name="relationChangeNo" id="relationChangeNo"
-                                   th:value="${data.relationChangeNo}" disabled="disabled"
-                                   />
+                            <label for="createName">表单创建者</label>
+                            <input type="text" class="form-control" name="createName" id="createName"
+                                   th:value="${data.createName}" disabled="disabled"
+                            />
                         </div>
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
@@ -100,6 +100,12 @@
                             <input type="text" class="form-control" name="state" id="state"
                                    th:value="${data.state}" disabled="disabled"
                                    />
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="relationChangeNo">是否关联变更</label>
+                            <input type="text" class="form-control" name="relationChangeNo" id="relationChangeNo"
+                                   th:value="${data.relationChangeNo}" disabled="disabled"
+                            />
                         </div>
                     </div>
                 </div>

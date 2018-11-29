@@ -62,6 +62,7 @@ function initTable(url) {
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
     column.push({field: 'state', title: '变更单状态', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '流程发起人', align: 'center', valign: 'middle'});
+    column.push({field: 'createName', title: '表单创建者', align: 'center', valign: 'middle'});
     column.push({field: 'projectName', title: '项目', align: 'center', valign: 'middle'});
     column.push({field: 'source', title: '来源', align: 'center', valign: 'middle'});
     $table.bootstrapTable({

@@ -20,6 +20,7 @@
                     <div class="col-lg-3 col-md-3">
                         <input id="isFromTc" type="hidden" th:value="${data.isFromTc}">
                         <input type="hidden" id="id" th:value="${data.id}">
+                        <input type="hidden"id="changeAccepter" th:value="${data.changeAccepter}">
                         <div class="form-group after_the">
                             <label for="ewoNo1">变更单号</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo1"
@@ -40,9 +41,9 @@
                         <div class="form-group after_the">
                             <label for="BOM">发起人</label>
                             <input type="text" class="form-control" name="ewoNo" id="BOM"
-                                   th:value="${data.originator}" style="display: none" disabled="disabled"/>
-                            <input type="text" class="form-control" name="ewoNo" id="TC"
-                                   th:value="${data.createName}" style="display: none" disabled="disabled"/>
+                                   th:value="${data.originator}"  disabled="disabled"/>
+                            <!--<input type="text" class="form-control" name="ewoNo" id="TC"-->
+                                   <!--th:value="${data.createName}" style="display: none" disabled="disabled"/>-->
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo5">联系电话</label>
@@ -57,10 +58,12 @@
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
-                            <label for="ewoNo7">是否关联变更</label>
-                            <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
-                                   th:value="${data.hasRelatedChange}" disabled="disabled" />
+                            <label for="createName">表单创建者</label>
+                            <input type="text" class="form-control" name="createName" id="createName"
+                                   th:value="${data.createName}" disabled="disabled"
+                            />
                         </div>
+
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
 
@@ -128,6 +131,7 @@
         </div>
     </div>
 </div>
+<div id="reviewForm">
 <h4><i class="fa fa-minus-square" aria-hidden="true">评估意见</i></h4>
 <div class="panel-body" style="padding-bottom:0;">
     <div class="panel panel-default panel-body col-lg-12 col-md-12">
@@ -174,22 +178,27 @@
         </div>
     </div>
 </div>
+</div>
 <script th:inline="javascript">
     $(document).ready(function () {
         var id = $("#id").val();
         var isFromTc = $("#isFromTc").val();
+        var changeAccepter = $("#changeAccepter").val();
         var projectId = $("#project", window.top.document).val();
 
         var TCForm = document.getElementById("TCForm");
         var BOMForm = document.getElementById("BOMForm");
+        if (changeAccepter == 1) {
+            $("#reviewForm").hide();
+        }
         if (isFromTc == 0) {
             TCForm.style.display = "none";
             BOMForm.style.display = "block";
-            $("#BOM").show();
+            // $("#BOM").show();
         } else if (isFromTc == 1) {
             TCForm.style.display = "block";
             BOMForm.style.display = "block";
-            $("#TC").show();
+            // $("#TC").show();
         }
         $.ajax({
             url: "../change/data/order/hyper?orderId=" + id,
