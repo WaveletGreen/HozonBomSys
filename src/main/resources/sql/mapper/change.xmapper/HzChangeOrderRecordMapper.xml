@@ -33,6 +33,7 @@
     <result column="AUDIT_ID" jdbcType="VARCHAR" property="auditId" />
     <result column="APPLICANT_TIME" jdbcType="TIMESTAMP" property="applicantTime" />
     <result column="AUDIT_TIME" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="CHANGE_ACCEPTER" jdbcType="VARCHAR" property="changeAccepter" />
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -120,6 +121,28 @@
     <!--join HZ_APPLICANT_CHANGE_RECORD t6 on t1.id=t6.ORDER_ID-->
     where t1.ID = #{id,jdbcType=DOUBLE}
   </select>
+
+
+    <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordDTOById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        t1.*,
+        T2.USER_NAME as CREATE_NAME,
+        t3.USER_NAME as ORIGINATOR,
+        t4. NAME as DEPT_NAME,
+        t5.p_project_name as PROJECT_NAME,
+        t6.id as AUDIT_ID,
+        t6.CHANGE_ACCEPTER as CHANGE_ACCEPTER
+        <!--,t7.APPLICANT_TIME as APPLICANT_TIME-->
+        FROM
+        HZ_CHANGE_ORDER_RECORD t1
+        LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
+        LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+        LEFT JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
+        LEFT JOIN HZ_PROJECT_LIBS t5 ON t1.project_id = t5. PUID
+        LEFT JOIN HZ_AUDITOR_CHANGE_RECORD t6 ON t1.id = t6.order_id
+        <!--join HZ_APPLICANT_CHANGE_RECORD t6 on t1.id=t6.ORDER_ID-->
+        where t1.ID = #{id,jdbcType=DOUBLE}
+    </select>
 
   <!--<select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds" parameterType="java.util.Map" resultMap="BaseResultMap">-->
     <!--select-->
@@ -271,7 +294,6 @@
         )
     </select>
 
-
     <!--待办事项分页-->
     <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByPageUn" parameterType="java.util.Map"
             resultMap="BaseResultMap">
@@ -279,11 +301,18 @@
         (SELECT u.*,rownum as rn from
         (SELECT
         t1.*,
+        T2.USER_NAME as CREATE_NAME,
+        t3.USER_NAME as ORIGINATOR,
+        t4. NAME as DEPT_NAME,
         t5.p_project_name as PROJECT_NAME,
-        t6.id as AUDIT_ID
+        t6.id as AUDIT_ID,
+        t6.CHANGE_ACCEPTER as CHANGE_ACCEPTER
         <!--,t7.APPLICANT_TIME as APPLICANT_TIME-->
         FROM
         HZ_CHANGE_ORDER_RECORD t1
+        LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
+        LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
+        LEFT JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
         LEFT JOIN HZ_PROJECT_LIBS t5 ON t1.project_id = t5. PUID
         LEFT JOIN HZ_AUDITOR_CHANGE_RECORD t6 ON t1.id = t6.order_id
         <!--join HZ_APPLICANT_CHANGE_RECORD t7 on t1.id=t7.ORDER_ID-->
@@ -332,18 +361,18 @@
         (SELECT u.*,rownum as rn from
         (SELECT
         t1.*,
-        <!--T2.USER_NAME as CREATE_NAME,
+        T2.USER_NAME as CREATE_NAME,
         t3.USER_NAME as ORIGINATOR,
-        t4. NAME as DEPT_NAME,-->
+        t4. NAME as DEPT_NAME,
         t5.p_project_name as PROJECT_NAME,
         t6.id as AUDIT_ID,
         t6.AUDIT_TIME as AUDIT_TIME
         ,t7.APPLICANT_TIME as APPLICANT_TIME
         FROM
         HZ_CHANGE_ORDER_RECORD t1
-        <!--LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
+        LEFT JOIN USERRECORD t2 ON t1.CREATE_ID = t2. ID
         LEFT JOIN USERRECORD t3 ON t1.ORIGINATOR_ID = t3. ID
-        LEFT JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID-->
+        LEFT JOIN ORG_GROUP t4 ON t1.dept_ID = t4. GROUP_ID
         LEFT JOIN HZ_PROJECT_LIBS t5 ON t1.project_id = t5. PUID
         join HZ_AUDITOR_CHANGE_RECORD t6 on t1.id=t6.ORDER_ID
         join HZ_APPLICANT_CHANGE_RECORD t7 on t1.id=t7.ORDER_ID and t7.AUDIT_RECORD_ID = t6.id

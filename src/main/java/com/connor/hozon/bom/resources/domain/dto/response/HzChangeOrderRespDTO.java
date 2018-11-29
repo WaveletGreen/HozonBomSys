@@ -63,7 +63,6 @@ public class HzChangeOrderRespDTO {
      *当前变更表单状态（1 已完成 2进行中 3已取消）
      */
     private String state;
-
     /**
      * 项目id
      */
@@ -82,7 +81,6 @@ public class HzChangeOrderRespDTO {
      * 表单创建时间
      */
     private String createTime;
-
     /**
      * 部门名称
      */
@@ -96,16 +94,29 @@ public class HzChangeOrderRespDTO {
      * 审批时间
      */
     private String auditTime;
-
     /**
      * 审批表ID
      */
     private Long auditId;
-
     /**
      * 流程发起时间（多条记录获取申请表的申请时间）
      */
     private String applicantTime;
+
+    /**
+     *是否为变更接口人,TC端同步的表单需要通知到接口人
+     * ==1:TC端同步过来任务未结束
+     * !=1:任务结束
+     */
+    private String changeAccepter;
+
+    public String getChangeAccepter() {
+        return changeAccepter;
+    }
+
+    public void setChangeAccepter(String changeAccepter) {
+        this.changeAccepter = changeAccepter;
+    }
 
     public String getApplicantTime() {
         return applicantTime;

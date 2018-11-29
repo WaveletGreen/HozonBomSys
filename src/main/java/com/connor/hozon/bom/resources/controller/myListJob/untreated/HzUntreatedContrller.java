@@ -67,7 +67,9 @@ public class HzUntreatedContrller extends BaseController {
      */
     @RequestMapping(value = "ToUntreatedForm",method = RequestMethod.GET)
     public String getToUntreatedFormToPage(Long id,Model model){
-        HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
+        //HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
+        HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRespDTOById(id);
+
         //HzChangeOrderByPageQuery query = new HzChangeOrderByPageQuery();
         //HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,id);
         List<HzChangeListRecord> changeList = hzChangeListDAO.findChangeList(respDTO.getChangeNo());
@@ -135,6 +137,7 @@ public class HzUntreatedContrller extends BaseController {
             //object.put("auditTime",hzChangeOrderRespDTO.getAuditTime());//审批时间
             object.put("state",hzChangeOrderRespDTO.getState());
             object.put("auditId",hzChangeOrderRespDTO.getAuditId());
+            object.put("changeAccepter",hzChangeOrderRespDTO.getChangeAccepter());
             list.add(object);
         });
         jsonObject.put("totalCount",page.getTotalCount());

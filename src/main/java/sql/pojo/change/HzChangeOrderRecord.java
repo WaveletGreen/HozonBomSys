@@ -89,7 +89,6 @@ public class HzChangeOrderRecord extends BasePOJO {
      *当前变更表单状态（1 已完成 2进行中 3已取消）
      */
     private Integer state;
-
     /**
      * 项目id
      */
@@ -114,6 +113,20 @@ public class HzChangeOrderRecord extends BasePOJO {
      * 流程发起时间（多条记录获取申请表的申请时间）
      */
     private Date applicantTime;
+    /**
+     *是否为变更接口人,TC端同步的表单需要通知到接口人
+     * ==1:TC端同步过来任务未结束
+     * !=1:任务结束
+     */
+    private String changeAccepter;
+
+    public String getChangeAccepter() {
+        return changeAccepter;
+    }
+
+    public void setChangeAccepter(String changeAccepter) {
+        this.changeAccepter = changeAccepter;
+    }
 
     public Date getAuditTime() {
         return auditTime;
