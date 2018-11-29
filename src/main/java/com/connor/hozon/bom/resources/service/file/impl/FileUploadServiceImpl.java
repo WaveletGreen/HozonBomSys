@@ -39,7 +39,7 @@ import java.util.concurrent.CountDownLatch;
  * @Date: 2018/8/22
  * @Description: EBOM导入Excel使用
  */
-@Service("FileUploadService")
+@Service("fileUploadService")
 public class FileUploadServiceImpl implements FileUploadService {
 
     @Autowired

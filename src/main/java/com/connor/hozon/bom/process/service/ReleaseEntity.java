@@ -19,6 +19,7 @@ import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.process.iservice.IDataModifier;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
@@ -33,6 +34,7 @@ import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.sys.exception.HzBomException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -214,6 +216,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @InChage haozt
      */
     @Override
+    @Transactional(rollbackFor = HzBomException.class)
     public boolean bom(Long orderId, Object... params) {
         //根据表单id 获取全部的变更数据
         HzChangeDataQuery hzChangeDataQuery = new HzChangeDataQuery();
@@ -264,7 +267,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
+                throw new HzBomException(WriteResultRespDTO.getFailResult());
             } finally {
                 if (service != null) {
                     service.shutdown();

@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
+import com.connor.hozon.bom.sys.exception.HzBomException;
 import sql.pojo.accessories.HzAccessoriesLibs;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
@@ -174,7 +175,7 @@ public class HzMbomRecordFactory {
                 recordList.add(lineRecord);
             }
         }else {
-            throw new RuntimeException("数据操作异常!");
+            throw new HzBomException(500L,"数据操作异常!");
         }
 
         return recordList;

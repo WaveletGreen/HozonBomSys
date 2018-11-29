@@ -87,19 +87,19 @@ public class HzEPLController extends BaseController {
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("colorPart", "颜色件");
         tableTitle.put("station","工位");
-
-        tableTitle.put("sparePart", "备件");
-        tableTitle.put("sparePartNum", "备件编号");
-        tableTitle.put("processRoute", "工艺路线");
-        tableTitle.put("laborHour", "人工工时");
-        tableTitle.put("rhythm", "节拍");
-        tableTitle.put("solderJoint", "焊点");
-        tableTitle.put("machineMaterial", "机物料");
-        tableTitle.put("standardPart", "标准件");
-        tableTitle.put("tools", "工具");
-        tableTitle.put("wasterProduct", "废品");
-        tableTitle.put("change", "变更");
-        tableTitle.put("changeNum", "变更号");
+//
+//        tableTitle.put("sparePart", "备件");
+//        tableTitle.put("sparePartNum", "备件编号");
+//        tableTitle.put("processRoute", "工艺路线");
+//        tableTitle.put("laborHour", "人工工时");
+//        tableTitle.put("rhythm", "节拍");
+//        tableTitle.put("solderJoint", "焊点");
+//        tableTitle.put("machineMaterial", "机物料");
+//        tableTitle.put("standardPart", "标准件");
+//        tableTitle.put("tools", "工具");
+//        tableTitle.put("wasterProduct", "废品");
+//        tableTitle.put("change", "变更");
+//        tableTitle.put("changeNum", "变更号");
         toJSONResponse(Result.build(tableTitle), response);
     }
 

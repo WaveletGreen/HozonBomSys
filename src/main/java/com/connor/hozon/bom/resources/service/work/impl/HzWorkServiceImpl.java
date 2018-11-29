@@ -27,7 +27,7 @@ import java.util.*;
  * \* Time: 13:28
  * \
  */
-@Service("HzWorkService")
+@Service("hzWorkService")
 public class HzWorkServiceImpl implements HzWorkService {
     @Autowired
     private HzWorkCenterDAO hzWorkCenterDAO;

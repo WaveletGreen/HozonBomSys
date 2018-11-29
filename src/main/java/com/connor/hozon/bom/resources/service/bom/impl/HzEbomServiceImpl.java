@@ -58,7 +58,7 @@ import java.util.concurrent.Future;
 /**
  * Created by haozt on 2018/06/06
  */
-@Service("HzEbomService")
+@Service("hzEbomService")
 @Transactional(rollbackFor={IllegalArgumentException.class})
 public class HzEbomServiceImpl implements HzEbomService {
 
