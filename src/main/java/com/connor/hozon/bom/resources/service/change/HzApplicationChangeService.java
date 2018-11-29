@@ -15,7 +15,7 @@ public interface HzApplicationChangeService {
     List<HzChangeOrderRespDTO> findChangeOrderList(HzChangeOrderByPageQuery query, HzApplicantChangeRecord record);
 
     /**
-     * 获取分页数据
+     * 获取分页数据-我的申请
      * @param query
      * @return
      */

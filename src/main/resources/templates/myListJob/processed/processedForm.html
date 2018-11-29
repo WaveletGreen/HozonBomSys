@@ -40,11 +40,17 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
+                        <!--<div class="form-group after_the">-->
+                            <!--<label for="ewoNo4">发起人</label>-->
+                            <!--<input type="text" class="form-control" name="ewoNo" id="ewoNo4"-->
+                                   <!--th:value="${data.originator}" disabled="disabled"/>-->
+                        <!--</div>-->
                         <div class="form-group after_the">
-                            <label for="ewoNo4">发起人</label>
-                            <input type="text" class="form-control" name="ewoNo" id="ewoNo4"
-                                   th:value="${data.originator}" disabled="disabled"
-                                   "/>
+                            <label for="BOM">发起人</label>
+                            <input type="text" class="form-control" name="ewoNo" id="BOM"
+                                   th:value="${data.originator}" style="display: none" disabled="disabled"/>
+                            <input type="text" class="form-control" name="ewoNo" id="TC"
+                                   th:value="${data.createName}" style="display: none" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo5">联系电话</label>
@@ -176,9 +182,11 @@
         if (isFromTc == 0) {
             TCForm.style.display = "none";
             BOMForm.style.display = "block";
+            $("#BOM").show();
         } else if (isFromTc == 1) {
             TCForm.style.display = "block";
             BOMForm.style.display = "block";
+            $("#TC").show();
         }
 
         $.ajax({
