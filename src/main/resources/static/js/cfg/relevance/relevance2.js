@@ -61,10 +61,10 @@ var toolbar = [
     // }
 ];
 var column = [
-    {
-        field: 'ck',
-        checkbox: true
-    },
+    // {
+    //     field: 'ck',
+    //     checkbox: true
+    // },
     {
         field: 'index',
         title: '序号',
@@ -92,6 +92,31 @@ var column = [
         valign: 'middle',
         sortable: true,
         sortOrder: 'asc',
+    },
+    {
+        field: 'status',
+        title: '状态',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+        formatter: function (value, row, index) {
+            if (value == 1 || "1" == value) {
+                return "<span style='color: #00B83F'>已生效</span>";
+            }
+            else if (value == 10 || "10" == value) {
+                return "<span style='color: #e69800'>变更审核中</span>";
+            }
+            else if (2 == row.cfgStatus || "2" == row.cfgStatus) {
+                return "<span style='color: #0c8fe2'>删除状态</span>";
+            }
+            else if (-1 == value || "-1" == value) {
+                return "<span style='color: #9492a9'>已废止</span>";
+            }
+            else {
+                return "<span style='color: #a90009'>未知状态</span>";
+            }
+        }
     },
     // {
     //     field: 'puid',
@@ -174,6 +199,9 @@ $(document).ready(
     }),
     $("#generateRelevance").click(function () {
         generateRelevance();
+    }),
+    $("#getChange").click(function () {
+        getChange();
     })
 );
 
@@ -196,6 +224,38 @@ function generateRelevance() {
                     window.Ewin.alert({message: "操作发送失败:" + info.status});
                 }
             })
+        }
+    })
+}
+
+function getChange() {
+    var msg = "您确定发起流程吗！";
+    var projectPuid = $("#project", window.top.document).val();
+    window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
+        if (e) {
+
+            window.Ewin.dialog({
+                title: "选择变更表单",
+                url: "./relevance/getChangePage?projectUid="+getProjectUid(),
+                gridId: "gridId",
+                width: 450,
+                height: 450
+            });
+            // $.ajax({
+            //     type: "GET",
+            //     //ajax需要添加打包名
+            //     url: "./relevance/getChangePage?projectUid="+getProjectUid(),
+            //     contentType: "application/json",
+            //     success: function (result) {
+            //         if (result) {
+            //             layer.msg("发起流程成功", {icon: 1, time: 2000});
+            //             loadData(getProjectUid());
+            //         }
+            //     },
+            //     error: function (info) {
+            //         window.Ewin.alert({message: "操作发送失败:" + info.status});
+            //     }
+            // })
         }
     })
 }

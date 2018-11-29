@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.service.relevance;
 
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
+import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceRelationDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
@@ -14,6 +15,10 @@ import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +26,10 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.modelColor.HzColorModel2;
 import sql.pojo.cfg.relevance.HzRelevanceBasic;
+import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
 import sql.pojo.cfg.relevance.HzRelevanceRelation;
+import sql.pojo.change.HzChangeDataRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.*;
 
@@ -48,6 +56,10 @@ public class HzRelevanceService2 {
     @Autowired
     private HzRelevanceRelationDao hzRelevanceRelationDao;
 
+    @Autowired
+    private HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
+    @Autowired
+    HzChangeDataRecordDAO hzChangeDataRecordDAO;
     /**
      *过滤特性为“车身颜色/HZCSYS”和特性为“内外饰/HZNWS”
      * @param projectPuid
@@ -218,6 +230,55 @@ public class HzRelevanceService2 {
         Integer totalCount = hzRelevanceBasicDao.tellMeHowManyOfIt(dto);
         result.put("result", beans);
         result.put("totalCount", totalCount);
+        return result;
+    }
+
+    public JSONObject getChange(Long changeFromId,String projectPuid) {
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("msg","发起流程成功");
+
+
+        List<HzRelevanceBasic> hzRelevanceBasics = hzRelevanceBasicDao.selectByProjectPuid(projectPuid);
+        if(hzRelevanceBasics==null||hzRelevanceBasics.size()<=0){
+            result.put("status",false);
+            result.put("msg","该项目下不存在相关性，请生成相关性后再发起流程");
+            return result;
+        }
+        List<HzRelevanceBasicChange> hzRelevanceBasicChanges = new ArrayList<>();
+        for(HzRelevanceBasic hzRelevanceBasic : hzRelevanceBasics){
+            HzRelevanceBasicChange hzRelevanceBasicChange = new HzRelevanceBasicChange(hzRelevanceBasic);
+            hzRelevanceBasicChanges.add(hzRelevanceBasicChange);
+        }
+
+        if(hzRelevanceBasicChanges!=null&&hzRelevanceBasicChanges.size()>0) {
+            int insertNum = hzRelevanceBasicChangeDao.insertList(hzRelevanceBasicChanges);
+            if(insertNum<=0){
+                result.put("status",false);
+                result.put("msg","新增变更数据失败");
+                return result;
+            }
+        }
+        HzRelevanceBasic hzRelevanceBasicUpdate = new HzRelevanceBasic();
+        hzRelevanceBasicUpdate.setRbProjectUid(projectPuid);
+        hzRelevanceBasicUpdate.setRelevanceStatus(10);
+        if(hzRelevanceBasicDao.updateStatus(hzRelevanceBasicUpdate)<=0?true : false){
+            result.put("status",false);
+            result.put("msg","修改源数据状态失败");
+            return result;
+        }
+
+        //为关系表新增数据
+        HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
+        hzChangeDataRecord.setOrderId(changeFromId);
+        hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_RELEVANCE_BASIC_CHANGE.getTableName());
+        hzChangeDataRecord.setApplicantId(Long.valueOf(UserInfo.getUser().getId()));
+        int insertNum = hzChangeDataRecordDAO.insert(hzChangeDataRecord);
+        if(insertNum<=0){
+            result.put("status", false);
+            result.put("msg", "绑定人员失败");
+            return result;
+        }
         return result;
     }
 }

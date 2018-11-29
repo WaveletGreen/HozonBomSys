@@ -89,4 +89,16 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
         }
     }
 
+    @Override
+    public List<HzRelevanceBasic> selectByProjectPuid(String projectPuid) {
+        HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
+        hzRelevanceBasic.setRbProjectUid(projectPuid);
+        return baseSQLUtil.executeQuery(hzRelevanceBasic,clz.getCanonicalName()+".selectByProjectPuid");
+    }
+
+    @Override
+    public int updateStatus(HzRelevanceBasic hzRelevanceBasicUpdate) {
+        return baseSQLUtil.executeUpdate(hzRelevanceBasicUpdate,clz.getCanonicalName()+".updateStatus");
+    }
+
 }

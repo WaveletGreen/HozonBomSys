@@ -2630,6 +2630,18 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         map.put("result", result);
     }
 
+    /**
+     * 查看相关性变更数据
+     * @param orderChangeId
+     * @param projectUid
+     * @return
+     */
+    @Override
+    public Map<String, Object> getRelevance(Integer orderChangeId, String projectUid) {
+
+        //根据项目ID获取变更前
+        return null;
+    }
 
 
     public void doQueryCmcrDetailChangBefor(Map<String, Object> map, Long vwoId) {

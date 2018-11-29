@@ -22,6 +22,8 @@ public enum TableNameToHyperLinkNameEnum {
     //全配置变更表
     HZ_FULL_CFG_MAIN_RECORD_CHANGE("HZ_FULL_CFG_MAIN_RECORD_CHANGE","全BOM配置"),
 
+    //相关性变更表单
+    HZ_RELEVANCE_BASIC_CHANGE("HZ_RELEVANCE_BASIC_CHANGE","相关性"),
     ;
 
     private String tableName;
