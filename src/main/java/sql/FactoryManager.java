@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
+@Deprecated
 public class FactoryManager {
     static Reader reader = null;
     public static SqlSessionFactory factory = null;
