@@ -929,11 +929,18 @@ function editorOrSave(but) {
                             //备注为选配时
                             if (msgVal == 0) {
                                 //大版本小于2时
-                                if (versionHead < 2) {
-                                    params[modeId] = "○";
-                                } else {
-                                    params[modeId] = "";
-                                }
+                                $(but).parent().siblings().each(function (index, item) {
+                                    if(index>10){
+                                        var pointOld = $(item).find('div').text();
+                                        if(pointOld==""){
+                                            if (versionHead < 2) {
+                                                params[modeId] = "○";
+                                            } else {
+                                                params[modeId] = "";
+                                            }
+                                        }
+                                    }
+                                });
                             } else if (msgVal == 1) {
                                 //备注为标配时
                                 params[modeId] = "●";
@@ -989,10 +996,12 @@ function editorOrSave(but) {
                                                 // $(item).find('select').find("option[text='●']").attr("selected",true);
                                                 $(item).find('div').text("●");
                                             } else if (msgVal == 0) {
-                                                if (versionHead < 2) {
-                                                    $(item).find('div').text("○");
-                                                } else {
-                                                    $(item).find('div').text("");
+                                                if($(item).find('div').text()=="") {
+                                                    if (versionHead < 2) {
+                                                        $(item).find('div').text("○");
+                                                    } else {
+                                                        $(item).find('div').text("");
+                                                    }
                                                 }
                                             }
                                         }
