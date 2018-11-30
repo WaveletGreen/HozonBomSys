@@ -37,6 +37,7 @@
     <result column="IS_SENT" jdbcType="DECIMAL" property="isSent" />
     <result column="SRC_ID" jdbcType="DECIMAL" property="srcId" />
     <result column="CHANGE_STATUS" jdbcType="DECIMAL" property="changeStatus" />
+    <result column="CHANGE_VERSION" jdbcType="DECIMAL" property="changeVersion" />
   </resultMap>
   <sql id="Base_Column_List">
       ID, RB_COLOR_CODE, RB_COLOR_UID,
@@ -50,7 +51,7 @@
       RB_RESERVED_9, RB_RESERVED_10, RB_RESERVED_11,
       RB_RESERVED_12, RB_RESERVED_13, RB_RESERVED_14,
       RB_RESERVED_15, CHANGE_ORDER_ID, RB_PROJECT_UID,
-      IS_SENT, SRC_ID, CHANGE_STATUS
+      IS_SENT, SRC_ID, CHANGE_STATUS,CHANGE_VERSION
   </sql>
   <insert id="insert" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange">
     insert into HZ_RELEVANCE_BASIC_CHANGE (ID, RB_COLOR_CODE, RB_COLOR_UID, 
@@ -64,7 +65,7 @@
       RB_RESERVED_9, RB_RESERVED_10, RB_RESERVED_11, 
       RB_RESERVED_12, RB_RESERVED_13, RB_RESERVED_14, 
       RB_RESERVED_15, CHANGE_ORDER_ID, RB_PROJECT_UID, 
-      IS_SENT, SRC_ID, CHANGE_STATUS
+      IS_SENT, SRC_ID, CHANGE_STATUS,CHANGE_VERSION
       )
     values (#{id,jdbcType=DECIMAL}, #{rbColorCode,jdbcType=VARCHAR}, #{rbColorUid,jdbcType=VARCHAR}, 
       #{rbFeatureCode,jdbcType=VARCHAR}, #{rbFeatureUid,jdbcType=VARCHAR}, #{rbFeatureValueCode,jdbcType=VARCHAR}, 
@@ -77,7 +78,7 @@
       #{rbReserved9,jdbcType=VARCHAR}, #{rbReserved10,jdbcType=VARCHAR}, #{rbReserved11,jdbcType=VARCHAR}, 
       #{rbReserved12,jdbcType=VARCHAR}, #{rbReserved13,jdbcType=VARCHAR}, #{rbReserved14,jdbcType=VARCHAR}, 
       #{rbReserved15,jdbcType=VARCHAR}, #{changeOrderId,jdbcType=DECIMAL}, #{rbProjectUid,jdbcType=VARCHAR}, 
-      #{isSent,jdbcType=DECIMAL}, #{srcId,jdbcType=DECIMAL}, #{changeStatus,jdbcType=DECIMAL}
+      #{isSent,jdbcType=DECIMAL}, #{srcId,jdbcType=DECIMAL}, #{changeStatus,jdbcType=DECIMAL},#{changeVersion,jdbcType=DECIMAL}
       )
   </insert>
   <insert id="insertSelective" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange">
@@ -316,12 +317,63 @@
       #{item.rbReserved9,jdbcType=VARCHAR}, #{item.rbReserved10,jdbcType=VARCHAR}, #{item.rbReserved11,jdbcType=VARCHAR},
       #{item.rbReserved12,jdbcType=VARCHAR}, #{item.rbReserved13,jdbcType=VARCHAR}, #{item.rbReserved14,jdbcType=VARCHAR},
       #{item.rbReserved15,jdbcType=VARCHAR}, #{item.changeOrderId,jdbcType=DECIMAL}, #{item.rbProjectUid,jdbcType=VARCHAR},
-      #{item.isSent,jdbcType=DECIMAL}, #{item.srcId,jdbcType=DECIMAL}, #{item.changeStatus,jdbcType=DECIMAL}
+      #{item.isSent,jdbcType=DECIMAL}, #{item.srcId,jdbcType=DECIMAL}, #{item.changeStatus,jdbcType=DECIMAL},#{item.changeVersion,jdbcType=DECIMAL}
       from
       dual
     </foreach>
     )A
-
-
   </insert>
+
+  <select id="selectMaxVersionByProject" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from HZ_RELEVANCE_BASIC_CHANGE
+    where
+    RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR}
+    and
+    CHANGE_VERSION = (select MAX(CHANGE_VERSION) from HZ_RELEVANCE_BASIC_CHANGE where RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR})
+  </select>
+
+  <select id="selectByOrderChangeId" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from HZ_RELEVANCE_BASIC_CHANGE
+    where
+    CHANGE_ORDER_ID = #{changeOrderId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByVersionAndProjectId" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from HZ_RELEVANCE_BASIC_CHANGE
+    where
+    RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR}
+    and
+    CHANGE_VERSION = #{changeVersion,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByChangeOrderid" parameterType="java.lang.Long">
+    delete from
+    HZ_RELEVANCE_BASIC_CHANGE
+    where
+    CHANGE_ORDER_ID = #{changeOrderId,jdbcType=DECIMAL}
+  </delete>
+
+  <select id="selectLastexecutedByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from HZ_RELEVANCE_BASIC_CHANGE
+    where
+    RB_PROJECT_UID = #{projectPuid,jdbcType=VARCHAR}
+    and
+    CHANGE_VERSION = (select MAX(CHANGE_VERSION) from HZ_RELEVANCE_BASIC_CHANGE where RB_PROJECT_UID = #{projectPuid,jdbcType=VARCHAR} and CHANGE_STATUS=1 group by CHANGE_VERSION)
+  </select>
+
+  <update id="updateStatusByIOrderId" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange">
+    update HZ_RELEVANCE_BASIC_CHANGE
+    set CHANGE_STATUS = #{changeStatus,jdbcType=DECIMAL}
+    where
+    CHANGE_ORDER_ID = #{changeOrderId,jdbcType=DECIMAL}
+  </update>
+
 </mapper>

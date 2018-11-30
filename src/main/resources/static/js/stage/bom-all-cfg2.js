@@ -388,7 +388,7 @@ function loadData(projectUid) {
 }
 
 
-var projectPuid;
+var projectPuid = $("#project", window.top.document).val();
 $(document).ready(
     function () {
         loadData(getProjectUid()),

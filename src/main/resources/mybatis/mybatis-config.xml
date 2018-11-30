@@ -98,6 +98,7 @@
         <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>
         <mapper resource="sql/mapper/project.xmapper/HzVehicleRecordMapper.xml"/>
+        <mapper resource="sql/mapper/project.xmapper/HzSuperMaterielMapper.xml"/>
         <!--EPL-->
         <mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
         <!--flow 流程-->
@@ -147,5 +148,7 @@
         <mapper resource="sql/mapper/sys/mybatis_user.xml"/>
         <mapper  resource="sql/mapper/sys/mybatis_userAssociateRole.xml"/>
         <mapper resource="sql/mapper/sys/mybatis_userRole.xml"/>
+
+
     </mappers>
 </configuration>

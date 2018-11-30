@@ -719,4 +719,13 @@
         where
         RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR}
     </update>
+
+    <update id="updateStatusByOrderChangeId" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
+        update HZ_RELEVANCE_BASIC
+        set RELEVANCE_STATUS = #{relevanceStatus,jdbcType=DECIMAL}
+        where
+        ID in (
+        select SRC_ID from HZ_RELEVANCE_BASIC_CHANGE where CHANGE_ORDER_ID = #{rbVwoId,jdbcType=DECIMAL}
+        )
+    </update>
 </mapper>

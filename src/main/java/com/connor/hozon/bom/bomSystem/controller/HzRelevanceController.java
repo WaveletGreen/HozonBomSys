@@ -78,4 +78,10 @@ public class HzRelevanceController {
     public JSONObject getChange(String projectPuid,Long changeFromId){
         return hzRelevanceService2.getChange(changeFromId,projectPuid);
     }
+
+    @RequestMapping(value = "/goBackData")
+    @ResponseBody
+    public JSONObject goBackData(String projectPuid){
+        return hzRelevanceService2.goBackData(projectPuid);
+    }
 }

@@ -445,8 +445,8 @@ public class HzVwoController {
     /****************************相关性变更描述变更表单********************************/
     @RequestMapping(value = "getRelevance")
     @ResponseBody
-    public Map<String,Object> getRelevance(@RequestParam Integer orderChangeId){
-        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(Long.valueOf(orderChangeId));
+    public Map<String,Object> getRelevance(@RequestParam Long orderChangeId){
+        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(orderChangeId);
         String projectUid = record.getProjectId();
         return  iHzVWOManagerService.getRelevance(orderChangeId,projectUid);
     }
@@ -483,6 +483,14 @@ public class HzVwoController {
     @ResponseBody
     public JSONObject deleteChangeBomAll(@RequestParam Long mainId,Long orderId){
         return iHzVWOManagerService.deleteChangeBomAll(mainId,orderId);
+    }
+
+
+    /***************删除相关性变更数据*************************************/
+    @RequestMapping("/deleteChangeRelevance")
+    @ResponseBody
+    public JSONObject deleteChangeRelevance(Long orderChangeId){
+        return iHzVWOManagerService.deleteChangeRelevance(orderChangeId);
     }
 
 
