@@ -48,7 +48,7 @@ public interface HzChangeOrderDAO {
      */
     HzChangeOrderRecord findHzChangeOrderRecordById(Long id);
 
-    HzChangeOrderRecord findHzChangeOrderRecordDTOById(Long id);
+    HzChangeOrderRecord findHzChangeOrderRecordDTOById(Long id, Long auditId);
 
     /**
      * 查询变更清单 根据项目id+id

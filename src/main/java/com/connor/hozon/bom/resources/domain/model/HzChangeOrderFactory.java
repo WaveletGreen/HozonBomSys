@@ -50,8 +50,8 @@ public class HzChangeOrderFactory {
         //流程发起人
         if(record.getOriginator()!=null)
             respDTO.setOriginator(record.getOriginator());
-        else
-            respDTO.setOriginator(record.getCreateNameTC());
+        //else
+            //respDTO.setOriginator(record.getCreateNameTC());
         //respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getOriginTime()));
         if(record.getApplicantTime()==null)
             respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getOriginTime()));

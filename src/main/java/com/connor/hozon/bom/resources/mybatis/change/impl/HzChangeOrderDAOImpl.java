@@ -49,8 +49,11 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
     }
 
     @Override
-    public HzChangeOrderRecord findHzChangeOrderRecordDTOById(Long id) {
-        return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_findHzChangeOrderRecordDTOById",id);
+    public HzChangeOrderRecord findHzChangeOrderRecordDTOById(Long id, Long auditId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("id",id);
+        map.put("auditId",auditId);
+        return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_findHzChangeOrderRecordDTOById",map);
     }
 
     @Override

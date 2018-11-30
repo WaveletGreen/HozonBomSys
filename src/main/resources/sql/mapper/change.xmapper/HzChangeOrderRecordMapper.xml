@@ -123,7 +123,7 @@
   </select>
 
 
-    <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordDTOById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordDTOById" parameterType="java.util.Map" resultMap="BaseResultMap">
         SELECT
         t1.*,
         T2.USER_NAME as CREATE_NAME,
@@ -142,6 +142,7 @@
         LEFT JOIN HZ_AUDITOR_CHANGE_RECORD t6 ON t1.id = t6.order_id
         <!--join HZ_APPLICANT_CHANGE_RECORD t6 on t1.id=t6.ORDER_ID-->
         where t1.ID = #{id,jdbcType=DOUBLE}
+        and t6.ID = #{auditId,jdbcType=DOUBLE}
     </select>
 
   <!--<select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByIds" parameterType="java.util.Map" resultMap="BaseResultMap">-->
@@ -262,7 +263,7 @@
         <where>
             1=1
             and t7.APPLICANT_ID =#{id,jdbcType=INTEGER}
-            ORDER BY t1.create_time DESC
+
             <if test="changeNo != null and changeNo!=''">
                 and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
             </if>
@@ -278,6 +279,7 @@
                 and (t1.ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
                 and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
             </if>
+            ORDER BY t1.create_time DESC
             )u
         </where>
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -320,7 +322,7 @@
             1=1
             and t6.auditor_id =#{id,jdbcType=INTEGER}
             and t6.AUDIT_RESULT is null
-            ORDER BY t1.create_time DESC
+
             <if test="changeNo != null and changeNo!=''">
                 and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
             </if>
@@ -336,6 +338,7 @@
                 and (t1.ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
                 and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
             </if>
+            ORDER BY t1.create_time DESC
             )u
         </where>
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -387,7 +390,7 @@
             1=1
             and t6.auditor_id =#{id,jdbcType=INTEGER}
             and t6.AUDIT_RESULT is not null
-            ORDER BY t1.create_time DESC
+
             <if test="changeNo != null and changeNo!=''">
                 and t1.CHANGE_NO = #{changeNo,jdbcType=VARCHAR}
             </if>
@@ -403,6 +406,7 @@
                 and (t1.ORIGIN_TIME between to_date(#{firstOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
                 and to_date(#{lastOriginTime,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
             </if>
+            ORDER BY t1.create_time DESC
             )u
         </where>
         WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}

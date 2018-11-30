@@ -58,7 +58,7 @@ public class HzMyApplicationContrller {
 
         //List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList2(record);
         for(int i=0;i<infos.size();i++){
-            if(id==infos.get(i).getOrderId()){
+            if(id.equals(infos.get(i).getOrderId())){
                 //infos.get(i).setAuditTime(DateUtil.formatTimestampDate(infos.get(i).getAuditTime()));
                 model.addAttribute("timeString",DateUtil.formatTimestampDate(infos.get(i).getAuditTime()));
                 model.addAttribute("result",infos.get(i));

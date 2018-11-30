@@ -49,7 +49,8 @@ public class ProcessFinishEntity implements IProcessFinish {
     @Autowired
     HzChangeOrderDAO hzChangeOrderDAO;
     /***审核人对象，减少查询User*/
-    private HzAuditorChangeRecord hzAuditorChangeRecord;
+    //private HzAuditorChangeRecord hzAuditorChangeRecord;
+    private List<HzAuditorChangeRecord>  hzAuditorChangeRecord;
     /***是否能重复审核，不允许审核则审核不通过，审核不通过不影响修改配置和BOM的数据*/
     private static boolean signAgain = true;
     private final static Logger LOGGER = LoggerFactory.getLogger(ProcessFinishEntity.class);
@@ -94,8 +95,48 @@ public class ProcessFinishEntity implements IProcessFinish {
      */
     private boolean updateAuditor(Long orderId, Object[] params) {
         User user = UserInfo.getUser();
-        hzAuditorChangeRecord = hzAuditorChangeDAO.findByOrderId(orderId, Long.valueOf(user.getId()));
-        if (null != hzAuditorChangeRecord) {
+        hzAuditorChangeRecord = hzAuditorChangeDAO.findByOrdersId(orderId, Long.valueOf(user.getId()));
+        int count=0;
+        for(int i=0;i<hzAuditorChangeRecord.size();i++){
+            if (null != hzAuditorChangeRecord.get(i)) {
+                if (null != hzAuditorChangeRecord.get(i).getAuditResult()) {
+                    LOGGER.error("已完成审核，不需要再进行审核");
+                    if (!signAgain) {
+                        return false;
+                    }
+                }
+                //不同意时，TC同步过来的不修改状态
+                if (0 == (int) params[0]) {
+                    if(hzAuditorChangeRecord.get(i).getChangeAccepter()==0){//
+                        //审核人意见
+                        hzAuditorChangeRecord.get(i).setAuditSugg((String) params[1]);
+                        hzAuditorChangeRecord.get(i).setAuditTime(new Date());
+                        //审核人是否同意，状态码与发布or终止一致
+                        hzAuditorChangeRecord.get(i).setAuditResult((int) params[0]);
+                        //return hzAuditorChangeDAO.updateByPrimaryKeySelective(hzAuditorChangeRecord.get(i)) > 0 ? true : false;
+                        if(hzAuditorChangeDAO.updateByPrimaryKeySelective(hzAuditorChangeRecord.get(i)) > 0)
+                            count++;
+                    }else {
+                        count++;
+                    }
+
+                }else{
+                    //审核人意见
+                    hzAuditorChangeRecord.get(i).setAuditSugg((String) params[1]);
+                    hzAuditorChangeRecord.get(i).setAuditTime(new Date());
+                    //审核人是否同意，状态码与发布or终止一致
+                    hzAuditorChangeRecord.get(i).setAuditResult((int) params[0]);
+                    //return hzAuditorChangeDAO.updateByPrimaryKeySelective(hzAuditorChangeRecord.get(i)) > 0 ? true : false;
+                    if(hzAuditorChangeDAO.updateByPrimaryKeySelective(hzAuditorChangeRecord.get(i)) > 0)
+                        count++;
+                }
+
+            }
+            if(count==hzAuditorChangeRecord.size()){
+                return true;
+            }
+        }
+        /*if (null != hzAuditorChangeRecord) {
             if (null != hzAuditorChangeRecord.getAuditResult()) {
                 LOGGER.error("已完成审核，不需要再进行审核");
                 if (!signAgain) {
@@ -108,7 +149,7 @@ public class ProcessFinishEntity implements IProcessFinish {
             //审核人是否同意，状态码与发布or终止一致
             hzAuditorChangeRecord.setAuditResult((int) params[0]);
             return hzAuditorChangeDAO.updateByPrimaryKeySelective(hzAuditorChangeRecord) > 0 ? true : false;
-        }
+        }*/
         return false;
     }
 
@@ -120,7 +161,41 @@ public class ProcessFinishEntity implements IProcessFinish {
      * @return
      */
     private boolean updateTask(Long orderId, Object[] params) {
-        List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_CHANGE, TaskOptions.TASK_TARGET_TYPE_CHANE, orderId, hzAuditorChangeRecord.getAuditorId(), TaskOptions.TASK_STATUS_EXECUTING);
+        int count=0;
+        for (int i=0;i<hzAuditorChangeRecord.size();i++){
+//            List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_CHANGE,
+//                    TaskOptions.TASK_TARGET_TYPE_CHANE, orderId, hzAuditorChangeRecord.get(i).getAuditorId(), TaskOptions.TASK_STATUS_EXECUTING);
+            List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_CHANGE,
+                    TaskOptions.TASK_TARGET_TYPE_CHANE, orderId, hzAuditorChangeRecord.get(i).getAuditorId(), null);
+            for(int j=0;j<tasks.size();j++){
+                if (tasks != null && tasks.size() > 0) {
+                    HzTasks task = new HzTasks();
+                    task.setId(tasks.get(j).getId());
+                    if (1 == (int) params[0]) {
+                        task.setTaskStatus(TaskOptions.TASK_STATUS_FINISHED);
+                        if(hzTasksService.doUpdateByPrimaryKeySelective(task))
+                            count++;
+                    } else {
+                        //不同意时，TC同步过来的不修改状态
+                        if(tasks.get(j).getTaskLauncherId()!=null)
+                            task.setTaskStatus(TaskOptions.TASK_STATUS_STOP);
+                        else
+                            task.setTaskStatus(tasks.get(j).getTaskStatus());//保持不变状态
+
+                        if(hzTasksService.doUpdateByPrimaryKeySelective(task))
+                            count++;
+
+                    }
+                    //return hzTasksService.doUpdateByPrimaryKeySelective(task);
+
+                }
+            }
+
+            if(count==hzAuditorChangeRecord.size())
+                return true;
+        }
+        /*List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_CHANGE,
+                TaskOptions.TASK_TARGET_TYPE_CHANE, orderId, hzAuditorChangeRecord.getAuditorId(), TaskOptions.TASK_STATUS_EXECUTING);
         if (tasks != null && tasks.size() > 0) {
             HzTasks task = new HzTasks();
             task.setId(tasks.get(0).getId());
@@ -130,7 +205,7 @@ public class ProcessFinishEntity implements IProcessFinish {
                 task.setTaskStatus(TaskOptions.TASK_STATUS_STOP);
             }
             return hzTasksService.doUpdateByPrimaryKeySelective(task);
-        }
+        }*/
         return false;
     }
 }
