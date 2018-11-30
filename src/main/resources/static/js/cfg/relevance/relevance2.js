@@ -159,7 +159,7 @@ function loadData(_projectPuid) {
         pagination: true,                   //是否显示分页（*）
         pageNumber: 1,                       //初始化加载第一页，默认第一页
         pageSize: 10,                       //每页的记录行数（*）
-        pageList: ['ALL',10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
+        pageList: ['ALL', 10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
         smartDisplay: false,
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "queryRelevance",
@@ -250,43 +250,45 @@ function generateRelevance() {
 function getChange() {
     var msg = "您确定发起流程吗！";
     var projectPuid = $("#project", window.top.document).val();
-    window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
-        if (e) {
-            var url = "relevance/getChangePage";
-            $.ajax({
-                url: "privilege/write?url=" + url,
-                type: "GET",
-                success: function (result) {
-                    if (!result.success) {
-                        window.Ewin.alert({message: result.errMsg});
-                        return false;
-                    }
-                    else {
+    var url = "relevance/getChangePage";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
+                    if (e) {
+
                         window.Ewin.dialog({
                             title: "选择变更表单",
-                            url: "./relevance/getChangePage?projectUid="+getProjectUid(),
+                            url: "./relevance/getChangePage?projectUid=" + getProjectUid(),
                             gridId: "gridId",
                             width: 450,
                             height: 450
                         });
+
+                        // $.ajax({
+                        //     type: "GET",
+                        //     //ajax需要添加打包名
+                        //     url: "./relevance/getChangePage?projectUid="+getProjectUid(),
+                        //     contentType: "application/json",
+                        //     success: function (result) {
+                        //         if (result) {
+                        //             layer.msg("发起流程成功", {icon: 1, time: 2000});
+                        //             loadData(getProjectUid());
+                        //         }
+                        //     },
+                        //     error: function (info) {
+                        //         window.Ewin.alert({message: "操作发送失败:" + info.status});
+                        //     }
+                        // })
                     }
-                }
-            })
-            // $.ajax({
-            //     type: "GET",
-            //     //ajax需要添加打包名
-            //     url: "./relevance/getChangePage?projectUid="+getProjectUid(),
-            //     contentType: "application/json",
-            //     success: function (result) {
-            //         if (result) {
-            //             layer.msg("发起流程成功", {icon: 1, time: 2000});
-            //             loadData(getProjectUid());
-            //         }
-            //     },
-            //     error: function (info) {
-            //         window.Ewin.alert({message: "操作发送失败:" + info.status});
-            //     }
-            // })
+                })
+            }
         }
     })
 }
@@ -294,24 +296,37 @@ function getChange() {
 function goBackData() {
     var msg = "您确定撤销吗！";
     var projectPuid = $("#project", window.top.document).val();
-    window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
-        if (e) {
-            $.ajax({
-                type: "GET",
-                url: "./relevance/goBackData?projectPuid=" + projectPuid,
-                contentType: "application/json",
-                success: function (result) {
-                    if (result.status) {
-                        layer.msg("撤销数据成功", {icon: 1, time: 2000})
-                        window.location.reload();
-                    }else {
-                        window.Ewin.alert({message: "操作撤销失败:" + result.msg});
+    var url = "relevance/goBackData";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
+                    if (e) {
+                        $.ajax({
+                            type: "GET",
+                            url: "./relevance/goBackData?projectPuid=" + projectPuid,
+                            contentType: "application/json",
+                            success: function (result) {
+                                if (result.status) {
+                                    layer.msg("撤销数据成功", {icon: 1, time: 2000})
+                                    window.location.reload();
+                                } else {
+                                    window.Ewin.alert({message: "操作撤销失败:" + result.msg});
+                                }
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: "操作发送失败:" + info.status});
+                            }
+                        })
                     }
-                },
-                error: function (info) {
-                    window.Ewin.alert({message: "操作发送失败:" + info.status});
-                }
-            })
+                })
+            }
         }
     })
 }
