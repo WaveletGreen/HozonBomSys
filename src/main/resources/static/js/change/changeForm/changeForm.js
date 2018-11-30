@@ -112,12 +112,25 @@ function initTable(url) {
                 text: '添加',
                 iconCls: 'glyphicon glyphicon-plus',
                 handler: function () {
-                    window.Ewin.dialog({
-                        title: "添加",
-                        url: "change/addPage",
-                        gridId: "gridId",
-                        width: 500,
-                        height: 500
+                    var url = "change/addPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "添加",
+                                    url: "change/addPage",
+                                    gridId: "gridId",
+                                    width: 500,
+                                    height: 500
+                                })
+                            }
+                        }
                     })
                 }
             },
@@ -131,13 +144,26 @@ function initTable(url) {
                         window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                         return false;
                     }
-                    window.Ewin.dialog({
-                        title: "修改",
-                        url: "change/updatePage?id=" + rows[0].id,
-                        gridId: "gridId",
-                        width: 500,
-                        height: 500
-                    });
+                    var url = "change/updatePage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "修改",
+                                    url: "change/updatePage?id=" + rows[0].id,
+                                    gridId: "gridId",
+                                    width: 500,
+                                    height: 500
+                                });
+                            }
+                        }
+                    })
                 }
             },
             {
@@ -145,54 +171,44 @@ function initTable(url) {
                 iconCls: 'glyphicon glyphicon-remove',
                 handler: function () {
                     var rows = $table.bootstrapTable('getSelections');
-                    // var puids = "";
-                    // for (var i = 0 ; i<rows.length;i++){
-                    //     puids += rows[i].puid+",";
-                    // };
-                    // var myData = JSON.stringify({
-                    //     "puids":puids,
-                    // });
                     if (rows.length != 1) {
                         window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                         return false;
                     }
-                    // var _table = '<p>是否要删除您所选择的记录？</p>' +
-                    //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                    // for (var index in rows) {
-                    //     _table += '<tr><td>' + rows[index].pLineId + '</td></tr>';
-                    // }
-                    // _table += '</table></div>';
-                    window.Ewin.confirm({title: '提示', message: "确定要删除数据么", width: 500}).on(function (e) {
-                        if (e) {
-                            $.ajax({
-                                type: "DELETE",
-                                //ajax需要添加打包名
-                                url: "change/delete?id=" + rows[0].id,
-                                // data: myData,
-                                // contentType: "application/json",
-                                success: function (result) {
-                                    /*if (result.status) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        //刷新，会重新申请数据库数据
+                    var url = "change/delete";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.confirm({title: '提示', message: "确定要删除数据么", width: 500}).on(function (e) {
+                                    if (e) {
+                                        $.ajax({
+                                            type: "DELETE",
+                                            //ajax需要添加打包名
+                                            url: "change/delete?id=" + rows[0].id,
+                                            success: function (result) {
+                                                if (result.success) {
+                                                    layer.msg('删除成功', {icon: 1, time: 2000})
+                                                }
+                                                else if (!result.success) {
+                                                    window.Ewin.alert({message: result.errMsg})
+                                                }
+                                                $table.bootstrapTable("refresh");
+                                            },
+                                            error: function (info) {
+                                                window.Ewin.alert({message: "操作删除:" + info.status});
+                                            }
+                                        })
                                     }
-                                    else {
-                                        window.Ewin.alert({message: ":" + result.errMsg});
-                                    }*/
-                                    if (result.success) {
-                                        layer.msg('删除成功', {icon: 1, time: 2000})
-                                    }
-                                    else if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg})
-                                    }
-                                    //window.Ewin.alert({message: result.errMsg});
-                                    $table.bootstrapTable("refresh");
-                                },
-                                error: function (info) {
-                                    window.Ewin.alert({message: "操作删除:" + info.status});
-                                }
-                            })
+                                });
+                            }
                         }
-                    });
+                    })
                 }
             },
             {
@@ -200,13 +216,6 @@ function initTable(url) {
                 iconCls: 'glyphicon glyphicon-log-out',
                 handler: function () {
                     var rows = $table.bootstrapTable('getSelections');
-                    // var puids = "";
-                    // for (var i = 0 ; i<rows.length;i++){
-                    //     puids += rows[i].puid+",";
-                    // };
-                    // var myData = JSON.stringify({
-                    //     "puids":puids,
-                    // });
                     if (rows.length == 0 || rows.length != 1) {
                         window.Ewin.alert({message: '请选择<span style="color: red">一条</span>需要发起流程的数据!'});
                         return false;
@@ -221,43 +230,30 @@ function initTable(url) {
                             return;
                         }
                     }
-                    window.Ewin.dialog({
-                        title: "选择审核人",
-                        url: "process/getAuditorPage?orderId="+rows[0].id,
-                        gridId: "getAuditorPage",
-                        width: 500,
-                        height: 500
-                    });
-                    // window.Ewin.confirm({title: '提示', message: "确定要确定发起流程吗?", width: 500}).on(function (e) {
-                    //     if (e) {
-                    //         $.ajax({
-                    //             type: "",
-                    //             //ajax需要添加打包名
-                    //             url: "../process/delete?id=" + rows[0].id,
-                    //             // data: myData,
-                    //             // contentType: "application/json",
-                    //             success: function (result) {
-                    //                 if (result.success) {
-                    //                     layer.msg('发起流程成功', {icon: 1, time: 2000})
-                    //                 }
-                    //                 else if (!result.success) {
-                    //                     window.Ewin.alert({message: result.errMsg})
-                    //                 }
-                    //                 $table.bootstrapTable("refresh");
-                    //             },
-                    //             error: function (info) {
-                    //                 window.Ewin.alert({message: "发起流程删除:" + info.status});
-                    //             }
-                    //         })
-                    //     }
-                    // });
+                    var url = "process/getAuditorPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "选择审核人",
+                                    url: "process/getAuditorPage?orderId="+rows[0].id,
+                                    gridId: "getAuditorPage",
+                                    width: 500,
+                                    height: 500
+                                });
+                            }
+                        }
+                    })
                 }
             },
         ],
     });
-
-    //     }
-    // })
 }
 
 //@Modified by Fancyears·Maylos·Malvis in 2018/11/22 13:30  获取选中行

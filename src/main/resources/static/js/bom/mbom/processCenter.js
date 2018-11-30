@@ -1,36 +1,31 @@
-$(document).ready((function (){
-    var projectId =  $("#project", window.top.document).val();
-    var url = "work/record?projectId="+projectId;
+$(document).ready((function () {
+    var projectId = $("#project", window.top.document).val();
+    var url = "work/record?projectId=" + projectId;
     initTable(url);
-    }))
-function doRefresh(projectId){
+}))
+
+function doRefresh(projectId) {
     $('#processCenterTable').bootstrapTable('destroy');
-    var url = "work/record?projectId="+projectId;
+    var url = "work/record?projectId=" + projectId;
     initTable(url);
 }
+
 function doQuery() {
-    //$('#processCenterTable').bootstrapTable('refresh');    //刷新表格
-    var projectId =  $("#project", window.top.document).val();
-    var url = "work/record?projectId="+projectId;
-    // var factoryCode = $("#factoryCode").val();
-    // url+="&factoryCode="+factoryCode;
-    // var pWorkCode = $("#pWorkCode").val();
-    // url+="&pWorkCode="+pWorkCode;
-    // var pPurpose = $("#pPurpose").val();
-    // url += "&pPurpose="+pPurpose;
+    var projectId = $("#project", window.top.document).val();
+    var url = "work/record?projectId=" + projectId;
     initTable(url);
     $('#processCenterTable').bootstrapTable('destroy');
 }
 
 
 function initTable(url) {
-    var  $table =  $("#processCenterTable");
-    var projectId =  $("#project", window.top.document).val();
-    var  column = [];
+    var $table = $("#processCenterTable");
+    var projectId = $("#project", window.top.document).val();
+    var column = [];
     $.ajax({
-        url:"work/title",
-        type:"GET",
-        success:function(result){
+        url: "work/title",
+        type: "GET",
+        success: function (result) {
             var column = [];
             column.push({field: 'ck', checkbox: true, Width: 50});
             var data = result.data;
@@ -41,14 +36,13 @@ function initTable(url) {
                     var json = {
                         field: key,
                         title: data[key],
-                        // align:
-                        //     'center',
                         valign:
                             'middle'
                     };
                     column.push(json);
                 }
-            };
+            }
+            ;
             $table.bootstrapTable({
                 url: url,
                 method: 'GET',
@@ -56,12 +50,12 @@ function initTable(url) {
                 cache: false,
                 striped: true,                       //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height()-75,
+                height: $(window.parent.document).find("#wrapper").height() - 75,
                 width: $(window).width(),
-                formId :"queryProcessCenter",
+                formId: "queryProcessCenter",
                 undefinedText: "",                  //当数据为 undefined 时显示的字符
                 pagination: true,
-                pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                        //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                   //每一行的唯一标识，一般为主键列
                 showExport: true,
@@ -78,12 +72,25 @@ function initTable(url) {
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
-                            window.Ewin.dialog({
-                                title: "添加",
-                                url: "work/addWork",
-                                gridId: "gridId",
-                                width: 500,
-                                height: 500
+                            var url = "work/addWork";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "添加",
+                                            url: "work/addWork",
+                                            gridId: "gridId",
+                                            width: 500,
+                                            height: 500
+                                        })
+                                    }
+                                }
                             })
                         }
                     },
@@ -97,13 +104,26 @@ function initTable(url) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
-                            window.Ewin.dialog({
-                                title: "修改",
-                                url: "work/updateWork?projectId="+projectId+"&puid="+rows[0].puid,
-                                gridId: "gridId",
-                                width: 500,
-                                height: 500
-                            });
+                            var url = "work/updateWork";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "修改",
+                                            url: "work/updateWork?projectId=" + projectId + "&puid=" + rows[0].puid,
+                                            gridId: "gridId",
+                                            width: 500,
+                                            height: 500
+                                        });
+                                    }
+                                }
+                            })
                         }
                     },
                     {
@@ -115,43 +135,49 @@ function initTable(url) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
                             }
-                            var _table = '<p>是否要删除您所选择的记录？</p>' +
-                                '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                            for (var index in rows) {
-                                if (rows[index].pWorkCode==null){
-                                    rows[index].pWorkCode="";
-                                }
-                                _table += '<tr><td>' + rows[index].pWorkCode + '</td></tr>';
-                            }
-                            _table += '</table></div>';
-                            window.Ewin.confirm({title: '提示', message:_table, width: 500}).on(function (e) {
-                                if (e) {
-                                    $.ajax({
-                                        type: "POST",
-                                        //ajax需要添加打包名
-                                        url: "work/delete?puid="+rows[0].puid,
-                                        //data: JSON.stringify(rows),
-                                        contentType: "application/json",
-                                        success: function (result) {
-                                            /*if (result.status) {
-                                                window.Ewin.alert({message: result.errMsg});
-                                                //刷新，会重新申请数据库数据
+                            var url = "work/delete";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        var _table = '<p>是否要删除您所选择的记录？</p>' +
+                                            '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                                        for (var index in rows) {
+                                            if (rows[index].pWorkCode == null) {
+                                                rows[index].pWorkCode = "";
                                             }
-                                            else {
-                                                window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*/if (result.success){
-                                                layer.msg('删除成功', {icon: 1, time: 2000})
-                                            } else if (!result.success){
-                                                window.Ewin.alert({message: result.errMsg});
-                                            }
-                                            $table.bootstrapTable("refresh");
-                                        },
-                                        error: function (info) {
-                                            window.Ewin.alert({message: "操作删除:" + info.status});
+                                            _table += '<tr><td>' + rows[index].pWorkCode + '</td></tr>';
                                         }
-                                    })
+                                        _table += '</table></div>';
+                                        window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                                            if (e) {
+                                                $.ajax({
+                                                    type: "POST",
+                                                    //ajax需要添加打包名
+                                                    url: "work/delete?puid=" + rows[0].puid,
+                                                    contentType: "application/json",
+                                                    success: function (result) {
+                                                        if (result.success) {
+                                                            layer.msg('删除成功', {icon: 1, time: 2000})
+                                                        } else if (!result.success) {
+                                                            window.Ewin.alert({message: result.errMsg});
+                                                        }
+                                                        $table.bootstrapTable("refresh");
+                                                    },
+                                                    error: function (info) {
+                                                        window.Ewin.alert({message: "操作删除:" + info.status});
+                                                    }
+                                                })
+                                            }
+                                        });
+                                    }
                                 }
-                            });
+                            })
                         }
                     },
                     {
@@ -169,16 +195,16 @@ function initTable(url) {
                                 _table += '<tr><td>' + rows[index].pWorkCode + '</td></tr>';
                             }
                             _table += '</table></div>';
-                            window.Ewin.confirm({title: '提示', message:_table, width: 500}).on(function (e) {
+                            window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                                 if (e) {
                                     var materielIds = new Array();
-                                    for(var i=0;i<rows.length;i++){
+                                    for (var i = 0; i < rows.length; i++) {
                                         materielIds[i] = rows[i].materielId;
                                     }
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "work/process/submit?projectId="+projectId+"&materielIds="+materielIds,
+                                        url: "work/process/submit?projectId=" + projectId + "&materielIds=" + materielIds,
                                         //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
@@ -188,9 +214,10 @@ function initTable(url) {
                                             }
                                             else {
                                                 window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*/if (result.success){
+                                            }*/
+                                            if (result.success) {
                                                 layer.msg('发送成功', {icon: 1, time: 2000})
-                                            } else if (!result.success){
+                                            } else if (!result.success) {
                                                 window.Ewin.alert({message: result.errMsg});
                                             }
                                             $table.bootstrapTable("refresh");
@@ -208,15 +235,17 @@ function initTable(url) {
         }
     })
 }
+
 function toPage() {
     var pageNum = $("#pageNum").val();
     if (pageNum) {
         $('#processCenterTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
-$(document).keydown(function(event) {
+
+$(document).keydown(function (event) {
     if (event.keyCode == 13) {
-        $('form').each(function() {
+        $('form').each(function () {
             event.preventDefault();
         });
     }

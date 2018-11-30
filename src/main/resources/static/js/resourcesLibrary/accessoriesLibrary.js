@@ -62,12 +62,25 @@ function initTable(){
                         text: '添加',
                         iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
-                            window.Ewin.dialog({
-                                title: "添加",
-                                url: "acce/addAccessories",
-                                gridId: "gridId",
-                                width: 500,
-                                height: 500
+                            var url = "acce/addAccessories";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "添加",
+                                            url: "acce/addAccessories",
+                                            gridId: "gridId",
+                                            width: 500,
+                                            height: 500
+                                        })
+                                    }
+                                }
                             })
                         }
                     },
@@ -81,13 +94,26 @@ function initTable(){
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
-                            window.Ewin.dialog({
-                                title: "修改",
-                                url: "acce/updateAccessories?puid=" + rows[0].puid,
-                                gridId: "gridId",
-                                width: 500,
-                                height: 500
-                            });
+                            var url = "acce/updateAccessories";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "修改",
+                                            url: "acce/updateAccessories?puid=" + rows[0].puid,
+                                            gridId: "gridId",
+                                            width: 500,
+                                            height: 500
+                                        });
+                                    }
+                                }
+                            })
                         }
                     },
                     {
@@ -112,28 +138,41 @@ function initTable(){
                                 _table += '<tr><td>' + rows[index].pMaterielName + '</td></tr>';
                             }
                             _table += '</table></div>';
-                            window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
-                                if (e) {
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "acce/delete",
-                                        data: myData,
-                                        contentType: "application/json",
-                                        success: function (result) {
-                                            if (result.success) {
-                                                layer.msg('删除成功', {icon: 1, time: 2000})
+                            var url = "acce/delete";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
+                                            if (e) {
+                                                $.ajax({
+                                                    type: "POST",
+                                                    url: "acce/delete",
+                                                    data: myData,
+                                                    contentType: "application/json",
+                                                    success: function (result) {
+                                                        if (result.success) {
+                                                            layer.msg('删除成功', {icon: 1, time: 2000})
+                                                        }
+                                                        else if(!result.success){
+                                                            window.Ewin.alert({message: result.errMsg})
+                                                        }
+                                                        $table.bootstrapTable("refresh");
+                                                    },
+                                                    error: function (info) {
+                                                        window.Ewin.alert({message: "操作删除:" + info.status});
+                                                    }
+                                                })
                                             }
-                                            else if(!result.success){
-                                                window.Ewin.alert({message: result.errMsg})
-                                            }
-                                            $table.bootstrapTable("refresh");
-                                        },
-                                        error: function (info) {
-                                            window.Ewin.alert({message: "操作删除:" + info.status});
-                                        }
-                                    })
+                                        });
+                                    }
                                 }
-                            });
+                            })
                         }
                     }
                 ],
