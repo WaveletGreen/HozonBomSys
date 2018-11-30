@@ -64,6 +64,7 @@ public interface IHzTaskService {
      */
     List<HzTasks> doSelectUserTargetTaskByType(Integer taskFormType, Integer taskTargetType, Long taskTargetId, Long taskUserId, Integer status);
 
+    List<HzTasks> doSelectUserTargetTask(Integer taskFormType, Integer taskTargetType, Long taskTargetId, Long taskUserId, Integer status);
     /**
      * 根据VWO主键和用户主键，获取到当前VWO变更表单该用户的任务
      *

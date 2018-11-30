@@ -24,7 +24,11 @@ public interface HzTasksDao extends BasicDao<HzTasks> {
      */
     List<HzTasks> selectUserTasks(HzTasks tasks);
 
+    List<HzTasks> selectInterfaceTasks(HzTasks tasks);
+
     List<HzTasks> selectUserTargetTaskByType(HzTasks task);
+
+    List<HzTasks> selectUserTargetTask(HzTasks task);
 
     /**
      * 批量插入

@@ -123,6 +123,9 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     private HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
 
     @Autowired
+    @Qualifier("synBomService")
+    private ISynBomService synBomService;
+    @Autowired
     private HzRelevanceBasicDao hzRelevanceBasicDao;
     @Autowired
     private HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;

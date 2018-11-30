@@ -176,9 +176,9 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
     }
 
     @Override
-    public HzChangeOrderRespDTO getHzChangeOrderRespDTOById(Long id) {
+    public HzChangeOrderRespDTO getHzChangeOrderRespDTOById(Long id, Long auditId) {
         try {
-            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordDTOById(id);
+            HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordDTOById(id,auditId);
             if(record != null){
                 return HzChangeOrderFactory.changeOrderRecordToRespDTO(record);
             }

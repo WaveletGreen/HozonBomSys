@@ -94,9 +94,10 @@ public class HzTasksService implements IHzTaskService {
     @Override
     public List<HzTasks> doSelectUserExecutingTasks(Long userId) {
         HzTasks task = new HzTasks();
-        task.setTaskStatus(TaskOptions.TASK_STATUS_EXECUTING);
+        //task.setTaskStatus(TaskOptions.TASK_STATUS_EXECUTING);
         task.setTaskUserId(userId);
-        return hzTasksDao.selectUserTasks(task);
+        //return hzTasksDao.selectUserTasks(task);
+        return hzTasksDao.selectInterfaceTasks(task);
     }
 
     /**
@@ -122,6 +123,17 @@ public class HzTasksService implements IHzTaskService {
         task.setTaskUserId(taskUserId);
         task.setTaskStatus(status);
         return hzTasksDao.selectUserTargetTaskByType(task);
+    }
+
+    @Override
+    public List<HzTasks> doSelectUserTargetTask(Integer taskFormType, Integer taskTargetType, Long taskTargetId, Long taskUserId, Integer status) {
+        HzTasks task = new HzTasks();
+        task.setTaskFormType(taskFormType);
+        task.setTaskTargetType(taskTargetType);
+        task.setTaskTargetId(taskTargetId);
+        task.setTaskUserId(taskUserId);
+        task.setTaskStatus(status);
+        return hzTasksDao.selectUserTargetTask(task);
     }
 
     /**

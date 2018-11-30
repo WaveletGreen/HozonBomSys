@@ -40,6 +40,14 @@ public interface HzAuditorChangeDAO {
      */
     HzAuditorChangeRecord findByOrderId(Long orderId, Long userId);
 
+    /**
+     * 根据表单的ID查询<strong>多个记录</strong>并保存审核人意见的数据
+     * @param orderId
+     * @param userId
+     * @return
+     */
+    List<HzAuditorChangeRecord> findByOrdersId(Long orderId, Long userId);
+
     int updateByPrimaryKeySelective(HzAuditorChangeRecord record);
 
     int updateAuditorRecord(HzAuditorChangeDTO reqDTO);
