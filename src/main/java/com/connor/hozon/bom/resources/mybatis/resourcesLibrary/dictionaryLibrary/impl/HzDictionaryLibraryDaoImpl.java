@@ -18,7 +18,7 @@ import java.util.Map;
  * Time: 16:10
  */
 
-@Service("HzDictionaryLibraryDao")
+@Service("hzDictionaryLibraryDao")
 public class HzDictionaryLibraryDaoImpl extends BaseSQLUtil implements HzDictionaryLibraryDao {
 
     @Override

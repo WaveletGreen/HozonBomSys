@@ -282,7 +282,7 @@ public class SynMaterielService implements ISynMaterielService {
             }
 
         /**
-         * 更新信息
+         * 更新信息,这里也是更新is_sent状态的
          */
         if (puids != null && puids.size() > 0) {
             toUpdate.forEach(to -> puids.add(to.getpMaterielCode()));

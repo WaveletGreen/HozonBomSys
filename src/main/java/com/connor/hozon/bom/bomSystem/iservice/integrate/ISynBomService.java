@@ -26,6 +26,8 @@ public interface ISynBomService {
      */
     JSONObject updateByUids(String projectPuid, String puidOfUpdate);
 
+    JSONObject updateByUids(String projectPuid, List<String> uids);
+
     /**
      * 删除时候传
      *
@@ -41,6 +43,8 @@ public interface ISynBomService {
      * @return
      */
     JSONObject addOne(String projectPuid, String puidOfNew);
+
+    JSONObject addByUids(String projectPuid, List<String> addedPuids);
 
     /**
      * 一开始同步所有数据到ERP

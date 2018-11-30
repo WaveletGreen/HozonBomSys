@@ -1,29 +1,25 @@
-var type ;
-$(document).ready((function (){
-    // $("#ms").multiselect();
+var type;
+$(document).ready((function () {
     var projectId = $("#project", window.top.document).val();
-    var url = "work/process/record/page2?projectId="+projectId;
+    var url = "work/process/record/page2?projectId=" + projectId;
     initTable(url);
 }))
-function doRefresh(projectId){
+
+function doRefresh(projectId) {
     $('#routingDataTable').bootstrapTable('destroy');
-    var url = "work/process/record/page2?projectId="+projectId;
+    var url = "work/process/record/page2?projectId=" + projectId;
     initTable(url);
 }
+
 function doQuery() {
-    //$('#routingDataTable').bootstrapTable('refresh');    //刷新表格
     var projectId = $("#project", window.top.document).val();
-    var url = "work/process/record/page2?projectId="+projectId;
-    // var pMaterielCode = $("#pMaterielCode").val();
-    // url+="&pMaterielCode="+pMaterielCode;
-    // var pMaterielDesc = $("#pMaterielDesc").val();
-    // url+="&pMaterielDesc="+pMaterielDesc;
+    var url = "work/process/record/page2?projectId=" + projectId;
     type = $("#type").val();
-    if (type=="请选择工艺路线") {
-        url += "&type="+"";
+    if (type == "请选择工艺路线") {
+        url += "&type=" + "";
     }
     else {
-        url += "&type="+type;
+        url += "&type=" + type;
     }
     initTable(url);
     $('#routingDataTable').bootstrapTable('destroy');
@@ -35,24 +31,14 @@ function initTable(url) {
     if (!checkIsSelectProject(projectId)) {
         return;
     }
-    var  $table =  $("#routingDataTable");
-    var  column = [];
+    var $table = $("#routingDataTable");
+    var column = [];
     $.ajax({
-        url:"work/process/title",
-        type:"GET",
-        success:function(result){
+        url: "work/process/title",
+        type: "GET",
+        success: function (result) {
             var column = [];
-            // column.push({field: 'materielId', title: 'puid'});
             column.push({field: 'ck', checkbox: true, Width: 50});
-            /*column.push({field: '',
-                title: '序号',
-                formatter: function (value, row, index) {
-                    return index+1;},
-                align:
-                    'center',
-                valign:
-                    'middle'
-            });*/
             var data = result.data;
             var keys = [];
             var values;
@@ -68,7 +54,8 @@ function initTable(url) {
                     };
                     column.push(json);
                 }
-            };
+            }
+            ;
             column.push({
                 field: 'status',
                 title: '变更状态',
@@ -104,10 +91,10 @@ function initTable(url) {
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 150,
                 width: $(window).width(),
-                formId :"queryRoutingData",
+                formId: "queryRoutingData",
                 undefinedText: "",//当数据为 undefined 时显示的字符
                 pagination: true,
-                pageNumber:1,                       //初始化加载第一页，默认第一页
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
                 showExport: true,
@@ -120,25 +107,6 @@ function initTable(url) {
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 toolbars: [
-                    /*{
-                        text: '添加',
-                        iconCls: 'glyphicon glyphicon-plus',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要添加的数据!'});
-                                return false;
-                            }
-                            window.Ewin.dialog({
-                                title: "添加",
-                                url: "work/process/addWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
-                                gridId: "gridId",
-                                width: 500,
-                                height: 500
-                            })
-                        }
-                    },*/
                     {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
@@ -153,13 +121,26 @@ function initTable(url) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
                                 return false;
                             }
-                            window.Ewin.dialog({
-                                title: "修改",
-                                url: "work/process/updateWorkProcess2?projectId="+projectId+"&materielId="+rows[0].materielId+"&procedureDesc="+rows[0].pProcedureDesc,
-                                gridId: "gridId",
-                                width: 500,
-                                height: 500
-                            });
+                            var url = "work/process/updateWorkProcess2";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "修改",
+                                            url: "work/process/updateWorkProcess2?projectId=" + projectId + "&materielId=" + rows[0].materielId + "&procedureDesc=" + rows[0].pProcedureDesc,
+                                            gridId: "gridId",
+                                            width: 500,
+                                            height: 500
+                                        });
+                                    }
+                                }
+                            })
                         }
                     },
                     {
@@ -167,8 +148,8 @@ function initTable(url) {
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            if (type!="1"&&type!="2"){
-                                window.Ewin.alert({message:'请先选择工艺路线'})
+                            if (type != "1" && type != "2") {
+                                window.Ewin.alert({message: '请先选择工艺路线'})
                                 return false;
                             }
                             else if (rows[0].status == 5 || rows[0].status == 6) {
@@ -176,48 +157,44 @@ function initTable(url) {
                                 return false;
                             }
                             for (var i = 0; i < rows.length; i++) {
-                                for (var j = i+1; j < rows.length; j++) {
-                                    if(rows[i].materielId==rows[j].materielId){
+                                for (var j = i + 1; j < rows.length; j++) {
+                                    if (rows[i].materielId == rows[j].materielId) {
                                         window.Ewin.alert({message: '请不要选择重复物料!'});
                                         return false;
                                     }
                                 }
-                            };
-
-
+                            }
                             var puids = "";
                             var processDescList = "";
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].materielId + ",";
-                                processDescList += rows[i].pProcedureDesc+",";
-                            };
-
-
-                            // var myData = JSON.stringify({
-                            //     "projectId": $("#project", window.top.document).val(),
-                            //     "puids": puids,
-                            //     "type" : type,
-                            //     "rows" : rowsJson
-                            // });
+                                processDescList += rows[i].pProcedureDesc + ",";
+                            }
                             if (rows.length < 1) {
                                 window.Ewin.alert({message: '请至少选择一条需要修改的数据!'});
                                 return false;
                             }
-                            window.Ewin.dialog({
-                                title: "修改四大工艺",
-                                // url: "work/process/updateWorkProcess?projectId="+projectId+"&materielId="+rows[0].materielId,
-                                url:"work/process/four2?projectId="+projectId+"&puids="+puids+"&type="+type+"&processDescs="+processDescList,
-                                // url:"work/process/four2",
-                                gridId: "gridId",
-                                contentType: "application/json",
-                                width: 350,
-                                height: 300,
-                                // onReady:function () {
-                                //     $("#ms").multiselect({
-                                //         selectAll:true
-                                //     })
-                                // }
-                            });
+                            var url = "work/process/four2"
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "修改四大工艺",
+                                            url: "work/process/four2?projectId=" + projectId + "&puids=" + puids + "&type=" + type + "&processDescs=" + processDescList,
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            width: 350,
+                                            height: 300,
+                                        });
+                                    }
+                                }
+                            })
                         }
                     },
                     {
@@ -235,49 +212,59 @@ function initTable(url) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
                                 return false;
                             }
-                            var _table = '<p>是否要删除您所选择的记录？</p>' +
-                                '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                            for (var index in rows) {
-                                var pMaterielDesc = (rows[index].pMaterielDesc == undefined ? "" : rows[index].pMaterielDesc);
-                                var pMaterielDesc = (rows[index].pMaterielDesc == null ? "" : rows[index].pMaterielDesc);
-                                _table += '<tr><td>' + pMaterielDesc + '</td></tr>';
-                                materielIds.push(rows[index].materielId);
-                                procedureDesc.push(rows[index].pProcedureDesc);
-                            }
-                            var data = {};
-                            data["materielIds"] = materielIds;
-                            data["procedureDesc"] = procedureDesc;
-                            _table += '</table></div>';
-                            window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
-                                if (e) {
-                                    $.ajax({
-                                        type: "POST",
-                                        //ajax需要添加打包名
-                                        url: "work/process/delete2",
-                                        data: JSON.stringify(data),
-                                        contentType: "application/json",
-                                        success: function (result) {
-                                            /*if (result.status) {
-                                                window.Ewin.alert({message: result.errMsg});
-                                                //刷新，会重新申请数据库数据
-                                            }
-                                            else {
-                                                window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*/
-                                            if (result.success){
-                                                layer.msg('删除成功', {icon: 1, time: 2000})
-                                            }
-                                            else if (!result.success) {
-                                                window.Ewin.alert({message: result.errMsg});
-                                            }
-                                            $table.bootstrapTable("refresh");
-                                        },
-                                        error: function (info) {
-                                            window.Ewin.alert({message: "操作删除:" + info.status});
+                            var url = "work/process/delete2";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        var _table = '<p>是否要删除您所选择的记录？</p>' +
+                                            '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                                        for (var index in rows) {
+                                            var pMaterielDesc = (rows[index].pMaterielDesc == undefined ? "" : rows[index].pMaterielDesc);
+                                            var pMaterielDesc = (rows[index].pMaterielDesc == null ? "" : rows[index].pMaterielDesc);
+                                            _table += '<tr><td>' + pMaterielDesc + '</td></tr>';
+                                            materielIds.push(rows[index].materielId);
+                                            procedureDesc.push(rows[index].pProcedureDesc);
                                         }
-                                    })
+                                        var data = {};
+                                        data["materielIds"] = materielIds;
+                                        data["procedureDesc"] = procedureDesc;
+                                        _table += '</table></div>';
+                                        window.Ewin.confirm({
+                                            title: '提示',
+                                            message: _table,
+                                            width: 500
+                                        }).on(function (e) {
+                                            if (e) {
+                                                $.ajax({
+                                                    type: "POST",
+                                                    //ajax需要添加打包名
+                                                    url: "work/process/delete2",
+                                                    data: JSON.stringify(data),
+                                                    contentType: "application/json",
+                                                    success: function (result) {
+                                                        if (result.success) {
+                                                            layer.msg('删除成功', {icon: 1, time: 2000})
+                                                        }
+                                                        else if (!result.success) {
+                                                            window.Ewin.alert({message: result.errMsg});
+                                                        }
+                                                        $table.bootstrapTable("refresh");
+                                                    },
+                                                    error: function (info) {
+                                                        window.Ewin.alert({message: "操作删除:" + info.status});
+                                                    }
+                                                })
+                                            }
+                                        });
+                                    }
                                 }
-                            });
+                            })
                         }
                     },
                     {
@@ -289,7 +276,6 @@ function initTable(url) {
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
                             }
-                            ;
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
                                 "puids": puids,
@@ -306,41 +292,41 @@ function initTable(url) {
                                     }
                                 }
                             }
-                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
-                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                            // for (var index in rows) {
-                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
-                            // }
-                            // _table += '</table></div>';
-                            window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
-                                if (e) {
-                                    $.ajax({
-                                        type: "POST",
-                                        //ajax需要添加打包名
-                                        url: "work/process/cancel",
-                                        data: myData,
-                                        contentType: "application/json",
-                                        success: function (result) {
-                                            // if (result.status) {
-                                            //     window.Ewin.alert({message: result.errMsg});
-                                            //     //刷新，会重新申请数据库数据
-                                            // }
-                                            // else {
-                                            //     window.Ewin.alert({messabge: + result.errMsg});
-                                            // }
-                                            if (result.success) {
-                                                layer.msg('撤销成功', {icon: 1, time: 2000})
-                                            } else if (!result.success) {
-                                                window.Ewin.alert({message: result.errMsg});
+                            var url = "work/process/cancel"
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
+                                            if (e) {
+                                                $.ajax({
+                                                    type: "POST",
+                                                    //ajax需要添加打包名
+                                                    url: "work/process/cancel",
+                                                    data: myData,
+                                                    contentType: "application/json",
+                                                    success: function (result) {
+                                                        if (result.success) {
+                                                            layer.msg('撤销成功', {icon: 1, time: 2000})
+                                                        } else if (!result.success) {
+                                                            window.Ewin.alert({message: result.errMsg});
+                                                        }
+                                                        $table.bootstrapTable("refresh");
+                                                    },
+                                                    error: function (info) {
+                                                        window.Ewin.alert({message: ":" + info.status});
+                                                    }
+                                                })
                                             }
-                                            $table.bootstrapTable("refresh");
-                                        },
-                                        error: function (info) {
-                                            window.Ewin.alert({message: ":" + info.status});
-                                        }
-                                    })
+                                        });
+                                    }
                                 }
-                            });
+                            })
                         }
                     },
                     {
@@ -366,15 +352,15 @@ function initTable(url) {
                             window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                                 if (e) {
                                     var materielIds = new Array();
-                                    for(var i=0;i<rows.length;i++){
+                                    for (var i = 0; i < rows.length; i++) {
                                         materielIds[i] = rows[i].materielId;
                                     }
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "work/process/submit?projectId="+projectId+"&materielIds="+materielIds,
+                                        url: "work/process/submit?projectId=" + projectId + "&materielIds=" + materielIds,
                                         success: function (result) {
-                                            if (result.success){
+                                            if (result.success) {
                                                 layer.msg('提交成功', {icon: 1, time: 2000})
                                             }
                                             else if (!result.success) {
@@ -413,15 +399,15 @@ function initTable(url) {
                             window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                                 if (e) {
                                     var materielIds = new Array();
-                                    for(var i=0;i<rows.length;i++){
+                                    for (var i = 0; i < rows.length; i++) {
                                         materielIds[i] = rows[i].materielId;
                                     }
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "work/process/delete1?projectId="+projectId+"&materielIds="+materielIds,
+                                        url: "work/process/delete1?projectId=" + projectId + "&materielIds=" + materielIds,
                                         success: function (result) {
-                                            if (result.success){
+                                            if (result.success) {
                                                 layer.msg('提交成功', {icon: 1, time: 2000})
                                             }
                                             else if (!result.success) {
@@ -460,15 +446,15 @@ function initTable(url) {
                             window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
                                 if (e) {
                                     var materielIds = new Array();
-                                    for(var i=0;i<rows.length;i++){
+                                    for (var i = 0; i < rows.length; i++) {
                                         materielIds[i] = rows[i].materielId;
                                     }
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
-                                        url: "work/process/updata?projectId="+projectId+"&materielIds="+materielIds,
+                                        url: "work/process/updata?projectId=" + projectId + "&materielIds=" + materielIds,
                                         success: function (result) {
-                                            if (result.success){
+                                            if (result.success) {
                                                 layer.msg('提交成功', {icon: 1, time: 2000})
                                             }
                                             else if (!result.success) {
@@ -493,11 +479,6 @@ function initTable(url) {
                             for (var i = 0; i < rows.length; i++) {
                                 puids += rows[i].puid + ",";
                             }
-                            ;
-                            // var myData = JSON.stringify({
-                            //     "projectId": $("#project", window.top.document).val(),
-                            //     "puids": puids,
-                            // });
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
@@ -510,63 +491,28 @@ function initTable(url) {
                                     }
                                 }
                             }
-                            window.Ewin.dialog({
-                                title: "选择变更表单",
-                                url: "work/process/order/choose?projectId="+projectId+"&puids="+puids,
-                                gridId: "gridId",
-                                width: 450,
-                                height: 450
-                            });
-                            // var _table = '<p>是否要删除您所选择的记录？</p>' +
-                            //     '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                            // for (var index in rows) {
-                            //     _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
-                            // }
-                            // _table += '</table></div>';
-                            // window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
-                            //     if (e) {
-                            // $.ajax({
-                            //     type: "POST",
-                            //     // ajax需要添加打包名
-                            //     url: "ewo/initiating/process",
-                            //     data: myData,
-                            //     contentType: "application/json",
-                            //     success: function (result) {
-                            //         // if (result.status) {
-                            //         //     window.Ewin.alert({message: result.errMsg});
-                            //         //     //刷新，会重新申请数据库数据
-                            //         // }
-                            //         // else {
-                            //         //     window.Ewin.alert({messabge: + result.errMsg});
-                            //         // }
-                            //         if (result.success) {
-                            //             layer.msg('发起流程成功', {icon: 1, time: 2000})
-                            //         } else if (!result.success) {
-                            //             window.Ewin.alert({message: result.errMsg});
-                            //         }
-                            //         $table.bootstrapTable("refresh");
-                            //     },
-                            //     error: function (info) {
-                            //         window.Ewin.alert({message: ":" + info.status});
-                            //     }
-                            // })
-                            //     }
-                            // });
+                            var url = "work/process/order/choose";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "选择变更表单",
+                                            url: "work/process/order/choose?projectId=" + projectId + "&puids=" + puids,
+                                            gridId: "gridId",
+                                            width: 450,
+                                            height: 450
+                                        });
+                                    }
+                                }
+                            })
                         }
                     },
-                    /*{
-                        text: '选取数据',
-                        iconCls: 'glyphicon glyphicon-save',
-                        handler: function () {
-                                    window.Ewin.dialog({
-                                        title: "选取数据",
-                                        url: "work/process/getMBom",
-                                        gridId: "gridId2",
-                                        width: 700,
-                                        height:650
-                                    })
-                                }
-                    }*/
                 ],
             });
         }
@@ -579,9 +525,10 @@ function toPage() {
         $('#routingDataTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
-$(document).keydown(function(event) {
+
+$(document).keydown(function (event) {
     if (event.keyCode == 13) {
-        $('form').each(function() {
+        $('form').each(function () {
             event.preventDefault();
         });
     }

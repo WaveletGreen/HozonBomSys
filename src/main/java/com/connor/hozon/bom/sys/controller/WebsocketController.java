@@ -57,7 +57,7 @@ public class WebsocketController {
     @RequestMapping(value = "/sendUser",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public void senduUser(){
-        // 此处账号已经被写死为hyll 大家可以根据自己的实际业务来修改此处的代码
+        // 此处账号已经被写死为hyll
         Set<String> keys = webAgentSessionRegistry.getSessionIds("hyll");
         JSONObject jobj = new JSONObject();
         jobj.put("hyll","hyll");

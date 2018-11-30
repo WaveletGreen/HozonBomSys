@@ -1,5 +1,9 @@
 package sql.pojo.bom;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+@Data
 public class HzMBomToERPBean {
     /**
      * 主键
@@ -79,155 +83,9 @@ public class HzMBomToERPBean {
      */
     private Integer number;
 
-    public String getPuid() {
-        return puid;
-    }
+    private String unit;
 
-    public void setPuid(String puid) {
-        this.puid = puid;
-    }
+    private Integer sent;
 
-    public String getParentUID() {
-        return parentUID;
-    }
 
-    public void setParentUID(String parentUID) {
-        this.parentUID = parentUID;
-    }
-
-    public String getBomUid() {
-        return bomUid;
-    }
-
-    public void setBomUid(String bomUid) {
-        this.bomUid = bomUid;
-    }
-
-    public String getChangeNum() {
-        return changeNum;
-    }
-
-    public void setChangeNum(String changeNum) {
-        this.changeNum = changeNum;
-    }
-
-    public String getChange() {
-        return change;
-    }
-
-    public void setChange(String change) {
-        this.change = change;
-    }
-
-    public String getFactoryCode() {
-        return factoryCode;
-    }
-
-    public void setFactoryCode(String factoryCode) {
-        this.factoryCode = factoryCode;
-    }
-
-    public String getBomType() {
-        return bomType;
-    }
-
-    public void setBomType(String bomType) {
-        this.bomType = bomType;
-    }
-
-    public String getBomLineId() {
-        return bomLineId;
-    }
-
-    public void setBomLineId(String bomLineId) {
-        this.bomLineId = bomLineId;
-    }
-
-    public String getBomOrderNum() {
-        return bomOrderNum;
-    }
-
-    public Integer getIs2Y() {
-        return is2Y;
-    }
-
-    public void setIs2Y(Integer is2Y) {
-        this.is2Y = is2Y;
-    }
-
-    public void setBomOrderNum(String bomOrderNum) {
-        this.bomOrderNum = bomOrderNum;
-    }
-
-    public String getStockLocation() {
-        return stockLocation;
-    }
-
-    public void setStockLocation(String stockLocation) {
-        this.stockLocation = stockLocation;
-    }
-
-    public String getCfg0Relevance() {
-        return cfg0Relevance;
-    }
-
-    public void setCfg0Relevance(String cfg0Relevance) {
-        this.cfg0Relevance = cfg0Relevance;
-    }
-
-    public String getFNAInfo() {
-        return FNAInfo;
-    }
-
-    public void setFNAInfo(String FNAInfo) {
-        this.FNAInfo = FNAInfo;
-    }
-
-    public String getWorkShop() {
-        return workShop;
-    }
-
-    public void setWorkShop(String workShop) {
-        this.workShop = workShop;
-    }
-
-    public String getStation() {
-        return station;
-    }
-
-    public void setStation(String station) {
-        this.station = station;
-    }
-
-    public byte[] getBomLineBlock() {
-        return bomLineBlock;
-    }
-
-    public void setBomLineBlock(byte[] bomLineBlock) {
-        this.bomLineBlock = bomLineBlock;
-    }
-
-    public String getLineIndex() {
-        return lineIndex;
-    }
-
-    public void setLineIndex(String lineIndex) {
-        this.lineIndex = lineIndex;
-    }
-
-    public Integer getIsSended() {
-        return isSended;
-    }
-
-    public void setIsSended(Integer isSended) {
-        this.isSended = isSended;
-    }
-
-    public Integer getNumber() {
-        return number;
-    }
-
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
 }

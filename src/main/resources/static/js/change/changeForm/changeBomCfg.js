@@ -137,20 +137,33 @@ function modelAppend(index,data) {
 
 
 function deleteBom(){
+    var url = "vwo/deleteChangeBomAll";
     $.ajax({
-        type: "POST",
-        url: "/hozon/vwo/deleteChangeBomAll?mainId="+mainId+"&orderId="+orderChangeId,
-        contentType: "application/json",
+        url: "privilege/write?url=" + url,
+        type: "GET",
         success: function (result) {
-            if (result.status) {
-                layer.msg('删除成功', {icon: 1, time: 2000})
-            } else if (!result.status) {
-                window.Ewin.alert({message: result.msg});
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
             }
-            $table.bootstrapTable("refresh");
-        },
-        error: function (info) {
-            window.Ewin.alert({message: "操作失败:" + info.status});
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "/hozon/vwo/deleteChangeBomAll?mainId="+mainId+"&orderId="+orderChangeId,
+                    contentType: "application/json",
+                    success: function (result) {
+                        if (result.status) {
+                            layer.msg('删除成功', {icon: 1, time: 2000})
+                        } else if (!result.status) {
+                            window.Ewin.alert({message: result.msg});
+                        }
+                        $table.bootstrapTable("refresh");
+                    },
+                    error: function (info) {
+                        window.Ewin.alert({message: "操作失败:" + info.status});
+                    }
+                })
+            }
         }
     })
 }

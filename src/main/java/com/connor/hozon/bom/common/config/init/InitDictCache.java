@@ -20,6 +20,6 @@ public class InitDictCache implements CommandLineRunner {
 
     @Override
     public void run(String... strings) {
-        logger.warn("------初始化成功------");
+        logger.warn("------init container success------");
     }
 }

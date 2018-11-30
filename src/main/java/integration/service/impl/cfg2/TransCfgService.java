@@ -122,28 +122,28 @@ public class TransCfgService extends Author implements ITransmitService {
         return out;
     }
 
-    public static void main(String[] args) throws Exception {
-        TransCfgService transCfgService = new TransCfgService();
-        Features features = new Features();
-        String packnum = UUID.randomUUID().toString().replaceAll("-", "");
-        //数据包号
-        features.setPackNo(packnum);
-        //行号
-        features.setLineNum(packnum.substring(0, 5));
-        //动作描述代码
-        features.setActionFlag(ActionFlagOption.ADD);
-        //特性编码
-        features.setFeaturesCode("HZDCZZZC");
-        //特性描述
-        features.setFeaturesDescribe("电池装置总成");
-        //特性值编码
-        features.setPropertyValuesCode("1BC03");
-        //特性值描述
-        features.setPropertyValuesDescribe("高续航大容量电池");
-        //            featuresList.add(features);
-        transCfgService.getInput().getItem().add(features.getZpptci002());
-        transCfgService.execute();
-        System.out.println();
-    }
+//    public static void main(String[] args) throws Exception {
+//        TransCfgService transCfgService = new TransCfgService();
+//        Features features = new Features();
+//        String packnum = UUID.randomUUID().toString().replaceAll("-", "");
+//        //数据包号
+//        features.setPackNo(packnum);
+//        //行号
+//        features.setLineNum(packnum.substring(0, 5));
+//        //动作描述代码
+//        features.setActionFlag(ActionFlagOption.ADD);
+//        //特性编码
+//        features.setFeaturesCode("HZDCZZZC");
+//        //特性描述
+//        features.setFeaturesDescribe("电池装置总成");
+//        //特性值编码
+//        features.setPropertyValuesCode("1BC03");
+//        //特性值描述
+//        features.setPropertyValuesDescribe("高续航大容量电池");
+//        //            featuresList.add(features);
+//        transCfgService.getInput().getItem().add(features.getZpptci002());
+//        transCfgService.execute();
+//        System.out.println();
+//    }
 
 }
