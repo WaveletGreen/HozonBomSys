@@ -245,9 +245,17 @@ public class HzRelevanceService2 {
             result.put("msg","该项目下不存在相关性，请生成相关性后再发起流程");
             return result;
         }
+        //根据项目查询该项目下的相关性最大版本
+        HzRelevanceBasicChange maxVersion = hzRelevanceBasicChangeDao.selectMaxVersionByProject(projectPuid);
         List<HzRelevanceBasicChange> hzRelevanceBasicChanges = new ArrayList<>();
         for(HzRelevanceBasic hzRelevanceBasic : hzRelevanceBasics){
             HzRelevanceBasicChange hzRelevanceBasicChange = new HzRelevanceBasicChange(hzRelevanceBasic);
+            if(maxVersion==null){
+                hzRelevanceBasicChange.setChangeVersion(0);
+            }else {
+                hzRelevanceBasicChange.setChangeVersion(maxVersion.getChangeVersion()+1);
+            }
+            hzRelevanceBasicChange.setChangeOrderId(changeFromId);
             hzRelevanceBasicChanges.add(hzRelevanceBasicChange);
         }
 
@@ -279,6 +287,40 @@ public class HzRelevanceService2 {
             result.put("msg", "绑定人员失败");
             return result;
         }
+        return result;
+    }
+
+    /**
+     * 撤销
+     * @param projectPuid
+     * @return
+     */
+    public JSONObject goBackData(String projectPuid) {
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+        result.put("msg","撤销成功");
+        //删除原数据
+        if(hzRelevanceBasicDao.deleteByProjectUid(projectPuid)<=0?true:false){
+            result.put("status",false);
+            result.put("msg","删除草稿数据失败");
+            return result;
+        }
+
+        //查找最近一次变更数据
+        List<HzRelevanceBasicChange> hzRelevanceBasicChanges = hzRelevanceBasicChangeDao.selectLastexecutedByProjectId(projectPuid);
+        if(hzRelevanceBasicChanges!=null&&hzRelevanceBasicChanges.size()>0){
+            List<HzRelevanceBasic> hzRelevanceBasics = new ArrayList<>();
+            for(HzRelevanceBasicChange hzRelevanceBasicChange : hzRelevanceBasicChanges){
+                HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic(hzRelevanceBasicChange);
+                hzRelevanceBasics.add(hzRelevanceBasic);
+            }
+            if(hzRelevanceBasicDao.insertByBatch(hzRelevanceBasics)<=0?true:false){
+                result.put("status",false);
+                result.put("msg","撤销变更数据失败");
+                return result;
+            }
+        }
+
         return result;
     }
 }

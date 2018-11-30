@@ -288,7 +288,7 @@ function addVehicleDialog() {
             else {
                 window.Ewin.dialog({
                     // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                    title: "修改基本信息",
+                    title: "添加衍生物料",
                     url: "materielV2/composePage?projectUid=" + projectUid,
                     gridId: "gridId",
                     width: 400,
@@ -310,7 +310,7 @@ function modifyBasicDataDialog() {
         return;
     }
     var status = rows[0].status;
-    if(status!=0&&status!=1){
+    if(status!=0&&status!=1&&status!=null){
         window.Ewin.alert({message:rows[0].modeBasicDetail+"状态不能修改"});
         return false
     }

@@ -46,4 +46,38 @@ public class HzRelevanceBasicChangeDaoImpl extends BasicDaoImpl<HzRelevanceBasic
     public int insertList(List<HzRelevanceBasicChange> hzRelevanceBasicChanges) {
         return baseSQLUtil.executeInsert(hzRelevanceBasicChanges,clzName+"insertList");
     }
+
+    @Override
+    public List<HzRelevanceBasicChange> selectByOrderChangeId(Long orderChangeId) {
+        HzRelevanceBasicChange hzRelevanceBasicChange = new HzRelevanceBasicChange();
+        hzRelevanceBasicChange.setChangeOrderId(orderChangeId);
+        return baseSQLUtil.executeQuery(hzRelevanceBasicChange,clzName+"selectByOrderChangeId");
+    }
+
+    @Override
+    public HzRelevanceBasicChange selectMaxVersionByProject(String projectPuid) {
+        HzRelevanceBasicChange hzRelevanceBasicChange = new HzRelevanceBasicChange();
+        hzRelevanceBasicChange.setRbProjectUid(projectPuid);
+        return baseSQLUtil.executeQueryById(hzRelevanceBasicChange,clzName+"selectMaxVersionByProject");
+    }
+
+    @Override
+    public List<HzRelevanceBasicChange> selectByVersionAndProjectId(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor) {
+        return baseSQLUtil.executeQuery(hzRelevanceBasicChangeQueryBefor,clzName+"selectByVersionAndProjectId");
+    }
+
+    @Override
+    public int deleteByChangeOrderid(Long orderChangeId) {
+        return baseSQLUtil.executeDelete(orderChangeId,clzName+"deleteByChangeOrderid");
+    }
+
+    @Override
+    public List<HzRelevanceBasicChange> selectLastexecutedByProjectId(String projectPuid) {
+        return baseSQLUtil.executeQueryByPass(new HzRelevanceBasicChange(), projectPuid,clzName+"selectLastexecutedByProjectId");
+    }
+
+    @Override
+    public int updateStatusByIOrderId(HzRelevanceBasicChange hzRelevanceBasicChange) {
+        return baseSQLUtil.executeUpdate(hzRelevanceBasicChange,clzName+"updateStatusByIOrderId");
+    }
 }
