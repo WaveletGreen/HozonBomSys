@@ -27,11 +27,6 @@ function initTable(url) {
     }
     var $table = $("#bikeBomTable");
     var column = [];
-    // $.ajax({
-    //     url: "ebom/title?projectId=" + projectPuid,
-    //     type: "GET",
-    //     success: function (result) {
-    //         var column = [];
     column.push({field: 'id', title: '主键'});
     column.push({field: 'ck', checkbox: true,align: 'center',width: 50});
     column.push({
@@ -41,7 +36,6 @@ function initTable(url) {
         valign: 'middle',
         formatter: function (value, row, index) {
             return [
-                // '<a href="ewo/base/info?id='+id +'">' + value + '</a>'
                 '<a href="javascript:void(0)" onclick="queryLou(' +  row.id +  ')">' + value + '</a>'
             ].join("");
         }
@@ -59,41 +53,7 @@ function initTable(url) {
     column.push({field: 'colorName', title: '颜色名称', align: 'center', valign: 'middle'});
     column.push({field: 'svlBatteryCode', title: '电池型号', align: 'center', valign: 'middle'});
     column.push({field: 'svlMotorCode', title: '电机型号', align: 'center', valign: 'middle'});
-
-    // var data = result.data;
-    // var keys = [];
-    // var values;
-    // for (var key in data) {
-    //     if (data.hasOwnProperty(key)) {
-    //         var json = {
-    //             field: key,
-    //             title: data[key],
-    //             align:
-    //                 'center',
-    //             valign:
-    //                 'middle'
-    //         };
-    //         column.push(json);
-    //     }
-    // };
     $table.bootstrapTable({
-        // ajax: function (request) {
-        //     $.ajax({
-        //         url: "ewo/base/infoList?projectId=" + projectId,
-        //         success: function (result) {
-        //             // var data = JSON.stringify(result);
-        //             // var msg = JSON.parse(data);
-        //             // console.log(msg);
-        //             request.success({
-        //                 row: result
-        //             });
-        //             $table.bootstrapTable('load', result);
-        //         },
-        //         error: function () {
-        //             window.Ewin.alert("操作错误")
-        //         }
-        //     })
-        // },
         url: url,
         method: 'get',
         height: $(window.parent.document).find("#wrapper").height() - 90,
@@ -101,10 +61,6 @@ function initTable(url) {
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
         pagination: false,                   //是否显示分页（*）
-        // pageSize: 20,
-        // pageNumber: 1,
-        // pageList: ['ALL', 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
-        // sidePagination: "server",          //分页方式：client客户端分页，server服务端分页（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         showExport: false,
         formId: "formId",
@@ -125,13 +81,26 @@ function initTable(url) {
                         window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                         return false;
                     }
-                    window.Ewin.dialog({
-                        title: "修改",
-                        url: "singleVehicles/update/page?projectId="+projectId+"&id="+rows[0].id,
-                        gridId: "gridId",
-                        width: 500,
-                        height: 500
-                    });
+                    var url = "singleVehicles/update/page";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "修改",
+                                    url: "singleVehicles/update/page?projectId="+projectId+"&id="+rows[0].id,
+                                    gridId: "gridId",
+                                    width: 500,
+                                    height: 500
+                                });
+                            }
+                        }
+                    })
                 }
             },
             {
@@ -231,8 +200,6 @@ function initTable(url) {
         ],
     });
     $table.bootstrapTable('hideColumn', 'id');
-    //     }
-    // })
 }
 
 function queryLou(row) {

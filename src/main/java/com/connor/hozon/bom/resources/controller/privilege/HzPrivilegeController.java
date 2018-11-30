@@ -29,9 +29,10 @@ public class HzPrivilegeController extends BaseController {
 
     @RequestMapping(value = "write",method = RequestMethod.GET)
     public void openWritePrivilege(String url,HttpServletResponse response){
+        String uri ="/hozon/"+url;
         List<String> urls = HzFilter.getUrlList();
         if(ListUtil.isNotEmpty(urls)){
-            if(urls.contains(url)){
+            if(urls.contains(uri)){
                 WriteResultRespDTO resultRespDTO = userRolePrivilegeService.hasPrivilege(url,urls);
                 if(WriteResultRespDTO.isSuccess(resultRespDTO)){
                     toJSONResponse(Result.build(true),response);

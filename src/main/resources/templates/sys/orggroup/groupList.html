@@ -44,12 +44,25 @@
         if (btn) btn.bind("click", function () {
             zTree = $.fn.zTree.getZTreeObj("tree");
             selectNode = treeNode;
-            window.Ewin.dialog({
-                title: "添加",
-                url: "group/addGroupPage?groupId=" + treeNode.groupId,
-                gridId: "gridId",
-                width: 400,
-                height: 460
+            var url = "group/addGroupPage";
+            $.ajax({
+                url: "privilege/write?url=" + url,
+                type: "GET",
+                success: function (result) {
+                    if (!result.success) {
+                        window.Ewin.alert({message: result.errMsg});
+                        return false;
+                    }
+                    else {
+                        window.Ewin.dialog({
+                            title: "添加",
+                            url: "group/addGroupPage?groupId=" + treeNode.groupId,
+                            gridId: "gridId",
+                            width: 400,
+                            height: 460
+                        })
+                    }
+                }
             })
             return false;
         });
@@ -59,19 +72,32 @@
             if (treeNode.isParent) {
                 window.Ewin.alert({message: "请先删除当前组织架构底下的子组织架构！"});
             } else {
-                window.Ewin.confirm({title: '提示', message: '是否要删除您当前选中的组织机构？', width: 500}).on(function (e) {
-                    if (e) {
-                        $.post("./group/remove", {groupId: treeNode.groupId}, function (e) {
-                            if (e.result) {
-                                zTree.removeNode(treeNode);
-                                // window.Ewin.alert({message: e.msg});
-                                layer.msg('删除成功', {icon: 1, time: 2000})
-                            } else {
-                                window.Ewin.alert({message: e.msg});
-                            }
-                        })
+                var url = "group/remove";
+                $.ajax({
+                    url: "privilege/write?url=" + url,
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        }
+                        else {
+                            window.Ewin.confirm({title: '提示', message: '是否要删除您当前选中的组织机构？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.post("./group/remove", {groupId: treeNode.groupId}, function (e) {
+                                        if (e.result) {
+                                            zTree.removeNode(treeNode);
+                                            // window.Ewin.alert({message: e.msg});
+                                            layer.msg('删除成功', {icon: 1, time: 2000})
+                                        } else {
+                                            window.Ewin.alert({message: e.msg});
+                                        }
+                                    })
+                                }
+                            });
+                        }
                     }
-                });
+                })
             }
             return false;
         });
@@ -79,12 +105,25 @@
         if (edit_btn) edit_btn.bind("click", function () {
             zTree = $.fn.zTree.getZTreeObj("tree");
             selectNode = treeNode;
-            window.Ewin.dialog({
-                title: "修改",
-                url: "group/updateGroupPage?groupId=" + treeNode.groupId,
-                gridId: "gridId",
-                width: 400,
-                height: 460
+            var url = "group/updateGroupPage";
+            $.ajax({
+                url: "privilege/write?url=" + url,
+                type: "GET",
+                success: function (result) {
+                    if (!result.success) {
+                        window.Ewin.alert({message: result.errMsg});
+                        return false;
+                    }
+                    else {
+                        window.Ewin.dialog({
+                            title: "修改",
+                            url: "group/updateGroupPage?groupId=" + treeNode.groupId,
+                            gridId: "gridId",
+                            width: 400,
+                            height: 460
+                        })
+                    }
+                }
             })
             return false;
         });

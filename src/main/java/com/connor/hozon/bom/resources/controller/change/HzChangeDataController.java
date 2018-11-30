@@ -263,7 +263,11 @@ public class HzChangeDataController extends BaseController {
         model.addAttribute("orderId",orderId);
         return "change/changeOrder/changeBomCfgTable";
     }
-
+    @RequestMapping(value = "relevance/page")
+    public String relevancePage(Model model,Long orderId){
+        model.addAttribute("orderId",orderId);
+        return "change/changeOrder/changeRelevanceTable";
+    }
     @RequestMapping(value = "tc",method = RequestMethod.GET)
     public void getDataDetailForTc(String formId,HttpServletResponse response){
         if(StringUtils.isBlank(formId)){

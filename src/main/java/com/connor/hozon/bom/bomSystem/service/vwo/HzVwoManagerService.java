@@ -2630,6 +2630,18 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         map.put("result", result);
     }
 
+    /**
+     * 查看相关性变更数据
+     * @param orderChangeId
+     * @param projectUid
+     * @return
+     */
+    @Override
+    public Map<String, Object> getRelevance(Integer orderChangeId, String projectUid) {
+
+        //根据项目ID获取变更前
+        return null;
+    }
 
 
     public void doQueryCmcrDetailChangBefor(Map<String, Object> map, Long vwoId) {
@@ -3616,7 +3628,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         result.put("msg","删除成功");
         if(hzFullCfgMainDao.updateChangeByOrderId(orderId)<=0?true:false){
             result.put("status",false);
-            result.put("msg","修改源数据失败");
+            result.put("msg","修改源数据失败,请确定您删除的数据为未生效的数据");
             return result;
         }
         if(hzFullCfgMainChangeDao.deleteById(mainId)<=0?true:false){

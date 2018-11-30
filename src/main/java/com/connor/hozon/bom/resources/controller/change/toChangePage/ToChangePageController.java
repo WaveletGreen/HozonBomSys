@@ -52,4 +52,9 @@ public class ToChangePageController {
         model.addAttribute("orderId",orderId);
         return "myListJob/changeBomCfgTable";
     }
+    @RequestMapping(value = "relevance/page")
+    public String relevancePage(Model model,Long orderId){
+        model.addAttribute("orderId",orderId);
+        return "myListJob/changeRelevanceTable";
+    }
 }

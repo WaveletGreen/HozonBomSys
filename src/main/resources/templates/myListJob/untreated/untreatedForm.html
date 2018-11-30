@@ -20,49 +20,50 @@
                     <div class="col-lg-3 col-md-3">
                         <input id="isFromTc" type="hidden" th:value="${data.isFromTc}">
                         <input type="hidden" id="id" th:value="${data.id}">
+                        <input type="hidden"id="changeAccepter" th:value="${data.changeAccepter}">
                         <div class="form-group after_the">
                             <label for="ewoNo1">变更单号</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo1"
-                                   th:value="${data.changeNo}" disabled="disabled"
-                            />
+                                   th:value="${data.changeNo}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo2">创建时间</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo2"
-                                   th:value="${data.createTime}" disabled="disabled"
-                            />
+                                   th:value="${data.createTime}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo3">部门</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo3"
-                                   th:value="${data.deptName}" disabled="disabled"
-                            />
+                                   th:value="${data.deptName}" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
-                            <label for="ewoNo4">发起人</label>
-                            <input type="text" class="form-control" name="ewoNo" id="ewoNo4"
-                                   th:value="${data.originator}" disabled="disabled"
-                            />
+                            <label for="BOM">发起人</label>
+                            <input type="text" class="form-control" name="ewoNo" id="BOM"
+                                   th:value="${data.originator}"  disabled="disabled"/>
+                            <!--<input type="text" class="form-control" name="ewoNo" id="TC"-->
+                                   <!--th:value="${data.createName}" style="display: none" disabled="disabled"/>-->
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo5">联系电话</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo5"
-                                   th:value="${data.tel}" disabled="disabled"/>
+                                   th:value="${data.tel}" disabled="disabled" />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo6">变更类型</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo6"
-                                   th:value="${data.changeType}" disabled="disabled"/>
+                                   th:value="${data.changeType}" disabled="disabled" />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
-                            <label for="ewoNo7">是否关联变更</label>
-                            <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
-                                   th:value="${data.hasRelatedChange}" disabled="disabled"/>
+                            <label for="createName">表单创建者</label>
+                            <input type="text" class="form-control" name="createName" id="createName"
+                                   th:value="${data.createName}" disabled="disabled"
+                            />
                         </div>
+
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
 
@@ -72,19 +73,19 @@
                             <!--<option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>-->
                             <!--</select>-->
                             <input type="text" class="form-control" name="marketType" id="marketType"
-                                   th:value="${data.marketType}" disabled="disabled"/>
+                                   th:value="${data.marketType}" disabled="disabled" />
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo9">项目所属阶段</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo9"
-                                   th:value="${data.projectStage}" disabled="disabled"/>
+                                   th:value="${data.projectStage}" disabled="disabled" />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo10">备注</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo10"
-                                   th:value="${data.remark}" disabled="disabled"/>
+                                   th:value="${data.remark}" disabled="disabled" />
                         </div>
                         <div class="form-group after_the">
                             <label for="state">变更状态</label>
@@ -96,7 +97,7 @@
                             <!--<option th:selected="${data.getState()=='取消 '?true:false}">取消</option>-->
                             <!--</select>-->
                             <input type="text" class="form-control" name="state" id="state"
-                                   th:value="${data.state}" disabled="disabled"/>
+                                   th:value="${data.state}" disabled="disabled" />
                         </div>
                     </div>
                 </div>
@@ -130,6 +131,7 @@
         </div>
     </div>
 </div>
+<div id="reviewForm">
 <h4><i class="fa fa-minus-square" aria-hidden="true">评估意见</i></h4>
 <div class="panel-body" style="padding-bottom:0;">
     <div class="panel panel-default panel-body col-lg-12 col-md-12">
@@ -176,20 +178,27 @@
         </div>
     </div>
 </div>
+</div>
 <script th:inline="javascript">
     $(document).ready(function () {
         var id = $("#id").val();
         var isFromTc = $("#isFromTc").val();
+        var changeAccepter = $("#changeAccepter").val();
         var projectId = $("#project", window.top.document).val();
 
         var TCForm = document.getElementById("TCForm");
         var BOMForm = document.getElementById("BOMForm");
+        if (changeAccepter == 1) {
+            $("#reviewForm").hide();
+        }
         if (isFromTc == 0) {
             TCForm.style.display = "none";
             BOMForm.style.display = "block";
+            // $("#BOM").show();
         } else if (isFromTc == 1) {
             TCForm.style.display = "block";
-            BOMForm.style.display = "none";
+            BOMForm.style.display = "block";
+            // $("#TC").show();
         }
         $.ajax({
             url: "../change/data/order/hyper?orderId=" + id,
@@ -202,6 +211,7 @@
                 table += "<th><a id='bomCfgId' href='../toMyListJob/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[10].name + "</a></th>";
                 table += "<th><a id='modelColorCfgId' href='../toMyListJob/modelColorCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[8].name + "</a></th>";
                 table += "<th><a id='materielFeatureId' href='../toMyListJob/materielFeature/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[9].name + "</a></th>";
+                table += "<th><a id='relevanceId' href='../change/data/relevance/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[11].name+"</a></th>";
                 table += "<th><a id='ebomId' href='../toMyListJob/ebom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[0].name + "</a></th>";
                 table += "<th><a id='pbomId' href='../toMyListJob/pbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[1].name + "</a></th>";
                 table += "<th><a id='mbomId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[2].name + "</a></th>";
@@ -237,6 +247,10 @@
                 if (data[9].status == 0) {
                     // materielFeatureId.style.display = "none";
                     $("#materielFeatureId").hide();
+                }
+                if (data[11].status == 0) {
+                    // materielFeatureId.style.display = "none";
+                    $("#relevanceId").hide();
                 }
                 if (data[0].status == 0) {
                     // ebomId.style.display = "none";

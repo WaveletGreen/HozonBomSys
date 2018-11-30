@@ -59,4 +59,8 @@ public interface HzRelevanceBasicDao extends BasicDao<HzRelevanceBasic> {
      * @return
      */
     Integer tellMeHowManyOfIt(HzRelevanceQueryDTO dto);
+
+    List<HzRelevanceBasic> selectByProjectPuid(String projectPuid);
+
+    int updateStatus(HzRelevanceBasic hzRelevanceBasicUpdate);
 }

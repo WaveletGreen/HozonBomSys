@@ -65,7 +65,20 @@ $(document).ready(
     ),
     $("#newBrand").click(function () {
         //添加品牌
-        window.Ewin.dialog({title: "添加", url: "project/addPage?id=&page=brand", width: 400, height: 650})
+        var url = "project/addPage";
+        $.ajax({
+            url: "privilege/write?url=" + url,
+            type: "GET",
+            success: function (result) {
+                if (!result.success) {
+                    window.Ewin.alert({message: result.errMsg});
+                    return false;
+                }
+                else {
+                    window.Ewin.dialog({title: "添加", url: "project/addPage?id=&page=brand", width: 400, height: 650})
+                }
+            }
+        })
         // location.reload();
     })
 )
@@ -110,28 +123,67 @@ function addHoverDom(treeId, treeNode) {
                 selectNode = treeNode;
                 if (0 == treeNode.level) {
                     //添加平台
-                    window.Ewin.dialog({
-                        title: "添加",
-                        url: "project/addPage?id=" + treeNode.puid + "&page=platform",
-                        width: 400,
-                        height: 650
+                    var url = "project/addPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "添加",
+                                    url: "project/addPage?id=" + treeNode.puid + "&page=platform",
+                                    width: 400,
+                                    height: 650
+                                })
+                            }
+                        }
                     })
                 }
                 else if (1 == treeNode.level) {
                     //添加项目
-                    window.Ewin.dialog({
-                        title: "添加",
-                        url: "project/addPage?id=" + treeNode.puid + "&page=vehicle",
-                        width: 400,
-                        height: 650
+                    var url = "project/addPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "添加",
+                                    url: "project/addPage?id=" + treeNode.puid + "&page=vehicle",
+                                    width: 400,
+                                    height: 650
+                                })
+                            }
+                        }
                     })
                 }
                 else if (2 == treeNode.level) {
-                    window.Ewin.dialog({
-                        title: "添加",
-                        url: "project/addPage?id=" + treeNode.puid + "&page=project",
-                        width: 500,
-                        height: 650
+                    var url = "project/addPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "添加",
+                                    url: "project/addPage?id=" + treeNode.puid + "&page=project",
+                                    width: 500,
+                                    height: 650
+                                })
+                            }
+                        }
                     })
                 }
                 return false;
@@ -171,25 +223,38 @@ function addHoverDom(treeId, treeNode) {
                 if (treeNode.isParent) {
                     window.Ewin.alert({message: "请先删除下级" + downer});
                 } else {
-                    window.Ewin.confirm({
-                        title: '提示',
-                        message: '是否要删除您当前选中的' + typeName + ":" + name + "?",
-                        width: 500
-                    }).on(function (e) {
-                        if (e) {
-                            $.post("./project/delete", {puid: treeNode.puid, type: type}, function (e) {
-                                if (e) {
-                                    /**删除指定节点*/
-                                    zTree.removeNode(treeNode);
-                                    // zTree.destroy();
-                                    // (initZTree());
-                                    layer.msg('成功删除', {icon: 1, time: 2000})
-                                } else {
-                                    window.Ewin.alert({message: "删除失败" + typeName + ":" + name});
-                                }
-                            })
+                    var url = "project/delete";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.confirm({
+                                    title: '提示',
+                                    message: '是否要删除您当前选中的' + typeName + ":" + name + "?",
+                                    width: 500
+                                }).on(function (e) {
+                                    if (e) {
+                                        $.post("./project/delete", {puid: treeNode.puid, type: type}, function (e) {
+                                            if (e) {
+                                                /**删除指定节点*/
+                                                zTree.removeNode(treeNode);
+                                                // zTree.destroy();
+                                                // (initZTree());
+                                                layer.msg('成功删除', {icon: 1, time: 2000})
+                                            } else {
+                                                window.Ewin.alert({message: "删除失败" + typeName + ":" + name});
+                                            }
+                                        })
+                                    }
+                                });
+                            }
                         }
-                    });
+                    })
                 }
                 return false;
             });
@@ -201,36 +266,88 @@ function addHoverDom(treeId, treeNode) {
                 zTree = $.fn.zTree.getZTreeObj("menu_tree");
                 selectNode = treeNode;
                 if (0 == treeNode.level) {
-                    window.Ewin.dialog({
-                        title: "修改品牌信息",
-                        url: "project/modifyPage?id=" + treeNode.puid + "&page=brand",
-                        width: 400,
-                        height: 650
-                    });
+                    var url = "project/modifyPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "修改品牌信息",
+                                    url: "project/modifyPage?id=" + treeNode.puid + "&page=brand",
+                                    width: 400,
+                                    height: 650
+                                });
+                            }
+                        }
+                    })
                 }
                 else if (1 == treeNode.level) {
-                    window.Ewin.dialog({
-                        title: "修改平台信息",
-                        url: "project/modifyPage?id=" + treeNode.puid + "&page=platform",
-                        width: 400,
-                        height: 650
-                    });
+                    var url = "project/modifyPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "修改平台信息",
+                                    url: "project/modifyPage?id=" + treeNode.puid + "&page=platform",
+                                    width: 400,
+                                    height: 650
+                                });
+                            }
+                        }
+                    })
                 }
                 else if (2 == treeNode.level) {
-                    window.Ewin.dialog({
-                        title: "修改项目信息",
-                        url: "project/modifyPage?id=" + treeNode.puid + "&page=vehicle",
-                        width: 400,
-                        height: 650
-                    });
+                    var url = "project/modifyPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "修改项目信息",
+                                    url: "project/modifyPage?id=" + treeNode.puid + "&page=vehicle",
+                                    width: 400,
+                                    height: 650
+                                });
+                            }
+                        }
+                    })
                 }
                 else if (3 == treeNode.level) {
-                    window.Ewin.dialog({
-                        title: "修改项目信息",
-                        url: "project/modifyPage?id=" + treeNode.puid + "&page=project",
-                        width: 500,
-                        height: 650
-                    });
+                    var url = "project/modifyPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    title: "修改项目信息",
+                                    url: "project/modifyPage?id=" + treeNode.puid + "&page=project",
+                                    width: 500,
+                                    height: 650
+                                });
+                            }
+                        }
+                    })
                 }
                 var puid = selectNode.puid;
                 coach[puid] = null;
@@ -244,7 +361,25 @@ function addHoverDom(treeId, treeNode) {
             add_parent_btn.bind("click", function () {
                 zTree = $.fn.zTree.getZTreeObj("menu_tree");
                 selectNode = null;
-                window.Ewin.dialog({title: "添加", url: "project/addPage?id=&page=brand", width: 400, height: 650})
+                var url = "project/addPage";
+                $.ajax({
+                    url: "privilege/write?url=" + url,
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        }
+                        else {
+                            window.Ewin.dialog({
+                                title: "添加",
+                                url: "project/addPage?id=&page=brand",
+                                width: 400,
+                                height: 650
+                            })
+                        }
+                    }
+                })
                 return false;
             })
         }

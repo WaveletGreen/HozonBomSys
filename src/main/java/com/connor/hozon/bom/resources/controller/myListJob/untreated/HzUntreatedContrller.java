@@ -13,6 +13,7 @@ import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
+import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -66,7 +67,9 @@ public class HzUntreatedContrller extends BaseController {
      */
     @RequestMapping(value = "ToUntreatedForm",method = RequestMethod.GET)
     public String getToUntreatedFormToPage(Long id,Model model){
-        HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
+        //HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
+        HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRespDTOById(id);
+
         //HzChangeOrderByPageQuery query = new HzChangeOrderByPageQuery();
         //HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,id);
         List<HzChangeListRecord> changeList = hzChangeListDAO.findChangeList(respDTO.getChangeNo());
@@ -98,7 +101,50 @@ public class HzUntreatedContrller extends BaseController {
 //            return new JSONObject();
 //        }
 
-        List<HzChangeOrderRespDTO> respDTOs = hzAuditorChangeService.findChangeOrderList(query,record);
+        HzChangeOrderByPageQuery pageQuery = query;
+        try {
+            pageQuery.setPageSize(Integer.valueOf(query.getLimit()));
+        }catch (Exception e){
+        }
+
+        Page<HzChangeOrderRespDTO> page = hzAuditorChangeService.getHzChangeOrderPageUn(pageQuery,record);
+        if(ListUtil.isEmpty(page.getResult())){
+            return new JSONObject();
+        }
+
+        List<HzChangeOrderRespDTO> respDTOS = page.getResult();
+        JSONObject jsonObject = new JSONObject();
+        List<JSONObject> list = new ArrayList<>();
+        respDTOS.forEach(hzChangeOrderRespDTO -> {
+            JSONObject object = new JSONObject();
+            object.put("createName",hzChangeOrderRespDTO.getCreateName());
+            object.put("marketType",hzChangeOrderRespDTO.getMarketType());
+            object.put("createNo",hzChangeOrderRespDTO.getChangeNo());
+            object.put("tel",hzChangeOrderRespDTO.getTel());
+            object.put("relationChangeNo",hzChangeOrderRespDTO.getRelationChangeNo());
+            object.put("createTime",hzChangeOrderRespDTO.getCreateTime());
+            object.put("remark",hzChangeOrderRespDTO.getRemark());
+            object.put("projectState",hzChangeOrderRespDTO.getProjectStage());
+
+            object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
+            object.put("originTime",hzChangeOrderRespDTO.getOriginTime());
+            object.put("id",hzChangeOrderRespDTO.getId());
+            object.put("deptName",hzChangeOrderRespDTO.getDeptName());
+            object.put("changeType",hzChangeOrderRespDTO.getChangeType());
+            object.put("originator",hzChangeOrderRespDTO.getOriginator());
+            object.put("projectName",hzChangeOrderRespDTO.getProjectName());
+            object.put("source",hzChangeOrderRespDTO.getSource());
+            //object.put("auditTime",hzChangeOrderRespDTO.getAuditTime());//审批时间
+            object.put("state",hzChangeOrderRespDTO.getState());
+            object.put("auditId",hzChangeOrderRespDTO.getAuditId());
+            object.put("changeAccepter",hzChangeOrderRespDTO.getChangeAccepter());
+            list.add(object);
+        });
+        jsonObject.put("totalCount",page.getTotalCount());
+        jsonObject.put("result",list);
+        return jsonObject;
+
+        /*List<HzChangeOrderRespDTO> respDTOs = hzAuditorChangeService.findChangeOrderList(query,record);
 
         if(ListUtil.isEmpty(respDTOs)){
             return new JSONObject();
@@ -121,7 +167,7 @@ public class HzUntreatedContrller extends BaseController {
             list.add(object);
         });
         jsonObject.put("result",list);
-        return jsonObject;
+        return jsonObject;*/
     }
     /**
      * 待办事项

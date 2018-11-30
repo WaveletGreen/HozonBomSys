@@ -442,6 +442,16 @@ public class HzVwoController {
         return  iHzVWOManagerService.getFullCfgTable(orderChangeId,projectUid);
     }
 
+    /****************************相关性变更描述变更表单********************************/
+    @RequestMapping(value = "getRelevance")
+    @ResponseBody
+    public Map<String,Object> getRelevance(@RequestParam Integer orderChangeId){
+        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(Long.valueOf(orderChangeId));
+        String projectUid = record.getProjectId();
+        return  iHzVWOManagerService.getRelevance(orderChangeId,projectUid);
+    }
+
+
 
 
     /***************删除特性变更数据*************************************/

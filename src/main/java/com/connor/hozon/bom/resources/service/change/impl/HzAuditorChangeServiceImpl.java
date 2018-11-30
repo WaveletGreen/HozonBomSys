@@ -3,9 +3,11 @@ package com.connor.hozon.bom.resources.service.change.impl;
 import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzChangeOrderFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
+import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -30,7 +32,7 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
     public List<HzChangeOrderRespDTO> findChangeOrderList(HzChangeOrderByPageQuery query, HzAuditorChangeRecord record) {
         List<HzChangeOrderRespDTO> auditorList = new ArrayList<>();
         try{
-            //从HZ_AUDITOR_CHANGE_RECORD表中查找任务条数
+            //从HZ_AUDITOR_CHANGE_RECORD表中查找任务条数:AUDIT_RESULT is null
             List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList(record);
 
             if(ListUtil.isNotEmpty(infos)){
@@ -181,5 +183,45 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
             return null;
         }
         return null;
+    }
+
+    @Override
+    public Page<HzChangeOrderRespDTO> getHzChangeOrderPageUn(HzChangeOrderByPageQuery query, HzAuditorChangeRecord chrecord) {
+        try {
+            List<HzChangeOrderRespDTO> respDTOS = new ArrayList<>();
+            Page<HzChangeOrderRecord> page = hzChangeOrderDAO.findHzChangeOrderRecordByPageUn(query);
+            if (page == null || page.getResult() == null || page.getResult().size() == 0) {
+                return new Page<>(page.getPageNumber(), page.getPageSize(), 0);
+            }
+            List<HzChangeOrderRecord> records = page.getResult();
+            for(HzChangeOrderRecord record :records){
+                HzChangeOrderRespDTO respDTO = HzChangeOrderFactory.changeOrderRecordToRespDTO(record);
+                respDTOS.add(respDTO);
+            }
+            return new Page<>(page.getPageNumber(), page.getPageSize(), page.getTotalCount(), respDTOS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Page<>(query.getPage(), query.getPageSize(), 0);
+        }
+    }
+
+    @Override
+    public Page<HzChangeOrderRespDTO> getHzChangeOrderPagePr(HzChangeOrderByPageQuery query, HzAuditorChangeRecord chrecord) {
+        try {
+            List<HzChangeOrderRespDTO> respDTOS = new ArrayList<>();
+            Page<HzChangeOrderRecord> page = hzChangeOrderDAO.findHzChangeOrderRecordByPagePr(query);
+            if (page == null || page.getResult() == null || page.getResult().size() == 0) {
+                return new Page<>(page.getPageNumber(), page.getPageSize(), 0);
+            }
+            List<HzChangeOrderRecord> records = page.getResult();
+            for(HzChangeOrderRecord record :records){
+                HzChangeOrderRespDTO respDTO = HzChangeOrderFactory.changeOrderRecordToRespDTO(record);
+                respDTOS.add(respDTO);
+            }
+            return new Page<>(page.getPageNumber(), page.getPageSize(), page.getTotalCount(), respDTOS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Page<>(query.getPage(), query.getPageSize(), 0);
+        }
     }
 }

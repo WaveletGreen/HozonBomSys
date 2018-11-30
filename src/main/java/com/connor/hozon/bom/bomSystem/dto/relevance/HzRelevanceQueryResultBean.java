@@ -36,5 +36,9 @@ public class HzRelevanceQueryResultBean {
      * 相关性代码
      */
     private String relevanceCode;
+    /**
+     * 相关性状态
+     */
+    private Integer status;
 
 }
