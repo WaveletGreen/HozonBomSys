@@ -9,6 +9,7 @@ import com.connor.hozon.bom.sys.dao.UserRoleDao;
 
 import com.connor.hozon.bom.sys.entity.*;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -113,10 +114,16 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 	public boolean saveRoleWritePrivilege(UserRole userRole) {
 		try {
 			userRole.packagingTrees(userRole.getTreeArray());
-			List<String> list = Lists.newArrayList(userRole.getTreeArray().split(","));
+			List<String> list = new ArrayList<>();
+			if(StringUtils.isNotBlank(userRole.getTreeArray())){
+				list = Lists.newArrayList(userRole.getTreeArray().split(","));
+			}
+
 			roleWriteAssociateTreeDao.removeTreeByRoleId(userRole);
-			for(String s:list){
-				roleWriteAssociateTreeDao.save(new RoleWriteAssociateTree(userRole.getId(),Long.valueOf(s)));
+			if(ListUtil.isNotEmpty(list)){
+				for(String s:list){
+					roleWriteAssociateTreeDao.save(new RoleWriteAssociateTree(userRole.getId(),Long.valueOf(s)));
+				}
 			}
 			return true;
 		}catch (Exception e){

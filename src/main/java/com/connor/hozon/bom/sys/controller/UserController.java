@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
 import com.connor.hozon.bom.common.base.service.GenericService;
+import com.connor.hozon.bom.common.config.websocket.SocketSessionRegistry;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 
@@ -22,6 +23,7 @@ import com.connor.hozon.bom.sys.service.UserRoleService;
 import com.connor.hozon.bom.sys.service.UserService;
 import com.google.common.collect.Lists;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.inject.Inject;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
 
 /*
 * 类描述：用户维护controller
@@ -54,6 +57,9 @@ public class UserController extends GenericController<User,QueryUser> {
 	@Inject
     private UserAssociateRoleService userAssociateRoleService;
 
+
+    @Autowired
+    SocketSessionRegistry webAgentSessionRegistry;
     @Override
     protected GenericService<User, QueryUser> getService() {
         return userService;
@@ -134,6 +140,7 @@ public class UserController extends GenericController<User,QueryUser> {
     public Map<String,Object> resetPassWord(User entity){
         Map<String,Object> result = new HashMap<>();
         User user = UserInfo.getUser();
+
         User loginUser = userService.findByLogin(user.getLogin());
         if(entity.getId() == null){
             result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
