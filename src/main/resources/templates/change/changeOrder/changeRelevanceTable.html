@@ -110,10 +110,10 @@
                                                 type: "POST",
                                                 url: "../../../vwo/deleteChangeRelevance?orderChangeId="+orderId,
                                                 success: function (result) {
-                                                    if (result.success) {
+                                                    if (result.status) {
                                                         layer.msg('删除成功', {icon: 1, time: 2000})
                                                         window.location.reload();
-                                                    } else if (!result.success) {
+                                                    } else if (!result.status) {
                                                         window.Ewin.alert({message: result.errMsg});
                                                     }
                                                     $table.bootstrapTable("refresh");

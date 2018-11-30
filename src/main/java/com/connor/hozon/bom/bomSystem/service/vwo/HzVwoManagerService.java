@@ -399,7 +399,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
         User user = UserInfo.getUser();
         if (beans != null && beans.size() > 0) {
             for (HzCfg0Record hzCfg0Record : beans) {
-                if (hzCfg0Record.getCfgIsInProcess() == 1) {
+                if (hzCfg0Record.getCfgIsInProcess()!=null&&hzCfg0Record.getCfgIsInProcess() == 1) {
                     result.put("status", false);
                     result.put("msg", "已在VWO流程中，不允许重复发起VWO流程");
                     return result;
@@ -2753,7 +2753,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     public JSONObject deleteChangeRelevance(Long orderChangeId) {
         JSONObject result = new JSONObject();
         result.put("status",true);
-        result.put("status","删除失败");
+        result.put("status","删除成功");
         //修改源数据
         HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
         hzRelevanceBasic.setRbVwoId(orderChangeId);
@@ -2779,7 +2779,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             result.put("status","删除关系表数据失败");
             return  result;
         }
-        return null;
+        return result;
     }
 
 
