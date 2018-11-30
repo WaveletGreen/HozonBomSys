@@ -40,5 +40,9 @@ public class HzAuditorChangeRecord {
      * 数据库表名
      */
     private String tableName;
-
+    /**
+     * 是否为变更接口人,TC端同步的表单 需要通知到接口人
+     * 1:TC同步获取，0：BOM端发起
+     */
+    private Integer changeAccepter;
 }

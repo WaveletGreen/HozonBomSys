@@ -34,6 +34,7 @@ public class TaskOptions {
     public static final int FORM_TYPE_CHANGE = 4;
     /**
      * 任务状态：草稿状态，不需要通知，甚至都不需要保存
+     * @modify by haozt TC 端同步过来变更接口人 需要通知接口人
      */
     public static final int TASK_STATUS_DRAFT = 0;
     /**
@@ -60,4 +61,5 @@ public class TaskOptions {
      * 变更表单
      */
     public static final int TASK_TARGET_TYPE_CHANE = 10;
+
 }

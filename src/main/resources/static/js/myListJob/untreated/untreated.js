@@ -56,9 +56,14 @@ function initTable(url) {
             align: 'center',
             valign: 'middle',
             formatter: function (value, row, index) {
-                var id = row.id
+                var id = row.id;
+                // return [
+                //     '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
+                // ].join("");
+                var auditId = row.auditId;
+                //alert(auditId);
                 return [
-                    '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
+                    '<a href="javascript:void(0)" onclick="queryLou(\'' + id+ '\',+\'' + auditId+'\')">' + value + '</a>'
                 ].join("");
             }
         });
@@ -121,8 +126,8 @@ function initTable(url) {
     });
 }
 
-function queryLou(id) {
-    window.location.href = "untreated/ToUntreatedForm?id=" + id;
+function queryLou(id,auditId) {
+    window.location.href = "untreated/ToUntreatedForm?id=" + id+"&auditId="+auditId;
 }
 
 /**

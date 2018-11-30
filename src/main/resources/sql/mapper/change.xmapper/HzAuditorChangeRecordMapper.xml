@@ -9,10 +9,11 @@
         <result column="AUDIT_SUGG" jdbcType="VARCHAR" property="auditSugg"/>
         <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
         <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName"/>
+        <result column="CHANGE_ACCEPTER" jdbcType="DOUBLE" property="changeAccepter"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-    ID, AUDITOR_ID, AUDIT_TIME, AUDIT_RESULT, AUDIT_SUGG, ORDER_ID, TABLE_NAME
+    ID, AUDITOR_ID, AUDIT_TIME, AUDIT_RESULT, AUDIT_SUGG, ORDER_ID, TABLE_NAME,CHANGE_ACCEPTER
   </sql>
 
     <!--insert-->
@@ -75,6 +76,16 @@
     <!--既然一个表单只能有一个人审核，则表单在审核的时候没有审核结果，有审核结果的不应该再被审核
         因此前提是AUDIT_RESULT is null-->
     <select id="HzAuditorChangeDAOImpl_findByOrderId" parameterType="sql.pojo.change.HzAuditorChangeRecord"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HZ_AUDITOR_CHANGE_RECORD
+        where ORDER_ID = #{orderId,jdbcType=DOUBLE} and AUDITOR_ID=#{auditorId,jdbcType=DOUBLE}
+        and AUDIT_RESULT is null
+    </select>
+
+    <!--接口人查询出的记录可能有多条返回list集合-->
+    <select id="HzAuditorChangeDAOImpl_findByOrdersId" parameterType="sql.pojo.change.HzAuditorChangeRecord"
             resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>

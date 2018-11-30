@@ -52,6 +52,9 @@
         <!--数量-->
         <result column="P_NUMBER" jdbcType="INTEGER"
                 property="number"/>
+        <!--sent-->
+        <!--,，要加2个字段-->
+        <!--unit不见了，todo-->
     </resultMap>
 
     <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"-->

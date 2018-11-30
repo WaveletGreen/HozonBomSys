@@ -33,7 +33,7 @@ public class HzPrivilegeController extends BaseController {
         List<String> urls = HzFilter.getUrlList();
         if(ListUtil.isNotEmpty(urls)){
             if(urls.contains(uri)){
-                WriteResultRespDTO resultRespDTO = userRolePrivilegeService.hasPrivilege(url,urls);
+                WriteResultRespDTO resultRespDTO = userRolePrivilegeService.hasPrivilege(uri,urls);
                 if(WriteResultRespDTO.isSuccess(resultRespDTO)){
                     toJSONResponse(Result.build(true),response);
                 }else {

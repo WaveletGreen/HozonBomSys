@@ -5,6 +5,7 @@
 		<id property="id" column="id"/>
 		<result property="name" column="name"/>
 		<result property="roleName" column="role_name"/>
+		<result property="user_id" column="userId"/>
 	</resultMap>
 
 	<resultMap type="com.connor.hozon.bom.sys.entity.UserRole" id="UserRoleTreeMap">
@@ -121,5 +122,29 @@
 		<if test="sort!= null">
 		order by ${sort} ${order}
 		</if>
+	</select>
+
+	<!--查询-->
+	<select id="findUserRoleListByIds" parameterType="java.util.List" resultMap="UserRoleMap">
+		SELECT id,name,role_name FROM user_role
+		WHERE 1=1
+		<if test="ids != null and ids.size()>0">
+			and t2.id in
+			<foreach collection="ids" index="index" item="item"  open="(" separator="," close=")">
+				#{ids[${index}]}
+			</foreach>
+		</if>
+	</select>
+
+	<select id="findUserRoleAndUserByRoleName" parameterType="java.lang.String" resultMap="UserRoleMap">
+	SELECT
+		T1.*,
+		t2.USER_ID
+	FROM
+		USER_ROLE t1,
+		USER_ASSOCIATE_ROLE t2
+	WHERE
+		T1. ID = T2.ROLE_ID
+	AND t1.ROLE_NAME = #{roleName}
 	</select>
 </mapper>

@@ -37,8 +37,18 @@ public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao 
     }
 
     @Override
+    public List<HzTasks> selectInterfaceTasks(HzTasks tasks) {
+        return baseSQLUtil.executeQuery(tasks, clzName + ".selectInterfaceTasks");
+    }
+
+    @Override
     public List<HzTasks> selectUserTargetTaskByType(HzTasks task) {
         return baseSQLUtil.executeQuery(task, clzName + ".selectUserTargetTaskByType");
+    }
+
+    @Override
+    public List<HzTasks> selectUserTargetTask(HzTasks task) {
+        return baseSQLUtil.executeQuery(task, clzName + ".selectUserTargetTask");
     }
 
     @Override
@@ -59,7 +69,7 @@ public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao 
      */
     @Override
     public int tasksStop(HzTasks task) {
-        return baseSQLUtil.executeUpdate(task, clzName + ".updateTargetStatus");
+        return baseSQLUtil.executeUpdate(task, clzName + ".tasksStop");
     }
 
 }

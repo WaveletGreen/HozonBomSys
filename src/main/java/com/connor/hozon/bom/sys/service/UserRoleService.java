@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -122,5 +123,20 @@ public class UserRoleService extends GenericService<UserRole, QueryUserRole> {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+
+	public List<UserRole> findUserRoleListByIds(List<String> ids){
+		List<Long> list  = new ArrayList<>();
+		if(ListUtil.isNotEmpty(ids)){
+			ids.forEach(id->{
+				list.add(Long.parseLong(id));
+			});
+		}
+		return userRoleDao.findUserRoleListByIds(list);
+	}
+
+	public List<UserRole> findUserRoleAndUserByRoleName(String roleName){
+		return userRoleDao.findUserRoleAndUserByRoleName(roleName);
 	}
 }

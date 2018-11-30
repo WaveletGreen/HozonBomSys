@@ -66,9 +66,15 @@ public class HzUntreatedContrller extends BaseController {
      * 获取ChangeOrder表单详细信息-待办事项
      */
     @RequestMapping(value = "ToUntreatedForm",method = RequestMethod.GET)
-    public String getToUntreatedFormToPage(Long id,Model model){
+    public String getToUntreatedFormToPage(Long id,Long auditId,Model model){
+        HzChangeOrderRespDTO respDTO = null;
+        if(auditId==null){
+            respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
+        }else{
+            respDTO = hzChangeOrderService.getHzChangeOrderRespDTOById(id,auditId);
+        }
         //HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
-        HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRespDTOById(id);
+        //HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRespDTOById(id,auditId);
 
         //HzChangeOrderByPageQuery query = new HzChangeOrderByPageQuery();
         //HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,id);

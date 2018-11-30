@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO">
+<mapper namespace="HzMaterielRecordMapper">
     <resultMap id="BaseResultMap" type="sql.pojo.project.HzMaterielRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_MATERIEL_CODE" jdbcType="VARCHAR" property="pMaterielCode"/>
@@ -395,8 +395,9 @@
         </where>
     </select>
 
+    <!--这不是有个批量更新发送状态的码？-->
     <!--批量更新发送到SAP的状态为1，表示发放成功，没有写在DAO层中-->
-    <update id="updateByBatch" parameterType="java.util.HashMap">
+    <update id="HzMaterialDAOImpl_updateByBatch" parameterType="java.util.HashMap">
         update ${tableName} t set t.IS_SENT=1
         where t.${field} in
         <if test="list!=null">

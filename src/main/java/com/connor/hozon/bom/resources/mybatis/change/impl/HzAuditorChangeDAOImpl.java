@@ -68,6 +68,14 @@ public class HzAuditorChangeDAOImpl extends BaseSQLUtil implements HzAuditorChan
     }
 
     @Override
+    public List<HzAuditorChangeRecord> findByOrdersId(Long orderId, Long userId) {
+        HzAuditorChangeRecord record = new HzAuditorChangeRecord();
+        record.setOrderId(orderId);
+        record.setAuditorId(userId);
+        return super.findForList("HzAuditorChangeDAOImpl_findByOrdersId", record);
+    }
+
+    @Override
     public int updateByPrimaryKeySelective(HzAuditorChangeRecord record) {
         return super.executeUpdate(record, "HzAuditorChangeDAOImpl_updateByPrimaryKeySelective");
     }
