@@ -590,7 +590,7 @@
     <update id="updateStatusByOrderId" parameterType="java.util.Map">
         update HZ_CFG0_RECORD
         set CFG_STATUS = #{status,jdbcType=INTEGER},
-        CFG_IS_IN_PROCESS = null ,
+        CFG_IS_IN_PROCESS = 0 ,
         CHANGE_ORDER_ID = null
         where
         PUID in (select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL})

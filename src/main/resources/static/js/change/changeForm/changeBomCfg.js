@@ -139,7 +139,7 @@ function modelAppend(index,data) {
 function deleteBom(){
     var url = "vwo/deleteChangeBomAll";
     $.ajax({
-        url: "privilege/write?url=" + url,
+        url: "../../../privilege/write?url=" + url,
         type: "GET",
         success: function (result) {
             if (!result.success) {
