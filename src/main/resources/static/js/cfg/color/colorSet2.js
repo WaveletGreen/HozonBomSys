@@ -9,12 +9,25 @@ var toolbar = [
         text: '添加',
         iconCls: 'glyphicon glyphicon-plus',
         handler: function () {
-            window.Ewin.dialog({
-                title: "添加",
-                url: "colorSet/addPage",
-                gridId: "gridId",
-                width: 400,
-                height: 500
+            var url = "colorSet/addPage";
+            $.ajax({
+                url: "privilege/write?url=" + url,
+                type: "GET",
+                success: function (result) {
+                    if (!result.success) {
+                        window.Ewin.alert({message: result.errMsg});
+                        return false;
+                    }
+                    else {
+                        window.Ewin.dialog({
+                            title: "添加",
+                            url: "colorSet/addPage",
+                            gridId: "gridId",
+                            width: 400,
+                            height: 500
+                        })
+                    }
+                }
             })
         }
     },
@@ -28,13 +41,26 @@ var toolbar = [
                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                 return false;
             }
-            window.Ewin.dialog({
-                title: "修改",
-                url: "colorSet/update?puid=" + rows[0].puid,
-                gridId: "gridId",
-                width: 400,
-                height: 500
-            });
+            var url = "colorSet/update";
+            $.ajax({
+                url: "privilege/write?url=" + url,
+                type: "GET",
+                success: function (result) {
+                    if (!result.success) {
+                        window.Ewin.alert({message: result.errMsg});
+                        return false;
+                    }
+                    else {
+                        window.Ewin.dialog({
+                            title: "修改",
+                            url: "colorSet/update?puid=" + rows[0].puid,
+                            gridId: "gridId",
+                            width: 400,
+                            height: 500
+                        });
+                    }
+                }
+            })
         }
     },
     {
@@ -46,31 +72,44 @@ var toolbar = [
                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                 return false;
             }
-            window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
-                if (e) {
-                    $.ajax({
-                        type: "POST",
-                        //ajax需要添加打包名
-                        url: "./colorSet/delete",
-                        data: JSON.stringify(rows),
-                        contentType: "application/json",
-                        success: function (result) {
-                            if (result.status) {
-                                layer.msg(result.msg, {icon: 1, time: 2000})
-                                // window.Ewin.alert({message: });
-                                //刷新，会重新申请数据库数据
+            var url = "colorSet/delete";
+            $.ajax({
+                url: "privilege/write?url=" + url,
+                type: "GET",
+                success: function (result) {
+                    if (!result.success) {
+                        window.Ewin.alert({message: result.errMsg});
+                        return false;
+                    }
+                    else {
+                        window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                            if (e) {
+                                $.ajax({
+                                    type: "POST",
+                                    //ajax需要添加打包名
+                                    url: "./colorSet/delete",
+                                    data: JSON.stringify(rows),
+                                    contentType: "application/json",
+                                    success: function (result) {
+                                        if (result.status) {
+                                            layer.msg(result.msg, {icon: 1, time: 2000})
+                                            // window.Ewin.alert({message: });
+                                            //刷新，会重新申请数据库数据
+                                        }
+                                        else {
+                                            window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                        }
+                                        $table.bootstrapTable("refresh");
+                                    },
+                                    error: function (info) {
+                                        window.Ewin.alert({message: "操作删除:" + info.status});
+                                    }
+                                })
                             }
-                            else {
-                                window.Ewin.alert({message: "操作删除失败:" + result.msg});
-                            }
-                            $table.bootstrapTable("refresh");
-                        },
-                        error: function (info) {
-                            window.Ewin.alert({message: "操作删除:" + info.status});
-                        }
-                    })
+                        });
+                    }
                 }
-            });
+            })
         }
     }
 ];

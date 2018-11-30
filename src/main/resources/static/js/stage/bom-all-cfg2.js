@@ -17,7 +17,8 @@ var modelArr = [];
 var cfgmagArr = [];
 
 
-var mainStatus ;
+var mainStatus;
+
 function doRefresh(projectUid) {
     loadData(projectUid);
 }
@@ -59,7 +60,7 @@ function loadData(projectUid) {
             cfgSize = _ddd.cfgSize;
             array = _ddd.array;
             var main = _ddd.main;
-            mainStatus =  main.status;
+            mainStatus = main.status;
             var versionArr = main.version.split(".");
             versionHead = parseInt(versionArr[0]);
             var $table = $("#cfg0Table");
@@ -90,11 +91,11 @@ function loadData(projectUid) {
                         "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>生效日期：" + main.effectiveDate + "</td>" +
                         "</tr>";
                 }
-                else if(i == 4){
+                else if (i == 4) {
                     temp +=
                         "<tr id='tr" + i + "'>" +
                         "<td></td>" +
-                        "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>状态：" + statusIntToStr(mainStatus)+ "</td>" +
+                        "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>状态：" + statusIntToStr(mainStatus) + "</td>" +
                         "</tr>";
                 }
                 else {
@@ -226,12 +227,12 @@ function loadData(projectUid) {
                 var v0 = modeli.key;
                 var v1 = modeli.hide;
 
-                $("#tr0").append("<td id='in_" + i + "' data-model-uid='"+modeli.modelPuid+"'>" +
-                                    "<input class='btn btn-default' type='button' value='编辑' onclick='editPoint(this)'/>" +
-                                    "<input class='btn btn-default' type='button' value='取消' style='display: none' onclick='cancelEditorPoint(this)'/>" +
-                                    "<input class='btn btn-default' type='button' value='删除' style='background-color: red;display:none' onclick='deleteModel(this)'/>" +
-                                    // "<div style='display: none' >" + modeli.modelPuid + "</div>" +
-                                "</td>");
+                $("#tr0").append("<td id='in_" + i + "' data-model-uid='" + modeli.modelPuid + "'>" +
+                    "<input class='btn btn-default' type='button' value='编辑' onclick='editPoint(this)'/>" +
+                    "<input class='btn btn-default' type='button' value='取消' style='display: none' onclick='cancelEditorPoint(this)'/>" +
+                    "<input class='btn btn-default' type='button' value='删除' style='background-color: red;display:none' onclick='deleteModel(this)'/>" +
+                    // "<div style='display: none' >" + modeli.modelPuid + "</div>" +
+                    "</td>");
                 //品牌
                 $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.brand + "</div></td>");
                 //平台
@@ -406,15 +407,28 @@ $(document).ready(
                     }
                 }
                 if (!flag) {
-                    projectPuid = $("#project", window.top.document).val(),
-                        window.Ewin.dialog({
-                            // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                            title: "添加车型模型",
-                            url: "bomAllCfg/addVehicleModelPage2?projectPuid=" + projectPuid,
-                            gridId: "gridId",
-                            width: 350,
-                            height: 450
-                        });
+                    projectPuid = $("#project", window.top.document).val();
+                    var url = "bomAllCfg/addVehicleModelPage2";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                                    title: "添加车型模型",
+                                    url: "bomAllCfg/addVehicleModelPage2?projectPuid=" + projectPuid,
+                                    gridId: "gridId",
+                                    width: 350,
+                                    height: 450
+                                });
+                            }
+                        }
+                    })
                 }
             }),
             $("#setVersion").click(function () {
@@ -443,52 +457,91 @@ $(document).ready(
                     }
                 }
                 if (!flag) {
-                    window.Ewin.dialog({
-                        // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                        title: "手动设置版本",
-                        url: "bomAllCfg/setStageOrVersionPage?projectUid=" + getProjectUid() + "&setName=version",
-                        gridId: "gridId",
-                        width: 450,
-                        height: 450
-                    });
+                    var url = "bomAllCfg/setStageOrVersionPage";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.dialog({
+                                    // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                                    title: "手动设置版本",
+                                    url: "bomAllCfg/setStageOrVersionPage?projectUid=" + getProjectUid() + "&setName=version",
+                                    gridId: "gridId",
+                                    width: 450,
+                                    height: 450
+                                });
+                            }
+                        }
+                    })
                 }
             }),
             $("#setStage").click(function () {
-                window.Ewin.dialog({
-                    // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                    title: "手动设置阶段",
-                    url: "bomAllCfg/setStageOrVersionPage?projectUid=" + getProjectUid() + "&setName=stage",
-                    gridId: "gridId",
-                    width: 450,
-                    height: 450
-                });
+                var url = "bomAllCfg/setStageOrVersionPage";
+                $.ajax({
+                    url: "privilege/write?url=" + url,
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        }
+                        else {
+                            window.Ewin.dialog({
+                                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                                title: "手动设置阶段",
+                                url: "bomAllCfg/setStageOrVersionPage?projectUid=" + getProjectUid() + "&setName=stage",
+                                gridId: "gridId",
+                                width: 450,
+                                height: 450
+                            });
+                        }
+                    }
+                })
                 undead();
             }),
             $("#release").click(function () {
-                window.Ewin.confirm({title: '提示', message: '您确定需要升小版本吗？', width: 500}).on(function (e) {
-                    if (e) {
-                        $.ajax({
-                            type: "POST",
-                            //ajax需要添加打包名
-                            url: "./bomAllCfg/promote?projectUid=" + getProjectUid(),
-                            contentType: "application/json",
-                            success: function (result) {
-                                if (result.status) {
-                                    $("#row1").text("版本：" + result.version);
-                                    $("#row2").text("生效日期：" + result.releaseDate);
-                                    layer.msg(result.msg, {icon: 1, time: 2000})
+                var url = "bomAllCfg/promote";
+                $.ajax({
+                    url: "privilege/write?url=" + url,
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        }
+                        else {
+                            window.Ewin.confirm({title: '提示', message: '您确定需要升小版本吗？', width: 500}).on(function (e) {
+                                if (e) {
+                                    $.ajax({
+                                        type: "POST",
+                                        //ajax需要添加打包名
+                                        url: "./bomAllCfg/promote?projectUid=" + getProjectUid(),
+                                        contentType: "application/json",
+                                        success: function (result) {
+                                            if (result.status) {
+                                                $("#row1").text("版本：" + result.version);
+                                                $("#row2").text("生效日期：" + result.releaseDate);
+                                                layer.msg(result.msg, {icon: 1, time: 2000})
+                                            }
+                                            else {
+                                                window.Ewin.alert({message: "操作升级小版本失败:" + result.msg});
+                                            }
+                                            // loadData();
+                                        },
+                                        error: function (info) {
+                                            window.Ewin.alert({message: "操作失败:" + info.status});
+                                        }
+                                    })
                                 }
-                                else {
-                                    window.Ewin.alert({message: "操作升级小版本失败:" + result.msg});
-                                }
-                                // loadData();
-                            },
-                            error: function (info) {
-                                window.Ewin.alert({message: "操作失败:" + info.status});
-                            }
-                        })
+                            });
+                        }
                     }
-                });
+                })
             }),
             $("#getVwo").click(function () {
                 for (var i = 0; i < cfgSize; i++) {
@@ -501,41 +554,67 @@ $(document).ready(
                     }
                 }
                 var stage = $("#row1").html();
-                if(stage=="阶段："){
+                if (stage == "阶段：") {
                     window.Ewin.alert({message: "请设置完阶段后再发起变更"});
                     return false;
                 }
 
-                if(mainStatus!=0&&mainStatus!=5){
+                if (mainStatus != 0 && mainStatus != 5) {
                     window.Ewin.alert({message: "非编辑状态不能发起变更"});
                     return false;
                 }
-                window.Ewin.dialog({
-                    // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                    title: "选择变更表单",
-                    url: "bomAllCfg/setChangeFromPage?projectUid=" + getProjectUid(),
-                    gridId: "gridId",
-                    width: 450,
-                    height: 450
-                });
+                var url = "bomAllCfg/setChangeFromPage";
+                $.ajax({
+                    url: "privilege/write?url=" + url,
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        }
+                        else {
+                            window.Ewin.dialog({
+                                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                                title: "选择变更表单",
+                                url: "bomAllCfg/setChangeFromPage?projectUid=" + getProjectUid(),
+                                gridId: "gridId",
+                                width: 450,
+                                height: 450
+                            });
+                        }
+                    }
+                })
             }),
             $("#goBackData").click(function () {
-                if(mainStatus!=0&&mainStatus!=5){
+                if (mainStatus != 0 && mainStatus != 5) {
                     window.Ewin.alert({message: "非编辑状态不能撤销"});
-                }else {
-                    window.Ewin.confirm({title: '提示', message: '是否要撤销您所选择的记录？', width: 500}).on(function (e) {
-                        if (e) {
-                            $.ajax({
-                                type: "POST",
-                                url: "bomAllCfg/goBackData?projectUid=" + getProjectUid(),
-                                success: function (result) {
-                                    layer.msg(result.msg, {icon: 1, time: 2000});
-                                    window.location.reload();
-                                },
-                                error: function (result) {
-                                    window.Ewin.alert({message: "撤销失败:" + result.msg});
-                                }
-                            });
+                } else {
+                    var url = "bomAllCfg/goBackData";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.confirm({title: '提示', message: '是否要撤销您所选择的记录？', width: 500}).on(function (e) {
+                                    if (e) {
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "bomAllCfg/goBackData?projectUid=" + getProjectUid(),
+                                            success: function (result) {
+                                                layer.msg(result.msg, {icon: 1, time: 2000});
+                                                window.location.reload();
+                                            },
+                                            error: function (result) {
+                                                window.Ewin.alert({message: "撤销失败:" + result.msg});
+                                            }
+                                        });
+                                    }
+                                })
+                            }
                         }
                     })
                 }
@@ -574,12 +653,25 @@ $('.edit').on('click', function () {
 
 
 function Botton(id) {
-    window.Ewin.dialog({
-        url: "model/modModel?pModelPuid=" + id,
-        title: "修改",
-        width: 500,
-        height: 400,
-        gridId: "addPageOfModel"
+    var url = "model/modModel";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    url: "model/modModel?pModelPuid=" + id,
+                    title: "修改",
+                    width: 500,
+                    height: 400,
+                    gridId: "addPageOfModel"
+                })
+            }
+        }
     })
 }
 
@@ -624,19 +716,32 @@ function save() {
         object[modelId] = params;
     }
     var data = JSON.stringify(object);
+    var url = "bomAllCfg/savePoint";
     $.ajax({
-        type: "POST",
-        //ajax需要添加打包名
-        url: "bomAllCfg/savePoint",
-        data: data,
-        contentType: 'application/json',
-        // data: JSON.stringify(puidOfModelFeatures),
+        url: "privilege/write?url=" + url,
+        type: "GET",
         success: function (result) {
-            window.Ewin.alert({message: result, width: 800});
-            $table.bootstrapTable("refresh");
-        },
-        error: function (info) {
-            window.Ewin.alert({message: "操作删除:" + info.status});
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    //ajax需要添加打包名
+                    url: "bomAllCfg/savePoint",
+                    data: data,
+                    contentType: 'application/json',
+                    // data: JSON.stringify(puidOfModelFeatures),
+                    success: function (result) {
+                        window.Ewin.alert({message: result, width: 800});
+                        $table.bootstrapTable("refresh");
+                    },
+                    error: function (info) {
+                        window.Ewin.alert({message: "操作删除:" + info.status});
+                    }
+                })
+            }
         }
     })
 }
@@ -648,101 +753,114 @@ function editorOrSave(but) {
         projectPuid = $("#project", window.top.document).val();
         // var bomLineId = $(but).parent().find('div').text();
         //是一个jQuery对象
-        var parent=$(but).parent();
+        var parent = $(but).parent();
         //jQuery对象jQuery获取方法data()方法
-        var bomLineId=parent.data("uid-coach");
+        var bomLineId = parent.data("uid-coach");
+        var url = "bomAllCfg/query2YCfg";
         $.ajax({
+            url: "privilege/write?url=" + url,
             type: "GET",
-            url: "bomAllCfg/query2YCfg?projectPuid=" + projectPuid + "&bomLineId=" + bomLineId,
             success: function (result) {
-                var cfgs = result.cfgs;
-                var selfCfg = result.selfCfg;
-                $(but).val('保存');
-                $(but).parent().find('input:eq(1)').show();
-                $(but).parent().siblings().each(function (index, item) {
-                    if (index == 8) {
-                        var divText = $(item).find('div').text();
-                        //从特性数组中删除对应特性
-                        for (var i = 0; i < cfgValArr.length; i++) {
-                            if (divText == cfgValArr[i]) {
-                                cfgValArr.splice(i, 1);
-                                break;
-                            }
-                        }
-                        $("#td_cfg").typeahead({
-                            source: cfgValArr
-                        });
-                        var select = $(item).find('select');
-                        $(select).empty();
-                        $(select).append("<option></option>");
-                        let _array = JSON.parse(JSON.stringify(array));
-                        // console.log(_array);
-                        for (let j = 0; j < cfgs.length; j++) {
-                            for (let i = 0; i < _array.length; i++) {
-                                if (cfgs[j].cfgCfg0Uid == _array[i].puid) {
-                                    _array.splice(i, 1);
-                                    break;
+                if (!result.success) {
+                    window.Ewin.alert({message: result.errMsg});
+                    return false;
+                }
+                else {
+                    $.ajax({
+                        type: "GET",
+                        url: "bomAllCfg/query2YCfg?projectPuid=" + projectPuid + "&bomLineId=" + bomLineId,
+                        success: function (result) {
+                            var cfgs = result.cfgs;
+                            var selfCfg = result.selfCfg;
+                            $(but).val('保存');
+                            $(but).parent().find('input:eq(1)').show();
+                            $(but).parent().siblings().each(function (index, item) {
+                                if (index == 8) {
+                                    var divText = $(item).find('div').text();
+                                    //从特性数组中删除对应特性
+                                    for (var i = 0; i < cfgValArr.length; i++) {
+                                        if (divText == cfgValArr[i]) {
+                                            cfgValArr.splice(i, 1);
+                                            break;
+                                        }
+                                    }
+                                    $("#td_cfg").typeahead({
+                                        source: cfgValArr
+                                    });
+                                    var select = $(item).find('select');
+                                    $(select).empty();
+                                    $(select).append("<option></option>");
+                                    let _array = JSON.parse(JSON.stringify(array));
+                                    // console.log(_array);
+                                    for (let j = 0; j < cfgs.length; j++) {
+                                        for (let i = 0; i < _array.length; i++) {
+                                            if (cfgs[j].cfgCfg0Uid == _array[i].puid) {
+                                                _array.splice(i, 1);
+                                                break;
+                                            }
+                                        }
+
+                                    }
+                                    for (let i = 0; i < _array.length; i++) {
+                                        $(select).append("<option value='" + _array[i].puid + "|" + _array[i].pCfg0Desc + "'><span style='color: #0c5460'>" + _array[i].pCfg0ObjectId + "</span></option>");
+                                    }
+                                    if (undefined != selfCfg) {
+                                        for (let cfgIdIndex = 0; cfgIdIndex < array.length; cfgIdIndex++) {
+                                            if (array[cfgIdIndex].puid == selfCfg.cfgCfg0Uid) {
+                                                $(select).append("<option value='" + array[cfgIdIndex].puid + "|" + array[cfgIdIndex].pCfg0Desc + "' selected='selected'><span style='color: #b96104'>" + array[cfgIdIndex].pCfg0ObjectId + "</span></option>");
+                                            }
+                                        }
+                                    }
+                                    // for (var i = 0; i < cfgs.length; i++) {
+                                    //     $("select option[value='" + cfgs[i].cfgCfg0Uid + "']").remove();
+                                    //     // alert(cfgs[i].cfgCfg0Uid);
+                                    // }
+                                    // var selectText = $(select).find("option:selected").text();
+                                    // if(selectText==null){
+                                    //     $('#'+selectText+ 'option:first').prop("selected", 'selected');
+                                    // }
+
+                                    $(item).find('select').show();
+                                    $(item).find('div').hide();
+                                } else if (index == 9) {
+                                    var div = $(item).find('div');
+                                    var select = $(item).find('select');
+                                    var divText = $(div).text();
+                                    // alert(divText);
+                                    // $(select).find("option[text='N']").attr("selected",true);
+                                    if (divText == "Y") {
+                                        $(select).val("1");
+                                    } else {
+                                        $(select).val("0");
+                                    }
+                                    $(div).hide();
+                                    $(select).show();
+                                } else if (index == 10) {
+                                    var select = $(item).find('select');
+                                    var div = $(item).find('div');
+                                    if ($(div).text() == "选配") {
+                                        $(select).val("0");
+                                    } else {
+                                        $(select).val("1");
+                                    }
+                                    $(select).show();
+                                    $(div).hide();
                                 }
-                            }
+                            })
 
+                        },
+                        error: function (info) {
+                            window.Ewin.alert({message: "系统错误:" + info.status});
                         }
-                        for (let i = 0; i < _array.length; i++) {
-                            $(select).append("<option value='" + _array[i].puid + "|" + _array[i].pCfg0Desc + "'><span style='color: #0c5460'>" + _array[i].pCfg0ObjectId + "</span></option>");
-                        }
-                        if (undefined != selfCfg) {
-                            for (let cfgIdIndex = 0; cfgIdIndex < array.length; cfgIdIndex++) {
-                                if (array[cfgIdIndex].puid == selfCfg.cfgCfg0Uid) {
-                                    $(select).append("<option value='" + array[cfgIdIndex].puid + "|" + array[cfgIdIndex].pCfg0Desc + "' selected='selected'><span style='color: #b96104'>" + array[cfgIdIndex].pCfg0ObjectId + "</span></option>");
-                                }
-                            }
-                        }
-                        // for (var i = 0; i < cfgs.length; i++) {
-                        //     $("select option[value='" + cfgs[i].cfgCfg0Uid + "']").remove();
-                        //     // alert(cfgs[i].cfgCfg0Uid);
-                        // }
-                        // var selectText = $(select).find("option:selected").text();
-                        // if(selectText==null){
-                        //     $('#'+selectText+ 'option:first').prop("selected", 'selected');
-                        // }
-
-                        $(item).find('select').show();
-                        $(item).find('div').hide();
-                    } else if (index == 9) {
-                        var div = $(item).find('div');
-                        var select = $(item).find('select');
-                        var divText = $(div).text();
-                        // alert(divText);
-                        // $(select).find("option[text='N']").attr("selected",true);
-                        if (divText == "Y") {
-                            $(select).val("1");
-                        } else {
-                            $(select).val("0");
-                        }
-                        $(div).hide();
-                        $(select).show();
-                    } else if (index == 10) {
-                        var select = $(item).find('select');
-                        var div = $(item).find('div');
-                        if ($(div).text() == "选配") {
-                            $(select).val("0");
-                        } else {
-                            $(select).val("1");
-                        }
-                        $(select).show();
-                        $(div).hide();
-                    }
-                })
-
-            },
-            error: function (info) {
-                window.Ewin.alert({message: "系统错误:" + info.status});
+                    });
+                }
             }
-        });
+        })
     } else {
         $(but).val('编辑');
         $(but).parent().find('input:eq(1)').hide();
         //2Y层id
-        var parent=$(but).parent();
+        var parent = $(but).parent();
         var bomLinePuid;
         //特性Id
         var cfgPuid;
@@ -795,7 +913,7 @@ function editorOrSave(but) {
         //保存2Y层对应的各数据
         $.ajax({
             type: "POST",
-            url: "bomAllCfg/saveOneRow?bomLinePuid=" + bomLinePuid + "&cfgPuid=" + cfgPuid + "&colorPart=" + colorPart + "&msgVal=" + msgVal+"&projectPuid="+projectPuid,
+            url: "bomAllCfg/saveOneRow?bomLinePuid=" + bomLinePuid + "&cfgPuid=" + cfgPuid + "&colorPart=" + colorPart + "&msgVal=" + msgVal + "&projectPuid=" + projectPuid,
             contentType: 'application/json',
             success: function (result) {
                 if (result.flag) {
@@ -990,63 +1108,89 @@ function editPoint(but) {
 
         var json = JSON.stringify(object);
         //传给后台保存打点图
+        var url = "bomAllCfg/savePoint";
         $.ajax({
-            type: "POST",
-            url: "bomAllCfg/savePoint?projectPuid="+projectPuid,
-            data: json,
-            dataType: 'json',
-            contentType: 'application/json',
+            url: "privilege/write?url=" + url,
+            type: "GET",
             success: function (result) {
-                if (result.updateFlag) {
-                    for (var i = 0; i < cfgSize; i++) {
-                        var pointId = modelDivId + "in_in_" + i;
-                        var selectVal = $("#" + pointId).parent().find("select").find("option:selected").val();
-                        $("#" + pointId).parent().find("div").text(selectVal);
-                        $("#" + pointId).parent().find("div").show();
-                        $("#" + pointId).parent().find("select").hide();
-                    }
-                } else {
-                    window.Ewin.alert({message: "修改失败:" + info.status});
-                }
-            },
-            error: function (info) {
-                if (200 == info.status) {
-                    window.Ewin.alert({message: "您似乎操作超时，请重新登录"});
-                }
-                else if (info.status == 0 || 500 == info.status) {
-                    window.Ewin.alert({message: "保存失败，服务器故障，请联系系统管理员查看日志"});
+                if (!result.success) {
+                    window.Ewin.alert({message: result.errMsg});
+                    return false;
                 }
                 else {
-                    window.Ewin.alert({message: "未知错误，请稍后重试"});
+                    $.ajax({
+                        type: "POST",
+                        url: "bomAllCfg/savePoint?projectPuid=" + projectPuid,
+                        data: json,
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (result) {
+                            if (result.updateFlag) {
+                                for (var i = 0; i < cfgSize; i++) {
+                                    var pointId = modelDivId + "in_in_" + i;
+                                    var selectVal = $("#" + pointId).parent().find("select").find("option:selected").val();
+                                    $("#" + pointId).parent().find("div").text(selectVal);
+                                    $("#" + pointId).parent().find("div").show();
+                                    $("#" + pointId).parent().find("select").hide();
+                                }
+                            } else {
+                                window.Ewin.alert({message: "修改失败:" + info.status});
+                            }
+                        },
+                        error: function (info) {
+                            if (200 == info.status) {
+                                window.Ewin.alert({message: "您似乎操作超时，请重新登录"});
+                            }
+                            else if (info.status == 0 || 500 == info.status) {
+                                window.Ewin.alert({message: "保存失败，服务器故障，请联系系统管理员查看日志"});
+                            }
+                            else {
+                                window.Ewin.alert({message: "未知错误，请稍后重试"});
+                            }
+                        }
+                    });
                 }
             }
-        });
+        })
     }
 }
 
 //删除车辆模型
 function deleteModel(obj) {
     // var isDelete = confirm("是否确认删除");
-    window.Ewin.confirm({title: '提示', message: '是否确认删除？', width: 500}).on(function (e) {
-        if (e) {
-            var modelId = $(obj).parent().data("model-uid");
-            $.ajax({
-                type: "GET",
-                url: "bomAllCfg/deleteModel?modelId=" + modelId,
-                success: function (result) {
-                    if (result.flag) {
-                        layer.msg("删除成功", {icon: 1, time: 2000})
-                        loadData(getProjectUid());
-                    } else {
-                        window.Ewin.alert({message: "执行删除操作失败"});
+    var url = "bomAllCfg/deleteModel";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: '是否确认删除？', width: 500}).on(function (e) {
+                    if (e) {
+                        var modelId = $(obj).parent().data("model-uid");
+                        $.ajax({
+                            type: "GET",
+                            url: "bomAllCfg/deleteModel?modelId=" + modelId,
+                            success: function (result) {
+                                if (result.flag) {
+                                    layer.msg("删除成功", {icon: 1, time: 2000})
+                                    loadData(getProjectUid());
+                                } else {
+                                    window.Ewin.alert({message: "执行删除操作失败"});
+                                }
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: "删除失败:" + info.status});
+                            }
+                        });
                     }
-                },
-                error: function (info) {
-                    window.Ewin.alert({message: "删除失败:" + info.status});
-                }
-            });
+                });
+            }
         }
-    });
+    })
 }
 
 /**
@@ -1073,13 +1217,13 @@ function cancelEditorPoint(but) {
 }
 
 function statusIntToStr(mStatus) {
-    if(mStatus==0){
+    if (mStatus == 0) {
         return "编辑";
-    }else if(mStatus==1){
+    } else if (mStatus == 1) {
         return "已生效";
-    }else if(mStatus==5){
+    } else if (mStatus == 5) {
         return "更新";
-    }else if(mStatus==10){
+    } else if (mStatus == 10) {
         return "变更流程中"
     }
 }

@@ -214,22 +214,35 @@ $(document).ready(
 function generateRelevance() {
     var msg = "您确定生成相关性吗！";
     var projectPuid = $("#project", window.top.document).val();
-    window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
-        if (e) {
-            $.ajax({
-                type: "GET",
-                //ajax需要添加打包名
-                url: "./relevance/addRelevance?projectPuid=" + projectPuid,
-                contentType: "application/json",
-                success: function (result) {
-                    if (result) {
-                        loadData(getProjectUid());
+    var url = "relevance/addRelevance";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
+                    if (e) {
+                        $.ajax({
+                            type: "GET",
+                            //ajax需要添加打包名
+                            url: "./relevance/addRelevance?projectPuid=" + projectPuid,
+                            contentType: "application/json",
+                            success: function (result) {
+                                if (result) {
+                                    loadData(getProjectUid());
+                                }
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: "操作发送失败:" + info.status});
+                            }
+                        })
                     }
-                },
-                error: function (info) {
-                    window.Ewin.alert({message: "操作发送失败:" + info.status});
-                }
-            })
+                })
+            }
         }
     })
 }
@@ -239,14 +252,26 @@ function getChange() {
     var projectPuid = $("#project", window.top.document).val();
     window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
         if (e) {
-
-            window.Ewin.dialog({
-                title: "选择变更表单",
-                url: "./relevance/getChangePage?projectUid="+getProjectUid(),
-                gridId: "gridId",
-                width: 450,
-                height: 450
-            });
+            var url = "relevance/getChangePage";
+            $.ajax({
+                url: "privilege/write?url=" + url,
+                type: "GET",
+                success: function (result) {
+                    if (!result.success) {
+                        window.Ewin.alert({message: result.errMsg});
+                        return false;
+                    }
+                    else {
+                        window.Ewin.dialog({
+                            title: "选择变更表单",
+                            url: "./relevance/getChangePage?projectUid="+getProjectUid(),
+                            gridId: "gridId",
+                            width: 450,
+                            height: 450
+                        });
+                    }
+                }
+            })
             // $.ajax({
             //     type: "GET",
             //     //ajax需要添加打包名

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
+import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.change.HzChangeOrderRecord;
@@ -47,6 +48,8 @@ public interface HzChangeOrderDAO {
      */
     HzChangeOrderRecord findHzChangeOrderRecordById(Long id);
 
+    HzChangeOrderRecord findHzChangeOrderRecordDTOById(Long id);
+
     /**
      * 查询变更清单 根据项目id+id
      * @param
@@ -59,6 +62,19 @@ public interface HzChangeOrderDAO {
      * @return
      */
     Page<HzChangeOrderRecord> findHzChangeOrderRecordByPageId(HzChangeOrderByPageQuery query);
+    /**
+     * 分页获取“待办事项”表单记录
+     * @param query
+     * @return
+     */
+    Page<HzChangeOrderRecord> findHzChangeOrderRecordByPageUn(HzChangeOrderByPageQuery query);
+    /**
+     * 分页获取“已处理事项”表单记录
+     * @param query
+     * @return
+     */
+    Page<HzChangeOrderRecord> findHzChangeOrderRecordByPagePr(HzChangeOrderByPageQuery query);
+
     /**
      * 查询变更清单 根据项目id+id（TC同步）
      * @param
