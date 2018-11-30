@@ -77,54 +77,56 @@
             url: "../../../vwo/getRelevance?orderChangeId="+orderId,
             method: 'GET',
             dataType: 'json',
-            //cache: false,
-            // striped: true,                              //是否显示行间隔色
             height: $(window.parent.document).find("#wrapper").height() - 150,
             width: $(window).width(),
             formId: 'ebomChangeData',
             undefinedText: "",//当数据为 undefined 时显示的字符
             pagination: false,
-            //showExport: true,
-            //exportDataType: 'all',
             columns: column,
             toolbar: "#toolbar",
-            //sortName: 'id',
-            // sortable: true,                     //是否启用排序
             sortOrder: "asc",                   //排序方式
             clickToSelect: true,// 单击某一行的时候选中某一条记录
-            //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
             showColumns: false, //是否显示所有的列
-            // resizable:true,
-            // fixedColumns: true,
-            // fixedNumber:3,
             showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
             showRefresh: false,                  //是否显示刷新按钮
-            //minimumCountColumns:4,
             toolbars: [
                 {
                     text: '删除',
                     iconCls: 'glyphicon glyphicon-remove',
                     handler: function () {
-                        window.Ewin.confirm({title: '提示', message: '确定要删除数据吗?', width: 500}).on(function (e) {
-                            if (e) {
-                                $.ajax({
-                                    type: "POST",
-                                    url: "../../../vwo/deleteChangeRelevance?orderChangeId="+orderId,
-                                    success: function (result) {
-                                        if (result.success) {
-                                            layer.msg('删除成功', {icon: 1, time: 2000})
-                                            window.location.reload();
-                                        } else if (!result.success) {
-                                            window.Ewin.alert({message: result.errMsg});
+                        var url = "vwo/deleteChangeRelevance";
+                        $.ajax({
+                            url: "../../../privilege/write?url=" + url,
+                            type: "GET",
+                            success: function (result) {
+                                if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                    return false;
+                                }
+                                else {
+                                    window.Ewin.confirm({title: '提示', message: '确定要删除数据吗?', width: 500}).on(function (e) {
+                                        if (e) {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "../../../vwo/deleteChangeRelevance?orderChangeId="+orderId,
+                                                success: function (result) {
+                                                    if (result.success) {
+                                                        layer.msg('删除成功', {icon: 1, time: 2000})
+                                                        window.location.reload();
+                                                    } else if (!result.success) {
+                                                        window.Ewin.alert({message: result.errMsg});
+                                                    }
+                                                    $table.bootstrapTable("refresh");
+                                                },
+                                                error: function (info) {
+                                                    window.Ewin.alert({message: "操作失败:" + info.status});
+                                                }
+                                            })
                                         }
-                                        $table.bootstrapTable("refresh");
-                                    },
-                                    error: function (info) {
-                                        window.Ewin.alert({message: "操作失败:" + info.status});
-                                    }
-                                })
+                                    });
+                                }
                             }
-                        });
+                        })
                     }
                 },
             ]
