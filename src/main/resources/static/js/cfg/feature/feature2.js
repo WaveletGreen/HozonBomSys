@@ -117,25 +117,25 @@ var toolbar = [
                 msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
             }
             msg += "</div>";
-            window.Ewin.confirm({title: '请确认发起流程的特性值', message: msg, width: 500}).on(function (e) {
-                if (e) {
-                    var puids = "";
-                    for (let i in rows) {
-                        puids += rows[i].puid;
-                        if (i < rows.length - 1) {
-                            puids += ",";
-                        }
+            var url = "vwoProcess/setChangeFromPage";
+            $.ajax({
+                url: "privilege/write?url=" + url,
+                type: "GET",
+                success: function (result) {
+                    if (!result.success) {
+                        window.Ewin.alert({message: result.errMsg});
+                        return false;
                     }
-                    var url = "vwoProcess/setChangeFromPage";
-                    $.ajax({
-                        url: "privilege/write?url=" + url,
-                        type: "GET",
-                        success: function (result) {
-                            if (!result.success) {
-                                window.Ewin.alert({message: result.errMsg});
-                                return false;
-                            }
-                            else {
+                    else {
+                        window.Ewin.confirm({title: '请确认发起流程的特性值', message: msg, width: 500}).on(function (e) {
+                            if (e) {
+                                var puids = "";
+                                for (let i in rows) {
+                                    puids += rows[i].puid;
+                                    if (i < rows.length - 1) {
+                                        puids += ",";
+                                    }
+                                }
                                 window.Ewin.dialog({
                                     // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
                                     title: "选择变更表单",
@@ -145,10 +145,10 @@ var toolbar = [
                                     height: 450
                                 });
                             }
-                        }
-                    })
+                        });
+                    }
                 }
-            });
+            })
         }
     },
     {
@@ -204,31 +204,6 @@ var toolbar = [
                     }
                 }
             })
-            window.Ewin.confirm({title: '提示', message: '是否要撤销您所选择的记录？', width: 500}).on(function (e) {
-                if (e) {
-                    $.ajax({
-                        type: "POST",
-                        //ajax需要添加打包名
-                        url: "./vwoProcess/goBackData?projectUid=" + getProjectUid(),
-                        data: JSON.stringify(rows),
-                        contentType: "application/json",
-                        success: function (result) {
-                            if (result.status) {
-                                layer.msg(result.msg, {icon: 1, time: 2000})
-                                // window.Ewin.alert({message: result, width: 800});
-                                //刷新，会重新申请数据库数据
-                            }
-                            else {
-                                window.Ewin.alert({message: "操作撤销失败:" + result.msg});
-                            }
-                            $table.bootstrapTable("refresh");
-                        },
-                        error: function (info) {
-                            window.Ewin.alert({message: "操作撤销:" + info.status});
-                        }
-                    })
-                }
-            });
         }
     }
 ];
