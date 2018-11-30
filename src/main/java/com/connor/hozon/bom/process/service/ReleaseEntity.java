@@ -130,9 +130,6 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     @Autowired
     private HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
 
-    @Autowired
-    @Qualifier("synBomService")
-    private ISynBomService synBomService;
     @Override
     public void interruptionFunctionDesc() {
 

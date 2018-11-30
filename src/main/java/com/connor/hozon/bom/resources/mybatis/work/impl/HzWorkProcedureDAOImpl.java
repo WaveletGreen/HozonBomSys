@@ -23,7 +23,7 @@ import java.util.Map;
  * @Date: 2018/6/30
  * @Description:
  */
-@Service("HzWorkProcedureDAO")
+@Service("hzWorkProcedureDAO")
 public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProcedureDAO {
 
     @Override

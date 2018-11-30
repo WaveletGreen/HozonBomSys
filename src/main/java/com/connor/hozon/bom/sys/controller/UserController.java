@@ -157,7 +157,7 @@ public class UserController extends GenericController<User,QueryUser> {
             return result;
         }
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        String newPassWord = encoder.encodePassword(SystemStaticConst.ORIGINAL_PASSWORD,"hyll");
+        String newPassWord = encoder.encodePassword(SystemStaticConst.ORIGINAL_PASSWORD,SystemStaticConst.SALT);
         User userInfo = new User();
         userInfo.setId(entity.getId());
         userInfo.setPassword(newPassWord);
@@ -325,7 +325,7 @@ public class UserController extends GenericController<User,QueryUser> {
         boolean success  = userService.update(entity);
         Map<String,Object> result = new HashMap<>();
         if(success){
-                result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
+            result.put(SystemStaticConst.RESULT,SystemStaticConst.SUCCESS);
             result.put(SystemStaticConst.MSG,"更新数据成功！");
         }else{
             result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
@@ -431,14 +431,14 @@ public class UserController extends GenericController<User,QueryUser> {
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
         String oldPassWord = reqDTO.getOldPassWord();
         String oldPassWordInDB = user.getPassword();
-        if(!encoder.encodePassword(oldPassWord,"hyll").equals(oldPassWordInDB)){//加密
+        if(!encoder.encodePassword(oldPassWord,SystemStaticConst.SALT).equals(oldPassWordInDB)){//加密
             map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
             map.put(SystemStaticConst.MSG,"原始密码输入不正确！");
             return map;
         }
 
         String newPassWord = reqDTO.getNewPassWord();
-        newPassWord = encoder.encodePassword(newPassWord,"hyll");
+        newPassWord = encoder.encodePassword(newPassWord,SystemStaticConst.SALT);
         User userInfo = new User();
         userInfo.setId(user.getId());
         userInfo.setPassword(newPassWord);

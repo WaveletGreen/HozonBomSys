@@ -16,5 +16,8 @@ public class SystemStaticConst {
     public final static String DCPROXY="dcproxy";
     public final static String INFODBA="infodba";
 
+    /**
+     * 盐 还没用到
+     */
     public final static String SALT = "04bcc01,<>-77@4-4!cc-a#be-504^%e0&f5810";
 }

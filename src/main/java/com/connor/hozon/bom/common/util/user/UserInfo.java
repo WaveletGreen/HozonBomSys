@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.common.util.user;
 
 
+import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.util.node.NodeUtil;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.User;
@@ -47,7 +48,7 @@ public class UserInfo {
      */
     public static String encode(String password) {
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        return encoder.encodePassword(password, "hyll");
+        return encoder.encodePassword(password, SystemStaticConst.SALT);
     }
 
     /**
