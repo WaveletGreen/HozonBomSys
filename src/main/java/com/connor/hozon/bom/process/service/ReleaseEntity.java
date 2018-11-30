@@ -222,7 +222,6 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      */
 
     //这里是流程审核完成后 要传输的全部数据
-    // tell me  hao  to  do
     //传输数据 包括 物料 MBOM 和工艺路线
     @Override
     @Transactional(rollbackFor = HzBomException.class)

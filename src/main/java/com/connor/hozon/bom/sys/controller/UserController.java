@@ -431,7 +431,7 @@ public class UserController extends GenericController<User,QueryUser> {
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
         String oldPassWord = reqDTO.getOldPassWord();
         String oldPassWordInDB = user.getPassword();
-        if(!encoder.encodePassword(oldPassWord,"hyll").equals(oldPassWordInDB)){//加密 盐 最好还是随机产生
+        if(!encoder.encodePassword(oldPassWord,"hyll").equals(oldPassWordInDB)){//加密
             map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
             map.put(SystemStaticConst.MSG,"原始密码输入不正确！");
             return map;
