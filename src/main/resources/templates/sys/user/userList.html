@@ -26,6 +26,7 @@
             </form>
         </div>
     </div>
+
     <table id="user-table" style="margin-top: -50px;">
     </table>
 </div>
@@ -75,23 +76,7 @@
         })
     }
 
-
-    // 重置密码
-    function resetPassWord(id){
-        var confirmTitle = "是否重置该账户密码为系统默认密码？";
-        window.Ewin.confirm({title: '提示', message: confirmTitle, width: 500}).on(function (e) {
-            if (e) {
-                $.post("./user/reset/password",{id:id},function(data){
-                    if(data.result){
-                        layer.msg('操作成功', {icon: 1, time: 2000});
-                        doQuery();
-                    }else{
-                        window.Ewin.alert({message:data.msg});
-                    }
-                })
-            }
-        });
-    }
+    var name ="";
 
     function initTable() {
         var $table = $("#user-table");
@@ -299,13 +284,29 @@
                     valign : 'middle',
                     // sortable : true,
                     formatter: function (value, row, index) {
-                        return '<a href="#" onclick="resetPassWord('+row.id+')" >重置</a>';
+                        return '<a href="javascript:void(0)" onclick="resetPassWord(\''+row.userName+'\',+'+row.id+')" >重置</a>';
                     }
                 }
             ]
         });
     }
 
+    // 重置密码
+    function resetPassWord(name,id){
+        var confirmTitle = "是否重置<strong style='color: red'>"+name+"</strong>的密码为系统默认密码(123456)？";
+        window.Ewin.confirm({title: '提示', message: confirmTitle, width: 500}).on(function (e) {
+            if (e) {
+                $.post("./user/reset/password",{id:id},function(data){
+                    if(data.result){
+                        layer.msg('操作成功', {icon: 1, time: 2000});
+                        doQuery();
+                    }else{
+                        window.Ewin.alert({message:data.msg});
+                    }
+                })
+            }
+        });
+    }
 
 </script>
 </body>
