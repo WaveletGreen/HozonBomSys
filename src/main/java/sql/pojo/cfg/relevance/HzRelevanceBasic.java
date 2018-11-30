@@ -6,6 +6,9 @@
 
 package sql.pojo.cfg.relevance;
 
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.sys.entity.User;
+
 import java.util.Date;
 
 /**
@@ -147,6 +150,46 @@ public class HzRelevanceBasic {
      * 是否已发送到SAP
      */
     private Integer isSent;
+
+
+    public HzRelevanceBasic(){}
+
+    public HzRelevanceBasic(HzRelevanceBasicChange hzRelevanceBasicChange){
+        Date date = new Date();
+        User user = UserInfo.getUser();
+        this.rbColorCode = hzRelevanceBasicChange.getRbColorCode();
+        this.rbColorUid = hzRelevanceBasicChange.getRbColorUid();
+        this.rbFeatureCode = hzRelevanceBasicChange.getRbFeatureCode();
+        this.rbFeatureUid = hzRelevanceBasicChange.getRbFeatureUid();
+        this.rbFeatureValueCode = hzRelevanceBasicChange.getRbFeatureValueCode();
+        this.rbFeatureValueUid = hzRelevanceBasicChange.getRbFeatureValueUid();
+        this.rbRelevance = hzRelevanceBasicChange.getRbRelevance();
+        this.rbRelevanceDesc = hzRelevanceBasicChange.getRbRelevanceDesc();
+        this.rbRelevanceCode = hzRelevanceBasicChange.getRbRelevanceCode();
+        this.relevanceStatus = hzRelevanceBasicChange.getRelevanceStatus();
+        this.relevanceCreateDate = date;
+        this.relevanceCreator = user.getLogin();
+        this.relevanceUpdateDate = date;
+        this.relevanceUpdater = user.getLogin();
+        this.rbReserved1 = hzRelevanceBasicChange.getRbReserved1();
+        this.rbReserved2 = hzRelevanceBasicChange.getRbReserved2();
+        this.rbReserved3 = hzRelevanceBasicChange.getRbReserved3();
+        this.rbReserved4 = hzRelevanceBasicChange.getRbReserved4();
+        this.rbReserved5 = hzRelevanceBasicChange.getRbReserved5();
+        this.rbReserved6 = hzRelevanceBasicChange.getRbReserved6();
+        this.rbReserved7 = hzRelevanceBasicChange.getRbReserved7();
+        this.rbReserved8 = hzRelevanceBasicChange.getRbReserved8();
+        this.rbReserved9 = hzRelevanceBasicChange.getRbReserved9();
+        this.rbReserved10 = hzRelevanceBasicChange.getRbReserved10();
+        this.rbReserved11 = hzRelevanceBasicChange.getRbReserved11();
+        this.rbReserved12 = hzRelevanceBasicChange.getRbReserved12();
+        this.rbReserved13 = hzRelevanceBasicChange.getRbReserved13();
+        this.rbReserved14 = hzRelevanceBasicChange.getRbReserved14();
+        this.rbReserved15 = hzRelevanceBasicChange.getRbReserved15();
+        this.rbVwoId = hzRelevanceBasicChange.getChangeOrderId();
+        this.rbProjectUid = hzRelevanceBasicChange.getRbProjectUid();
+        this.isSent = hzRelevanceBasicChange.getIsSent();
+    }
 
     public Long getId() {
         return id;

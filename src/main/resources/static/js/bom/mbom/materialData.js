@@ -225,28 +225,45 @@ function initTable(url) {
                                         }
                                     }
                                 }
-                                window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
-                                    if (e) {
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: "materiel/cancel",
-                                            data: myData,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                if (result.success) {
-                                                    layer.msg('撤销成功', {icon: 1, time: 2000})
-                                                } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                var url = "materiel/cancel";
+                                $.ajax({
+                                    url: "privilege/write?url=" + url,
+                                    type: "GET",
+                                    success: function (result) {
+                                        if (!result.success) {
+                                            window.Ewin.alert({message: result.errMsg});
+                                            return false;
+                                        }
+                                        else {
+                                            window.Ewin.confirm({
+                                                title: '提示',
+                                                message: '确定要撤销数据吗?',
+                                                width: 500
+                                            }).on(function (e) {
+                                                if (e) {
+                                                    $.ajax({
+                                                        type: "POST",
+                                                        //ajax需要添加打包名
+                                                        url: "materiel/cancel",
+                                                        data: myData,
+                                                        contentType: "application/json",
+                                                        success: function (result) {
+                                                            if (result.success) {
+                                                                layer.msg('撤销成功', {icon: 1, time: 2000})
+                                                            } else if (!result.success) {
+                                                                window.Ewin.alert({message: result.errMsg});
+                                                            }
+                                                            $table.bootstrapTable("refresh");
+                                                        },
+                                                        error: function (info) {
+                                                            window.Ewin.alert({message: ":" + info.status});
+                                                        }
+                                                    })
                                                 }
-                                                $table.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: ":" + info.status});
-                                            }
-                                        })
+                                            });
+                                        }
                                     }
-                                });
+                                })
                             }
                         },
                         {

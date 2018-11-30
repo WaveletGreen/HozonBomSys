@@ -101,4 +101,9 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
         return baseSQLUtil.executeUpdate(hzRelevanceBasicUpdate,clz.getCanonicalName()+".updateStatus");
     }
 
+    @Override
+    public int updateStatusByOrderChangeId(HzRelevanceBasic hzRelevanceBasic) {
+        return baseSQLUtil.executeUpdate(hzRelevanceBasic,clz.getCanonicalName()+".updateStatusByOrderChangeId");
+    }
+
 }

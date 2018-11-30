@@ -15,6 +15,8 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
+import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
@@ -47,6 +49,8 @@ import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.cfg.relevance.HzRelevanceBasic;
+import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -117,6 +121,11 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     private HzFullCfgMainDao hzFullCfgMainDao;
     @Autowired
     private HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
+
+    @Autowired
+    private HzRelevanceBasicDao hzRelevanceBasicDao;
+    @Autowired
+    private HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
 
     @Autowired
     @Qualifier("synBomService")
@@ -203,6 +212,19 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         return false;
                     }
                     if(hzFullCfgMainChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                        return false;
+                    }
+                }else if(ChangeTableNameEnum.HZ_RELEVANCE_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
+                    hzRelevanceBasic.setRbVwoId(orderId);
+                    hzRelevanceBasic.setRelevanceStatus(1);
+                    HzRelevanceBasicChange hzRelevanceBasicChange = new HzRelevanceBasicChange();
+                    hzRelevanceBasicChange.setChangeOrderId(orderId);
+                    hzRelevanceBasicChange.setChangeStatus(1);
+                    if(hzRelevanceBasicChangeDao.updateStatusByIOrderId(hzRelevanceBasicChange)<=0?true:false){
+                        return false;
+                    }
+                    if(hzRelevanceBasicDao.updateStatusByOrderChangeId(hzRelevanceBasic)<=0?true:false){
                         return false;
                     }
                 }

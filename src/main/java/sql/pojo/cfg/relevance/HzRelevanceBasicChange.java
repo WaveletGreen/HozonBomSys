@@ -74,6 +74,11 @@ public class HzRelevanceBasicChange {
 
     private Integer changeStatus;
 
+    private Integer changeVersion;
+
+    public HzRelevanceBasicChange(){
+
+    }
 
     public HzRelevanceBasicChange(HzRelevanceBasic hzRelevanceBasic) {
         this.rbColorCode = hzRelevanceBasic.getRbColorCode();
@@ -390,5 +395,13 @@ public class HzRelevanceBasicChange {
 
     public void setChangeStatus(Integer changeStatus) {
         this.changeStatus = changeStatus;
+    }
+
+    public Integer getChangeVersion() {
+        return changeVersion;
+    }
+
+    public void setChangeVersion(Integer changeVersion) {
+        this.changeVersion = changeVersion;
     }
 }
