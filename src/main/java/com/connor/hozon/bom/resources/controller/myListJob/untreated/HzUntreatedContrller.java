@@ -151,7 +151,6 @@ public class HzUntreatedContrller extends BaseController {
         return jsonObject;
 
         /*List<HzChangeOrderRespDTO> respDTOs = hzAuditorChangeService.findChangeOrderList(query,record);
-
         if(ListUtil.isEmpty(respDTOs)){
             return new JSONObject();
         }

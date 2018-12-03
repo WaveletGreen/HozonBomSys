@@ -1,32 +1,24 @@
 package com.connor.hozon.bom.resources.controller.myListJob.processed;
 
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeListRecord;
-import sql.pojo.change.HzChangeOrderRecord;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -44,9 +36,6 @@ public class HzProcessedContrller {
 
     @Autowired
     private HzChangeOrderService hzChangeOrderService;
-
-    @Autowired
-    private HzChangeOrderDAO hzChangeOrderDAO;
 
     @Autowired
     private HzAuditorChangeDAO hzAuditorChangeDAO;
@@ -126,8 +115,8 @@ public class HzProcessedContrller {
             object.put("tel",hzChangeOrderRespDTO.getTel());
             object.put("relationChangeNo",hzChangeOrderRespDTO.getRelationChangeNo());
             object.put("createTime",hzChangeOrderRespDTO.getCreateTime());
-            object.put("remark",hzChangeOrderRespDTO.getRemark());
             object.put("projectState",hzChangeOrderRespDTO.getProjectStage());
+            object.put("remark",hzChangeOrderRespDTO.getRemark());
 
             object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
             object.put("originTime",hzChangeOrderRespDTO.getOriginTime());
