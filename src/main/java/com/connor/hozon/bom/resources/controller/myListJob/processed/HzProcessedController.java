@@ -37,7 +37,7 @@ import java.util.*;
  */
 @Controller
 @RequestMapping(value = "processed")
-public class HzProcessedContrller {
+public class HzProcessedController {
 
     @Autowired
     private HzAuditorChangeService hzAuditorChangeService;
