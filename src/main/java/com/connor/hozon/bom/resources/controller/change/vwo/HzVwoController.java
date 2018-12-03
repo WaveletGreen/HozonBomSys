@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -13,6 +13,7 @@ import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.vwo.*;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +31,7 @@ import java.util.Map;
 
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/10/10 13:29
  * @Modified By:
@@ -40,6 +42,9 @@ public class HzVwoController {
     /***VWO表单服务层*/
     @Autowired
     IHzVWOManagerService iHzVWOManagerService;
+
+    @Autowired
+    HzChangeOrderDAO hzChangeOrderDAO;
     /***日志*/
     private static Logger logger = LoggerFactory.getLogger(HzVwoController.class);
 
@@ -414,8 +419,97 @@ public class HzVwoController {
     @ResponseBody
     public Map<String, Object> getModelColorTable(@RequestParam Long vwoId) {
         Map<String, Object> map = new HashMap<String, Object>();
-        iHzVWOManagerService.doQueryCmcrDetailChangBefor(map, vwoId);
+//        iHzVWOManagerService.doQueryCmcrDetailChangBefor(map, vwoId);
+        iHzVWOManagerService.doQueryCmcrDetailChangBefor2(map, vwoId);
         return map;
     }
 
+    /**************************衍生物料变更描述表单***************************/
+    @RequestMapping(value = "getMaterielFeatureTable", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> getMaterielFeatureTable(@RequestParam Long formId){
+        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(formId);
+        String projectUid = record.getProjectId();
+        return iHzVWOManagerService.getMaterielFeatureTable(formId,projectUid);
+    }
+
+    /**************************全配置BOM变更描述表单*************************************/
+    @RequestMapping(value = "getFullCfgTable", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> getFullCfgTable(@RequestParam Integer orderChangeId){
+        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(Long.valueOf(orderChangeId));
+        String projectUid = record.getProjectId();
+        return  iHzVWOManagerService.getFullCfgTable(orderChangeId,projectUid);
+    }
+
+    /****************************相关性变更描述变更表单********************************/
+    @RequestMapping(value = "getRelevance")
+    @ResponseBody
+    public Map<String,Object> getRelevance(@RequestParam Long orderChangeId){
+        HzChangeOrderRecord record = hzChangeOrderDAO.findHzChangeOrderRecordById(orderChangeId);
+        String projectUid = record.getProjectId();
+        return  iHzVWOManagerService.getRelevance(orderChangeId,projectUid);
+    }
+
+
+
+
+    /***************删除特性变更数据*************************************/
+    @RequestMapping("/deleteChangeFeature")
+    @ResponseBody
+    public JSONObject deleteChangeFeature(@RequestBody List<Long> ids,Long orderId){
+        return iHzVWOManagerService.deleteChangeFeature(ids,orderId);
+    }
+
+
+    /***************删除配色方案变更数据*************************************/
+    @RequestMapping("/deleteChangeColorModel")
+    @ResponseBody
+    public JSONObject deleteChangeColorModel(@RequestBody List<Long> ids,Long orderId){
+        return iHzVWOManagerService.deleteChangeColorModel(ids,orderId);
+    }
+
+
+    /***************删除衍生物料变更数据*************************************/
+    @RequestMapping("/deleteChangeMaterielFeature")
+    @ResponseBody
+    public JSONObject deleteChangeMaterielFeature(@RequestBody List<Long> ids,Long orderId){
+        return iHzVWOManagerService.deleteChangeMaterielFeature(ids,orderId);
+    }
+
+
+    /***************删除全配置BOM变更数据*************************************/
+    @RequestMapping("/deleteChangeBomAll")
+    @ResponseBody
+    public JSONObject deleteChangeBomAll(@RequestParam Long mainId,Long orderId){
+        return iHzVWOManagerService.deleteChangeBomAll(mainId,orderId);
+    }
+
+
+    /***************删除相关性变更数据*************************************/
+    @RequestMapping("/deleteChangeRelevance")
+    @ResponseBody
+    public JSONObject deleteChangeRelevance(Long orderChangeId){
+        return iHzVWOManagerService.deleteChangeRelevance(orderChangeId);
+    }
+
+
+
+
+
+
+
+
+
+    @RequestMapping(value = "featurePage")
+    public String featurePage (Long vwoId, Model model){
+        model.addAttribute("orderChangeId",vwoId);
+        return "change/ChangeOrder/changeFeatureTable";
+    }
+
+    @RequestMapping(value = "fullCfgPage")
+    public String fullCfgPage(Long orderChangeId, Model model){
+        model.addAttribute("orderChangeId", orderChangeId);
+        return "change/ChangeOrder/changeBomCfgTable";
+    }
 }

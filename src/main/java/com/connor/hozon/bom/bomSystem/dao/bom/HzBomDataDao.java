@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.dao.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HzBomLineRecord;
 
@@ -16,12 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 0.0.1版的BOM dao层
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzBomDataDao extends BasicDao<HzBomLineRecord>{
     /**
      * Author: Fancyears·Maylos·Mayways

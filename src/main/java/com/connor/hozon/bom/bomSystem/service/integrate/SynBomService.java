@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -17,16 +17,18 @@ import integration.service.impl.bom5.TransBomService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzMBomToERPBean;
 
 import java.util.*;
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 @Configuration
+@Service("synBomService")
 public class SynBomService implements ISynBomService {
     /***
      * sql语句in的容量
@@ -46,20 +48,37 @@ public class SynBomService implements ISynBomService {
     /**
      * 执行更新的时候传，有可能时传多条，传多条也演变成传单挑数据传输，先找到父层，再找到子层，父+子一条一条传即可
      *
-     * @param puidOfUpdate
+     * @param projectPuid 项目UID
+     * @param   uid 单条BOM的UID
      * @return
      */
     @Override
-    public JSONObject updateByUids(String projectPuid, String puidOfUpdate) {
+    public JSONObject updateByUids(String projectPuid, String uid) {
         JSONObject result = null;//deleteByUids(projectPuid, Collections.singletonList(puidOfUpdate));
 //        if (result.getBoolean("status")) {
-        result = execute(projectPuid, Collections.singletonList(puidOfUpdate), ActionFlagOption.UPDATE);
+        result = execute(projectPuid, Collections.singletonList(uid), ActionFlagOption.UPDATE);
+//        }
+        return result;
+    }
+    /**
+     *批量更新
+     *
+     * @param projectPuid 项目UID
+     * @param   uids 当前项目{@code projectPuid}下需要更新数据的BOM的UID合集
+     * @return
+     */
+    @Override
+    public JSONObject updateByUids(String projectPuid, List<String> uids) {
+        JSONObject result = null;//deleteByUids(projectPuid, Collections.singletonList(puidOfUpdate));
+//        if (result.getBoolean("status")) {
+        result = execute(projectPuid, uids, ActionFlagOption.UPDATE);
 //        }
         return result;
     }
 
     /**
-     * 删除时候传
+     * 删除时候传，删除的时候BOM系统直接删除，SAP标记的是这个BOM不可用
+     *
      *
      * @param puidsOfDelete 需要删除的BOM行的Puid
      * @param projectPuid   项目的Puid
@@ -71,15 +90,32 @@ public class SynBomService implements ISynBomService {
     }
 
     /**
-     * 添加1行
+     * 默认传输的action代码是{@link ActionFlagOption#ADD}
+     * 添加1行，将单条BOM传输到SAP，并更新该条BOM的is_sent字段为1，表示已经发送所SAP1次,
+     * 下一次无论是{@link ActionFlagOption#ADD}还是{@link ActionFlagOption#UPDATE}，都将执行{@link ActionFlagOption#UPDATE}
+     * 否则SAP会存在2条同名的BOM
      *
      * @param addedPuid   被添加的BOM行的puid
-     * @param projectPuid 项目的PUID
+     * @param uid bomline的uid
      * @return
      */
     @Override
-    public JSONObject addOne(String projectPuid, String addedPuid) {
-        return execute(projectPuid, Collections.singletonList(addedPuid), ActionFlagOption.ADD);
+    public JSONObject addOne(String uid, String addedPuid) {
+        return execute(uid, Collections.singletonList(addedPuid), ActionFlagOption.ADD);
+    }
+    /**
+     * 批量添加到SAP，默认传输的action代码是{@link ActionFlagOption#ADD}
+     * 添加n行，将n行BOM传输到SAP，并更新传输成功的BOM的is_sent字段为1，表示已经发送所SAP1次,
+     * 下一次无论是{@link ActionFlagOption#ADD}还是{@link ActionFlagOption#UPDATE}，都将执行{@link ActionFlagOption#UPDATE}
+     * 否则SAP会存在2条同名的BOM
+     *
+     *  @param projectUid 项目的UID
+     * @param addedPuids   被添加的BOM行的puid
+    * @return
+     */
+    @Override
+    public JSONObject addByUids(String projectUid, List<String> addedPuids) {
+        return execute(projectUid, addedPuids, ActionFlagOption.ADD);
     }
 
     /**
@@ -104,14 +140,14 @@ public class SynBomService implements ISynBomService {
         List<IntegrateMsgDTO> fail = new ArrayList<>();
 
         JSONObject result = new JSONObject();
-
+        //查询所有的2Y层，因为2Y层没有父层，所以2Y层不进行单独传输，只能依赖下层的子层进行2Y层的标识
         List<HzMBomToERPBean> beanListIs2Y = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 1);
+        //非2Y层作为所有的子层，2Y层的直接子层要标识其父层是2Y作为传输的标准，其余非2Y都从改List中取出重新搭建BOM的树形结构批量传输
         List<HzMBomToERPBean> beanListIsnot2Y = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 0);
         //父层所有的
         List<HzMBomToERPBean> beanListOfParent;
         //实际上是所有的
         List<HzMBomToERPBean> beanListOfChildren;
-
         //所有数据
         List<HzMBomToERPBean> all = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 3);
 
@@ -588,7 +624,24 @@ public class SynBomService implements ISynBomService {
                 reflectBom.setPackNo(packNum);
                 //设置行号
                 reflectBom.setLineNum(reflectBom.getOrderOfBomLine());
-                //设置状态
+                //设置状态，代码好像少了
+                // TODO: 2018/11/29 根据option进行设置action代码，首先判断 bean 的状态是否已经传输过sap，不能盲目设置option
+//                //动作描述代码
+//                if (option == ActionFlagOption.ADD) {
+//                    //没有发送过，添加发送
+//                    if (null == bean.getIsFeatureSent() || record.getIsFeatureSent() == 0) {
+//                        features.setActionFlag(option);
+//                    }
+//                    //有发送过，执行更新
+//                    else {
+//                        features.setActionFlag(ActionFlagOption.UPDATE);
+//                    }
+//                }
+//                //执行更新或删除
+//                else {
+//                    features.setActionFlag(option);
+//                }
+
                 reflectBom.setActionFlag(option);
                 transBomService.getInput().getItem().add(reflectBom.getZpptci005());
                 packNumMap.put(packNum, reflectBom);
@@ -623,6 +676,7 @@ public class SynBomService implements ISynBomService {
             msgDTO.setPuid(bean.getPuid());
             if ("S".equalsIgnoreCase(zpptco005.getPTYPE())) {
                 success.add(msgDTO);
+                //todo 用list存储已经发送成功的BOM，记录packNo和BOM 的UID，存储到数据库中，因为断点回传的是packNo，想要与BOM对应得重新开一张表记录对应值
                 //成功数自增
                 totalOfSuccess++;
             } else {
@@ -646,6 +700,7 @@ public class SynBomService implements ISynBomService {
         } else {
             result.put("status", true);
         }
+        //todo 添加更新MBOM的 is_sent字段，标识已经发送过一次SAP
         result.put("success", success);
         result.put("fail", fail);
         result.put("total", total);

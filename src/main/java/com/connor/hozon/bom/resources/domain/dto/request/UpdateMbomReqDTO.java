@@ -7,6 +7,8 @@ package com.connor.hozon.bom.resources.domain.dto.request;
  */
 public class UpdateMbomReqDTO {
 
+    private String lineId;
+
     private String eBomPuid;
     /**
      * 备件
@@ -67,6 +69,24 @@ public class UpdateMbomReqDTO {
      * 1生产 6财务
      */
     private Integer type;
+
+    private String projectId;
+
+    public String getLineId() {
+        return lineId;
+    }
+
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
 
     public Integer getType() {
         return type;

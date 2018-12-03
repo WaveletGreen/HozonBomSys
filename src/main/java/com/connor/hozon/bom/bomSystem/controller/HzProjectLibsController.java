@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.bom.HZBomMainRecord;
@@ -43,7 +44,7 @@ import java.util.*;
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 项目controller，用于前端获取到项目信息，由项目信息驱动下面的额bom数据和配置数据
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
@@ -352,6 +353,7 @@ public class HzProjectLibsController {
      */
     @RequestMapping(value = "/addProject", method = RequestMethod.POST)
     @ResponseBody
+    @Transactional
     public JSONObject addProject(@RequestBody HzProjectLibs project) {
         Date now = new Date();
         JSONObject result = new JSONObject();
@@ -651,7 +653,7 @@ public class HzProjectLibsController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public boolean delete(@RequestParam String puid, @RequestParam String type) {
-        if (checkString(puid) || checkString(type)) {
+        if (!checkString(puid) || !checkString(type)) {
             return false;
         }
         switch (type) {

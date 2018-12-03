@@ -49,7 +49,7 @@ public class HzChangeController extends BaseController {
         return "change/changeForm/updateChangeForm";
     }
     @RequestMapping(value = "ToChangeOrder",method = RequestMethod.GET)
-    public String getToChangeOrderToPage(Long id,Model model){
+    public String toChangeOrderPage(Long id,Model model){
         HzChangeOrderRespDTO respDTO = hzChangeOrderService.getHzChangeOrderRecordById(id);
         if(respDTO != null){
             model.addAttribute("data",respDTO);
@@ -115,6 +115,9 @@ public class HzChangeController extends BaseController {
         List<JSONObject> list = new ArrayList<>();
         respDTOS.forEach(hzChangeOrderRespDTO -> {
             JSONObject object = new JSONObject();
+            object.put("resource",hzChangeOrderRespDTO.getOrderResource());
+            object.put("isFromTc",hzChangeOrderRespDTO.getIsFromTc());
+            object.put("status",hzChangeOrderRespDTO.getStatus());
             object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("createName",hzChangeOrderRespDTO.getCreateName());
@@ -128,10 +131,11 @@ public class HzChangeController extends BaseController {
             object.put("originTime",hzChangeOrderRespDTO.getOriginTime());
             object.put("createTime",hzChangeOrderRespDTO.getCreateTime());
             object.put("remark",hzChangeOrderRespDTO.getRemark());
-            object.put("projectState",hzChangeOrderRespDTO.getProjectStage());
+            object.put("projectStage",hzChangeOrderRespDTO.getProjectStage());
             object.put("deptName",hzChangeOrderRespDTO.getDeptName());
             list.add(object);
         });
+        jsonObject.put("totalCount",page.getTotalCount());
         jsonObject.put("result",list);
         return jsonObject;
     }

@@ -670,12 +670,25 @@ function simulateSynthesise() {
         window.Ewin.alert({message: "请至少选择两个零件生成工艺合件"});
     }
     else {
-        window.Ewin.dialog({
-            title: "生成工艺合件",
-            url: "pbom/updataProcessOfFitting2",
-            gridId: "gridId",
-            width: 500,
-            height: 500
+        var url = "pbom/updataProcessOfFitting2";
+        $.ajax({
+            url: "privilege/write?url=" + url,
+            type: "GET",
+            success: function (result) {
+                if (!result.success) {
+                    window.Ewin.alert({message: result.errMsg});
+                    return false;
+                }
+                else {
+                    window.Ewin.dialog({
+                        title: "生成工艺合件",
+                        url: "pbom/updataProcessOfFitting2",
+                        gridId: "gridId",
+                        width: 500,
+                        height: 500
+                    })
+                }
+            }
         })
     }
 }

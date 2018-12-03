@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -14,7 +14,7 @@ import sql.pojo.task.HzTasks;
 import java.util.List;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
@@ -64,6 +64,7 @@ public interface IHzTaskService {
      */
     List<HzTasks> doSelectUserTargetTaskByType(Integer taskFormType, Integer taskTargetType, Long taskTargetId, Long taskUserId, Integer status);
 
+    List<HzTasks> doSelectUserTargetTask(Integer taskFormType, Integer taskTargetType, Long taskTargetId, Long taskUserId, Integer status);
     /**
      * 根据VWO主键和用户主键，获取到当前VWO变更表单该用户的任务
      *

@@ -3,85 +3,121 @@
 <head th:include="include/includebase"></head>
 <body>
 <div class="panel-body" style="padding-bottom:0px;">
-        <div class="panel panel-default" style="margin-top: 10px;">
-            <div class="panel-heading">查询条件</div>
-            <div class="panel-body">
-                <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post" id="queryUser">
-                    <div class="form-group">
-                        <label for="userName">名字:</label>
-                        <input type="text" class="form-control" name="userName" id="userName"  placeholder="请输入名字" />
-                    </div>
-                    <div class="form-group">
-                        <label for="login">账号(登录名):</label>
-                        <input type="text" class="form-control" name="login" id="login"  placeholder="请输入账号(登录名)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="job">职位:</label>
-                        <input type="text" class="form-control" name="job" id="job"  placeholder="请输入职位" />
-                    </div>
-                    <div class="form-group">
-                        <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
-                    </div>
-                </form>
-            </div>
+    <div class="panel panel-default" style="margin-top: 10px;">
+        <div class="panel-heading">查询条件</div>
+        <div class="panel-body">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
+                  id="queryUser">
+                <div class="form-group">
+                    <label for="userName">名字:</label>
+                    <input type="text" class="form-control" name="userName" id="userName" placeholder="请输入名字"/>
+                </div>
+                <div class="form-group">
+                    <label for="login">账号(登录名):</label>
+                    <input type="text" class="form-control" name="login" id="login" placeholder="请输入账号(登录名)"/>
+                </div>
+                <div class="form-group">
+                    <label for="job">职位:</label>
+                    <input type="text" class="form-control" name="job" id="job" placeholder="请输入职位"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
         </div>
-        <table id="user-table" style="margin-top: -50px;">
-        </table>
+    </div>
+
+    <table id="user-table" style="margin-top: -50px;">
+    </table>
 </div>
 <script th:inline="javascript">
-    $(function() {
+    $(function () {
         //var url = "user/list";
         initTable();
         //$('#user-table').bootstrapTable('hideColumn', 'id');
     });
 
-    function doQuery(){
+    function doQuery() {
         $('#user-table').bootstrapTable('refresh');    //刷新表格
     }
 
     // 账号禁用和启用
-    function userControl(state,id){
+    function userControl(state, id) {
         var confirmTitle = "";
-        if(state==0){
+        if (state == 0) {
             confirmTitle = "是否禁用账户？";
-        }else{
+        } else {
             confirmTitle = "是否启用账户？";
         }
-        window.Ewin.confirm({title: '提示', message: confirmTitle, width: 500}).on(function (e) {
-            if (e) {
-                $.post("./user/userControl",{state:state,id:id},function(data){
-                    if(data.result){
-                        layer.msg('操作成功', {icon: 1, time: 2000});
-                        doQuery();
-                    }else{
-                        window.Ewin.alert({message:data.msg});
-                    }
-                })
+        var url = "user/userControl";
+        $.ajax({
+            url: "privilege/write?url=" + url,
+            type: "GET",
+            success: function (result) {
+                if (!result.success) {
+                    window.Ewin.alert({message: result.errMsg});
+                    return false;
+                }
+                else {
+                    window.Ewin.confirm({title: '提示', message: confirmTitle, width: 500}).on(function (e) {
+                        if (e) {
+                            $.post("./user/userControl", {state: state, id: id}, function (data) {
+                                if (data.result) {
+                                    layer.msg('操作成功', {icon: 1, time: 2000});
+                                    doQuery();
+                                } else {
+                                    window.Ewin.alert({message: data.msg});
+                                }
+                            })
+                        }
+                    });
+                }
             }
-        });
+        })
     }
 
-    function initTable(){
+    var name ="";
+
+    function initTable() {
         var $table = $("#user-table");
         $table.bootstrapTable({
             //url: url,
-            url:"user/list",
+            url: "user/list",
             height: $(window.parent.document).find("#wrapper").height() - 252,
-            width:$(window).width(),
-            showColumns:true,
-            formId :"queryUser",
-            pagination : true,
-            sortName : 'id',
-            sortOrder : 'desc',
+            width: $(window).width(),
+            showColumns: true,
+            formId: "queryUser",
+            pagination: true,
+            sortName: 'id',
+            sortOrder: 'desc',
             clickToSelect: true,// 单击某一行的时候选中某一条记录
             showToggle: false,  //是否显示详细视图和列表视图的切换按钮
-            pageSize : 10,
-            toolbars:[
+            pageSize: 10,
+            toolbars: [
                 {
                     text: '添加',
                     iconCls: 'glyphicon glyphicon-plus',
                     handler: function () {
-                        window.Ewin.dialog({title:"添加",url:"user/addPage",gridId:"gridId",width:550,height:550})
+                        var url = "user/addPage";
+                        $.ajax({
+                            url: "privilege/write?url=" + url,
+                            type: "GET",
+                            success: function (result) {
+                                if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                    return false;
+                                }
+                                else {
+                                    window.Ewin.dialog({
+                                        title: "添加",
+                                        url: "user/addPage",
+                                        gridId: "gridId",
+                                        width: 550,
+                                        height: 550
+                                    })
+                                }
+                            }
+                        })
                     }
                 },
                 {
@@ -89,11 +125,29 @@
                     iconCls: 'glyphicon glyphicon-pencil',
                     handler: function () {
                         var rows = $('#user-table').bootstrapTable('getSelections');
-                        if(rows.length==0||rows.length>1){
-                            window.Ewin.alert({message:'请选择一条需要修改的数据!'});
+                        if (rows.length == 0 || rows.length > 1) {
+                            window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                             return false;
                         }
-                        window.Ewin.dialog({title:"修改",url:"user/updatePage?id="+rows[0].id,width:550,height:550});
+                        var url = "user/updatePage";
+                        $.ajax({
+                            url: "privilege/write?url=" + url,
+                            type: "GET",
+                            success: function (result) {
+                                if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                    return false;
+                                }
+                                else {
+                                    window.Ewin.dialog({
+                                        title: "修改",
+                                        url: "user/updatePage?id=" + rows[0].id,
+                                        width: 550,
+                                        height: 550
+                                    });
+                                }
+                            }
+                        })
                     }
                 },
                 {
@@ -101,22 +155,35 @@
                     iconCls: 'glyphicon glyphicon-remove',
                     handler: function () {
                         var rows = $('#user-table').bootstrapTable('getSelections');
-                        if(rows.length==0){
-                            window.Ewin.alert({message:'请选择一条需要删除的数据!'});
+                        if (rows.length == 0) {
+                            window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                             return false;
                         }
-                        window.Ewin.confirm({title:'提示',message:'是否要删除您当前所勾选的用户？',width:500}).on(function (e) {
-                            if (e) {
-                                $.post("user/removeBath",{json:JSON.stringify(rows)},function(e){
-                                    if(e.result){
-                                        layer.msg('删除成功!', {icon: 1, time: 2000})
-                                        doQuery();
-                                    }else {
-                                        window.Ewin.alert({message:e.msg});
-                                    }
-                                });
+                        var url = "user/removeBath";
+                        $.ajax({
+                            url: "privilege/write?url=" + url,
+                            type: "GET",
+                            success: function (result) {
+                                if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                    return false;
+                                }
+                                else {
+                                    window.Ewin.confirm({title: '提示', message: '是否要删除您当前所勾选的用户？', width: 500}).on(function (e) {
+                                        if (e) {
+                                            $.post("user/removeBath", {json: JSON.stringify(rows)}, function (e) {
+                                                if (e.result) {
+                                                    layer.msg('删除成功!', {icon: 1, time: 2000})
+                                                    doQuery();
+                                                } else {
+                                                    window.Ewin.alert({message: e.msg});
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
-                        });
+                        })
                     }
                 }
             ],
@@ -142,38 +209,38 @@
                 //     sortable : true
                 // },
                 {
-                    field : 'userName',
-                    title : '用户姓名',
-                    align : 'center',
-                    valign : 'middle',
+                    field: 'userName',
+                    title: '用户姓名',
+                    align: 'center',
+                    valign: 'middle',
                     // sortable : true
                 },
                 {
                     field : 'login',
-                    title : '账号/登录名',
+                    title : '账号/工号',
                     align : 'center',
                     valign : 'middle',
                     sortable : true
                 },
                 {
-                    field : 'job',
-                    title : '职位名称',
-                    align : 'center',
-                    valign : 'middle',
-                    sortable : true
+                    field: 'job',
+                    title: '职位名称',
+                    align: 'center',
+                    valign: 'middle',
+                    sortable: true
                 },
                 {
-                    field : 'email',
-                    title : '邮箱',
-                    align : 'center',
-                    valign : 'middle',
+                    field: 'email',
+                    title: '邮箱',
+                    align: 'center',
+                    valign: 'middle',
                 },
-                {
-                    field : 'userNo',
-                    title : '工号',
-                    align : 'center',
-                    valign : 'middle',
-                },
+                // {
+                //     field : 'userNo',
+                //     title : '工号',
+                //     align : 'center',
+                //     valign : 'middle',
+                // },
                 /*{
                     field : 'address',
                     title : '用户地址',
@@ -182,37 +249,64 @@
                     sortable : true
                 },*/
                 {
-                    field : 'orgGroup.name',
-                    title : '组织架构',
-                    align : 'center',
-                    valign : 'middle',
+                    field: 'orgGroup.name',
+                    title: '组织架构',
+                    align: 'center',
+                    valign: 'middle',
                     // sortable : true
                 },
                 {
-                    field : 'state',
-                    title : '账号状态',
+                    field: 'state',
+                    title: '账号状态',
+                    align: 'center',
+                    valign: 'middle',
+                    // sortable : true,
+                    formatter: function (value, row, index) {
+                        return getCodeDictText("USER_STATE", value);
+                    }
+                }, {
+                    field: 'operations',
+                    title: '操作',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function (value, row, index) {
+                        if (row.state == '1') {
+                            return '<a href="#" onclick="userControl(0,' + row.id + ')" >禁用</a>';
+                        } else {
+                            return '<a href="#" onclick="userControl(1,' + row.id + ')" >启用</a>';
+                        }
+                    }
+                },
+                {
+                    field : 'resetPassWord',
+                    title : '密码重置',
                     align : 'center',
                     valign : 'middle',
                     // sortable : true,
                     formatter: function (value, row, index) {
-                        return getCodeDictText("USER_STATE",value);
+                        return '<a href="javascript:void(0)" onclick="resetPassWord(\''+row.userName+'\',+'+row.id+')" >重置</a>';
                     }
-                },{
-                    field : 'operations',
-                    title : '操作',
-                    align : 'center',
-                    valign : 'middle',
-                    formatter: function (value, row, index) {
-                        if(row.state=='1'){
-                            return '<a href="#" onclick="userControl(0,'+row.id+')" >禁用</a>';
-                        }else{
-                            return '<a href="#" onclick="userControl(1,'+row.id+')" >启用</a>';
-                        }
-                    }
-                }]
+                }
+            ]
         });
     }
 
+    // 重置密码
+    function resetPassWord(name,id){
+        var confirmTitle = "是否重置<strong style='color: red'>"+name+"</strong>的密码为系统默认密码(123456)？";
+        window.Ewin.confirm({title: '提示', message: confirmTitle, width: 500}).on(function (e) {
+            if (e) {
+                $.post("./user/reset/password",{id:id},function(data){
+                    if(data.result){
+                        layer.msg('操作成功', {icon: 1, time: 2000});
+                        doQuery();
+                    }else{
+                        window.Ewin.alert({message:data.msg});
+                    }
+                })
+            }
+        });
+    }
 
 </script>
 </body>

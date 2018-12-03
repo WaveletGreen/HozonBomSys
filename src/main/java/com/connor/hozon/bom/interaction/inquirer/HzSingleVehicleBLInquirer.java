@@ -3,7 +3,7 @@ package com.connor.hozon.bom.interaction.inquirer;
 import lombok.Data;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description:
  * @Date: Created in 2018/9/25 13:20
  * @Modified By:

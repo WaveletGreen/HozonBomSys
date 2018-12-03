@@ -1,9 +1,11 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import sql.pojo.BaseChangePOJO;
+
 /**
  * Created by haozt on 2018/5/24
  */
-public class HzMbomRecordRespDTO {
+public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
     /**
      * id
      */

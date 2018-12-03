@@ -1,12 +1,13 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
@@ -40,7 +41,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 特性controller
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
@@ -72,6 +73,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /***这就是他妈的传说中的配置字典库了*/
     @Autowired
     HzDictionaryLibraryService hzDictionaryLibraryService;
+    @Autowired
+    HzCfg0RecordDao hzCfg0RecordDao;
     /*** 日志记录*/
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0Controller.class);
 
@@ -198,14 +201,14 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //                iSynFeatureService.addFeature(Collections.singletonList(record));
 //            }
             record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
-                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
-            }
-            HzCfg0Record record1 = new HzCfg0Record();
-            record1.setPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
-                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
-            }
+//            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+//                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
+//            }
+//            HzCfg0Record record1 = new HzCfg0Record();
+//            record1.setPuid(record.getPuid());
+//            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
+//                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
+//            }
 
 
         } else {
@@ -215,6 +218,96 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return result;
     }
 
+    @RequestMapping("/deleteByPuidFake")
+    @ResponseBody
+    public JSONObject deleteByPuidFake(@RequestBody List<HzCfg0Record> records){
+        JSONObject result = new JSONObject();
+        List<HzCfg0Record> toDelete = new ArrayList<>();
+        Map<String, HzCfg0Record> mapOfDelete = new HashMap<>();
+        if (records == null || records.size() <= 0) {
+            result.put("status", false);
+            result.put("msg", "选择的列为空，请至少选择1列做删除");
+            return result;
+        }
+        for (HzCfg0Record record : records) {
+            if (record == null || "".equalsIgnoreCase(record.getPuid()) || null == record.getPuid()) {
+                result.put("status", false);
+                result.put("msg", "找不到需要删除的数据，请重试或联系系统管理员");
+                return result;
+            }
+            //原始配置先不给删除，只能删除新加的配置项
+            else {
+                if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
+                    //如果需要删除原数据
+                    toDelete.add(record);
+                    mapOfDelete.put(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getpCfg0ObjectId() + "-" + record.getpCfg0FamilyDesc(), record);
+                } else {
+                    result.put("status", false);
+                    result.put("msg", "找不到需要删除的数据，请重试或联系系统管理员");
+                    return result;
+                }
+            }
+            if (record.getCfgIsInProcess() != null&&record.getCfgIsInProcess() == 1) {
+                result.put("status", false);
+                result.put("msg", "已在流程中，不允许删除");
+                return result;
+            }
+            record.setCfgStatus(2);
+        }
+
+        List<HzFeatureChangeBean> hzFeatureChangeBeans = iHzFeatureChangeService.doSelectHasEffect(records);
+        List<HzCfg0Record> hzCfg0RecordsDelete = new ArrayList<>();
+        List<HzCfg0Record> hzCfg0RecordsUpdate = new ArrayList<>();
+        if(hzFeatureChangeBeans!=null&&hzFeatureChangeBeans.size()>0){
+            for(HzCfg0Record hzCfg0Record : records){
+                boolean flag = false;
+                for(HzFeatureChangeBean hzFeatureChangeBean : hzFeatureChangeBeans){
+                    if(hzCfg0Record.getPuid().equals(hzFeatureChangeBean.getCfgPuid())){
+                        flag = true;
+                        break;
+                    }
+                }
+                if(flag){
+                    hzCfg0RecordsUpdate.add(hzCfg0Record);
+                }else {
+                    hzCfg0RecordsDelete.add(hzCfg0Record);
+                }
+            }
+            if(hzCfg0RecordsUpdate!=null&&hzCfg0RecordsUpdate.size()>0){
+                int updateNum = hzCfg0RecordDao.updateStatus(hzCfg0RecordsUpdate);
+                if(updateNum<=0){
+                    result.put("status", false);
+                    result.put("msg", "删除失败");
+                    return result;
+                }else {
+                    result.put("status", true);
+                    result.put("msg", "删除成功");
+                }
+            }
+            if(hzCfg0RecordsDelete!=null&&hzCfg0RecordsDelete.size()>0){
+                int daleteNum = hzCfg0RecordDao.deleteCfgByList(hzCfg0RecordsDelete);
+                if(daleteNum <=0){
+                    result.put("status", false);
+                    result.put("msg", "删除失败");
+                    return result;
+                }else {
+                    result.put("status", true);
+                    result.put("msg", "删除成功");
+                }
+            }
+        }else {
+            int deleteNum = hzCfg0RecordDao.deleteCfgByList(records);
+            if(deleteNum<=0){
+                result.put("status", false);
+                result.put("msg", "删除失败");
+                return result;
+            }else {
+                result.put("status", true);
+                result.put("msg", "删除成功");
+            }
+        }
+        return result;
+    }
     /**
      * 通过特性值主键删除特性值，删除特性值的同时，判断特性值父层下是否还有其他特性值，如果该特性是最后一个特性值，则连同特性一起删除
      *

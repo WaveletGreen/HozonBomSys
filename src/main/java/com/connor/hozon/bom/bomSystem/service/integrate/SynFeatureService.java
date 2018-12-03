@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -24,7 +24,7 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 import java.util.*;
 import java.util.stream.Collectors;
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
@@ -225,6 +225,7 @@ public class SynFeatureService implements ISynFeatureService {
                         success.add(dto);
                         _forDelete.add(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getpCfg0ObjectId() + "-" + record.getpCfg0FamilyDesc());
                         totalOfSuccess++;
+                        //添加进传输成功list中进行批量更新
                         needToUpdateStatus.add(record);
                     } else {
                         fail.add(dto);
@@ -235,6 +236,7 @@ public class SynFeatureService implements ISynFeatureService {
                 //设定需要更新特性值已发送,不用设定相关性值已发送
                 _map.put("isFeatureSent", 1);
                 _map.put("list", needToUpdateStatus);
+                //像这里就执行更新了，把某个字段更新,我记得字段都定义成了is_sent
                 if (needToUpdateStatus.size() > 0) {
                     hzCfg0Service.doUpdateByBatch(_map);
                 }

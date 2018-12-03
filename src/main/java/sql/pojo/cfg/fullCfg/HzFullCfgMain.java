@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -11,17 +11,17 @@ import java.util.Date;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 全配置一级BOM清单主数据
  * @Date: Created in 2018/8/10 13:55
  * @Modified By:
  */
 public class HzFullCfgMain {
-    private BigDecimal id;
+    private Long id;
 
     private String projectUid;
 
-    private String status;
+    private Integer status;
 
     private Integer stage;
 
@@ -68,11 +68,11 @@ public class HzFullCfgMain {
         }
     }
 
-    public BigDecimal getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(BigDecimal id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -84,11 +84,11 @@ public class HzFullCfgMain {
         this.projectUid = projectUid == null ? null : projectUid.trim();
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

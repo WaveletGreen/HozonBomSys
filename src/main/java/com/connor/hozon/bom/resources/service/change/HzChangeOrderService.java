@@ -53,4 +53,6 @@ public interface HzChangeOrderService {
      * @return
      */
     HzChangeOrderRespDTO getHzChangeOrderRecordById(Long id);
+
+    HzChangeOrderRespDTO getHzChangeOrderRespDTOById(Long id, Long auditId);
 }

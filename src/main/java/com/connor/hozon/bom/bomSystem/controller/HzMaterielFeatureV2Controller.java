@@ -1,12 +1,13 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.*;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
@@ -24,6 +25,8 @@ import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService
 import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.entity.User;
@@ -35,11 +38,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.derivative.*;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
+import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
@@ -50,7 +55,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 配置物料特性表
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
@@ -113,6 +118,11 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     HzDMDetailChangeDao hzDMDetailChangeDao;
     @Autowired
     HzChangeOrderDAO hzChangeOrderDAO;
+    @Autowired
+    HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+
+    @Autowired
+    HzChangeDataRecordDAO hzChangeDataRecordDAO;
     /***日志*/
     private static Logger logger = LoggerFactory.getLogger(HzMaterielFeatureV2Controller.class);
 
@@ -289,6 +299,65 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return result;
     }
 
+    @RequestMapping(value = "/deleteVehicleFake", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject deleteVehicleFake(@RequestBody List<HzComposeDelDto> delDtos) {
+        JSONObject result = new JSONObject();
+        result.put("status", true);
+        result.put("msg", "删除成功");
+        if (delDtos == null || delDtos.size() <= 0) {
+            result.put("status", false);
+            result.put("msg", "请至少选择一个衍生物料进行操作");
+            return result;
+        }
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = hzDMBasicChangeDao.selectLastByPuid(delDtos);
+        if(hzDMBasicChangeBeans !=null&&hzDMBasicChangeBeans.size()>0){
+            List<HzComposeDelDto> hzComposeDelDtosUpdate = new ArrayList<>();
+            List<HzComposeDelDto> hzComposeDelDtosDelete = new ArrayList<>();
+            for(HzComposeDelDto hzComposeDelDto : delDtos){
+                boolean flag = false;
+                for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeans){
+                    if(hzDMBasicChangeBean.getDmbSrcId().equals(hzComposeDelDto.getBasicId())){
+                        flag = true;
+                        break;
+                    }
+                }
+                if(flag){
+                    hzComposeDelDtosUpdate.add(hzComposeDelDto);
+                }else {
+                    hzComposeDelDtosDelete.add(hzComposeDelDto);
+                }
+            }
+            if(hzComposeDelDtosUpdate!=null&&hzComposeDelDtosUpdate.size()>0){
+                try {
+                    hzComposeMFService.deleteVehicleFake(hzComposeDelDtosUpdate);
+                }catch (Exception e){
+                    result.put("status", false);
+                    result.put("msg", "删除失败");
+                    return result;
+                }
+            }
+            if(hzComposeDelDtosDelete!=null&&hzComposeDelDtosDelete.size()>0){
+                for(HzComposeDelDto hzComposeDelDto : hzComposeDelDtosDelete) {
+                    if(!hzCfg0ModelFeatureService.doDeleteByPrimaryKey(hzComposeDelDto.getPuidOfModelFeature())){
+                        result.put("status", false);
+                        result.put("msg", "删除失败");
+                        return result;
+                    }
+                }
+            }
+        }else {
+            for(HzComposeDelDto hzComposeDelDto : delDtos) {
+                if(!hzCfg0ModelFeatureService.doDeleteByPrimaryKey(hzComposeDelDto.getPuidOfModelFeature())){
+                    result.put("status", false);
+                    result.put("msg", "删除失败");
+                    return result;
+                }
+            }
+        }
+        return result;
+    }
+
     /**
      * 加载所有的衍生物料数据，这些衍生物料数据title需要配合{@link HzMaterielFeatureV2Controller#getColumn2(String)}进行使用
      * 只有定义了title的字段才能准确的由bootstrap table自动匹配到各个单元格中
@@ -420,7 +489,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         //基本信息basicId
         List<String> puids = (List<String>)params.get("puids");
         //变更表单Id
-        Integer changeFromId = Integer.valueOf((String)params.get("changeFromId"));
+         Long changeFromId = Long.valueOf((String)params.get("changeFromId"));
         //查询主数据
         List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics = hzDerivativeMaterielBasicDao.selectByPuids(puids);
         //查询从数据
@@ -430,8 +499,9 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         List<HzDMBasicChangeBean> hzDMBasicChangeBeans = new ArrayList<HzDMBasicChangeBean>();
         for(HzDerivativeMaterielBasic hzDerivativeMaterielBasic : hzDerivativeMaterielBasics){
             HzDMBasicChangeBean hzDMBasicChangeBean = new HzDMBasicChangeBean();
-            hzDMBasicChangeBean.setFormId(1L);
+            hzDMBasicChangeBean.setFormId(changeFromId);
             hzDMBasicChangeBean.srcSetChange(hzDerivativeMaterielBasic);
+            hzDMBasicChangeBean.setDmbChangeStatus(0);
             hzDMBasicChangeBeans.add(hzDMBasicChangeBean);
         }
         int basicInsertNum = hzDMBasicChangeDao.insertList(hzDMBasicChangeBeans);
@@ -440,18 +510,31 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             result.put("msg","跟新变更主数据失败");
             return result;
         }
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeanList =hzDMBasicChangeDao.selectByFormid(changeFromId);
+        Map<Long,Long> idMap = new HashMap<>();
+        for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeanList){
+            idMap.put(hzDMBasicChangeBean.getDmbSrcId(),hzDMBasicChangeBean.getId());
+        }
         //根据从数据生成变更从数据
         List<HzDMDetailChangeBean> hzDMDetailChangeBeans = new ArrayList<HzDMDetailChangeBean>();
+        List<HzCfg0OptionFamily> familiesBefor = hzCfg0OptionFamilyDao.selectByDM(hzDerivativeMaterielDetails);
+        Map<String,HzCfg0OptionFamily> map = new HashMap<>();
+        for(HzCfg0OptionFamily hzCfg0OptionFamily : familiesBefor){
+            map.put(hzCfg0OptionFamily.getPuid(),hzCfg0OptionFamily );
+        }
         for(HzDerivativeMaterielDetail hzDerivativeMaterielDetail : hzDerivativeMaterielDetails){
             HzDMDetailChangeBean hzDMDetailChangeBean = new HzDMDetailChangeBean();
-            hzDMDetailChangeBean.setFormId(1L);
-            hzDMDetailChangeBean.srcSetChange(hzDerivativeMaterielDetail );
+            hzDMDetailChangeBean.setFormId(changeFromId);
+            hzDMDetailChangeBean.srcSetChange(hzDerivativeMaterielDetail);
+            hzDMDetailChangeBean.setDmbChangeBasicId(idMap.get(hzDerivativeMaterielDetail.getDmdDmbId()));
+            HzCfg0OptionFamily  hzCfg0OptionFamily = map.get(hzDerivativeMaterielDetail.getDmdCfg0FamilyUid());
+            hzDMDetailChangeBean.setTitle(hzCfg0OptionFamily.getpOptionfamilyDesc() + "<br/>" + hzCfg0OptionFamily.getpOptionfamilyName());
             hzDMDetailChangeBeans.add(hzDMDetailChangeBean);
         }
         int detialnum = hzDMDetailChangeDao.insertList(hzDMDetailChangeBeans);
         if(detialnum<hzDMDetailChangeBeans.size()){
             result.put("status",false);
-            result.put("msg","跟新变更主数据失败");
+            result.put("msg","跟新变更从数据失败");
             return result;
         }
 
@@ -462,11 +545,32 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         }
         int srcBasicUpdateNum = hzDerivativeMaterielBasicDao.updateByBasicList(hzDerivativeMaterielBasics);
         int srcBasicUpdateChangIdNum = hzDerivativeMaterielBasicDao.updateByBasicListChangId(hzDerivativeMaterielBasics);
+
+        //流程绑定人员
+        User user = UserInfo.getUser();
+        HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
+        hzChangeDataRecord.setApplicantId(Long.valueOf(user.getId()));
+        hzChangeDataRecord.setOrderId(changeFromId);
+        hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName());
+        int insertNum = hzChangeDataRecordDAO.insert(hzChangeDataRecord);
+        if(insertNum<=0){
+            result.put("status", false);
+            result.put("msg", "绑定人员失败");
+            return result;
+        }
         result.put("status",true);
         result.put("msg","发起VWO流程成功");
         return result;
     }
 
+    /**
+     * 跳转到选择变更表单页面
+     * @param projectUid
+     * @param puids
+     * @param titles
+     * @param model
+     * @return
+     */
     @RequestMapping("/setChangeFromPage")
     public String setChangeFromPage(String projectUid, String puids, String titles, Model model){
         List<String> puidList = new ArrayList<>();
@@ -487,6 +591,111 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         return  "cfg/materielFeature/MaterieFeatureSetChangeFrom";
     }
 
+    @RequestMapping("goBackData")
+    @ResponseBody
+    public JSONObject goBackData(@RequestBody List<HzComposeDelDto> delDtos){
+        JSONObject result = new JSONObject();
+        result.put("status",true);
+
+        Iterator<HzComposeDelDto> iterator = delDtos.iterator();
+        /*********根据主数据ID查出所有主数据**************/
+        List<String> puids = new ArrayList<>();
+        for(HzComposeDelDto hzComposeDelDto : delDtos){
+            puids.add(String.valueOf(hzComposeDelDto.getBasicId()));
+        }
+        List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics = hzDerivativeMaterielBasicDao.selectByPuids(puids);
+        /*********找出主数据所有为删除状态的数据*******************/
+        List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasicsDelete = new ArrayList<>();
+        for(HzDerivativeMaterielBasic hzDerivativeMaterielBasic : hzDerivativeMaterielBasics){
+            if(hzDerivativeMaterielBasic.getDmbStatus()!=null&&2==hzDerivativeMaterielBasic.getDmbStatus()){
+                hzDerivativeMaterielBasic.setDmbStatus(1);
+                hzDerivativeMaterielBasicsDelete.add(hzDerivativeMaterielBasic);
+                while (iterator.hasNext()){
+                    HzComposeDelDto hzComposeDelDto = iterator.next();
+                    if(hzComposeDelDto.getBasicId().equals(hzDerivativeMaterielBasic.getId())){
+                        iterator.remove();
+                        break;
+                    }
+                }
+            }
+        }
+        if(hzDerivativeMaterielBasicsDelete!=null&&hzDerivativeMaterielBasicsDelete.size()>0){
+            int deleteNum = hzDerivativeMaterielBasicDao.updateStatus(hzDerivativeMaterielBasicsDelete);
+            if(deleteNum<=0){
+                result.put("status",false);
+                result.put("msg","撤销删除数据失败");
+                return result;
+            }
+        }
+
+        /**********找出修改的数据******************/
+        if(delDtos==null||delDtos.size()==0){
+            return result;
+        }
+        List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasicsUpdate= new ArrayList<>();
+        List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetailsUpdate = new ArrayList<>();
+        //根据主数据id查找最近一次有效数据
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = new ArrayList<>();
+        hzDMBasicChangeBeans = hzDMBasicChangeDao.selectLastByPuid(delDtos);
+        //根据主数据找到从数据
+        List<HzDMDetailChangeBean> hzDMDetailChangeBeans = new ArrayList<>();
+        if(hzDMBasicChangeBeans!=null&&hzDMBasicChangeBeans.size()!=0){
+            hzDMDetailChangeBeans = hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeans);
+            //根据变更主数据生成源主数据
+            for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeans){
+                HzDerivativeMaterielBasic hzDerivativeMaterielBasic = hzDMBasicChangeBean.getHzDerivativeMaterielBasic();
+                hzDerivativeMaterielBasic.setDmbStatus(0);
+                hzDerivativeMaterielBasicsUpdate.add(hzDerivativeMaterielBasic);
+            }
+            if(hzDerivativeMaterielBasicsUpdate!=null&&hzDerivativeMaterielBasicsUpdate.size()>0){
+                try {
+                    hzDerivativeMaterielBasicDao.updateByBasicAll(hzDerivativeMaterielBasicsUpdate);
+                }catch (Exception e){
+                    result.put("status",false);
+                    result.put("msg","撤销修改基本数据失败");
+                    return result;
+                }
+            }
+            //根据变更从数据生成源从数据
+            for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeans){
+                HzDerivativeMaterielDetail hzDerivativeMaterielDetail = hzDMDetailChangeBean.getHzDerivativeMaterielDetail();
+                hzDerivativeMaterielDetailsUpdate.add(hzDerivativeMaterielDetail);
+            }
+            if(hzDerivativeMaterielDetailsUpdate!=null&&hzDerivativeMaterielDetailsUpdate.size()>0) {
+                try {
+                    hzDerivativeMaterielDetailDao.updateByDetailAll(hzDerivativeMaterielDetailsUpdate);
+                }catch (Exception e){
+                    result.put("status", false);
+                    result.put("msg", "撤销修改从数据失败");
+                    return result;
+                }
+            }
+            //删除修改数据，只留下新增数据
+            Iterator<HzComposeDelDto> iteratorUpdate = delDtos.iterator();
+            for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeans){
+                while (iteratorUpdate.hasNext()){
+                    HzComposeDelDto hzComposeDelDto = iteratorUpdate.next();
+                    if(hzComposeDelDto.getBasicId().equals(hzDMBasicChangeBean.getDmbSrcId())){
+                        iteratorUpdate.remove();
+                        break;
+                    }
+                }
+            }
+        }
+
+        /****************删除所有新增的主从数据************************/
+        if(delDtos==null||delDtos.size()==0){
+            return result;
+        }
+        for(HzComposeDelDto hzComposeDelDto : delDtos){
+            if(!hzCfg0ModelFeatureService.doDeleteByPrimaryKey(hzComposeDelDto.getPuidOfModelFeature())){
+                result.put("status", false);
+                result.put("msg", "撤销新增基本数据失败");
+                return result;
+            }
+        }
+        return  result;
+    }
     /**********************************************废除方法****************************************/
     /**
      * 修改超级物料特性，已废除，不再使用

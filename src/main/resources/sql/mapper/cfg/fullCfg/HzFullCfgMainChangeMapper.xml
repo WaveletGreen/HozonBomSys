@@ -5,7 +5,7 @@
     <result column="ID" jdbcType="DECIMAL" property="id" />
     <result column="CHANGE_ORDER_UID" jdbcType="DECIMAL" property="changeOrderId" />
     <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid" />
-    <result column="STATUS" jdbcType="OTHER" property="status" />
+    <result column="STATUS" jdbcType="DECIMAL" property="status" />
     <result column="STAGE" jdbcType="DECIMAL" property="stage" />
     <result column="VERSION" jdbcType="OTHER" property="version" />
     <result column="EFFECTIVE_DATE" jdbcType="TIMESTAMP" property="effectiveDate" />
@@ -18,7 +18,18 @@
     <result column="CREATOR_CHANGE" jdbcType="OTHER" property="creatorChange" />
     <result column="UPDATER_CHANGE" jdbcType="OTHER" property="updaterChange" />
     <result column="FM_IS_RELEASE" jdbcType="DECIMAL" property="fmIsRelease" />
+    <result column="SRC_MAIN_ID" jdbcType="DECIMAL" property="srcMainId" />
+    <result column="CHANGE_STATUS" jdbcType="DECIMAL" property="changeStatus" />
   </resultMap>
+
+  <sql id="Base_Column_List">
+      ID, CHANGE_ORDER_UID, PROJECT_UID, STATUS,
+      STAGE, VERSION, EFFECTIVE_DATE,
+      CREATE_DATE, UPDATE_DATE, CREATOR,
+      UPDATER, CREATE_DATE_CHANGE, UPDATE_DATE_CHANGE,
+      CREATOR_CHANGE, UPDATER_CHANGE, FM_IS_RELEASE,SRC_MAIN_ID,CHANGE_STATUS
+  </sql>
+
   <insert id="insert" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange">
     <selectKey keyProperty="id" order="BEFORE" resultType="Integer">
         select SEQ_HZ_FC_MAIN_RECORD_CHANGE.NEXTVAL from dual
@@ -27,14 +38,18 @@
       STAGE, VERSION, EFFECTIVE_DATE, 
       CREATE_DATE, UPDATE_DATE, CREATOR, 
       UPDATER, CREATE_DATE_CHANGE, UPDATE_DATE_CHANGE, 
-      CREATOR_CHANGE, UPDATER_CHANGE, FM_IS_RELEASE
+      CREATOR_CHANGE, UPDATER_CHANGE, FM_IS_RELEASE,SRC_MAIN_ID,CHANGE_STATUS
       )
-    values ( #{id,jdbcType=DECIMAL},#{changeOrderId,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=OTHER},
+    values ( #{id,jdbcType=DECIMAL},#{changeOrderId,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=DECIMAL},
       #{stage,jdbcType=DECIMAL}, #{version,jdbcType=OTHER}, #{effectiveDate,jdbcType=TIMESTAMP}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{creator,jdbcType=OTHER}, 
       #{updater,jdbcType=OTHER}, #{createDateChange,jdbcType=TIMESTAMP}, #{updateDateChange,jdbcType=TIMESTAMP}, 
-      #{creatorChange,jdbcType=OTHER}, #{updaterChange,jdbcType=OTHER}, #{fmIsRelease,jdbcType=DECIMAL}
+      #{creatorChange,jdbcType=OTHER}, #{updaterChange,jdbcType=OTHER}, #{fmIsRelease,jdbcType=DECIMAL},
+      #{srcMainId,jdbcType=DECIMAL},#{changeStatus,jdbcType=DECIMAL}
       )
+    <!--where
+    (select ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_STATUS=0 and SRC_MAIN_ID=#{srcMainId,jdbcType=DECIMAL}) is null
+    -->
   </insert>
   <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange">
     insert into HZ_FULL_CFG_MAIN_RECORD_CHANGE
@@ -96,7 +111,7 @@
         #{projectUid,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
-        #{status,jdbcType=OTHER},
+        #{status,jdbcType=DECIMAL},
       </if>
       <if test="stage != null">
         #{stage,jdbcType=DECIMAL},
@@ -136,4 +151,53 @@
       </if>
     </trim>
   </insert>
+
+  <select id="selectByChangeId" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap">
+      select
+        <include refid="Base_Column_List"/>
+      from
+        HZ_FULL_CFG_MAIN_RECORD_CHANGE
+      where
+        CHANGE_ORDER_UID = #{changeOrderId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectLastFullCfg" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      HZ_FULL_CFG_MAIN_RECORD_CHANGE
+    where
+      ID = (select Max(ID) from HZ_FULL_CFG_MAIN_RECORD_CHANGE where SRC_MAIN_ID = #{srcMainId,jdbcType=DECIMAL} and CHANGE_STATUS = 1 and ID&lt;#{id,jdbcType=DECIMAL})
+  </select>
+
+  <select id="selectLastByProjectUid" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    HZ_FULL_CFG_MAIN_RECORD_CHANGE
+    where
+    ID = (select Max(ID) from HZ_FULL_CFG_MAIN_RECORD_CHANGE where PROJECT_UID = #{projectUid,jdbcType=VARCHAR} and CHANGE_STATUS = 1)
+  </select>
+
+  <update id="updateStatusByOrderId" parameterType="java.util.Map">
+    update HZ_FULL_CFG_MAIN_RECORD_CHANGE
+    set CHANGE_STATUS = #{status,jdbcType=DECIMAL}
+    where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+  </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from HZ_FULL_CFG_MAIN_RECORD_CHANGE
+        where ID = #{mainId,jdbcType=DECIMAL}
+    </delete>
+
+  <select id="selectNotEffectByProjectUid" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMainChange" resultMap="BaseResultMap" flushCache="true">
+    select
+    <include refid="Base_Column_List"/>
+    from
+    HZ_FULL_CFG_MAIN_RECORD_CHANGE
+    where
+    PROJECT_UID = #{projectUid,jdbcType=VARCHAR}
+    and
+    CHANGE_STATUS = #{status,jdbcType=DECIMAL}
+  </select>
 </mapper>

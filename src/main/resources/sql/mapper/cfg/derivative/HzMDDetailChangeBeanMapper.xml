@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -45,6 +45,12 @@
         <result column="DMD_RESERVED_5" jdbcType="VARCHAR" property="dmdReserved5"/>
         <!--特性值,放在最后直接显示在前端-->
         <result column="DMD_FEATURE_VALUE" jdbcType="VARCHAR" property="dmdFeatureValue"/>
+        <!--特性值,放在最后直接显示在前端-->
+        <result column="DMB_CHANGE_BASIC_ID" jdbcType="DECIMAL" property="dmbChangeBasicId"/>
+        <!--特性值,放在最后直接显示在前端-->
+        <result column="TITLE" jdbcType="VARCHAR" property="title"/>
+        <!--源从数据ID-->
+        <result column="DMD_SRC_DETAIL_ID" jdbcType="DECIMAL" property="dbdSrcDetailId"/>
         <!--特性对象-->
         <!--<result column="DMB_COLOR_MODEL_UID" jdbcType="VARCHAR" property="cfg0Record"/>-->
     </resultMap>
@@ -68,41 +74,14 @@
         DMD_RESERVED_3,
         DMD_RESERVED_4,
         DMD_RESERVED_5,
-        DMD_FEATURE_VALUE
+        DMD_FEATURE_VALUE,
+        DMB_CHANGE_BASIC_ID,
+        TITLE,
+        DMD_SRC_DETAIL_ID
     </sql>
 
 
     <insert id="insertList" parameterType="java.util.List">
-        <!--insert into-->
-          <!--HZ_DM_DETAIL_CHANGE-->
-        <!--(<include refid="Base_Column_List"/> )-->
-        <!--select SEQ_HZ_DM_DETAIL_CHANGE.NEXTVAL,A.*  from (-->
-        <!--<foreach collection="list" index="index" item="hzDMDetailChangeBean" separator="union">-->
-            <!--select-->
-              <!--#{hzDMDetailChangeBean.formId,jdbcType=DECIMAL},-->
-              <!--#{hzDMDetailChangeBean.dmdDmbId,jdbcType=DECIMAL},-->
-              <!--#{hzDMDetailChangeBean.dmdCfg0Uid,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.dmdCfg0FamilyUid,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.dmdCreator,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.dmdCreateDate,jdbcType=DATE},-->
-              <!--#{hzDMDetailChangeBean.dmdUpdater,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.dmdUpdateDate,jdbcType=DATE},-->
-              <!--#{hzDMDetailChangeBean.changeCreator,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.changeCreateDate,jdbcType=DATE},-->
-              <!--#{hzDMDetailChangeBean.changeUpdater,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.changeUpdateDate,jdbcType=DATE},-->
-              <!--#{hzDMDetailChangeBean.dmdReserved1,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.dmdReserved2,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.dmdReserved3,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.dmdReserved4,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.dmdReserved5,jdbcType=VARCHAR},-->
-              <!--#{hzDMDetailChangeBean.dmdFeatureValue,jdbcType=VARCHAR}-->
-            <!--from-->
-              <!--dual-->
-        <!--</foreach>-->
-        <!--)A-->
-
-
         insert into
         HZ_DM_DETAIL_CHANGE
         (<include refid="Base_Column_List"/>)
@@ -126,10 +105,26 @@
             #{hzDMDetailChangeBean.dmdReserved3,jdbcType=VARCHAR},
             #{hzDMDetailChangeBean.dmdReserved4,jdbcType=VARCHAR},
             #{hzDMDetailChangeBean.dmdReserved5,jdbcType=VARCHAR},
-            #{hzDMDetailChangeBean.dmdFeatureValue,jdbcType=VARCHAR}
+            #{hzDMDetailChangeBean.dmdFeatureValue,jdbcType=VARCHAR},
+            #{hzDMDetailChangeBean.dmbChangeBasicId,jdbcType=DECIMAL},
+            #{hzDMDetailChangeBean.title,jdbcType=VARCHAR},
+            #{hzDMDetailChangeBean.dbdSrcDetailId,jdbcType=DECIMAL}
+
             from
             dual
         </foreach>
         )A
     </insert>
+
+    <select id="selectByBasic" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_DM_DETAIL_CHANGE
+        where
+        DMB_CHANGE_BASIC_ID in
+        <foreach collection="list" index="index" item="hzDMBasicChangeBean" open="(" separator="," close=")">
+            #{hzDMBasicChangeBean.id,jdbcType=DECIMAL}
+        </foreach>
+    </select>
 </mapper>

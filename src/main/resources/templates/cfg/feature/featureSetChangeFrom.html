@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="stage">阶段</label>
+                    <label for="stage">选择变更表单</label>
                     <select class="form-control" id="stage" name="stage">
                         <option th:each="model:${changeFroms}"
                                 th:value="${model.getId()}"
@@ -21,26 +21,26 @@
                     </select>
                 </div>
             </div>
-            <div class="panel-body">
-                <div class="col-lg-6">
-                    <label>请展开部门选择人员</label>
-                    <ul id="orgGroupTree" class="ztree" style="width:400px; overflow:auto;"></ul>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group col-lg-12">
-                        <label th:for="${typeName}">关联工程师名:</label>
-                        <input type="text" class="form-control" th:id="${typeName}" th:name="${typeName}"
-                               placeholder="请选择工程师"
-                        />
-                    </div>
-                    <div class="form-group col-lg-12">
-                        <label>所属部门:</label>
-                        <input type="text" class="form-control" id="dept"
-                               disabled="disabled"
-                        />
-                    </div>
-                </div>
-            </div>
+            <!--<div class="panel-body">-->
+                <!--<div class="col-lg-6">-->
+                    <!--<label>请展开部门选择人员</label>-->
+                    <!--<ul id="orgGroupTree" class="ztree" style="width:400px; overflow:auto;"></ul>-->
+                <!--</div>-->
+                <!--<div class="col-lg-6">-->
+                    <!--<div class="form-group col-lg-12">-->
+                        <!--<label th:for="${typeName}">关联工程师名:</label>-->
+                        <!--<input type="text" class="form-control" th:id="${typeName}" th:name="${typeName}"-->
+                               <!--placeholder="请选择工程师"-->
+                        <!--/>-->
+                    <!--</div>-->
+                    <!--<div class="form-group col-lg-12">-->
+                        <!--<label>所属部门:</label>-->
+                        <!--<input type="text" class="form-control" id="dept"-->
+                               <!--disabled="disabled"-->
+                        <!--/>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
     </form>
 </div>
@@ -119,9 +119,10 @@
                 data: JSON.stringify(rows),
                 contentType: "application/json",
                 success: function (result) {
-                    $('.modal-dialog', window.top.document).parent('div').remove()
-                    $('body', window.top.document).find('.modal-backdrop').remove();
-                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    // $('.modal-dialog', window.top.document).parent('div').remove()
+                    // $('body', window.top.document).find('.modal-backdrop').remove();
+                    // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    activeTabBodyRefresh();
                     // if (result.status) {
                     if (result.status) {
                         layer.msg(result.msg, {icon: 1, time: 2000});

@@ -2,6 +2,7 @@ package sql.pojo.cfg.derivative;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
+import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.Date;
@@ -92,6 +93,14 @@ public class HzDMDetailChangeBean {
      * 特性对象
      */
     private HzCfg0Record cfg0Record;
+
+    private Long dmbChangeBasicId;
+
+    private String title;
+    /**
+     * 源从数据ID
+     */
+    private Long dbdSrcDetailId;
 
     public Long getId() {
         return id;
@@ -253,10 +262,35 @@ public class HzDMDetailChangeBean {
         this.cfg0Record = cfg0Record;
     }
 
+    public Long getDmbChangeBasicId() {
+        return dmbChangeBasicId;
+    }
+
+    public void setDmbChangeBasicId(Long dmbChangeBasicId) {
+        this.dmbChangeBasicId = dmbChangeBasicId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Long getDbdSrcDetailId() {
+        return dbdSrcDetailId;
+    }
+
+    public void setDbdSrcDetailId(Long dbdSrcDetailId) {
+        this.dbdSrcDetailId = dbdSrcDetailId;
+    }
+
     public void srcSetChange(HzDerivativeMaterielDetail hzDerivativeMaterielDetail) {
         Date date = new Date();
         User user = UserInfo.getUser();
 
+        this.setDbdSrcDetailId(hzDerivativeMaterielDetail.getId());
         this.setDmdDmbId(hzDerivativeMaterielDetail.getDmdDmbId());
         this.setDmdCfg0Uid(hzDerivativeMaterielDetail.getDmdCfg0Uid());
         this.setDmdCfg0FamilyUid(hzDerivativeMaterielDetail.getDmdCfg0FamilyUid());
@@ -275,5 +309,14 @@ public class HzDMDetailChangeBean {
         this.setDmdReserved5(hzDerivativeMaterielDetail.getDmdReserved5());
         this.setDmdFeatureValue(hzDerivativeMaterielDetail.getDmdFeatureValue());
         this.setCfg0Record(hzDerivativeMaterielDetail.getCfg0Record());
+    }
+
+    public HzDerivativeMaterielDetail getHzDerivativeMaterielDetail() {
+        HzDerivativeMaterielDetail hzDerivativeMaterielDetail = new HzDerivativeMaterielDetail();
+        hzDerivativeMaterielDetail.setId(this.getDbdSrcDetailId());
+        hzDerivativeMaterielDetail.setDmdCfg0Uid(this.getDmdCfg0Uid());
+        hzDerivativeMaterielDetail.setDmdCfg0FamilyUid(this.getDmdCfg0FamilyUid());
+        hzDerivativeMaterielDetail.setDmdFeatureValue(this.getDmdFeatureValue());
+        return hzDerivativeMaterielDetail;
     }
 }

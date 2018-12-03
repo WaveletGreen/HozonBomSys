@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -14,7 +14,11 @@ var loadDetailTask = function () {
         if (1 == options.formType) {
             vwoLoader(options);
         }
+        else if (4 == options.formType) {
+            changeLoader(options);
+        }
     }
+    taskStatusHold();
 };
 
 
@@ -25,7 +29,15 @@ function vwoLoader(options) {
     $div.append($a).appendTo('body');
     document.getElementById("load-task-a").click();
     $div.remove();
+}
 
+function changeLoader(options) {
+    var $div = $('<div id="load-task-div"/>');
+    var $a = $('<a id="load-task-a" href="untreated/ToUntreatedForm?id=' + options.targetId + '"/>');
+    $a.text(" ");
+    $div.append($a).appendTo('body');
+    document.getElementById("load-task-a").click();
+    $div.remove();
 }
 
 /**

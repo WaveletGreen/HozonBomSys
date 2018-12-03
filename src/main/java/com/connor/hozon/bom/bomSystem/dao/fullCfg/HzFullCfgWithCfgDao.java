@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -8,18 +8,15 @@ package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 import com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg;
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
 
-import java.math.BigDecimal;
 import java.util.List;
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 全配置BOM一级清单2Y层对应的配置项
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzFullCfgWithCfgDao extends BasicDao<HzFullCfgWithCfg> {
 
     int deleteByPrimaryKey(Long id);
@@ -28,7 +25,7 @@ public interface HzFullCfgWithCfgDao extends BasicDao<HzFullCfgWithCfg> {
 
     HzFullCfgWithCfg selectByPrimaryKey(Long id);
 
-    List<HzFullCfgWithCfg> selectByMainID(BigDecimal flCfgVersion);
+    List<HzFullCfgWithCfg> selectByMainID(Long flCfgVersion);
 
     int insertBomLine(List<HzFullCfgWithCfg> hzFullCfgWithCfgs);
 
@@ -36,7 +33,7 @@ public interface HzFullCfgWithCfgDao extends BasicDao<HzFullCfgWithCfg> {
 
     List<HzFullCfgWithCfg> query2YCfgByProjectId(String projectId);
 
-    HzFullCfgWithCfg selectByBomLineUidWithVersion(BigDecimal version, String puid);
+    HzFullCfgWithCfg selectByBomLineUidWithVersion(Long version, String puid);
 
     HzFullCfgWithCfg query2YCfgByBomLineId(String bomLineId);
 
@@ -47,7 +44,7 @@ public interface HzFullCfgWithCfgDao extends BasicDao<HzFullCfgWithCfg> {
      * @param puid
      * @return
      */
-    HzExFullCfgWithCfg selectByBLOutWithCfg(BigDecimal version, String puid);
+    HzExFullCfgWithCfg selectByBLOutWithCfg(Long version, String puid);
     /**
      * 根据2Y和全配主键一起查询，连带出特性值对象和BOMLine对象
      *
@@ -55,6 +52,9 @@ public interface HzFullCfgWithCfgDao extends BasicDao<HzFullCfgWithCfg> {
      * @param puid
      * @return
      */
-    HzExFullCfgWithCfg selectByBLOutWithCfgAndBL(BigDecimal version, String puid);
+    HzExFullCfgWithCfg selectByBLOutWithCfgAndBL(Long version, String puid);
 
+    int insertAll(List<HzFullCfgWithCfg> hzFullCfgWithCfgs);
+
+    HzFullCfgWithCfg selectBy2Yid(HzFullCfgWithCfg hzFullCfgWithCfg);
 }

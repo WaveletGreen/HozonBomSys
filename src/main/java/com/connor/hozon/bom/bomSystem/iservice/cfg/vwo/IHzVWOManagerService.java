@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
@@ -261,4 +261,22 @@ public interface IHzVWOManagerService {
     List<HzCmcrDetailChange> doQueryCmcrDetailChangBeforAndAfter(List<String> cmcrDetailSrcPuidList, Long cmcrCgVwoId);
 
     void doQueryCmcrDetailChangBefor(Map<String,Object> map, Long vwoId);
+
+    Map<String,Object> getMaterielFeatureTable(Long formId,String projectUid);
+
+    Map<String,Object> getFullCfgTable(Integer orderChangeId, String projectUid);
+
+    JSONObject deleteChangeFeature(List<Long> changeFeatureIds,Long orderId);
+
+    JSONObject deleteChangeColorModel(List<Long> changeColorModelIds,Long orderId);
+
+    JSONObject deleteChangeMaterielFeature(List<Long> changeMaterielFeatureIds,Long orderId);
+
+    JSONObject deleteChangeBomAll(Long mainId,Long orderId);
+
+    void doQueryCmcrDetailChangBefor2(Map<String,Object> map, Long vwoId);
+
+    Map<String,Object> getRelevance(Long orderChangeId, String projectUid);
+
+    JSONObject deleteChangeRelevance(Long orderChangeId);
 }

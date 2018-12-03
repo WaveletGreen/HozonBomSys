@@ -6,6 +6,12 @@
 <title>变更单</title>
 </head>
 <body>
+<!--<a href="javascript:history.go(-1);">返回变更表单</a>-->
+<div class="form-group">
+    <button type="button" class="btn btn-primary" onclick="doReturn();" style="float: right">返回变更表单</button>
+</div>
+<div class="panel-body" style="padding-bottom: 0;">
+</div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">基本信息</i></h4>
 <div class="panel-body" style="padding:0px;">
     <form id="basicForm" role="form" method="post" action="">
@@ -13,23 +19,25 @@
             <div class="panel-body" style="padding:0px;">
                 <div class="col-lg-12 col-md-12" style="padding:0px;">
                     <div class="col-lg-3 col-md-3">
+                        <input id="id" type="hidden" th:value="${data.id}">
+                        <input id="isFromTc" type="hidden" th:value="${data.isFromTc}">
                         <div class="form-group after_the">
                             <label for="changeNo">变更单号</label>
                             <input type="text" class="form-control" name="changeNo" id="changeNo"
-                                    th:value="${data.changeNo}" disabled="disabled"
-                                   placeholder="请输入变更单号"/>
+                                   th:value="${data.changeNo}" disabled="disabled"
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="createTime">创建时间</label>
                             <input type="text" class="form-control" name="createTime" id="createTime"
                                    th:value="${data.createTime}" disabled="disabled"
-                                   placeholder="请输入创建时间"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="deptName">部门</label>
                             <input type="text" class="form-control" name="deptName" id="deptName"
                                    th:value="${data.deptName}" disabled="disabled"
-                                   placeholder="请输入部门"/>
+                                   />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
@@ -37,31 +45,32 @@
                             <label for="originator">发起人</label>
                             <input type="text" class="form-control" name="originator" id="originator"
                                    th:value="${data.originator}" disabled="disabled"
-                                   placeholder="请输入发起人"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="tel">联系电话</label>
                             <input type="text" class="form-control" name="tel" id="tel"
                                    th:value="${data.tel}" disabled="disabled"
-                                   placeholder="请输入联系电话"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="changeType">变更类型</label>
                             <input type="text" class="form-control" name="changeType" id="changeType"
                                    th:value="${data.changeType}" disabled="disabled"
-                                   placeholder="请输入变更类型"/>
+                                   />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
-                            <label for="relationChangeNo">是否关联变更</label>
-                            <input type="text" class="form-control" name="relationChangeNo" id="relationChangeNo"
-                                   th:value="${data.relationChangeNo}" disabled="disabled"
-                                   placeholder="请输入部门关联变更号"/>
+                            <label for="createName">表单创建者</label>
+                            <input type="text" class="form-control" name="createName" id="createName"
+                                   th:value="${data.createName}" disabled="disabled"
+                            />
                         </div>
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
-                            <select class="form-control" name="marketType" id="marketType"disabled="disabled" placeholder="请选择上市类型">
+                            <select class="form-control" name="marketType" id="marketType" disabled="disabled"
+                                    >
                                 <option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>
                                 <option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>
                             </select>
@@ -70,7 +79,7 @@
                             <label for="projectStage">项目所属阶段</label>
                             <input type="text" class="form-control" name="projectStage" id="projectStage"
                                    th:value="${data.projectStage}" disabled="disabled"
-                                   placeholder="请输入项目所属阶段"/>
+                                   />
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
@@ -78,15 +87,25 @@
                             <label for="remark">备注</label>
                             <input type="text" class="form-control" name="remark" id="remark"
                                    th:value="${data.remark}" disabled="disabled"
-                                   placeholder="请输入备注"/>
+                                   />
                         </div>
                         <div class="form-group after_the">
                             <label for="state">变更状态</label>
-                            <select class="form-control" name="state" id="state" placeholder="请选择变更状态"disabled="disabled">
-                                <option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>
-                                <option th:selected="${data.getState()=='完成'?true:false}">完成</option>
-                                <option th:selected="${data.getState()=='取消 '?true:false}">取消</option>
-                            </select>
+                            <!--<select class="form-control" name="state" id="state" placeholder="请选择变更状态"-->
+                                    <!--disabled="disabled">-->
+                                <!--<option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>-->
+                                <!--<option th:selected="${data.getState()=='完成'?true:false}">完成</option>-->
+                                <!--<option th:selected="${data.getState()=='取消 '?true:false}">取消</option>-->
+                            <!--</select>-->
+                            <input type="text" class="form-control" name="state" id="state"
+                                   th:value="${data.state}" disabled="disabled"
+                                   />
+                        </div>
+                        <div class="form-group after_the">
+                            <label for="relationChangeNo">是否关联变更</label>
+                            <input type="text" class="form-control" name="relationChangeNo" id="relationChangeNo"
+                                   th:value="${data.relationChangeNo}" disabled="disabled"
+                            />
                         </div>
                     </div>
                 </div>
@@ -96,41 +115,44 @@
 </div>
 <!--<h4><i class="fa fa-minus-square" aria-hidden="true">变更附件</i></h4>-->
 <!--<div class="panel-body" style="padding:0px;">-->
-    <!--<div class="panel panel-default">-->
-        <!--<div class="panel-body">-->
-            <!--<div class="col-md-12 col-lg-12" style="padding:0px;">-->
-                <!--<div class="form-group after_the">-->
-                    <!--<label for="EWOnum5">附件:</label>-->
-                    <!--<input type="file" class="form-control" name="level" id="EWOnum5"-->
-                           <!--placeholder=""/>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
+<!--<div class="panel panel-default">-->
+<!--<div class="panel-body">-->
+<!--<div class="col-md-12 col-lg-12" style="padding:0px;">-->
+<!--<div class="form-group after_the">-->
+<!--<label for="EWOnum5">附件:</label>-->
+<!--<input type="file" class="form-control" name="level" id="EWOnum5"-->
+<!--placeholder=""/>-->
 <!--</div>-->
-<h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
-<div class="panel-body" style="padding:0px;">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="content col-lg-12 col-md-12" style="padding:0px;">
-                <table class="table table-striped tableNormalStyle" id="routingDaTable">
-                    <tr><td><a onclick="skip('feature')">特性变更</a></td></tr>
-                    <tr><td><a onclick="skip('modelColor')">配色方案变更</a></td></tr>
-                    <!--<tr><td><a onclick="skip('feature')">特性变更</a></td></tr>-->
-                    <tr>
-                        <th><a href="../change/texing">特性变更</a></th>
-                        <th><a href="#">全BOM配置</a></th>
-                        <th><a href="#">配色方案</a></th>
-                        <th><a href="#">配置物料</a></th>
-                        <th><a href="../change/data/ebom/page">EBOM管理</a></th>
-                        <th><a href="#">PBOM管理</a></th>
-                        <th><a href="#">超级MBOM</a></th>
-                        <th><a href="#">白车身生产</a></th>
-                        <th><a href="#">白车身财务</a></th>
-                        <th><a href="#">物料数据</a></th>
-                        <th><a href="#">工艺路线</a></th>
-                    </tr>
-                </table>
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+<div id="TCForm">
+    <h4><i class="fa fa-minus-square" aria-hidden="true">变更清单</i></h4>
+    <div class="panel-body" style="padding:0px;">
+        <div class="panel panel-default">
+            <div class="panel-body" style="min-height:0px;max-height: 200px;overflow: scroll">
+                <div class="content col-lg-12 col-md-12" style="padding:0px;">
+                    <div class="col-lg-4 col-md-4"></div>
+                    <div class="col-lg-4 col-md-4">
+                        <table class="table table-striped tableNormalStyle" id="changeTCTable">
+                        </table>
+                    </div>
+                    <div class="col-lg-4 col-md-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="BOMForm">
+    <h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
+    <div class="panel-body" style="padding:0px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="content col-lg-12 col-md-12" style="padding:0px;">
+                    <table class="table table-striped tableNormalStyle" id="changeOrderTable">
+                    </table>
+                </div>
             </div>
         </div>
     </div>

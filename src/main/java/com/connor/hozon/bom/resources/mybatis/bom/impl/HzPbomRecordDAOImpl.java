@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
@@ -23,7 +24,7 @@ import java.util.Map;
 /**
  * Created by haozt on 2018/5/25
  */
-@Service("HzPbomRecordDAO")
+@Service("hzPbomRecordDAO")
 public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO {
 
     @Override
@@ -113,6 +114,44 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public int insertListForChange(List<HzPbomLineRecord> records, String tableName) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("tableName",tableName);
+        int size = records.size();
+        //分批插入数据 一次1000条
+        int i = 0;
+        int cout = 0;
+        try {
+            synchronized (this){
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzPbomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        map.put("list",list);//map key相同 value会被替代
+                        super.insert("HzPbomRecordDAOImpl_insertListForChange",map);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzPbomLineRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    map.put("list",list);
+                    super.insert("HzPbomRecordDAOImpl_insertListForChange",map);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public int update(HzPbomLineRecord record) {
         return super.update("HzPbomRecordDAOImpl_update",record);
     }
@@ -146,7 +185,8 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
             }
             return 1;
         }catch (Exception e){
-            return 0;
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -160,12 +200,12 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.update("HzPbomRecordDAOImpl_recoverBomById",ePuid);
     }
 
-    @Override
-    public int deleteList(String puids) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("eBomPuids",Lists.newArrayList(puids.split(",")));
-        return super.delete("HzPbomRecordDAOImpl_deleteListByPuids",map);
-    }
+//    @Override
+//    public int deleteList(String puids) {
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("eBomPuids",Lists.newArrayList(puids.split(",")));
+//        return super.delete("HzPbomRecordDAOImpl_deleteByPuids",map);
+//    }
 
     @Override
     public int deleteList(List<DeleteHzPbomReqDTO> list) {
@@ -342,15 +382,79 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("puids", query.getPuids());
         map.put("projectId",query.getProjectId());
-        if(!query.getRevision()){
-            map.put("revision",null);
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"":null);
         }else {
-            map.put("revision","");
+            map.put("revision",null);
         }
-        map.put("state",query.getState());
+        map.put("status",query.getStatus());
         map.put("tableName",query.getTableName());
         map.put("orderId",query.getOrderId());
         return super.findForList("HzPbomRecordDAOImpl_getPbomRecordsByPuids",map);
+    }
+
+    @Override
+    public int deleteByPuids(String puids) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("eBomPuids",Lists.newArrayList(puids.split(",")));
+        return super.update("HzPbomRecordDAOImpl_deleteByPuids",map);
+    }
+
+    @Override
+    public int deleteListByPuids(String puids,String tableName) {
+        List<String> list = Lists.newArrayList(puids.split(","));
+        try {
+            int size = list.size();
+            Map<String,Object> m = new HashMap<>();
+            m.put("tableName",tableName);
+            synchronized (this){
+                if(size>1000){
+                    HzBomSysFactory<String> factory = new HzBomSysFactory();
+                    Map<Integer,List<String>> map = factory.spiltList(list);
+                    for(List<String> v:map.values()){
+                        m.put("puids",v);
+                        super.delete("HzPbomRecordDAOImpl_deleteListByPuids",m);
+                    }
+                }else {
+                    m.put("puids",list);
+                    super.delete("HzPbomRecordDAOImpl_deleteListByPuids",m);
+                }
+            }
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public HzPbomLineRecord getPBomRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid", query.getPuid());
+        map.put("projectId",query.getProjectId());
+        if(null != query.getRevision()){
+            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+        }else {
+            map.put("revision",null);
+        }
+        map.put("status",query.getStatus());
+        map.put("tableName",query.getTableName());
+        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_getEBomRecordByPuidAndRevision",map);
+    }
+
+    @Override
+    public List<HzPbomLineRecord> getPbomRecordsByOrderId(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        map.put("status",query.getStatus());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"1":"0");
+        }else {
+            map.put("revision",null);
+        }
+        return super.findForList("HzPbomRecordDAOImpl_getPbomRecordsByOrderId",map);
     }
 
 }

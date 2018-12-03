@@ -41,26 +41,43 @@ public class HzChangeOrderFactory {
         HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
         respDTO.setChangeNo(record.getChangeNo());
         respDTO.setChangeType(record.getChangeType());
-        respDTO.setCreateName(record.getCreateName());
+        respDTO.setCreateName(1==record.getFromTc()?record.getCreateNameTC():record.getCreateName());
+        respDTO.setDeptName(1==record.getFromTc()?record.getDeptNameTC():record.getDeptName());
         respDTO.setCreateNo(record.getCreateNo());
         respDTO.setCreateTime(DateUtil.formatTimestampDate(record.getCreateTime()));
         respDTO.setId(record.getId());
         respDTO.setMarketType(Integer.valueOf(1).equals(record.getMarketType())?"上市前":"上市后");
-        respDTO.setOriginator(record.getOriginator());
-        respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getOriginTime()));
+        //流程发起人
+        if(record.getOriginator()!=null)
+            respDTO.setOriginator(record.getOriginator());
+        //else
+            //respDTO.setOriginator(record.getCreateNameTC());
+        //respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getOriginTime()));
+        if(record.getApplicantTime()==null)
+            respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getOriginTime()));
+        else
+            respDTO.setOriginTime(DateUtil.formatTimestampDate(record.getApplicantTime()));//申请时间
+        respDTO.setAuditTime(DateUtil.formatTimestampDate(record.getAuditTime()));//审核时间
         respDTO.setProjectStage(record.getProjectStage());
         respDTO.setRelationChangeNo(record.getRelationChangeNo());
         respDTO.setRemark(record.getRemark());
-        Integer state = record.getState();
-        if(Integer.valueOf(1).equals(state)){
-            respDTO.setState("已完成");
-        }else if(Integer.valueOf(2).equals(state)){
-            respDTO.setState("进行中");
-        }else {
-            respDTO.setState("已取消");
-        }
+        respDTO.setOrderResource(record.getFromTc());
+        respDTO.setState(record.getState());
+        respDTO.setStatus(record.getState());
         respDTO.setTel(record.getTel());
-        respDTO.setDeptName(record.getDeptName());
+        respDTO.setIsFromTc(record.getFromTc());
+        if(record.getFromTc()==0){
+            respDTO.setSource("BOM");
+        }else{
+            respDTO.setSource("TC");
+        }
+        respDTO.setProjectName(record.getProjectName());
+        if(record.getAuditRecordId()!=null)
+            respDTO.setAuditId(Long.parseLong(record.getAuditRecordId()));
+        if(record.getAuditId()!=null)
+            respDTO.setAuditId(Long.parseLong(record.getAuditId()));
+        if(record.getChangeAccepter()!=null)
+            respDTO.setChangeAccepter(record.getChangeAccepter());
         return respDTO;
     }
 

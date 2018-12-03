@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 
@@ -238,10 +238,11 @@
                             data: JSON.stringify(data),
                             success:
                                 function (result) {
-                                    $('.modal-dialog', window.top.document).parent('div').remove()
-                                    $('body', window.top.document).find('.modal-backdrop').remove();
+                                    // $('.modal-dialog', window.top.document).parent('div').remove()
+                                    // $('body', window.top.document).find('.modal-backdrop').remove();
                                     // jquery 调用刷新当前操作的table页面的refresh方法
-                                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                    // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                    activeTabBodyRefresh();
                                     layer.msg(result.msg, {icon: 1, time: 2000})
                                     // window.Ewin.alert({message: result.msg});
                                 },

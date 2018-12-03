@@ -1,5 +1,8 @@
 package integration.option;
 
+/**
+ * 与SAP交互使用的选项，只能是"A"、"U"、"D"传输代码值，其他不生效
+ */
 public enum ActionFlagOption {
     /**
      * 添加

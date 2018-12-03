@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!--二阶段特性从配置字典中获取-->
@@ -19,34 +19,33 @@
     <div class="form-group">
         <label for="pCfg0FamilyName">特性名称<span style="color: red">*</span></label>
         <input class="form-control" id="pCfg0FamilyName" name="pCfg0FamilyName" type="text"
-               readonly="readonly"
+               readonly="readonly" unselectable='on'
         />
     </div>
     <div class="form-group">
         <label for="pCfg0FamilyDesc">特性描述<span style="color: red">*</span></label>
         <input class="form-control" id="pCfg0FamilyDesc" name="pCfg0FamilyDesc" type="text"
-               readonly="readonly"
+               readonly="readonly" unselectable='on'
         />
         <!--disabled="disabled"-->
     </div>
     <div class="form-group">
         <label for="pH9featureenname">特性英文名称</label>
         <input class="form-control" id="pH9featureenname" name="pH9featureenname" type="text"
-               readonly="readonly"
+               readonly="readonly" unselectable='on'
         />
     </div>
     </div>
     <div class="form-group">
         <label for="pCfg0ObjectId">特性值/配置代码<span style="color: red">*</span></label>
         <input class="form-control" id="pCfg0ObjectId" name="pCfg0ObjectId" type="text" onblur="returnCfgMsg(this)"
-               placeholder="请输入特性值/配置代码"
-        />
+               placeholder="请输入特性值/配置代码"/>
+        <div id="cfgFlag" style="color:#a94442;display: none">配置代码无效</div>
     </div>
     <div class="form-group">
         <label for="pCfg0Desc">特性值/配置(描述)<span style="color: red">*</span></label>
         <input class="form-control" id="pCfg0Desc" name="pCfg0Desc" type="text"
-               readonly="readonly"
-        />
+               readonly="readonly" unselectable='on'/>
     </div>
     <!--<div class="form-group">-->
     <!--<label for="length">字符长度</label>-->
@@ -97,23 +96,23 @@
                         }
                     }
                 },
-                pCfg0ObjectId: {
-                    message: '特性值/配置代码验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '特性值/配置代码不能为空'
-                        },
-                        //正则校验
-                        regexp: {
-                            regexp: /[a-zA-Z0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
-                            message: '特性值只能以数字/英文开头，加英文和数字，不允许有英文和数字以外的字符'
-                        },
-                        stringLength: {
-                            max: 10,
-                            message: '特性值最长长度为10'
-                        },
-                    }
-                },
+                // pCfg0ObjectId: {
+                //     message: '特性值/配置代码验证失败',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '特性值/配置代码不能为空'
+                //         },
+                //         //正则校验
+                //         regexp: {
+                //             regexp: /[a-zA-Z0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                //             message: '特性值只能以数字/英文开头，加英文和数字，不允许有英文和数字以外的字符'
+                //         },
+                //         stringLength: {
+                //             max: 10,
+                //             message: '特性值最长长度为10'
+                //         },
+                //     }
+                // },
                 pCfg0Desc: {
                     message: '特性值/配置(描述)验证失败',
                     validators: {
@@ -169,10 +168,11 @@
                     url: url,
                     success:
                         function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
-                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // $('.modal-dialog', window.top.document).parent('div').remove()
+                            // $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            activeTabBodyRefresh();
                             if (result.status) {
                                 layer.msg(result.msg, {icon: 1, time: 2000})
                             }
@@ -193,16 +193,21 @@
 <script>
     function returnCfgMsg(obj) {
         var cfgVal = $(obj).val();
+        $("#featureForm", window.top.document).data('bootstrapValidator').resetForm();
         $.ajax({
             type: "GET",
             url: "./cfg0/returnCfgMsg?cfgVal=" + cfgVal,
             success: function (result) {
                 if (result.stage) {
                     var libraryJson = result.data;
-                        $(pCfg0FamilyName).val(libraryJson.famillyCode);
-                        $(pCfg0FamilyDesc).val(libraryJson.famillyCh);
-                        $("#pH9featureenname").val(libraryJson.famillyEn);
-                        $("#pCfg0Desc").val(libraryJson.valueDescCh);
+                    $(pCfg0FamilyName).val(libraryJson.famillyCode);
+                    $(pCfg0FamilyDesc).val(libraryJson.famillyCh);
+                    $("#pH9featureenname").val(libraryJson.famillyEn);
+                    $("#pCfg0Desc").val(libraryJson.valueDescCh);
+                    $("#cfgFlag").hide();
+                }
+                else {
+                    $("#cfgFlag").show();
                 }
             },
             error: function (result) {

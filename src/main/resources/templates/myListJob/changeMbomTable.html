@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/11/15 Time: 18:54-->
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/change/changeForm/changeOrderTable.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>超级Mbom变更</title>
+</head>
+<body>
+<div class="form-group">
+    <button type="button"class="btn btn-primary"onclick="doReturn();" style="float: right">返回上一步</button>
+</div>
+<h4><i class="fa fa-minus-square" aria-hidden="true">超级Mbom变更</i></h4>
+<div class="panel-body" style="padding-bottom: 0;">
+    <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+          id="ebomChangeData">
+        <input type="hidden" id="orderId" th:value="${orderId}">
+        <input type="hidden" id="type" th:value="${type}">
+    </form>
+</div>
+<div class="panel-body" style="padding:0px;">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="content col-lg-12 col-md-12" style="padding:0px;">
+                <table class="table table-striped tableNormalStyle" id="mbom_table">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    $(document).ready((function () {
+        initTable();
+    }))
+
+
+    function initTable() {
+        var projectPuid = $("#project", window.top.document).val();
+        var $table = $("#mbom_table");
+        var column = [];
+        var orderId = $("#orderId").val();
+        var type = $("#type").val();
+        // column.push({field: 'ck', checkbox: true, Width: 50});
+        column.push({
+            field: '',
+            title: '序号',
+            align: 'center',
+            Width: 50,
+            formatter: function (value, row, index) {
+                var options = $table.bootstrapTable('getOptions');
+                return options.pageSize * (options.pageNumber - 1) + index + 1;
+
+            }
+        }),
+            $.ajax({
+                url: "../../change/data/mbom/title",
+                type: "GET",
+                success: function (result) {
+                    var data = result.data;
+                    for (var key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            var json = {
+                                field: key,
+                                title: data[key],
+                                // align: 'center',
+                                valign: 'middle',
+                            };
+                            column.push(json);
+                        }
+                    }
+                    $table.bootstrapTable({
+                        url: "../../change/data/mbom/data?orderId="+orderId + "&type="+type,
+                        method: 'GET',
+                        dataType: 'json',
+                        //cache: false,
+                        // striped: true,                              //是否显示行间隔色
+                        height: $(window.parent.document).find("#wrapper").height() - 150,
+                        width: $(window).width(),
+                        formId: 'ebomChangeData',
+                        undefinedText: "",//当数据为 undefined 时显示的字符
+                        pagination: false,
+                        //showExport: true,
+                        //exportDataType: 'all',
+                        columns: column,
+                        toolbar: "#toolbar",
+                        //sortName: 'id',
+                        // sortable: true,                     //是否启用排序
+                        sortOrder: "asc",                   //排序方式
+                        clickToSelect: true,// 单击某一行的时候选中某一条记录
+                        //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+                        showColumns: false, //是否显示所有的列
+                        // resizable:true,
+                        // fixedColumns: true,
+                        // fixedNumber:3,
+                        showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+                        showRefresh: false,                  //是否显示刷新按钮
+                        //minimumCountColumns:4,
+                    });
+
+                }
+            });
+    }
+    function doReturn() {
+        window.location.href="javascript:history.go(-1);"
+    }
+</script>
+</body>
+</html>

@@ -5,10 +5,10 @@ import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import sql.redis.HzDBException;
 
 import java.util.ArrayList;
@@ -16,41 +16,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service("baseSQLUtil")
-public class BaseSQLUtil implements IBaseSQLUtil {
+
+public class BaseSQLUtil extends SqlSessionDaoSupport implements IBaseSQLUtil {
     private static final Logger logger = LoggerFactory.getLogger(BaseSQLUtil.class);
-    private static SqlSession session;
-    private static SqlSessionTemplate sqlSessionTemplate;
-    //    锁对象，保证能进入双重校验锁结构语句
-    private Object obj = new Object();
+//    //DefaultSqlSession这个类不是线程安全的，所以DefaultSqlSession这个类不可以被设置成单例模式的
+//    private static SqlSession session;
+//    private static getSqlSession() getSqlSession();
+//    //    锁对象，保证能进入双重校验锁结构语句
+//    private Object obj = new Object();
 
-    static {
-        SqlSessionFactory f = FactoryManager.getInstance();
-        session = f.openSession();
-        sqlSessionTemplate = new SqlSessionTemplate(f);
-    }
+//    static {
+//        SqlSessionFactory f = FactoryManager.getInstance();
+//        session = f.openSession();
+//        getSqlSession() = new getSqlSession()(f);
+//    }
 
 
-    private void checkSessionStatus() {
-        if (sqlSessionTemplate == null) {
-            synchronized (obj) {
-                if (sqlSessionTemplate == null) {
-                    SqlSessionFactory f = FactoryManager.getInstance();
-                    sqlSessionTemplate = new SqlSessionTemplate(f);
-                }
-            }
-        }
-    }
+//    private void checkSessionStatus() {
+//        if (getSqlSession() == null) {
+//            synchronized (obj) {
+//                if (getSqlSession() == null) {
+//                    SqlSessionFactory f = FactoryManager.getInstance();
+//                    getSqlSession() = new getSqlSession()(f);
+//                }
+//            }
+//        }
+//    }
 
-    public <T> T executeQueryById(T suppliers, String by) {
-        checkSessionStatus();
+    public <T> T executeQueryById(final T suppliers, final String by) {
+//        checkSessionStatus();
         T result = null;
         try {
             logger.info("BaseSQLUtil execute sql:" + by);
             if (suppliers == null) {
-                result = (T) sqlSessionTemplate.selectOne(by);
+                result = (T) getSqlSession().selectOne(by);
             } else {
-                result = (T) sqlSessionTemplate.selectOne(by, suppliers);
+                result = (T) getSqlSession().selectOne(by, suppliers);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,52 +60,53 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
-    public <T> int executeInsert(T suppliers, String by) {
-        checkSessionStatus();
+    public <T> int executeInsert(final T suppliers, final String by) {
+//        checkSessionStatus();
         int result = 0;
         try {
             logger.info("BaseSQLUtil execute sql:" + by);
             if (suppliers == null) {
-                result = sqlSessionTemplate.insert(by);
+                result = getSqlSession().insert(by);
             } else {
-                // sqlSessionTemplate.insert(by, suppliers);
-                result = sqlSessionTemplate.insert(by, suppliers);
+                // getSqlSession().insert(by, suppliers);
+                result = getSqlSession().insert(by, suppliers);
             }
-//            sqlSessionTemplate.commit();
+//            getSqlSession().commit();
         } catch (Exception e) {
-//            sqlSessionTemplate.rollback(true);
+//            getSqlSession().rollback(true);
+            e.printStackTrace();
+            throw e;
+        } finally {
+        }
+        return result;
+    }
+
+    public <T> List<T> executeQuery(final T suppliers,final String by) {
+        List<T> result = null;
+//        checkSessionStatus();
+        try {
+            logger.info("BaseSQLUtil execute sql:" + by);
+            if (suppliers == null) {
+                result = getSqlSession().selectList(by);
+            } else {
+                result = getSqlSession().selectList(by, suppliers);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
         }
         return result;
     }
 
-    public <T> List<T> executeQuery(T suppliers, String by) {
-        List<T> result = null;
-        checkSessionStatus();
-        try {
-            logger.info("BaseSQLUtil execute sql:" + by);
-            if (suppliers == null) {
-                result = sqlSessionTemplate.selectList(by);
-            } else {
-                result = sqlSessionTemplate.selectList(by, suppliers);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        }
-        return result;
-    }
-
-    public <T, E> List<T> executeQueryByPass(T suppliers, E pass, String by) {
-        checkSessionStatus();
+    public <T, E> List<T> executeQueryByPass(final T suppliers,final E pass, final String by) {
+//        checkSessionStatus();
         List<T> result = null;
         try {
             logger.info("BaseSQLUtil execute sql:" + by);
             if (suppliers == null) {
-                result = sqlSessionTemplate.selectList(by);
+                result = getSqlSession().selectList(by);
             } else {
-                result = sqlSessionTemplate.selectList(by, pass);
+                result = getSqlSession().selectList(by, pass);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,15 +116,15 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     }
 
     @Override
-    public <T> T executeQueryByPass(T t, String pass, String by, boolean b) {
-        checkSessionStatus();
+    public <T> T executeQueryByPass(final T t, final String pass,final String by, final boolean b) {
+//        checkSessionStatus();
         T result = null;
         try {
             logger.info("BaseSQLUtil execute sql:" + by);
             if (t == null) {
-                result = sqlSessionTemplate.selectOne(by);
+                result = getSqlSession().selectOne(by);
             } else {
-                result = sqlSessionTemplate.selectOne(by, pass);
+                result = getSqlSession().selectOne(by, pass);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -132,15 +134,15 @@ public class BaseSQLUtil implements IBaseSQLUtil {
     }
 
     @Override
-    public <T> T executeQueryByPass(T t, String by, String... pass) {
-        checkSessionStatus();
+    public <T> T executeQueryByPass(final T t, final String by,final String... pass) {
+//        checkSessionStatus();
         T result = null;
         try {
             logger.info("BaseSQLUtil execute sql:" + by);
             if (t == null) {
-                result = sqlSessionTemplate.selectOne(by);
+                result = getSqlSession().selectOne(by);
             } else {
-                result = sqlSessionTemplate.selectOne(by, pass);
+                result = getSqlSession().selectOne(by, pass);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,81 +151,85 @@ public class BaseSQLUtil implements IBaseSQLUtil {
         return result;
     }
 
-    public <T> int executeUpdate(T suppliers, String by) {
-        checkSessionStatus();
+    public <T> int executeUpdate(final T suppliers, final String by) {
+//        checkSessionStatus();
         int result = 0;
         try {
             logger.info("BaseSQLUtil execute sql:" + by);
             if (suppliers == null) {
-                result = sqlSessionTemplate.update(by);
+                result = getSqlSession().update(by);
             } else {
-                result = sqlSessionTemplate.update(by, suppliers);
+                result = getSqlSession().update(by, suppliers);
             }
-//            sqlSessionTemplate.commit(true);
+//            getSqlSession().commit(true);
         } catch (Exception e) {
-//            if (sqlSessionTemplate != null) {
-//                sqlSessionTemplate.rollback(true);
+//            if (getSqlSession() != null) {
+//                getSqlSession().rollback(true);
 //            }
             e.printStackTrace();
+            throw e;
 
         } finally {
         }
         return result;
     }
 
-    public <T> int executeDelete(T suppliers, String by) {
-        checkSessionStatus();
+    public <T> int executeDelete(final T suppliers, final String by) {
+//        checkSessionStatus();
         int result = 0;
         try {
             logger.info("BaseSQLUtil execute sql:" + by);
             if (suppliers == null) {
-                result = sqlSessionTemplate.delete(by);
+                result = getSqlSession().delete(by);
             } else {
-                result = sqlSessionTemplate.delete(by, suppliers);
+                result = getSqlSession().delete(by, suppliers);
             }
-//            sqlSessionTemplate.commit(true);
+//            getSqlSession().commit(true);
         } catch (Exception e) {
-//            sqlSessionTemplate.rollback(true);
+//            getSqlSession().rollback(true);
             e.printStackTrace();
+            throw e;
         } finally {
         }
         return result;
     }
 
     @Override
-    public <T> int executeDelete(List<T> ts, String by) {
-        checkSessionStatus();
+    public <T> int executeDelete(final List<T> ts,final String by) {
+//        checkSessionStatus();
         int result = 0;
         try {
             logger.info("BaseSQLUtil execute sql:" + by);
             if (ts == null) {
-                result = sqlSessionTemplate.delete(by);
+                result = getSqlSession().delete(by);
             } else {
-                result = sqlSessionTemplate.delete(by, ts);
+                result = getSqlSession().delete(by, ts);
             }
-//            sqlSessionTemplate.commit(true);
+//            getSqlSession().commit(true);
         } catch (Exception e) {
-//            sqlSessionTemplate.rollback(true);
+//            getSqlSession().rollback(true);
             e.printStackTrace();
+            throw e;
         } finally {
         }
         return result;
     }
 
-    public int executeDeleteByPass(String puid, String by) {
-        checkSessionStatus();
+    public int executeDeleteByPass(final String puid, final String by) {
+//        checkSessionStatus();
         int result = 0;
         try {
             System.out.println("执行sql方法:" + by);
             if (puid == null) {
-                result = sqlSessionTemplate.delete(by);
+                result = getSqlSession().delete(by);
             } else {
-                result = sqlSessionTemplate.delete(by, puid);
+                result = getSqlSession().delete(by, puid);
             }
-//            sqlSessionTemplate.commit(true);
+//            getSqlSession().commit(true);
         } catch (Exception e) {
-//            sqlSessionTemplate.rollback(true);
+//            getSqlSession().rollback(true);
             e.printStackTrace();
+            throw e;
         } finally {
         }
         return result;
@@ -231,20 +237,21 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 
 
     @Override
-    public int executeDeleteBySome(String by, String... condition) {
-        checkSessionStatus();
+    public int executeDeleteBySome(final String by, final String... condition) {
+//        checkSessionStatus();
         int result = 0;
         try {
             System.out.println("执行sql方法:" + by);
             if (condition == null) {
-                result = sqlSessionTemplate.delete(by);
+                result = getSqlSession().delete(by);
             } else {
-                result = sqlSessionTemplate.delete(by, condition);
+                result = getSqlSession().delete(by, condition);
             }
-//            sqlSessionTemplate.commit(true);
+//            getSqlSession().commit(true);
         } catch (Exception e) {
-//            sqlSessionTemplate.rollback(true);
+//            getSqlSession().rollback(true);
             e.printStackTrace();
+            throw e;
         } finally {
         }
         return result;
@@ -263,26 +270,16 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public List findForList(final String sqlMapId, final Object param) {
-//        SqlSession session = null;
-        checkSessionStatus();
-        List result = null;
         try {
-//            SqlSessionFactory f = FactoryManager.getInstance();
-//            session = f.openSession();
             logger.info("BaseSQLUtil execute sql:" + sqlMapId);
             if (param == null) {
-                result = sqlSessionTemplate.selectList(sqlMapId);
+                 return getSqlSession().selectList(sqlMapId);
             } else {
-                result = sqlSessionTemplate.selectList(sqlMapId, param);
+                return  getSqlSession().selectList(sqlMapId, param);
             }
-            // session.commit();
         } catch (Exception e) {
             throw new HzDBException("SQL执行出错" + sqlMapId, e);
-        } finally {
-//            if (session != null)
-//                session.close();
         }
-        return result;
     }
 
     /**
@@ -293,22 +290,13 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public int insert(final String sqlMapId, final Object object) {
-//        SqlSession session = null;
-        checkSessionStatus();
         try {
-//            SqlSessionFactory f = FactoryManager.getInstance();
-//            session = f.openSession();
-            int result = sqlSessionTemplate.insert(sqlMapId, object);
-//            sqlSessionTemplate.commit();
+            int result = getSqlSession().insert(sqlMapId, object);
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错" + sqlMapId, e);
-        } finally {
-//            if (session != null)
-//                session.close();
         }
-
     }
 
     /**
@@ -319,22 +307,15 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public Object findForObject(final String sqlMapId, final Object param) {
-//        SqlSession session = null;
-        checkSessionStatus();
         try {
-//            SqlSessionFactory f = FactoryManager.getInstance();
-//            session = f.openSession();
             if (param != null) {
-                return sqlSessionTemplate.selectOne(sqlMapId, param);
+                return getSqlSession().selectOne(sqlMapId, param);
             } else {
-                return sqlSessionTemplate.selectOne(sqlMapId);
+                return getSqlSession().selectOne(sqlMapId);
             }
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错" + sqlMapId, e);
-        } finally {
-//            if (session != null)
-//                session.close();
         }
     }
 
@@ -346,43 +327,29 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public int update(final String sqlMapId, final Object param) {
-//        SqlSession session = null;
-        checkSessionStatus();
         try {
-//            SqlSessionFactory factory = FactoryManager.getInstance();
-//            session = factory.openSession();
-            int result = sqlSessionTemplate.update(sqlMapId, param);
-//            sqlSessionTemplate.commit();
+            int result = getSqlSession().update(sqlMapId, param);
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错" + sqlMapId, e);
         } finally {
-//            if (session != null)
-//                session.close();
         }
     }
 
     public int delete(final String sqlMapId, final Object param) {
-//        SqlSession session = null;
-        checkSessionStatus();
         try {
-//            SqlSessionFactory f = FactoryManager.getInstance();
-//            session = f.openSession();
-            int result = sqlSessionTemplate.delete(sqlMapId, param);
-//            sqlSessionTemplate.commit();
+            int result = getSqlSession().delete(sqlMapId, param);
             return result;
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错" + sqlMapId, e);
-        } finally {
-//            if (session != null)
-//                session.close();
         }
     }
 
     /**
      * 分页查询 逻辑分页
+     *
      * @param sqlMapId         mybatis映射id
      * @param pageRequestParam 分页请求参数信息
      * @return
@@ -448,12 +415,8 @@ public class BaseSQLUtil implements IBaseSQLUtil {
      * @return
      */
     public List findForList(final String sqlMapId, final Object param, final int offset, final int limit) {
-//        SqlSession session = null;
-        checkSessionStatus();
         try {
-//            SqlSessionFactory f = FactoryManager.getInstance();
-//            session = f.openSession();
-            return sqlSessionTemplate.selectList(sqlMapId, param, new RowBounds(offset, limit));
+            return getSqlSession().selectList(sqlMapId, param, new RowBounds(offset, limit));
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错: " + sqlMapId, e);
@@ -461,4 +424,20 @@ public class BaseSQLUtil implements IBaseSQLUtil {
 
     }
 
+
+    @Override
+    @Autowired
+    public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+        super.setSqlSessionFactory(sqlSessionFactory);
+    }
+
+    @Override
+    public SqlSession getSqlSession() {
+        try {
+            return super.getSqlSession();
+        }catch (Exception e){
+            throw new HzDBException("获取数据库连接session失败!",e);
+        }
+        
+    }
 }

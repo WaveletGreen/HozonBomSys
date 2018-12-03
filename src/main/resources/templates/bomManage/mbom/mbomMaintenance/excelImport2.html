@@ -76,10 +76,11 @@
                     contentType: false,
                     success: function (result) {
                         // $('#layout',window.top.document).hide();
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
+                        // $('.modal-dialog', window.top.document).parent('div').remove()
+                        // $('body', window.top.document).find('.modal-backdrop').remove();
                         // jquery 调用刷新当前操作的table页面的refresh方法
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery1();
+                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery1();
+                        activeTabBodyRefresh();
                         if (result.success) {
                             layer.msg(result.errMsg, {icon: 1, time: 2000})
                         }

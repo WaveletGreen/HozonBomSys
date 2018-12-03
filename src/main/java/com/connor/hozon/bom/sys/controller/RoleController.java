@@ -132,7 +132,7 @@ public class RoleController extends GenericController<UserRole,QueryUserRole> {
         }
 
         Integer count = userRoleService.getUserRoleReferenceCount(Long.valueOf(id));
-        if(count!=null){
+        if(count!=null && count>0){
             result.put(SystemStaticConst.RESULT,SystemStaticConst.FAIL);
             result.put(SystemStaticConst.MSG,"当前要删除的权限信息正在被用户所引用,无法删除！");
             return result;

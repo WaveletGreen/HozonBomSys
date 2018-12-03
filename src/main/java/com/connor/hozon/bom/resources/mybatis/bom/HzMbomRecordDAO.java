@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
@@ -24,6 +25,12 @@ public interface HzMbomRecordDAO {
      */
     int insertList(List<HzMbomLineRecord> records);
 
+    /**
+     * 根据零件号更新
+     * @param records
+     * @return
+     */
+    int updateList(List<HzMbomLineRecord> records);
     /**
      * 插入单条记录
      * @param record
@@ -225,4 +232,19 @@ public interface HzMbomRecordDAO {
      * @return
      */
     Page<HzMbomLineRecord> getHzMbomTreeByPage(HzMbomByPageQuery query);
+
+
+    /**
+     * 根据puids 获取数据结果集
+     * @param query
+     * @return
+     */
+    List<HzMbomLineRecord> getMbomRecordsByPuids(HzChangeDataDetailQuery query);
+
+
+
+    HzMbomLineRecord getMBomRecordByPuidAndRevision(HzChangeDataDetailQuery query);
+
+
+    List<HzMbomLineRecord> getMbomRecordsByOrderId(HzChangeDataDetailQuery query);
 }

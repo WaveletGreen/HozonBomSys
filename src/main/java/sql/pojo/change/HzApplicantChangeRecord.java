@@ -28,7 +28,9 @@ public class HzApplicantChangeRecord {
      */
     private Long orderId;
     /**
-     * 数据库表名
+     * 审核记录id
      */
+    private Long auditRecordId;
+
     private String tableName;
 }

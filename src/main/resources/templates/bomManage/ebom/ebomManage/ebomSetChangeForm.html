@@ -4,12 +4,12 @@
 <!--User: xulf Date: 2018/11/14 Time: 13:55-->
 <body>
 <div style="max-width: 450px;max-height: 450px;">
-    <form id="form" role="form" method="post" action="">
+    <form id="form" role="form" method="post" action="ebom/data/change">
         <div class="row">
             <div class="col-md-12">
                 <input id="puids" type="hidden" th:value="${puids}">
                 <div class="form-group">
-                    <label for="stage">阶段</label>
+                    <label for="stage">选择变更表单</label>
                     <select class="form-control" id="stage" name="stage">
                         <option th:each="model:${data}"
                                 th:value="${model.getId()}"
@@ -117,24 +117,26 @@
             var url = $("#form", window.top.document).attr('action');
 
             $.ajax({
+                contentType: "application/json",
                 type: "POST",
                 //ajax需要添加打包名
                 url: url,
+                data: myData,
                 success: function (result) {
-                    $('.modal-dialog', window.top.document).parent('div').remove()
-                    $('body', window.top.document).find('.modal-backdrop').remove();
-                    $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    // $('.modal-dialog', window.top.document).parent('div').remove()
+                    // $('body', window.top.document).find('.modal-backdrop').remove();
+                    // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                    activeTabBodyRefresh();
                     // if (result.status) {
-                    if (result.status) {
-                        layer.msg(result.msg, {icon: 1, time: 2000});
+                    if (result.success) {
+                        layer.msg(result.errMsg, {icon: 1, time: 2000});
                     }
                     // window.Ewin.alert({message: result, width: 800});
                     //刷新，会重新申请数据库数据
                     // }
                     else {
-                        window.Ewin.alert({message: result.msg});
+                        window.Ewin.alert({message: result.errMsg});
                     }
-                    $table.bootstrapTable("refresh");
                 },
                 error: function (info) {
                     window.Ewin.alert({message: "操作发送失败:" + info.status});

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.common.config.security;
 
+import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -12,13 +13,13 @@ public class CustomPasswordEncoder implements PasswordEncoder {
     @Override
     public String encode(CharSequence rawPassword) {
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        return encoder.encodePassword(rawPassword.toString(), "hyll");
+        return encoder.encodePassword(rawPassword.toString(), SystemStaticConst.SALT);
     }
 
     @Override
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-        return encoder.isPasswordValid(encodedPassword, rawPassword.toString(), "hyll");
+        return encoder.isPasswordValid(encodedPassword, rawPassword.toString(), SystemStaticConst.SALT);
     }
 
 }

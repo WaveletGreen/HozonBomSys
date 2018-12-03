@@ -27,7 +27,7 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
 /**
  * Created by haozt on 2018/06/05
  */
-@Service("HzEPLManageRecordService")
+@Service("hzEPLManageRecordService")
 public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 
     @Autowired
@@ -467,18 +467,18 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                     jsonObject.put("colorPart", "");
                 }
 
-                jsonObject.put("sparePart", record.getSparePart());
-                jsonObject.put("sparePartNum", record.getSparePartNum());
-                jsonObject.put("processRoute", record.getProcessRoute());
-                jsonObject.put("laborHour", record.getLaborHour());
-                jsonObject.put("rhythm", record.getRhythm());
-                jsonObject.put("solderJoint", record.getSolderJoint());
-                jsonObject.put("machineMaterial", record.getMachineMaterial());
-                jsonObject.put("standardPart", record.getStandardPart());
-                jsonObject.put("tools", record.getTools());
-                jsonObject.put("wasterProduct", record.getWasterProduct());
-                jsonObject.put("change", record.getChange());
-                jsonObject.put("changeNum", record.getChangeNum());
+//                jsonObject.put("sparePart", record.getSparePart());
+//                jsonObject.put("sparePartNum", record.getSparePartNum());
+//                jsonObject.put("processRoute", record.getProcessRoute());
+//                jsonObject.put("laborHour", record.getLaborHour());
+//                jsonObject.put("rhythm", record.getRhythm());
+//                jsonObject.put("solderJoint", record.getSolderJoint());
+//                jsonObject.put("machineMaterial", record.getMachineMaterial());
+//                jsonObject.put("standardPart", record.getStandardPart());
+//                jsonObject.put("tools", record.getTools());
+//                jsonObject.put("wasterProduct", record.getWasterProduct());
+//                jsonObject.put("change", record.getChange());
+//                jsonObject.put("changeNum", record.getChangeNum());
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);

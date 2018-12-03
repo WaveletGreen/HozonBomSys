@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -30,7 +30,7 @@ import java.util.*;
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEmpty;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
@@ -282,7 +282,7 @@ public class SynMaterielService implements ISynMaterielService {
             }
 
         /**
-         * 更新信息
+         * 更新信息,这里也是更新is_sent状态的
          */
         if (puids != null && puids.size() > 0) {
             toUpdate.forEach(to -> puids.add(to.getpMaterielCode()));

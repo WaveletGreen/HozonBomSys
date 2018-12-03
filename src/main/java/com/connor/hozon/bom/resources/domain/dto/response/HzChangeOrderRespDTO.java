@@ -1,13 +1,16 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
-import java.util.Date;
-
 /**
  * @Author: haozt
  * @Date: 2018/11/12
  * @Description:
  */
 public class HzChangeOrderRespDTO {
+
+    private static final String ORDER_FROM_TC="TC端";
+
+    private static final String ORDER_FROM_BOM="BOM端";
+
     /**
      * 主键id
      */
@@ -60,11 +63,15 @@ public class HzChangeOrderRespDTO {
      *当前变更表单状态（1 已完成 2进行中 3已取消）
      */
     private String state;
-
     /**
      * 项目id
      */
     private String projectId;
+
+    /**
+     * 项目name
+     */
+    private String projectName;
 
     /**
      * 表单创建者
@@ -74,12 +81,104 @@ public class HzChangeOrderRespDTO {
      * 表单创建时间
      */
     private String createTime;
-
     /**
      * 部门名称
      */
     private String deptName;
+    /**
+     * 来源(TC/BOM)
+     */
+    private String source;
 
+    /**
+     * 审批时间
+     */
+    private String auditTime;
+    /**
+     * 审批表ID
+     */
+    private Long auditId;
+    /**
+     * 流程发起时间（多条记录获取申请表的申请时间）
+     */
+    private String applicantTime;
+
+    /**
+     *是否为变更接口人,TC端同步的表单需要通知到接口人
+     * ==1:TC端同步过来任务未结束
+     * !=1:任务结束
+     */
+    private String changeAccepter;
+
+    public String getChangeAccepter() {
+        return changeAccepter;
+    }
+
+    public void setChangeAccepter(String changeAccepter) {
+        this.changeAccepter = changeAccepter;
+    }
+
+    public String getApplicantTime() {
+        return applicantTime;
+    }
+
+    public void setApplicantTime(String applicantTime) {
+        this.applicantTime = applicantTime;
+    }
+
+    public Long getAuditId() {
+        return auditId;
+    }
+
+    public void setAuditId(Long auditId) {
+        this.auditId = auditId;
+    }
+
+    public String getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(String auditTime) {
+        this.auditTime = auditTime;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+    /**
+     * 表单来源 BOM端 TC端
+     */
+    private String orderResource;
+
+    /**
+     * 表单来源
+     */
+    private Integer isFromTc;
+
+    /**
+     * 表单状态值
+     */
+    private Integer Status;
+
+    public Integer getIsFromTc() {
+        return isFromTc;
+    }
+
+    public void setIsFromTc(Integer isFromTc) {
+        this.isFromTc = isFromTc;
+    }
 
     public Long getId() {
         return id;
@@ -181,8 +280,17 @@ public class HzChangeOrderRespDTO {
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setState(Integer status) {
+        if(status!=null){
+            switch (status){
+                case 1:this.state="已完成";break;
+                case 2:this.state="进行中";break;
+                case 3:this.state="流程中";break;
+                default:this.state="已取消";break;
+            }
+        }else {
+            this.state="未知";
+        }
     }
 
     public String getProjectId() {
@@ -217,4 +325,19 @@ public class HzChangeOrderRespDTO {
         this.deptName = deptName;
     }
 
+    public String getOrderResource() {
+        return orderResource;
+    }
+
+    public void setOrderResource(Integer from) {
+        this.orderResource = 1==from?ORDER_FROM_TC:ORDER_FROM_BOM;
+    }
+
+    public Integer getStatus() {
+        return Status;
+    }
+
+    public void setStatus(Integer status) {
+        Status = status;
+    }
 }

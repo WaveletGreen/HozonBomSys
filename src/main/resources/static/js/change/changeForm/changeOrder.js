@@ -4,187 +4,120 @@
  * Date: 2018/11/14
  * Time: 9:26
  */
-var columnOfFeature1 = [
-    {
-        field: 'headDesc',
-        title: '变更类型',
-    },
-    {
-        field: 'featureName',
-        title: '特性名称',
-    },
-    {
-        field: 'featureDesc',
-        title: '特性描述',
-        align: 'center',
-        valign: 'middle',
-    },
-    {
-        field: 'h9featureenname',
-        title: '特性英文名称',
-        align: 'center',
-        valign: 'middle'
-    },
-    {
-        field: 'featureValueName',
-        title: '特性值/配置代码',
-        align: 'center',
-        valign: 'middle',
-    },
-    {
-        field: 'featureValueDesc',
-        title: '特性值/配置(描述)',
-        align: 'center',
-        valign: 'middle',
-    },
-    {
-        field: 'cfgEffectedDate',
-        title: '生效时间',
-        align: 'center',
-        valign: 'middle',
-        //——修改——获取日期列的值进行转换
-        formatter: function (value, row, index) {
-            return dateToStringFormat(value)
-        }
-    },
-    {
-        field: 'cfgAbolishDate',
-        title: '废止时间',
-        align: 'center',
-        valign: 'middle',
-        //——修改——获取日期列的值进行转换
-        formatter: function (value, row, index) {
-            return dateToStringFormat(value)
-        }
-    }];
-
-
-var columnOfModelColor = [
-    {
-        field: 'codeOfColorModel',
-        title: '车型颜色代码',
-        align: 'center',
-        valign: 'middle'
-    },
-    {
-        field: 'descOfColorModel',
-        title: '&emsp;&emsp;&emsp;&emsp;描述&emsp;&emsp;&emsp;&emsp;',
-        align: 'center',
-        valign: 'middle'
-    },
-    {
-        field: 'modelShell',
-        title: '油漆车身总成',
-        align: 'center',
-        valign: 'middle'
+$(document).ready(function () {
+    var id = $("#id").val();
+    var isFromTc = $("#isFromTc").val();
+    var projectId = $("#project", window.top.document).val();
+    var TCForm = document.getElementById("TCForm");
+    var BOMForm = document.getElementById("BOMForm");
+    if (isFromTc == 0) {
+        TCForm.style.display = "none";
+        BOMForm.style.display = "block";
+    } else if (isFromTc == 1) {
+        TCForm.style.display = "block";
+        BOMForm.style.display = "block";
     }
-];
-
-$(document).ready((function () {
-
-}))
-
-function skip(type) {
-    if(type=='feature'){
-        // $.ajax({
-        //    type : "POST",
-        //    url : "./vwoProcess/changeDetails",
-        //    success : function (result) {
-        //
-        //    },
-        //    error : function (result) {
-        //
-        //    }
-        // });
-        // window.
-        var $table = $("#routingDaTable");
-        $table.bootstrapTable('destroy');
-        $table.bootstrapTable({
-            // url: "getFeatureTable?vwoId=" + vwoId,
-            url : "../vwo/getFeatureTable?vwoId="+6,
-            method: "POST",
-            height: 400,// $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 100,
-            width: $(window).width(),
-            showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-            showColumns: false,                  //是否显示所有的列
-            showRefresh: false,                  //是否显示刷新按钮
-            pagination: false,                   //是否显示分页（*）
-            clickToSelect: false,                // 单击某一行的时候选中某一条记录
-            formId: "null",                      //需要定义formId，不定义的话会造成jQuery异常，随便定义一个没有的id即可
-            /**列信息，需要预先定义好*/
-            columns: columnOfFeature1,
-            onLoadSuccess: function () {
-                //加载成功时执行,渲染双行的
-                changeTableRendering("routingDaTable");
-            },
-        });
-    }else if(type=="modelColor"){
-        $.ajax({
-            url: "../vwo/getModelColorTable?vwoId=" + 6,
-            type: "POST",
-            success: function (result) {
-                if (result) {
-                    initTable(result);
-                }
-            },
-            error: function (e) {
-                console.error("服务器错误:" + e.status);
+    $.ajax({
+        url: "../change/data/order/hyper?orderId=" + id,
+        type: "GET",
+        success: function (result) {
+            var data = result.data;
+            var table = "<tr>";
+            table += "<th><a id='featureId' href='../change/data/feature/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[7].name + "</a></th>";
+            table += "<th><a id='bomCfgId' href='../change/data/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[10].name + "</a></th>";
+            table += "<th><a id='modelColorCfgId' href='../change/data/modelColorCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[8].name + "</a></th>";
+            table += "<th><a id='materielFeatureId' href='../change/data/materielFeature/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[9].name + "</a></th>";
+            table += "<th><a id='relevanceId' href='../change/data/relevance/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[11].name+"</a></th>";
+            table += "<th><a id='ebomId' href='../change/data/ebom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[0].name + "</a></th>";
+            table += "<th><a id='pbomId' href='../change/data/pbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[1].name + "</a></th>";
+            table += "<th><a id='mbomId' href='../change/data/mbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[2].name + "</a></th>";
+            table += "<th><a id='productionId' href='../change/data/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=1" + "'>" + data[3].name + "</a></th>";
+            table += "<th><a id='financialId' href='../change/data/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=6" + "'>" + data[4].name + "</a></th>";
+            table += "<th><a id='materialId' href='../change/data/material/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[5].name + "</a></th>";
+            table += "<th><a id='routingId' href='../change/data/routing/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[6].name + "</a></th>";
+            table += "</tr>"
+            $("#changeOrderTable").html(table);
+            // var featureId = document.getElementById("featureId");
+            // var bomCfgId = document.getElementById("bomCfgId");
+            // var modelColorCfgId = document.getElementById("modelColorCfgId");
+            // var materielFeatureId = document.getElementById("materielFeatureId");
+            // var ebomId = document.getElementById("ebomId");
+            // var pbomId = document.getElementById("pbomId");
+            // var mbomId = document.getElementById("mbomId");
+            // var productionId = document.getElementById("productionId");
+            // var financialId = document.getElementById("financialId");
+            // var materialId = document.getElementById("materialId");
+            // var routingId = document.getElementById("routingId");
+            if (data[7].status == 0) {
+                // featureId.style.display = "none";
+                $("#featureId").hide();
             }
-        })
-    }
+            if (data[10].status == 0) {
+                // bomCfgId.style.display = "none";
+                $("#bomCfgId").hide();
+            }
+            if (data[8].status == 0) {
+                // modelColorCfgId.style.display = "none";
+                $("#modelColorCfgId").hide();
+            }
+            if (data[9].status == 0) {
+                // materielFeatureId.style.display = "none";
+                $("#materielFeatureId").hide();
+            }
+            if (data[11].status == 0) {
+                // materielFeatureId.style.display = "none";
+                $("#relevanceId").hide();
+            }
+            if (data[0].status == 0) {
+                // ebomId.style.display = "none";
+                $("#ebomId").hide();
+            }
+            if (data[1].status == 0) {
+                // pbomId.style.display = "none";
+                $("#pbomId").hide();
+            }
+            if (data[2].status == 0) {
+                // mbomId.style.display = "none";
+                $("#mbomId").hide();
+            }
+            if (data[3].status == 0) {
+                // productionId.style.display = "none";
+                $("#productionId").hide();
+            }
+            if (data[4].status == 0) {
+                // financialId.style.display = "none";
+                $("#financialId").hide();
+            }
+            if (data[5].status == 0) {
+                // materialId.style.display = "none";
+                $("#materialId").hide();
+            }
+            if (data[6].status == 0) {
+                // routingId.style.display = "none";
+                $("#routingId").hide();
+            }
+        }
+    })
+})
+
+function doReturn() {
+    window.location.href = "javascript:history.go(-1);"
 }
 
-
-/**
- * 初始化配色方案变更table
- * @param data
- */
-
-function initTable(data) {
-    let titles = data.titleSet;
-    let tableData = data.result;
-    for (let i in titles) {
-        columnOfModelColor.push({
-            field: "s" + i,
-            title:
-                titles[i],
-            align:
-                'center',
-            valign:
-                'middle'
-        })
-    }
-
-    let $table = $("#routingDaTable");
-    $table.bootstrapTable('destroy');
-    $table.bootstrapTable({
-        // url: "getModelColorTable?vwoId=" + vwoId,
-        method: "get",
-        data: tableData,
-        cache: false,
-        height: 400,// $(window.parent.document).find("#wrapper").height() - document.body.offsetHeight - 100,
-        width: $(window).width(),
-        showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-        showColumns: false,                  //是否显示所有的列
-        showRefresh: false,                  //是否显示刷新按钮
-        pagination: false,                   //是否显示分页（*）
-        clickToSelect: false,                // 单击某一行的时候选中某一条记录
-        formId: "null",                       //需要定义formId，不定义的话会造成jQuery异常
-        /**列信息，需要预先定义好*/
-        columns: columnOfModelColor,
-
-    });
-    //加载成功时执行,渲染双行的
-    changeTableRendering("routingDaTable");
-}
-
-
-// function OnToTeXing() {
-//     window.Ewin.dialog({
-//         title: "添加",
-//         url:"../change/texing",
-//         gridId: "gridId",
-//         width: 950,
-//         height: 600
-//     })
-// }
+$(document).ready(function () {
+    var changeNo = $("#changeNo").val();
+    $.ajax({
+        url: "../change/data/tc?formId=" + changeNo,
+        type: "GET",
+        success: function (result) {
+            var data = result.data;
+            var temp = "<table >" +
+                "<tr><th>零件号</th><th>版本</th></tr>";
+            for (var i = 0; i < data.length; i++) {
+                temp = temp + "<tr><td>" + data[i].itemId + "</td><td>" + data[i].itemRevision + "</td></tr>"
+            }
+            temp = temp + "</table>"
+            $("#changeTCTable").html(temp);
+        }
+    })
+})

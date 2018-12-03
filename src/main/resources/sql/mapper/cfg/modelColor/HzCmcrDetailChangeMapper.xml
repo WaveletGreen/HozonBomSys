@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 
@@ -178,7 +178,7 @@
                 #{hzCmcrDetailChange.cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgTitle,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgIsColorful,jdbcType=INTEGER}, #{hzCmcrDetailChange.cmcrDetailCgReverse3,jdbcType=VARCHAR},
                 #{hzCmcrDetailChange.cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse5,jdbcType=VARCHAR},
-                #{hzCmcrDetailChange.cmcrDetailCgReverse6,jdbcType=VARCHAR},#{cmcrCgChangeId,jdbcType=DECIMAL}
+                #{hzCmcrDetailChange.cmcrDetailCgReverse6,jdbcType=VARCHAR},#{hzCmcrDetailChange.cmcrCgChangeId,jdbcType=DECIMAL}
             from
                 dual
         </foreach>
@@ -607,4 +607,18 @@
         and
         CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
     </select>
+
+    <select id="selectCmcrDetailBefor" parameterType="java.util.List" resultMap="VWO_Result_map">
+        select
+          <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from
+          HZ_CMCR_DETAIL_AFTER_CHANGE t
+          LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+        where
+          t.CMCR_CG_CHANGE_ID in
+        <foreach collection="list" index="index" item="hzCmcrChange" open="(" separator="," close=")">
+            #{hzCmcrChange.cmcrCgId,jdbcType=DECIMAL}
+        </foreach>
+    </select>
+
 </mapper>

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.dao.project.HzPlatformRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.project.HzPlatformRecord;
@@ -17,13 +18,13 @@ import sql.pojo.project.HzPlatformRecord;
 import java.util.List;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 //@Service("hzPlatformRecordDao")
-@Configuration
+@Repository
 public class HzPlatformRecordDaoImpl extends BasicDaoImpl<HzPlatformRecord> implements HzPlatformRecordDao {
 
     private final static HzPlatformRecord PLATFORM = new HzPlatformRecord();

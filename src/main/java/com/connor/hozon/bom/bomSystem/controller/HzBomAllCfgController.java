@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -25,7 +25,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 全配置BOM一级清单
  * 配置管理controller的所有返回消息字段key都是msg
  * 配置管理controller的所有返回成功标志字段key都是status
@@ -86,8 +86,8 @@ public class HzBomAllCfgController {
      */
     @RequestMapping("/saveOneRow")
     @ResponseBody
-    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid, Integer colorPart, String msgVal) {
-        return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid, colorPart, msgVal);
+    public JSONObject saveOneRow(String bomLinePuid, String cfgPuid, Integer colorPart, String msgVal,String projectPuid) {
+        return hzBomAllCfgService.saveOneRow(bomLinePuid, cfgPuid, colorPart, msgVal,projectPuid);
     }
 
     /**
@@ -98,8 +98,8 @@ public class HzBomAllCfgController {
      */
     @RequestMapping("/savePoint")
     @ResponseBody
-    public JSONObject savePoint(@RequestBody Map<String, Map<String, String>> data) {
-        return hzBomAllCfgService.savePoint(data);
+    public JSONObject savePoint(@RequestBody Map<String, Map<String, String>> data,String projectPuid) {
+        return hzBomAllCfgService.savePoint(data,projectPuid);
     }
 
     /**
@@ -230,5 +230,16 @@ public class HzBomAllCfgController {
     @ResponseBody
     public JSONObject getVwo(String projectId, Integer changeFromId){
         return hzBomAllCfgService.getVwo(projectId, changeFromId);
+    }
+
+    /**
+     * 撤销
+     * @param projectUid
+     * @return
+     */
+    @RequestMapping("goBackData")
+    @ResponseBody
+    public JSONObject goBackData(@RequestParam String projectUid){
+        return hzBomAllCfgService.goBackData(projectUid);
     }
 }

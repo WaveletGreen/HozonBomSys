@@ -1,21 +1,23 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
 package com.connor.hozon.bom.bomSystem.impl.bom;
 
+import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
@@ -141,12 +143,42 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
 
     /**
      * 批量更新
-     * 走变更 这里只更新了部分字段
+     * 走变更 根据puid更新
      * @param records
      * @return
      */
     public int updateBatch(List<HzBomLineRecord> records) {
-        return super.update("HzEbomRecordDAOImpl_updateBatch", records);
+        try {
+            if (ListUtil.isNotEmpty(records)) {
+                int size = records.size();
+                //分批更新数据 一次1000条
+                int i = 0;
+                int cout = 0;
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzBomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        super.update("HzEbomRecordDAOImpl_updateBatch",list);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzBomLineRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    super.update("HzEbomRecordDAOImpl_updateBatch",list);
+                }
+
+            }
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -154,4 +186,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
         return (Integer) super.findForObject("HzBomLineRecordDaoImpl_getMaxLineIndexFirstNum",projectId);
     }
 
+    public List<HzBomLineRecord> selectByPuids(List<String> withCfgPuids) {
+        return executeQueryByPass(new HzBomLineRecord(), withCfgPuids,"HzBomLineRecordDaoImpl_selectByPuids");
+    }
 }

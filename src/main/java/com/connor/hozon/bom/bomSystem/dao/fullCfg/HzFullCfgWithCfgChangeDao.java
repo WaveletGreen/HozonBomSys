@@ -1,22 +1,19 @@
 package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-@Configuration
 public interface HzFullCfgWithCfgChangeDao {
-    int deleteByPrimaryKey(BigDecimal id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(HzFullCfgWithCfgChange record);
 
     int insertSelective(HzFullCfgWithCfgChange record);
 
-    HzFullCfgWithCfgChange selectByPrimaryKey(BigDecimal id);
+    HzFullCfgWithCfgChange selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(HzFullCfgWithCfgChange record);
 
@@ -24,5 +21,6 @@ public interface HzFullCfgWithCfgChangeDao {
 
     int insertList(List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChanges);
 
-    HzFullCfgWithCfg selectBy2Yid(HzFullCfgWithCfg hzFullCfgWithCfg);
+
+    List<HzFullCfgWithCfgChange> selectByMainId(Integer id);
 }

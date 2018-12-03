@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 var toolbar = [
@@ -61,10 +61,10 @@ var toolbar = [
     // }
 ];
 var column = [
-    {
-        field: 'ck',
-        checkbox: true
-    },
+    // {
+    //     field: 'ck',
+    //     checkbox: true
+    // },
     {
         field: 'index',
         title: '序号',
@@ -92,6 +92,34 @@ var column = [
         valign: 'middle',
         sortable: true,
         sortOrder: 'asc',
+    },
+    {
+        field: 'status',
+        title: '状态',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+        formatter: function (value, row, index) {
+            if (value == 1 || "1" == value) {
+                return "<span style='color: #00B83F'>已生效</span>";
+            }
+            else if (value == 10 || "10" == value) {
+                return "<span style='color: #e69800'>变更审核中</span>";
+            }
+            else if (value == 0 || "0" == value) {
+                return "<span style='color: #a97f89'>草稿状态</span>";
+            }
+            else if (2 == row.cfgStatus || "2" == row.cfgStatus) {
+                return "<span style='color: #0c8fe2'>删除状态</span>";
+            }
+            else if (-1 == value || "-1" == value) {
+                return "<span style='color: #9492a9'>已废止</span>";
+            }
+            else {
+                return "<span style='color: #a90009'>未知状态</span>";
+            }
+        }
     },
     // {
     //     field: 'puid',
@@ -131,7 +159,7 @@ function loadData(_projectPuid) {
         pagination: true,                   //是否显示分页（*）
         pageNumber: 1,                       //初始化加载第一页，默认第一页
         pageSize: 10,                       //每页的记录行数（*）
-        pageList: ['ALL',10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
+        pageList: ['ALL', 10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
         smartDisplay: false,
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "queryRelevance",
@@ -174,28 +202,131 @@ $(document).ready(
     }),
     $("#generateRelevance").click(function () {
         generateRelevance();
+    }),
+    $("#getChange").click(function () {
+        getChange();
+    }),
+    $("#goBackData").click(function () {
+        goBackData();
     })
 );
 
 function generateRelevance() {
     var msg = "您确定生成相关性吗！";
     var projectPuid = $("#project", window.top.document).val();
-    window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
-        if (e) {
-            $.ajax({
-                type: "GET",
-                //ajax需要添加打包名
-                url: "./relevance/addRelevance?projectPuid=" + projectPuid,
-                contentType: "application/json",
-                success: function (result) {
-                    if (result) {
-                        loadData(getProjectUid());
+    var url = "relevance/addRelevance";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
+                    if (e) {
+                        $.ajax({
+                            type: "GET",
+                            //ajax需要添加打包名
+                            url: "./relevance/addRelevance?projectPuid=" + projectPuid,
+                            contentType: "application/json",
+                            success: function (result) {
+                                if (result) {
+                                    loadData(getProjectUid());
+                                }
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: "操作发送失败:" + info.status});
+                            }
+                        })
                     }
-                },
-                error: function (info) {
-                    window.Ewin.alert({message: "操作发送失败:" + info.status});
-                }
-            })
+                })
+            }
+        }
+    })
+}
+
+function getChange() {
+    var msg = "您确定发起流程吗！";
+    var projectPuid = $("#project", window.top.document).val();
+    var url = "relevance/getChangePage";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
+                    if (e) {
+
+                        window.Ewin.dialog({
+                            title: "选择变更表单",
+                            url: "./relevance/getChangePage?projectUid=" + getProjectUid(),
+                            gridId: "gridId",
+                            width: 450,
+                            height: 450
+                        });
+
+                        // $.ajax({
+                        //     type: "GET",
+                        //     //ajax需要添加打包名
+                        //     url: "./relevance/getChangePage?projectUid="+getProjectUid(),
+                        //     contentType: "application/json",
+                        //     success: function (result) {
+                        //         if (result) {
+                        //             layer.msg("发起流程成功", {icon: 1, time: 2000});
+                        //             loadData(getProjectUid());
+                        //         }
+                        //     },
+                        //     error: function (info) {
+                        //         window.Ewin.alert({message: "操作发送失败:" + info.status});
+                        //     }
+                        // })
+                    }
+                })
+            }
+        }
+    })
+}
+
+function goBackData() {
+    var msg = "您确定撤销吗！";
+    var projectPuid = $("#project", window.top.document).val();
+    var url = "relevance/goBackData";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: msg, width: 500}).on(function (e) {
+                    if (e) {
+                        $.ajax({
+                            type: "GET",
+                            url: "./relevance/goBackData?projectPuid=" + projectPuid,
+                            contentType: "application/json",
+                            success: function (result) {
+                                if (result.status) {
+                                    layer.msg("撤销数据成功", {icon: 1, time: 2000})
+                                    window.location.reload();
+                                } else {
+                                    window.Ewin.alert({message: "操作撤销失败:" + result.msg});
+                                }
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: "操作发送失败:" + info.status});
+                            }
+                        })
+                    }
+                })
+            }
         }
     })
 }

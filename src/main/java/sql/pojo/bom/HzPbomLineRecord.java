@@ -1,6 +1,7 @@
 package sql.pojo.bom;
 
 import lombok.Data;
+import sql.pojo.BaseChangePOJO;
 
 import java.util.Date;
 import java.util.Objects;
@@ -9,7 +10,7 @@ import java.util.Objects;
  * Created by haozt on 2018/5/25
  * EBOM 和PBOM 两张表信息  继承自EBOM  维护PBOM
  */
-public class HzPbomLineRecord implements Cloneable{
+public class HzPbomLineRecord extends BaseChangePOJO implements Cloneable{
     private String parentUid;
     private Integer isDept;
     private String bomDigifaxId;
@@ -99,23 +100,6 @@ public class HzPbomLineRecord implements Cloneable{
      */
     private Integer status;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-    /**
-     * 创建者
-     */
-    private String createName;
-    /**
-     * 更改者
-     */
-    private String updateName;
-
     private Integer pLouaFlag;
 
     private String sortNum;
@@ -125,6 +109,7 @@ public class HzPbomLineRecord implements Cloneable{
     /**
      * mwo编号
      */
+    @Deprecated
     private String mwoNo;
 
     public String getMwoNo() {
@@ -155,6 +140,10 @@ public class HzPbomLineRecord implements Cloneable{
     public void setSingleVehDosage(byte[] singleVehDosage) {
         this.singleVehDosage = singleVehDosage;
     }
+
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -168,6 +157,7 @@ public class HzPbomLineRecord implements Cloneable{
         int result = Objects.hash(eBomPuid);
         return result;
     }
+
 
     public String getSortNum() {
         return sortNum;
@@ -425,38 +415,6 @@ public class HzPbomLineRecord implements Cloneable{
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getCreateName() {
-        return createName;
-    }
-
-    public void setCreateName(String createName) {
-        this.createName = createName;
-    }
-
-    public String getUpdateName() {
-        return updateName;
-    }
-
-    public void setUpdateName(String updateName) {
-        this.updateName = updateName;
     }
 
     @Override

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -13,6 +13,10 @@ import com.connor.hozon.bom.bomSystem.iservice.task.IHzTaskService;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
+import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
+import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.service.TreeService;
@@ -30,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/10/19 16:49
  * @Modified By:
@@ -49,7 +53,11 @@ public class HzTasksService implements IHzTaskService {
     @Autowired
     HzVwoInfoService hzVwoInfoService;
 
+    @Autowired
+    private HzWorkListDAO hzWorkListDAO;
 
+    @Autowired
+    HzChangeOrderService hzChangeOrderService;
     private final static Logger LOGGER = LoggerFactory.getLogger(HzTasksService.class);
 
     /**
@@ -86,9 +94,10 @@ public class HzTasksService implements IHzTaskService {
     @Override
     public List<HzTasks> doSelectUserExecutingTasks(Long userId) {
         HzTasks task = new HzTasks();
-        task.setTaskStatus(TaskOptions.TASK_STATUS_EXECUTING);
+        //task.setTaskStatus(TaskOptions.TASK_STATUS_EXECUTING);
         task.setTaskUserId(userId);
-        return hzTasksDao.selectUserTasks(task);
+        //return hzTasksDao.selectUserTasks(task);
+        return hzTasksDao.selectInterfaceTasks(task);
     }
 
     /**
@@ -114,6 +123,17 @@ public class HzTasksService implements IHzTaskService {
         task.setTaskUserId(taskUserId);
         task.setTaskStatus(status);
         return hzTasksDao.selectUserTargetTaskByType(task);
+    }
+
+    @Override
+    public List<HzTasks> doSelectUserTargetTask(Integer taskFormType, Integer taskTargetType, Long taskTargetId, Long taskUserId, Integer status) {
+        HzTasks task = new HzTasks();
+        task.setTaskFormType(taskFormType);
+        task.setTaskTargetType(taskTargetType);
+        task.setTaskTargetId(taskTargetId);
+        task.setTaskUserId(taskUserId);
+        task.setTaskStatus(status);
+        return hzTasksDao.selectUserTargetTask(task);
     }
 
     /**
@@ -197,7 +217,7 @@ public class HzTasksService implements IHzTaskService {
                     dto.setId(dbTree.getId());
                 }
                 switch (task.getTaskFormType()) {
-                    case 1:
+                    case TaskOptions.FORM_TYPE_VWO:
                         HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
                         dto.setText(info.getVwoNum());
                         dto.setTargetId(info.getId());
@@ -206,14 +226,25 @@ public class HzTasksService implements IHzTaskService {
                         dto.setFormType(task.getTaskFormType());
                         break;
                     //预留给EWO表单用
-                    case 2:
+                    case TaskOptions.FORM_TYPE_EWO:
                         break;
                     //预留该MWO表单用
-                    case 3:
+                    case TaskOptions.FORM_TYPE_MWO:
+                        break;
+                    case TaskOptions.FORM_TYPE_CHANGE:
+                        HzChangeOrderRespDTO hzcor= hzChangeOrderService.getHzChangeOrderRecordById(task.getTaskTargetId());
+                        dto.setText(hzcor.getChangeNo());
+                        dto.setTargetId(hzcor.getId());
+                        dto.setTargetName(hzcor.getChangeNo() + "表单");
+                        dto.setTargetType(task.getTaskTargetType());
+                        dto.setFormType(task.getTaskFormType());
                         break;
                     default:
                         break;
                 }
+                //HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
+                //int count = hzWorkListDAO.count(user.getLogin(),info.getProjectUid());
+
                 dto.setReserve("");
                 dto.setReserve2("");
                 dto.setReserve3("");

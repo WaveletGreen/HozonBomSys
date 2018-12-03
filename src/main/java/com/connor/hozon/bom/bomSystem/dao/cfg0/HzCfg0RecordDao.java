@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -10,20 +10,19 @@ import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 特性基础dao层
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
+//@Service("hzCfg0RecordDao")
 public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
 
     /***
@@ -134,4 +133,14 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     int updateByVwoid(HzCfg0Record hzCfg0Record);
 
     List<HzCfg0Record> selectByPuids(List<String> puidList);
+
+    int updateStatus(List<HzCfg0Record> hzCfg0RecordListDelete);
+
+    int updateListAll(List<HzCfg0Record> hzCfg0RecordListUpdata);
+
+    int updateStatusByOrderId(Long orderId, int status);
+
+    int updateByChangeId(List<Long> changeFeatureIds);
+
+    int updateStatusByChangeDate(List<HzFeatureChangeBean> hzFeatureChangeBeans);
 }

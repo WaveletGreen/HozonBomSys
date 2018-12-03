@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -9,7 +9,7 @@ var projectUid = null;
 /**目标table*/
 var $table = null;
 /**动态表头**/
- var dynamicTitle = [];
+var dynamicTitle = [];
 /**工具条设置*/
 var toolbar = [
     {
@@ -27,6 +27,7 @@ var toolbar = [
         iconCls: 'glyphicon glyphicon-pencil',
         handler: modifyBasicDataDialog
     },
+
     // {
     //     text: '修改超级物料',
     //     iconCls: 'glyphicon glyphicon-pencil',
@@ -50,12 +51,17 @@ var toolbar = [
     {
         text: '删除衍生物料',
         iconCls: 'glyphicon glyphicon-pencil',
-        handler: deleteVehicle
+        handler: deleteVehicleFake
     },
     {
-        text: '发起变更表单',
-        iconCls: 'glyphicon glyphicon-pencil',
+        text: '发起流程',
+        iconCls: 'glyphicon glyphicon-log-out',
         handler: launchChangeForm
+    },
+    {
+        text: '撤销',
+        iconCls: 'glyphicon glyphicon-share-alt',
+        handler: goBackData
     }
 
     // ,
@@ -270,14 +276,27 @@ function loadData(_projectPuid) {
  * 添加衍生物料
  */
 function addVehicleDialog() {
-    window.Ewin.dialog({
-        // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-        title: "修改基本信息",
-        url: "materielV2/composePage?projectUid=" + projectUid,
-        gridId: "gridId",
-        width: 400,
-        height: 450
-    });
+    var url = "materielV2/composePage";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                    title: "添加衍生物料",
+                    url: "materielV2/composePage?projectUid=" + projectUid,
+                    gridId: "gridId",
+                    width: 400,
+                    height: 450
+                });
+            }
+        }
+    })
 }
 
 /**
@@ -290,54 +309,195 @@ function modifyBasicDataDialog() {
         window.Ewin.alert({message: '请选择一条需要修改的数据!'});
         return;
     }
-    window.Ewin.dialog({
-        // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-        title: "修改基本信息",
-        url: "materielV2/modifyPage?projectUid=" + projectUid + "&puid=" + rows[0].puid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=model",
-        gridId: "gridId",
-        width: 350,
-        height: 450
-    });
+    var status = rows[0].status;
+    if (status != 0 && status != 1 && status != null) {
+        window.Ewin.alert({message: rows[0].modeBasicDetail + "状态不能修改"});
+        return false
+    }
+    var url = "materielV2/modifyPage";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                    title: "修改基本信息",
+                    url: "materielV2/modifyPage?projectUid=" + projectUid + "&puid=" + rows[0].puid + "&puidOfModelFeature=" + rows[0].puidOfModelFeature + "&page=model",
+                    gridId: "gridId",
+                    width: 350,
+                    height: 450
+                });
+            }
+        }
+    })
+}
+
+/**
+ * 撤销
+ */
+function goBackData() {
+    var rows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (rows.length <= 0) {
+        window.Ewin.alert({message: '请至少选择一条需要撤销的数据!'});
+        return;
+    }
+
+    for (let i in rows) {
+        if (10 == rows[i].status || "10" == rows[i].status) {
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已在变更流程中，不可撤销"});
+            return false;
+        } else if (1 == rows[i].status || "1" == rows[i].status) {
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已生效，不可撤销"});
+            return false;
+        }
+    }
+    var url = "materielV2/goBackData";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: '是否要撤销您所选择的记录？', width: 500}).on(function (e) {
+                    if (e) {
+                        $.ajax({
+                            type: "POST",
+                            //ajax需要添加打包名
+                            url: "./materielV2/goBackData",
+                            data: JSON.stringify(rows),
+                            contentType: "application/json",
+                            success: function (result) {
+                                if (result.status) {
+                                    layer.msg(result.msg, {icon: 1, time: 2000});
+                                    doQuery();
+                                    //$(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                    // window.Ewin.alert({message: });
+                                    //刷新，会重新申请数据库数据
+                                }
+                                else {
+                                    window.Ewin.alert({message: "操作撤销失败:" + result.msg});
+                                }
+                                $table.bootstrapTable("refresh");
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: "操作撤销:" + info.status});
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    })
 }
 
 /**
  * 删除衍生物料
  */
-function deleteVehicle() {
+function deleteVehicleFake() {
     var rows = $table.bootstrapTable('getSelections');
     //只能选一条
     if (rows.length <= 0) {
         window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
         return;
     }
-    window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
-        if (e) {
-            $.ajax({
-                type: "POST",
-                //ajax需要添加打包名
-                url: "./materielV2/deleteCompose",
-                data: JSON.stringify(rows),
-                contentType: "application/json",
-                success: function (result) {
-                    if (result.status) {
-                        layer.msg(result.msg, {icon: 1, time: 2000});
-                        doQuery();
-                        //$(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                        // window.Ewin.alert({message: });
-                        //刷新，会重新申请数据库数据
+    for (let i in rows) {
+        if (2 == rows[i].status || "2" == rows[i].status) {
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已删除，不可重复删除"});
+            return false;
+        } else if (10 == rows[i].status || "10" == rows[i].status) {
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已在变更流程中，不可删除"});
+            return false;
+        }
+    }
+    var url = "materielV2/deleteVehicleFake";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                    if (e) {
+                        $.ajax({
+                            type: "POST",
+                            //ajax需要添加打包名
+                            url: "./materielV2/deleteVehicleFake",
+                            data: JSON.stringify(rows),
+                            contentType: "application/json",
+                            success: function (result) {
+                                if (result.status) {
+                                    layer.msg(result.msg, {icon: 1, time: 2000});
+                                    doQuery();
+                                    //$(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                    // window.Ewin.alert({message: });
+                                    //刷新，会重新申请数据库数据
+                                }
+                                else {
+                                    window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                }
+                                $table.bootstrapTable("refresh");
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: "操作删除:" + info.status});
+                            }
+                        })
                     }
-                    else {
-                        window.Ewin.alert({message: "操作删除失败:" + result.msg});
-                    }
-                    $table.bootstrapTable("refresh");
-                },
-                error: function (info) {
-                    window.Ewin.alert({message: "操作删除:" + info.status});
-                }
-            })
+                })
+            }
         }
     })
 }
+
+// /**
+//  * 删除衍生物料
+//  */
+// function deleteVehicle() {
+//     var rows = $table.bootstrapTable('getSelections');
+//     //只能选一条
+//     if (rows.length <= 0) {
+//         window.Ewin.alert({message: '请至少选择一条需要删除的数据!'});
+//         return;
+//     }
+//     window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+//         if (e) {
+//             $.ajax({
+//                 type: "POST",
+//                 //ajax需要添加打包名
+//                 url: "./materielV2/deleteCompose",
+//                 data: JSON.stringify(rows),
+//                 contentType: "application/json",
+//                 success: function (result) {
+//                     if (result.status) {
+//                         layer.msg(result.msg, {icon: 1, time: 2000});
+//                         doQuery();
+//                         //$(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+//                         // window.Ewin.alert({message: });
+//                         //刷新，会重新申请数据库数据
+//                     }
+//                     else {
+//                         window.Ewin.alert({message: "操作删除失败:" + result.msg});
+//                     }
+//                     $table.bootstrapTable("refresh");
+//                 },
+//                 error: function (info) {
+//                     window.Ewin.alert({message: "操作删除:" + info.status});
+//                 }
+//             })
+//         }
+//     })
+// }
 
 /******发起变更表单****/
 function launchChangeForm() {
@@ -346,76 +506,100 @@ function launchChangeForm() {
         window.Ewin.alert({message: '请选择一条需要发起变更的数据!'});
         return false;
     }
+    for (let i in rows) {
+        if (1 == rows[i].status || "1" == rows[i].status) {
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已生效，不可发起流程"});
+            return false;
+        } else if (10 == rows[i].status || "10" == rows[i].status) {
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已在流程中，不可发起流程"});
+            return false;
+        }
+    }
 
     let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
     for (let i in rows) {
-        if (0 != rows[i].status && "0" != rows[i].status && null != rows[i].status && "null" != rows[i].status) {
-            window.Ewin.alert({message: rows[i].modeBasicDetail + "该衍生物料不是草稿状态，不能发起变更"});
+        if (0 != rows[i].status && "0" != rows[i].status && null != rows[i].status && "null" != rows[i].status && 2 != rows[i].status && "2" != rows[i].status) {
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "该衍生物料不是草稿状态，不能发起流程"});
             return false;
         }
         msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
     }
 
-    var data = {};
-    data.rows = rows;
-    var puids = [];
-    for(var i=0;i<rows.length;i++){
-        puids.push(rows[i].basicId);
-    }
-    data.puids = puids;
-    data.titles = dynamicTitle;
-    data.projectPuid = projectUid;
-    window.Ewin.confirm({
-        title: '提示',
-        message: '是否要发起变更？',
-        width: 500
-    }).on(function (e) {
-        if (e) {
-            var puids = "";
-            for(let i in rows){
-                puids += rows[i].puid;
-                if(i<rows.length-1){
-                    puids+=",";
-                }
+    // var data = {};
+    // data.rows = rows;
+    // var puids = [];
+    // for(var i=0;i<rows.length;i++){
+    //     puids.push(rows[i].basicId);
+    // }
+    // data.puids = puids;
+    // data.titles = dynamicTitle;
+    // data.projectPuid = projectUid;
+    var url = "materielV2/setChangeFromPage";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
             }
-            var titles = "";
-            for(let i in dynamicTitle){
-                titles += dynamicTitle[i];
-                if(i<dynamicTitle.length-1){
-                    titles+=",";
-                }
+            else {
+                window.Ewin.confirm({
+                    title: '提示',
+                    message: '是否要发起流程？',
+                    width: 500
+                }).on(function (e) {
+                    if (e) {
+                        var puids = "";
+                        for (let i in rows) {
+                            puids += rows[i].basicId;
+                            if (i < rows.length - 1) {
+                                puids += ",";
+                            }
+                        }
+                        var titles = "";
+                        for (let i in dynamicTitle) {
+                            titles += dynamicTitle[i];
+                            if (i < dynamicTitle.length - 1) {
+                                titles += ",";
+                            }
+                        }
+
+                        window.Ewin.dialog({
+                            // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
+                            title: "选择变更表单",
+                            url: "./materielV2/setChangeFromPage?projectUid=" + getProjectUid() + "&puids=" + puids + "&titles=" + titles,
+                            gridId: "gridId",
+                            width: 450,
+                            height: 450
+                        });
+
+                        // $.ajax({
+                        //     type: "POST",
+                        //     //ajax需要添加打包名
+                        //     url: "./materielV2/getVWO",
+                        //     data: /*data*/JSON.stringify(data),
+                        //     contentType: "application/json",
+                        //     success: function (result) {
+                        //         if (result.status) {
+                        //             layer.msg("发起VWO流程成功", {icon: 1, time: 2000})
+                        //             // window.Ewin.alert({message: "删除时数据成功"});
+                        //             //刷新，会重新申请数据库数据
+                        //         }
+                        //         else {
+                        //             window.Ewin.alert({message: "发起VWO流程失败:" + result.msg});
+                        //         }
+                        //         $table.bootstrapTable("refresh");
+                        //     },
+                        //     error: function (info) {
+                        //         window.Ewin.alert({message: "发起VWO流程:" + info.status});
+                        //     }
+                        // })
+                    }
+                });
             }
-            window.Ewin.dialog({
-                // 这个puid就是车型模型的puid，直接修改了车型模型的基本信息（在bom系统维护的字段）
-                title: "选择变更表单",
-                url: "./materielV2/setChangeFromPage?projectUid="+getProjectUid()+"&puids="+puids+"&titles="+titles,
-                gridId: "gridId",
-                width: 450,
-                height: 450
-            });
-            // $.ajax({
-            //     type: "POST",
-            //     //ajax需要添加打包名
-            //     url: "./materielV2/getVWO",
-            //     data: /*data*/JSON.stringify(data),
-            //     contentType: "application/json",
-            //     success: function (result) {
-            //         if (result.status) {
-            //             layer.msg("发起VWO流程成功", {icon: 1, time: 2000})
-            //             // window.Ewin.alert({message: "删除时数据成功"});
-            //             //刷新，会重新申请数据库数据
-            //         }
-            //         else {
-            //             window.Ewin.alert({message: "发起VWO流程失败:" + result.msg});
-            //         }
-            //         $table.bootstrapTable("refresh");
-            //     },
-            //     error: function (info) {
-            //         window.Ewin.alert({message: "发起VWO流程:" + info.status});
-            //     }
-            // })
         }
-    });
+    })
 }
 
 /**成功从后台获取数据*/
@@ -456,27 +640,30 @@ function gotIt(result) {
         dynamicTitle.push(data[i]);
     }
     column.push(
-    {
-        field: 'cfgStatus',
+        {
+            field: 'cfgStatus',
             title: '状态',
-        align: 'center',
-        valign: 'middle',
-        formatter: function (value, row, index) {
-            var status = row.status;
-        if (status == 999 || "999" == status) {
-            return "<span style='color: #00B83F'>已生效</span>";
-        }
-        if (status == 10 || "10" == status) {
-                return "<span style='color: #e69800'>VWO审核中("+row.changeOrderNo+")</span>";
-        }
-        if (0 == status|| "0" == status||"null" == status || null == status) {
-            return "<span style='color: #a97f89'>草稿状态</span>";
-        }
-        else {
-            return "<span style='color: #a90009'>未知状态</span>";
-        }
-    }
-    });
+            align: 'center',
+            valign: 'middle',
+            formatter: function (value, row, index) {
+                var status = row.status;
+                if (status == 1 || "1" == status) {
+                    return "<span style='color: #00B83F'>已生效</span>";
+                }
+                else if (status == 10 || "10" == status) {
+                    return "<span style='color: #e69800'>变更审核中(" + row.changeOrderNo + ")</span>";
+                }
+                else if (0 == status || "0" == status || "null" == status || null == status) {
+                    return "<span style='color: #a97f89'>草稿状态</span>";
+                }
+                else if (2 == status || "2" == status) {
+                    return "<span style='color: #0c8fe2'>删除状态</span>";
+                }
+                else {
+                    return "<span style='color: #a90009'>未知状态</span>";
+                }
+            }
+        });
     $table.bootstrapTable({
         url: "materielV2/loadComposes?projectPuid=" + projectUid,
         method: 'get',
@@ -514,20 +701,33 @@ function gotIt(result) {
 }
 
 function saveCompose() {
+    var url = "materielV2/saveCompose";
     $.ajax({
-        type : "GET",
-        url : "materielV2/saveCompose?projectPuid="+projectUid ,
-        success : function (result) {
-            if(result.status!=false){
-                // window.Ewin.alert({message: '生成成功!'});
-                layer.msg("生成成功", {icon: 1, time: 2000});
-                doQuery();
-            }else {
-                window.Ewin.alert({message: result.msg});
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
             }
-        },
-        error : function (result) {
-            window.Ewin.alert({message: result.msg});
+            else {
+                $.ajax({
+                    type: "GET",
+                    url: "materielV2/saveCompose?projectPuid=" + projectUid,
+                    success: function (result) {
+                        if (result.status != false) {
+                            // window.Ewin.alert({message: '生成成功!'});
+                            layer.msg("生成成功", {icon: 1, time: 2000});
+                            doQuery();
+                        } else {
+                            window.Ewin.alert({message: result.msg});
+                        }
+                    },
+                    error: function (result) {
+                        window.Ewin.alert({message: result.msg});
+                    }
+                })
+            }
         }
     })
 }

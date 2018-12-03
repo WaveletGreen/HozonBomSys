@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -206,5 +206,51 @@
           t.CMCR_CHANGE_ORDER_UID = null
         where
           t.CMCR_CHANGE_ORDER_UID = #{cmcrVwoId}
+    </update>
+
+    <update id="updateStatus" parameterType="java.util.List">
+        update HZ_CFG0_MODEL_COLOR_RECORD
+        set CMCR_STATUS =
+    <foreach collection="list" index="index" item="hzCfg0ModelColors" open="case"  close="end">
+        when PUID = #{hzCfg0ModelColors.puid,jdbcType=VARCHAR}
+        then #{hzCfg0ModelColors.cmcrStatus,jdbcType=INTEGER}
+    </foreach>
+      where
+        PUID in
+        <foreach collection="list" index="index" item="hzCfg0ModelColors" open="("  close=")" separator=",">
+            #{hzCfg0ModelColors.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <update id="updateListAll" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="hzCfg0ModelColors" open="begin" close=";end;" separator=";">
+            update
+            HZ_CFG0_MODEL_COLOR_RECORD
+            set
+            P_DESC_OF_COLORFUL_MODEL = #{hzCfg0ModelColors.cmcrSrcDescOfColorMod,jdbcType=VARCHAR}
+            where
+            PUID = #{hzCfg0ModelColors.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <update id="updateStatusByOrderId" parameterType="java.util.Map">
+        update HZ_CFG0_MODEL_COLOR_RECORD
+        set CMCR_STATUS = #{status,jdbcType=INTEGER}
+        where
+        CMCR_CHANGE_ORDER_UID = #{orderId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByChangeIds" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update HZ_CFG0_MODEL_COLOR_RECORD
+            set CMCR_STATUS = (select CMCR_SRC_STATUS from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL}),
+            CMCR_CHANGE_ORDER_UID = null
+            where
+            PUID = (
+            select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL}
+            )
+            and
+              0=(select CMCR_CHANGE_STATUS from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL})
+        </foreach>
     </update>
 </mapper>

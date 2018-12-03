@@ -21,7 +21,7 @@ import sql.pojo.bom.HzPbomLineRecord;
 import java.math.BigDecimal;
 import java.util.*;
 
-@Service("FileUploadUpdataService")
+@Service("fileUploadUpdataService")
 public class FileUploadUpdataServiceImpl implements FileUploadUpdataService {
 
     @Autowired
@@ -175,8 +175,8 @@ public class FileUploadUpdataServiceImpl implements FileUploadUpdataService {
                             List<HzPbomLineRecord> pbomRecord_old = hzPbomRecordDAO.getPbomById(m);
                             List<HzPbomLineRecord> pbomRecord_before = hzPbomRecordDAO.getPbomById_before(m);
                             List<HzPbomLineRecord> pbomRecord_after = hzPbomRecordDAO.getPbomById_after(m);
-
-                            if(!beforeMap.containsKey(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue())){
+                            //2018.11.25注释掉，只修改原数据不做保存到before、after表，走变更流程时才记录
+                            /*if(!beforeMap.containsKey(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue())){
                                 beforeMap.put(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue(),"");
                                 //找before记录表是否有记录
                                 if(pbomRecord_before.size()==0){
@@ -196,11 +196,13 @@ public class FileUploadUpdataServiceImpl implements FileUploadUpdataService {
                                         }
                                     }
                                 }
-                            }
+                            }*/
 
                             //更新操作--updateInput
                             hzPbomRecordDAO.updateInput(hzPbomLineRecords.get(rowNum-1));
-                            if(!afterMap.containsKey(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue())){
+
+                            //2018.11.25注释掉，只修改原数据不做保存到before、after表，走变更流程时才记录
+                            /*if(!afterMap.containsKey(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue())){
                                 afterMap.put(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue(),"");
                                 pbomRecord_old = hzPbomRecordDAO.getPbomById(m);
                                 //修改后数据保存到after记录表(插入或更新)
@@ -221,7 +223,7 @@ public class FileUploadUpdataServiceImpl implements FileUploadUpdataService {
                                         }
                                     }
                                 }
-                            }
+                            }*/
                             //i++;
                         }
                     }

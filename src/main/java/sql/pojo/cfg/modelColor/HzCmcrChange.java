@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -11,7 +11,7 @@ import lombok.Getter;
 
 import java.util.Date;
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 配色方案变更主数据
  * @Date: Created in 2018/8/10 13:55
  * @Modified By:
@@ -138,4 +138,7 @@ public class HzCmcrChange {
      * 变更状态，0为审核中，1为生效
      */
     private Integer cmcrChangeStatus;
+
+    private Integer cmcrSrcStatus;
+
 }

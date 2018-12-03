@@ -1,113 +1,190 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzAuditorChangeRecordMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.change.HzAuditorChangeRecord">
-    <id column="ID" jdbcType="DOUBLE" property="id" />
-    <result column="AUDITOR_ID" jdbcType="DOUBLE" property="auditorId" />
-    <result column="AUDIT_TIME" jdbcType="TIMESTAMP" property="auditTime" />
-    <result column="AUDIT_RESULT" jdbcType="DOUBLE" property="auditResult" />
-    <result column="AUDIT_SUGG" jdbcType="VARCHAR" property="auditSugg" />
-    <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId" />
-    <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="sql.pojo.change.HzAuditorChangeRecord">
+        <id column="ID" jdbcType="DOUBLE" property="id"/>
+        <result column="AUDITOR_ID" jdbcType="DOUBLE" property="auditorId"/>
+        <result column="AUDIT_TIME" jdbcType="TIMESTAMP" property="auditTime"/>
+        <result column="AUDIT_RESULT" jdbcType="DOUBLE" property="auditResult"/>
+        <result column="AUDIT_SUGG" jdbcType="VARCHAR" property="auditSugg"/>
+        <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
+        <result column="TABLE_NAME" jdbcType="VARCHAR" property="tableName"/>
+        <result column="CHANGE_ACCEPTER" jdbcType="DOUBLE" property="changeAccepter"/>
+    </resultMap>
 
-  <sql id="Base_Column_List">
-    ID, AUDITOR_ID, AUDIT_TIME, AUDIT_RESULT, AUDIT_SUGG, ORDER_ID, TABLE_NAME
+    <sql id="Base_Column_List">
+    ID, AUDITOR_ID, AUDIT_TIME, AUDIT_RESULT, AUDIT_SUGG, ORDER_ID, TABLE_NAME,CHANGE_ACCEPTER
   </sql>
 
-
-
-
-
-  <!--insert-->
-  <insert id="HzAuditorChangeDAOImpl_insert" parameterType="sql.pojo.change.HzAuditorChangeRecord">
-    insert into HZ_AUDITOR_CHANGE_RECORD (ID, AUDITOR_ID,
-      ORDER_ID,
-      TABLE_NAME)
-    values (SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval, #{auditorId,jdbcType=DOUBLE},
-       #{orderId,jdbcType=DOUBLE},
-      #{tableName,jdbcType=VARCHAR})
+    <!--insert-->
+    <insert id="HzAuditorChangeDAOImpl_insert" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval as id from dual
+        </selectKey>
+    insert into HZ_AUDITOR_CHANGE_RECORD (ID, AUDITOR_ID,ORDER_ID,TABLE_NAME)
+    values
+    (#{id,jdbcType=DOUBLE},
+    #{auditorId,jdbcType=DOUBLE},
+    #{orderId,jdbcType=DOUBLE},
+    #{tableName,jdbcType=VARCHAR})
   </insert>
 
+    <!--待办事项返回ORDER_ID：AUDIT_RESULT is NULL-->
+    <select id="HzAuditorChangeDAOImpl_findAuditorList" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_AUDITOR_CHANGE_RECORD
+        where 1=1
+        <!--ID = #{id,jdbcType=DOUBLE}-->
+        and AUDITOR_ID = #{auditorId,jdbcType=DOUBLE}
+        and AUDIT_RESULT is NULL
+    </select>
 
-  <insert id="insertSelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
-    insert into HZ_AUDITOR_CHANGE_RECORD
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        ID,
-      </if>
-      <if test="auditorId != null">
-        AUDITOR_ID,
-      </if>
-      <if test="auditTime != null">
-        AUDIT_TIME,
-      </if>
-      <if test="auditResult != null">
-        AUDIT_RESULT,
-      </if>
-      <if test="auditSugg != null">
-        AUDIT_SUGG,
-      </if>
-      <if test="orderId != null">
-        ORDER_ID,
-      </if>
-      <if test="tableName != null">
-        TABLE_NAME,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=DECIMAL},
-      </if>
-      <if test="auditorId != null">
-        #{auditorId,jdbcType=DECIMAL},
-      </if>
-      <if test="auditTime != null">
-        #{auditTime,jdbcType=DATE},
-      </if>
-      <if test="auditResult != null">
-        #{auditResult,jdbcType=DECIMAL},
-      </if>
-      <if test="auditSugg != null">
-        #{auditSugg,jdbcType=VARCHAR},
-      </if>
-      <if test="orderId != null">
-        #{orderId,jdbcType=DECIMAL},
-      </if>
-      <if test="tableName != null">
-        #{tableName,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+    <!--已处理事项返回ORDER_ID：AUDIT_RESULT is not NULL-->
+    <select id="HzAuditorChangeDAOImpl_findAuditorList2" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_AUDITOR_CHANGE_RECORD
+        where 1=1
+        <!--ID = #{id,jdbcType=DOUBLE}-->
+        and AUDITOR_ID = #{auditorId}
+        and AUDIT_RESULT is not NULL
+    </select>
+
+<!--根据ID查记录-->
+    <select id="HzAuditorChangeDAOImpl_findAuditorListById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_AUDITOR_CHANGE_RECORD
+        where
+        ID = #{id,jdbcType=DOUBLE}
+    <!--and AUDITOR_ID = #{auditorId}-->
+    <!--and AUDIT_RESULT is not NULL-->
+    </select>
+
+<!--统计待办事项-->
+    <select id="HzAuditorChangeDAOImpl_count" parameterType="java.util.Map" resultType="int">
+        SELECT count(*) FROM HZ_AUDITOR_CHANGE_RECORD
+        WHERE 1=1
+        <!--接口（审批）人是自己（登录角色）-->
+        and AUDITOR_ID = #{auditorId,jdbcType=DOUBLE}
+        and AUDIT_RESULT is null
+    </select>
+
+    <!--根据变更表单的ID查询一个审核意见数据-->
+    <!--既然一个表单只能有一个人审核，则表单在审核的时候没有审核结果，有审核结果的不应该再被审核
+        因此前提是AUDIT_RESULT is null-->
+    <select id="HzAuditorChangeDAOImpl_findByOrderId" parameterType="sql.pojo.change.HzAuditorChangeRecord"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HZ_AUDITOR_CHANGE_RECORD
+        where ORDER_ID = #{orderId,jdbcType=DOUBLE} and AUDITOR_ID=#{auditorId,jdbcType=DOUBLE}
+        and AUDIT_RESULT is null
+    </select>
+
+    <!--接口人查询出的记录可能有多条返回list集合-->
+    <select id="HzAuditorChangeDAOImpl_findByOrdersId" parameterType="sql.pojo.change.HzAuditorChangeRecord"
+            resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM HZ_AUDITOR_CHANGE_RECORD
+        where ORDER_ID = #{orderId,jdbcType=DOUBLE} and AUDITOR_ID=#{auditorId,jdbcType=DOUBLE}
+        and AUDIT_RESULT is null
+    </select>
+
+    <insert id="insertSelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+        insert into HZ_AUDITOR_CHANGE_RECORD
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="auditorId != null">
+                AUDITOR_ID,
+            </if>
+            <if test="auditTime != null">
+                AUDIT_TIME,
+            </if>
+            <if test="auditResult != null">
+                AUDIT_RESULT,
+            </if>
+            <if test="auditSugg != null">
+                AUDIT_SUGG,
+            </if>
+            <if test="orderId != null">
+                ORDER_ID,
+            </if>
+            <if test="tableName != null">
+                TABLE_NAME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="auditorId != null">
+                #{auditorId,jdbcType=DECIMAL},
+            </if>
+            <if test="auditTime != null">
+                #{auditTime,jdbcType=DATE},
+            </if>
+            <if test="auditResult != null">
+                #{auditResult,jdbcType=DECIMAL},
+            </if>
+            <if test="auditSugg != null">
+                #{auditSugg,jdbcType=VARCHAR},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=DECIMAL},
+            </if>
+            <if test="tableName != null">
+                #{tableName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
 
 
-  <!--update-->
-  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
-    update HZ_AUDITOR_CHANGE_RECORD
-    <set>
-      <if test="auditorId != null">
-        AUDITOR_ID = #{auditorId,jdbcType=DECIMAL},
-      </if>
-      <if test="auditTime != null">
-        AUDIT_TIME = #{auditTime,jdbcType=DATE},
-      </if>
-      <if test="auditResult != null">
-        AUDIT_RESULT = #{auditResult,jdbcType=DECIMAL},
-      </if>
-      <if test="auditSugg != null">
-        AUDIT_SUGG = #{auditSugg,jdbcType=VARCHAR},
-      </if>
-      <if test="orderId != null">
-        ORDER_ID = #{orderId,jdbcType=DECIMAL},
-      </if>
-      <if test="tableName != null">
-        TABLE_NAME = #{tableName,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where ID = #{id,jdbcType=DECIMAL}
-  </update>
+    <update id="HzAuditorChangeDAOImpl_updateAuditorRecord"
+            parameterType="com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO">
+        update HZ_AUDITOR_CHANGE_RECORD
+        <set>
+            <if test="auditResult != null">
+                AUDIT_RESULT = #{auditResult,jdbcType=INTEGER},
+            </if>
+            AUDIT_TIME = sysdate
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
 
-  <update id="updateByPrimaryKey" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+    <!--update-->
+    <update id="HzAuditorChangeDAOImpl_updateByPrimaryKeySelective"
+            parameterType="sql.pojo.change.HzAuditorChangeRecord">
+        update HZ_AUDITOR_CHANGE_RECORD
+        <set>
+            <if test="auditorId != null">
+                AUDITOR_ID = #{auditorId,jdbcType=DOUBLE},
+            </if>
+            <if test="auditTime != null">
+                AUDIT_TIME = #{auditTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="auditResult != null">
+                AUDIT_RESULT = #{auditResult,jdbcType=INTEGER},
+            </if>
+            <if test="auditSugg != null">
+                AUDIT_SUGG = #{auditSugg,jdbcType=VARCHAR},
+            </if>
+            <if test="orderId != null">
+                ORDER_ID = #{orderId,jdbcType=DOUBLE},
+            </if>
+            <if test="tableName != null">
+                TABLE_NAME = #{tableName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="sql.pojo.change.HzAuditorChangeRecord">
     update HZ_AUDITOR_CHANGE_RECORD
     set AUDITOR_ID = #{auditorId,jdbcType=DECIMAL},
       AUDIT_TIME = #{auditTime,jdbcType=DATE},
@@ -118,17 +195,17 @@
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 
-  <!--delete-->
-  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    <!--delete-->
+    <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
     delete from HZ_AUDITOR_CHANGE_RECORD
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
 
-  <!--select-->
-  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from HZ_AUDITOR_CHANGE_RECORD
-    where ID = #{id,jdbcType=DECIMAL}
-  </select>
+    <!--select-->
+    <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_AUDITOR_CHANGE_RECORD
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
 </mapper>

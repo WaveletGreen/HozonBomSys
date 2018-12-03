@@ -16,7 +16,7 @@
         sql: 'SQL',
         doc: 'MS-Word',
         excel: '导出Excel2003',
-        xlsx: '导出Excel2007',
+        xlsx: '导出Excel数据表格',
         powerpoint: 'MS-Powerpoint',
         pdf: 'PDF'
     };

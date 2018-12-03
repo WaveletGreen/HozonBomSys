@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 
@@ -45,20 +45,6 @@
     CMCR_SRC_COLOR_IS_MULTIPLY, CMCR_SRC_CREATE_DATE, CMCR_SRC_CREATOR, CMCR_SRC_UPDATE_DATE, 
     CMCR_SRC_UPDATER, CMCR_SRC_CODE_OF_COLOR_MOD, CMCR_SRC_DESC_OF_COLOR_MOD
   </sql>
-  <select id="selectByExample" parameterType="sql.pojo.cfg.modelColor.HzCmcrBeforeChangeExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from HZ_CMCR_BEFORE_CHANGE
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
   <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />

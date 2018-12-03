@@ -6,14 +6,15 @@
     <div class="panel panel-default">
         <div class="panel-heading">查询条件</div>
         <div class="panel-body">
-            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post" id="queryRole">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="post"
+                  id="queryRole">
                 <div class="form-group">
                     <label for="name">权限代码:</label>
-                    <input type="text" class="form-control" name="name" id="name"  placeholder="请输入权限代码" />
+                    <input type="text" class="form-control" name="name" id="name" placeholder="请输入权限代码"/>
                 </div>
                 <div class="form-group">
                     <label for="roleName">权限名称:</label>
-                    <input type="text" class="form-control" name="roleName" id="roleName"  placeholder="请输入权限名称" />
+                    <input type="text" class="form-control" name="roleName" id="roleName" placeholder="请输入权限名称"/>
                 </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
@@ -26,39 +27,75 @@
 </div>
 <script th:inline="javascript">
 
-    $(function() {
+    $(function () {
         initTable();
         $('#role-table').bootstrapTable('hideColumn', 'id');
     });
 
-    function doQuery(){
+    function doQuery() {
         $('#role-table').bootstrapTable('refresh');    //刷新表格
     }
 
     // 开通账号写权限
-    function openEdit(id){
-        window.Ewin.dialog({title: '开通写权限', url:"role/openEdit?id="+id,width:700,height:310});
+    function openEdit(id) {
+        var url = "role/openEdit";
+        $.ajax({
+            url: "privilege/write?url=" + url,
+            type: "GET",
+            success: function (result) {
+                if (!result.success) {
+                    window.Ewin.alert({message: result.errMsg});
+                    return false;
+                }
+                else {
+                    window.Ewin.dialog({
+                        title: '开通写权限',
+                        url: "role/openEdit?id=" + id,
+                        width: 700,
+                        height: 310
+                    });
+                }
+            }
+        })
     }
 
-    function initTable(){
+    function initTable() {
         $('#role-table').bootstrapTable({
-            url:"role/list",
+            url: "role/list",
             height: $(window.parent.document).find("#wrapper").height() - 252,
-            width:$(window).width(),
-            showColumns:true,
-            formId :"queryRole",
-            pagination : true,
-            sortName : 'id',
-            sortOrder : 'desc',
-            pageSize : 10,
+            width: $(window).width(),
+            showColumns: true,
+            formId: "queryRole",
+            pagination: true,
+            sortName: 'id',
+            sortOrder: 'desc',
+            pageSize: 10,
             clickToSelect: true,// 单击某一行的时候选中某一条记录
             showToggle: false,  //是否显示详细视图和列表视图的切换按钮
-            toolbars:[
+            toolbars: [
                 {
                     text: '添加',
                     iconCls: 'glyphicon glyphicon-plus',
                     handler: function () {
-                        window.Ewin.dialog({title:"添加",url:"role/addPage",width:600,height:310})
+                        var url = "role/addPage";
+                        $.ajax({
+                            url: "privilege/write?url=" + url,
+                            type: "GET",
+                            success: function (result) {
+                                if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                    return false;
+                                }
+                                else {
+                                    window.Ewin.dialog({
+                                        title: "添加",
+                                        url: "role/addPage",
+                                        width: 600,
+                                        height: 310
+                                    })
+                                }
+                            }
+                        })
                     }
                 },
                 {
@@ -66,11 +103,29 @@
                     iconCls: 'glyphicon glyphicon-pencil',
                     handler: function () {
                         var rows = $('#role-table').bootstrapTable('getSelections');
-                        if(rows.length==0||rows.length>1){
-                            window.Ewin.alert({message:'请选择一条需要修改的数据!'});
+                        if (rows.length == 0 || rows.length > 1) {
+                            window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                             return false;
                         }
-                        window.Ewin.dialog({title:"修改",url:"role/updatePage?id="+rows[0].id,width:600,height:310});
+                        var url = "role/updatePage";
+                        $.ajax({
+                            url: "privilege/write?url=" + url,
+                            type: "GET",
+                            success: function (result) {
+                                if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                    return false;
+                                }
+                                else {
+                                    window.Ewin.dialog({
+                                        title: "修改",
+                                        url: "role/updatePage?id=" + rows[0].id,
+                                        width: 600,
+                                        height: 310
+                                    });
+                                }
+                            }
+                        })
                     }
                 },
                 {
@@ -78,23 +133,36 @@
                     iconCls: 'glyphicon glyphicon-remove',
                     handler: function () {
                         var rows = $('#role-table').bootstrapTable('getSelections');
-                        if(rows.length==0){
-                            window.Ewin.alert({message:'请选择一条需要删除的数据!'});
+                        if (rows.length == 0) {
+                            window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                             return false;
                         }
-                        window.Ewin.confirm({title:'提示',message:'是否要删除您所选择的记录？',width:500}).on(function (e) {
-                            if (e) {
-                                $.post("./role/removeBath",{json:JSON.stringify(rows)},function(e){
-                                   if(e.result){
-                                       // window.Ewin.alert({message:e.msg});
-                                       layer.msg('删除成功', {icon: 1, time: 2000})
-                                       doQuery();
-                                   }else {
-                                       window.Ewin.alert({message:e.msg});
-                                   }
-                                });
+                        var url = "role/removeBath";
+                        $.ajax({
+                            url: "privilege/write?url=" + url,
+                            type: "GET",
+                            success: function (result) {
+                                if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                    return false;
+                                }
+                                else {
+                                    window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                                        if (e) {
+                                            $.post("./role/removeBath", {json: JSON.stringify(rows)}, function (e) {
+                                                if (e.result) {
+                                                    // window.Ewin.alert({message:e.msg});
+                                                    layer.msg('删除成功', {icon: 1, time: 2000})
+                                                    doQuery();
+                                                } else {
+                                                    window.Ewin.alert({message: e.msg});
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
-                        });
+                        })
                     }
                 }
             ],
@@ -119,29 +187,29 @@
                 //     sortable : true
                 // },
                 {
-                    field : 'name',
-                    title : '权限代码',
-                    align : 'center',
-                    valign : 'middle',
-                    sortable : true
+                    field: 'name',
+                    title: '权限代码',
+                    align: 'center',
+                    valign: 'middle',
+                    sortable: true
                 },
                 {
-                    field : 'roleName',
-                    title : '权限名称',
-                    align : 'center',
-                    valign : 'middle',
+                    field: 'roleName',
+                    title: '权限名称',
+                    align: 'center',
+                    valign: 'middle',
                     // sortable : true
                 },
                 {
-                    field : 'openEdit',
-                    title : '开通写权限',
-                    align : 'center',
-                    valign : 'middle',
-                    formatter: function (value,row,index) {
-                        if(row.name=='ROLE_ADMIN'){
+                    field: 'openEdit',
+                    title: '开通写权限',
+                    align: 'center',
+                    valign: 'middle',
+                    formatter: function (value, row, index) {
+                        if (row.name == 'ROLE_ADMIN') {
                             return '<a>无需开通</a>';
                         }
-                        return '<a href="#" onclick="openEdit('+row.id+')" >开通</a>';
+                        return '<a href="#" onclick="openEdit(' + row.id + ')" >开通</a>';
                     }
                 }
             ]

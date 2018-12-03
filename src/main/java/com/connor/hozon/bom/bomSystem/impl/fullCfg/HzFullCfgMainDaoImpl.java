@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -9,16 +9,20 @@ package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
+@Repository
 public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements HzFullCfgMainDao {
     private static final HzFullCfgMain HZ_FULL_CFG_MAIN = new HzFullCfgMain();
 
@@ -28,19 +32,19 @@ public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements
     }
 
     @Override
-    public int deleteByPrimaryKey(BigDecimal id) {
+    public int deleteByPrimaryKey(Long id) {
         HZ_FULL_CFG_MAIN.setId(id);
         return baseSQLUtil.executeDelete(HZ_FULL_CFG_MAIN, clzName + ".deleteByPrimaryKey");
     }
 
     @Override
-    public BigDecimal insertBackId(HzFullCfgMain record) {
+    public Long insertBackId(HzFullCfgMain record) {
         baseSQLUtil.executeInsert(record, clzName + ".insertBackId");
         return record.getId();
     }
 
     @Override
-    public HzFullCfgMain selectByPrimaryKey(BigDecimal id) {
+    public HzFullCfgMain selectByPrimaryKey(Long id) {
         HZ_FULL_CFG_MAIN.setId(id);
         return baseSQLUtil.executeQueryById(HZ_FULL_CFG_MAIN, clzName + ".selectByPrimaryKey");
     }
@@ -49,5 +53,34 @@ public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements
     public HzFullCfgMain selectByProjectId(String id) {
         HZ_FULL_CFG_MAIN.setProjectUid(id);
         return baseSQLUtil.executeQueryById(HZ_FULL_CFG_MAIN, clzName + ".selectByProjectId");
+    }
+
+    @Override
+    public int deleteByProjectUid(String projectUid) {
+        return baseSQLUtil.executeDelete(projectUid,clzName+".deleteByProjectUid");
+    }
+
+    @Override
+    public Long insertSeqAll(HzFullCfgMain hzFullCfgMain) {
+         baseSQLUtil.executeInsert(hzFullCfgMain,clzName+".insertSeqAll");
+        return hzFullCfgMain.getId();
+    }
+
+    @Override
+    public int updateStatusByOrderId(Long orderId, Integer stutas) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("stutas",stutas);
+        map.put("orderId",orderId);
+        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
+    @Override
+    public int updateStatusById(HzFullCfgMain hzFullCfgMain) {
+        return baseSQLUtil.executeUpdate(hzFullCfgMain,clzName+".updateStatusById");
+    }
+
+    @Override
+    public int updateChangeByOrderId(Long orderId) {
+        return baseSQLUtil.executeUpdate(orderId,clzName+".updateChangeByOrderId");
     }
 }

@@ -20,7 +20,7 @@ import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.*;
 
-@Service("HzMWOService")
+@Service("hzMWOService")
 public class HzMWOServiceImpl implements HzMWOService {
     @Autowired
     private HzEWOBasicInfoDAO hzEWOBasicInfoDAO;

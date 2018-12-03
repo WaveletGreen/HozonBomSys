@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 
@@ -105,4 +105,15 @@
         where
           PUID = #{puid,jdbcType=VARCHAR}
     </delete>
+
+    <select id="selectByFullCfgModel" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CFG0_MODEL_RECORD
+        where
+          PUID in (
+            select distinct(MOD_MODEL_UID) from HZ_FC_MODEL_RECORD_CHANGE where FL_MAIN_ID = #{orderChangeId,jdbcType=DECIMAL}
+          )
+    </select>
 </mapper>

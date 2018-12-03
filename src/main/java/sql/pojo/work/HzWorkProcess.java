@@ -1,5 +1,6 @@
 package sql.pojo.work;
 
+
 import java.util.Date;
 
 /**
@@ -120,6 +121,7 @@ public class HzWorkProcess {
      */
     private Integer isSent;
 
+    private Integer pStatus;
     public String getpCreateName() {
         return pCreateName;
     }
@@ -323,4 +325,12 @@ public class HzWorkProcess {
     public Integer getIsSent() { return isSent; }
 
     public void setIsSent(Integer isSent) { this.isSent = isSent; }
+
+    public Integer getpStatus() {
+        return pStatus;
+    }
+
+    public void setpStatus(Integer pStatus) {
+        this.pStatus = pStatus;
+    }
 }

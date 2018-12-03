@@ -9,21 +9,31 @@
         <input class="form-control" id="changeNo" name="changeNo" type="text"
                placeholder="请输入变更单号"/>
     </div>
-    <!--<div class="form-group">-->
-    <!--<label for="lineId">创建时间<span>*</span></label>-->
-    <!--<input class="form-control" id="lineId2" name="lineId" type="text"-->
-    <!--placeholder="请输入零件号"/>-->
-    <!--</div>-->
-    <!--<div class="form-group">-->
-    <!--<label for="lineId3">部门</label>-->
-    <!--<input class="form-control" id="lineId3" name="lineId" type="text"-->
-    <!--placeholder="请输入部门"/>-->
-    <!--</div>-->
-    <!--<div class="form-group">-->
-    <!--<label for="lineId">发起人<span>*</span></label>-->
-    <!--<input class="form-control" id="lineId4" name="lineId" type="text"-->
-    <!--placeholder="请输入发起人"/>-->
-    <!--</div>-->
+    <div class="form-group">
+        <label for="createTime">创建时间</label>
+        <input class="form-control" id="createTime" name="createTime" type="text"
+        disabled="disabled"       placeholder="请输入创建时间"/>
+    </div>
+    <div class="form-group">
+        <label for="originTime">流程发起时间</label>
+        <input class="form-control" id="originTime" name="originTime" type="text"
+        disabled="disabled"       placeholder="请输入流程发起时间"/>
+    </div>
+    <div class="form-group">
+        <label for="deptName">部门</label>
+        <input class="form-control" id="deptName" name="deptName" type="text"
+        disabled="disabled"       placeholder="请输入部门"/>
+    </div>
+    <div class="form-group">
+        <label for="originator">发起人</label>
+        <input class="form-control" id="originator" name="originator" type="text"
+        disabled="disabled"       placeholder="请输入发起人"/>
+    </div>
+    <div class="form-group">
+        <label for="createName">表单创建者</label>
+        <input class="form-control" id="createName" name="createName" type="text"
+        disabled="disabled"       placeholder="请输入表单创建者"/>
+    </div>
     <div class="form-group">
         <label for="tel">联系电话</label>
         <input class="form-control" id="tel" name="tel" type="text"
@@ -31,16 +41,19 @@
     </div>
     <div class="form-group">
         <label for="state">变更单状态<span>*</span></label>
-        <select class="form-control" name="state" id="state" placeholder="请选择变更单状态">
+        <select class="form-control" name="state" id="state"disabled="disabled" placeholder="请选择变更单状态">
+            <!--<option>进行中</option>-->
+            <!--<option>完成</option>-->
+            <!--<option>取消</option>-->
             <option>进行中</option>
-            <option>完成</option>
-            <option>取消</option>
+            <option>流程中</option>
+            <option>已完成</option>
         </select>
     </div>
     <div class="form-group">
         <label for="changeType">变更类型</label>
         <input class="form-control" id="changeType" name="changeType" type="text"
-               placeholder="请输入变更类型"/>
+        placeholder="请输入变更类型"/>
     </div>
     <div class="form-group">
         <label for="relationChangeNo">是否关联变更</label>
@@ -113,8 +126,13 @@
                 // var projectId= $("#project", window.top.document).val();
                 var myData = JSON.stringify({
                     "changeNo": $("#changeNo").val(),
+                    // "createTime":$("#createTime").val(),
+                    // "originTime":$("#originTime").val(),
+                    // "deptName":$("#deptName").val(),
+                    // "originator":$("#originator").val(),
+                    // "createName":$("#createName").val(),
                     "tel": $("#tel").val(),
-                    "state": $("state").val(),
+                    "state": $("#state").val(),
                     "changeType": $("#changeType").val(),
                     "relationChangeNo": $("#relationChangeNo").val(),
                     "marketType": $("#marketType").val(),
@@ -133,10 +151,11 @@
                     data: myData,
                     success:
                         function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
-                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // $('.modal-dialog', window.top.document).parent('div').remove()
+                            // $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            activeTabBodyRefresh();
                             /*if (result)
                                 window.Ewin.alert({message: '修改数据成功!'});
                             else

@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -9,19 +9,20 @@ package com.connor.hozon.bom.bomSystem.impl.task;
 import com.connor.hozon.bom.bomSystem.dao.task.HzTasksDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.task.HzTasks;
 
 import java.util.List;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 //@Service("hzTasksDao")
-@Configuration
+@Repository
 public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao {
     private final static HzTasks TASKS = new HzTasks();
 
@@ -36,8 +37,18 @@ public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao 
     }
 
     @Override
+    public List<HzTasks> selectInterfaceTasks(HzTasks tasks) {
+        return baseSQLUtil.executeQuery(tasks, clzName + ".selectInterfaceTasks");
+    }
+
+    @Override
     public List<HzTasks> selectUserTargetTaskByType(HzTasks task) {
         return baseSQLUtil.executeQuery(task, clzName + ".selectUserTargetTaskByType");
+    }
+
+    @Override
+    public List<HzTasks> selectUserTargetTask(HzTasks task) {
+        return baseSQLUtil.executeQuery(task, clzName + ".selectUserTargetTask");
     }
 
     @Override
@@ -58,7 +69,7 @@ public class HzTasksDaoImpl extends BasicDaoImpl<HzTasks> implements HzTasksDao 
      */
     @Override
     public int tasksStop(HzTasks task) {
-        return baseSQLUtil.executeUpdate(task, clzName + ".updateTargetStatus");
+        return baseSQLUtil.executeUpdate(task, clzName + ".tasksStop");
     }
 
 }

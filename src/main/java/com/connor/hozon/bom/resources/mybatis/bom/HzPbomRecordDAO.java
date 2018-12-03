@@ -57,6 +57,15 @@ public interface HzPbomRecordDAO {
     int update_after(HzPbomLineRecord record);
 
     int insertList(List<HzPbomLineRecord> records);
+
+    /**
+     * 批量插入变更数据
+     * @param records
+     * @param tableName
+     * @return
+     */
+    int insertListForChange(List<HzPbomLineRecord> records,String tableName);
+
     /**
      * 编辑 PBOM管理信息
      * @param record
@@ -89,7 +98,7 @@ public interface HzPbomRecordDAO {
      * @param puids eBomPuid  中间全部用英文逗号 隔开
      * @return
      */
-    int deleteList(String puids);
+//    int deleteList(String puids);
 
     /**
      * 批量删除
@@ -177,4 +186,22 @@ public interface HzPbomRecordDAO {
      */
     List<HzPbomLineRecord> getPbomRecordsByPuids(HzChangeDataDetailQuery query);
 
+    /**
+     * 根据ebomPuid 进行逻辑删除
+     * @param puids
+     * @return
+     */
+    int deleteByPuids(String puids);
+    /**
+     * 根据Puid 进行物理删除
+     * @param puids
+     * @return
+     */
+    int deleteListByPuids(String puids,String tableName);
+
+    HzPbomLineRecord getPBomRecordByPuidAndRevision(HzChangeDataDetailQuery query);
+
+
+
+    List<HzPbomLineRecord> getPbomRecordsByOrderId(HzChangeDataDetailQuery query);
 }

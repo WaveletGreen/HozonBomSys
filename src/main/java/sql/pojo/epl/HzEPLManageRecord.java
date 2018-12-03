@@ -1,5 +1,7 @@
 package sql.pojo.epl;
 
+import sql.pojo.BaseChangePOJO;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
@@ -8,7 +10,7 @@ import java.util.Objects;
  * Created by haozt on 2018/06/05
  * EPL管理全字段
  */
-public class HzEPLManageRecord {
+public class HzEPLManageRecord extends BaseChangePOJO {
 
     /**
      * puid
@@ -169,8 +171,9 @@ public class HzEPLManageRecord {
     /**
      * FNA信息
      */
-    private String fna;
+    private String pFnaInfo;
 
+    private String fna;
     /**
      * 单车用量
      */
@@ -267,20 +270,12 @@ public class HzEPLManageRecord {
 
     private String pBuyEngineer;
 
-    private String tableName;
-
-    /**
-     * 变更表单id
-     */
-    private Long orderId;
 
     private Integer pLouaFlag;
 
     private String sortNum;
 
-    private String revision;
 
-    private Date effectTime;
 
     @Override
     public boolean equals(Object o) {
@@ -313,14 +308,6 @@ public class HzEPLManageRecord {
         this.pLouaFlag = pLouaFlag;
     }
 
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
     public String getpBuyEngineer() {
         return pBuyEngineer;
     }
@@ -337,12 +324,21 @@ public class HzEPLManageRecord {
         this.number = number;
     }
 
+
     public String getFna() {
         return fna;
     }
 
     public void setFna(String fna) {
         this.fna = fna;
+    }
+
+    public String getpFnaInfo() {
+        return pFnaInfo;
+    }
+
+    public void setpFnaInfo(String pFnaInfo) {
+        this.pFnaInfo = pFnaInfo;
     }
 
     public String getPuid() {
@@ -969,27 +965,4 @@ public class HzEPLManageRecord {
         this.pRegulationCode = pRegulationCode;
     }
 
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
-    public String getRevision() {
-        return revision;
-    }
-
-    public void setRevision(String revision) {
-        this.revision = revision;
-    }
-
-    public Date getEffectTime() {
-        return effectTime;
-    }
-
-    public void setEffectTime(Date effectTime) {
-        this.effectTime = effectTime;
-    }
 }

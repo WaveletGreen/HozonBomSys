@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 
@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <title>修改颜色基础信息</title>
 </head>
-<body>
+<body onload="loadInput()">
     <button id="btnAdd" class="btn btn-success" style="position: fixed;margin-left:38%;margin-top:-60px;margin-bottom: -10px;z-index:99999;" onclick="add()">添加油漆物料</button>
 <form id="colorForm" role="form" method="post" action="./colorSet/updateWithEntity2">
     <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
@@ -42,7 +42,7 @@
     <div class="form-group">
         <label>是否拼色</label>
         <select class="form-control input-small" data-style="btn-info"
-                id="pColorIsMultiply">
+                id="pColorIsMultiply" name="pColorIsMultiply">
             <option th:value="N" th:text="否" th:selected="${entity.pColorIsMultiply=='N'?true:false}">
             </option>
             <option th:value="Y" th:text="是" th:selected="${entity.pColorIsMultiply=='Y'?true:false}">
@@ -68,12 +68,15 @@
         <input class="form-control" id="pColorComment" name="pColorComment" type="text"
                th:value="${entity.pColorComment}"
                placeholder="备注"/>
+        <!--<input type="text" hidden="hidden" id="csPaintMaterielCodes"  th:value="${entity.csPaintMaterielCodes}"/>-->
+        <input id="csPaintMaterielCodes" name="csPaintMaterielCodes" type="text" th:value="${entity.csPaintMaterielCodes}" style="display: none"/>
     </div>
 </form>
-<script th:inline="javascript">
 
+<script th:inline="javascript">
     <![CDATA[
     var total = 0;
+    var sttt = [];
     function checkMaterielCode(inp){
         var materielCode = $(inp).val();
         $.ajax({
@@ -95,6 +98,18 @@
     }
     $(
         function () {
+            var csPaintMaterielCodes = $("#csPaintMaterielCodes").val();
+            var strs = csPaintMaterielCodes.split('<'+'br'+'>');
+            for(let i in strs){
+                var child = '<div class="form-group"><label for="pColorCode">油漆物料</label><a onclick="delInput(this)" style="float:right">删除</a>' +
+                    '<br><span style="color : red;display: none" class="valError"></span>'+
+
+                    '<input type="text" class="form-control" id="color_'+total+'" name="color_'+total+'" placeholder="请输入油漆物料" onblur="checkMaterielCode(this)"/>' +
+                    '</div>';
+                $("#colorForm").append(child);
+                $("#color_"+total).val(strs[i]);
+                total++;
+            }
             $('#colorForm').bootstrapValidator({
                 message: 'This value is not valid',
                 feedbackIcons: {
@@ -119,58 +134,6 @@
                             }
                         }
                     },
-                    /*strColorEffectedDate: {
-                         message: '生效时间验证失败',
-                         validators: {
-                             callback: {
-                                 message: '生效时间不能晚于废止时间',
-                                 callback: function (value, validator, $field) {
-                                     if (
-                                         ($('#strColorEffectedDate').val() == null ||
-                                             $('#strColorEffectedDate').val() == undefined) &&
-                                         ($('#strColorAbolishDate').val() == null ||
-                                             $('#strColorAbolishDate').val() == undefined)) {
-                                         return true;
-                                     }
-                                     else if ($('#strColorEffectedDate').val() < $('#strColorAbolishDate').val()) {
-                                         return true;
-                                     }
-                                     else if ($('#strColorEffectedDate').val() >= $('#strColorAbolishDate').val()) {
-                                         if ($('#strColorAbolishDate').val() == null || $('#strColorAbolishDate').val() == undefined) {
-                                             return true;
-                                         }
-                                         return false;
-                                     }
-                                 }
-                             }
-                         }
-                     },
-                     strColorAbolishDate: {
-                         message: '废止时间验证失败',
-                         validators: {
-                             callback: {
-                                 message: '废止时间不能早于生效时间',
-                                 callback: function (value, validator, $field) {
-                                     if (
-                                         ($('#strColorEffectedDate').val() == null ||
-                                             $('#strColorEffectedDate').val() == undefined) &&
-                                         ($('#strColorAbolishDate').val() == null ||
-                                             $('#strColorAbolishDate').val() == undefined)) {
-                                         return true;
-                                     }
-                                     else if ($('#strColorEffectedDate').val() < $('#strColorAbolishDate').val()) {
-                                         return true;
-                                     }
-                                     else if ($('#strColorEffectedDate').val() >= $('#strColorAbolishDate').val()) {
-                                         if ($('#strColorAbolishDate').val() == null || $('#strColorAbolishDate').val() == undefined) {
-                                             return true;
-                                         }
-                                         return false;
-                                     }
-                                 }
-                             }
-                         }
-                     },*/
                     pColorCode: {
                         message: '颜色代号验证失败',
                         validators: {
@@ -236,12 +199,14 @@
                         type:
                             'POST',
                         url: url,
+                        data: JSON.stringify(data),
                         success:
                             function (result) {
-                                $('.modal-dialog', window.top.document).parent('div').remove()
-                                $('body', window.top.document).find('.modal-backdrop').remove();
+                                // $('.modal-dialog', window.top.document).parent('div').remove()
+                                // $('body', window.top.document).find('.modal-backdrop').remove();
                                 // jquery 调用刷新当前操作的table页面的refresh方法
-                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                activeTabBodyRefresh();
                                 if (result.status) {
                                     layer.msg('修改数据成功!', {icon: 1, time: 2000})
                                     // window.Ewin.alert({message: '修改数据成功!'});
@@ -252,7 +217,6 @@
                                 }
 
                             },
-                        data: JSON.stringify(data),
                         error: function (status) {
                             window.Ewin.alert({message: status.status + ':修改数据失败!'});
                         }
@@ -301,6 +265,9 @@
             total++;
         })
     );
+    function delInput(delButtton){
+        $(delButtton).parent().remove();
+    }
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>

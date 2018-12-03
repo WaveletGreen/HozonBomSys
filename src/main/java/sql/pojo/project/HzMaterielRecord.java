@@ -1,21 +1,23 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
 package sql.pojo.project;
 
+import sql.pojo.BaseChangePOJO;
+
 import java.util.Date;
 import java.util.Objects;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: 物料
  * @Date: Created in 2018/10/10 13:29
  * @Modified By:
  */
-public class HzMaterielRecord {
+public class HzMaterielRecord extends BaseChangePOJO {
     /**
      * 主键id
      */
@@ -90,7 +92,7 @@ public class HzMaterielRecord {
      */
     private Integer pLoosePartFlag;
     /**
-     * 物料类型  严格按照注释来读写数据
+     * 物料类型
      * （11 整车超级物料主数据
      * 21 整车衍生物料主数据
      * 31 虚拟件物料主数据
@@ -121,6 +123,9 @@ public class HzMaterielRecord {
      */
     private String resource;
 
+    /**
+     * 状态标志位（1 已生效 0 删除  2草稿状态  3废除状态 4删除状态 5草稿状态->审核中   6删除状态->审核中）
+     */
     private Integer pValidFlag;
 
     /**

@@ -29,4 +29,9 @@ public interface UserRoleDao extends GenericDao<UserRole, QueryUserRole> {
     Integer getUserRoleReferenceCount(Long id);
 
     UserRole getUserWriteRoleAssociate(UserRole userRole);
+
+    List<UserRole> findUserRoleListByIds(List<Long> ids);
+
+
+    List<UserRole> findUserRoleAndUserByRoleName(String roleName);
 }

@@ -13,7 +13,7 @@ import java.util.Map;
  * @Date: 2018/6/30
  * @Description:
  */
-@Service("HzFactoryDAO")
+@Service("hzFactoryDAO")
 public class HzFactoryDAOImpl extends BaseSQLUtil implements HzFactoryDAO {
     @Override
     public int insert(HzFactory hzFactory) {

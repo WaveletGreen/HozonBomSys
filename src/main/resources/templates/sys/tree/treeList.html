@@ -27,7 +27,25 @@
             btn.bind("click", function () {
                 zTree = $.fn.zTree.getZTreeObj("menu_tree");
                 selectNode = treeNode;
-                window.Ewin.dialog({title: "添加", url: "tree/addTreePage?id=" + treeNode.id, width: 400, height: 650})
+                var url = "tree/addTreePage";
+                $.ajax({
+                    url: "privilege/write?url=" + url,
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        }
+                        else {
+                            window.Ewin.dialog({
+                                title: "添加",
+                                url: "tree/addTreePage?id=" + treeNode.id,
+                                width: 400,
+                                height: 650
+                            })
+                        }
+                    }
+                })
                 return false;
             });
         }
@@ -40,18 +58,35 @@
                 if (treeNode.isParent) {
                     window.Ewin.alert({message: "请先删除当前菜单节点底下的子菜单！"});
                 } else {
-                    window.Ewin.confirm({title: '提示', message: '是否要删除您当前选中的菜单节点？', width: 500}).on(function (e) {
-                        if (e) {
-                            $.post("./tree/remove", {id: treeNode.id}, function (e) {
-                                if (e.result) {
-                                    zTree.removeNode(treeNode);
-                                    window.Ewin.alert({message: e.msg});
-                                } else {
-                                    window.Ewin.alert({message: e.msg});
-                                }
-                            })
+                    var url = "tree/remove";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                window.Ewin.confirm({
+                                    title: '提示',
+                                    message: '是否要删除您当前选中的菜单节点？',
+                                    width: 500
+                                }).on(function (e) {
+                                    if (e) {
+                                        $.post("./tree/remove", {id: treeNode.id}, function (e) {
+                                            if (e.result) {
+                                                zTree.removeNode(treeNode);
+                                                window.Ewin.alert({message: e.msg});
+                                            } else {
+                                                window.Ewin.alert({message: e.msg});
+                                            }
+                                        })
+                                    }
+                                });
+                            }
                         }
-                    });
+                    })
                 }
                 return false;
             });
@@ -62,7 +97,25 @@
             edit_btn.bind("click", function () {
                 zTree = $.fn.zTree.getZTreeObj("menu_tree");
                 selectNode = treeNode;
-                window.Ewin.dialog({title: "修改", url: "tree/updateTreePage?id=" + treeNode.id, width: 400, height: 650})
+                var url = "tree/updateTreePage";
+                $.ajax({
+                    url: "privilege/write?url=" + url,
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        }
+                        else {
+                            window.Ewin.dialog({
+                                title: "修改",
+                                url: "tree/updateTreePage?id=" + treeNode.id,
+                                width: 400,
+                                height: 650
+                            })
+                        }
+                    }
+                })
                 return false;
             });
         }
@@ -72,7 +125,25 @@
             add_parent_btn.bind("click", function () {
                 zTree = $.fn.zTree.getZTreeObj("menu_tree");
                 selectNode = null;
-                window.Ewin.dialog({title: "添加", url: "tree/addTreePage", width: 400, height: 650})
+                var url = "tree/addTreePage";
+                $.ajax({
+                    url: "privilege/write?url=" + url,
+                    type: "GET",
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        }
+                        else {
+                            window.Ewin.dialog({
+                                title: "添加",
+                                url: "tree/addTreePage",
+                                width: 400,
+                                height: 650
+                            })
+                        }
+                    }
+                })
                 return false;
             })
         }

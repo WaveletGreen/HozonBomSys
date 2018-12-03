@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -57,6 +57,13 @@
         from HZ_TASKS
         where TASK_STATUS = #{taskStatus,jdbcType=DECIMAL} and TASK_USER_ID=#{taskUserId,jdbcType=DECIMAL}
     </select>
+    <!--变更接口人任务特殊情况-->
+    <select id="selectInterfaceTasks" parameterType="sql.pojo.task.HzTasks" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_TASKS
+        where TASK_STATUS in (0,1) and TASK_USER_ID=#{taskUserId,jdbcType=DECIMAL}
+    </select>
     <select id="selectUserTargetTaskByType" parameterType="sql.pojo.task.HzTasks" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -74,6 +81,33 @@
             <if test="taskTargetType!=null">
                 and TASK_TARGET_TYPE=#{taskTargetType,jdbcType=DECIMAL}
             </if>
+            <if test="taskStatus!=null">
+                and TASK_STATUS = #{taskStatus,jdbcType=DECIMAL}
+            </if>
+            <if test="taskStatus==null">
+                and TASK_STATUS in (0,1)
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUserTargetTask" parameterType="sql.pojo.task.HzTasks" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_TASKS
+        <where>
+            <if test="taskUserId!=null">
+                TASK_USER_ID = #{taskUserId,jdbcType=DECIMAL}
+            </if>
+            <if test="taskFormType!=null">
+                and TASK_FORM_TYPE=#{taskFormType,jdbcType=DECIMAL}
+            </if>
+            <if test="taskTargetId!=null">
+                and TASK_TARGET_ID=#{taskTargetId,jdbcType=DECIMAL}
+            </if>
+            <if test="taskTargetType!=null">
+                and TASK_TARGET_TYPE=#{taskTargetType,jdbcType=DECIMAL}
+            </if>
+            <!--and TASK_STATUS in (0,1)-->
             <if test="taskStatus!=null">
                 and TASK_STATUS = #{taskStatus,jdbcType=DECIMAL}
             </if>

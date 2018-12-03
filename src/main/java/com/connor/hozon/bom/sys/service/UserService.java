@@ -132,6 +132,7 @@ public class UserService extends GenericService<User, QueryUser> {
 		return userDao.findByLogin(login);
 	}
 
+	
 	/**
 	 * 根据id 获取用户信息
 	 * @param id
@@ -145,5 +146,14 @@ public class UserService extends GenericService<User, QueryUser> {
 		map.put("id",id);
 		map.put("state",state);
 		return userDao.findUserById(map);
+	}
+
+	public boolean updatePassWord(User user){
+		try {
+			return userDao.updatePassword(user)>0;
+		}catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

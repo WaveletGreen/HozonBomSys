@@ -3,10 +3,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.AddMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
@@ -66,7 +63,7 @@ public class HzMbomController extends BaseController {
      */
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
     public void mbomTitle(HttpServletResponse response) {
-        //LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
         tableTitle.put("pBomLinePartName", "名称");
@@ -92,6 +89,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("pFactoryCode", "工厂代码");
         tableTitle.put("pStockLocation", "发货料库存地点");
         tableTitle.put("pBomType", "BOM类型");
+        this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
 
@@ -127,7 +125,7 @@ public class HzMbomController extends BaseController {
             _res.put("No", dto.getNo());
             _res.put("rank",dto.getRank());
             _res.put("level", dto.getLevel());
-//            _res.put("lineNo",dto.getLineNo());
+//            _res.put("lineNo",ProcessReceiveDto.getLineNo());
             _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
             _res.put("pBomLinePartName", dto.getpBomLinePartName());
@@ -376,13 +374,13 @@ public class HzMbomController extends BaseController {
 
 
     /**
-     * EBOM发起变更数据到变更单
+     * MBOM发起变更数据到变更单
      * @param reqDTO
      * @param response
      */
     @RequestMapping(value = "data/change",method = RequestMethod.POST)
     public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO = new WriteResultRespDTO();
+        WriteResultRespDTO respDTO = hzMbomService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -399,6 +397,17 @@ public class HzMbomController extends BaseController {
             model.addAttribute("type",type);
         }
         return "bomManage/mbom/mbomMaintenance/mbomSetChangeForm";
+    }
+
+    /**
+     * MBOM撤销
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "cancel",method = RequestMethod.POST)
+    public void mbomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzMbomService.backBomUtilLastValidState(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 }
 

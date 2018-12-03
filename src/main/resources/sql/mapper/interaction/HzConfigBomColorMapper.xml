@@ -9,6 +9,7 @@
         <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="featureValueCode"/>
         <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="featureCode"/>
         <result column="colorUid" jdbcType="VARCHAR" property="colorUid"/>
+        <result column="materielCodes" jdbcType="VARCHAR" property="materielCodes"/>
     </resultMap>
     <sql id="ColumnWithColorCode">
         CFG_BOMLINE_UID,
@@ -25,7 +26,8 @@
             t3.p_cfg0_family_name,
             t9.p_desc_of_colorful_model,
             t99.p_color_code,
-            t99.puid as colorUid
+            t99.puid as colorUid,
+            t99.CS_PAINT_MATERIEL_CODES as materielCodes
             from Hz_Full_Cfg_Withcfg_Record t
             left join Hz_Bom_Line_Record t2 on t.cfg_bomline_uid=t2.puid
             left join Hz_Cfg0_Record t3 on t.cfg_cfg0_uid=t3.puid

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8">
+<title>选择审核人</title>
+</head>
+<body>
+<input id="url" type="hidden" value="vwo/queryByBase"/>
+<div class="panel-body" style="padding-bottom:0px;">
+    <form class="form-horizontal" id="cntForm" role="form" method="post">
+        <fieldset>
+            <div class="panel panel-default" style="margin-top: 10px;">
+                <input type="hidden" id="selectedUserId" name="selectedUserId"/>
+                <div class="panel-body">
+                    <div class="col-lg-6">
+                        <label>请展开部门选择人员</label>
+                        <ul id="orgGroupTree" class="ztree" style="width:400px; overflow:auto;"></ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group col-lg-12">
+                            <label th:for="user">审核人:</label>
+                            <input type="text" class="form-control" id="user" name="user"
+                                   placeholder="请选择工程师"
+                            />
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>所属部门:</label>
+                            <input type="text" class="form-control" id="dept"
+                                   disabled="disabled"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:inline="javascript">
+
+    $(function () {
+        $('#cntForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                user: {
+                    message: '没有选择审核人',
+                    validators: {
+                        notEmpty: {
+                            message: '没有选择审核人,请选择审核人而非部门'
+                        }
+                    }
+                },
+                dept: {
+                    message: '没有部门',
+                    validators: {
+                        notEmpty: {
+                            message: '选择的审核人没有挂靠部门，请联系系统管理员'
+                        }
+                    }
+                }
+            }
+        });
+        orgTree.init({
+            id: "orgGroupTree",
+            targetTable: "changeOrderTable",
+            selectedUserId: "selectedUserId",
+            user: "user",
+            dept: "dept"
+        });
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#cntForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            //重新验证字段
+            // bootstrapValidator.revalidateField("pColorAbolishDate");
+            // bootstrapValidator.revalidateField("pColorEffectedDate");
+            bootstrapValidator.revalidateField("user");
+            if (bootstrapValidator.isValid()) {
+                var rows = getActiveTab().getRows();
+                var activeDivId = getActiveDiv()[0].id;
+                var data = {
+                    userId: $("#selectedUserId").val(),
+                    orderId: rows[0].id,
+                    activeDivId: activeDivId
+                }
+                console.log(data);
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    data: JSON.stringify(data),
+                    url: "./process/doStartProcess",
+                    success: function (result) {
+                        if (result.status) {
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.reloadSheet(result.type, result.name);//.find('#' + result.type).text(result.name);
+                            activeTabBodyRefresh();
+                            window.top.loadTasks();
+                            layer.msg(result.msg, {icon: 1, time: 2000});
+                        }
+                        else {
+                            activeTabBodyReset();
+                            window.Ewin.alert({message: result.msg});
+                        }
+                    },
+                    error: function (e) {
+                        console.error("连接服务器异常:" + e.status);
+                    }
+                });
+            }
+        })
+    })
+</script>
+</body>
+</html>

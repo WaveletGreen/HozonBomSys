@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -12,6 +12,7 @@ import com.connor.hozon.bom.bomSystem.option.ChangeCmcrOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
@@ -21,13 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 //@Service("HzCmcrDetailChange")
-@Configuration
+@Repository
 public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> implements HzCmcrDetailChangeDao {
     private final static HzCmcrDetailChange CHANGE_POJO = new HzCmcrDetailChange();
 
@@ -232,6 +233,13 @@ public class HzCmcrDetailChangeDaoImpl extends BasicDaoImpl<HzCmcrDetailChange> 
     public List<HzCmcrDetailChange> doQueryCmcrDetailChangAfter(HzCmcrChange hzCmcrChange) {
         return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(), hzCmcrChange, "doQueryCmcrDetailChangAfter");
     }
+
+
+    @Override
+    public List<HzCmcrDetailChange> doQueryCmcrDetailByMainChange(List<HzCmcrChange> hzCmcrChangeListBefor) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrDetailChange(),hzCmcrChangeListBefor,"selectCmcrDetailBefor");
+    }
+
 
 
     private List<HzCmcrDetailChange> executeSelectLast(List<HzCmcrDetailChange> hzCmcrDetailChangeList, String by) {

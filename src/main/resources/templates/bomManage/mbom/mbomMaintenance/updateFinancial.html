@@ -181,8 +181,9 @@
                     "eBomPuid": $("#eBomPuid").val(),
                     // "level": $("#level").val(),
                     // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    // "lineId": $("#lineId").val(),
+                    "lineId": $("#lineId").val(),
                     // "object_name": $("#object_name").val(),
+                    "projectId" : $("#project", window.top.document).val(),
                     "sparePart": $("#sparePart").val(),
                     "sparePartNum": $("#sparePartNum").val(),
                     "processRoute": $("#processRoute").val(),
@@ -208,10 +209,10 @@
                     data: myData,
                     success:
                         function (result) {
-                            $('.modal-dialog', window.top.document).parent('div').remove()
-                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // $('.modal-dialog', window.top.document).parent('div').remove()
+                            // $('body', window.top.document).find('.modal-backdrop').remove();
                             // jquery 调用刷新当前操作的table页面的refresh方法
-                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                             /*if (result)
                                 window.Ewin.alert({message: '修改数据成功!'});
                             else

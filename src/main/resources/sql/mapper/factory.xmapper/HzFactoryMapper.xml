@@ -51,14 +51,9 @@
       <if test="pFactoryDesc != null">
         P_FACTORY_DESC,
       </if>
-
         P_FACTORY_STATUS,
-
-
         P_CREATE_TIME,
-
         P_UPDATE_TIME,
-
       <if test="pCreateName != null">
         P_CREATE_NAME,
       </if>
@@ -116,7 +111,5 @@
     </set>
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
-
-
 
 </mapper>

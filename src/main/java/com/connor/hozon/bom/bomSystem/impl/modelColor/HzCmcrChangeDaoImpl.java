@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -12,7 +12,9 @@ import com.connor.hozon.bom.bomSystem.option.ChangeCmcrOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 
 import java.util.HashMap;
@@ -20,13 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 //@Service("hzCmcrChange")
-@Configuration
+@Repository
 public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements HzCmcrChangeDao {
 
     private final static HzCmcrChange CHANGE_POJO = new HzCmcrChange();
@@ -220,6 +222,29 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     @Override
     public List<HzCmcrChange> doQueryCmcrChangeAfter(Long vwoId) {
         return baseSQLUtil.executeQueryByPass(new HzCmcrChange(), vwoId, clzName+".doQueryCmcrChangeAfter");
+    }
+
+    @Override
+    public List<HzCmcrChange> doQueryCmcrChangeByModelColorId(List<HzCfg0ModelColor> hzCfg0ModelColors) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrChange(),hzCfg0ModelColors,clzName+".doQueryCmcrChangeByModelColorId");
+    }
+
+    @Override
+    public int updateStatusByOrderId(Long orderId, int status) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("status",status);
+        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
+    @Override
+    public int doDeleteIds(List<Long> changeColorModelIds) {
+        return baseSQLUtil.executeDelete(changeColorModelIds,clzName+".doDeleteIds");
+    }
+
+    @Override
+    public HzCmcrChange doQueryCmcrChangeBeforByAfter(HzCmcrChange hzCmcrChangeAfter) {
+        return baseSQLUtil.executeQueryById(hzCmcrChangeAfter,clzName+".doQueryCmcrChangeBeforByAfter");
     }
 
     @Override

@@ -26,6 +26,19 @@ public class HzMbomTreeQuery {
      */
     private String colorId;
 
+    /**
+     * 状态标志位
+     */
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public String getColorId() {
         return colorId;
     }

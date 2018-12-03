@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
@@ -23,8 +24,9 @@ import java.util.Map;
 /**
  * Created by haozt on 2018/06/06
  */
-@Service("HzEbomRecordDAO")
+@Service("hzEbomRecordDAO")
 public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO {
+
 
     @Override
     public Page<HzEPLManageRecord> getHzEbomPage(HzEbomByPageQuery query) {
@@ -109,6 +111,30 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     @Override
     public int delete(String puid) {
         return super.delete("HzEbomRecordDAOImpl_delete",puid);
+    }
+
+    @Override
+    public int deleteByPuids(List<String> puids,String tableName) {
+        int size = puids.size();
+        Map<String,Object> m = new HashMap<>();
+        m.put("tableName",tableName);
+        try {
+            if(size>1000){
+                HzBomSysFactory<String> factory = new HzBomSysFactory();
+                Map<Integer,List<String>> map = factory.spiltList(puids);
+                for(List<String> v:map.values()){
+                    m.put("puids",v);
+                    super.delete("HzEbomRecordDAOImpl_deleteByPuids",m);
+                }
+            }else {
+                m.put("puids",puids);
+                super.delete("HzEbomRecordDAOImpl_deleteByPuids",m);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        return 1;
     }
 
     @Override
@@ -308,15 +334,45 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("puids", query.getPuids());
         map.put("projectId",query.getProjectId());
-        if(!query.getRevision()){
-            map.put("revision",null);
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"":null);
         }else {
-            map.put("revision","");
+            map.put("revision",null);
         }
-        map.put("state",query.getState());
+        map.put("status",query.getStatus());
         map.put("tableName",query.getTableName());
         map.put("orderId",query.getOrderId());
         return super.findForList("HzEbomRecordDAOImpl_getEbomRecordsByPuids",map);
+    }
+
+    @Override
+    public HzEPLManageRecord getEBomRecordByPuidAndRevision(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid", query.getPuid());
+        map.put("projectId",query.getProjectId());
+        if(null != query.getRevision()){
+            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+        }else {
+            map.put("revision",null);
+        }
+        map.put("status",query.getStatus());
+        map.put("tableName",query.getTableName());
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_getEBomRecordByPuidAndRevision",map);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> getEbomRecordsByOrderId(HzChangeDataDetailQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("tableName",query.getTableName());
+        map.put("orderId",query.getOrderId());
+        map.put("status",query.getStatus());
+        if(null!=query.getRevision()){
+            map.put("revision",query.getRevision()?"1":"0");
+        }else {
+            map.put("revision",null);
+        }
+        return super.findForList("HzEbomRecordDAOImpl_getEbomRecordsByOrderId",map);
     }
 
     @Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -231,4 +231,15 @@
             #{hzCfg0ModelColor.puid}
         </foreach>
     </select>
+
+    <update id="updateListAll" parameterType="java.util.List">
+      <foreach collection="list" index="index" item="hzCfg0ModelColorDetails" open="begin" close=";end;" separator=";">
+          update HZ_CFG0_MODEL_COLOR_DETAIL
+          set MODEL_UID = #{hzCfg0ModelColorDetails.modelUid,jdbcType=VARCHAR},
+          P_CFG_UID = #{hzCfg0ModelColorDetails.cfgUid,jdbcType=VARCHAR},
+          P_COLOR_UID = #{hzCfg0ModelColorDetails.colorUid,jdbcType=VARCHAR}
+          where
+          PUID = #{hzCfg0ModelColorDetails.puid,jdbcType=VARCHAR}
+      </foreach>
+    </update>
 </mapper>

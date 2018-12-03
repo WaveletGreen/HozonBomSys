@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -247,10 +247,10 @@
         where t2.p_cfg0_of_which_project_puid=#{projectUid,jdbcType=VARCHAR}
         )
         <if test="featureValue!=null">
-            and t.p_cfg0_object_id like upper(#{featureValue})||'%'
+            and t.p_cfg0_object_id like '%'||upper(#{featureValue})||'%'
         </if>
         <if test="feature!=null">
-            and t.p_cfg0_family_name like upper(#{feature})||'%'
+            and t.p_cfg0_family_name like '%'||upper(#{feature})||'%'
         </if>
     </select>
     <!--**************************************delete**************************************-->
@@ -501,4 +501,127 @@
             #{puid,jdbcType=VARCHAR}
         </foreach>
     </select>
+
+    <update id="updateStatus" parameterType="java.util.List">
+        update HZ_CFG0_RECORD
+        set
+        CFG_STATUS =
+        <foreach collection="list" index="index" item="hzCfg0Record" open="case" close="end">
+            when PUID = #{hzCfg0Record.puid,jdbcType=VARCHAR}
+            then #{hzCfg0Record.cfgStatus,jdbcType=INTEGER}
+        </foreach>
+        where
+        PUID in
+        <foreach collection="list" index="index" item="hzCfg0Record" open="(" close=")" separator=",">
+            #{hzCfg0Record.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <update id="updateListAll" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="hzCfg0Record" open="begin" close=";end;" separator=";">
+            update HZ_CFG0_RECORD
+            <set>
+            <if test="hzCfg0Record.pCfg0ObjectId!=null">
+                P_CFG0_OBJECT_ID = #{hzCfg0Record.pCfg0ObjectId,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.pCfg0Desc!=null">
+                P_CFG0_DESC = #{hzCfg0Record.pCfg0Desc,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.pCfg0FamilyName!=null">
+                P_CFG0_FAMILY_NAME = #{hzCfg0Record.pCfg0FamilyName,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.pCfg0FamilyPuid!=null">
+                P_CFG0_FAMILY_PUID = #{hzCfg0Record.pCfg0FamilyPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.pCfg0MainItemPuid!=null">
+                P_CFG0_MAIN_ITEM_PUID = #{hzCfg0Record.pCfg0MainItemPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.pH9featureenname!=null">
+                P_H9FEATUREENNAME = #{hzCfg0Record.pH9featureenname,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.pCfg0FamilyDesc!=null">
+                P_CFG0_FAMILY_DESC = #{hzCfg0Record.pCfg0FamilyDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.pCfg0Relevance!=null">
+                P_CFG0_RELEVANCE = #{hzCfg0Record.pCfg0Relevance,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.lastModifier!=null">
+                P_FEATURE_LAST_MODIFIER = #{hzCfg0Record.lastModifier,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.cfgEffectedDate!=null">
+                CFG_EFFECTED_DATE = #{hzCfg0Record.cfgEffectedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="hzCfg0Record.cfgAbolishDate!=null">
+                CFG_ABOLISH_DATE = #{hzCfg0Record.cfgAbolishDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="hzCfg0Record.cfgStatus!=null">
+                CFG_STATUS = #{hzCfg0Record.cfgStatus,jdbcType=INTEGER},
+            </if>
+            <if test="hzCfg0Record.cfgIsInProcess!=null">
+                CFG_IS_IN_PROCESS = #{hzCfg0Record.cfgIsInProcess,jdbcType=INTEGER},
+            </if>
+            <if test="hzCfg0Record.vwoId!=null">
+                CHANGE_ORDER_ID = #{hzCfg0Record.vwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="hzCfg0Record.cfgDicLibUid!=null">
+                CFG_DIC_LIB_UID = #{hzCfg0Record.cfgDicLibUid,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.cfgReverse2!=null">
+                CFG_REVERSE_2 = #{hzCfg0Record.cfgReverse2,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.cfgReverse3!=null">
+                CFG_REVERSE_3 = #{hzCfg0Record.cfgReverse3,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.cfgReverse4!=null">
+                CFG_REVERSE_4 = #{hzCfg0Record.cfgReverse4,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.cfgReverse5!=null">
+                CFG_REVERSE_5 = #{hzCfg0Record.cfgReverse5,jdbcType=VARCHAR},
+            </if>
+            <if test="hzCfg0Record.cfgReverse6!=null">
+                CFG_REVERSE_6 = #{hzCfg0Record.cfgReverse6,jdbcType=VARCHAR},
+            </if>
+            </set>
+            where PUID = #{hzCfg0Record.puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+
+    <update id="updateStatusByOrderId" parameterType="java.util.Map">
+        update HZ_CFG0_RECORD
+        set CFG_STATUS = #{status,jdbcType=INTEGER},
+        CFG_IS_IN_PROCESS = 0 ,
+        CHANGE_ORDER_ID = null
+        where
+        PUID in (select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL})
+    </update>
+
+    <update id="updateByChangeId" parameterType="java.util.List">
+        update HZ_CFG0_RECORD
+        set CFG_STATUS = 0,
+        CHANGE_ORDER_ID = null,
+        CFG_IS_IN_PROCESS = 0
+        where
+        PUID in (
+        select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where ID in
+        <foreach collection="list" index="index" item="changeFeatureId" open="(" separator="," close=")">
+            #{changeFeatureId,jdbcType=DECIMAL}
+        </foreach>
+        )
+    </update>
+
+    <update id="updateStatusByChangeDate" parameterType="java.util.List">
+        <foreach collection="list" item="hzFeatureChangeBean" index="index" open="begin" close=";end;" separator=";">
+            update HZ_CFG0_RECORD
+            set CHANGE_ORDER_ID = null,
+            CFG_IS_IN_PROCESS = 0,
+            CFG_STATUS = (
+            select CFG_STATUS from HZ_CFG0_AFTER_CHANGE_RECORD where ID = #{hzFeatureChangeBean.id,jdbcType=DECIMAL}
+            )
+            where
+            PUID = (select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where ID = #{hzFeatureChangeBean.id,jdbcType=DECIMAL})
+            and
+            0 = (select PROCESS_STATUS from HZ_CFG0_AFTER_CHANGE_RECORD where ID = #{hzFeatureChangeBean.id,jdbcType=DECIMAL})
+        </foreach>
+    </update>
 </mapper>

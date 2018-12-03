@@ -155,6 +155,25 @@ public class OrgGroupController extends GenericController<OrgGroup, QueryOrgGrou
     }
 
 
+
+
+    /**
+     * 功能描述：查询部门名称是否存在
+     *
+     * @return
+     */
+    @RequestMapping(value = "/exist", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> deptExist(String name) {
+        Map<String, Object> result = new HashMap<>();
+        if(orgGroupService.deptNameIsRepeat(name)){
+            result.put("valid",false);
+        }else {
+            result.put("valid",true);
+        }
+        return result;
+    }
+
     /**
      * 功能描述：实现批量删除数据字典的记录
      *
@@ -214,5 +233,6 @@ public class OrgGroupController extends GenericController<OrgGroup, QueryOrgGrou
         }
         return max_node;
     }
+
 
 }

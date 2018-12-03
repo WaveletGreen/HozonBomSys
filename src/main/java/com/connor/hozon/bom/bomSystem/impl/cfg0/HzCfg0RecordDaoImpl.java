@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2018.
- * This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+ * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
 
@@ -13,21 +13,23 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: Fancyears·Maylos·Maywas
+ * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
 //@Service("hzCfg0RecordDao")
-@Configuration
+@Repository
 public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements HzCfg0RecordDao {
 
     private final static HzCfg0Record RECORD = new HzCfg0Record();
@@ -41,7 +43,6 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     @Override
     public int deleteByPrimaryKey(String puid) {
         return baseSQLUtil.executeDeleteBySome(clzName + ".deleteByPrimaryKey", puid, "HZ_CFG0_RECORD");
-
     }
 
     @Override
@@ -166,6 +167,34 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     @Override
     public List<HzCfg0Record> selectByPuids(List<String> puidList) {
         return baseSQLUtil.executeQueryByPass(new HzCfg0Record(), puidList, clzName+".selectByPuids");
+    }
+
+    @Override
+    public int updateStatus(List<HzCfg0Record> hzCfg0RecordListDelete) {
+        return baseSQLUtil.executeUpdate(hzCfg0RecordListDelete,clzName+".updateStatus");
+    }
+
+    @Override
+    public int updateListAll(List<HzCfg0Record> hzCfg0RecordListUpdata) {
+        return baseSQLUtil.executeUpdate(hzCfg0RecordListUpdata,clzName+".updateListAll");
+    }
+
+    @Override
+    public int updateStatusByOrderId(Long orderId, int status) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("orderId",orderId);
+        map.put("status",status);
+        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+    }
+
+    @Override
+    public int updateByChangeId(List<Long> changeFeatureIds) {
+        return baseSQLUtil.executeUpdate(changeFeatureIds,clzName+".updateByChangeId");
+    }
+
+    @Override
+    public int updateStatusByChangeDate(List<HzFeatureChangeBean> hzFeatureChangeBeans) {
+        return baseSQLUtil.executeUpdate(hzFeatureChangeBeans,clzName+".updateStatusByChangeDate");
     }
 
 }

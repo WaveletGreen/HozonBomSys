@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 
@@ -10,7 +10,7 @@
     <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgMain">
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid"/>
-        <result column="STATUS" jdbcType="VARCHAR" property="status"/>
+        <result column="STATUS" jdbcType="DECIMAL" property="status"/>
         <result column="STAGE" jdbcType="INTEGER" property="stage"/>
         <result column="VERSION" jdbcType="VARCHAR" property="version"/>
         <result column="EFFECTIVE_DATE" jdbcType="TIMESTAMP" property="effectiveDate"/>
@@ -34,12 +34,12 @@
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <insert id="insertBackId" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
-        <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.math.BigDecimal">
+        <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_HZ_FL_CFG_MAIN_ID.Nextval from dual
         </selectKey>
         insert into HZ_FULL_CFG_MAIN_RECORD (ID, PROJECT_UID, STATUS,
         VERSION, CREATOR,UPDATER)
-        values (#{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+        values (#{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=DECIMAL},
         #{version,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR}, #{updater,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
@@ -86,7 +86,7 @@
                 #{projectUid,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
-                #{status,jdbcType=VARCHAR},
+                #{status,jdbcType=DECIMAL},
             </if>
             <if test="stage != null">
                 #{stage,jdbcType=INTEGER},
@@ -118,7 +118,7 @@
                 PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
-                STATUS = #{status,jdbcType=VARCHAR},
+                STATUS = #{status,jdbcType=DECIMAL},
             </if>
             <if test="stage != null">
                 STAGE = #{stage,jdbcType=INTEGER},
@@ -147,7 +147,7 @@
     <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
     update HZ_FULL_CFG_MAIN_RECORD
     set PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
-      STATUS = #{status,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=DECIMAL},
       STAGE = #{stage,jdbcType=INTEGER},
       VERSION = #{version,jdbcType=VARCHAR},
       EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP},
@@ -165,4 +165,55 @@
         where PROJECT_UID = #{projectUid}
     </select>
 
+    <delete id="deleteByProjectUid" parameterType="java.lang.String">
+        delete from HZ_FULL_CFG_MAIN_RECORD
+        where
+        PROJECT_UID = #{projectUid,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="insertSeqAll" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+        <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_HZ_FL_CFG_MAIN_ID.Nextval from dual
+        </selectKey>
+        insert into HZ_FULL_CFG_MAIN_RECORD (ID, PROJECT_UID, STATUS, STAGE, VERSION, EFFECTIVE_DATE, CREATE_DATE, UPDATE_DATE,
+        CREATOR, UPDATER,FM_IS_RELEASE )
+        values (
+        #{id,jdbcType=DECIMAL},
+        #{projectUid,jdbcType=VARCHAR},
+        #{status,jdbcType=DECIMAL},
+        #{stage,jdbcType=DECIMAL},
+        #{version,jdbcType=VARCHAR},
+        #{effectiveDate,jdbcType=TIMESTAMP},
+        #{createDate,jdbcType=TIMESTAMP},
+        #{updateDate,jdbcType=TIMESTAMP},
+        #{creator,jdbcType=VARCHAR},
+        #{updater,jdbcType=VARCHAR},
+        #{fmIsRelease,jdbcType=DECIMAL})
+    </insert>
+
+    <update id="updateStatusByOrderId" parameterType="java.util.Map">
+        update HZ_FULL_CFG_MAIN_RECORD
+        set STATUS = #{stutas,jdbcType=DECIMAL}
+        where
+        ID in (
+          select SRC_MAIN_ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+        )
+    </update>
+
+    <update id="updateStatusById" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+        update HZ_FULL_CFG_MAIN_RECORD
+        set STATUS = #{status,jdbcType=DECIMAL}
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateChangeByOrderId" parameterType="java.lang.Long">
+        update HZ_FULL_CFG_MAIN_RECORD
+        set STATUS = (select STATUS from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL})
+        where
+        ID = (
+          select SRC_MAIN_ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+        )
+        and
+        0=(select CHANGE_STATUS from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL})
+    </update>
 </mapper>

@@ -8,9 +8,13 @@ import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
+@Deprecated
 public class FactoryManager {
     static Reader reader = null;
     public static SqlSessionFactory factory = null;

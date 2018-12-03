@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="stage">阶段</label>
+                    <label for="stage">选择变更表单</label>
                     <select class="form-control" id="stage" name="stage">
                         <option th:each="model:${changeFroms}"
                                 th:value="${model.getId()}"
@@ -20,25 +20,38 @@
                         </option>
                     </select>
                 </div>
+                <div id="layout" style="display: none;margin-top: 50px;text-align: center;z-index: 100;" class="layoutLoading">
+                    <span style="color: red">发起流程中...</span><br>
+                    <img th:src="@{/img/process.gif}"/></div>
             </div>
         </div>
     </form>
 </div>
 <script th:inline="javascript">
     <![CDATA[
+    var butFlag = 0;
     $(function () {
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
+            // var changeFromNo = $("#stage option:selected").text();
+            // window.Ewin.confirm({title: '提示', message: '您确定需要对'+changeFromNo+'表单发起流程吗？', width: 500}).on(function (e) {
+            //     if(e){
+            if(butFlag==0){
+                butFlag = 1;
+            }else {
+                window.Ewin.alert({message: '流程已在发起中，请稍等...'});
+                return false;
+            }
             var changeFromId = $("#stage option:selected").val();
+            $('#layout').show();
             $.ajax({
                 type:
                     'POST',
                 url: "bomAllCfg/getVwo?projectId="+getProjectUid()+"&changeFromId="+changeFromId,
                 success:
                     function (result) {
-                        $('.modal-dialog', window.top.document).parent('div').remove()
-                        $('body', window.top.document).find('.modal-backdrop').remove();
-                        $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                        butFlag = 0;
+                        activeTabBodyRefresh();
                         if (result.status) {
                             layer.msg(result.msg, {icon: 1, time: 2000})
                         }
@@ -47,9 +60,12 @@
                         }
                     },
                 error: function (status) {
+                    butFlag = 0;
                     window.Ewin.alert({message: status.status + ':变更失败!'});
                 }
             });
+            //     }
+            // })
         });
     })
     ]]>

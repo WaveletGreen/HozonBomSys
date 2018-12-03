@@ -26,7 +26,7 @@ import java.util.*;
  * @Date: 2018/9/26
  * @Description:
  */
-@Service("HzSingleVehiclesServices")
+@Service("hzSingleVehiclesServices")
 public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
 
     @Autowired

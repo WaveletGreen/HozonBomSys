@@ -42,9 +42,21 @@ public class HzChangeOrderRecord extends BasePOJO {
      */
     private String originator;
     /**
+     * 申请人表对应审核表ID
+     */
+    private String auditRecordId;
+    /**
+     * 审核表ID
+     */
+    private String auditId;
+    /**
      *流程发起时间
      */
     private Date originTime;
+    /**
+     *流程审核时间
+     */
+    private Date auditTime;
     /**
      *联系电话
      */
@@ -77,18 +89,18 @@ public class HzChangeOrderRecord extends BasePOJO {
      *当前变更表单状态（1 已完成 2进行中 3已取消）
      */
     private Integer state;
-
     /**
      * 项目id
      */
     private String projectId;
-
+    /**
+     * 项目名
+     */
+    private String projectName;
     /**
      * 表单信息是否同步自TC
      */
     private Integer fromTc;
-
-
     /**
      * 部门名称 来自TC
      */
@@ -97,6 +109,64 @@ public class HzChangeOrderRecord extends BasePOJO {
      * 创建者 来自TC
      */
     private String createNameTC;
+    /**
+     * 流程发起时间（多条记录获取申请表的申请时间）
+     */
+    private Date applicantTime;
+    /**
+     *是否为变更接口人,TC端同步的表单需要通知到接口人
+     * ==1:TC端同步过来任务未结束
+     * !=1:任务结束
+     */
+    private String changeAccepter;
+
+    public String getChangeAccepter() {
+        return changeAccepter;
+    }
+
+    public void setChangeAccepter(String changeAccepter) {
+        this.changeAccepter = changeAccepter;
+    }
+
+    public Date getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(Date auditTime) {
+        this.auditTime = auditTime;
+    }
+
+    public Date getApplicantTime() {
+        return applicantTime;
+    }
+
+    public void setApplicantTime(Date applicantTime) {
+        this.applicantTime = applicantTime;
+    }
+
+    public String getAuditId() {
+        return auditId;
+    }
+
+    public void setAuditId(String auditId) {
+        this.auditId = auditId;
+    }
+
+    public String getAuditRecordId() {
+        return auditRecordId;
+    }
+
+    public void setAuditRecordId(String auditRecordId) {
+        this.auditRecordId = auditRecordId;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public String getOriginator() {
         return originator;

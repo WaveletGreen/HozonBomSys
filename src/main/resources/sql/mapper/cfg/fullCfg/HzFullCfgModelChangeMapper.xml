@@ -18,6 +18,14 @@
     <result column="FL_MOD_LAST_UPDATER_CHANGE" jdbcType="OTHER" property="flModLastUpdaterChange" />
     <result column="FL_MOD_VERSION" jdbcType="DECIMAL" property="flModVersion" />
     <result column="FL_MODEL_BOMLINE_UID" jdbcType="VARCHAR" property="flModelBomlineUid" />
+
+    <result column="P_MODEL_VERSION" jdbcType="VARCHAR" property="modelVersion"/>
+    <result column="P_MODEL_SHAPE" jdbcType="VARCHAR" property="modelShape"/>
+    <result column="P_MODEL_ANNOUNCEMENT" jdbcType="VARCHAR" property="modelAnnouncement"/>
+    <result column="P_MODEL_CFG_DESC" jdbcType="VARCHAR" property="modelCfgDesc"/>
+    <result column="P_MODEL_CFG_MNG" jdbcType="VARCHAR" property="modelCfgMng"/>
+    <result column="P_MODEL_TRAIL_NUM" jdbcType="VARCHAR" property="modelTrailNum"/>
+    <result column="P_MODEL_GOODS_NUM" jdbcType="VARCHAR" property="modelGoodsNum"/>
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -35,7 +43,14 @@
       FL_MOD_UPDATE_DATE_CHANGE,
       FL_MOD_CREATOR_CHANGE,
       FL_MOD_LAST_UPDATER_CHANGE,
-      FL_MOD_VERSION, FL_MODEL_BOMLINE_UID
+      FL_MOD_VERSION, FL_MODEL_BOMLINE_UID,
+      P_MODEL_VERSION,
+      P_MODEL_SHAPE,
+      P_MODEL_ANNOUNCEMENT,
+      P_MODEL_CFG_DESC,
+      P_MODEL_CFG_MNG,
+      P_MODEL_TRAIL_NUM,
+      P_MODEL_GOODS_NUM
   </sql>
 
   <insert id="insert" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgModelChange">
@@ -43,13 +58,22 @@
       MOD_POINT_TYPE, FL_MOD_CREATE_DATE, FL_MOD_UPDATE_DATE, 
       FL_MOD_CREATOR, FL_MOD_LAST_UPDATER, FL_MOD_CREATE_DATE_CHANGE, 
       FL_MOD_UPDATE_DATE_CHANGE, FL_MOD_CREATOR_CHANGE, 
-      FL_MOD_LAST_UPDATER_CHANGE, FL_MOD_VERSION, FL_MODEL_BOMLINE_UID
+      FL_MOD_LAST_UPDATER_CHANGE, FL_MOD_VERSION, FL_MODEL_BOMLINE_UID,
+       P_MODEL_VERSION,
+      P_MODEL_SHAPE,
+      P_MODEL_ANNOUNCEMENT,
+      P_MODEL_CFG_DESC,
+      P_MODEL_CFG_MNG,
+      P_MODEL_TRAIL_NUM,
+      P_MODEL_GOODS_NUM
       )
     values (#{id,jdbcType=DECIMAL}, #{modModelUid,jdbcType=VARCHAR}, #{modCfg0Uid,jdbcType=VARCHAR}, 
       #{modPointType,jdbcType=DECIMAL}, #{flModCreateDate,jdbcType=DATE}, #{flModUpdateDate,jdbcType=DATE},
       #{flModCreator,jdbcType=OTHER}, #{flModLastUpdater,jdbcType=OTHER}, #{flModCreateDateChange,jdbcType=DATE},
       #{flModUpdateDateChange,jdbcType=DATE}, #{flModCreatorChange,jdbcType=OTHER},
-      #{flModLastUpdaterChange,jdbcType=OTHER}, #{flModVersion,jdbcType=DECIMAL}, #{flModelBomlineUid,jdbcType=VARCHAR}
+      #{flModLastUpdaterChange,jdbcType=OTHER}, #{flModVersion,jdbcType=DECIMAL}, #{flModelBomlineUid,jdbcType=VARCHAR},
+      #{modelVersion,jdbcType=VARCHAR},#{modelShape,jdbcType=VARCHAR},#{modelAnnouncement,jdbcType=VARCHAR},
+      #{modelCfgDesc,jdbcType=VARCHAR},#{modelCfgMng,jdbcType=VARCHAR},#{modelTrailNum,jdbcType=VARCHAR},#{modelGoodsNum,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgModelChange">
@@ -165,11 +189,28 @@
         #{hzFullCfgModelChange.flModCreatorChange,jdbcType=OTHER},
         #{hzFullCfgModelChange.flModLastUpdaterChange,jdbcType=OTHER},
         #{hzFullCfgModelChange.flModVersion,jdbcType=DECIMAL},
-        #{hzFullCfgModelChange.flModelBomlineUid,jdbcType=VARCHAR}
+        #{hzFullCfgModelChange.flModelBomlineUid,jdbcType=VARCHAR},
+        #{hzFullCfgModelChange.modelVersion,jdbcType=VARCHAR},
+        #{hzFullCfgModelChange.modelShape,jdbcType=VARCHAR},
+        #{hzFullCfgModelChange.modelAnnouncement,jdbcType=VARCHAR},
+        #{hzFullCfgModelChange.modelCfgDesc,jdbcType=VARCHAR},
+        #{hzFullCfgModelChange.modelCfgMng,jdbcType=VARCHAR},
+        #{hzFullCfgModelChange.modelTrailNum,jdbcType=VARCHAR},
+        #{hzFullCfgModelChange.modelGoodsNum,jdbcType=VARCHAR}
       from
         dual
     </foreach>
     )A
   </insert>
 
+
+
+  <select id="selectByMainId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      HZ_FC_MODEL_RECORD_CHANGE
+    where
+      FL_MAIN_ID = #{id,jdbcType=DECIMAL}
+  </select>
 </mapper>

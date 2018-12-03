@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (c) 2018.
-  ~ This file was wrote by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -136,6 +136,25 @@
             select
             #{hzFullCfgWithCfg.cfgCfg0Uid,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgCreator,jdbcType=VARCHAR},
             #{hzFullCfgWithCfg.flCfgUpdator,jdbcType=VARCHAR}, #{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL}
+            from
+            dual
+        </foreach>
+        )A
+    </insert>
+    <insert id="insertAll" parameterType="java.util.List">
+        insert into HZ_FULL_CFG_WITHCFG_RECORD
+        (ID, CFG_CFG0_UID, CFG_BOMLINE_UID,FL_CFG_CREATE_DATE,FL_CFG_UPDATE_DATE,
+        FL_CFG_CREATOR,
+        FL_CFG_UPDATOR, FL_CFG_BOMLINE_NAME,FL_CFG_VERSION,FL_OPERATION_TYPE,FL_COMMENT
+        )
+        select SEQ_HZ_FL_CFG_CFG0_ID.NEXTVAL ,A.* from(
+        <foreach collection="list" index="index" item="hzFullCfgWithCfg" separator="union">
+            select
+            #{hzFullCfgWithCfg.cfgCfg0Uid,jdbcType=VARCHAR},#{hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR},
+            #{hzFullCfgWithCfg.flCfgCreateDate,jdbcType=DATE},#{hzFullCfgWithCfg.flCfgUpdateDate,jdbcType=DATE},
+            #{hzFullCfgWithCfg.flCfgCreator,jdbcType=VARCHAR},#{hzFullCfgWithCfg.flCfgUpdator,jdbcType=VARCHAR},
+            #{hzFullCfgWithCfg.flCfgBomlineName,jdbcType=VARCHAR},#{hzFullCfgWithCfg.flCfgVersion,jdbcType=DECIMAL},
+            #{hzFullCfgWithCfg.flOperationType,jdbcType=DECIMAL},#{hzFullCfgWithCfg.flComment,jdbcType=VARCHAR}
             from
             dual
         </foreach>
@@ -282,6 +301,6 @@
         from
         HZ_FULL_CFG_WITHCFG_RECORD
         where
-        CFG_BOMLINE_UID = {hzFullCfgWithCfg.cfgBomlineUid,jdbcType=VARCHAR}
+        CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR}
     </select>
 </mapper>

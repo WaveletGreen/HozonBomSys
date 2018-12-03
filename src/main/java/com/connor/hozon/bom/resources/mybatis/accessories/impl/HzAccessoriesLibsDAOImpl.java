@@ -19,7 +19,7 @@ import java.util.Map;
  * Date: 2018/9/27
  * Time: 15:19
  */
-@Service("HzAccessoriesLibsDAO")
+@Service("hzAccessoriesLibsDAO")
 public class HzAccessoriesLibsDAOImpl  extends BaseSQLUtil implements HzAccessoriesLibsDAO {
     @Override
     public int insert(HzAccessoriesLibs accessoriesLibs) {
@@ -73,5 +73,11 @@ public class HzAccessoriesLibsDAOImpl  extends BaseSQLUtil implements HzAccessor
         HzAccessoriesLibs hzAccessoriesLibs = new HzAccessoriesLibs();
         hzAccessoriesLibs.setpMaterielCode(materielCode);
         return super.executeQueryById(hzAccessoriesLibs, "HzAccessoriesLibsDAOImpl_queryAccessoriesByMaterielCode");
+    }
+
+    public List<HzAccessoriesLibs> queryAccessoriesByMaterielCodes(List<String> materielCodes){
+        Map<String,Object> map = new HashMap<>();
+        map.put("materielCodes",materielCodes);
+        return super.findForList("HzAccessoriesLibsDAOImpl_queryAccessoriesByMaterielCodes",map);
     }
 }

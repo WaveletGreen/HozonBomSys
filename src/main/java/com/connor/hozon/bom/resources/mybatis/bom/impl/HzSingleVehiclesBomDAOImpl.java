@@ -21,7 +21,7 @@ import java.util.Map;
  * @Date: 2018/9/27
  * @Description:
  */
-@Service("HzSingleVehiclesBomDAO")
+@Service("hzSingleVehiclesBomDAO")
 public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleVehiclesBomDAO {
     @Override
     public int insertList(List<HzSingleVehiclesBomRecord> records) {

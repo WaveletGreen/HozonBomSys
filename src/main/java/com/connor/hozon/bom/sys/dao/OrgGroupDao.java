@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author linzf
  **/
-@Service("OrgGroupDao")
+@Service("orgGroupDao")
 public interface OrgGroupDao extends GenericDao<OrgGroup, QueryOrgGroup> {
 
 	/**
@@ -45,4 +45,6 @@ public interface OrgGroupDao extends GenericDao<OrgGroup, QueryOrgGroup> {
 	 * @return
 	 */
 	Integer queryOrgGroupUserCount(Long groupId);
+
+	Integer queryOrgGroupNameExist(String deptName);
 }

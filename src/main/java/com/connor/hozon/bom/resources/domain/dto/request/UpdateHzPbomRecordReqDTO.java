@@ -48,6 +48,22 @@ public class UpdateHzPbomRecordReqDTO {
 
     private String station;
 
+    private String projectId;
+
+    private String lineId;
+
+    public String getLineId() {
+        return lineId;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
     public String getStation() {
         return station;
     }
