@@ -1,3 +1,4 @@
+//已废除
 $(document).ready(function () {
     var count =0;
     var localSelectedNode;

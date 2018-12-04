@@ -76,18 +76,7 @@
                     processData: false,
                     // 告诉jQuery不要去设置Content-Type请求头
                     contentType: false,
-                    // beforeSend:function(){
-                    //     window.Ewin.alert({message: '系统正在处理，请耐心等待...'});
-                    // },
-                    // beforeSend: function () {
-                    //     $("#excelImportForm").append('<div id="layout"></div>');
-                    // },
                     success: function (result) {
-                        // $('#layout',window.top.document).hide();
-                        // $('.modal-dialog', window.top.document).parent('div').remove()
-                        // $('body', window.top.document).find('.modal-backdrop').remove();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
-                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                         activeTabBodyRefresh();
                         if (result.success) {
                             layer.msg(result.errMsg, {icon: 1, time: 2000})

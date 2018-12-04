@@ -1,3 +1,4 @@
+// 已废除
 $(document).ready((function (){
     initTable();
 }))
