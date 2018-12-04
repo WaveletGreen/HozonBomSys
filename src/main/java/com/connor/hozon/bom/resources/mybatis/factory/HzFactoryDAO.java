@@ -15,5 +15,12 @@ public interface HzFactoryDAO {
      */
     int insert(HzFactory hzFactory);
 
+    /**
+     * 初始化默认工厂 代号 1001
+     * @return 新增记录puid
+     */
+    String insert();
+
+
     HzFactory findFactory(String puid,String factoryCode);
 }

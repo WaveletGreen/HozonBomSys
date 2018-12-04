@@ -8,6 +8,7 @@ import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.UUID;
@@ -91,7 +92,13 @@ public class HzMaterielFactory {
         return hzMaterielRecord;
     }
 
-    public static HzMaterielRecord mbomRecordToMaterielRecord(String projectId, HzMbomLineRecord record){
+    /**
+     * 将EBOM+MBOM的部分字段信息 带入到物料数据来
+     * @param
+     * @param record
+     * @return
+     */
+    public static HzMaterielRecord mbomRecordToMaterielRecord(String projectId, HzMbomLineRecord record,HzEPLManageRecord eplManageRecord){
         HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
         hzMaterielRecord.setpMaterielCode(record.getLineId());
         hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
@@ -102,10 +109,19 @@ public class HzMaterielFactory {
         hzMaterielRecord.setPuid(UUID.randomUUID().toString());
         hzMaterielRecord.setMaterielResourceId(record.geteBomPuid());
         hzMaterielRecord.setpColorPart(record.getIsColorPart());
+        hzMaterielRecord.setResource(record.getBuyType());//采购类型
         hzMaterielRecord.setpFactoryPuid(record.getpFactoryId());
         hzMaterielRecord.setpValidFlag(2);
+        if(eplManageRecord != null){
+            hzMaterielRecord.setpBasicUnitMeasure(eplManageRecord.getpUnit());
+            hzMaterielRecord.setpHeight(eplManageRecord.getpActualWeight());
+            hzMaterielRecord.setpInOutSideFlag(eplManageRecord.getpInOutSideFlag());
+            hzMaterielRecord.setP3cPartFlag(eplManageRecord.getP3cpartFlag());
+            hzMaterielRecord.setpPartImportantDegree(eplManageRecord.getpImportance());
+        }
         return hzMaterielRecord;
     }
+
 
 
 
@@ -127,7 +143,9 @@ public class HzMaterielFactory {
         Integer p3CPartFlag = record.getP3cPartFlag();
         Integer colorPart = record.getpColorPart();
         Integer inOutSideFlag = record.getpInOutSideFlag();
-        Integer inventedFlag = record.getpInventedPart();
+        Integer dataType = record.getpMaterielDataType();
+        // 2Y 层的 就是虚拟件  否则就不是
+//        Integer inventedFlag = record.getpInventedPart();
         Integer loosePartFlag = record.getpLoosePartFlag();
         if (Integer.valueOf(0).equals(p3CPartFlag)) {
             respDTO.setP3cPartFlag("N");
@@ -137,12 +155,13 @@ public class HzMaterielFactory {
             respDTO.setP3cPartFlag("");
         }
 
-        if (Integer.valueOf(0).equals(inventedFlag)) {
-            respDTO.setpInventedPart("N");
-        } else if (Integer.valueOf(1).equals(inventedFlag)) {
-            respDTO.setpInventedPart("Y");
-        } else {
-            respDTO.setpInventedPart("");
+        if(dataType != null){
+            switch (dataType){
+                case 31:respDTO.setpInventedPart("Y");
+                break;
+                default:respDTO.setpInventedPart("N");
+                break;
+            }
         }
 
         if (Integer.valueOf(0).equals(colorPart)) {
@@ -237,4 +256,7 @@ public class HzMaterielFactory {
         respDTO.setType(record.getType());
         return respDTO;
     }
+
+
+
 }

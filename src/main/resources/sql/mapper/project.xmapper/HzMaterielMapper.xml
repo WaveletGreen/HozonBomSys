@@ -205,7 +205,7 @@
         P_MATERIEL_DESC, P_PERTAIN_TO_PROJECT_PUID, P_MATERIEL_DESC_EN,P_MATERIEL_DATA_TYPE,
         P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_VALID_FLAG,P_COLOR_PART,P_CREATE_TIME, P_UPDATE_TIME
         ,P_CREATE_NAME,P_UPDATE_NAME,P_BASIC_UNIT_MEASURE,P_INVENTED_PART, P_SPARE_MATERIAL, P_VIN_PER_NO,
-         P_HEIGHT, P_IN_OUT_SIDE_FLAG, P_3C_PART_FLAG, P_MRP_CONTROLLER, P_PART_IMPORTANT_DEGREE,
+         P_HEIGHT, P_IN_OUT_SIDE_FLAG, P_3C_PART_FLAG, P_MRP_CONTROLLER, P_PART_IMPORTANT_DEGREE,P_RESOURCE,
         P_LOOSE_PART_FLAG,P_ORDER_ID,P_REVISION,P_EFFECT_TIME)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
@@ -223,7 +223,9 @@
             #{item.pInOutSideFlag,jdbcType=INTEGER},
             #{item.p3cPartFlag,jdbcType=INTEGER},
             #{item.pMrpController,jdbcType=VARCHAR},
-            #{item.pPartImportantDegree,jdbcType=VARCHAR},#{item.pLoosePartFlag,jdbcType=INTEGER},
+            #{item.pPartImportantDegree,jdbcType=VARCHAR},
+            #{item.resource,jdbcType=VARCHAR},
+            #{item.pLoosePartFlag,jdbcType=INTEGER},
             #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR},#{item.effectTime,jdbcType=TIMESTAMP}
             from DUAL
         </foreach>
@@ -467,25 +469,25 @@
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
             update HZ_MATERIEL_RECORD
             <set>
-                <if test="item.pMaterielCode != null">
+                <if test="item.pMaterielCode != null and item.pMaterielCode!='' ">
                     P_MATERIEL_CODE = #{item.pMaterielCode,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pMaterielDesc != null">
+                <if test="item.pMaterielDesc != null and item.pMaterielDesc!=''">
                     P_MATERIEL_DESC = #{item.pMaterielDesc,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pMaterielDescEn != null">
+                <if test="item.pMaterielDescEn != null and item.pMaterielDescEn!=''">
                     P_MATERIEL_DESC_EN = #{item.pMaterielDescEn,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pMaterielType != null">
+                <if test="item.pMaterielType != null and item.pMaterielType!=''">
                     P_MATERIEL_TYPE = #{item.pMaterielType,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pSpareMaterial != null">
+                <if test="item.pSpareMaterial != null and item.pSpareMaterial!=''">
                     P_SPARE_MATERIAL = #{item.pSpareMaterial,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pVinPerNo != null">
+                <if test="item.pVinPerNo != null and item.pVinPerNo!=''">
                     P_VIN_PER_NO = #{item.pVinPerNo,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pMrpController != null">
+                <if test="item.pMrpController != null and item.pMrpController!='' ">
                     P_MRP_CONTROLLER = #{item.pMrpController,jdbcType=VARCHAR},
                 </if>
                 <if test="item.pLoosePartFlag != null">
@@ -495,10 +497,10 @@
                 <if test="item.pUpdateName != null">
                     P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pFactoryPuid != null">
+                <if test="item.pFactoryPuid != null and item.pFactoryPuid!=''">
                     P_FACTORY_PUID = #{item.pFactoryPuid,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pBasicUnitMeasure != null">
+                <if test="item.pBasicUnitMeasure != null and item.pBasicUnitMeasure!=''">
                     P_BASIC_UNIT_MEASURE = #{item.pBasicUnitMeasure,jdbcType=VARCHAR},
                 </if>
                 <if test="item.pInventedPart != null">
@@ -507,8 +509,8 @@
                 <if test="item.pColorPart != null">
                     P_COLOR_PART = #{item.pColorPart,jdbcType=INTEGER},
                 </if>
-                <if test="item.pHeight != null">
-                    P_HEIGHT = #{item.pHeight,jdbcType=INTEGER},
+                <if test="item.pHeight != null and item.pHeight!=''">
+                    P_HEIGHT = #{item.pHeight,jdbcType=VARCHAR},
                 </if>
                 <if test="item.pInOutSideFlag != null">
                     P_IN_OUT_SIDE_FLAG = #{item.pInOutSideFlag,jdbcType=INTEGER},
@@ -516,10 +518,10 @@
                 <if test="item.p3cPartFlag != null">
                     P_3C_PART_FLAG = #{item.p3cPartFlag,jdbcType=INTEGER},
                 </if>
-                <if test="item.pPartImportantDegree != null">
+                <if test="item.pPartImportantDegree != null and item.pPartImportantDegree!=''">
                     P_PART_IMPORTANT_DEGREE = #{item.pPartImportantDegree,jdbcType=VARCHAR},
                 </if>
-                <if test="item.resource != null">
+                <if test="item.resource != null and item.resource!=''">
                     P_RESOURCE = #{item.resource,jdbcType=VARCHAR},
                 </if>
                 <if test="item.pValidFlag != null">
@@ -531,7 +533,7 @@
                 <if test="item.effectTime != null">
                     P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
                 </if>
-                <if test="item.revision != null">
+                <if test="item.revision != null and item.revision!=''">
                     P_REVISION = #{item.revision,jdbcType=VARCHAR}
                 </if>
             </set>

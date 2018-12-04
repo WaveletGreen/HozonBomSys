@@ -84,6 +84,7 @@ public class HzMbomRecordFactory {
         hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzMbomLineRecord.setSortNum(record.getSortNum());
         hzMbomLineRecord.setIsColorPart(record.getColorPart());
+        hzMbomLineRecord.setBuyType(record.getResource());
         return hzMbomLineRecord;
     }
 
@@ -182,7 +183,15 @@ public class HzMbomRecordFactory {
     }
 
 
-    public  HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, HzConfigBomColorBean bean,int n){
+    /**
+     * 产生超级MBOM
+     * @param record PBOM数据
+     * @param i 颜色件集合下标
+     * @param bean 颜色件信息
+     * @param n 集合空间长度
+     * @return
+     */
+    public  HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, HzConfigBomColorBean bean,int n,String factoryId){
         HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
         String lineId = mbomLineRecord.getLineId();
         if(Integer.valueOf(1).equals(record.getColorPart())&& bean!=null){
@@ -194,7 +203,7 @@ public class HzMbomRecordFactory {
             mbomLineRecord.setColorId(bean.getColorUid());
         }
         mbomLineRecord.setLineId(lineId);
-
+        mbomLineRecord.setpFactoryId(factoryId);
         String lineIndex = record.getLineIndex();
 
         String firstIndex = lineIndex.split("\\.")[0];

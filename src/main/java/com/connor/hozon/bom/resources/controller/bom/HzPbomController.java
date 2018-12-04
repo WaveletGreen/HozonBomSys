@@ -175,12 +175,6 @@ public class HzPbomController extends BaseController {
     }
 
 
-    @RequestMapping(value = "insert", method = RequestMethod.POST)
-    public void addPbomToDB(@RequestBody AddHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
-        WriteResultRespDTO respDTO = hzPbomService.insertHzPbomRecord(reqDTO);
-        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
-    }
-
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public void updatePbomRecord(@RequestBody UpdateHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
         WriteResultRespDTO respDTO = hzPbomService.updateHzPbomRecord(reqDTO);

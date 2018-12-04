@@ -1360,15 +1360,12 @@
 
     <!--查询 一条EBOM全信息-->
     <select id="HzEbomRecordDAOImpl_findEbomById" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-        SELECT t1.*from HZ_BOM_LINE_RECORD t1
+        SELECT t1.* from HZ_BOM_LINE_RECORD t1
         where t1.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-        select t2.puid from Hz_project_libs t2
-        <where>
-          t2.puid=#{projectId,jdbcType=VARCHAR}))
+          #{projectId,jdbcType=VARCHAR}))
           and t1.puid = #{puid,jdbcType=VARCHAR}
           and t1.P_EBOM_STATUS <![CDATA[ <> ]]>0
-        </where>
     </select>
 
     <!--查询根据父层零件ID找父层puid-->

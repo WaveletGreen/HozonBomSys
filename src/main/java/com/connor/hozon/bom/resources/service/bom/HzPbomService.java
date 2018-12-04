@@ -22,14 +22,6 @@ import java.util.Map;
 public interface HzPbomService {
 
     /**
-     * 插入PBOM维护信息   获取当前登陆者的信息 需要进行权限判断
-     *
-     * @param recordReqDTO
-     * @return
-     */
-    WriteResultRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO);
-
-    /**
      * PBOM维护 编辑 获取当前登录这信息 进行权限判断
      *
      * @param recordReqDTO
@@ -92,6 +84,7 @@ public interface HzPbomService {
      * @param recordReqDTO
      * @return
      */
+    @Deprecated
     WriteResultRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO);
 
     /**
