@@ -624,4 +624,35 @@
             0 = (select PROCESS_STATUS from HZ_CFG0_AFTER_CHANGE_RECORD where ID = #{hzFeatureChangeBean.id,jdbcType=DECIMAL})
         </foreach>
     </update>
+
+    <update id="updateDescByDictionaryLib" parameterType="sql.pojo.cfg.cfg0.HzCfg0Record">
+        update
+          HZ_CFG0_RECORD
+        set
+          P_CFG0_DESC = #{pCfg0Desc,jdbcType=VARCHAR},
+          P_CFG0_FAMILY_DESC = #{pCfg0FamilyDesc,jdbcType=VARCHAR},
+          CFG_STATUS = 0
+        where
+          CFG_DIC_LIB_UID = #{cfgDicLibUid,jdbcType=VARCHAR}
+        and
+          CFG_STATUS != 2
+    </update>
+
+    <select id="selectByDictionaryLibId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CFG0_RECORD
+        where
+          CFG_DIC_LIB_UID = #{cfgDicLibUid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByChangeOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CFG0_RECORD
+        where
+        CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL}
+    </select>
 </mapper>

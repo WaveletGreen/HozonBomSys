@@ -83,7 +83,7 @@ public class SynConfigurableMaterialService {
      * @return
      */
     public JSONObject deleteConfigurableMaterial(String[] puid, String[] cfg0MainPuids, String[] modeBasiceDetails, String projectPuid) {
-        return execute(puid, cfg0MainPuids, modeBasiceDetails, projectPuid, ActionFlagOption.UPDATE);
+        return execute(puid, cfg0MainPuids, modeBasiceDetails, projectPuid, ActionFlagOption.DELETE);
     }
 
     /**

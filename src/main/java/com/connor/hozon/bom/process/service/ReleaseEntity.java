@@ -18,6 +18,7 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
@@ -130,6 +131,8 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     @Autowired
     private HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
 
+    @Autowired
+    private IHzVWOManagerService hzVWOManagerService;
     @Override
     public void interruptionFunctionDesc() {
 
@@ -181,6 +184,10 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             for(HzChangeDataRecord hzChangeDataRecord : list){
                 //特性变更批准
                 if(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    //发送至sap
+                    if(!hzVWOManagerService.featureToSap(orderId)){
+                        return false;
+                    }
                     //将变更数据的状态修改为以生效
                     if(!iHzFeatureChangeService.updateStatusByOrderId(orderId,1)){
                         return false;

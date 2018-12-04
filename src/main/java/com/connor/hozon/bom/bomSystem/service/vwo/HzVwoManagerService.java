@@ -25,6 +25,7 @@ import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFeatureTableDto;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
+import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
@@ -32,6 +33,7 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynFeatureService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IProcess;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
@@ -245,6 +247,9 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
     @Autowired
     HzRelevanceBasicDao hzRelevanceBasicDao;
+
+    @Autowired
+    ISynFeatureService synFeatureService;
     /**
      * 日志
      */
@@ -2079,7 +2084,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     bs.get(1).setHeadDesc("新增<br>"+bs.get(1).getFeatureValueName());
                     HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
                     list.add(after);
-                }else if(bs.get(1).getCfgStatus()==2){
+                }else if(bs.get(1).getCfgStatus()!=null&&bs.get(1).getCfgStatus()==2){
                     bs.get(1).setHeadDesc("删除<br>"+bs.get(1).getFeatureValueName());
                     HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(1));
                     list.add(before);
@@ -2096,6 +2101,60 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         result.put("totalCount", list.size());
         result.put("result", list);
         return result;
+    }
+
+    /****************特性变更发送SAP*************************************************/
+    @Override
+    public boolean featureToSap(Long vwoId){
+
+
+        List<HzCfg0Record> hzFeatureChangeBeansAdd = new ArrayList<>();
+        List<HzCfg0Record> hzFeatureChangeBeansDelete = new ArrayList<>();
+        List<HzCfg0Record> hzFeatureChangeBeansUpdate = new ArrayList<>();
+
+        List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByChangeOrderId(vwoId);
+
+        for(HzCfg0Record hzCfg0Record : hzCfg0RecordList){
+            if(hzCfg0Record.getCfgStatus()==2){
+                hzFeatureChangeBeansDelete.add(hzCfg0Record);
+            }else {
+                hzFeatureChangeBeansAdd.add(hzCfg0Record);
+            }
+        }
+
+
+//        List<HzFeatureChangeBean> beans = iHzFeatureChangeService.doSelectCfgUidsByVwoId(vwoId);
+//        if (beans != null && !beans.isEmpty()) {
+//            for (int i = 0; i < beans.size(); i++) {
+//                List<HzFeatureChangeBean> bs = iHzFeatureChangeService.doQueryLastTwoChange(beans.get(i).getCfgPuid(), vwoId);
+//                if(bs==null||bs.size()<=0||bs.get(1)==null){
+//                    continue;
+//                }
+//                if(bs.get(0)==null){
+//                    hzFeatureChangeBeansAdd.add(bs.get(1).getHzCfg0Record());
+//                }else if(bs.get(1).getCfgStatus()!=null&&bs.get(1).getCfgStatus()==2){
+//                    hzFeatureChangeBeansDelete.add(bs.get(1).getHzCfg0Record());
+//                }else {
+//                    hzFeatureChangeBeansUpdate.add(bs.get(1).getHzCfg0Record());
+//                }
+//            }
+//        }
+
+        try {
+            JSONObject addResult = synFeatureService.addFeature(hzFeatureChangeBeansAdd);
+            JSONObject deleteResult = synFeatureService.deleteFeature(hzFeatureChangeBeansDelete);
+//            JSONObject updateResult = synFeatureService.updateFeature(hzFeatureChangeBeansUpdate);
+            List<IntegrateMsgDTO> addFail = (List<IntegrateMsgDTO>) addResult.get("fail");
+            List<IntegrateMsgDTO> deleteFail = (List<IntegrateMsgDTO>) deleteResult.get("fail");
+//            List<IntegrateMsgDTO> updateFail = (List<IntegrateMsgDTO>) updateResult.get("fail");
+//            if(addFail.size()>0||deleteFail.size()>0||updateFail.size()>0){
+            if(addFail.size()>0||deleteFail.size()>0){
+                return false;
+            }
+        }catch (Exception e){
+            return false;
+        }
+        return true;
     }
 
     /**
