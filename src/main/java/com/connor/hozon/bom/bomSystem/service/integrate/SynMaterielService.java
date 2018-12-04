@@ -248,9 +248,9 @@ public class SynMaterielService implements ISynMaterielService {
             //加入缓存
             _mapCoach.put(packNo, record);
         }
-        _mapCoach.forEach((k, v) ->
-                System.out.println(v.getpMaterielCode())
-        );
+//        _mapCoach.forEach((k, v) ->
+//                System.out.println(v.getpMaterielCode())
+//        );
         //执行
         if (debug) {
             return result;

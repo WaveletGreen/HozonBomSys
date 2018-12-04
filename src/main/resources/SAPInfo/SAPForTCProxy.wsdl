@@ -141,6 +141,7 @@
          <xsd:complexType name="ZPP_TCO001">
             <xsd:sequence>
                <xsd:element name="P_GUID" type="tns:byte16"/>
+               <xsd:element name="P_ZITEM" type="tns:char6"/>
                <xsd:element name="P_TYPE" type="tns:char1"/>
                <xsd:element name="P_MESSAGE" type="tns:char220"/>
             </xsd:sequence>
@@ -174,6 +175,7 @@
          <xsd:complexType name="ZPP_TCO002">
             <xsd:sequence>
                <xsd:element name="P_PACKNO" type="tns:char40"/>
+               <xsd:element name="P_ZITEM" type="tns:char6"/>
                <xsd:element name="P_TYPE" type="tns:char1"/>
                <xsd:element name="P_MESSAGE" type="tns:char220"/>
             </xsd:sequence>
@@ -207,6 +209,7 @@
          <xsd:complexType name="ZPP_TCO003">
             <xsd:sequence>
                <xsd:element name="P_PACKNO" type="tns:char40"/>
+               <xsd:element name="P_ZITEM" type="tns:char6"/>
                <xsd:element name="P_TYPE" type="tns:char1"/>
                <xsd:element name="P_MESSAGE" type="tns:char220"/>
             </xsd:sequence>
@@ -243,6 +246,7 @@
          <xsd:complexType name="ZPP_TCO004">
             <xsd:sequence>
                <xsd:element name="P_PACKNO" type="tns:char40"/>
+               <xsd:element name="P_ZITEM" type="tns:char6"/>
                <xsd:element name="P_TYPE" type="tns:char1"/>
                <xsd:element name="P_MESSAGE" type="tns:char220"/>
             </xsd:sequence>
@@ -290,6 +294,7 @@
          <xsd:complexType name="ZPP_TCO005">
             <xsd:sequence>
                <xsd:element name="P_PACKNO" type="tns:char40"/>
+               <xsd:element name="P_ZITEM" type="tns:char6"/>
                <xsd:element name="P_TYPE" type="tns:char1"/>
                <xsd:element name="P_MESSAGE" type="tns:char220"/>
             </xsd:sequence>
@@ -335,6 +340,7 @@
          <xsd:complexType name="ZPP_TCO006">
             <xsd:sequence>
                <xsd:element name="P_PACKNO" type="tns:char40"/>
+               <xsd:element name="P_ZITEM" type="tns:char6"/>
                <xsd:element name="P_TYPE" type="tns:char1"/>
                <xsd:element name="P_MESSAGE" type="tns:char220"/>
             </xsd:sequence>
@@ -368,6 +374,7 @@
          <xsd:complexType name="ZPP_TCO007">
             <xsd:sequence>
                <xsd:element name="P_PACKNO" type="tns:char40"/>
+               <xsd:element name="P_ZITEM" type="tns:char6"/>
                <xsd:element name="P_TYPE" type="tns:char1"/>
                <xsd:element name="P_MESSAGE" type="tns:char220"/>
             </xsd:sequence>
@@ -768,22 +775,22 @@
    </wsdl:binding>
    <wsdl:service name="SAPForTCProxy">
       <wsdl:port name="SAPForTCProxyHttpSoap11Endpoint" binding="tns:SAPForTCProxySoap11Binding">
-         <soap:address location="http://10.0.6.71:8280/services/SAPForTCProxy.SAPForTCProxyHttpSoap11Endpoint"/>
+         <soap:address location="http://service.leap.esb.com:80/services/SAPForTCProxy.SAPForTCProxyHttpSoap11Endpoint"/>
       </wsdl:port>
       <wsdl:port name="SAPForTCProxyHttpsSoap11Endpoint" binding="tns:SAPForTCProxySoap11Binding">
-         <soap:address location="http://10.0.6.71:8280/services/SAPForTCProxy.SAPForTCProxyHttpsSoap11Endpoint"/>
+         <soap:address location="https://service.leap.esb.ssl.com:443/services/SAPForTCProxy.SAPForTCProxyHttpsSoap11Endpoint"/>
       </wsdl:port>
       <wsdl:port name="SAPForTCProxyHttpsSoap12Endpoint" binding="tns:SAPForTCProxySoap12Binding">
-         <soap12:address location="http://10.0.6.71:8280/services/SAPForTCProxy.SAPForTCProxyHttpsSoap12Endpoint"/>
+         <soap12:address location="https://service.leap.esb.ssl.com:443/services/SAPForTCProxy.SAPForTCProxyHttpsSoap12Endpoint"/>
       </wsdl:port>
       <wsdl:port name="SAPForTCProxyHttpSoap12Endpoint" binding="tns:SAPForTCProxySoap12Binding">
-         <soap12:address location="http://10.0.6.71:8280/services/SAPForTCProxy.SAPForTCProxyHttpSoap12Endpoint"/>
+         <soap12:address location="http://service.leap.esb.com:80/services/SAPForTCProxy.SAPForTCProxyHttpSoap12Endpoint"/>
       </wsdl:port>
       <wsdl:port name="SAPForTCProxyHttpEndpoint" binding="tns:SAPForTCProxyHttpBinding">
-         <http:address location="http://10.0.6.71:8280/services/SAPForTCProxy.SAPForTCProxyHttpEndpoint"/>
+         <http:address location="http://service.leap.esb.com:80/services/SAPForTCProxy.SAPForTCProxyHttpEndpoint"/>
       </wsdl:port>
       <wsdl:port name="SAPForTCProxyHttpsEndpoint" binding="tns:SAPForTCProxyHttpBinding">
-         <http:address location="http://10.0.6.71:8280/services/SAPForTCProxy.SAPForTCProxyHttpsEndpoint"/>
+         <http:address location="https://service.leap.esb.ssl.com:443/services/SAPForTCProxy.SAPForTCProxyHttpsEndpoint"/>
       </wsdl:port>
    </wsdl:service>
 </wsdl:definitions>

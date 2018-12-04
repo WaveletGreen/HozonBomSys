@@ -12,6 +12,7 @@ import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMbomLineRecord;

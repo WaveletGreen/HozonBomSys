@@ -10,12 +10,15 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +29,6 @@ import java.util.Map;
  */
 @Service("hzEbomRecordDAO")
 public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO {
-
-
     @Override
     public Page<HzEPLManageRecord> getHzEbomPage(HzEbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();

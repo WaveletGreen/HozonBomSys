@@ -11,7 +11,7 @@ import sql.pojo.bom.HzBomState;
  * @Date: 2018/6/14
  * @Description:
  */
-@Service("HzBomStateDAO")
+@Service("hzBomStateDAO")
 public class HzBomStateDAOImpl extends BaseSQLUtil implements HzBomStateDAO {
 
     @Override
