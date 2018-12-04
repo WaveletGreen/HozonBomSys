@@ -1126,10 +1126,6 @@ function queryLoa(row) {
 }
 
 function queryLou(row) {
-    // var myData = JSON.stringify({
-    //     "projectId": $("#project", window.top.document).val(),
-    //     "puid": row
-    // });
     var projectId = $("#project", window.top.document).val();
     $.ajax({
         type: "GET",
