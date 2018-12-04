@@ -26,6 +26,13 @@ function doQuery() {
     else {
         pBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
     }
+    var pIsNewPart = $("#pIsNewPart").val();
+    if (pIsNewPart == "请选择工艺合件") {
+        pBomUrl += "&pIsNewPart=" + "";
+    }
+    else {
+        pBomUrl += "&pIsNewPart=" + pIsNewPart;
+    }
     initTable(pBomUrl);
     $('#pbomManageTable').bootstrapTable('destroy');
 }
