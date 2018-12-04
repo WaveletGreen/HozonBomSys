@@ -345,7 +345,7 @@ var setting = {
             }
             //动态提示
             if (size >= 2) {
-                $("#info_div span").text("第三步：点击“生成工艺合件”");
+                $("#info_div span").text("第三步:点击“生成工艺合件”");
                 $("#info_div").css("top", "8%");
                 $("#info_img_2").css("display", "inline");
                 $("#info_img_2").css("max-width", "36px");
@@ -353,7 +353,7 @@ var setting = {
                 $("#synthetic").removeAttr("disabled");
             }
             else {
-                $("#info_div span").text("第二步：选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
+                $("#info_div span").text("第二步:选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
                 $("#info_div").css("top", "20%");
                 $("#info_img_1").css("display", "inline");
                 $("#info_img_1").css("max-width", "36px");
@@ -772,7 +772,7 @@ function queryAssignTree() {
                 }
                 var zNodes = data.obj;
                 $.fn.zTree.init($("#Ztree3"), setting3, zNodes);
-                $("#info_div2 span").text("第六步：选择挂载位置节点");
+                $("#info_div2 span").text("第六步:选择挂载位置节点");
                 $("#info_div2").css("top", "20%");
             },
         });
@@ -1036,7 +1036,7 @@ function querySrc() {
                 }
                 var zNodes = data.obj;
                 initZtree(zNodes);
-                $("#info_div span").text("第二步：选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
+                $("#info_div span").text("第二步:选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
                 $("#info_div").css("top", "20%");
             },
         });
