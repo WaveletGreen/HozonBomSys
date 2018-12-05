@@ -82,6 +82,16 @@ public class EditHzMaterielReqDTO {
      */
     private String resource;
 
+    private  String pMaterielDesc;
+
+    public String getpMaterielDesc() {
+        return pMaterielDesc;
+    }
+
+    public void setpMaterielDesc(String pMaterielDesc) {
+        this.pMaterielDesc = pMaterielDesc;
+    }
+
     public String getPuid() {
         return puid;
     }

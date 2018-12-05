@@ -21,6 +21,12 @@ public interface HzFactoryDAO {
      */
     String insert();
 
+    /**
+     * 新增工厂
+     * @param factoryCode 工厂代码
+     * @return
+     */
+    String insert(String factoryCode);
 
     HzFactory findFactory(String puid,String factoryCode);
 }

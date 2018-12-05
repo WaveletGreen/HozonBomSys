@@ -237,17 +237,7 @@ public class HzMbomServiceImpl implements HzMbomService{
             if (StringUtils.isNotBlank(reqDTO.getpFactoryCode())) {
                 HzFactory hzFactory = hzFactoryDAO.findFactory("", reqDTO.getpFactoryCode());
                 if (hzFactory == null) {
-                    String puid = UUID.randomUUID().toString();
-                    hzFactory = new HzFactory();
-                    hzFactory.setPuid(puid);
-                    hzFactory.setpFactoryCode(reqDTO.getpFactoryCode());
-                    hzFactory.setpUpdateName(user.getUserName());
-                    hzFactory.setpCreateName(user.getUserName());
-                    int i = hzFactoryDAO.insert(hzFactory);
-                    if (i < 0) {
-                        return WriteResultRespDTO.getFailResult();
-                    }
-                    record.setpFactoryId(puid);
+                    record.setpFactoryId(hzFactoryDAO.insert(reqDTO.getpFactoryCode()));
                 } else {
                     record.setpFactoryId(hzFactory.getPuid());
                 }
@@ -434,10 +424,6 @@ public class HzMbomServiceImpl implements HzMbomService{
             if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
                 return WriteResultRespDTO.IllgalArgument();
             }
-            boolean b = PrivilegeUtil.writePrivilege();
-            if(!b){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
             String[] lineIds = reqDTO.getLineIds().split(",");
             for(String lineId:lineIds){
                 Map<String,Object> map = new HashMap<>();
@@ -454,6 +440,7 @@ public class HzMbomServiceImpl implements HzMbomService{
             }
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
+            e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
     }
@@ -518,7 +505,7 @@ public class HzMbomServiceImpl implements HzMbomService{
      */
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = HzBomException.class)
     public WriteResultRespDTO refreshHzMbom(String projectId) {
         if(StringUtils.isEmpty(projectId)){
             return WriteResultRespDTO.IllgalArgument();
@@ -605,6 +592,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 for(int j =0;j<whiteBodys.size();j++){
                                     HzPbomLineRecord whiteBody = whiteBodys.get(j);
                                     HzMbomLineRecord mbomRecord = HzMbomRecordFactory.pBomRecordToMbomRecord(whiteBody);
+                                    mbomRecord.setpFactoryId(factoryPuid);
                                     if(null == whiteBody.getpBomLinePartName()){
                                         continue;
                                     }
@@ -775,6 +763,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                         List<HzMaterielRecord> recordList = hzMaterielDAO.findHzMaterielForList(query);
                         if(ListUtil.isEmpty(recordList)){
                             materielRecords.add(record);
+                        }else {
+                            record.setPuid(recordList.get(0).getPuid());
+                            updateMaterielRecords.add(record);
                         }
                     });
 
@@ -921,6 +912,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                 try {
                     countDownLatch.await();
                 }catch (Exception e){
+                    e.printStackTrace();
                     return WriteResultRespDTO.getFailResult();
                 }
             }else {
@@ -934,6 +926,7 @@ public class HzMbomServiceImpl implements HzMbomService{
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return WriteResultRespDTO.getFailResult();
         }
 
@@ -1258,6 +1251,7 @@ public class HzMbomServiceImpl implements HzMbomService{
 //                                    String sortNum = whiteBody.getSortNum();
                                     mbomRecord.setSortNum(String.valueOf(100+100*superMboms.size()));
                                     mbomRecord.setColorId(colorId);
+                                    mbomRecord.setpFactoryId(factoryId);
                                     String firstIndex = pbomLineRecord.getLineIndex().split("\\.")[0];
                                     String othersIndex = pbomLineRecord.getLineIndex().substring(firstIndex.length(),pbomLineRecord.getLineIndex().length());
                                     if(null == whiteBody.getpBomLinePartName()){
@@ -1299,7 +1293,19 @@ public class HzMbomServiceImpl implements HzMbomService{
                                 if(null != bean){
                                     List<HzAccessoriesLibs> libs = bean.getMaterielList();
                                     if(ListUtil.isNotEmpty(libs)){
-                                        superMboms.addAll(HzMbomRecordFactory.generateMaterielPaint(pbomLineRecord,superMboms.size(),lineIndex,libs,i,bean.getColorUid()));
+                                        List<HzAccessoriesLibs> libsList = new ArrayList<>();
+                                        for(HzAccessoriesLibs libs1 :libs){
+                                            HzMbomPaintMaterielRepeatQuery repeatQuery = new HzMbomPaintMaterielRepeatQuery();
+                                            repeatQuery.setColorId(colorId);
+                                            repeatQuery.setLineId(libs1.getpMaterielCode());
+                                            repeatQuery.setParentId(pbomLineRecord.getParentUid());
+                                            repeatQuery.setProjectId(projectId);
+                                            boolean b = hzMbomRecordDAO.checkPaintMaterielRepeat(repeatQuery);//检查是否已添加过
+                                            if(!b){
+                                               libsList.add(libs1);
+                                            }
+                                        }
+                                        superMboms.addAll(HzMbomRecordFactory.generateMaterielPaint(pbomLineRecord,superMboms.size(),lineIndex,libsList,i,bean.getColorUid(),factoryId));
                                     }
                                 }
                             }
@@ -1362,6 +1368,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     lineRecord.setLineId(record.getLineId());
                     lineRecord.setIsColorPart(record.getIsColorPart());
                     lineRecord.setColorId(record.getColorId());
+                    lineRecord.setpFactoryId(record.getpFactoryId());
                     u.add(lineRecord);
                 }
             }

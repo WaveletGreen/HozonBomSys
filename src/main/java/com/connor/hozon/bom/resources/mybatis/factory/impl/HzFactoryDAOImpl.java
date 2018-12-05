@@ -40,6 +40,18 @@ public class HzFactoryDAOImpl extends BaseSQLUtil implements HzFactoryDAO {
     }
 
     @Override
+    public String insert(String factoryCode) {
+        HzFactory factory = new HzFactory();
+        String puid = UUIDHelper.generateUid();
+        factory.setPuid(puid);
+        factory.setpFactoryCode(factoryCode);
+        factory.setpCreateName(UserInfo.getUser().getUserName());
+        factory.setpUpdateName(UserInfo.getUser().getUserName());
+        int i =  super.insert("HzFactoryDAOImpl_insert",factory);
+        return i>0?puid:"";
+    }
+
+    @Override
     public HzFactory findFactory(String puid,String factoryCode) {
         Map<String,Object> map = new HashMap<>();
         map.put("puid",puid);

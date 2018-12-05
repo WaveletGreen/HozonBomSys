@@ -1039,7 +1039,7 @@
         P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
         P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
         P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_MBOM_STATUS,
-        P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,
+        P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,P_FACTORY_ID,
         P_SPARE_PART,P_SPARE_PART_NUM,P_PROCESS_ROUTE,P_LABOR_HOUR,P_RHYTHM,P_SOLDER_JOINT,
         P_MACHINE_MATERITAL,P_STANDARD_PART,P_TOOLS,P_WASTER_PRODUCT,P_CHANGE,P_CHANGE_NUM,
         P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME)
@@ -1054,7 +1054,7 @@
             #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
             #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
             #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},
-            sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},
+            sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.pFactoryId},
             #{item.sparePart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR}, #{item.processRoute,jdbcType=VARCHAR},
             #{item.laborHour,jdbcType=VARCHAR}, #{item.rhythm,jdbcType=VARCHAR}, #{item.solderJoint,jdbcType=VARCHAR},
             #{item.machineMaterial,jdbcType=VARCHAR}, #{item.standardPart,jdbcType=VARCHAR}, #{item.tools,jdbcType=VARCHAR},
@@ -1139,9 +1139,6 @@
                 <if test="item.pStockLocation != null">
                     P_STOCK_LOCATION = #{item.pStockLocation,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pFactoryId != null">
-                    P_FACTORY_ID = #{item.pFactoryId,jdbcType=VARCHAR},
-                </if>
                 <if test="item.colorId != null">
                     P_COLOR_PUID = #{item.colorId,jdbcType=VARCHAR},
                 </if>
@@ -1155,7 +1152,10 @@
                     P_REVISION = #{item.revision,jdbcType=VARCHAR},
                 </if>
                 <if test="item.status != null">
-                    P_MBOM_STATUS = #{item.status,jdbcType=VARCHAR}
+                    P_MBOM_STATUS = #{item.status,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pFactoryId != null">
+                    P_FACTORY_ID = #{item.pFactoryId,jdbcType=VARCHAR}
                 </if>
             </set>
             where PUID = #{item.puid,jdbcType=VARCHAR}
@@ -1327,4 +1327,26 @@
             </if>
         </where>
     </select>
+
+    <!--查询油漆物料是否已添加-->
+    <select id="HzMbomRecordDAOImpl_checkPaintMaterielRepeat" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*) from HZ_MBOM_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid = #{projectId,jdbcType=VARCHAR}))
+            <if test="colorId!= null">
+                and t.P_COLOR_PUID =#{colorId,jdbcType=VARCHAR}
+            </if>
+            <if test="parentId != null">
+                and t.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
+            </if>
+            <if test="lineId != null">
+                and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+
 </mapper>

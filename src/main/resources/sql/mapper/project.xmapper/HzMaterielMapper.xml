@@ -69,7 +69,6 @@
     P_LOOSE_PART_FLAG, P_VALID_FLAG, P_MATERIEL_DATA_TYPE, P_CREATE_TIME, P_UPDATE_TIME,
     P_CREATE_NAME, P_UPDATE_NAME, P_FACTORY_PUID,P_MATERIEL_RESOURCE_ID,P_TYPE,IS_SENT,P_ORDER_ID,
     P_REVISION,P_EFFECT_TIME
-
   </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -312,26 +311,27 @@
     <select id="HzMaterialDAOImpl_findHzMaterielForList" parameterType="java.util.HashMap"
             resultMap="HzMaterielRecordMap">
         select
-        <include refid="HzMaterielRecordList"/>
-        from HZ_MATERIEL_RECORD
+        t.*,t1.P_FACTORY_CODE
+        from HZ_MATERIEL_RECORD t,HZ_FACTORY t1
         <where>
             1=1
             <if test="projectId != null and projectId!=''">
-                and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+                and t.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
             </if>
+            and t.P_FACTORY_PUID = t1.PUID
             <if test="puid != null and puid!=''">
-                and PUID = #{puid,jdbcType=VARCHAR}
+                and t.PUID = #{puid,jdbcType=VARCHAR}
             </if>
             <if test="pMaterielDataType != null">
-                and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
+                and t.P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=INTEGER}
             </if>
             <if test="materielResourceId != null and materielResourceId!=''">
-                and P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
+                and t.P_MATERIEL_RESOURCE_ID = #{materielResourceId,jdbcType=VARCHAR}
             </if>
             <if test="pMaterielCode != null">
-                and P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR}
+                and t.P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR}
             </if>
-            and P_VALID_FLAG <![CDATA[ <> ]]>0
+            and t.P_VALID_FLAG <![CDATA[ <> ]]>0
         </where>
     </select>
 
@@ -497,9 +497,6 @@
                 <if test="item.pUpdateName != null">
                     P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pFactoryPuid != null and item.pFactoryPuid!=''">
-                    P_FACTORY_PUID = #{item.pFactoryPuid,jdbcType=VARCHAR},
-                </if>
                 <if test="item.pBasicUnitMeasure != null and item.pBasicUnitMeasure!=''">
                     P_BASIC_UNIT_MEASURE = #{item.pBasicUnitMeasure,jdbcType=VARCHAR},
                 </if>
@@ -523,6 +520,9 @@
                 </if>
                 <if test="item.resource != null and item.resource!=''">
                     P_RESOURCE = #{item.resource,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pFactoryPuid != null and item.pFactoryPuid!=''">
+                    P_FACTORY_PUID = #{item.pFactoryPuid,jdbcType=VARCHAR},
                 </if>
                 <if test="item.pValidFlag != null">
                     P_VALID_FLAG = #{item.pValidFlag,jdbcType=INTEGER},
@@ -566,9 +566,10 @@
 
     <!--批量查询数据-->
     <select id="HzMaterialDAOImpl_getMaterialRecordsByPuids" parameterType="java.util.HashMap" resultMap="HzMaterielRecordMap">
-        select * from ${tableName} t
+        select t.*,t1.P_FACTORY_CODE from ${tableName} t,HZ_FACTORY t1
         <where>
             t.P_PERTAIN_TO_PROJECT_PUID= #{projectId,jdbcType=VARCHAR}
+            and t.P_FACTORY_PUID = t1.PUID
             <if test="puids != null and puids.size()>0">
                 and t.puid in
                 <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">

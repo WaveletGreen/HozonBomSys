@@ -173,6 +173,7 @@ public class HzMbomRecordFactory {
                 }
                 lineRecord.setLineIndex(lindIndex+stringBuffer.toString());
                 lineRecord.setColorId(record.getColorId());
+                lineRecord.setpFactoryId(record.getpFactoryId());
                 recordList.add(lineRecord);
             }
         }else {
@@ -262,7 +263,8 @@ public class HzMbomRecordFactory {
      * 产生油漆物料BOM
      * @return
      */
-    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,int i,String colorId){
+    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,
+                                                               int i,String colorId,String factoryId){
         List<HzMbomLineRecord> list = new ArrayList<>();
         if(ListUtil.isNotEmpty(libs)){
             for(int j=0;j<libs.size();j++){
@@ -280,6 +282,7 @@ public class HzMbomRecordFactory {
                 record.setBomDigifaxId(pbomLineRecord.getBomDigifaxId());
                 record.seteBomPuid(UUID.randomUUID().toString());
                 record.setColorId(colorId);
+                record.setpFactoryId(factoryId);
                 list.add(record);
             }
         }

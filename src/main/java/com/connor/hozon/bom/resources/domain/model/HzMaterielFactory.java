@@ -198,6 +198,7 @@ public class HzMaterielFactory {
 
     public static HzMaterielRecord featureToMaterielRecord(HzCfg0ModelFeature feature,String projectId){
         HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+        hzMaterielRecord.setpValidFlag(2);
         hzMaterielRecord.setpFactoryPuid(feature.getFactoryCode());
         hzMaterielRecord.setpColorPart(feature.getColor());
         hzMaterielRecord.setPuid(UUID.randomUUID().toString());
@@ -208,13 +209,13 @@ public class HzMaterielFactory {
         hzMaterielRecord.setpMaterielDescEn(feature.getMaterielEnDesc());
         hzMaterielRecord.setpCreateName(UserInfo.getUser().getUserName());
         hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUserName());
-        hzMaterielRecord.setpMrpController(feature.getMrpController());
+        hzMaterielRecord.setpMrpController("Z02");//整车的MRP控制者都是Z02
         hzMaterielRecord.setpVinPerNo(feature.getVinCode());
         hzMaterielRecord.setResource(feature.getPurchaseType());
         hzMaterielRecord.setpInOutSideFlag(feature.getLabelFlag());
         hzMaterielRecord.setpBasicUnitMeasure(feature.getBasicCountUnit());
         hzMaterielRecord.setMaterielResourceId(feature.getPuid());
-        hzMaterielRecord.setpPartImportantDegree(String.valueOf(feature.getImportance()));
+        hzMaterielRecord.setpPartImportantDegree(feature.getImportance()==null?null:String.valueOf(feature.getImportance()));
         hzMaterielRecord.setP3cPartFlag(feature.getRulesFlag());
         hzMaterielRecord.setpInventedPart(feature.getVirtualFlag());
         hzMaterielRecord.setpMaterielType("A001");

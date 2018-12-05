@@ -94,7 +94,7 @@
         and t1.P_MATERIEL_DESC like CONCAT(CONCAT('%',#{pMaterielDesc,jdbcType=VARCHAR}),'%')
       </if>
       and t1.P_VALID_FLAG <![CDATA[ <> ]]>0
-      and (t2.P_STATUS is null or t2.P_STATUS<![CDATA[ <> ]]>0)
+      and (t2.P_STATUS<![CDATA[ <> ]]>0)
    </where>
     )t
     WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -114,11 +114,8 @@
     LEFT OUTER JOIN HZ_FACTORY t4 ON t1.P_Factory_PUID = t4.PUID
     <where>
       1=1
-      <if test="projectId != null and projectId != ''">
-        and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
-      </if>
       <if test="type == 1">
-        and t1.P_MATERIEL_DATA_TYPE = 11 or t1.P_MATERIEL_DATA_TYPE=21
+        and (t1.P_MATERIEL_DATA_TYPE = 11 or t1.P_MATERIEL_DATA_TYPE=21)
       </if>
       <if test="type == 2">
         and t1.P_MATERIEL_DATA_TYPE = 71
@@ -132,8 +129,11 @@
       <if test="pMaterielDesc != null and pMaterielDesc!='' ">
         and t1.P_MATERIEL_DESC like CONCAT(CONCAT('%',#{pMaterielDesc,jdbcType=VARCHAR}),'%')
       </if>
+      <if test="projectId != null and projectId != ''">
+        and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+      </if>
       and t1.P_VALID_FLAG <![CDATA[ <> ]]>0
-      and (t2.P_STATUS is null or t2.P_STATUS<![CDATA[ <> ]]>0)
+      and t2.P_STATUS<![CDATA[ <> ]]>0
    </where>
     order by t1.P_MATERIEL_CODE)t
     WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -176,11 +176,8 @@
     LEFT OUTER JOIN HZ_FACTORY t4 ON t1.P_Factory_PUID = t4.PUID
     <where>
       1=1
-      <if test="projectId != null and projectId != ''">
-        and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
-      </if>
       <if test="type == 1">
-        and t1.P_MATERIEL_DATA_TYPE = 11 or t1.P_MATERIEL_DATA_TYPE=21
+        and (t1.P_MATERIEL_DATA_TYPE = 11 or t1.P_MATERIEL_DATA_TYPE=21)
       </if>
       <if test="type == 2">
         and t1.P_MATERIEL_DATA_TYPE = 71
@@ -194,8 +191,11 @@
       <if test="pMaterielDesc != null and pMaterielDesc!='' ">
         and t1.P_MATERIEL_DESC like CONCAT(CONCAT('%',#{pMaterielDesc,jdbcType=VARCHAR}),'%')
       </if>
+        <if test="projectId != null and projectId != ''">
+            and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+        </if>
       and t1.P_VALID_FLAG <![CDATA[ <> ]]>0
-      and (t2.P_STATUS is null or t2.P_STATUS<![CDATA[ <> ]]>0)
+      and t2.P_STATUS<![CDATA[ <> ]]>0
     </where>
   </select>
 

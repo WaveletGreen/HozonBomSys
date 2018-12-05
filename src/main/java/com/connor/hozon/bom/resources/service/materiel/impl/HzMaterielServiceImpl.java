@@ -59,6 +59,9 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
 
+    private int errorCount =0;
+
+
     @Override
     public WriteResultRespDTO editHzMateriel(EditHzMaterielReqDTO editHzMaterielReqDTO) {
         WriteResultRespDTO respDTO = new WriteResultRespDTO();
@@ -70,20 +73,10 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         try{
             HzMaterielRecord record = new HzMaterielRecord();
             User user = UserInfo.getUser();
-            if(!editHzMaterielReqDTO.getFactoryCode().equals("") && null != editHzMaterielReqDTO.getFactoryCode()){
+            if(StringUtils.isNotBlank(editHzMaterielReqDTO.getFactoryCode())){
                 HzFactory hzFactory = hzFactoryDAO.findFactory("", editHzMaterielReqDTO.getFactoryCode());
                 if(hzFactory == null){
-                    String puid = UUID.randomUUID().toString();
-                    hzFactory =  new HzFactory();
-                    hzFactory.setPuid(puid);
-                    hzFactory.setpFactoryCode(editHzMaterielReqDTO.getFactoryCode());
-                    hzFactory.setpUpdateName(user.getUserName());
-                    hzFactory.setpCreateName(user.getUserName());
-                    int i = hzFactoryDAO.insert(hzFactory);
-                    if(i<0){
-                        return WriteResultRespDTO.getFailResult();
-                    }
-                    record.setpFactoryPuid(puid);
+                    record.setpFactoryPuid(hzFactoryDAO.insert(editHzMaterielReqDTO.getFactoryCode()));
                 }else{
                     record.setpFactoryPuid(hzFactory.getPuid());
                 }
@@ -135,15 +128,17 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             }else {
                 record.setP3cPartFlag(null);
             }
+
             record.setpPartImportantDegree(editHzMaterielReqDTO.getpPartImportantDegree());
+            record.setpMaterielDesc(editHzMaterielReqDTO.getpMaterielDesc());
             int i = hzMaterielDAO.update(record);
             if(i>0){
                 return WriteResultRespDTO.getSuccessResult();
             }
         }catch (Exception e){
+            e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
-
         return WriteResultRespDTO.getFailResult();
     }
 
@@ -214,7 +209,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     }
 
     @Override
-    @Transactional(rollbackFor = IllegalArgumentException.class)
+    @Transactional(rollbackFor = Exception.class)
     public WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO) {
         if(StringUtil.isEmpty(reqDTO.getPuids()) || StringUtil.isEmpty(reqDTO.getProjectId())
                 || null == reqDTO.getOrderId()){
@@ -247,6 +242,14 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             List<HzMaterielRecord> records = hzMaterielDAO.getMaterialRecordsByPuids(query);
             List<HzMaterielRecord> afterRecords = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){
+                //核查参数信息
+                String errMsg = checkMaterielParamResult(records);
+                if(this.errorCount>0){
+                    WriteResultRespDTO respDTO = new WriteResultRespDTO();
+                    respDTO.setErrMsg(errMsg);
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                    return respDTO;
+                }
                 //到 after表中查询看是否存在记录
                 //存在记录则过滤 不存在记录则插入
                 HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
@@ -399,4 +402,42 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             return WriteResultRespDTO.getFailResult();
         }
     }
+
+
+    /**
+     * 物料发起流程需要做参数合法性检验
+     * 需要和SAP进行参数传递，SAP规定的必填参数必须填写完整后才允许发起流程
+     */
+    private String checkMaterielParamResult(List<HzMaterielRecord> materielRecords){
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("<strong style='color: red'>参数信息填写不完整，不允许发起流程!<br>" +
+                "必填参数有:工厂，物料编码，物料中文描述，基本计量单位，" +
+                "物料类型，采购类型，MRP控制者</strong><br>");
+        for(HzMaterielRecord record:materielRecords){
+            String materielCode = record.getpMaterielCode();
+            String factoryCode = record.getFactoryCode();
+            String materielDesc = record.getpMaterielDesc();
+            String basicUnit = record.getpBasicUnitMeasure();
+            String materielType = record.getpMaterielType();
+            String mrpController = record.getpMrpController();
+            String buyType = record.getResource();
+
+            if(
+                    StringUtils.isBlank(factoryCode)  ||
+                    StringUtils.isBlank(materielDesc) ||
+                    StringUtils.isBlank(basicUnit)    ||
+                    StringUtils.isBlank(materielType) ||
+                    StringUtils.isBlank(mrpController)||
+                    StringUtils.isBlank(buyType)
+                    ){
+
+                stringBuffer.append("<strong style='color:deeppink'>"+materielCode+"</strong>的必填参数填写不完整!<br>");
+                this.errorCount++;
+            }
+        }
+
+        return stringBuffer.toString();
+    }
+
+
 }

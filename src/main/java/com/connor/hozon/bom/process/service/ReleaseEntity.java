@@ -21,6 +21,7 @@ import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
+import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.process.iservice.IDataModifier;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.*;
@@ -125,8 +126,13 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     @Autowired
     @Qualifier("synBomService")
     private ISynBomService synBomService;
+
+    @Autowired
+    private SynMaterielService synMaterielService;
+
     @Autowired
     private HzRelevanceBasicDao hzRelevanceBasicDao;
+
     @Autowired
     private HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
 
@@ -639,11 +645,14 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             });
         }
 
+        //需要传输数据到SAP BOM端需要记录数据传输结果
         if (ListUtil.isNotEmpty(deleteList)) {
+//            synMaterielService.deleteByPuids();
             hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
         }
         if (ListUtil.isNotEmpty(updateList)) {
             hzMaterielDAO.updateList(updateList);
+
         }
         if (ListUtil.isNotEmpty(addList)) {
             hzMaterielDAO.insertList(addList, ChangeTableNameEnum.HZ_MATERIEL_BEFORE.getTableName());
