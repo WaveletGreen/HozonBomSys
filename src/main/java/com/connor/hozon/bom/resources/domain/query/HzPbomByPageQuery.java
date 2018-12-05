@@ -45,7 +45,7 @@ public class HzPbomByPageQuery extends DefaultPageQuery {
      */
     private Integer showBomStructure;
     /**
-     * 是否为新产生件，(1工艺合件产生,2工艺辅料产生,0否）指工艺合件和工艺辅料产生的件
+     * 是否为新产生件，(2工艺合件产生,1工艺辅料产生,0否）指工艺合件和工艺辅料产生的件
      */
     private String pIsNewPart;
 

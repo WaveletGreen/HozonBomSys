@@ -4,6 +4,8 @@
 <body>
 <form id="pbomManageForm" role="form" method="post" action="pbom/update">
     <input id="eBomPuid" name="eBomPuid" type="hidden" th:value="${data.eBomPuid}"/><!--th:value="${entity.eBomPuid}"-->
+    <input id="updateType" name="updateType" type="hidden" th:value="${data.updateType}"/>
+    <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/>
     <div class="form-group">
         <label for="lineId">零件号</label>
         <input class="form-control" id="lineId" name="lineId" type="text" disabled="disabled" th:value="${data.lineId}"
@@ -154,6 +156,9 @@
                     // "rank": $("#rank").val(),
                     // "level": $("#level").val(),
                     "lineId": $("#lineId").val(),
+                    "updateType": $("#updateType").val(),
+                    "puid": $("#puid").val(),
+
                     // "pBomLinePartName": $("#pBomLinePartName").val(),
                     // "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
                     // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),

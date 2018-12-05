@@ -194,7 +194,7 @@ function initTable(eBomUrl) {
                         }
                     },
                     {
-                        text: '修改',
+                        text: '同步修改',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -218,8 +218,8 @@ function initTable(eBomUrl) {
                                     }
                                     else {
                                         window.Ewin.dialog({
-                                            title: "修改",
-                                            url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
+                                            title: "同步修改",
+                                            url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid+"&updateType="+2,
                                             gridId: "gridId",
                                             width: 500,
                                             height: 500
@@ -229,6 +229,42 @@ function initTable(eBomUrl) {
                             })
                         }
                     },
+                    // {
+                    //     text: '当前修改',
+                    //     iconCls: 'glyphicon glyphicon-pencil',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         //只能选一条
+                    //         if (rows.length != 1) {
+                    //             window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                    //             return false;
+                    //         }
+                    //         else if (rows[0].status == 5 || rows[0].status == 6) {
+                    //             window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                    //             return false;
+                    //         }
+                    //         var url = "ebom/updateEbom";
+                    //         $.ajax({
+                    //             url: "privilege/write?url=" + url,
+                    //             type: "GET",
+                    //             success: function (result) {
+                    //                 if (!result.success) {
+                    //                     window.Ewin.alert({message: result.errMsg});
+                    //                     return false;
+                    //                 }
+                    //                 else {
+                    //                     window.Ewin.dialog({
+                    //                         title: "当前修改",
+                    //                         url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid+"&updateType="+1,
+                    //                         gridId: "gridId",
+                    //                         width: 500,
+                    //                         height: 500
+                    //                     });
+                    //                 }
+                    //             }
+                    //         })
+                    //     }
+                    // },
                     {
                         text: '删除',
                         iconCls: 'glyphicon glyphicon-remove',
@@ -782,7 +818,7 @@ function initTable1(eBomUrl, puids) {
                         }
                     },
                     {
-                        text: '修改',
+                        text: '同步修改',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -806,7 +842,7 @@ function initTable1(eBomUrl, puids) {
                                     }
                                     else {
                                         window.Ewin.dialog({
-                                            title: "修改",
+                                            title: "同步修改",
                                             url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
                                             gridId: "gridId",
                                             width: 500,

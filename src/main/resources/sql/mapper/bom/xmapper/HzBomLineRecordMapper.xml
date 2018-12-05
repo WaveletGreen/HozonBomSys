@@ -80,6 +80,8 @@
 
         <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
         <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
+
+        <result column="UPDATE_TYPE" jdbcType="INTEGER" property="updateType"/>
     </resultMap>
     <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"-->
                <!--type="sql.pojo.bom.HzBomLineRecord">-->

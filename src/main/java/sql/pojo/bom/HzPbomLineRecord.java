@@ -112,6 +112,19 @@ public class HzPbomLineRecord extends BaseChangePOJO implements Cloneable{
     @Deprecated
     private String mwoNo;
 
+    /**
+     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
+     */
+    private Integer updateType;
+
+    public Integer getUpdateType() {
+        return updateType;
+    }
+
+    public void setUpdateType(Integer updateType) {
+        this.updateType = updateType;
+    }
+
     public String getMwoNo() {
         return mwoNo;
     }

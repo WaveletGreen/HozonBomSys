@@ -253,6 +253,8 @@ public class HzMbomServiceImpl implements HzMbomService{
             record.setpStockLocation(reqDTO.getpStockLocation());
             record.setBomDigifaxId(hzBomMainRecord.getPuid());
             record.setLineId(reqDTO.getLineId());
+            if(reqDTO.getUpdateType()==1)
+                record.setPuid(reqDTO.getPuid());
             int i = hzMbomRecordDAO.update(record);
             if (i > 0) {
                 //更新后传输到SAP

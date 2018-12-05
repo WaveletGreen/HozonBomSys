@@ -165,8 +165,9 @@ public class HzPbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updatePbomManage", method = RequestMethod.GET)
-    public String updatePbomManageRecordToPage(String projectId, String eBomPuid, Model model) {
+    public String updatePbomManageRecordToPage(String projectId, String eBomPuid,String puid,Integer updateType, Model model) {
         HzPbomLineRespDTO respDTO = hzPbomService.getHzPbomByPuid(projectId, eBomPuid);
+        respDTO.setUpdateType(updateType);
         if (respDTO == null) {
             return "";
         }

@@ -161,7 +161,7 @@ function initTable(pBomUrl) {
                 showRefresh: true,                  //是否显示刷新按钮
                 toolbars: [
                     {
-                        text: '修改',
+                        text: '同步修改',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -185,8 +185,8 @@ function initTable(pBomUrl) {
                                     }
                                     else {
                                         window.Ewin.dialog({
-                                            title: "修改",
-                                            url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
+                                            title: "同步修改",
+                                            url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid+"&puid="+rows[0].puid+"&updateType="+2,
                                             gridId: "gridId",
                                             width: 500,
                                             height: 500
@@ -196,6 +196,42 @@ function initTable(pBomUrl) {
                             })
                         }
                     },
+                    // {
+                    //     text: '当前修改',
+                    //     iconCls: 'glyphicon glyphicon-pencil',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         //只能选一条
+                    //         if (rows.length != 1) {
+                    //             window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                    //             return false;
+                    //         }
+                    //         else if (rows[0].status == 5 || rows[0].status == 6) {
+                    //             window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                    //             return false;
+                    //         }
+                    //         var url = "pbom/updatePbomManage";
+                    //         $.ajax({
+                    //             url: "privilege/write?url=" + url,
+                    //             type: "GET",
+                    //             success: function (result) {
+                    //                 if (!result.success) {
+                    //                     window.Ewin.alert({message: result.errMsg});
+                    //                     return false;
+                    //                 }
+                    //                 else {
+                    //                     window.Ewin.dialog({
+                    //                         title: "当前修改",
+                    //                         url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid+"&puid="+rows[0].puid+"&updateType="+1,
+                    //                         gridId: "gridId",
+                    //                         width: 500,
+                    //                         height: 500
+                    //                     });
+                    //                 }
+                    //             }
+                    //         })
+                    //     }
+                    // },
                     {
                         text: '删除',
                         iconCls: 'glyphicon glyphicon-remove',
