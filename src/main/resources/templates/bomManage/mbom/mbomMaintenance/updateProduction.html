@@ -30,12 +30,14 @@
     </div>
     <div class="form-group">
         <label for="pBomLinePartClass">零件分类</label>
-        <input class="form-control" id="pBomLinePartClass" name="pBomLinePartClass" type="text" disabled="disabled" th:value="${data.pBomLinePartClass}"
+        <input class="form-control" id="pBomLinePartClass" name="pBomLinePartClass" type="text" disabled="disabled"
+               th:value="${data.pBomLinePartClass}"
                placeholder=""/>
     </div>
     <div class="form-group">
         <label for="pBomLinePartResource">零部件来源</label>
-        <input class="form-control" id="pBomLinePartResource" name="pBomLinePartResource" type="text" disabled="disabled" th:value="${data.pBomLinePartResource}"
+        <input class="form-control" id="pBomLinePartResource" name="pBomLinePartResource" type="text"
+               disabled="disabled" th:value="${data.pBomLinePartResource}"
                placeholder=""/>
     </div>
     <div class="form-group">
@@ -161,7 +163,7 @@
                 var myData = JSON.stringify({
                     "eBomPuid": $("#eBomPuid").val(),
                     "lineId": $("#lineId").val(),
-                    "projectId" : $("#project", window.top.document).val(),
+                    "projectId": $("#project", window.top.document).val(),
                     "sparePart": $("#sparePart").val(),
                     "sparePartNum": $("#sparePartNum").val(),
                     "processRoute": $("#processRoute").val(),
@@ -187,11 +189,14 @@
                     data: myData,
                     success:
                         function (result) {
-                            activeTabBodyRefresh();
+                            $('.modal-dialog', window.top.document).parent('div').remove()
+                            $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery1();
                             if (result.success) {
                                 layer.msg('修改成功', {icon: 1, time: 2000})
                             }
-                            else if(!result.success){
+                            else if (!result.success) {
                                 window.Ewin.alert({message: result.errMsg})
                             }
                         },
@@ -202,9 +207,9 @@
             }
         });
     })
-    $(document).keydown(function(event) {
+    $(document).keydown(function (event) {
         if (event.keyCode == 13) {
-            $('form').each(function() {
+            $('form').each(function () {
                 event.preventDefault();
             });
         }
