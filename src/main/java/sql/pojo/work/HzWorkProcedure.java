@@ -3,6 +3,7 @@ package sql.pojo.work;
 import io.swagger.models.auth.In;
 import sql.pojo.BaseChangePOJO;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Date;
 
 /**
@@ -131,6 +132,16 @@ public class HzWorkProcedure extends BaseChangePOJO {
      * 是否已发送过SAP
      */
     private Integer isSent;
+
+    private Integer dataType;
+
+    public Integer getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Integer dataType) {
+        this.dataType = dataType;
+    }
 
     public String getFactoryCode() {
         return factoryCode;

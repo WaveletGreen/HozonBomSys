@@ -68,14 +68,15 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
 
+    private int errorCount = 0;
     @Override
     public WriteResultRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO) {
         try{
             WriteResultRespDTO respDTO = new WriteResultRespDTO();
             User user = UserInfo.getUser();
-            if(!PrivilegeUtil.writePrivilege()){
-               return WriteResultRespDTO.getFailPrivilege();
-            }
+//            if(!PrivilegeUtil.writePrivilege()){
+//               return WriteResultRespDTO.getFailPrivilege();
+//            }
 
             HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
             HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(reqDTO.getMaterielId());
@@ -157,9 +158,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Override
     public WriteResultRespDTO updateHzWorkProcess(UpdateHzProcessReqDTO reqDTO) {
         User user = UserInfo.getUser();
-        if(!PrivilegeUtil.writePrivilege()){
-            return WriteResultRespDTO.getFailPrivilege();
-        }
+//        if(!PrivilegeUtil.writePrivilege()){
+//            return WriteResultRespDTO.getFailPrivilege();
+//        }
         HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(reqDTO.getMaterielId());
         if(workProcess == null){
             HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
@@ -709,8 +710,6 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             //表单id
             Long orderId = reqDTO.getOrderId();
 
-            //获取审核人信息
-//            Long auditorId = reqDTO.getAuditorId();
             //数据库表名
             String tableName = ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName();
             //获取数据信息
@@ -785,21 +784,6 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 record.setTableName(tableName);
 
                 map.put("changeData",record);
-                //申请人
-//                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
-//                applicantChangeRecord.setApplicantId(applicantId);
-//                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
-//                applicantChangeRecord.setTableName(tableName);
-//
-//                map.put("applicant",applicantChangeRecord);
-                //审核人
-//                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
-//                auditorChangeRecord.setAuditorId(auditorId);
-//                auditorChangeRecord.setOrderId(reqDTO.getOrderId());
-//                auditorChangeRecord.setTableName(tableName);
-//
-//                map.put("auditor",auditorChangeRecord);
-
 
                 //启动线程进行插入操作
                 List<ExecutorServices> services = new ArrayList<>();
@@ -817,12 +801,6 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                                 case "changeData":
                                     hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
                                     break;
-//                                case "applicant":
-//                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
-//                                    break;
-//                                case "auditor" :
-//                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
-//                                    break;
                                 default:break;
                             }
                         }
@@ -900,13 +878,27 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
          * 2.半成品工艺路线 需要一次性传输2条数据
          *
          * 必填的字段
-         * 工厂 物料编码 基本数量 有效日期自 用途 状态 工序序号 工作中心 控制码 工序描述 作业数量1（直接人工）
+         * 工厂 物料编码 基本数量 有效日期(当前系统时间) 用途 状态 工序序号 工作中心 控制码 工序描述 作业数量1（直接人工）
          *
-         * 对以上的参数要求进行校验
+         * 对以上的参数进行合法性校验
          */
+        StringBuffer stringBuffer = new StringBuffer();
+        boolean[] booleans = new boolean[hzWorkProcedures.size()];//和集合长度一一对应
+
+        for(int i=0;i<hzWorkProcedures.size();i++){
+
+
+        }
 
 
 
         return null;
+    }
+
+
+
+    public static void main(String[] s){
+        boolean[] b = new boolean[10];
+        System.out.println(Arrays.toString(b));
     }
 }
