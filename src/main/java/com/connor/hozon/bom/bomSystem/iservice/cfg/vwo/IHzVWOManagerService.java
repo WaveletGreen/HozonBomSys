@@ -281,4 +281,8 @@ public interface IHzVWOManagerService {
     JSONObject deleteChangeRelevance(Long orderChangeId);
 
     boolean featureToSap(Long vwoId);
+
+    boolean derivativeMaterielToSap(Long orderId);
+
+    boolean relevanceToSap(Long orderId);
 }

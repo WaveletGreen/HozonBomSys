@@ -207,6 +207,9 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     }
                 //衍生物料变更批准
                 }else if(ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    if(!hzVWOManagerService.derivativeMaterielToSap(orderId)){
+                        return false;
+                    }
                     if(hzDMBasicChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
@@ -222,6 +225,10 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         return false;
                     }
                 }else if(ChangeTableNameEnum.HZ_RELEVANCE_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    //发送至SAP
+                    if(!hzVWOManagerService.relevanceToSap(orderId)){
+                        return false;
+                    }
                     HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
                     hzRelevanceBasic.setRbVwoId(orderId);
                     hzRelevanceBasic.setRelevanceStatus(1);

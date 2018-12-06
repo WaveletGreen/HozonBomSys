@@ -48,55 +48,44 @@ var toolbar = [
                     return false;
                 }
             }
-            var url = "cfg0/deleteByPuidFake";
-            $.ajax({
-                url: "privilege/write?url=" + url,
-                type: "GET",
-                success: function (result) {
-                    if (!result.success) {
-                        window.Ewin.alert({message: result.errMsg});
-                        return false;
-                    }
-                    else {
-                        var url = "cfg0/deleteByPuidFake";
-                        $.ajax({
-                            url: "privilege/write?url=" + url,
-                            type: "GET",
-                            success: function (result) {
-                                if (!result.success) {
-                                    window.Ewin.alert({message: result.errMsg});
-                                    return false;
-                                }
-                                else {
-                                    window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
-                                        if (e) {
-                                            $.ajax({
-                                                type: "POST",
-                                                //ajax需要添加打包名
-                                                url: "./cfg0/deleteByPuidFake",
-                                                data: JSON.stringify(rows),
-                                                contentType: "application/json",
-                                                success: function (result) {
-                                                    if (result.status) {
-                                                        layer.msg(result.msg, {icon: 1, time: 2000})
-                                                    }
-                                                    else {
-                                                        window.Ewin.alert({message: "操作删除失败:" + result.msg});
-                                                    }
-                                                    $table.bootstrapTable("refresh");
-                                                },
-                                                error: function (info) {
-                                                    window.Ewin.alert({message: "操作删除:" + info.status});
-                                                }
-                                            })
-                                        }
-                                    });
-                                }
-                            }
-                        })
-                    }
+
+        var url = "cfg0/deleteByPuidFake";
+        $.ajax({
+            url: "privilege/write?url=" + url,
+            type: "GET",
+            success: function (result) {
+                if (!result.success) {
+                    window.Ewin.alert({message: result.errMsg});
+                    return false;
                 }
-            })
+                else {
+                    window.Ewin.confirm({title: '提示', message: '是否要删除您所选择的记录？', width: 500}).on(function (e) {
+                        if (e) {
+                            $.ajax({
+                                type: "POST",
+                                //ajax需要添加打包名
+                                url: "./cfg0/deleteByPuidFake",
+                                data: JSON.stringify(rows),
+                                contentType: "application/json",
+                                success: function (result) {
+                                    if (result.status) {
+                                        layer.msg(result.msg, {icon: 1, time: 2000})
+                                    }
+                                    else {
+                                        window.Ewin.alert({message: "操作删除失败:" + result.msg});
+                                    }
+                                    $table.bootstrapTable("refresh");
+                                },
+                                error: function (info) {
+                                    window.Ewin.alert({message: "操作删除:" + info.status});
+                                }
+                            })
+                        }
+                    });
+                }
+            }
+        })
+
         }
     },
     {

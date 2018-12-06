@@ -34,10 +34,12 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynFeatureService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynRelevanceService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IProcess;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureService;
+import com.connor.hozon.bom.bomSystem.service.integrate.SynConfigurableMaterialService;
 import com.connor.hozon.bom.bomSystem.service.process.FeatureProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.InterruptionContainer;
 import com.connor.hozon.bom.bomSystem.service.process.ModelColorProcessManager;
@@ -70,6 +72,7 @@ import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
 import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
+import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
 import sql.pojo.cfg.fullCfg.HzFullCfgModelChange;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange;
@@ -248,8 +251,13 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     @Autowired
     HzRelevanceBasicDao hzRelevanceBasicDao;
 
+    //SAP
     @Autowired
     ISynFeatureService synFeatureService;
+    @Autowired
+    SynConfigurableMaterialService synConfigurableMaterialService;
+    @Autowired
+    ISynRelevanceService synRelevanceService;
     /**
      * 日志
      */
@@ -2121,40 +2129,135 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 hzFeatureChangeBeansAdd.add(hzCfg0Record);
             }
         }
-
-
-//        List<HzFeatureChangeBean> beans = iHzFeatureChangeService.doSelectCfgUidsByVwoId(vwoId);
-//        if (beans != null && !beans.isEmpty()) {
-//            for (int i = 0; i < beans.size(); i++) {
-//                List<HzFeatureChangeBean> bs = iHzFeatureChangeService.doQueryLastTwoChange(beans.get(i).getCfgPuid(), vwoId);
-//                if(bs==null||bs.size()<=0||bs.get(1)==null){
-//                    continue;
-//                }
-//                if(bs.get(0)==null){
-//                    hzFeatureChangeBeansAdd.add(bs.get(1).getHzCfg0Record());
-//                }else if(bs.get(1).getCfgStatus()!=null&&bs.get(1).getCfgStatus()==2){
-//                    hzFeatureChangeBeansDelete.add(bs.get(1).getHzCfg0Record());
-//                }else {
-//                    hzFeatureChangeBeansUpdate.add(bs.get(1).getHzCfg0Record());
-//                }
-//            }
-//        }
-
         try {
-            JSONObject addResult = synFeatureService.addFeature(hzFeatureChangeBeansAdd);
-            JSONObject deleteResult = synFeatureService.deleteFeature(hzFeatureChangeBeansDelete);
-//            JSONObject updateResult = synFeatureService.updateFeature(hzFeatureChangeBeansUpdate);
-            List<IntegrateMsgDTO> addFail = (List<IntegrateMsgDTO>) addResult.get("fail");
-            List<IntegrateMsgDTO> deleteFail = (List<IntegrateMsgDTO>) deleteResult.get("fail");
-//            List<IntegrateMsgDTO> updateFail = (List<IntegrateMsgDTO>) updateResult.get("fail");
-//            if(addFail.size()>0||deleteFail.size()>0||updateFail.size()>0){
-            if(addFail.size()>0||deleteFail.size()>0){
+            List<IntegrateMsgDTO> addFail = null;
+            List<IntegrateMsgDTO> deleteFail = null;
+            if(hzFeatureChangeBeansAdd!=null&&hzFeatureChangeBeansAdd.size()>0) {
+                JSONObject addResult = synFeatureService.addFeature(hzFeatureChangeBeansAdd);
+                addFail = (List<IntegrateMsgDTO>) addResult.get("fail");
+            }
+            if(hzFeatureChangeBeansDelete!=null&&hzFeatureChangeBeansDelete.size()>0){
+                JSONObject deleteResult = synFeatureService.deleteFeature(hzFeatureChangeBeansDelete);
+                deleteFail = (List<IntegrateMsgDTO>) deleteResult.get("fail");
+            }
+            if(addFail!=null&&addFail.size()>0){
+                return false;
+            }
+            if(deleteFail!=null&&deleteFail.size()>0){
                 return false;
             }
         }catch (Exception e){
             return false;
         }
         return true;
+    }
+
+    /****************衍生物料变更发送SAP*************************************************/
+    @Override
+    public boolean derivativeMaterielToSap(Long orderId) {
+        List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics = hzDerivativeMaterielBasicDao.selectByChangeOrderId(orderId);
+        List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasicAdd = new ArrayList<>();
+        List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasicDelete = new ArrayList<>();
+
+        for(HzDerivativeMaterielBasic hzDerivativeMaterielBasic : hzDerivativeMaterielBasics){
+            if(hzDerivativeMaterielBasic.getDmbStatus()==2){
+                hzDerivativeMaterielBasicDelete.add(hzDerivativeMaterielBasic);
+            }else {
+                hzDerivativeMaterielBasicAdd.add(hzDerivativeMaterielBasic);
+            }
+        }
+
+        try {
+            List<IntegrateMsgDTO> addFail = null;
+            List<IntegrateMsgDTO> deleteFail = null;
+            if(hzDerivativeMaterielBasicAdd!=null&&hzDerivativeMaterielBasicAdd.size()>0) {
+                JSONObject addResult = synConfigurableMaterialService.add(hzDerivativeMaterielBasicAdd);
+                addFail = (List<IntegrateMsgDTO>) addResult.get("fail");
+            }
+            if (hzDerivativeMaterielBasicDelete!=null&&hzDerivativeMaterielBasicDelete.size()>0) {
+                JSONObject deleteResult = synConfigurableMaterialService.delete(hzDerivativeMaterielBasicDelete);
+                deleteFail = (List<IntegrateMsgDTO>) deleteResult.get("fail");
+            }
+            if(addFail!=null&&addFail.size()>0){
+                return false;
+            }
+            if(deleteFail!=null&&deleteFail.size()>0){
+                return false;
+            }
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean relevanceToSap(Long orderId) {
+
+        HzChangeOrderRecord hzChangeOrderRecord = hzChangeOrderDAO.selectById(orderId);
+
+        List<HzRelevanceBasicChange> hzRelevanceBasicChangesAdd = new ArrayList<>();
+        List<HzRelevanceBasicChange> hzRelevanceBasicChangesUpdate = new ArrayList<>();
+        List<HzRelevanceBasicChange> hzRelevanceBasicChangesDelete = new ArrayList<>();
+        /*********************根据变更单Id获取变更后数据***********************/
+        List<HzRelevanceBasicChange> hzRelevanceBasicChangesAfter = hzRelevanceBasicChangeDao.selectByOrderChangeId(orderId);
+        /*****************根据变更后的数据获取变更前的数据******************/
+        //根据变更后版本找到最近的版本，并根据其版本找到变更前数据
+        if(hzRelevanceBasicChangesAfter==null||hzRelevanceBasicChangesAfter.size()<=0){
+            return false;
+        }
+        Integer version = hzRelevanceBasicChangesAfter.get(0).getChangeVersion();
+        //如果当前变更是否为第一次变更
+        if(version>0){
+            HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor = new HzRelevanceBasicChange();
+            hzRelevanceBasicChangeQueryBefor.setChangeVersion(version-1);
+            hzRelevanceBasicChangeQueryBefor.setRbProjectUid(hzChangeOrderRecord.getProjectId());
+            List<HzRelevanceBasicChange> hzRelevanceBasicChangesBefor = hzRelevanceBasicChangeDao.selectByVersionAndProjectId(hzRelevanceBasicChangeQueryBefor);
+
+            Iterator<HzRelevanceBasicChange> iteratorBefor = hzRelevanceBasicChangesBefor.iterator();
+
+            while (iteratorBefor.hasNext()){
+                boolean deleteFlag = true;
+                HzRelevanceBasicChange hzRelevanceBasicChangeBefor = iteratorBefor.next();
+                Iterator<HzRelevanceBasicChange> iteratorAfter = hzRelevanceBasicChangesAfter.iterator();
+                while (iteratorAfter.hasNext()){
+                    HzRelevanceBasicChange hzRelevanceBasicChangeAfter = iteratorAfter.next();
+//                    if(hzRelevanceBasicChangeBefor.getRbRelevance().equals(hzRelevanceBasicChangeAfter.getRbRelevance())&&hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
+                    if(hzRelevanceBasicChangeBefor.getRbRelevance().equals(hzRelevanceBasicChangeAfter.getRbRelevance())){
+                        if(hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
+                            deleteFlag = false;
+                            iteratorAfter.remove();
+                            iteratorBefor.remove();
+                            break;
+                        }
+                        deleteFlag = false;
+                        hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeAfter);
+                        iteratorAfter.remove();
+                        break;
+                    }
+                }
+                if (deleteFlag){
+                    hzRelevanceBasicChangesDelete.add(hzRelevanceBasicChangeBefor);
+                    iteratorBefor.remove();
+                }
+            }
+            hzRelevanceBasicChangesAdd.addAll(hzRelevanceBasicChangesAfter);
+        }else {
+            hzRelevanceBasicChangesAdd.addAll(hzRelevanceBasicChangesAfter);
+        }
+        List<HzRelevanceBasic> hzRelevanceBasicsAdd = hzRelevanceBasicDao.selectByChange(hzRelevanceBasicChangesAdd);
+        List<HzRelevanceBasic> hzRelevanceBasicsUpdate = hzRelevanceBasicDao.selectByChange(hzRelevanceBasicChangesUpdate);
+        List<HzRelevanceBasic> hzRelevanceBasicsDelete = hzRelevanceBasicDao.selectByChange(hzRelevanceBasicChangesDelete);
+        try {
+
+            JSONObject resultAdd = synRelevanceService.addRelevance(hzRelevanceBasicsAdd);
+            JSONObject resultUpdate = synRelevanceService.addRelevance(hzRelevanceBasicsUpdate);
+            JSONObject resultDelete = synRelevanceService.deleteRelevance(hzRelevanceBasicsDelete);
+
+        }catch (Exception e){
+            return false;
+        }
+
+        return false;
     }
 
     /**

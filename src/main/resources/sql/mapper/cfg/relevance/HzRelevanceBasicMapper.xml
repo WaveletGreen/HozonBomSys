@@ -685,7 +685,8 @@
         RB_RELEVANCE_DESC,
         RB_RELEVANCE_CODE,
         RELEVANCE_STATUS,
-        RB_PROJECT_UID
+        RB_PROJECT_UID,
+        IS_SENT
         )
         values
         (
@@ -700,7 +701,8 @@
         #{rbRelevanceDesc,jdbcType=OTHER},
         #{rbRelevanceCode,jdbcType=VARCHAR},
         #{relevanceStatus,jdbcType=DECIMAL},
-        #{rbProjectUid,jdbcType=VARCHAR}
+        #{rbProjectUid,jdbcType=VARCHAR},
+        #{isSent,jdbcType=DECIMAL}
         )
     </insert>
 
@@ -728,4 +730,16 @@
         select SRC_ID from HZ_RELEVANCE_BASIC_CHANGE where CHANGE_ORDER_ID = #{rbVwoId,jdbcType=DECIMAL}
         )
     </update>
+
+    <select id="selectByChange" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_RELEVANCE_BASIC
+        where
+          ID in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{srcId,jdbcType=DECIMAL}
+        </foreach>
+    </select>
 </mapper>

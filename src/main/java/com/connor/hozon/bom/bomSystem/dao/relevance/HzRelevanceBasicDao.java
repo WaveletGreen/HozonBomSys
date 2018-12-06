@@ -11,6 +11,7 @@ import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
 import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.relevance.HzRelevanceBasic;
+import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
 
 import java.util.List;
 /**
@@ -65,4 +66,6 @@ public interface HzRelevanceBasicDao extends BasicDao<HzRelevanceBasic> {
     int updateStatus(HzRelevanceBasic hzRelevanceBasicUpdate);
 
     int updateStatusByOrderChangeId(HzRelevanceBasic hzRelevanceBasic);
+
+    List<HzRelevanceBasic> selectByChange(List<HzRelevanceBasicChange> hzRelevanceBasicChangesAdd);
 }

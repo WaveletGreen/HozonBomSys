@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.relevance.HzRelevanceBasic;
+import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
 
 import java.util.List;
 
@@ -104,6 +105,11 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
     @Override
     public int updateStatusByOrderChangeId(HzRelevanceBasic hzRelevanceBasic) {
         return baseSQLUtil.executeUpdate(hzRelevanceBasic,clz.getCanonicalName()+".updateStatusByOrderChangeId");
+    }
+
+    @Override
+    public List<HzRelevanceBasic> selectByChange(List<HzRelevanceBasicChange> hzRelevanceBasicChangesAdd) {
+        return baseSQLUtil.executeQueryByPass(new HzRelevanceBasic(),hzRelevanceBasicChangesAdd,clz.getCanonicalName()+".selectByChange");
     }
 
 }

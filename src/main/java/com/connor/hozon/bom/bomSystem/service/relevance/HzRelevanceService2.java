@@ -70,6 +70,14 @@ public class HzRelevanceService2 {
         JSONArray datas = new JSONArray();
         Long index = 1L;
 
+        //查询项目中的相关性
+        List<HzRelevanceBasic> hzRelevanceBasicsOld = hzRelevanceBasicDao.selectByProjectPuid(projectPuid);
+        Map<String,HzRelevanceBasic> hzRelevanceBasicsOldMap = new HashMap<>();
+        for(HzRelevanceBasic hzRelevanceBasic : hzRelevanceBasicsOld){
+            hzRelevanceBasicsOldMap.put(hzRelevanceBasic.getRbRelevance(),hzRelevanceBasic);
+        }
+
+
         //查看相关性主表和相关性关联表是否有数据，有则删除
         hzRelevanceBasicDao.deleteByProjectUid(projectPuid);
 
@@ -179,6 +187,12 @@ public class HzRelevanceService2 {
                     hzRelevanceBasic.setRbProjectUid(projectPuid);
                     //状态
                     hzRelevanceBasic.setRelevanceStatus(0);
+
+                    //是否发送至sap
+                    if(hzRelevanceBasicsOldMap.get(relevance)!=null){
+                        hzRelevanceBasic.setIsSent(hzRelevanceBasicsOldMap.get(relevance).getIsSent());
+                    }
+
                     //向相关性主表增加数据
                     Long relevanceUid = hzRelevanceBasicDao.insertBasic(hzRelevanceBasic);
 

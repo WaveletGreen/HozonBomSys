@@ -405,6 +405,7 @@ public class HzComposeMFService {
                 sm.setPuid(UUIDHelper.generateUpperUid());
                 sm.setpFactoryPuid(factory.getPuid());
                 sm.setpPertainToProjectPuid(hzComposeMFDTO.getProjectUid());
+                sm.setpMaterielDataType(11);
                 if (!hzSuperMaterielService.doInsertOne(sm)) {
                     logger.error("存储超级物料失败");
                 }

@@ -403,4 +403,13 @@
             and 0 = (select DMB_CHANGE_STATUS from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})
         </foreach>
     </update>
+
+    <select id="selectByChangeOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_DERIVATIVE_MATERIEL_BASIC
+        where
+          CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+    </select>
 </mapper>
