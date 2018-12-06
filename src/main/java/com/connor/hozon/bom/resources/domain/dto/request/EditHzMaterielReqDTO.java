@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
 
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/7/3
@@ -83,6 +85,7 @@ public class EditHzMaterielReqDTO {
     private String resource;
 
     private  String pMaterielDesc;
+
 
     public String getpMaterielDesc() {
         return pMaterielDesc;

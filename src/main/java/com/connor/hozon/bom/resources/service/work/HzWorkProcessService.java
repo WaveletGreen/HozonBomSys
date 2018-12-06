@@ -58,7 +58,9 @@ public interface HzWorkProcessService {
 
     Page<HzWorkProcessRespDTO> findHzWorkProcessForPage2(HzWorkProcessByPageQuery query);
 
-    HzWorkProcessRespDTO findHzWorkProcess(String materielId,String projectId);
+
+    List<HzWorkProcessRespDTO> findHzWorkProcess(String materielId,String projectId);
+
 
     HzWorkProcessRespDTO findHzWorkProcess2(String materielId,String projectId, String procedureDesc);
 

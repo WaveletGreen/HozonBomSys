@@ -411,8 +411,8 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     private String checkMaterielParamResult(List<HzMaterielRecord> materielRecords){
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("<strong style='color: red'>参数信息填写不完整，不允许发起流程!<br>" +
-                "必填参数有:工厂，物料编码，物料中文描述，基本计量单位，" +
-                "物料类型，采购类型，MRP控制者</strong><br>");
+                "必填参数有:工厂,物料编码,物料中文描述,基本计量单位," +
+                "物料类型,采购类型,MRP控制者</strong><br>");
         for(HzMaterielRecord record:materielRecords){
             String materielCode = record.getpMaterielCode();
             String factoryCode = record.getFactoryCode();

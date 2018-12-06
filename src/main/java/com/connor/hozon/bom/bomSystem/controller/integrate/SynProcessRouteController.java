@@ -24,6 +24,7 @@ public class SynProcessRouteController extends ExtraIntegrate {
     SynProcessRouteService synProcessRouteService;
     @RequestMapping("/process/submit")
     public String submit( String[] materielIds, String projectId, Model model){
+        materielIds = new String[]{"e390a8ef-b621-4288-9e98-d6621f45f7ac"};
         JSONObject result =  synProcessRouteService.addRouting(materielIds, projectId);
         addToModel(result, model);
         return "stage/templateOfIntegrate";

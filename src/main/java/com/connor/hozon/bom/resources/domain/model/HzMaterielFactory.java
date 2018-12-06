@@ -255,6 +255,7 @@ public class HzMaterielFactory {
         respDTO.setpCreateName(record.getpCreateName());
         respDTO.setpPertainToProjectPuid(record.getpPertainToProjectPuid());
         respDTO.setType(record.getType());
+        respDTO.setSendSapFlag(record.getSendSapFlag());
         return respDTO;
     }
 
