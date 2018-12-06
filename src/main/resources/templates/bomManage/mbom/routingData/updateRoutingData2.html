@@ -73,41 +73,41 @@
     </div>
 
     <div class="form-group">
-        <label for="pDirectLabor">直接人工时间</label>
-        <input class="form-control" id="pDirectLabor" name="pDirectLabor" type="text"
+        <label for="pDirectLabor">直接人工/机物料消耗</label>
+        <input class="form-control" id="pDirectLabor" name="pDirectLabor" type="number"
                th:value="${data.pDirectLabor}"
-               placeholder="请输入直接人工时间"/>
+               placeholder="请输入直接人工/机物料消耗"/>
     </div>
 
     <div class="form-group">
-        <label for="pIndirectLabor">间接人工时间</label>
+        <label for="pIndirectLabor">间接人工/标准件消耗</label>
         <input class="form-control" id="pIndirectLabor" name="pIndirectLabor" type="text"
                th:value="${data.pIndirectLabor}"
-               placeholder="请输入间接人工时间"/>
+               placeholder="请输入间接人工/标准件消耗"/>
     </div>
     <div class="form-group">
-        <label for="pMachineLabor">机器时间</label>
+        <label for="pMachineLabor">折旧/工具消耗</label>
         <input class="form-control" id="pMachineLabor" name="pMachineLabor" type="text"
                th:value="${data.pMachineLabor}"
-               placeholder="请输入机器时间"/>
+               placeholder="请输入折旧/工具消耗"/>
     </div>
     <div class="form-group">
-        <label for="pBurn">燃动能</label>
+        <label for="pBurn">燃动费/废品损失</label>
         <input class="form-control" id="pBurn" name="pBurn" type="text"
                th:value="${data.pBurn}"
-               placeholder="请输入燃动能"/>
+               placeholder="请输入燃动费/废品损失"/>
     </div>
     <div class="form-group">
-        <label for="pMachineMaterialLabor">机物料消耗</label>
+        <label for="pMachineMaterialLabor">辅助人工/设备维修</label>
         <input class="form-control" id="pMachineMaterialLabor" name="pMachineMaterialLabor" type="text"
                th:value="${data.pMachineMaterialLabor}"
-               placeholder="请输入机物料消耗"/>
+               placeholder="请输入辅助人工/设备维修"/>
     </div>
     <div class="form-group">
-        <label for="pOtherCost">其他费用</label>
+        <label for="pOtherCost">辅助折旧/辅助其他费用</label>
         <input class="form-control" id="pOtherCost" name="pOtherCost" type="text"
                th:value="${data.pOtherCost}"
-               placeholder="请输入其他费用"/>
+               placeholder="请输入辅助折旧/辅助其他费用"/>
     </div>
 </form>
 
@@ -153,7 +153,47 @@
                             message: '基本数量只能输入数字'
                         },
                     }
-                }
+                },
+                pDirectLabor: {
+                    message: '直接人工/机物料消耗验证失败',
+                    validators: {
+                        numeric: {
+                            message: '直接人工/机物料消耗只能输入数字'
+                        },
+                    }
+                },
+                pIndirectLabor: {
+                    message: '间接人工/标准件消耗验证失败',
+                    validators: {
+                        numeric: {
+                            message: '间接人工/标准件消耗只能输入数字'
+                        },
+                    }
+                },
+                pMachineLabor: {
+                    message: '折旧/工具消耗验证失败',
+                    validators: {
+                        numeric: {
+                            message: '折旧/工具消耗只能输入数字'
+                        },
+                    }
+                },
+                pBurn: {
+                    message: '燃动费/废品损失验证失败',
+                    validators: {
+                        numeric: {
+                            message: '燃动费/废品损失只能输入数字'
+                        },
+                    }
+                },
+                pMachineMaterialLabor: {
+                    message: '辅助人工/设备维修验证失败',
+                    validators: {
+                        numeric: {
+                            message: '辅助人工/设备维修只能输入数字'
+                        },
+                    }
+                },
             }
         });
         // 绑定dialog的确定按钮的监听事件
