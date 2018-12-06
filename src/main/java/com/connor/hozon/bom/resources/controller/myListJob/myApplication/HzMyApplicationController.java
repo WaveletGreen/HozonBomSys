@@ -35,7 +35,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "myApplication")
-public class HzMyApplicationContrller {
+public class HzMyApplicationController {
 
     @Autowired
     private HzApplicationChangeService hzApplicationChangeService;

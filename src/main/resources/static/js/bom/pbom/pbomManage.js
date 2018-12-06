@@ -26,6 +26,13 @@ function doQuery() {
     else {
         pBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
     }
+    var pIsNewPart = $("#pIsNewPart").val();
+    if (pIsNewPart == "请选择工艺合件") {
+        pBomUrl += "&pIsNewPart=" + "";
+    }
+    else {
+        pBomUrl += "&pIsNewPart=" + pIsNewPart;
+    }
     initTable(pBomUrl);
     $('#pbomManageTable').bootstrapTable('destroy');
 }
@@ -1126,10 +1133,6 @@ function queryLoa(row) {
 }
 
 function queryLou(row) {
-    // var myData = JSON.stringify({
-    //     "projectId": $("#project", window.top.document).val(),
-    //     "puid": row
-    // });
     var projectId = $("#project", window.top.document).val();
     $.ajax({
         type: "GET",

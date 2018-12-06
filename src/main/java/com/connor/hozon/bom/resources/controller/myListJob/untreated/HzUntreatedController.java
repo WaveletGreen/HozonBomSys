@@ -45,7 +45,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping(value = "untreated")
-public class HzUntreatedContrller extends BaseController {
+public class HzUntreatedController extends BaseController {
 
     @Autowired
     private HzAuditorChangeService hzAuditorChangeService;

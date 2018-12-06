@@ -53,9 +53,6 @@ function initTable(url) {
         align: 'center',
         width: 50,
         formatter: function (value, row, index) {
-            //return index+1;
-            // var temp = $('#changeFormTable').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
-            // return temp + index;
             var options = $table.bootstrapTable('getOptions');
             return options.pageSize * (options.pageNumber - 1) + index + 1;
         }

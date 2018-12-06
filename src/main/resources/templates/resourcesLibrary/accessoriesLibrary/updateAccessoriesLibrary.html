@@ -9,53 +9,43 @@
         <label for="pMaterielCode">物料号<span>*</span></label>
         <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"
          th:value="${data.pMaterielCode}"
-         placeholder="请输入物料号"/><!--th:value="${entity.level}"-->
+         placeholder="请输入物料号"/>
     </div>
     <div class="form-group">
         <label for="pMaterielName">物料名称<span>*</span></label>
         <input class="form-control" id="pMaterielName" name="pMaterielName" type="text"
                th:value="${data.pMaterielName}"
-               placeholder="请输入物料名称"/><!--th:value="${entity.level}"-->
+               placeholder="请输入物料名称"/>
     </div>
     <div class="form-group">
         <label for="pTechnicalConditions">技术条件/牌号规格</label>
         <input class="form-control" id="pTechnicalConditions" name="pTechnicalConditions" type="text"
                th:value="${data.pTechnicalConditions}"
-               placeholder="请输入技术条件/牌号规格"/><!--th:value="${entity.level}"-->
+               placeholder="请输入技术条件/牌号规格"/>
     </div>
-    <!--<div class="form-group">-->
-    <!--<label for="pUnit">单位</label>-->
-    <!--<select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">-->
-    <!--<option></option>-->
-    <!--<option>EA</option> &lt;!&ndash;th:selected="${data.getResource()=='MAKE'?true:false}"&ndash;&gt;-->
-    <!--<option>Kg</option>-->
-    <!--<option>L</option>-->
-    <!--<option>mm</option>-->
-    <!--</select>-->
-    <!--</div>-->
     <div class="form-group">
         <label for="pMeasuringUnit">计量单位</label>
         <input class="form-control" id="pMeasuringUnit" name="pMeasuringUnit" type="text"
                th:value="${data.pMeasuringUnit}"
-               placeholder="请输入计量单位"/><!--th:value="${entity.level}"-->
+               placeholder="请输入计量单位"/>
     </div>
     <div class="form-group">
         <label for="pMaterielPurpose">材料用途</label>
         <input class="form-control" id="pMaterielPurpose" name="pMaterielPurpose" type="text"
                th:value="${data.pMaterielPurpose}"
-               placeholder="请输入材料用途"/><!--th:value="${entity.level}"-->
+               placeholder="请输入材料用途"/>
     </div>
     <div class="form-group">
         <label for="pDosageBicycle">单车用量</label>
         <input class="form-control" id="pDosageBicycle" name="pDosageBicycle" type="text"
                th:value="${data.pDosageBicycle}"
-               placeholder="请输入单车用量"/><!--th:value="${entity.level}"-->
+               placeholder="请输入单车用量"/>
     </div>
     <div class="form-group">
         <label for="pNote">备注</label>
         <input class="form-control" id="pNote" name="pNote" type="text"
                th:value="${data.pNote}"
-               placeholder="请输入备注"/><!--th:value="${entity.level}"-->
+               placeholder="请输入备注"/>
     </div>
 </form>
 
@@ -113,10 +103,6 @@
                     data: myData,
                     success:
                         function (result) {
-                            // $('.modal-dialog', window.top.document).parent('div').remove()
-                            // $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                             activeTabBodyRefresh();
                             if (result.success) {
                                 layer.msg('修改成功', {icon: 1, time: 2000})

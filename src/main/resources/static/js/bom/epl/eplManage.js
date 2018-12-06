@@ -1,3 +1,4 @@
+//已废除
 // $(document).ready((function () {
 //         var $table = $("#eplTable");
 //         var column = [];
