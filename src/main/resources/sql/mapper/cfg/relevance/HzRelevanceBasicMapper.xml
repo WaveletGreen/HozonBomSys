@@ -731,6 +731,15 @@
         )
     </update>
 
+    <update id="updateStatusByChange" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" open="begin" separator=";" close=";end;">
+            update HZ_RELEVANCE_BASIC
+            set RELEVANCE_STATUS = #{item.relevanceStatus,jdbcType=DECIMAL}
+            where
+            ID =  #{item.srcId,jdbcType=DECIMAL}
+        </foreach>
+    </update>
+
     <select id="selectByChange" parameterType="java.util.List" resultMap="BaseResultMap">
         select
           <include refid="Base_Column_List"/>
@@ -739,7 +748,46 @@
         where
           ID in
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-            #{srcId,jdbcType=DECIMAL}
+            #{item.srcId,jdbcType=DECIMAL}
         </foreach>
     </select>
+
+    <delete id="deleteByPrimaryKeyList" parameterType="java.util.List">
+        delete from HZ_RELEVANCE_BASIC
+        where
+        ID in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+            #{id,jdbcType=DECIMAL}
+        </foreach>
+    </delete>
+
+    <update id="updateStatusList" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" open="begin" separator=";" close=";end;">
+            update HZ_RELEVANCE_BASIC
+            set RELEVANCE_STATUS = #{relevanceStatus,jdbcType=DECIMAL}
+            where
+            ID = #{id,jdbcType=DECIMAL}
+        </foreach>
+    </update>
+
+    <update id="doUpdateIsSent" parameterType="java.util.List">
+        update HZ_RELEVANCE_BASIC
+        set
+        <if test="isRelevanceSent==1">
+            IS_SENT=1,
+        </if>
+        RELEVANCE_UPDATE_DATE=sysdate
+        where ID in
+        <if test="list==null">
+            ('')
+        </if>
+        <if test="list!=null">
+            (
+            <foreach collection="list" item="item" index="index"
+                     separator=",">
+                #{item.id,jdbcType=VARCHAR}
+            </foreach>
+            )
+        </if>
+    </update>
 </mapper>

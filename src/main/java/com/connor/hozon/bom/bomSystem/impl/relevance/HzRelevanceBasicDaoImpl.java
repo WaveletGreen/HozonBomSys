@@ -17,6 +17,7 @@ import sql.pojo.cfg.relevance.HzRelevanceBasic;
 import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -110,6 +111,26 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
     @Override
     public List<HzRelevanceBasic> selectByChange(List<HzRelevanceBasicChange> hzRelevanceBasicChangesAdd) {
         return baseSQLUtil.executeQueryByPass(new HzRelevanceBasic(),hzRelevanceBasicChangesAdd,clz.getCanonicalName()+".selectByChange");
+    }
+
+    @Override
+    public int deleteByPrimaryKeyList(List<HzRelevanceBasic> hzRelevanceBasicsDelete) {
+        return baseSQLUtil.executeDelete(hzRelevanceBasicsDelete,clz.getCanonicalName()+".deleteByPrimaryKeyList");
+    }
+
+    @Override
+    public int updateStatusList(List<HzRelevanceBasic> hzRelevanceBasicsUpdate) {
+        return baseSQLUtil.executeUpdate(hzRelevanceBasicsUpdate,clz.getCanonicalName()+".updateStatusList");
+    }
+
+    @Override
+    public int updateStatusByChange(List<HzRelevanceBasicChange> hzRelevanceBasicChanges) {
+        return baseSQLUtil.executeUpdate(hzRelevanceBasicChanges,clz.getCanonicalName()+".updateStatusByChange");
+    }
+
+    @Override
+    public int doUpdateIsSent(Map<String, Object> map) {
+        return baseSQLUtil.executeUpdate(map,clz.getCanonicalName()+".doUpdateIsSent");
     }
 
 }

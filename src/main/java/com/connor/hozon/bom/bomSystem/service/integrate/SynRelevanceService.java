@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
+import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
@@ -44,6 +45,9 @@ public class SynRelevanceService implements ISynRelevanceService {
     @Autowired
     HzCfg0ModelGroupDao hzCfg0ModelGroupDao;//            hzCfg0ModelGroupDao.selectByMainUid(cfg0MainPuid);
 
+
+    @Autowired
+    HzRelevanceBasicDao hzRelevanceBasicDao;
 
 //    /**
 //     * 一开始同步所有数据到ERP，不实现
@@ -263,7 +267,7 @@ public class SynRelevanceService implements ISynRelevanceService {
                   */
         transOptionsService.setClearInputEachTime(true);
         transOptionsService.getInput().getItem().clear();
-
+        transOptionsService.getOut().getItem().clear();
         /**
          * 成功项
          */
@@ -282,6 +286,7 @@ public class SynRelevanceService implements ISynRelevanceService {
         int totalOfOutOfParent = 0;
         int totalOfUnknown = 0;
 
+//        int lineNum = 1;
         List<HzRelevanceBean> toSend = new ArrayList<>();
         //需要更新的数据，更新特性属性
         List<HzRelevanceBasic> needToUpdateStatus = new ArrayList<>();
@@ -292,6 +297,9 @@ public class SynRelevanceService implements ISynRelevanceService {
             String packnum = UUIDHelper.generateUpperUid();
             //包号
             correlate.setPackNo(packnum);
+            //行号
+//            correlate.setLineNum(String.valueOf(lineNum));
+//            lineNum++;
             //动作描述代码
             if (option == ActionFlagOption.ADD) {
                 if (null == bean.getIsSent() || 0 == bean.getIsSent()) {
@@ -350,9 +358,9 @@ public class SynRelevanceService implements ISynRelevanceService {
         //设定需要更新特性值已发送,不用设定相关性值已发送
         _map.put("isRelevanceSent", 1);
         _map.put("list", needToUpdateStatus);
-        if (needToUpdateStatus != null && needToUpdateStatus.size() > 0)
-            hzCfg0Service.doUpdateByBatch(_map);
-
+        if (needToUpdateStatus != null && needToUpdateStatus.size() > 0) {
+            hzRelevanceBasicDao.doUpdateIsSent(_map);
+        }
         result.put("status", true);
         result.put("success", success);
         result.put("fail", fail);
