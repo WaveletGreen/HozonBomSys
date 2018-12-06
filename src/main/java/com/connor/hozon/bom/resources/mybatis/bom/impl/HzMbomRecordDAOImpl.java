@@ -1,10 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
-import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -12,6 +9,7 @@ import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMbomLineRecord;
@@ -528,5 +526,15 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
             map.put("revision",null);
         }
         return super.findForList("HzMbomRecordDAOImpl_getMbomRecordsByOrderId",map);
+    }
+
+    @Override
+    public boolean checkPaintMaterielRepeat(HzMbomPaintMaterielRepeatQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("parentId",query.getParentId());
+        map.put("colorId",query.getColorId());
+        map.put("lineId",query.getLineId());
+        return (int)super.findForObject("HzMbomRecordDAOImpl_checkPaintMaterielRepeat",map)>0;
     }
 }

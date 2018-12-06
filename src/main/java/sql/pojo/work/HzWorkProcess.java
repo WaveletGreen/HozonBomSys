@@ -122,6 +122,20 @@ public class HzWorkProcess {
     private Integer isSent;
 
     private Integer pStatus;
+
+    /**
+     * 参数类型 整车工艺路线 11 或者 21 其他 71
+     */
+    private Integer dataType;
+
+    public Integer getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Integer dataType) {
+        this.dataType = dataType;
+    }
+
     public String getpCreateName() {
         return pCreateName;
     }

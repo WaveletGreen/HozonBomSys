@@ -3,10 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
-import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
@@ -247,4 +244,11 @@ public interface HzMbomRecordDAO {
 
 
     List<HzMbomLineRecord> getMbomRecordsByOrderId(HzChangeDataDetailQuery query);
+
+    /**
+     * 检查油漆物料是否存在
+     * @param query
+     * @return
+     */
+    boolean checkPaintMaterielRepeat(HzMbomPaintMaterielRepeatQuery query);
 }

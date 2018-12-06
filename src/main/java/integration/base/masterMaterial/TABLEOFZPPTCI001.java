@@ -67,4 +67,7 @@ public class TABLEOFZPPTCI001 implements ICommon {
 		return this.item;
 	}
 
+	public void setItem(List<ZPPTCI001> item) {
+		this.item = item;
+	}
 }

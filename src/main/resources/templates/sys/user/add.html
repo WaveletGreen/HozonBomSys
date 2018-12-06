@@ -120,10 +120,8 @@
                         // notEmpty: {
                         //     message: '邮箱不能为空'
                         // },
-                        regexp: {
-                            // regexp: /^[a-zA-Z0-9_\.]+$/,
-                            regexp:/^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+.){1,63}[a-z0-9]+$/,
-                            message: '邮箱格式不对(例如:xxxx@xx.xxx,xxx.xxxx@xx.xxx.xxx)！'
+                        emailAddress: {
+                            message: '邮箱地址格式有误'
                         }
                     }
                 },
@@ -173,19 +171,19 @@
                 //         }
                 //     }
                 // },
-                job : {
-                    message: '职位无效',
-                    validators: {
-                        notEmpty: {
-                            message: '职位不能为空'
-                        },
-                        stringLength: {
-                            min: 3,
-                            max: 30,
-                            message: '职位长度必须在3到30之间'
-                        }
-                    }
-                },
+                // job : {
+                //     message: '职位无效',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '职位不能为空'
+                //         },
+                //         stringLength: {
+                //             min: 3,
+                //             max: 30,
+                //             message: '职位长度必须在3到30之间'
+                //         }
+                //     }
+                // },
                 groupName:{
                     message: '部门无效',
                     validators: {

@@ -21,7 +21,9 @@ import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
+import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.process.iservice.IDataModifier;
+import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
@@ -125,8 +127,13 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     @Autowired
     @Qualifier("synBomService")
     private ISynBomService synBomService;
+
+    @Autowired
+    private SynMaterielService synMaterielService;
+
     @Autowired
     private HzRelevanceBasicDao hzRelevanceBasicDao;
+
     @Autowired
     private HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
 
@@ -617,18 +624,36 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
         //要新增的数据
         List<HzMaterielRecord> addList = new ArrayList<>();
 
+        //给SAP传输 删除
+        List<EditHzMaterielReqDTO> sapDeleteList = new ArrayList<>();
+        //给SAP传输 更新
+        List<EditHzMaterielReqDTO> sapUpdateList = new ArrayList<>();
+        //给SAP传输 新增
+        List<EditHzMaterielReqDTO> sapInsertList = new ArrayList<>();
+
+
         if (ListUtil.isNotEmpty(records)) {
             Date date = new Date();
             records.forEach(record -> {
                 if (4 == record.getpValidFlag()) {
                     deleteList.add(record);
+                    EditHzMaterielReqDTO reqDTO = new EditHzMaterielReqDTO();
+                    reqDTO.setPuid(record.getPuid());
+                    sapDeleteList.add(reqDTO);
                 } else {
                     HzMaterielRecord hzPbomLineRecord = HzMaterielFactory.hzMaterielRecordToMaterielRecord(record);
+                    EditHzMaterielReqDTO reqDTO = new EditHzMaterielReqDTO();
                     String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
                     hzPbomLineRecord.setpValidFlag(1);
                     hzPbomLineRecord.setEffectTime(date);
                     hzPbomLineRecord.setRevision(revision);
+                    reqDTO.setPuid(record.getPuid());
 
+                    if(1==record.getSendSapFlag()){
+                        sapUpdateList.add(reqDTO);
+                    }else {
+                        sapInsertList.add(reqDTO);
+                    }
                     record.setpValidFlag(1);
                     record.setRevision(revision);
                     record.setEffectTime(date);
@@ -639,11 +664,20 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             });
         }
 
+        //需要传输数据到SAP BOM端需要记录数据传输结果
         if (ListUtil.isNotEmpty(deleteList)) {
+//            synMaterielService.deleteByPuids();
+            synMaterielService.deleteByPuids(sapDeleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"puid");
             hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
         }
         if (ListUtil.isNotEmpty(updateList)) {
             hzMaterielDAO.updateList(updateList);
+            if(ListUtil.isNotEmpty(sapInsertList)){
+                synMaterielService.updateOrAddByUids(sapInsertList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
+            }
+            if(ListUtil.isNotEmpty(sapUpdateList)){
+                synMaterielService.updateOrAddByUids(sapUpdateList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
+            }
         }
         if (ListUtil.isNotEmpty(addList)) {
             hzMaterielDAO.insertList(addList, ChangeTableNameEnum.HZ_MATERIEL_BEFORE.getTableName());

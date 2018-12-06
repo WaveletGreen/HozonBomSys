@@ -36,6 +36,7 @@ public interface HzMaterielService {
      */
     Page<HzMaterielRespDTO> findHzMaterielForPage(HzMaterielByPageQuery query);
 
+
     HzMaterielRespDTO getHzMateriel(HzMaterielQuery query);
 
     /**
