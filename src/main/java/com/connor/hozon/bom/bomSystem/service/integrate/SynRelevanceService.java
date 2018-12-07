@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
+import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
@@ -22,6 +23,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.relevance.HzRelevanceBasic;
 
 import java.util.*;
 /**
@@ -44,95 +46,228 @@ public class SynRelevanceService implements ISynRelevanceService {
     HzCfg0ModelGroupDao hzCfg0ModelGroupDao;//            hzCfg0ModelGroupDao.selectByMainUid(cfg0MainPuid);
 
 
-    /**
-     * 一开始同步所有数据到ERP，不实现
-     *
-     * @param projectPuid
-     * @return
-     */
+    @Autowired
+    HzRelevanceBasicDao hzRelevanceBasicDao;
+
+//    /**
+//     * 一开始同步所有数据到ERP，不实现
+//     *
+//     * @param projectPuid
+//     * @return
+//     */
+//    @Override
+//    public JSONObject synAllByProjectPuid(String projectPuid) throws Exception {
+//        List<HzCfg0Record> list = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
+//        List<HzRelevanceBean> beans = new ArrayList<>();
+//        if (list != null && list.size() > 0) {
+//            sortData(list, beans);
+//            return execute(beans, ActionFlagOption.ADD, CorrelateTypeOption.CorrelateType_1);
+//        } else {
+//            return null;
+//        }
+//
+//    }
+
+//    /**
+//     * 添加相关性
+//     *
+//     * @param relevance
+//     * @return
+//     */
+//    @Override
+//    public JSONObject addRelevance(List<HzRelevanceBean> relevance) throws Exception {
+//        return execute(relevance, ActionFlagOption.ADD, CorrelateTypeOption.CorrelateType_1);
+//    }
+//
+//    /**
+//     * 更新相关性，只能更新描述
+//     *
+//     * @param relevance
+//     * @return
+//     */
+//    @Override
+//    public JSONObject updateRelevance(HzRelevanceBean relevance) throws Exception {
+//        //设置可用
+//        return execute(Collections.singletonList(relevance), ActionFlagOption.UPDATE, CorrelateTypeOption.CorrelateType_1);
+//    }
+//
+//    /**
+//     * 删除相关性，传给SAP时设置ZKNART为3
+//     *
+//     * @param relevance
+//     * @return
+//     */
+//    @Override
+//    public JSONObject deleteRelevance(List<HzRelevanceBean> relevance) throws Exception {
+//        return execute(relevance, ActionFlagOption.DELETE, CorrelateTypeOption.CorrelateType_3);
+//    }
+
+//    /**
+//     * 整理数据，将特性转化成相关性
+//     *
+//     * @param list  特性列表
+//     * @param beans 相关性结果集
+//     */
+//    public void sortData(List<HzCfg0Record> list, List<HzRelevanceBean> beans) {
+//        list.forEach(cfg0Record -> {
+//            HzRelevanceBean bean = new HzRelevanceBean();
+//            //相关性代码
+//            bean.setRelevanceCode(cfg0Record.getpCfg0Relevance());
+//            //相关性
+//            bean.setRelevance(cfg0Record.getpCfg0FamilyName() + "-" + cfg0Record.getpCfg0ObjectId());
+//            //相关性描述
+//            bean.setRelevanceDesc(cfg0Record.getpCfg0FamilyDesc() + "-" + cfg0Record.getpCfg0Desc());
+//            //创建时间
+//            bean.setCreateDate(cfg0Record.getCreateDate());
+//            //修改时间
+//            bean.setModifyDate(cfg0Record.getLastModifyDate());
+//            //相关性是否已发送
+//            bean.setIsRelevanceSended(cfg0Record.getIsRelevanceSent());
+//            //存入puid
+//            bean.setPuid(cfg0Record.getPuid());
+//            //添加进缓存
+//            beans.add(bean);
+//        });
+//    }
+//
+//
+//    public JSONObject execute(List<HzRelevanceBean> features, ActionFlagOption option, CorrelateTypeOption correlateTypeOption) throws Exception {
+//        /**
+//         * 清除缓存
+//         */
+//        transOptionsService.setClearInputEachTime(true);
+//        transOptionsService.getInput().getItem().clear();
+//
+//        /**
+//         * 成功项
+//         */
+//        List<IntegrateMsgDTO> success = new ArrayList<>();
+//        /**
+//         * 失败项
+//         */
+//        List<IntegrateMsgDTO> fail = new ArrayList<>();
+//
+//        /***
+//         * 计数
+//         */
+//        int total = 0;
+//        int totalOfSuccess = 0;
+//        int totalOfFail = 0;
+//        int totalOfOutOfParent = 0;
+//        int totalOfUnknown = 0;
+//
+//        List<HzRelevanceBean> toSend = new ArrayList<>();
+//        //需要更新的数据，更新特性属性
+//        List<HzRelevanceBean> needToUpdateStatus = new ArrayList<>();
+//        Map<String, HzRelevanceBean> _mapCoach = new HashMap<>();
+//        JSONObject result = new JSONObject();
+//        for (HzRelevanceBean bean : features) {
+//            Correlate correlate = new Correlate(bean);
+//            String packnum = UUIDHelper.generateUpperUid();
+//            //包号
+//            correlate.setPackNo(packnum);
+//            //动作描述代码
+//            if (option == ActionFlagOption.ADD) {
+//                if (null == bean.getIsRelevanceSended() || 0 == bean.getIsRelevanceSended()) {
+//                    correlate.setActionFlag(option);
+//                } else {
+//                    //更新
+//                    correlate.setActionFlag(ActionFlagOption.UPDATE);
+//                }
+//            }
+//            //不排除删除状态
+//            else {
+//                //没有发送过，则不执行更新状态
+//                if (null == bean.getIsRelevanceSended() || 0 == bean.getIsRelevanceSended()) {
+//                    continue;
+//                } else {
+//                    correlate.setActionFlag(option);
+//                }
+//            }
+//            //相关性类型
+//            correlate.setCorrelateType(correlateTypeOption);
+//            _mapCoach.put(packnum, bean);
+//            transOptionsService.getInput().getItem().add(correlate.getZpptci004());
+//        }
+//        //发送
+//        if (!SynMaterielService.debug && transOptionsService.getInput().getItem().size() > 0) {
+//            transOptionsService.execute();
+//        }
+//        List<ZPPTCO004> list = transOptionsService.getOut().getItem();
+//        if (list != null && list.size() > 0 && _mapCoach.size() > 0) {
+//            for (ZPPTCO004 _l : list) {
+//                total++;
+//                if (_l == null) {
+//                    totalOfUnknown++;
+//                    continue;
+//                }
+//                if (null == _l.getPPACKNO()) {
+//                    totalOfUnknown++;
+//                    continue;
+//                }
+//                IntegrateMsgDTO dto = new IntegrateMsgDTO();
+//                HzRelevanceBean record = _mapCoach.get(_l.getPPACKNO());
+//                dto.setItemId(record.getRelevanceCode());
+//                dto.setMsg(_l.getPMESSAGE());
+//                dto.setPuid(record.getPuid());
+//                if ("S".equalsIgnoreCase(_l.getPTYPE())) {
+//                    success.add(dto);
+//                    totalOfSuccess++;
+//                    needToUpdateStatus.add(record);
+//                } else {
+//                    fail.add(dto);
+//                    totalOfFail++;
+//                }
+//            }
+//        }
+//        Map<String, Object> _map = new HashMap<>();
+//        //设定需要更新特性值已发送,不用设定相关性值已发送
+//        _map.put("isRelevanceSent", 1);
+//        _map.put("list", needToUpdateStatus);
+//        if (needToUpdateStatus != null && needToUpdateStatus.size() > 0)
+//            hzCfg0Service.doUpdateByBatch(_map);
+//
+//        result.put("status", true);
+//        result.put("success", success);
+//        result.put("fail", fail);
+//        result.put("total", total);
+//        result.put("totalOfSuccess", totalOfSuccess);
+//        result.put("totalOfFail", totalOfFail);
+//        result.put("totalOfOutOfParent", totalOfOutOfParent);
+//        result.put("totalOfUnknown", totalOfUnknown);
+//        return result;
+//    }
+
+
     @Override
-    public JSONObject synAllByProjectPuid(String projectPuid) throws Exception {
-        List<HzCfg0Record> list = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
-        List<HzRelevanceBean> beans = new ArrayList<>();
-        if (list != null && list.size() > 0) {
-            sortData(list, beans);
-            return execute(beans, ActionFlagOption.ADD, CorrelateTypeOption.CorrelateType_1);
-        } else {
-            return null;
-        }
-
+    public JSONObject addRelevance(List<HzRelevanceBasic> relevance) throws Exception {
+        return execute2(relevance, ActionFlagOption.ADD, CorrelateTypeOption.CorrelateType_1);
     }
 
-    /**
-     * 添加相关性
-     *
-     * @param relevance
-     * @return
-     */
     @Override
-    public JSONObject addRelevance(List<HzRelevanceBean> relevance) throws Exception {
-        return execute(relevance, ActionFlagOption.ADD, CorrelateTypeOption.CorrelateType_1);
+    public JSONObject updateRelevance(List<HzRelevanceBasic> relevance) throws Exception {
+        return execute2(relevance, ActionFlagOption.UPDATE, CorrelateTypeOption.CorrelateType_1);
     }
 
-    /**
-     * 更新相关性，只能更新描述
-     *
-     * @param relevance
-     * @return
-     */
     @Override
-    public JSONObject updateRelevance(HzRelevanceBean relevance) throws Exception {
-        //设置可用
-        return execute(Collections.singletonList(relevance), ActionFlagOption.UPDATE, CorrelateTypeOption.CorrelateType_1);
-    }
-
-    /**
-     * 删除相关性，传给SAP时设置ZKNART为3
-     *
-     * @param relevance
-     * @return
-     */
-    @Override
-    public JSONObject deleteRelevance(List<HzRelevanceBean> relevance) throws Exception {
-        return execute(relevance, ActionFlagOption.DELETE, CorrelateTypeOption.CorrelateType_3);
-    }
-
-    /**
-     * 整理数据，将特性转化成相关性
-     *
-     * @param list  特性列表
-     * @param beans 相关性结果集
-     */
-    public void sortData(List<HzCfg0Record> list, List<HzRelevanceBean> beans) {
-        list.forEach(cfg0Record -> {
-            HzRelevanceBean bean = new HzRelevanceBean();
-            //相关性代码
-            bean.setRelevanceCode(cfg0Record.getpCfg0Relevance());
-            //相关性
-            bean.setRelevance(cfg0Record.getpCfg0FamilyName() + "-" + cfg0Record.getpCfg0ObjectId());
-            //相关性描述
-            bean.setRelevanceDesc(cfg0Record.getpCfg0FamilyDesc() + "-" + cfg0Record.getpCfg0Desc());
-            //创建时间
-            bean.setCreateDate(cfg0Record.getCreateDate());
-            //修改时间
-            bean.setModifyDate(cfg0Record.getLastModifyDate());
-            //相关性是否已发送
-            bean.setIsRelevanceSended(cfg0Record.getIsRelevanceSent());
-            //存入puid
-            bean.setPuid(cfg0Record.getPuid());
-            //添加进缓存
-            beans.add(bean);
-        });
+    public JSONObject deleteRelevance(List<HzRelevanceBasic> relevance) throws Exception {
+        return execute2(relevance, ActionFlagOption.DELETE, CorrelateTypeOption.CorrelateType_3);
     }
 
 
-    public JSONObject execute(List<HzRelevanceBean> features, ActionFlagOption option, CorrelateTypeOption correlateTypeOption) throws Exception {
+
+
+
+
+
+
+    public JSONObject execute2(List<HzRelevanceBasic> hzRelevanceBasics, ActionFlagOption option, CorrelateTypeOption correlateTypeOption) throws Exception {
         /**
-         * 清除缓存
-         */
+                  * 清除缓存
+                  */
         transOptionsService.setClearInputEachTime(true);
         transOptionsService.getInput().getItem().clear();
-
+        transOptionsService.getOut().getItem().clear();
         /**
          * 成功项
          */
@@ -151,19 +286,23 @@ public class SynRelevanceService implements ISynRelevanceService {
         int totalOfOutOfParent = 0;
         int totalOfUnknown = 0;
 
+//        int lineNum = 1;
         List<HzRelevanceBean> toSend = new ArrayList<>();
         //需要更新的数据，更新特性属性
-        List<HzRelevanceBean> needToUpdateStatus = new ArrayList<>();
-        Map<String, HzRelevanceBean> _mapCoach = new HashMap<>();
+        List<HzRelevanceBasic> needToUpdateStatus = new ArrayList<>();
+        Map<String, HzRelevanceBasic> _mapCoach = new HashMap<>();
         JSONObject result = new JSONObject();
-        for (HzRelevanceBean bean : features) {
+        for (HzRelevanceBasic bean : hzRelevanceBasics) {
             Correlate correlate = new Correlate(bean);
             String packnum = UUIDHelper.generateUpperUid();
             //包号
             correlate.setPackNo(packnum);
+            //行号
+//            correlate.setLineNum(String.valueOf(lineNum));
+//            lineNum++;
             //动作描述代码
             if (option == ActionFlagOption.ADD) {
-                if (null == bean.getIsRelevanceSended() || 0 == bean.getIsRelevanceSended()) {
+                if (null == bean.getIsSent() || 0 == bean.getIsSent()) {
                     correlate.setActionFlag(option);
                 } else {
                     //更新
@@ -173,7 +312,7 @@ public class SynRelevanceService implements ISynRelevanceService {
             //不排除删除状态
             else {
                 //没有发送过，则不执行更新状态
-                if (null == bean.getIsRelevanceSended() || 0 == bean.getIsRelevanceSended()) {
+                if (null == bean.getIsSent() || 0 == bean.getIsSent()) {
                     continue;
                 } else {
                     correlate.setActionFlag(option);
@@ -201,10 +340,10 @@ public class SynRelevanceService implements ISynRelevanceService {
                     continue;
                 }
                 IntegrateMsgDTO dto = new IntegrateMsgDTO();
-                HzRelevanceBean record = _mapCoach.get(_l.getPPACKNO());
-                dto.setItemId(record.getRelevanceCode());
+                HzRelevanceBasic record = _mapCoach.get(_l.getPPACKNO());
+                dto.setItemId(record.getRbRelevanceCode());
                 dto.setMsg(_l.getPMESSAGE());
-                dto.setPuid(record.getPuid());
+                dto.setPuid(record.getId().toString());
                 if ("S".equalsIgnoreCase(_l.getPTYPE())) {
                     success.add(dto);
                     totalOfSuccess++;
@@ -219,9 +358,9 @@ public class SynRelevanceService implements ISynRelevanceService {
         //设定需要更新特性值已发送,不用设定相关性值已发送
         _map.put("isRelevanceSent", 1);
         _map.put("list", needToUpdateStatus);
-        if (needToUpdateStatus != null && needToUpdateStatus.size() > 0)
-            hzCfg0Service.doUpdateByBatch(_map);
-
+        if (needToUpdateStatus != null && needToUpdateStatus.size() > 0) {
+            hzRelevanceBasicDao.doUpdateIsSent(_map);
+        }
         result.put("status", true);
         result.put("success", success);
         result.put("fail", fail);

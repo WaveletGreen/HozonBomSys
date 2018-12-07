@@ -279,4 +279,10 @@ public interface IHzVWOManagerService {
     Map<String,Object> getRelevance(Long orderChangeId, String projectUid);
 
     JSONObject deleteChangeRelevance(Long orderChangeId);
+
+    boolean featureToSap(Long vwoId);
+
+    boolean derivativeMaterielToSap(Long orderId);
+
+    boolean relevanceToSap(Long orderId);
 }

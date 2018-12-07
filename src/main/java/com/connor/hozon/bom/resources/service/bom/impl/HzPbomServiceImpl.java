@@ -1391,6 +1391,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomLineRecordAddSon.setIs2Y(0);
             //isHas
             hzPbomLineRecordAddSon.setIsHas(0);
+            hzPbomLineRecordAddSon.setIsNewPart(1);
             hzPbomLineRecordsAddSons.add(hzPbomLineRecordAddSon);
             //修改父的isHas
             if (hzPbomLineRecord.getIsHas() != 1) {

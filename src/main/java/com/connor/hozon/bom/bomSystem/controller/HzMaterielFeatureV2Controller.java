@@ -123,6 +123,9 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
 
     @Autowired
     HzChangeDataRecordDAO hzChangeDataRecordDAO;
+
+    @Autowired
+    HzCfg0ModelGroupDao hzCfg0ModelGroupDao;
     /***日志*/
     private static Logger logger = LoggerFactory.getLogger(HzMaterielFeatureV2Controller.class);
 
@@ -194,7 +197,10 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
 
             HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
 
+            HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectUid);
+            String groupName = hzCfg0ModelGroupDao.selectGroupNameByMainUid(hzCfg0MainRecord.getPuid());
 
+            model.addAttribute("groupName",groupName);
             model.addAttribute("entity", modelRecord);
             model.addAttribute("modelFeature", hzCfg0ModelFeature);
             model.addAttribute("projectUid", projectUid);
@@ -254,6 +260,12 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         model.addAttribute("projectUid", projectUid);
         model.addAttribute("sm", sm);
         model.addAttribute("action", "./materielV2/saveCompose");
+
+        //获取项目主数据
+        HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectUid);
+        //获取族
+        String groupName = hzCfg0ModelGroupDao.selectGroupNameByMainUid(hzCfg0MainRecord.getPuid());
+        model.addAttribute("modelGroup",groupName);
         return "cfg/materielFeature/add";
     }
 
@@ -273,7 +285,25 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             result.put("status", false);
             return result;
         }
+
         hzComposeMFService.saveCompose2(hzComposeMFDTO, result);
+        //获取项目主数据
+        HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(hzComposeMFDTO.getProjectUid());
+        //获取族
+        String groupName = hzCfg0ModelGroupDao.selectGroupNameByMainUid(hzCfg0MainRecord.getPuid());
+        if(groupName==null){
+            HzCfg0ModelGroup hzCfg0ModelGroup = new HzCfg0ModelGroup();
+            hzCfg0ModelGroup.setGroupDesc(hzComposeMFDTO.getModelGroup());
+            hzCfg0ModelGroup.setGroupName(hzComposeMFDTO.getModelGroup());
+            hzCfg0ModelGroup.setMainUid(hzCfg0MainRecord.getPuid());
+            hzCfg0ModelGroup.setId(UUIDHelper.generateUpperUid());
+            int insertNum = hzCfg0ModelGroupDao.insert(hzCfg0ModelGroup);
+            if(insertNum<=0){
+                result.put("msg", "新增模型族失败");
+                result.put("status", false);
+                return result;
+            }
+        }
         return result;
     }
 
@@ -397,6 +427,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     public JSONObject saveModelBasic(
             @RequestParam String projectUid,
             @RequestParam String superMateriel,
+            @RequestParam String modelGroup,
             @RequestBody HzCfg0ModelFeature modelFeature)
     {
         JSONObject _result = new JSONObject();
@@ -465,6 +496,20 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
                     if (!hzSuperMaterielService.doUpdateByPrimaryKey(sm)) {
                         logger.error("更新超级物料号失败");
                     }
+                }
+            }
+
+            /***************修改模型族*******************************/
+            if(modelGroup!=null&&!"".equals(modelGroup)) {
+                HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectUid);
+                HzCfg0ModelGroup hzCfg0ModelGroup = new HzCfg0ModelGroup();
+                hzCfg0ModelGroup.setMainUid(hzCfg0MainRecord.getPuid());
+                hzCfg0ModelGroup.setGroupName(modelGroup);
+                hzCfg0ModelGroup.setGroupDesc(modelGroup);
+                if (hzCfg0ModelGroupDao.updateByMainId(hzCfg0ModelGroup) <= 0) {
+                    _result.put("status", false);
+                    _result.put("msg", "更新模型族数据失败");
+                    return _result;
                 }
             }
             return _result;

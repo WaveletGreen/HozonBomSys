@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.impl;
 
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
@@ -12,6 +13,7 @@ import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.*;
@@ -27,6 +29,8 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
     @Autowired
     HzDictionaryLibraryDao hzDictionaryLibraryDao;
 
+    @Autowired
+    HzCfg0RecordDao hzCfg0RecordDao;
     /**
      * 添加数据
      * @param reqDTO
@@ -80,6 +84,30 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
             if (j==1&&hzDictionaryLibrary.getPuid().equals(reqDTO.getPuid())==false){
                 resultMessageRespDTO.setErrMsg("对不起！您修改的特性值已存在");
                 return resultMessageRespDTO;
+            }
+            //判断其修改数据是否特性和特性值没变，如没变则修改特性表中的特性描述和特性值描述
+            List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByDictionaryLibId(reqDTO.getPuid());
+            for(HzCfg0Record hzCfg0Record : hzCfg0RecordList){
+                if(hzCfg0Record.getCfgIsInProcess()==1){
+                    resultMessageRespDTO.setErrMsg("修改的特性已在特性变更流程中，请先结束流程后再进行修改");
+                    return resultMessageRespDTO;
+                }
+            }
+            HzDictionaryLibrary hzDictionaryLibrary1 = hzDictionaryLibraryDao.findDictionaryLibrary(reqDTO.getPuid());
+            if(hzCfg0RecordList!=null&&hzCfg0RecordList.size()>0){
+                if(hzDictionaryLibrary1.getFamillyCode().equals(reqDTO.getFamillyCode())&&hzDictionaryLibrary1.getEigenValue().equals(reqDTO.getEigenValue())) {
+                    HzCfg0Record hzCfg0Record = new HzCfg0Record();
+                    hzCfg0Record.setCfgDicLibUid(hzDictionaryLibrary1.getPuid());
+                    hzCfg0Record.setpCfg0FamilyDesc(reqDTO.getFamillyCh());
+                    hzCfg0Record.setpCfg0Desc(reqDTO.getValueDescCh());
+                    if (hzCfg0RecordDao.updateDescByDictionaryLib(hzCfg0Record) <= 0 ? true : false) {
+                        resultMessageRespDTO.setErrMsg("修改特性表中对应数据的描述失败");
+                        return resultMessageRespDTO;
+                    }
+                }else {
+                    resultMessageRespDTO.setErrMsg("您修改的了配置字典的特性或特性值，但该条数据已在特性中引用，请在特性中删除引用后再进行修改");
+                    return resultMessageRespDTO;
+                }
             }
             HzDictionaryLibrary library = HzDictionaryLibraryFactory.updateDictionaryDTOHzDictionaryLibrary(reqDTO);
             int i = hzDictionaryLibraryDao.update(library);

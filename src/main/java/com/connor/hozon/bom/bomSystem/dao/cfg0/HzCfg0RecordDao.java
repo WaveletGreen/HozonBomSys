@@ -143,4 +143,10 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     int updateByChangeId(List<Long> changeFeatureIds);
 
     int updateStatusByChangeDate(List<HzFeatureChangeBean> hzFeatureChangeBeans);
+
+    int updateDescByDictionaryLib(HzCfg0Record hzCfg0Record);
+
+    List<HzCfg0Record> selectByDictionaryLibId(String puid);
+
+    List<HzCfg0Record> selectByChangeOrderId(Long vwoId);
 }

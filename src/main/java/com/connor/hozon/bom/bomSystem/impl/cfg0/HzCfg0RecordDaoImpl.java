@@ -197,4 +197,19 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         return baseSQLUtil.executeUpdate(hzFeatureChangeBeans,clzName+".updateStatusByChangeDate");
     }
 
+    @Override
+    public int updateDescByDictionaryLib(HzCfg0Record hzCfg0Record) {
+        return baseSQLUtil.executeUpdate(hzCfg0Record,clzName+".updateDescByDictionaryLib");
+    }
+
+    @Override
+    public List<HzCfg0Record> selectByDictionaryLibId(String puid) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(),puid,clzName+".selectByDictionaryLibId");
+    }
+
+    @Override
+    public List<HzCfg0Record> selectByChangeOrderId(Long vwoId) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(),vwoId,clzName+".selectByChangeOrderId");
+    }
+
 }

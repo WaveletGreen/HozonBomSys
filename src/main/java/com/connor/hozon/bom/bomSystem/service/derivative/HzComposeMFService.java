@@ -31,6 +31,7 @@ import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.entity.User;
+import com.sun.org.apache.bcel.internal.generic.SWAP;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -404,6 +405,7 @@ public class HzComposeMFService {
                 sm.setPuid(UUIDHelper.generateUpperUid());
                 sm.setpFactoryPuid(factory.getPuid());
                 sm.setpPertainToProjectPuid(hzComposeMFDTO.getProjectUid());
+                sm.setpMaterielDataType(11);
                 if (!hzSuperMaterielService.doInsertOne(sm)) {
                     logger.error("存储超级物料失败");
                 }

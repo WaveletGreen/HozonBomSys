@@ -1066,7 +1066,7 @@
       and
     P_BOM_DIGIFAX_ID = (select PUID from HZ_BOM_MAIN_RECORD where P_CFG0_OF_WHICH_PROJECT_PUID = #{projectId, jdbcType=VARCHAR})
     and
-      P_PBOM_STATUS = 1
+      P_PBOM_STATUS !=0
   </select>
 
 

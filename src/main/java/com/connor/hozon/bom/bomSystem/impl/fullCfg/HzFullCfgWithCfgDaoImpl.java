@@ -129,5 +129,12 @@ public class HzFullCfgWithCfgDaoImpl extends BasicDaoImpl<HzFullCfgWithCfg> impl
         return baseSQLUtil.executeQueryById(hzFullCfgWithCfg,clzName+".selectBy2Yid");
     }
 
+    @Override
+    public HzFullCfgWithCfg selectByFeatureId(String featureId) {
+        HzFullCfgWithCfg hzFullCfgWithCfg = new HzFullCfgWithCfg();
+        hzFullCfgWithCfg.setCfgCfg0Uid(featureId);
+        return baseSQLUtil.executeQueryById(hzFullCfgWithCfg,clzName+".selectByFeatureId");
+    }
+
 
 }

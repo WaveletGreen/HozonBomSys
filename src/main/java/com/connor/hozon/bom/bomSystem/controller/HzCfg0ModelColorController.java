@@ -276,7 +276,7 @@ public class HzCfg0ModelColorController {
             //没有更新过的值不需要进行更新
             for (Map.Entry<String, String> entry : color.getMapOfCfg0().entrySet()) {
                 if (mHistory.containsKey(entry.getKey())) {
-                    if (mHistory.get(entry.getKey()).equals(entry.getValue())) {
+                    if (entry.getValue().equals(mHistory.get(entry.getKey()))) {
                         continue;
                     }
                 }
