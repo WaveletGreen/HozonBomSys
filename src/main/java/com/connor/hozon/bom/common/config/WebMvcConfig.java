@@ -102,7 +102,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //MBOM的工艺路线页面
         //registry.addViewController("/recycleBin").setViewName("/bomManage/recycleBin/recycleBin");
         //报价管理
-        registry.addViewController("/offerManage").setViewName("/bomManage/quote/offer/offerManage");
+        registry.addViewController("/offerManage").setViewName("/quote/offer/offerManage");
         //合众字典库
         registry.addViewController("/dictionaryLibrary").setViewName("/resourcesLibrary/dictionaryLibrary/dictionaryLibrary");
         //合众VPPS库
