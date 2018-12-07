@@ -2231,8 +2231,9 @@
         fixedBody = this.$tableBody.get(0);
 
         scrollWidth = fixedBody.scrollWidth > fixedBody.clientWidth &&
-        fixedBody.scrollHeight > fixedBody.clientHeight + this.$header.outerHeight() ?
-            getScrollBarWidth() : 0;
+        // fixedBody.scrollHeight > fixedBody.clientHeight + this.$header.outerHeight() ?
+            fixedBody.scrollHeight > fixedBody.clientHeight ?
+        getScrollBarWidth() : 0;
 
         this.$el.css('margin-top', -this.$header.outerHeight());
 
