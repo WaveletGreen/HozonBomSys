@@ -210,3 +210,7 @@
         cursor: pointer;
     }
 }
+body {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
