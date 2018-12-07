@@ -100,7 +100,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //registry.addViewController("/routingData").setViewName("/bomManage/mbom/routingData/routingData");
         registry.addViewController("/routingData2").setViewName("/bomManage/mbom/routingData/routingData2");
         //MBOM的工艺路线页面
-        registry.addViewController("/recycleBin").setViewName("/bomManage/recycleBin/recycleBin");
+        //registry.addViewController("/recycleBin").setViewName("/bomManage/recycleBin/recycleBin");
+        //报价管理
+        registry.addViewController("/offerManage").setViewName("/quote/offer/offerManage");
         //合众字典库
         registry.addViewController("/dictionaryLibrary").setViewName("/resourcesLibrary/dictionaryLibrary/dictionaryLibrary");
         //合众VPPS库

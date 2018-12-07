@@ -11,12 +11,12 @@
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top nav_custom" role="navigation">
         <div class="navbar-header" id="navbar_header">
-            <a class="navbar-brand" href="main"><img th:src="@{/img/logo.png}"><span>BOM管理系统</span></a>
+            <a class="navbar-brand" href="main"><img th:src="@{/img/logo.png}"><span style="color: #ffffff">BOM管理系统</span></a>
         </div>
         <!-- Top Menu Items -->
         <ul class="nav navbar-right top-nav">
             <li>
-                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                <a href="" class="dropdown-toggle"style="color: #ffffff" data-toggle="dropdown">
                     <i class="fa fa-star-half-o bar-task"></i>
                     <font>待办事项:</font>
                     <!--<mark class="caret">：</mark>-->
@@ -26,7 +26,7 @@
                 </ul>
             </li>
             <li>
-                <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                <a href="" class="dropdown-toggle"style="color: #ffffff" data-toggle="dropdown">
                     <i class="fa fa-list-alt bar-project"></i>
                     <font>当前工作项目:</font>
                     <!--<mark class="caret">：</mark>-->
@@ -36,7 +36,7 @@
                 <ul class="dropdown-menu" id="projectList" style="max-height: 300px;overflow-y:scroll;"></ul>
             </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <a href="#" class="dropdown-toggle"style="color: #ffffff" data-toggle="dropdown">
                     <i class="fa fa-user bar-user"></i>
                     <font th:text="${#authentication.name}"></font> <b class="caret"></b>
                 </a>
