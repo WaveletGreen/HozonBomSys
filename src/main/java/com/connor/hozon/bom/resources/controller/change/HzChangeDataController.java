@@ -4,22 +4,35 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzAttachmentRecordDao;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
+import com.connor.hozon.bom.resources.util.FileUtils;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzAttachmentRecord;
 import sql.pojo.change.HzChangeListRecord;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -39,6 +52,11 @@ public class HzChangeDataController extends BaseController {
 
     @Autowired
     private HzChangeListDAO hzChangeListDAO;
+
+
+    @Autowired
+    private HzAttachmentRecordDao hzAttachmentRecordDao;
+
     @RequestMapping(value = "ebom/title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
@@ -278,6 +296,37 @@ public class HzChangeDataController extends BaseController {
         toJSONResponse(Result.build(list),response);
     }
 
+
+    @RequestMapping(value = "changeFile", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject changeFile(String changeNo){
+        JSONObject result = new JSONObject();
+        List<HzAttachmentRecord> hzAttachmentRecords = hzAttachmentRecordDao.selectByChangeNo(changeNo);
+        result.put("files",hzAttachmentRecords);
+        return result;
+    }
+
+    @RequestMapping(value = "download")
+    public ResponseEntity<byte[]> export(Long filePath)  {
+
+        HzAttachmentRecord hzAttachmentRecord = hzAttachmentRecordDao.selectByPrimaryKey(filePath);
+
+
+        HttpHeaders headers = new HttpHeaders();
+//        File file = new File(hzAttachmentRecord.getAttachmentUrl()+"\\"+hzAttachmentRecord.getRealName());
+        File file = new File("D:\\cio.txt");
+        if(file==null){
+            return null;
+        }
+        try {
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", new String(hzAttachmentRecord.getShowName().getBytes("gbk"), "UTF-8"));
+            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+                    headers, HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity(null,headers,HttpStatus.NOT_FOUND);
+        }
+    }
 
 
     @RequestMapping(value = "ebom/data",method = RequestMethod.GET)

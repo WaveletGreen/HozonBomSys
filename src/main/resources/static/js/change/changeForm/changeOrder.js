@@ -8,13 +8,16 @@ $(document).ready(function () {
     var id = $("#id").val();
     var isFromTc = $("#isFromTc").val();
     var projectId = $("#project", window.top.document).val();
+    var FileForm = document.getElementById("FileForm");
     var TCForm = document.getElementById("TCForm");
     var BOMForm = document.getElementById("BOMForm");
     if (isFromTc == 0) {
         TCForm.style.display = "none";
+        FileForm.style.display = "none";
         BOMForm.style.display = "block";
     } else if (isFromTc == 1) {
         TCForm.style.display = "block";
+        FileForm.style.display = "block";
         BOMForm.style.display = "block";
     }
     $.ajax({
@@ -106,6 +109,33 @@ function doReturn() {
 
 $(document).ready(function () {
     var changeNo = $("#changeNo").val();
+    // $.ajax({
+    //     url : "../change/date/changeFile?changeOrderId="+changeNo,
+    //     type : "GET",
+    //     success : function (result) {
+    //         var a = result.files;
+    //         alert(JSON.stringify(a));
+    //         // for(let i in files){
+    //         //     alert(files[i].showName);
+    //         // }
+    //     }
+    // });
+
+    $.ajax({
+        url: "../change/data/changeFile?changeNo=" + changeNo,
+        type: "GET",
+        success: function (result) {
+            var files = result.files;
+            var temp = "";
+            for(let i in files) {
+                temp += "<div class='col-lg-2 col-md-2'><input id='file"+i+"' name='filePath' type='radio' value='"+files[i].id+"'/><span style='text-align: center;color: red'>  "+files[i].showName+"</span></div>";
+            }
+            $("#fileFormDiv").html(temp);
+        }
+    });
+
+
+
     $.ajax({
         url: "../change/data/tc?formId=" + changeNo,
         type: "GET",
@@ -119,5 +149,14 @@ $(document).ready(function () {
             temp = temp + "</table>"
             $("#changeTCTable").html(temp);
         }
-    })
+    });
+
+
 })
+
+
+
+function download() {
+    var form = $("#changeFileForm");
+    form.submit();
+}

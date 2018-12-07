@@ -123,6 +123,8 @@
         <mapper resource="sql/mapper/change.xmapper/HzAuditorChangeRecordMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzChangeDataRecordMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzChangeListMapper.xml"/>
+        <!--tc的变更附件-->
+        <mapper resource="sql/mapper/change.xmapper/HzAttachmentRecordMapper.xml"/>
         <!--字典库-->
         <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
         <!--VPPS库-->
@@ -148,7 +150,6 @@
         <mapper resource="sql/mapper/sys/mybatis_user.xml"/>
         <mapper  resource="sql/mapper/sys/mybatis_userAssociateRole.xml"/>
         <mapper resource="sql/mapper/sys/mybatis_userRole.xml"/>
-
 
     </mappers>
 </configuration>
