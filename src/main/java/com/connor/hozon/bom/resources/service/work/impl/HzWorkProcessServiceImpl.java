@@ -496,6 +496,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             }
             return new Page<>(hzWorkProcessPage.getPageNumber(),hzWorkProcessPage.getPageSize(),hzWorkProcessPage.getTotalCount(),respDTOS);
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }
@@ -548,6 +549,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 return respDTO;
             }
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
         return null;
@@ -731,10 +733,13 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
 
                 //审核通过的数据需要传输给SAP系统 所以这里要进行严格参数校验
                 //不符合SAP系统规定的数据 全部打回 不允许发起流程
-
-
-
-
+                String str = checkWorkProcessDataValid(records);
+                if(this.errorCount!=0){
+                    WriteResultRespDTO respDTO = new WriteResultRespDTO();
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                    respDTO.setErrMsg(str);
+                    return respDTO;
+                }
                 HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
                 dataDetailQuery.setProjectId(reqDTO.getProjectId());
                 dataDetailQuery.setOrderId(orderId);
@@ -786,7 +791,6 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 map.put("changeData",record);
 
                 //启动线程进行插入操作
-                List<ExecutorServices> services = new ArrayList<>();
                 for(Map.Entry<String,Object> entry:map.entrySet()){
                      new ExecutorServices(1) {
                         @Override
@@ -883,22 +887,73 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
          * 对以上的参数进行合法性校验
          */
         StringBuffer stringBuffer = new StringBuffer();
-        boolean[] booleans = new boolean[hzWorkProcedures.size()];//和集合长度一一对应
-
+        stringBuffer.append("<strong style='color: red'>参数信息填写不完整，不允许发起流程!<br></strong>" +
+                "必填参数有:<br><strong style='color: green'>工厂,物料编码,基本数量,用途,状态,工序序号," +
+                "工作中心,控制码,工序描述,直接人工<br></strong>" );
+        Set<HzWorkProcedure> set = new HashSet<>();
+        int count = 0;
         for(int i=0;i<hzWorkProcedures.size();i++){
+            HzWorkProcedure workProcedure = hzWorkProcedures.get(i);
+            count++;
+            if(11==workProcedure.getDataType() || 21 == workProcedure.getDataType()){//整车工艺路线
+                for(int j=i+1;j<hzWorkProcedures.size();j++){
+                    if(workProcedure.equals(hzWorkProcedures.get(j))){
+                        count++;
+                        this.errorCount++;
+                    }
+                }
+                if(6!=count){
+                    set.add(workProcedure);
+                    count =0;
+                }
+            }else {// 普通工艺路线
+                for(int j=i+1;j<hzWorkProcedures.size();j++){
+                    if(workProcedure.equals(hzWorkProcedures.get(j))){
+                        count++;
+                        this.errorCount++;
+                    }
+                }
+                if(2!=count){
+                    set.add(workProcedure);
+                    count=0;
+                }
+            }
 
+            String factoryCode = workProcedure.getFactoryCode();
+            String materielCode  = workProcedure.getpMaterielCode();
+            Integer basicCount = workProcedure.getpCount();
+            String use  =workProcedure.getPurpose();
+            String state = workProcedure.getState();
+            String procedureCode = workProcedure.getpProcedureCode();
+            String workCenterCode =  workProcedure.getWorkCenterCode();
+            String controlCode = workProcedure.getControlCode();
+            String procedureDesc = workProcedure.getpProcedureDesc();
+            String directLabor = workProcedure.getpDirectLabor();
 
+            if(
+                    StringUtils.isBlank(factoryCode)    ||
+                    StringUtils.isBlank(materielCode)   ||
+                    StringUtils.isBlank(use)            ||
+                    StringUtils.isBlank(state)          ||
+                    StringUtils.isBlank(procedureCode)  ||
+                    StringUtils.isBlank(workCenterCode) ||
+                    StringUtils.isBlank(controlCode)    ||
+                    StringUtils.isBlank(procedureDesc)  ||
+                    StringUtils.isBlank(directLabor)    ||
+                    null == basicCount
+                    ){
+                stringBuffer.append("<strong style='color:deeppink'>"+materielCode+"</strong>:必填参数填写不完整<br>");
+            }
         }
 
-
-
-        return null;
+        for(HzWorkProcedure hzWorkProcedure:set){
+            if(11 == hzWorkProcedure.getDataType() || 21== hzWorkProcedure.getDataType()){
+                stringBuffer.append("<strong style='color:deeppink'>"+hzWorkProcedure.getpMaterielCode()+"</strong>:每条整车工艺路线必须生成<strong style='color:blue'>3</strong>对不同四大工艺路线才允许发起流程<br>");
+            }else {
+                stringBuffer.append("<strong style='color:deeppink'>"+hzWorkProcedure.getpMaterielCode()+"</strong>:每条普通工艺路线必须生成<strong style='color:blue'>1</strong>对不同四大工艺路线才允许发起流程<br>");
+            }
+        }
+        return stringBuffer.toString();
     }
 
-
-
-    public static void main(String[] s){
-        boolean[] b = new boolean[10];
-        System.out.println(Arrays.toString(b));
-    }
 }

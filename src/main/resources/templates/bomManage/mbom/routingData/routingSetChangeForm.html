@@ -50,7 +50,9 @@
                         layer.msg(result.errMsg, {icon: 1, time: 2000});
                     }
                     else {
-                        window.Ewin.alert({message: result.errMsg});
+                        var msg = "<div style='height: 60%;overflow: auto'>" + result.errMsg + "</div>"
+                        window.Ewin.confirm({title: '提示', message: msg});
+                        // window.Ewin.alert({message: result.errMsg});
                     }
                 },
                 error: function (info) {

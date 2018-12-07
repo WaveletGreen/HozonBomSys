@@ -22,6 +22,7 @@ import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
+import com.connor.hozon.bom.bomSystem.service.integrate.SynProcessRouteService;
 import com.connor.hozon.bom.process.iservice.IDataModifier;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -59,9 +60,7 @@ import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.project.HzMaterielRecord;
 import sql.pojo.work.HzWorkProcedure;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -137,6 +136,8 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     @Autowired
     private HzRelevanceBasicChangeDao hzRelevanceBasicChangeDao;
 
+    @Autowired
+    private SynProcessRouteService synProcessRouteService;
     @Override
     public void interruptionFunctionDesc() {
 
@@ -689,7 +690,6 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
 
     /**
      * 工艺路线变更审核通过
-     *
      * @param tableName
      */
     private void workProduceChange(String tableName, Long orderId, String projectId) {
@@ -703,14 +703,18 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
         List<HzWorkProcedure> updateList = new ArrayList<>();
         //即将要删除的数据 线程安全
         List<String> deleteList = new ArrayList<>();
+        Set<String> materielIds = new HashSet<>();//传SAP 删除
         //要新增的数据
         List<HzWorkProcedure> addList = new ArrayList<>();
+
+        Set<String> addSapSet = new HashSet<>();//传SAP 新增
 
         if (ListUtil.isNotEmpty(records)) {
             Date date = new Date();
             records.forEach(record -> {
                 if (4 == record.getpStatus()) {
                     deleteList.add(record.getPuid());
+                    materielIds.add(record.getMaterielId());
                 } else {
                     HzWorkProcedure hzPbomLineRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
                     String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
@@ -722,16 +726,22 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     record.setRevision(revision);
                     record.setEffectTime(date);
                     updateList.add(hzPbomLineRecord);
+                    addSapSet.add(hzPbomLineRecord.getMaterielId());
                     addList.add(record);
                 }
 
             });
         }
 
+        //传数据到SAP
         if (ListUtil.isNotEmpty(deleteList)) {
+            String[] strings = materielIds.toArray(new String[materielIds.size()]);
+            synProcessRouteService.deleteRouting(strings,projectId);
             hzWorkProcedureDAO.deleteByPuids(deleteList,ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
         }
         if (ListUtil.isNotEmpty(updateList)) {
+            String[] strings = materielIds.toArray(new String[addSapSet.size()]);
+            synProcessRouteService.addRouting(strings,projectId);
             hzWorkProcedureDAO.updateList(updateList);
         }
         if (ListUtil.isNotEmpty(addList)) {

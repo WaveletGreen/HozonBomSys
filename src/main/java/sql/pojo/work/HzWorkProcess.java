@@ -128,6 +128,16 @@ public class HzWorkProcess {
      */
     private Integer dataType;
 
+    private String projectId;
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
     public Integer getDataType() {
         return dataType;
     }

@@ -627,20 +627,20 @@ public class SynBomService implements ISynBomService {
                 //设置状态，代码好像少了
                 // TODO: 2018/11/29 根据option进行设置action代码，首先判断 bean 的状态是否已经传输过sap，不能盲目设置option
 //                //动作描述代码
-//                if (option == ActionFlagOption.ADD) {
-//                    //没有发送过，添加发送
-//                    if (null == bean.getIsFeatureSent() || record.getIsFeatureSent() == 0) {
-//                        features.setActionFlag(option);
-//                    }
-//                    //有发送过，执行更新
-//                    else {
-//                        features.setActionFlag(ActionFlagOption.UPDATE);
-//                    }
-//                }
-//                //执行更新或删除
-//                else {
-//                    features.setActionFlag(option);
-//                }
+                if (option == ActionFlagOption.ADD) {
+                    //没有发送过，添加发送
+                    if (null == bean.getIsSended() || bean.getIsSended() == 0) {
+                        reflectBom.setActionFlag(option);
+                    }
+                    //有发送过，执行更新
+                    else {
+                        reflectBom.setActionFlag(ActionFlagOption.UPDATE);
+                    }
+                }
+                //执行更新或删除
+                else {
+                    reflectBom.setActionFlag(option);
+                }
 
                 reflectBom.setActionFlag(option);
                 transBomService.getInput().getItem().add(reflectBom.getZpptci005());
