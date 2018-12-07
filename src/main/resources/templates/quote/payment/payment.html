@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/12/7 Time: 10:02-->
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+    <meta charset="UTF-8">
+    <title>付款管理</title>
+</head>
+<body>
+<div class="content col-lg-12">
+    <table class="table table-striped tableNormalStyle" id="paymentTable"></table>
+</div>
+<script th:src="@{/js/quote/payment.js}"></script>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/jsonHelper.js}"></script>
+</body>
+</html>
