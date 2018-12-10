@@ -769,7 +769,9 @@ public class HzEbomServiceImpl implements HzEbomService {
             String lineId = "";
             if (bomLineRecord != null) {
                 lineId = bomLineRecord.getLineID();
-                }
+            }else {
+                return WriteResultRespDTO.getFailResult();
+            }
 
             HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
             HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.updateHzEbomDTOLineRecord(reqDTO);
@@ -794,9 +796,13 @@ public class HzEbomServiceImpl implements HzEbomService {
             map.put("projectId", reqDTO.getProjectId());
             map.put("lineID", lineId);
             map.put("lineId", lineId);
+            if(reqDTO.getUpdateType()==1){
+                //修改当前数据时添加
+                map.put("puid", reqDTO.getPuid());
+            }
             List<HzEPLManageRecord> hzEPLManageRecords = hzEbomRecordDAO.findEbom(map);
 
-            //pbom  要同步更新数据  MBOM 和物料中不再做同步数据更新
+            //pbom要同步更新数据,  MBOM和物料中不再做同步数据更新
             List<HzPbomLineRecord> hzPbomLineRecords = hzPbomRecordDAO.getPbomById(map);
 
             List<String> type = hzMbomService.loadingCarPartType();
@@ -863,9 +869,7 @@ public class HzEbomServiceImpl implements HzEbomService {
                             }
                         }
                     }
-
                 }
-
             }
             else {
 

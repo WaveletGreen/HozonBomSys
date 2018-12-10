@@ -51,6 +51,8 @@
     <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
     <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
     <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
+
+    <result column="UPDATE_TYPE" jdbcType="INTEGER" property="updateType" />
   </resultMap>
 
   <sql id="Pbom_List">
@@ -100,6 +102,10 @@
         <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
             and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
         </if>
+      <if test="pIsNewPart != null and pIsNewPart!=''">
+        and t.P_IS_NEW_PART = 2
+      </if>
+
         and t.P_PBOM_STATUS<![CDATA[ <> ]]>0 order by CAST(t.P_SORT_NUM as FLOAT)
     </where>
   </select>
@@ -135,6 +141,9 @@
         <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
             and P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
         </if>
+      <if test="pIsNewPart != null and pIsNewPart!=''">
+        and t.P_IS_NEW_PART = 2
+      </if>
         and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
     </where>
   </select>
@@ -785,6 +794,10 @@
       where P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR}
       and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
       and P_PBOM_STATUS <![CDATA[ <> ]]>0
+      <if test="item.puid != null">
+        and PUID = #{item.puid,jdbcType=VARCHAR}
+      </if>
+
     </foreach>
   </update>
 

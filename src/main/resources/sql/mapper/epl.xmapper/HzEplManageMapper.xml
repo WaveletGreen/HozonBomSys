@@ -96,6 +96,8 @@
     <result column="P_WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct" />
     <result column="P_CHANGE" jdbcType="VARCHAR" property="change" />
     <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
+
+    <result column="UPDATE_TYPE" jdbcType="INTEGER" property="updateType"/>
   </resultMap>
 
     <sql id="EBOM_COLUMN">

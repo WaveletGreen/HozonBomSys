@@ -6,6 +6,7 @@
 <form id="ebomMainForm" role="form" method="post" action="ebom/update/ebom">
     <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/><!--th:value="${entity.eBomPuid}"-->
     <input id="level" name="level" type="hidden" th:value="${data.level}"/>
+    <input id="updateType" name="updateType" type="hidden" th:value="${data.updateType}"/>
     <div class="form-group">
         <label for="lineId">零件号<span>*</span></label>
         <input class="form-control" id="lineId" name="lineId" type="text"

@@ -14,12 +14,10 @@ public class HzPbomByPageQuery extends DefaultPageQuery {
      * 层级
      */
     private String level;
-
     /**
      * 零件号
      */
     private String lineId;
-
     /**
      * 专业
      */
@@ -29,28 +27,35 @@ public class HzPbomByPageQuery extends DefaultPageQuery {
     private Integer isHas;
 
     private String lineIndex;
-
     /**
      * 零件分类
      */
     private String pBomLinePartClass;
-
     /**
      * 零件来源
      */
     private String pBomLinePartResource;
-
     /**
      * ebom 表 puid
      * 根据此字段来获取BOM结构树
      */
     private String eBomPuids;
-
     /**
      * 是否展示层级（1展示层级结构  0不展示层级结构）
      */
     private Integer showBomStructure;
+    /**
+     * 是否为新产生件，(2工艺合件产生,1工艺辅料产生,0否）指工艺合件和工艺辅料产生的件
+     */
+    private String pIsNewPart;
 
+    public String getpIsNewPart() {
+        return pIsNewPart;
+    }
+
+    public void setpIsNewPart(String pIsNewPart) {
+        this.pIsNewPart = pIsNewPart;
+    }
 
     public Integer getShowBomStructure() {
         return showBomStructure;

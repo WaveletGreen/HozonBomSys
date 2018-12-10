@@ -52,6 +52,36 @@ public class UpdateHzPbomRecordReqDTO {
 
     private String lineId;
 
+    /**
+     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
+     */
+    private Integer updateType;
+
+    /**
+     *PBOM主键id
+     */
+    private String puid;
+
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
+    }
+
+    public String getPuid() {
+        return puid;
+    }
+
+    public void setPuid(String puid) {
+        this.puid = puid;
+    }
+
+    public Integer getUpdateType() {
+        return updateType;
+    }
+
+    public void setUpdateType(Integer updateType) {
+        this.updateType = updateType;
+    }
+
     public String getLineId() {
         return lineId;
     }
