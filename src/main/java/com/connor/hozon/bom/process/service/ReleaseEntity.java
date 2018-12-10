@@ -185,9 +185,9 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 //特性变更批准
                 if(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName().equals(hzChangeDataRecord.getTableName())){
                     //发送至sap
-                    if(!hzVWOManagerService.featureToSap(orderId)){
-                        return false;
-                    }
+//                    if(!hzVWOManagerService.featureToSap(orderId)){
+//                        return false;
+//                    }
                     //将变更数据的状态修改为以生效
                     if(!iHzFeatureChangeService.updateStatusByOrderId(orderId,1)){
                         return false;
@@ -207,9 +207,10 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     }
                 //衍生物料变更批准
                 }else if(ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
-                    if(!hzVWOManagerService.derivativeMaterielToSap(orderId)){
-                        return false;
-                    }
+                    //发送至sap
+//                    if(!hzVWOManagerService.derivativeMaterielToSap(orderId)){
+//                        return false;
+//                    }
                     if(hzDMBasicChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
@@ -226,9 +227,9 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     }
                 }else if(ChangeTableNameEnum.HZ_RELEVANCE_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
                     //发送至SAP
-                    if(!hzVWOManagerService.relevanceToSap(orderId)){
-                        return false;
-                    }
+//                    if(!hzVWOManagerService.relevanceToSap(orderId)){
+//                        return false;
+//                    }
                     HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
                     hzRelevanceBasic.setRbVwoId(orderId);
                     hzRelevanceBasic.setRelevanceStatus(1);
