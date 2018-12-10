@@ -124,6 +124,8 @@ var column = [
     {
         field: 'pColorOfSet',
         title: '色系',
+        align: 'center',
+        valign: 'middle',
         sortable: true,
         sortOrder: 'asc',
     },
