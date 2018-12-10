@@ -32,9 +32,6 @@ function initTable(url) {
         align: 'center',
         width: 50,
         formatter: function (value, row, index) {
-            //return index+1;
-            // var temp = $('#changeFormTable').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
-            // return temp + index;
             var options = $table.bootstrapTable('getOptions');
             return options.pageSize * (options.pageNumber - 1) + index + 1;
 
@@ -48,9 +45,6 @@ function initTable(url) {
             formatter: function (value, row, index) {
                 var id = row.id;
                 var auditId = row.auditId;
-                // return [
-                //     '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
-                // ].join("");
                 return [
                     '<a href="javascript:void(0)" onclick="queryLou(\'' + id+ '\',+\'' + auditId+'\')">' + value + '</a>'
                 ].join("");

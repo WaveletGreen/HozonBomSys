@@ -205,16 +205,8 @@ function initTable(url) {
                                         type: "POST",
                                         //ajax需要添加打包名
                                         url: "work/process/submit?projectId=" + projectId + "&materielIds=" + materielIds,
-                                        //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            /*if (result.status) {
-                                                window.Ewin.alert({message: result.errMsg});
-                                                //刷新，会重新申请数据库数据
-                                            }
-                                            else {
-                                                window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*/
                                             if (result.success) {
                                                 layer.msg('发送成功', {icon: 1, time: 2000})
                                             } else if (!result.success) {

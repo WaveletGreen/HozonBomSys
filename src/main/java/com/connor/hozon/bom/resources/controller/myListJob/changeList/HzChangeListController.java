@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "changeList")
-public class HzChangeListContrller {
+public class HzChangeListController {
     @Autowired
     private HzChangeListService hzChangeListService;
     /**
