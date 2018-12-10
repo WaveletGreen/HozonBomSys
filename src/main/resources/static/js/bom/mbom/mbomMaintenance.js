@@ -648,7 +648,7 @@ function initTable1(mBomUrl) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单号',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $mBomTable.bootstrapTable('getSelections');
@@ -1285,7 +1285,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单号',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $mBomTable.bootstrapTable('getSelections');
@@ -1749,7 +1749,7 @@ function initTable2(productionUrl) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单号',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $productionTable.bootstrapTable('getSelections');
@@ -2181,7 +2181,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单号',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $productionTable.bootstrapTable('getSelections');
@@ -2644,7 +2644,7 @@ function initTable3(financialUrl) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单号',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $financialTable.bootstrapTable('getSelections');
@@ -3082,7 +3082,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单号',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $financialTable.bootstrapTable('getSelections');
