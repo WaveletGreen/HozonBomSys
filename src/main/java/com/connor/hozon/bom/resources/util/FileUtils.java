@@ -16,6 +16,9 @@ public class FileUtils {
             bos.write(b, 0, len);
         }
         byte[] fileByte = bos.toByteArray();
+        bos.flush();
+        bos.close();
+        fis.close();
         return fileByte;
     }
 }

@@ -89,18 +89,18 @@ var toolbar = [
         }
     },
     {
-        text: '发起流程',
+        text: '关联变更单号',
         iconCls: 'glyphicon glyphicon-log-out',
         handler: function () {
             var rows = $table.bootstrapTable('getSelections');
             if (rows.length == 0) {
-                window.Ewin.alert({message: '请至少选择一条需要发送的数据!'});
+                window.Ewin.alert({message: '请至少选择一条需要关联变更单号的数据!'});
                 return false;
             }
             let msg = "<div style='max-height: 350px;overflow:scroll'>";
             for (let i in rows) {
                 if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
-                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许重复发起VWO流程"});
+                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已关联变更单号"});
                     return false;
                 }
                 msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
@@ -116,7 +116,7 @@ var toolbar = [
                         return false;
                     }
                     else {
-                        window.Ewin.confirm({title: '请确认发起流程的特性值', message: msg, width: 500}).on(function (e) {
+                        window.Ewin.confirm({title: '请确认关联变更单号的特性值', message: msg, width: 500}).on(function (e) {
                             if (e) {
                                 var puids = "";
                                 for (let i in rows) {
@@ -151,7 +151,7 @@ var toolbar = [
             }
             for (let i in rows) {
                 if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
-                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许撤销"});
+                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已关联变更单号，不允许撤销"});
                     return false;
                 }
             }

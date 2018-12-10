@@ -248,7 +248,7 @@ function generateRelevance() {
 }
 
 function getChange() {
-    var msg = "您确定发起流程吗！";
+    var msg = "您确定关联变更单号吗！";
     var projectPuid = $("#project", window.top.document).val();
     var url = "relevance/getChangePage";
     $.ajax({

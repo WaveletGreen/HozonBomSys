@@ -313,14 +313,13 @@ public class HzChangeDataController extends BaseController {
 
 
         HttpHeaders headers = new HttpHeaders();
-//        File file = new File(hzAttachmentRecord.getAttachmentUrl()+"\\"+hzAttachmentRecord.getRealName());
-        File file = new File("D:\\cio.txt");
-        if(file==null){
-            return null;
-        }
+        File file = new File(hzAttachmentRecord.getAttachmentUrl()+"\\"+hzAttachmentRecord.getRealName());
         try {
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", new String(hzAttachmentRecord.getShowName().getBytes("gbk"), "UTF-8"));
+            headers.setContentDispositionFormData("attachment", new String(hzAttachmentRecord.getShowName().getBytes("utf-8"), "ISO-8859-1"));
+            if(!file.exists()){
+                return new ResponseEntity(null,headers,HttpStatus.NOT_FOUND);
+            }
             return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
                     headers, HttpStatus.CREATED);
         }catch (Exception e){
