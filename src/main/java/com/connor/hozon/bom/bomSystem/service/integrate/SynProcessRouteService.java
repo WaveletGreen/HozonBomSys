@@ -183,13 +183,30 @@ public class SynProcessRouteService {
                 processRoute.setControlCode(respDTO.getControlCode());
                 processRoute.setProcessDescription(respDTO.getpProcedureDesc());
 
+                if(null !=respDTO.getpDirectLabor()){
+                    processRoute.setWorkNumber1(new BigDecimal(Math.round(Double.parseDouble(respDTO.getpDirectLabor()))));
+                }
+                if(null != respDTO.getpIndirectLabor()){
+                    processRoute.setWorkNumber2(new BigDecimal(Math.round(Double.parseDouble(respDTO.getpIndirectLabor()))));
+                }
 
-                processRoute.setWorkNumber1(new BigDecimal(respDTO.getpDirectLabor()));
-                processRoute.setWorkNumber2(BigDecimal.valueOf(Long.valueOf(respDTO.getpIndirectLabor())));
-                processRoute.setWorkNumber3(BigDecimal.valueOf(Long.valueOf(respDTO.getpMachineLabor())));
-                processRoute.setWorkNumber4(BigDecimal.valueOf(Long.valueOf(respDTO.getpBurn())));
-                processRoute.setWorkNumber5(BigDecimal.valueOf(Long.valueOf(respDTO.getpMachineMaterialLabor())));
-                processRoute.setWorkNumber6(BigDecimal.valueOf(Long.valueOf(respDTO.getpOtherCost())));
+                if(null != respDTO.getpMachineMaterialLabor()){
+                    processRoute.setWorkNumber3(new BigDecimal(Math.round(Double.parseDouble(respDTO.getpMachineLabor()))));
+                }
+                if(null != respDTO.getpBurn()){
+                    processRoute.setWorkNumber4(new BigDecimal(Math.round(Double.parseDouble(respDTO.getpBurn()))));
+                }
+                if(null != respDTO.getpMachineMaterialLabor()){
+                    processRoute.setWorkNumber5(new BigDecimal(Math.round(Double.parseDouble(respDTO.getpMachineMaterialLabor()))));
+                }
+                if(null != respDTO.getpOtherCost()){
+                    processRoute.setWorkNumber6(new BigDecimal(Math.round(Double.parseDouble(respDTO.getpOtherCost()))));
+                }
+//                processRoute.setWorkNumber2(BigDecimal.valueOf(Long.valueOf(respDTO.getpIndirectLabor())));
+//                processRoute.setWorkNumber3(BigDecimal.valueOf(Long.valueOf(respDTO.getpMachineLabor())));
+//                processRoute.setWorkNumber4(BigDecimal.valueOf(Long.valueOf(respDTO.getpBurn())));
+//                processRoute.setWorkNumber5(BigDecimal.valueOf(Long.valueOf(respDTO.getpMachineMaterialLabor())));
+//                processRoute.setWorkNumber6(BigDecimal.valueOf(Long.valueOf(respDTO.getpOtherCost())));
 
                 coach.get(packNumOfFeature.get(fpuid)).put(processRoute.getLineNum(), respDTO);
                 transProcessRouteService.getInput().getItem().add(processRoute.getZpptci006());

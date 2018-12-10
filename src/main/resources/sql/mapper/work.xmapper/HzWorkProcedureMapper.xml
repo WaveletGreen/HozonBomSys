@@ -26,6 +26,7 @@
     <result column="P_MATERIEL_CODE" jdbcType="VARCHAR" property="pMaterielCode" />
     <result column="P_MATERIEL_DESC" jdbcType="VARCHAR" property="pMaterielDesc" />
     <result column="P_FACTORYID" jdbcType="VARCHAR" property="pFactoryId" />
+    <result column="P_MATERIEL_DATA_TYPE" jdbcType="INTEGER" property="dataType" />
     <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
     <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
     <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
@@ -39,7 +40,6 @@
     <result column="P_WORK_CODE" jdbcType="VARCHAR" property="workCenterCode" />
     <result column="P_WORK_DESC" jdbcType="VARCHAR" property="workCenterDesc" />
     <result column="P_SEND_FLAG" jdbcType="VARCHAR" property="isSent" />
-    <result column="P_MATERIEL_DATA_TYPE" jdbcType="VARCHAR" property="dataType" />
   </resultMap>
 
 
@@ -777,7 +777,7 @@
 
 
   <select id="HzWorkProcedureDAOImpl_getHzWorkProcedureByPuids" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-    SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t2.*,
+    SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t1.P_MATERIEL_DATA_TYPE,t2.*,
     t3.P_WORK_CODE,t3.P_WORK_DESC,
     t4.P_FACTORY_CODE  FROM HZ_MATERIEL_RECORD t1 LEFT OUTER JOIN ${tableName} t2 on T1.puid = T2.P_MATERIEL_PUID
     LEFT OUTER JOIN HZ_WORK_CENTER t3 ON t2.P_Work_PUID=t3.PUID

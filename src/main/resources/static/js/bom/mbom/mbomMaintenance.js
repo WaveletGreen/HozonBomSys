@@ -395,6 +395,10 @@ function initTable1(mBomUrl) {
                             });
                         }
                     },
+
+
+                    //todo 下面的代码注释掉 不用 这么传输数据了
+
                     // {
                     //     text: '发送MBOM到SAP',
                     //     iconCls: 'glyphicon glyphicon-send',
@@ -547,6 +551,8 @@ function initTable1(mBomUrl) {
                     //         }
                     //     }
                     // },
+
+                    //todo 上面的代码注释掉 不用这么传输数据了
                     {
                         text: '显示子层',
                         iconCls: 'glyphicon glyphicon-eye-open',
