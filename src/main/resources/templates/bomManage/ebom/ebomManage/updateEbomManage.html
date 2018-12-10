@@ -18,55 +18,23 @@
                th:value="${data.pBomLinePartName}"
                placeholder="请输入名称"/>
     </div>
-    <!--<div class="form-group">
-        <label for="level">层级</label>
-        <input class="form-control" id="level" name="level" type="text"
-        th:value="${data.level}"
-               placeholder="请输入层级"/>
-    </div>-->
     <div class="form-group">
         <label for="pBomOfWhichDept">专业</label>
         <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"
                th:value="${data.pBomOfWhichDept}"
                placeholder="请输入专业"/>
     </div>
-    <!--<div class="form-group">-->
-    <!--<label for="rank">级别</label>-->
-    <!--<input class="form-control" id="rank" name="rank" type="text"-->
-    <!--th:value="${data.rank}"-->
-    <!--placeholder="请输入级别"/>-->
-    <!--</div>-->
-    <!--<div class="form-group">-->
-    <!--<label for="groupNum">分组号</label>-->
-    <!--<input class="form-control" id="groupNum" name="groupNum" type="text"-->
-    <!--th:value="${data.groupNum}"-->
-    <!--placeholder="请输入分组号"/>-->
-    <!--</div>-->
     <div class="form-group">
         <label for="pBomLinePartEnName">英文名称</label>
         <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text"
                th:value="${data.pBomLinePartEnName}"
                placeholder="请输入英文名称"/>
     </div>
-    <!--<div class="form-group">-->
-    <!--<label for="lineNo">查找编号</label>-->
-    <!--<input class="form-control" id="lineNo" name="lineNo" type="text" onclick="doha()"-->
-    <!--th:value="${data.lineNo}"-->
-    <!--placeholder="请输入查找编号"/>-->
-    <!--</div>-->
-    <!--<input type="hidden" id="lineNumber" th:value="${data.lineNo}">-->
-    <!--<div class="form-group" id="parentNO">-->
-    <!--<label for="parentLineId">父零件号</label>-->
-    <!--<input class="form-control" id="parentLineId" name="parentLineId" type="text"-->
-
-    <!--placeholder="请输入父零件号"/>-->
-    <!--</div>-->
     <div class="form-group">
         <label for="pUnit">单位</label>
         <select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">
             <option></option>
             <option th:selected="${data.getpUnit()=='EA'?true:false}">EA</option>
-            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpUnit()=='Kg'?true:false}">Kg</option>
             <option th:selected="${data.getpUnit()=='L'?true:false}">L</option>
             <option th:selected="${data.getpUnit()=='mm'?true:false}">mm</option>
@@ -83,7 +51,6 @@
         <select class="form-control" name="pPictureSheet" id="pPictureSheet" placeholder="请选择图幅">
             <option></option>
             <option th:selected="${data.getpPictureSheet()=='A0+'?true:false}">A0+</option>
-            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpPictureSheet()=='A0'?true:false}">A0</option>
             <option th:selected="${data.getpPictureSheet()=='A1'?true:false}">A1</option>
             <option th:selected="${data.getpPictureSheet()=='A2'?true:false}">A2</option>
@@ -150,7 +117,6 @@
         <select class="form-control" name="pSymmetry" id="pSymmetry" placeholder="请选择对称">
             <option></option>
             <option th:selected="${data.getpSymmetry()=='左件'?true:false}">左件</option>
-            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpSymmetry()=='右件'?true:false}">右件</option>
             <option th:selected="${data.getpSymmetry()=='通用'?true:false}">通用</option>
         </select>
@@ -160,7 +126,6 @@
         <select class="form-control" name="pImportance" id="pImportance" placeholder="请选择重要度">
             <option></option>
             <option th:selected="${data.getpImportance()=='D'?true:false}">D</option>
-            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpImportance()=='P'?true:false}">P</option>
         </select>
     </div>
@@ -169,7 +134,6 @@
         <select class="form-control" name="pRegulationFlag" id="pRegulationFlag" placeholder="请选择是否法规件">
             <option></option>
             <option th:selected="${data.getpRegulationFlag()=='Y'?true:false}">Y</option>
-            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpRegulationFlag()=='N'?true:false}">N</option>
         </select>
     </div>
@@ -178,7 +142,6 @@
         <select class="form-control" name="p3cpartFlag" id="p3cpartFlag" placeholder="请选择是否3C件">
             <option></option>
             <option th:selected="${data.getP3cpartFlag()=='Y'?true:false}">Y</option>
-            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getP3cpartFlag()=='N'?true:false}">N</option>
         </select>
     </div>
@@ -193,7 +156,6 @@
         <select class="form-control" name="pBwgBoxPart" id="pBwgBoxPart" placeholder="请选择黑白灰匣子件">
             <option></option>
             <option th:selected="${data.getpBwgBoxPart()=='B'?true:false}">B</option>
-            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpBwgBoxPart()=='W'?true:false}">W</option>
             <option th:selected="${data.getpBwgBoxPart()=='G'?true:false}">G</option>
         </select>
@@ -233,7 +195,6 @@
         <select class="form-control" name="pFastener" id="pFastener" placeholder="请选择紧固件">
             <option></option>
             <option th:selected="${data.getpFastener()=='标准件'?true:false}">标准件</option>
-            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpFastener()=='非标件'?true:false}">非标件</option>
         </select>
     </div>
@@ -290,7 +251,6 @@
         <select class="form-control" name="pBomLinePartClass" id="pBomLinePartClass" placeholder="请选择零件分类">
             <option></option>
             <option th:selected="${data.getpBomLinePartClass()=='自制'?true:false}">自制</option>
-            <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
             <option th:selected="${data.getpBomLinePartClass()=='外协'?true:false}">外协</option>
             <option th:selected="${data.getpBomLinePartClass()=='虚拟总成'?true:false}">虚拟总成</option>
         </select>
@@ -360,22 +320,7 @@
 <script th:inline="javascript">
     <![CDATA[
     var data = [[${data}]];
-    $(
-        //     (function(){
-        //         var level = $("#level").val();
-        // //         var lineNo = $("#lineNo").val();
-        // //         var lineNumber = $("#lineNumber").val();
-        //         if (level=="2Y") {
-        //             // $("#colorPart").removeAttr("disabled");
-        //         // } else {
-        //             // $("#parentLineId").removeAttr("disabled");
-        //             $("#colorPart").attr({"disabled": "disabled"});
-        //         }
-        //     }),
-
-        function () {
-
-
+    $(function () {
             var list = data.map;
             var keys = [];
             for (var key in list) {
@@ -383,8 +328,6 @@
                     keys.push(key)
                 }
             }
-
-
             var level = data.level;
             if (level == "2Y") {
                 $("#colorPart").attr({"disabled": "disabled"});
@@ -413,27 +356,6 @@
                             }
                         }
                     },
-                    // lineNo: {
-                    //     message: '编号验证失败',
-                    //     validators: {
-                    //         stringLength: {
-                    //             /*长度提示*/
-                    //             min: 4,
-                    //             max: 4,
-                    //             message: '编号长度必须是4位数字'
-                    //         },
-                    //         //正则校验
-                    //
-                    //         regexp: {
-                    //
-                    //             regexp: /^[0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
-                    //
-                    //             message: '编号只能为数字'
-                    //
-                    //         },
-                    //
-                    //     }
-                    // },
                 }
             });
             // 绑定dialog的确定按钮的监听事件
@@ -453,62 +375,6 @@
                     }
                     localData.updateDosage=mapOfLocalData;
                     localData.projectId = $("#project", window.top.document).val();
-                   // var projectId= $("#project", window.top.document).val();
-                    /*var myData = JSON.stringify({
-                        "puid": $("#puid").val(),
-                        "lineId": $("#lineId").val(),
-                        "pBomLinePartName": $("#pBomLinePartName").val(),
-                        // "level": $("#level").val(),
-                        "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                        // "rank": $("#rank").val(),
-                        // "groupNum": $("#groupNum").val(),
-                        "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
-                        // "lineNo": $("#lineNo").val(),
-                        "parentLineId": $("#parentLineId").val(),
-                        "pLouaFlag": $("#pLouaFlag").val(),
-                        "pUnit": $("#pUnit").val(),
-                        "pPictureNo": $("#pPictureNo").val(),
-                        "pPictureSheet": $("#pPictureSheet").val(),
-                        "pMaterialHigh": $("#pMaterialHigh").val(),
-                        "pMaterial1": $("#pMaterial1").val(),
-                        "pMaterial2": $("#pMaterial2").val(),
-                        "pMaterial3": $("#pMaterial3").val(),
-                        "pDensity": $("#pDensity").val(),
-                        "pMaterialStandard": $("#pMaterialStandard").val(),
-                        "pSurfaceTreat": $("#pSurfaceTreat").val(),
-                        "pTextureColorNum": $("#pTextureColorNum").val(),
-                        "pManuProcess": $("#pManuProcess").val(),
-                        "pSymmetry": $("#pSymmetry").val(),
-                        "pImportance": $("#pImportance").val(),
-                        "pRegulationFlag": $("#pRegulationFlag").val(),
-                        "p3cpartFlag": $("#p3cpartFlag").val(),
-                        "pRegulationCode": $("#pRegulationCode").val(),
-                        "pBwgBoxPart": $("#pBwgBoxPart").val(),
-                        "pDevelopType": $("#pDevelopType").val(),
-                        "pDataVersion": $("#pDataVersion").val(),
-                        "pTargetWeight": $("#pTargetWeight").val(),
-                        "pFeatureWeight": $("#pFeatureWeight").val(),
-                        "pActualWeight": $("#pActualWeight").val(),
-                        "pFastener": $("#pFastener").val(),
-                        "pFastenerStandard": $("#pFastenerStandard").val(),
-                        "pFastenerLevel": $("#pFastenerLevel").val(),
-                        "pTorque": $("#pTorque").val(),
-                        "pDutyEngineer": $("#pDutyEngineer").val(),
-                        "pSupply": $("#pSupply").val(),
-                        "pSupplyCode": $("#pSupplyCode").val(),
-                        "pBuyEngineer": $("#pBuyEngineer").val(),
-                        "pRemark": $("#pRemark").val(),
-                        "pBomLinePartClass": $("#pBomLinePartClass").val(),
-                        "pBomLinePartResource": $("#pBomLinePartResource").val(),
-                        "pInOutSideFlag": $("#pInOutSideFlag").val(),
-                        "pUpc": $("#pUpc").val(),
-                        "fna": $("#fna").val(),
-                        "pFnaDesc": $("#pFnaDesc").val(),
-                        "number": $("#number").val(),
-                        "colorPart": $("#colorPart").val(),
-                        "projectId": $("#project", window.top.document).val(),
-                    });*/
-
                     $.ajax({
                         contentType:
                             "application/json",
@@ -518,16 +384,7 @@
                         data:  JSON.stringify(localData),
                         success:
                             function (result) {
-                                // $('.modal-dialog', window.top.document).parent('div').remove()
-                                // $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                                 activeTabBodyRefresh();
-                                /*if (result)
-                                    window.Ewin.alert({message: '修改数据成功!'});
-                                else
-                                    window.Ewin.alert({message: '修改数据失败!'});*/
-                                // window.Ewin.alert({message:result.errMsg});
                                 if (result.success) {
                                     layer.msg('修改成功', {icon: 1, time: 2000})
                                 }

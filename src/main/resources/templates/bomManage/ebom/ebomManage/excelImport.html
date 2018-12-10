@@ -29,36 +29,22 @@
         <p><strong>6.如有导入疑问，请联系相关责任人进行规范调整</strong></p>
     </div>
     <div class="form-group" style="float: right;">
-        <button style="font-size: 40%;width: 110px" type="button" onclick="getTemplate()"><img th:src="@{/img/excelModel.png}">
+        <button style="font-size: 40%;width: 110px" type="button" onclick="getTemplate()"><img
+                th:src="@{/img/excelModel.png}">
             </br>EBOM模版
         </button>
     </div>
-    <!--<div class="form-group" style="float: right">-->
-        <!--<button style="font-size: 40%;width: 110px" type="button" onclick="getSingleVehTemplate()"><img th:src="@{/img/singleVehImport.png}">-->
-            <!--<br>单车模板-->
-        <!--</button>-->
-    <!--</div>-->
 </div>
 <script>
     function getTemplate() {
         //下载EBOM导入模板
-        window.location.href =  "./files/EBOM导入模板.xlsx";//V1.1.0.log
+        window.location.href = "./files/EBOM导入模板.xlsx";//V1.1.0.log
     }
 </script>
 
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        // function getTemplate(){
-        //     window.location.href="http://192.168.1.115:8080/hozon/img/EBOM导入模板.xlsx";
-        // }
-
-        // $("#btnOk").click(function () {
-        //     var div =document.getElementById("layout");
-        //     if(div.style.display=="none"){
-        //         div.style.display="block";
-        //     }
-        // })
         $('#excelImportForm').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
@@ -107,18 +93,7 @@
                     processData: false,
                     // 告诉jQuery不要去设置Content-Type请求头
                     contentType: false,
-                    // beforeSend:function(){
-                    //     window.Ewin.alert({message: '系统正在处理，请耐心等待...'});
-                    // },
-                    // beforeSend: function () {
-                    //     $("#excelImportForm").append('<div id="layout"></div>');
-                    // },
                     success: function (result) {
-                        // $('#layout',window.top.document).hide();
-                        // $('.modal-dialog', window.top.document).parent('div').remove()
-                        // $('body', window.top.document).find('.modal-backdrop').remove();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
-                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                         activeTabBodyRefresh();
                         if (result.success) {
                             layer.msg(result.errMsg, {icon: 1, time: 2000})
@@ -137,17 +112,6 @@
             }
         })
     })
-
-    /*function showLoading(show){
-
-        if(show){
-            document.getElementById("over").style.display = "block";
-            document.getElementById("layout").style.display = "block";
-        }else{
-            document.getElementById("over").style.display = "none";
-            document.getElementById("layout").style.display = "none";
-        }
-    }*/
     ]]>
 </script>
 </body>

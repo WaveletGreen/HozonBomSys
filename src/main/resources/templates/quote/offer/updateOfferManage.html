@@ -1,0 +1,158 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/12/6 Time: 14:28-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="offerForm" role="form" method="post" action="">
+    <div class="form-group">
+        <label for="lineId1">零件号<span>*</span></label>
+        <input class="form-control" id="lineId1" name="lineId1" type="text"
+               placeholder="请输入零件号"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId2">零件名称<span>*</span></label>
+        <input class="form-control" id="lineId2" name="lineId2" type="text"
+               placeholder="请输入零件名称"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId3">每车数量</label>
+        <input class="form-control" id="lineId3" name="lineId3" type="text"
+               placeholder="请输入每车数量"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId4">中选供应商<span>*</span></label>
+        <input class="form-control" id="lineId4" name="lineId4" type="text"
+               placeholder="请输入中选供应商"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId5">零部件(不含税)</label>
+        <input class="form-control" id="lineId5" name="lineId5" type="text"
+               placeholder="请输入零部件(不含税)"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId6">单车零部件价格(不含税)</label>
+        <input class="form-control" id="lineId6" name="lineId6" type="text"
+               placeholder="请输入单车零部件价格(不含税)"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId7">模具费(不含税)</label>
+        <input class="form-control" id="lineId7" name="lineId7" type="text"
+               placeholder="请输入模具费(不含税)"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId8">模具费(含税)</label>
+        <input class="form-control" id="lineId8" name="lineId8" type="text"
+               placeholder="请输入模具费(含税)"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId9">模具费付费情况</label>
+        <input class="form-control" id="lineId9" name="lineId9" type="text"
+               placeholder="请输入模具费付费情况"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId10">检具费(不含税)</label>
+        <input class="form-control" id="lineId10" name="lineId10" type="text"
+               placeholder="请输入检具费(不含税)"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId11">开发费(不含税)</label>
+        <input class="form-control" id="lineId11" name="lineId11" type="text"
+               placeholder="请输入开发费(不含税)"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId12">A样件</label>
+        <input class="form-control" id="lineId12" name="lineId12" type="text"
+               placeholder="请输入A样件"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId13">B样件</label>
+        <input class="form-control" id="lineId13" name="lineId13" type="text"
+               placeholder="请输入B样件"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId14">C样件</label>
+        <input class="form-control" id="lineId14" name="lineId14" type="text"
+               placeholder="请输入C样件"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId15">供应商降本计划</label>
+        <input class="form-control" id="lineId15" name="lineId15" type="text"
+               placeholder="请输入供应商降本计划"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId16">备注</label>
+        <input class="form-control" id="lineId16" name="lineId16" type="text"
+               placeholder="请输入备注"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId17">专业<span>*</span></label>
+        <input class="form-control" id="lineId17" name="lineId17" type="text"
+               placeholder="请输入零件号"/>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#offerForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pMaterielCode: {
+                    message: '物料代码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '物料代码不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#offerForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#offerForm ", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "puid": $("#puid").val(),
+                    "projectId":$("#project", window.top.document).val()
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            activeTabBodyRefresh();
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

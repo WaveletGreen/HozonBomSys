@@ -206,7 +206,7 @@ var column = [
         field: 'pCfg0FamilyName',
         title: '特性名称',
         sortable: true,                     //是否启用排序
-        sortOrder: "asc"
+        sortOrder: "asc",
     },
     {
         field: 'pCfg0FamilyDesc',
@@ -273,14 +273,14 @@ var column = [
             }
             else if (value == 0 || "0" == value) {
                 if (1 == row.cfgIsInProcess || "1" == row.cfgIsInProcess) {
-                    return "<span style='color: #e69800'>变更审核中<br>(" + row.vwoNum + ")</span>";
+                    return "<span style='color: #e2ab2f'>审核中</span>";
                 }
                 else {
-                    return "<span style='color: #a97f89'>草稿状态</span>";
+                    return "<span style='color: #ff7cf4'>草稿状态</span>";
                 }
             }
             else if (2 == row.cfgStatus || "2" == row.cfgStatus) {
-                return "<span style='color: #0c8fe2'>删除状态</span>";
+                return "<span style='color: #a90009'>删除状态</span>";
             }
             else if (-1 == value || "-1" == value) {
                 return "<span style='color: #9492a9'>已废止</span>";

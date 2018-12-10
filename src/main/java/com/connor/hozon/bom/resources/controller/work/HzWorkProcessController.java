@@ -77,8 +77,10 @@ public class HzWorkProcessController extends BaseController {
      */
     @RequestMapping(value = "addWorkProcess",method = RequestMethod.GET)
     public String addWorkProcessToPage(String materielId, String projectId, Model model){
-        HzWorkProcessRespDTO respDTO = hzWorkProcessService.findHzWorkProcess(materielId,projectId);
-        model.addAttribute("data",respDTO);
+        List<HzWorkProcessRespDTO> respDTOs = hzWorkProcessService.findHzWorkProcess(materielId,projectId);
+        if(ListUtil.isNotEmpty(respDTOs)){
+            model.addAttribute("data",respDTOs.get(0));
+        }
         return  "bomManage/mbom/routingData/addRoutingData";
     }
     /**
@@ -87,8 +89,10 @@ public class HzWorkProcessController extends BaseController {
      */
     @RequestMapping(value = "updateWorkProcess",method = RequestMethod.GET)
     public String updateWorkProcessToPage(String materielId, String projectId, Model model){
-        HzWorkProcessRespDTO respDTO = hzWorkProcessService.findHzWorkProcess(materielId,projectId);
-        model.addAttribute("data",respDTO);
+        List<HzWorkProcessRespDTO> respDTOs = hzWorkProcessService.findHzWorkProcess(materielId,projectId);
+        if(ListUtil.isNotEmpty(respDTOs)){
+            model.addAttribute("data",respDTOs.get(0));
+        }
       return  "bomManage/mbom/routingData/updateRoutingData";
     }
 

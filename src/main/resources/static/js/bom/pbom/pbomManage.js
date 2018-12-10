@@ -26,6 +26,13 @@ function doQuery() {
     else {
         pBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
     }
+    var pIsNewPart = $("#pIsNewPart").val();
+    if (pIsNewPart == "请选择工艺合件") {
+        pBomUrl += "&pIsNewPart=" + "";
+    }
+    else {
+        pBomUrl += "&pIsNewPart=" + pIsNewPart;
+    }
     initTable(pBomUrl);
     $('#pbomManageTable').bootstrapTable('destroy');
 }
@@ -513,7 +520,7 @@ function initTable(pBomUrl) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单号',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -1037,7 +1044,7 @@ function initTable1(pBomUrl, lineIds) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单号',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');

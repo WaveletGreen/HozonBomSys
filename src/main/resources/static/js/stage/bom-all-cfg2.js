@@ -1078,24 +1078,37 @@ function editPoint(but) {
     // var modelPuid = $(but).parent().find("div").text();
     var modelDivId = $(but).parent().attr("id");
     if ($(but).val() == '编辑') {
-        $(but).val('保存');
-        //显示取消和删除两个按钮
-        $(but).parent().find("input:eq(1)").show();
-        $(but).parent().find("input:eq(2)").show();
-        //查找当前车辆模型所有2Y层
-        for (var i = 0; i < cfgSize; i++) {
-            //打点图id
-            var pointId = modelDivId + "in_in_" + i;
-            //备注id
-            var msgId = "msg" + i;
-            //备注值
-            var msgVal = $("#" + msgId).text();
-            //当备注不为标配和空时才可以编辑打点图
-            if (msgVal != '标配' && msgVal != "") {
-                $("#" + pointId).parent().find("select").show();
-                $("#" + pointId).parent().find("div").hide();
+        var url = "bomAllCfg/savePoint";
+        $.ajax({
+            url: "privilege/write?url=" + url,
+            type: "GET",
+            success: function (result) {
+                if (!result.success) {
+                    window.Ewin.alert({message: result.errMsg});
+                    return false;
+                }
+                else {
+                    $(but).val('保存');
+                    //显示取消和删除两个按钮
+                    $(but).parent().find("input:eq(1)").show();
+                    $(but).parent().find("input:eq(2)").show();
+                    //查找当前车辆模型所有2Y层
+                    for (var i = 0; i < cfgSize; i++) {
+                        //打点图id
+                        var pointId = modelDivId + "in_in_" + i;
+                        //备注id
+                        var msgId = "msg" + i;
+                        //备注值
+                        var msgVal = $("#" + msgId).text();
+                        //当备注不为标配和空时才可以编辑打点图
+                        if (msgVal != '标配' && msgVal != "") {
+                            $("#" + pointId).parent().find("select").show();
+                            $("#" + pointId).parent().find("div").hide();
+                        }
+                    }
+                }
             }
-        }
+        })
     } else {
         $(but).val('编辑');
         $(but).parent().find("input:eq(1)").hide();

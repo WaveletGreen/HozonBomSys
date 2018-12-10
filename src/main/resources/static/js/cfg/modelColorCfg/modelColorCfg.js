@@ -454,15 +454,15 @@ function loadData(_projectPuid) {
                         return "<span style='color: #00B83F'>已生效</span>";
                     }
                     else if (value == 0 || "0" == value) {
-                        return "<span style='color: #a97f89'>草稿状态</span>";
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
                     }
                     else if (-1 == value || "-1" == value) {
                         return "<span style='color: #9492a9'>已废止</span>";
                     }
                     else if (10 == value || "10" == value) {
-                        return "<span style='color: #e69800'>变更审核中<br>(" + row.cmcrVwoNum + ")</span>";
+                        return "<span style='color: #e2ab2f'>审核中</span>";
                     } else if (2 == value || "2" == value) {
-                        return "<span style='color: #0c8fe2'>删除状态</span>";
+                        return "<span style='color: #a90009'>删除状态</span>";
                     }
                     else {
                         return "<span style='color: #a90009'>未知状态</span>";

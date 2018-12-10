@@ -4,206 +4,205 @@
 <link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="processCenterForm" role="form" method="post" action="work/add">
-    <!--<input id="puid" name="puid" type="text"/>&lt;!&ndash;th:value="${entity.pBomPuid}"&ndash;&gt;-->
     <div class="form-group">
         <label for="factoryCode">工厂代码<span>*</span></label>
         <input class="form-control" id="factoryCode" name="factoryCode" type="text"
 
-               placeholder="请输入工厂代码"/><!--th:value="${entity.level}"-->
+               placeholder="请输入工厂代码"/>
     </div>
     <div class="form-group">
         <label for="pWorkCode">工作中心代码</label>
         <input class="form-control" id="pWorkCode" name="pWorkCode" type="text"
 
-               placeholder="请输入工作中心代码"/><!--th:value="${entity.level}"-->
+               placeholder="请输入工作中心代码"/>
     </div>
     <div class="form-group">
         <label for="pWorkDesc">工作中心描述</label>
         <input class="form-control" id="pWorkDesc" name="pWorkDesc" type="text"
 
-               placeholder="请输入工作中心描述"/><!--th:value="${entity.level}"-->
+               placeholder="请输入工作中心描述"/>
     </div>
     <div class="form-group">
         <label for="pWorkType">工作中心类别</label>
         <input class="form-control" id="pWorkType" name="pWorkType" type="text"
 
-               placeholder="请输入工作中心类别"/><!--th:value="${entity.level}"-->
+               placeholder="请输入工作中心类别"/>
     </div>
     <div class="form-group">
         <label for="pPurpose">用途</label>
         <input class="form-control" id="pPurpose" name="pPurpose" type="text"
 
-               placeholder="请输入用途"/><!--th:value="${entity.level}"-->
+               placeholder="请输入用途"/>
     </div>
     <div class="form-group">
         <label for="pStandardCode">标准值码</label>
         <input class="form-control" id="pStandardCode" name="pStandardCode" type="text"
 
-               placeholder="请输入标准值码"/><!--th:value="${entity.level}"-->
+               placeholder="请输入标准值码"/>
     </div>
     <div class="form-group">
         <label for="pControlCode">控制码</label>
         <input class="form-control" id="pControlCode" name="pControlCode" type="text"
 
-               placeholder="请输入控制码"/><!--th:value="${entity.level}"-->
+               placeholder="请输入控制码"/>
     </div>
     <div class="form-group">
         <label for="pDirectLabor">直接人工/机物料消耗</label>
         <input class="form-control" id="pDirectLabor" name="pDirectLabor" type="text"
 
-               placeholder="请输入直接人工工时"/><!--th:value="${entity.level}"-->
+               placeholder="请输入直接人工工时"/>
     </div>
     <div class="form-group">
         <label for="pIndirectLabor">间接人工/标准件消耗</label>
         <input class="form-control" id="pIndirectLabor" name="pIndirectLabor" type="text"
 
-               placeholder="请输入间接人工工时"/><!--th:value="${entity.level}"-->
+               placeholder="请输入间接人工工时"/>
     </div>
     <div class="form-group">
         <label for="pMachineLabor">折旧/工具消耗</label>
         <input class="form-control" id="pMachineLabor" name="pMachineLabor" type="text"
 
-               placeholder="请输入机器工时"/><!--th:value="${entity.level}"-->
+               placeholder="请输入机器工时"/>
     </div>
     <div class="form-group">
         <label for="pBurn">燃动费/废品损失</label>
         <input class="form-control" id="pBurn" name="pBurn" type="text"
 
-               placeholder="请输入燃动"/><!--th:value="${entity.level}"-->
+               placeholder="请输入燃动"/>
     </div>
 
     <div class="form-group">
         <label for="pMachineMaterial">辅助人工/设备维修</label>
         <input class="form-control" id="pMachineMaterial" name="pMachineMaterial" type="text"
 
-               placeholder="请输入机物料"/><!--th:value="${entity.level}"-->
+               placeholder="请输入机物料"/>
     </div>
 
     <div class="form-group">
         <label for="pOtherCost">辅助折旧/辅助其他费用</label>
         <input class="form-control" id="pOtherCost" name="pOtherCost" type="text"
 
-               placeholder="请输入其它费用"/><!--th:value="${entity.level}"-->
+               placeholder="请输入其它费用"/>
     </div>
     <div class="form-group">
         <label for="pProcessExression">加工公式</label>
         <input class="form-control" id="pProcessExression" name="pProcessExression" type="text"
 
-               placeholder="请输入加工公式"/><!--th:value="${entity.level}"-->
+               placeholder="请输入加工公式"/>
     </div>
     <div class="form-group">
         <label for="pAbilityType">能力类别</label>
         <input class="form-control" id="pAbilityType" name="pAbilityType" type="text"
 
-               placeholder="请输入能力类别"/><!--th:value="${entity.level}"-->
+               placeholder="请输入能力类别"/>
     </div>
     <div class="form-group">
         <label for="pStartTime">开始时间</label>
         <input class="form-control" id="pStartTime" name="pStartTime" type="text"
 
-               placeholder="请输入开始时间"/><!--th:value="${entity.level}"-->
+               placeholder="请输入开始时间"/>
     </div>
     <div class="form-group">
         <label for="pEndTime">结束时间</label>
         <input class="form-control" id="pEndTime" name="pEndTime" type="text"
 
-               placeholder="请输入结束时间"/><!--th:value="${entity.level}"-->
+               placeholder="请输入结束时间"/>
     </div>
     <div class="form-group">
         <label for="pRestTime">休息时间</label>
         <input class="form-control" id="pRestTime" name="pRestTime" type="text"
 
-               placeholder="请输入休息时间"/><!--th:value="${entity.level}"-->
+               placeholder="请输入休息时间"/>
     </div>
     <div class="form-group">
         <label for="pAbilityCount">能力数量</label>
         <input class="form-control" id="pAbilityCount" name="pAbilityCount" type="text"
 
-               placeholder="请输入能力数量"/><!--th:value="${entity.level}"-->
+               placeholder="请输入能力数量"/>
     </div>
     <div class="form-group">
         <label for="pDispatchExpression">调度公式</label>
         <input class="form-control" id="pDispatchExpression" name="pDispatchExpression" type="text"
 
-               placeholder="请输入调度公式"/><!--th:value="${entity.level}"-->
+               placeholder="请输入调度公式"/>
     </div>
     <div class="form-group">
         <label for="pCostCenter">成本中心</label>
         <input class="form-control" id="pCostCenter" name="pCostCenter" type="text"
 
-               placeholder="请输入成本中心"/><!--th:value="${entity.level}"-->
+               placeholder="请输入成本中心"/>
     </div>
     <div class="form-group">
         <label for="pTaskType1">作业类型1</label>
         <input class="form-control" id="pTaskType1" name="pTaskType1" type="text"
 
-               placeholder="请输入作业类型1"/><!--th:value="${entity.level}"-->
+               placeholder="请输入作业类型1"/>
     </div>
     <div class="form-group">
         <label for="pTaskType2">作业类型2</label>
         <input class="form-control" id="pTaskType2" name="pTaskType2" type="text"
 
-               placeholder="请输入作业类型2"/><!--th:value="${entity.level}"-->
+               placeholder="请输入作业类型2"/>
     </div>
     <div class="form-group">
         <label for="pTaskType3">作业类型3</label>
         <input class="form-control" id="pTaskType3" name="pTaskType3" type="text"
 
-               placeholder="请输入作业类型3"/><!--th:value="${entity.level}"-->
+               placeholder="请输入作业类型3"/>
     </div>
     <div class="form-group">
         <label for="pTaskType4">作业类型4</label>
         <input class="form-control" id="pTaskType4" name="pTaskType4" type="text"
 
-               placeholder="请输入作业类型4"/><!--th:value="${entity.level}"-->
+               placeholder="请输入作业类型4"/>
     </div>
     <div class="form-group">
         <label for="pTaskType5">作业类型5</label>
         <input class="form-control" id="pTaskType5" name="pTaskType5" type="text"
 
-               placeholder="请输入作业类型6"/><!--th:value="${entity.level}"-->
+               placeholder="请输入作业类型6"/>
     </div>
     <div class="form-group">
         <label for="pTaskType6">作业类型6</label>
         <input class="form-control" id="pTaskType6" name="pTaskType6" type="text"
 
-               placeholder="请输入作业类型6"/><!--th:value="${entity.level}"-->
+               placeholder="请输入作业类型6"/>
     </div>
     <div class="form-group">
         <label for="pExperssion1">公式1</label>
         <input class="form-control" id="pExperssion1" name="pExperssion1" type="text"
 
-               placeholder="请输入公式1"/><!--th:value="${entity.level}"-->
+               placeholder="请输入公式1"/>
     </div>
     <div class="form-group">
         <label for="pExperssion2">公式2</label>
         <input class="form-control" id="pExperssion2" name="pExperssion2" type="text"
 
-               placeholder="请输入公式2"/><!--th:value="${entity.level}"-->
+               placeholder="请输入公式2"/>
     </div>
     <div class="form-group">
         <label for="pExperssion3">公式3</label>
         <input class="form-control" id="pExperssion3" name="pExperssion3" type="text"
 
-               placeholder="请输入公式3"/><!--th:value="${entity.level}"-->
+               placeholder="请输入公式3"/>
     </div>
     <div class="form-group">
         <label for="pExperssion4">公式4</label>
         <input class="form-control" id="pExperssion4" name="pExperssion4" type="text"
 
-               placeholder="请输入公式4"/><!--th:value="${entity.level}"-->
+               placeholder="请输入公式4"/>
     </div>
     <div class="form-group">
         <label for="pExperssion5">公式5</label>
         <input class="form-control" id="pExperssion5" name="pExperssion5" type="text"
 
-               placeholder="请输入公式5"/><!--th:value="${entity.level}"-->
+               placeholder="请输入公式5"/>
     </div>
     <div class="form-group">
         <label for="pExperssion6">公式6</label>
         <input class="form-control" id="pExperssion6" name="pExperssion6" type="text"
 
-               placeholder="请输入公式6"/><!--th:value="${entity.level}"-->
+               placeholder="请输入公式6"/>
     </div>
 </form>
 <script th:inline="javascript">
@@ -279,10 +278,6 @@
                     data: myData,
                     success:
                         function (result) {
-                            // $('.modal-dialog', window.top.document).parent('div').remove()
-                            // $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                             activeTabBodyRefresh();
                             if (result.success) {
                                 layer.msg('添加成功', {icon: 1, time: 2000})

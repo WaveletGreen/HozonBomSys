@@ -230,6 +230,7 @@ public class HzMbomController extends BaseController {
        WriteResultRespDTO respDTO =  hzMbomService.deleteMbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
+
     @RequestMapping(value = "refresh",method = RequestMethod.POST)
     public void refreshMbom(String projectId,HttpServletResponse response){
         WriteResultRespDTO resultMessageRespDTO = hzMbomService.refreshHzMbom(projectId);

@@ -1,14 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<!--<head th:include="include/includebase"></head>-->
 <link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
-<!--<link th:href="@{/css/bom/eBom/excelImpart.css}" rel="stylesheet">-->
 <body>
-
-<!--<div class="form-group" id="thumbnailUploadContainer" class="col-sm-10" style="float: left; margin-right: 50px;">
-    <input id="articleImageFile" name="excelFile" type="file" class="form-control" style="width: 300px; display: inline;" />
-    <input id="saveZipButton" type="button" style="width: 60px;height: 35px;" value="上传" />
-</div>-->
 <form id="excelImportForm" role="form" method="post" action="./file/uploadPbom">
     <div class="form-group">
         <label for="articleImageFile">选择文件</label>
@@ -80,18 +73,7 @@
                     processData: false,
                     // 告诉jQuery不要去设置Content-Type请求头
                     contentType: false,
-                    // beforeSend:function(){
-                    //     window.Ewin.alert({message: '系统正在处理，请耐心等待...'});
-                    // },
-                    // beforeSend: function () {
-                    //     $("#excelImportForm").append('<div id="layout"></div>');
-                    // },
                     success: function (result) {
-                        // $('#layout',window.top.document).hide();
-                        // $('.modal-dialog', window.top.document).parent('div').remove()
-                        // $('body', window.top.document).find('.modal-backdrop').remove();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
-                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                         activeTabBodyRefresh();
                         if (result.success) {
                             layer.msg(result.errMsg, {icon: 1, time: 2000})

@@ -74,11 +74,11 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     }
 
     @Override
-    public HzWorkProcess getHzWorkProcess(String materielId, String projectId) {
+    public List<HzWorkProcess> getHzWorkProcess(String materielId, String projectId) {
         Map<String,Object> map = new HashMap<>();
         map.put("materielId",materielId);
         map.put("projectId",projectId);
-        return (HzWorkProcess) super.findForObject("HzWorkProcedureDAOImpl_getHzWorkProcess",map);
+        return  super.findForList("HzWorkProcedureDAOImpl_getHzWorkProcess",map);
     }
 
     @Override

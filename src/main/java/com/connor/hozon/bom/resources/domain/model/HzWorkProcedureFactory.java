@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.domain.model;
 
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import sql.pojo.work.HzWorkProcedure;
+import sql.pojo.work.HzWorkProcess;
 
 /**
  * @Author: haozt
@@ -65,5 +66,34 @@ public class HzWorkProcedureFactory {
         respDTO.setState(hzWorkProcedure.getState());
         respDTO.setStatus(hzWorkProcedure.getpStatus());
         return  respDTO;
+    }
+
+
+
+    public static HzWorkProcessRespDTO workProcessToRespDTO(HzWorkProcess hzWorkProcess){
+        HzWorkProcessRespDTO respDTO   = new HzWorkProcessRespDTO();
+        respDTO.setFactoryCode(hzWorkProcess.getFactoryCode());
+        respDTO.setMaterielId(hzWorkProcess.getPuid());
+        respDTO.setpBurn(hzWorkProcess.getpBurn());
+        respDTO.setpCount(hzWorkProcess.getpCount());
+        respDTO.setpDirectLabor(hzWorkProcess.getpDirectLabor());
+        respDTO.setpIndirectLabor(hzWorkProcess.getpIndirectLabor());
+        respDTO.setpMachineMaterialLabor(hzWorkProcess.getpMachineMaterialLabor());
+        respDTO.setpMachineLabor(hzWorkProcess.getpMachineLabor());
+        respDTO.setpOtherCost(hzWorkProcess.getpOtherCost());
+        respDTO.setpProcedureCode(hzWorkProcess.getpProcedureCode());
+        respDTO.setpProcedureDesc(hzWorkProcess.getpProcedureDesc());
+        respDTO.setpWorkCode(hzWorkProcess.getWorkCenterCode());
+        respDTO.setpWorkDesc(hzWorkProcess.getWorkCenterDesc());
+        respDTO.setPuid(hzWorkProcess.getPuid());
+        respDTO.setpMaterielCode(hzWorkProcess.getpMaterielCode());
+        respDTO.setpMaterielDesc(hzWorkProcess.getpMaterielDesc());
+        respDTO.setControlCode(hzWorkProcess.getControlCode());
+        respDTO.setPurpose(hzWorkProcess.getPurpose());
+        respDTO.setState(hzWorkProcess.getState());
+        respDTO.setpWorkPuid(hzWorkProcess.getpWorkPuid());
+        respDTO.setIsSent(hzWorkProcess.getIsSent());
+        respDTO.setDataType(hzWorkProcess.getDataType());
+        return respDTO;
     }
 }

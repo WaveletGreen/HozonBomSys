@@ -2,7 +2,7 @@ $(document).ready(
     // $("#queryColorSet").click(function () {
     (function () {
         loadData();
-    }),
+    })
 );
 
 function loadData() {

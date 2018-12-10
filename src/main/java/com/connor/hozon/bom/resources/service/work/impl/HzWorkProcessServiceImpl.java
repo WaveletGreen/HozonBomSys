@@ -500,35 +500,18 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     }
 
     @Override
-    public HzWorkProcessRespDTO findHzWorkProcess(String materielId,String projectId) {
+    public List<HzWorkProcessRespDTO> findHzWorkProcess(String materielId,String projectId) {
         try {
-            HzWorkProcess hzWorkProcess =hzWorkProcedureDAO.getHzWorkProcess(materielId,projectId);
-            if(hzWorkProcess != null){
-                HzWorkProcessRespDTO respDTO   = new HzWorkProcessRespDTO();
-                respDTO.setFactoryCode(hzWorkProcess.getFactoryCode());
-                respDTO.setMaterielId(hzWorkProcess.getPuid());
-                respDTO.setpBurn(hzWorkProcess.getpBurn());
-                respDTO.setpCount(hzWorkProcess.getpCount());
-                respDTO.setpDirectLabor(hzWorkProcess.getpDirectLabor());
-                respDTO.setpIndirectLabor(hzWorkProcess.getpIndirectLabor());
-                respDTO.setpMachineMaterialLabor(hzWorkProcess.getpMachineMaterialLabor());
-                respDTO.setpMachineLabor(hzWorkProcess.getpMachineLabor());
-                respDTO.setpOtherCost(hzWorkProcess.getpOtherCost());
-                respDTO.setpProcedureCode(hzWorkProcess.getpProcedureCode());
-                respDTO.setpProcedureDesc(hzWorkProcess.getpProcedureDesc());
-                respDTO.setpWorkCode(hzWorkProcess.getWorkCenterCode());
-                respDTO.setpWorkDesc(hzWorkProcess.getWorkCenterDesc());
-                respDTO.setPuid(hzWorkProcess.getPuid());
-                respDTO.setpMaterielCode(hzWorkProcess.getpMaterielCode());
-                respDTO.setpMaterielDesc(hzWorkProcess.getpMaterielDesc());
-                respDTO.setControlCode(hzWorkProcess.getControlCode());
-                respDTO.setPurpose(hzWorkProcess.getPurpose());
-                respDTO.setState(hzWorkProcess.getState());
-                respDTO.setpWorkPuid(hzWorkProcess.getpWorkPuid());
-                respDTO.setIsSent(hzWorkProcess.getIsSent());
-                return respDTO;
+            List<HzWorkProcessRespDTO> respDTOs = new ArrayList<>();
+            List<HzWorkProcess> hzWorkProcess =hzWorkProcedureDAO.getHzWorkProcess(materielId,projectId);
+            if(ListUtil.isNotEmpty(hzWorkProcess)){
+               for(HzWorkProcess workProcess:hzWorkProcess){
+                   respDTOs.add(HzWorkProcedureFactory.workProcessToRespDTO(workProcess));
+               }
+                return respDTOs;
             }
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
         return null;
@@ -746,6 +729,13 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             if(ListUtil.isNotEmpty(records)){//根据查询结果 记录数据
                 //到 after表中查询看是否存在记录
                 //存在记录则过滤 不存在记录则插入
+
+                //审核通过的数据需要传输给SAP系统 所以这里要进行严格参数校验
+                //不符合SAP系统规定的数据 全部打回 不允许发起流程
+
+
+
+
                 HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
                 dataDetailQuery.setProjectId(reqDTO.getProjectId());
                 dataDetailQuery.setOrderId(orderId);
@@ -898,5 +888,25 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             return WriteResultRespDTO.getFailResult();
         }
 
+    }
+
+
+
+    private String checkWorkProcessDataValid(List<HzWorkProcedure> hzWorkProcedures){
+        /**
+         * 流程审核通过后，需要将数据传输给SAP系统
+         * 这里进行参数合法性校验：
+         * 1.整车工艺路线 需要一次性传输6条数据
+         * 2.半成品工艺路线 需要一次性传输2条数据
+         *
+         * 必填的字段
+         * 工厂 物料编码 基本数量 有效日期自 用途 状态 工序序号 工作中心 控制码 工序描述 作业数量1（直接人工）
+         *
+         * 对以上的参数要求进行校验
+         */
+
+
+
+        return null;
     }
 }

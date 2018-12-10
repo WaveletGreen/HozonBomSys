@@ -233,6 +233,19 @@ public class HzMbomLineRecord extends BaseChangePOJO {
      */
     private String mwoNo;
 
+    /**
+     * 采购类型 buy& make
+     */
+    private String buyType;
+
+    public String getBuyType() {
+        return buyType;
+    }
+
+    public void setBuyType(String buyType) {
+        this.buyType = buyType;
+    }
+
     public String getMwoNo() {
         return mwoNo;
     }

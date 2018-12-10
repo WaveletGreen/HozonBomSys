@@ -19,6 +19,7 @@ import integration.logic.ReflectMateriel;
 import integration.option.ActionFlagOption;
 import integration.service.impl.masterMaterial1.TransMasterMaterialService;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
@@ -192,15 +193,15 @@ public class SynMaterielService implements ISynMaterielService {
 
         List<HzMaterielRecord> toUpdate = new ArrayList<>();
         List<String> puids = new ArrayList<>();
-        Set<String> materialCode = new HashSet<>();
+//        Set<String> materialCode = new HashSet<>();
         //没有过滤部门层
         for (HzMaterielRecord record : sorted) {
             //过滤重复的零件号
-            if (materialCode.contains(record.getpMaterielCode())) {
-                continue;
-            } else {
-                materialCode.add(record.getpMaterielCode());
-            }
+//            if (materialCode.contains(record.getpMaterielCode())) {
+//                continue;
+//            } else {
+//                materialCode.add(record.getpMaterielCode());
+//            }
             if (!validate(record)) {
                 totalOfUnknown++;
                 continue;
@@ -236,12 +237,12 @@ public class SynMaterielService implements ISynMaterielService {
                     continue;
                 }
             }
-            if (!_factoryCoach.containsKey(record.getpFactoryPuid())) {
-                HzFactory factory = hzFactoryDAO.findFactory(record.getpFactoryPuid(), null);
-                _factoryCoach.put(record.getpFactoryPuid(), factory.getpFactoryCode());
-            }
+//            if (!_factoryCoach.containsKey(record.getpFactoryPuid())) {
+//                HzFactory factory = hzFactoryDAO.findFactory(record.getpFactoryPuid(), null);
+//                _factoryCoach.put(record.getpFactoryPuid(), factory.getpFactoryCode());
+//            }
             //设置工厂
-            reflectMateriel.setFactory(_factoryCoach.get(record.getpFactoryPuid()));
+            reflectMateriel.setFactory(record.getFactoryCode());
             reflectMateriel.setMRPAndPurchase(record.getpMrpController(), record.getResource(), "默认公告");
             /////////////////////////////////////////////////////手动设置一些必填参数////////////////////////////////////////////////////
             transMasterMaterialService.getInput().getItem().add(reflectMateriel.getMm().getZpptci001());
@@ -344,10 +345,9 @@ public class SynMaterielService implements ISynMaterielService {
 
 
     private boolean validate(HzMaterielRecord record) {
-        if (null == record.getpMaterielDesc() || "".equalsIgnoreCase(record.getpMaterielDesc()) || null == record.getpFactoryPuid() || "".equals(record.getpFactoryPuid())) {
+        if (StringUtils.isBlank(record.getpMaterielDesc()) || StringUtils.isBlank(record.getpFactoryPuid())) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 }

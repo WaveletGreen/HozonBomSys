@@ -6,16 +6,15 @@
 <form id="ebomMainForm" role="form" method="post" action="ebom/update/ebomLevel">
     <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/>
     <input id="isHas" name="isHas" type="hidden" th:value="${data.isHas}"/>
-    <!--<input id="id" name="id" type="text" th:value="${data.id}"/>-->
     <div class="form-group">
         <label for="lineId">新层级父层零件号<span>*</span></label>
         <input class="form-control" id="lineId" name="lineId" type="text"
-               placeholder="请输入新层级父层零件号"/><!--th:value="${data.lineId}"-->
+               placeholder="请输入新层级父层零件号"/>
     </div>
     <div class="form-group">
         <label for="lineNo">查找编号<span>*</span></label>
         <input class="form-control" id="lineNo" name="lineNo" type="text"
-               placeholder="请输入新层级查找编号"/><!--th:value="${data.findNum}"-->
+               placeholder="请输入新层级查找编号"/>
     </div>
 
 </form>
@@ -93,10 +92,6 @@
                         data: myData,
                         success:
                             function (result) {
-                                // $('.modal-dialog', window.top.document).parent('div').remove()
-                                // $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                                 activeTabBodyRefresh();
                                 if (result.success) {
                                     layer.msg('修改成功', {icon: 1, time: 3000})

@@ -27,7 +27,7 @@ public interface HzWorkProcedureDAO {
 
     Page<HzWorkProcess> findHzWorkProcessByPage2(HzWorkProcessByPageQuery query);
 
-    HzWorkProcess getHzWorkProcess(String materielId,String projectId);
+    List<HzWorkProcess> getHzWorkProcess(String materielId,String projectId);
 
     HzWorkProcess getHzWorkProcess2(String materielId,String projectId, String procedureDesc);
 

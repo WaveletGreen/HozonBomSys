@@ -84,6 +84,7 @@ public class HzMbomRecordFactory {
         hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzMbomLineRecord.setSortNum(record.getSortNum());
         hzMbomLineRecord.setIsColorPart(record.getColorPart());
+        hzMbomLineRecord.setBuyType(record.getResource());
         return hzMbomLineRecord;
     }
 
@@ -172,6 +173,7 @@ public class HzMbomRecordFactory {
                 }
                 lineRecord.setLineIndex(lindIndex+stringBuffer.toString());
                 lineRecord.setColorId(record.getColorId());
+                lineRecord.setpFactoryId(record.getpFactoryId());
                 recordList.add(lineRecord);
             }
         }else {
@@ -182,7 +184,15 @@ public class HzMbomRecordFactory {
     }
 
 
-    public  HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, HzConfigBomColorBean bean,int n){
+    /**
+     * 产生超级MBOM
+     * @param record PBOM数据
+     * @param i 颜色件集合下标
+     * @param bean 颜色件信息
+     * @param n 集合空间长度
+     * @return
+     */
+    public  HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, HzConfigBomColorBean bean,int n,String factoryId){
         HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
         String lineId = mbomLineRecord.getLineId();
         if(Integer.valueOf(1).equals(record.getColorPart())&& bean!=null){
@@ -194,7 +204,7 @@ public class HzMbomRecordFactory {
             mbomLineRecord.setColorId(bean.getColorUid());
         }
         mbomLineRecord.setLineId(lineId);
-
+        mbomLineRecord.setpFactoryId(factoryId);
         String lineIndex = record.getLineIndex();
 
         String firstIndex = lineIndex.split("\\.")[0];
@@ -253,7 +263,8 @@ public class HzMbomRecordFactory {
      * 产生油漆物料BOM
      * @return
      */
-    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,int i,String colorId){
+    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,
+                                                               int i,String colorId,String factoryId){
         List<HzMbomLineRecord> list = new ArrayList<>();
         if(ListUtil.isNotEmpty(libs)){
             for(int j=0;j<libs.size();j++){
@@ -271,6 +282,7 @@ public class HzMbomRecordFactory {
                 record.setBomDigifaxId(pbomLineRecord.getBomDigifaxId());
                 record.seteBomPuid(UUID.randomUUID().toString());
                 record.setColorId(colorId);
+                record.setpFactoryId(factoryId);
                 list.add(record);
             }
         }

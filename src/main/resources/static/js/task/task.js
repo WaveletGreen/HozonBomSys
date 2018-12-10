@@ -89,7 +89,8 @@ function loadTab(data) {
     if ($(showObj).html() == undefined) {
         $("#tabContainer").data("tabs").addTab({
             id: data.targetName + data.targetId,
-            text: data.targetName,
+            //text: data.targetName,
+            text: "待办事项",
             closeable: true,
             url: data.url
         });
