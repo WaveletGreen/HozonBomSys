@@ -42,7 +42,7 @@ function initTable(url) {
 
         }
     }),
-        column.push({field: 'status', title: '零件号', align: 'center', valign: 'middle',})
+    column.push({field: 'status', title: '零件号', align: 'center', valign: 'middle',})
     column.push({field: 'status', title: '零件名称', align: 'center', valign: 'middle',})
     column.push({field: 'status', title: '每车数量', align: 'center', valign: 'middle',})
     column.push({field: 'status', title: '中选供应商', align: 'center', valign: 'middle',})
@@ -236,49 +236,49 @@ function initTable(url) {
                     })
                 }
             },
-            {
-                text: '发起流程',
-                iconCls: 'glyphicon glyphicon-log-out',
-                handler: function () {
-                    var rows = $table.bootstrapTable('getSelections');
-                    var puids = "";
-                    for (var i = 0; i < rows.length; i++) {
-                        puids += rows[i].puid + ",";
-                    }
-                    if (rows.length == 0) {
-                        window.Ewin.alert({message: '请选择一条需要变更的数据!'});
-                        return false;
-                    }
-                    else {
-                        for (var i = 0; i < rows.length; i++) {
-                            if (rows[i].status != 4 && rows[i].status != 2) {
-                                window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
-                                return false;
-                            }
-                        }
-                    }
-                    var url = "";
-                    $.ajax({
-                        url: "privilege/write?url=" + url,
-                        type: "GET",
-                        success: function (result) {
-                            if (!result.success) {
-                                window.Ewin.alert({message: result.errMsg});
-                                return false;
-                            }
-                            else {
-                                window.Ewin.dialog({
-                                    title: "选择变更表单",
-                                    url: "",
-                                    gridId: "gridId",
-                                    width: 450,
-                                    height: 450
-                                });
-                            }
-                        }
-                    })
-                }
-            },
+            // {
+            //     text: '发起流程',
+            //     iconCls: 'glyphicon glyphicon-log-out',
+            //     handler: function () {
+            //         var rows = $table.bootstrapTable('getSelections');
+            //         var puids = "";
+            //         for (var i = 0; i < rows.length; i++) {
+            //             puids += rows[i].puid + ",";
+            //         }
+            //         if (rows.length == 0) {
+            //             window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+            //             return false;
+            //         }
+            //         else {
+            //             for (var i = 0; i < rows.length; i++) {
+            //                 if (rows[i].status != 4 && rows[i].status != 2) {
+            //                     window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+            //                     return false;
+            //                 }
+            //             }
+            //         }
+            //         var url = "";
+            //         $.ajax({
+            //             url: "privilege/write?url=" + url,
+            //             type: "GET",
+            //             success: function (result) {
+            //                 if (!result.success) {
+            //                     window.Ewin.alert({message: result.errMsg});
+            //                     return false;
+            //                 }
+            //                 else {
+            //                     window.Ewin.dialog({
+            //                         title: "选择变更表单",
+            //                         url: "",
+            //                         gridId: "gridId",
+            //                         width: 450,
+            //                         height: 450
+            //                     });
+            //                 }
+            //             }
+            //         })
+            //     }
+            // },
         ]
     });
 }
