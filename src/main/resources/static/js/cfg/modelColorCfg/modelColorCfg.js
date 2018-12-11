@@ -477,7 +477,7 @@ function loadData(_projectPuid) {
                 width: $(window).width(),
                 showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
-                pageSize: 10,
+                pageSize: 20,
                 pagination: true,                   //是否显示分页（*）
                 clickToSelect: true,                // 单击某一行的时候选中某一条记录
                 formId: "hide",

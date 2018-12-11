@@ -342,8 +342,8 @@ function loadData(_projectPuid) {
         showRefresh: true,                  //是否显示刷新按钮
         pagination: true,                   //是否显示分页（*）
         pageNumber: 1,                       //初始化加载第一页，默认第一页
-        pageSize: 10,                       //每页的记录行数（*）
-        pageList: [10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
+        pageSize: 20,                       //每页的记录行数（*）
+        pageList: [20, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
         smartDisplay: false,
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "queryFeature",
