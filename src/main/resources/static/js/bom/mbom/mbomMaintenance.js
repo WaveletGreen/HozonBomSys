@@ -1794,6 +1794,7 @@ function initTable2(productionUrl) {
                 ],
             });
             $productionTable.bootstrapTable('hideColumn', 'level');
+            $productionTable.bootstrapTable('hideColumn', 'pBomType');
         }
     });
 }
@@ -2226,6 +2227,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                 ],
             });
             $productionTable.bootstrapTable('hideColumn', 'level');
+            $productionTable.bootstrapTable('hideColumn', 'pBomType');
         }
     });
 }
@@ -2689,7 +2691,7 @@ function initTable3(financialUrl) {
                 ],
             });
             $financialTable.bootstrapTable('hideColumn', 'level');
-
+            $financialTable.bootstrapTable('hideColumn', 'pBomType');
         }
     });
 }
@@ -3126,6 +3128,8 @@ function initTable33(financialUrl, lineIds, colorIds) {
                     },
                 ],
             });
+            $financialTable.bootstrapTable('hideColumn', 'level');
+            $financialTable.bootstrapTable('hideColumn', 'pBomType');
         }
     });
 }
