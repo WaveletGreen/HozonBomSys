@@ -198,4 +198,13 @@ public class HzAccessoriesLibsController extends BaseController {
         model.addAttribute("data", libs.get(0));
         return "resourcesLibrary/accessoriesLibrary/updateAccessoriesLibrary";
     }
+
+    /**
+     * 跳转到工艺辅料库的导入页面
+     * @return
+     */
+    @RequestMapping(value = "importExcel",method = RequestMethod.GET)
+    public String getExcelImport() {
+        return "resourcesLibrary/accessoriesLibrary/importExcel";
+    }
 }
