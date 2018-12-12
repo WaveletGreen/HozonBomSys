@@ -5,15 +5,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -27,9 +30,10 @@ public class HzEPLController extends BaseController {
 
     @Autowired
     private HzEPLManageRecordService hzEPLManageRecordService;
+    @Autowired
+    private HzChangeOrderDAO hzChangeOrderDAO;
 
-
-    @RequestMapping(value = "epl/title",method = RequestMethod.GET)
+    @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEplTitle(HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
@@ -73,20 +77,20 @@ public class HzEPLController extends BaseController {
         tableTitle.put("pBomLinePartClass","零件分类" );
         tableTitle.put("pBomLinePartResource","零件来源");
         tableTitle.put("pInOutSideFlag","内外饰标识");
-        tableTitle.put("pUpc","UPC");
-        tableTitle.put("fna","FNA");
-        tableTitle.put("pFnaDesc","FNA描述" );
-
-        tableTitle.put("resource", "自制/采购");
-        tableTitle.put("type", "焊接/装配");
-        tableTitle.put("buyUnit", "采购单元");
-        tableTitle.put("workShop1", "车间1");
-        tableTitle.put("workShop2", "车间2");
-        tableTitle.put("productLine", "生产线");
-        tableTitle.put("mouldType", "模具类别");
-        tableTitle.put("outerPart", "外委件");
-        tableTitle.put("colorPart", "颜色件");
-        tableTitle.put("station","工位");
+//        tableTitle.put("pUpc","UPC");
+//        tableTitle.put("fna","FNA");
+//        tableTitle.put("pFnaDesc","FNA描述" );
+//
+//        tableTitle.put("resource", "自制/采购");
+//        tableTitle.put("type", "焊接/装配");
+//        tableTitle.put("buyUnit", "采购单元");
+//        tableTitle.put("workShop1", "车间1");
+//        tableTitle.put("workShop2", "车间2");
+//        tableTitle.put("productLine", "生产线");
+//        tableTitle.put("mouldType", "模具类别");
+//        tableTitle.put("outerPart", "外委件");
+//        tableTitle.put("colorPart", "颜色件");
+//        tableTitle.put("station","工位");
 //
 //        tableTitle.put("sparePart", "备件");
 //        tableTitle.put("sparePartNum", "备件编号");
@@ -249,4 +253,17 @@ public class HzEPLController extends BaseController {
 //        tableTitle.put("changeNum", "变更号");
 //        toJSONResponse(Result.build(tableTitle), response);
 //    }
+    /**
+     * 跳转到EBOM选择变更单
+     * @return
+     */
+    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
+    public String getOrderChooseToPage(String projectId,String puids,Model model){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
+        if(ListUtil.isNotEmpty(records)){
+            model.addAttribute("data",records);
+            model.addAttribute("puids",puids);
+        }
+        return "bomManage/epl/eplSetChangeForm";
+    }
 }
