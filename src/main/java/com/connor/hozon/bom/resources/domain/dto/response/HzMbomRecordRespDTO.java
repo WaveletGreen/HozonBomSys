@@ -131,6 +131,19 @@ public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
      */
     private String colorId;
 
+    /**
+     * 生效时间
+     */
+    private String effectTime;
+
+    public String getEffectTime() {
+        return effectTime;
+    }
+
+    public void setEffectTime(String effectTime) {
+        this.effectTime = effectTime;
+    }
+
     public String getColorId() {
         return colorId;
     }

@@ -118,6 +118,16 @@ public class HzPbomLineRespDTO extends BaseChangeRespDTO {
     /**单车用量**/
     private JSONObject object;
 
+    private String effectTime;
+
+    public String getEffectTime() {
+        return effectTime;
+    }
+
+    public void setEffectTime(String effectTime) {
+        this.effectTime = effectTime;
+    }
+
     public JSONObject getObject() {
         return object;
     }

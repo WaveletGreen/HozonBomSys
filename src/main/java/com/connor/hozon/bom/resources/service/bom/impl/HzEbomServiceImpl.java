@@ -2033,7 +2033,7 @@ public class HzEbomServiceImpl implements HzEbomService {
             //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
             if(ListUtil.isNotEmpty(list)){
                 list.forEach(r->{
-                    if(1==r.getIsHas()){
+                    if(Integer.valueOf(1).equals(r.getIsHas())){
                         HzEbomTreeQuery ebomTreeQuery = new HzEbomTreeQuery();
                         ebomTreeQuery.setProjectId(reqDTO.getProjectId());
                         ebomTreeQuery.setPuid(r.getPuid());

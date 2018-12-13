@@ -13,6 +13,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import integration.base.masterMaterial.ZPPTCO001;
 import integration.logic.ReflectAddMasterMaterial;
 import integration.logic.ReflectMateriel;
@@ -60,7 +61,6 @@ public class SynMaterielService implements ISynMaterielService {
     @Autowired
     HzFactoryDAO hzFactoryDAO;
 
-
     /**
      * 更新操作
      *
@@ -71,6 +71,7 @@ public class SynMaterielService implements ISynMaterielService {
     public JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos, String tableName, String field) {
         return updateOrDelete(dtos, ActionFlagOption.UPDATE, tableName, field);
     }
+
 
     /**
      * 删除操作
@@ -285,7 +286,8 @@ public class SynMaterielService implements ISynMaterielService {
         /**
          * 更新信息,这里也是更新is_sent状态的
          */
-        if (puids != null && puids.size() > 0) {
+//        if (puids != null && puids.size() > 0) {//?
+        if (ListUtil.isNotEmpty(toUpdate)) {
             toUpdate.forEach(to -> puids.add(to.getpMaterielCode()));
             splitListThenUpdate(puids, tableName, field);
         }

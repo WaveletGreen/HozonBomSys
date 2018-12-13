@@ -144,7 +144,7 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
             }
             List<HzChangeOrderRecord> records = page.getResult();
             for(HzChangeOrderRecord record :records){
-                if(1==record.getFromTc()){
+                if(Integer.valueOf(1).equals(record.getFromTc())){
                     HzChangeOrderRespDTO respDTO = HzChangeOrderFactory.changeOrderRecordToRespDTO(record);
                     respDTO.setDeptName(record.getDeptNameTC());
                     respDTO.setCreateName(record.getCreateNameTC());

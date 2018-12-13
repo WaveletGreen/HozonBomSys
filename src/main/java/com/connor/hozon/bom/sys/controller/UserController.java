@@ -23,6 +23,7 @@ import com.connor.hozon.bom.sys.service.UserRoleService;
 import com.connor.hozon.bom.sys.service.UserService;
 import com.google.common.collect.Lists;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
@@ -343,7 +344,7 @@ public class UserController extends GenericController<User,QueryUser> {
 
 
     /**
-     * 功能描述：保存数据字典数据
+     * 功能描述：保存用户信息
      * @param entity
      * @return
      */
@@ -373,6 +374,10 @@ public class UserController extends GenericController<User,QueryUser> {
             }
         }
         try {
+            //设置登录名全部为小写
+            String login = entity.getLogin();
+            login = login.trim().toLowerCase();
+            entity.setLogin(login);
             boolean success = getService().save(entity);
             if(success){
                 result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
@@ -468,4 +473,23 @@ public class UserController extends GenericController<User,QueryUser> {
     }
 
 
+    /**
+     * 功能描述：判断当前的字典元素是否已经存在
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/isExist",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String,Object> isExist(QueryUser entity){
+        Map<String,Object> result = new HashMap<String, Object>();
+        if(StringUtils.isNotBlank(entity.getLogin())){
+            entity.setLogin(entity.getLogin().trim().toLowerCase());
+        }
+        if(getService().query(entity).size()>0){
+            result.put("valid",false);
+        }else{
+            result.put("valid",true);
+        }
+        return result;
+    }
 }
