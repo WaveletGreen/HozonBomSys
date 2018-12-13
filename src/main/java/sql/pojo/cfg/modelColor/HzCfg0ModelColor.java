@@ -87,6 +87,9 @@ public class HzCfg0ModelColor {
     @Getter
     @Setter
     private String cmcrStatus;
+    @Getter
+    @Setter
+    private Date cmcrEffectedDate;
 
     public HzCfg0ModelColor() {
         mapOfCfg0 = new LinkedHashMap<>();
@@ -179,5 +182,13 @@ public class HzCfg0ModelColor {
 
     public void setpShellCfg0Puid(String pShellCfg0Puid) {
         this.pShellCfg0Puid = pShellCfg0Puid;
+    }
+
+    public Date getCmcrEffectedDate() {
+        return cmcrEffectedDate;
+    }
+
+    public void setCmcrEffectedDate(Date cmcrEffectedDate) {
+        this.cmcrEffectedDate = cmcrEffectedDate;
     }
 }

@@ -664,6 +664,12 @@ function gotIt(result) {
                 }
             }
         });
+    column.push({
+        field: 'effectedDate',
+        title: '生效时间',
+        align: 'center',
+        valign: 'middle'
+    });
     $table.bootstrapTable({
         url: "materielV2/loadComposes?projectPuid=" + projectUid,
         method: 'get',

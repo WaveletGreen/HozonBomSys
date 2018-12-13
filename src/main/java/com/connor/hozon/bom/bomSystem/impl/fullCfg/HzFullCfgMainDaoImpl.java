@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,6 +72,7 @@ public class HzFullCfgMainDaoImpl extends BasicDaoImpl<HzFullCfgMain> implements
         Map<String,Object> map = new HashMap<>();
         map.put("stutas",stutas);
         map.put("orderId",orderId);
+        map.put("effectiveDate",new Date());
         return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
     }
 

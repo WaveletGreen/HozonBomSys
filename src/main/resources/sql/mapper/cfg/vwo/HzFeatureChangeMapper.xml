@@ -315,11 +315,29 @@
         delete from HZ_CFG0_AFTER_CHANGE_RECORD
         where
         ID in
-        <foreach collection="list" index="index" item="changeFeatureId" open="(" close=")" separator=",">
-            #{changeFeatureId,jdbcType=DECIMAL}
-        </foreach>
-        and
-        PROCESS_STATUS = 0
+        (
+            select
+              ID
+            from
+              HZ_CFG0_AFTER_CHANGE_RECORD
+            where
+              CFG_PUID in (
+                  select CFG_PUID from  HZ_CFG0_AFTER_CHANGE_RECORD where ID in
+                  <foreach collection="list" index="index" item="changeFeatureId" open="(" separator="," close=")">
+                      #{changeFeatureId,jdbcType=DECIMAL}
+                  </foreach>
+              )
+            and
+            PROCESS_STATUS = 0
+        )
+        <!--delete from HZ_CFG0_AFTER_CHANGE_RECORD-->
+        <!--where-->
+        <!--ID in-->
+        <!--<foreach collection="list" index="index" item="changeFeatureId" open="(" close=")" separator=",">-->
+            <!--#{changeFeatureId,jdbcType=DECIMAL}-->
+        <!--</foreach>-->
+        <!--and-->
+        <!--PROCESS_STATUS = 0-->
         <!--CHANGE_ORDER_ID =-->
         <!--(select DISTINCT(CHANGE_ORDER_ID) from HZ_CFG0_AFTER_CHANGE_RECORD where-->
         <!--ID in-->
@@ -366,6 +384,22 @@
         HZ_CFG0_AFTER_CHANGE_RECORD
         where
         CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL}
+        and
+        PROCESS_STATUS = 0
+    </select>
+
+    <select id="doSelectHasNotEffect" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CFG0_AFTER_CHANGE_RECORD
+        where
+        CFG_PUID in(
+          select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where ID in
+          <foreach collection="list" index="index" item="changeFeatureId" open="(" separator="," close=")">
+              #{changeFeatureId,jdbcType=DECIMAL}
+          </foreach>
+        )
         and
         PROCESS_STATUS = 0
     </select>

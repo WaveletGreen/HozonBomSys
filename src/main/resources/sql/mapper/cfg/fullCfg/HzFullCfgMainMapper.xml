@@ -193,7 +193,8 @@
 
     <update id="updateStatusByOrderId" parameterType="java.util.Map">
         update HZ_FULL_CFG_MAIN_RECORD
-        set STATUS = #{stutas,jdbcType=DECIMAL}
+        set STATUS = #{stutas,jdbcType=DECIMAL},
+        EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP}
         where
         ID in (
           select SRC_MAIN_ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}

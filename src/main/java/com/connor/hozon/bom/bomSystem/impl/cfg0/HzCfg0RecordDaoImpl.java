@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -184,6 +185,7 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         Map<String,Object> map = new HashMap<>();
         map.put("orderId",orderId);
         map.put("status",status);
+        map.put("effectedDate",new Date());
         return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
     }
 

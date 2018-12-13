@@ -120,7 +120,15 @@ var column = [
                 return "<span style='color: #a90009'>未知状态</span>";
             }
         }
-    },
+    },{
+        field: 'effectedDate',
+        title: '生效时间',
+        align: 'center',
+        valign: 'middle',
+        formatter: function (value, row, index) {
+            return dateToStringFormat(value)
+        }
+    }
     // {
     //     field: 'puid',
     //     title: 'puid',
@@ -158,8 +166,8 @@ function loadData(_projectPuid) {
         showRefresh: true,                  //是否显示刷新按钮
         pagination: true,                   //是否显示分页（*）
         pageNumber: 1,                       //初始化加载第一页，默认第一页
-        pageSize: 10,                       //每页的记录行数（*）
-        pageList: ['ALL', 10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
+        pageSize: 20,                       //每页的记录行数（*）
+        pageList: ['ALL', 20, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
         smartDisplay: false,
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "queryRelevance",
@@ -212,6 +220,14 @@ $(document).ready(
 );
 
 function generateRelevance() {
+    var rows = $table.bootstrapTable('getData');
+    for(let i in rows){
+        if(rows[i].status==10){
+            window.Ewin.alert({message: "相关性数据已关联变更单号" +
+                "，不能生成相关性"});
+            return false;
+        }
+    }
     var msg = "您确定生成相关性吗！";
     var projectPuid = $("#project", window.top.document).val();
     var url = "relevance/addRelevance";
@@ -248,6 +264,21 @@ function generateRelevance() {
 }
 
 function getChange() {
+    var rows = $table.bootstrapTable('getData');
+    var changeFlag = true;
+    for(let i in rows){
+        if(rows[i].status==10){
+            window.Ewin.alert({message: "相关性数据已关联变更单号，不能再次关联变更单号"});
+            return false;
+        }
+        if(rows[i].status==0){
+            changeFlag = false;
+        }
+    }
+    if(changeFlag){
+        window.Ewin.alert({message: "相关性数据不存在草稿状态数据，不能关联变更单号"});
+        return false;
+    }
     var msg = "您确定关联变更单号吗！";
     var projectPuid = $("#project", window.top.document).val();
     var url = "relevance/getChangePage";
@@ -294,6 +325,21 @@ function getChange() {
 }
 
 function goBackData() {
+    var rows = $table.bootstrapTable('getData');
+    var backFlag = true;
+    for(let i in rows){
+        if(rows[i].status==10){
+            window.Ewin.alert({message: "相关性数据已关联变更单号，不能撤销"});
+            return false;
+        }
+        if(rows[i].status==0){
+            backFlag = false;
+        }
+    }
+    if(backFlag){
+        window.Ewin.alert({message: "相关性数据不存在草稿状态数据，不能撤销"});
+        return false;
+    }
     var msg = "您确定撤销吗！";
     var projectPuid = $("#project", window.top.document).val();
     var url = "relevance/goBackData";

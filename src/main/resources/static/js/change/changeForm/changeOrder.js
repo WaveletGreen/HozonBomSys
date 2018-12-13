@@ -103,11 +103,15 @@ $(document).ready(function () {
         type: "GET",
         success: function (result) {
             var files = result.files;
-            var temp = "";
-            for(let i in files) {
-                temp += "<div class='col-lg-2 col-md-2'><input id='file"+i+"' name='filePath' type='radio' value='"+files[i].id+"'/><span style='text-align: center;color: red'>  "+files[i].showName+"</span></div>";
+            if(files.length>0){
+                var temp = "";
+                for(let i in files) {
+                    temp += "<div class='col-lg-2 col-md-2'><input id='file"+i+"' name='filePath' type='radio' value='"+files[i].id+"'/><span style='text-align: center;color: red'>  "+files[i].showName+"</span></div>";
+                }
+                $("#fileFormDiv").html(temp);
+            }else {
+                $("#downloadButton").hide()
             }
-            $("#fileFormDiv").html(temp);
         }
     });
 
@@ -135,5 +139,9 @@ $(document).ready(function () {
 
 function download() {
     var form = $("#changeFileForm");
+    if($("#changeFileForm [type=radio]:checked").length!=1){
+        window.Ewin.alert({message: "<span style='color: red'>请选择一个需要下载的文件!</span>"});
+        return false;
+    }
     form.submit();
 }

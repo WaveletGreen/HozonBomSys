@@ -133,4 +133,9 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
         return baseSQLUtil.executeUpdate(map,clz.getCanonicalName()+".doUpdateIsSent");
     }
 
+    @Override
+    public List<HzRelevanceBasic> selectByProjectPuidAndStatus(String projectPuid) {
+        return baseSQLUtil.executeQueryByPass(new HzRelevanceBasic(),projectPuid,clz.getCanonicalName()+".selectByProjectPuidAndStatus");
+    }
+
 }

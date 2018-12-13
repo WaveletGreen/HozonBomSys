@@ -353,7 +353,8 @@ public class HzBomAllCfgService {
         JSONObject mainJson = new JSONObject();
         mainJson.put("stage", hzFullCfgMain.getStage() == null ? "" : HzFullCfgMain.parseStage(hzFullCfgMain.getStage()));
         mainJson.put("version", hzFullCfgMain.getVersion() == null ? "" : hzFullCfgMain.getVersion());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         mainJson.put("effectiveDate", hzFullCfgMain.getEffectiveDate() == null ? "" : sdf.format(hzFullCfgMain.getEffectiveDate()));
 
         mainJson.put("status",hzFullCfgMain.getStatus());

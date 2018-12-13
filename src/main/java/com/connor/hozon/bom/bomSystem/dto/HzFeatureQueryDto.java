@@ -27,7 +27,7 @@ public class HzFeatureQueryDto {
     /**
      * 获取一页行数
      */
-    protected Integer limit;
+    protected String limit;
     /**
      * 获取的页码
      */

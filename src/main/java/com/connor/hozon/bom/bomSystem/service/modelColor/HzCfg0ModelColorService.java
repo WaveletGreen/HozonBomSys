@@ -33,6 +33,7 @@ import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.redis.SerializeUtil;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -227,6 +228,9 @@ public class HzCfg0ModelColorService {
         Date date = new Date();
         User user = UserInfo.getUser();
         Map<String, Object> result = new HashMap<>();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
         List<HzCfg0OptionFamily> familiesNewFromDb = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//.getFamilies(projectPuid, 0, 1);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
         List<HzCfg0OptionFamily> familiesNew = new ArrayList<>();
@@ -251,6 +255,7 @@ public class HzCfg0ModelColorService {
             _result.put("modelShell", color.getpModelShellOfColorfulModel());
             _result.put("modeColorIsMultiply", color.getpColorIsMultiply());
             _result.put("vwoNum", String.valueOf(color.getCmcrVwoId()));
+            _result.put("cmcrEffectedDate", color.getCmcrEffectedDate()==null?"-":sdf.format(color.getCmcrEffectedDate()));
 //            List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
             List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor2(color.getPuid());
             coach.clear();

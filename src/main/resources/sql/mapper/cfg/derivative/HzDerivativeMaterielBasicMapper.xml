@@ -42,6 +42,8 @@
         <result column="CHANGE_ORDER_UID" jdbcType="DECIMAL" property="changeOrderId"/>
         <!--变更单NO-->
         <result column="CHANGE_ORDER_NO" jdbcType="VARCHAR" property="changeOrderNo"/>
+        <!--生效时间-->
+        <result column="DMB_EFFECTED_DATE" jdbcType="TIMESTAMP" property="effectedDate"/>
     </resultMap>
     <sql id="Base_Column_List">
         ID,
@@ -58,7 +60,8 @@
         DMB_RESERVED_4,
         DMB_RESERVED_5,
         DMB_SPECIAL_FEATURE_UID,
-        DMB_STATUS
+        DMB_STATUS,
+        DMB_EFFECTED_DATE
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
@@ -83,6 +86,7 @@
             t.DMB_RESERVED_5,
             t.DMB_SPECIAL_FEATURE_UID,
             t.DMB_STATUS,
+            t.DMB_EFFECTED_DATE,
             t2.CHANGE_NO as CHANGE_ORDER_NO
         from HZ_DERIVATIVE_MATERIEL_BASIC t
         left join HZ_CHANGE_ORDER_RECORD t2 on t2.ID = t.CHANGE_ORDER_UID
@@ -378,7 +382,8 @@
 
     <update id="updateStatusByOrderId" parameterType="java.util.Map">
         update HZ_DERIVATIVE_MATERIEL_BASIC
-        set DMB_STATUS = #{status,jdbcType=DECIMAL}
+        set DMB_STATUS = #{status,jdbcType=DECIMAL},
+        DMB_EFFECTED_DATE = #{effectedDate,jdbcType=TIMESTAMP}
         where
         CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
     </update>

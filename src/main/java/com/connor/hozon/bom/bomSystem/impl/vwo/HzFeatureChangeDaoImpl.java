@@ -100,4 +100,10 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
         return baseSQLUtil.executeQueryByPass(new HzFeatureChangeBean(),orderId,clzName+".doselectByChangeId");
     }
 
+    @Override
+    public List<HzFeatureChangeBean> doSelectHasNotEffect(List<Long> changeFeatureIds) {
+        return baseSQLUtil.executeQueryByPass(new HzFeatureChangeBean(),changeFeatureIds,clzName+".doSelectHasNotEffect");
+    }
+
+
 }

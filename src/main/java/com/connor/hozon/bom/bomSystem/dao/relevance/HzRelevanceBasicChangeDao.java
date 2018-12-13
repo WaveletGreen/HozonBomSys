@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.bomSystem.dao.relevance;
 
 
+import sql.pojo.cfg.relevance.HzRelevanceBasic;
 import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface HzRelevanceBasicChangeDao {
     List<HzRelevanceBasicChange> selectLastexecutedByProjectId(String projectPuid);
 
     int updateStatusByIOrderId(HzRelevanceBasicChange hzRelevanceBasicChange);
+
+    HzRelevanceBasicChange selectByLasteBySrc(HzRelevanceBasic hzRelevanceBasic);
 }

@@ -470,6 +470,14 @@ function loadData(_projectPuid) {
                 }
             };
             column.push(status);
+            column.push({
+                field: "cmcrEffectedDate",
+                title: "生效时间",
+                align:
+                    'center',
+                valign:
+                    'middle'
+            });
             $table.bootstrapTable({
                 url: "modelColor/loadAll?projectPuid=" + projectPuid,
                 method: 'get',
