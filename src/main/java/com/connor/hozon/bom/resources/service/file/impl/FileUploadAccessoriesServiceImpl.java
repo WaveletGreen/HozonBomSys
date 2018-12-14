@@ -71,7 +71,7 @@ public class FileUploadAccessoriesServiceImpl implements FileUploadAccessoriesSe
 //                int i = 0;
 //                Map map = new HashMap();
 //                while (i<=sheet.getLastRowNum()){
-                    //基准行
+                //基准行
 //                    String no = ExcelUtil.getCell(sheet.getRow(i),0).getStringCellValue();
 //                    String pMaterielCode = ExcelUtil.getCell(sheet.getRow(i),1).getStringCellValue();
 //                    String pMaterielName = ExcelUtil.getCell(sheet.getRow(i),2).getStringCellValue();
@@ -80,7 +80,7 @@ public class FileUploadAccessoriesServiceImpl implements FileUploadAccessoriesSe
 //                    String pMaterielPurpose = ExcelUtil.getCell(sheet.getRow(i),5).getStringCellValue();
 //                    String pDosageBicycle = ExcelUtil.getCell(sheet.getRow(i),6).getStringCellValue();
 //                    String pNote = ExcelUtil.getCell(sheet.getRow(i),7).getStringCellValue();
-                    //i++;
+                //i++;
 //                    if (no != "序号"|| pMaterielCode !="物料号"||pMaterielName !="材料名称"||pTechnicalConditions!="技术条件"
 //                            ||pMeasuringUnit!="计量单位"||pMaterielPurpose!="材料用途"||pDosageBicycle!="单车用量"||pNote!="备注"){
 //
@@ -105,13 +105,15 @@ public class FileUploadAccessoriesServiceImpl implements FileUploadAccessoriesSe
 //                int m = row.getLastCellNum();//获取每行数据有多少列  列校验
 //                int i = sheet.getLastRowNum();//excel 有多少行数据
 //                List list = new ArrayList();
+                String materielId;
+                HzAccessoriesLibs hzAccessoriesLibs = new HzAccessoriesLibs();
                 for (int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++) {
 //                        Row sheetRow = sheet.getRow(rowNum);
-                    HzImportAccessoriesLibs libs = new HzImportAccessoriesLibs();
+                    HzAccessoriesLibs libs = new HzAccessoriesLibs();
 //                        if(sheetRow != null){
 
 //                            libs.setNo(ExcelUtil.getCell(sheet.getRow(rowNum),0).getStringCellValue());
-                    String materielId = ExcelUtil.getCell(sheet.getRow(rowNum), 1).getStringCellValue();
+                    materielId = ExcelUtil.getCell(sheet.getRow(rowNum), 1).getStringCellValue();
                     libs.setPuid(UUID.randomUUID().toString());
                     libs.setpMaterielCode(ExcelUtil.getCell(sheet.getRow(rowNum), 1).getStringCellValue());
                     libs.setpMaterielName(ExcelUtil.getCell(sheet.getRow(rowNum), 2).getStringCellValue());
@@ -120,14 +122,19 @@ public class FileUploadAccessoriesServiceImpl implements FileUploadAccessoriesSe
                     libs.setpMaterielPurpose(ExcelUtil.getCell(sheet.getRow(rowNum), 5).getStringCellValue());
                     libs.setpDosageBicycle(ExcelUtil.getCell(sheet.getRow(rowNum), 6).getStringCellValue());
                     libs.setpNote(ExcelUtil.getCell(sheet.getRow(rowNum), 7).getStringCellValue());
-                    HzAccessoriesLibs hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByMaterielCode(materielId);
-                    
-
+//                    hzImportAccessoriesLibs.add(libs);
+                    hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByMaterielCode(materielId);
+                    if (hzAccessoriesLibs==null){
+//                        hzAccessoriesLibsDAO.importList(hzImportAccessoriesLibs);
+                    hzAccessoriesLibsDAO.insert(libs);
+                    }
+                    else if (hzAccessoriesLibs.getpMaterielCode().equals(materielId)) {
+                        hzAccessoriesLibsDAO.update(libs);
+                    }
 //                        }
-                    hzImportAccessoriesLibs.add(libs);
 //                    list.add(materielId);
                 }
-                hzAccessoriesLibsDAO.importList(hzImportAccessoriesLibs);
+
             }
 //            }
         } catch (Exception e) {
@@ -159,43 +166,36 @@ public class FileUploadAccessoriesServiceImpl implements FileUploadAccessoriesSe
                 stringBuffer.append("Excel导入的列信息不正确</br>");
                 this.errorCount++;
             }
-            String no = ExcelUtil.getCell(sheet.getRow(0),0).getStringCellValue();
-            String pMaterielCode = ExcelUtil.getCell(sheet.getRow(0),1).getStringCellValue();
-            String pMaterielName = ExcelUtil.getCell(sheet.getRow(0),2).getStringCellValue();
-            String pTechnicalConditions = ExcelUtil.getCell(sheet.getRow(0),3).getStringCellValue();
-            String pMeasuringUnit = ExcelUtil.getCell(sheet.getRow(0),4).getStringCellValue();
-            String pMaterielPurpose = ExcelUtil.getCell(sheet.getRow(0),5).getStringCellValue();
-            String pDosageBicycle = ExcelUtil.getCell(sheet.getRow(0),6).getStringCellValue();
-            String pNote = ExcelUtil.getCell(sheet.getRow(0),7).getStringCellValue();
-            if (!no.equals("序号")){
+            String no = ExcelUtil.getCell(sheet.getRow(0), 0).getStringCellValue();
+            String pMaterielCode = ExcelUtil.getCell(sheet.getRow(0), 1).getStringCellValue();
+            String pMaterielName = ExcelUtil.getCell(sheet.getRow(0), 2).getStringCellValue();
+            String pTechnicalConditions = ExcelUtil.getCell(sheet.getRow(0), 3).getStringCellValue();
+            String pMeasuringUnit = ExcelUtil.getCell(sheet.getRow(0), 4).getStringCellValue();
+            String pMaterielPurpose = ExcelUtil.getCell(sheet.getRow(0), 5).getStringCellValue();
+            String pDosageBicycle = ExcelUtil.getCell(sheet.getRow(0), 6).getStringCellValue();
+            String pNote = ExcelUtil.getCell(sheet.getRow(0), 7).getStringCellValue();
+            if (!no.equals("序号")) {
                 stringBuffer.append("对不起,第一列标题不正确,应该为序号</br>");
                 this.errorCount++;
-            }
-            else if (!pMaterielCode.equals("物料号")){
+            } else if (!pMaterielCode.equals("物料号")) {
                 stringBuffer.append("对不起,第二列标题不正确,应该为物料号</br>");
                 this.errorCount++;
-            }
-            else if (!pMaterielName.equals("材料名称")){
+            } else if (!pMaterielName.equals("材料名称")) {
                 stringBuffer.append("对不起,第三列标题不正确,应该为材料名称</br>");
                 this.errorCount++;
-            }
-            else if (!pTechnicalConditions.equals("技术条件/牌号规格")){
+            } else if (!pTechnicalConditions.equals("技术条件/牌号规格")) {
                 stringBuffer.append("对不起,第四列标题不正确,应该为技术条件/牌号规格</br>");
                 this.errorCount++;
-            }
-            else if (!pMeasuringUnit.equals("计量单位")){
+            } else if (!pMeasuringUnit.equals("计量单位")) {
                 stringBuffer.append("对不起,第五列标题不正确,应该为计量单位</br>");
                 this.errorCount++;
-            }
-            else if (!pMaterielPurpose.equals("材料用途")){
+            } else if (!pMaterielPurpose.equals("材料用途")) {
                 stringBuffer.append("对不起,第六列标题不正确,应该为材料用途</br>");
                 this.errorCount++;
-            }
-            else if (!pDosageBicycle.equals("单车用量")){
+            } else if (!pDosageBicycle.equals("单车用量")) {
                 stringBuffer.append("对不起,第七列标题不正确,应该为单车用量</br>");
                 this.errorCount++;
-            }
-            else if (!pNote.equals("备注")){
+            } else if (!pNote.equals("备注")) {
                 stringBuffer.append("对不起,第八列标题不正确,应该为备注</br>");
                 this.errorCount++;
             }
