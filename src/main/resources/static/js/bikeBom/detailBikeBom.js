@@ -124,7 +124,8 @@ function initTable(url) {
                                                 if (result.success) {
                                                     layer.msg('同步成功', {icon: 1, time: 2000})
                                                 } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                    var msg = "<div style='height: 30%;overflow: auto'>" + result.errMsg+ "</div>"
+                                                    window.Ewin.confirm({message: msg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },

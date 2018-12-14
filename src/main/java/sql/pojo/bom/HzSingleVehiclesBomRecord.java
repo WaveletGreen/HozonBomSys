@@ -172,4 +172,9 @@ public class HzSingleVehiclesBomRecord {
      * 对应于单车清单的主键
      */
     private Long singleVehiclesId;
+
+    /**
+     * BOM类型
+     */
+    private Integer bomType;
 }

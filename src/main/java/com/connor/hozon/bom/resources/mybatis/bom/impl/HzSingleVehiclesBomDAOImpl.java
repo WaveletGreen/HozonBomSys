@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzSingleVehiclesBomRecord;
+import sql.redis.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -60,12 +61,25 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
         return 1;
     }
 
+
     @Override
     public int deleteByProjectId(String projectId) {
         if(StringUtil.isEmpty(projectId)){
             return -1;
         }
         return super.delete("HzSingleVehiclesBomDAOImpl_deleteByProjectId",projectId);
+    }
+
+    @Override
+    public List<String> getAllPuidByProjectId(String projectId) throws HzDBException {
+        List<String> puids = new ArrayList<>();
+        List<HzSingleVehiclesBomRecord> list = super.findForList("HzSingleVehiclesBomDAOImpl_getAllPuidByProjectId",projectId);;
+        if(ListUtil.isNotEmpty(list)){
+            list.forEach(record -> {
+                puids.add(record.getMBomPuid());
+            });
+        }
+        return puids;
     }
 
     @Override

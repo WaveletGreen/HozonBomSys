@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.bom;
 
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 
@@ -16,7 +17,7 @@ public interface HzSingleVehiclesBomServices {
      * @param projectId
      * @return
      */
-    void analysisSingleVehicles(String projectId);
+    WriteResultRespDTO analysisSingleVehicles(String projectId);
 
     /**
      * 解析产生全部项目的单车BOM
