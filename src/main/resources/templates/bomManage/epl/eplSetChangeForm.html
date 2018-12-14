@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/12/11 Time: 9:38-->
+<body>
+<div style="max-width: 450px;max-height: 450px;">
+    <form id="form" role="form" method="post" action="">
+        <div class="row">
+            <div class="col-md-12">
+                <input id="puids" type="hidden" th:value="${puids}">
+                <div class="form-group">
+                    <label for="stage">选择变更表单</label>
+                    <select class="form-control" id="stage" name="stage">
+                        <option th:each="model:${data}"
+                                th:value="${model.getId()}"
+                                th:text="${model.getChangeNo()}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var changeFromId = $("#stage option:selected").val();
+            var projectId = $("#project", window.top.document).val();
+            var puids = $("#puids").val();
+            var typeId = $("#typeId").val();
+            var myData = JSON.stringify({
+                "puids": puids,
+                "orderId": changeFromId,
+                "projectId": projectId,
+                // "auditorId": typeId
+            });
+            var url = $("#form", window.top.document).attr('action');
+
+            $.ajax({
+                contentType: "application/json",
+                type: "POST",
+                //ajax需要添加打包名
+                url: url,
+                data: myData,
+                success: function (result) {
+                    activeTabBodyRefresh();
+                    if (result.success) {
+                        layer.msg(result.errMsg, {icon: 1, time: 2000});
+                    }
+                    else {
+                        window.Ewin.alert({message: result.errMsg});
+                    }
+                },
+                error: function (info) {
+                    window.Ewin.alert({message: "操作发送失败:" + info.status});
+                }
+            })
+        });
+    })
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>
