@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesLibs
 import com.connor.hozon.bom.resources.domain.query.HzAccessoriesLibsPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.accessories.HzAccessoriesLibs;
+import sql.pojo.accessories.HzImportAccessoriesLibs;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ import java.util.List;
 public interface HzAccessoriesLibsDAO {
 
     int insert(HzAccessoriesLibs accessoriesLibs);
+
+    int importList(List<HzImportAccessoriesLibs> records);
 
     int update(HzAccessoriesLibs hzAccessoriesLibs);
 

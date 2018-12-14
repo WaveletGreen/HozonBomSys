@@ -4,57 +4,57 @@
 <body>
 <form id="pbomManageForm" role="form" method="post" action="pbom/update">
     <input id="eBomPuid" name="eBomPuid" type="hidden" th:value="${data.eBomPuid}"/>
-    <div class="form-group">
-        <label for="lineId">零件号</label>
-        <input class="form-control" id="lineId" name="lineId" type="text" disabled="disabled" th:value="${data.lineId}"
-               placeholder="请输入零件号"/>
-    </div>
-    <div class="form-group">
-        <label for="pBomLinePartName">名称</label>
-        <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text" disabled="disabled"
-               th:value="${data.pBomLinePartName}"
-               placeholder="请输入名称"/>
-    </div>
-    <div class="form-group">
-        <label for="level">层级</label>
-        <input class="form-control" id="level" name="level" type="text" disabled="disabled" th:value="${data.level}"
-               placeholder="请输入层级"/>
-    </div>
-    <div class="form-group">
-        <label for="pBomOfWhichDept">专业</label>
-        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text" disabled="disabled"
-               th:value="${data.pBomOfWhichDept}"
-               placeholder="请输入专业"/>
-    </div>
-    <div class="form-group">
-        <label for="rank">级别</label>
-        <input class="form-control" id="rank" name="rank" type="text" disabled="disabled" th:value="${data.rank}"
-               placeholder="请输入级别"/>
-    </div>
-    <div class="form-group">
-        <label for="groupNum">分组号</label>
-        <input class="form-control" id="groupNum" name="groupNum" type="text" disabled="disabled"
-               th:value="${data.groupNum}"
-               placeholder="请输入分组号"/>
-    </div>
-    <div class="form-group">
-        <label for="pBomLinePartEnName">英文名称</label>
-        <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text" disabled="disabled"
-               th:value="${data.pBomLinePartEnName}"
-               placeholder="请输入英文名称"/>
-    </div>
-    <div class="form-group">
-        <label for="pBomLinePartClass">零件分类</label>
-        <input class="form-control" id="pBomLinePartClass" name="pBomLinePartClass" type="text" disabled="disabled"
-               th:value="${data.pBomLinePartClass}"
-               placeholder="请输入零件分类"/>
-    </div>
-    <div class="form-group">
-        <label for="pBomLinePartResource">零部件来源</label>
-        <input class="form-control" id="pBomLinePartResource" name="pBomLinePartResource" type="text"
-               disabled="disabled" th:value="${data.pBomLinePartResource}"
-               placeholder="请输入零部件来源"/>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="lineId">零件号</label>-->
+        <!--<input class="form-control" id="lineId" name="lineId" type="text" disabled="disabled" th:value="${data.lineId}"-->
+               <!--placeholder="请输入零件号"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pBomLinePartName">名称</label>-->
+        <!--<input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text" disabled="disabled"-->
+               <!--th:value="${data.pBomLinePartName}"-->
+               <!--placeholder="请输入名称"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="level">层级</label>-->
+        <!--<input class="form-control" id="level" name="level" type="text" disabled="disabled" th:value="${data.level}"-->
+               <!--placeholder="请输入层级"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pBomOfWhichDept">专业</label>-->
+        <!--<input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text" disabled="disabled"-->
+               <!--th:value="${data.pBomOfWhichDept}"-->
+               <!--placeholder="请输入专业"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="rank">级别</label>-->
+        <!--<input class="form-control" id="rank" name="rank" type="text" disabled="disabled" th:value="${data.rank}"-->
+               <!--placeholder="请输入级别"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="groupNum">分组号</label>-->
+        <!--<input class="form-control" id="groupNum" name="groupNum" type="text" disabled="disabled"-->
+               <!--th:value="${data.groupNum}"-->
+               <!--placeholder="请输入分组号"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pBomLinePartEnName">英文名称</label>-->
+        <!--<input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text" disabled="disabled"-->
+               <!--th:value="${data.pBomLinePartEnName}"-->
+               <!--placeholder="请输入英文名称"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pBomLinePartClass">零件分类</label>-->
+        <!--<input class="form-control" id="pBomLinePartClass" name="pBomLinePartClass" type="text" disabled="disabled"-->
+               <!--th:value="${data.pBomLinePartClass}"-->
+               <!--placeholder="请输入零件分类"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pBomLinePartResource">零部件来源</label>-->
+        <!--<input class="form-control" id="pBomLinePartResource" name="pBomLinePartResource" type="text"-->
+               <!--disabled="disabled" th:value="${data.pBomLinePartResource}"-->
+               <!--placeholder="请输入零部件来源"/>-->
+    <!--</div>-->
     <div class="form-group">
         <label for="resource">自制/采购</label>
         <select class="form-control" name="resource" id="resource" placeholder="请选择来源">

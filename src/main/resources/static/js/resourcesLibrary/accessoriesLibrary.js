@@ -176,7 +176,7 @@ function initTable(){
                                                         else if(!result.success){
                                                             window.Ewin.alert({message: result.errMsg})
                                                         }
-                                                        $table.bootstrapTable("refresh");
+                                                        $('#accessoriesLibraryTable').bootstrapTable('refresh');
                                                     },
                                                     error: function (info) {
                                                         window.Ewin.alert({message: "操作删除:" + info.status});

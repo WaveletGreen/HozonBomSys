@@ -76,7 +76,7 @@ public class HzEPLController extends BaseController {
         tableTitle.put("pRemark","备注");
         tableTitle.put("pBomLinePartClass","零件分类" );
         tableTitle.put("pBomLinePartResource","零件来源");
-        tableTitle.put("pInOutSideFlag","内外饰标识");
+//        tableTitle.put("pInOutSideFlag","内外饰标识");
 //        tableTitle.put("pUpc","UPC");
 //        tableTitle.put("fna","FNA");
 //        tableTitle.put("pFnaDesc","FNA描述" );
@@ -254,7 +254,7 @@ public class HzEPLController extends BaseController {
 //        toJSONResponse(Result.build(tableTitle), response);
 //    }
     /**
-     * 跳转到EBOM选择变更单
+     * 跳转到EPL选择变更单
      * @return
      */
     @RequestMapping(value = "order/choose",method = RequestMethod.GET)

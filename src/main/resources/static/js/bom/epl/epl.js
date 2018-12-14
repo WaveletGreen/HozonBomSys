@@ -31,12 +31,13 @@ function initTable(eplUrl) {
     }
     var $table = $("#eplTable");
     var column = [];
-    var eplTitleUrl = "epl/epl/title";
+    var eplTitleUrl = "epl/title";
     $.ajax({
         url: eplTitleUrl,
         type: "GET",
         success: function (result) {
             var column = [];
+            column.push({field: 'ck', checkbox: true});
             var data = result.data;
             var keys = [];
             var values;
@@ -53,6 +54,33 @@ function initTable(eplUrl) {
                     column.push(json);
                 }
             }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
             $('#eplTable').bootstrapTable({
                 method: 'GET',
                 dataType: 'json',
@@ -80,6 +108,88 @@ function initTable(eplUrl) {
                 showColumns: true, //是否显示所有的列
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
+                clickToSelect: true,// 单击某一行的时候选中某一条记录
+                toolbars: [
+                    {
+                        text: '修改',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                                return false;
+                            }
+                            var url = "";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "修改",
+                                            url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
+                                            gridId: "gridId",
+                                            width: 500,
+                                            height: 500
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    },
+                    {
+                        text: '关联变更单号',
+                        iconCls: 'glyphicon glyphicon-log-out',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
+                            if (rows.length == 0) {
+                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                return false;
+                            }
+                            // else {
+                            //     for (var i = 0; i < rows.length; i++) {
+                            //         if (rows[i].status != 4 && rows[i].status != 2) {
+                            //             window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                            //             return false;
+                            //         }
+                            //     }
+                            // }
+                            var url = "epl/order/choose";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "选择变更表单",
+                                            url: "epl/order/choose?projectId=" + projectPuid + "&puids=" + puids,
+                                            gridId: "gridId",
+                                            width: 450,
+                                            height: 450
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    },
+                ],
             });
         }
     })
