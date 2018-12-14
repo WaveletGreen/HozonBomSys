@@ -26,4 +26,8 @@ public interface HzRelevanceBasicChangeDao {
     int updateStatusByIOrderId(HzRelevanceBasicChange hzRelevanceBasicChange);
 
     HzRelevanceBasicChange selectByLasteBySrc(HzRelevanceBasic hzRelevanceBasic);
+
+    HzRelevanceBasicChange selectByVersion(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor);
+
+    HzRelevanceBasicChange selectMaxVersion(HzRelevanceBasicChange hzRelevanceBasicChange);
 }

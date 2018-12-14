@@ -257,4 +257,14 @@
               0=(select CMCR_CHANGE_STATUS from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL})
         </foreach>
     </update>
+
+
+    <delete id="deleteByOrderId" parameterType="java.lang.Long">
+        delete from
+        HZ_CFG0_MODEL_COLOR_RECORD
+        where
+        PUID in (
+          select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_SRC_STATUS = 2 and CMCR_CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+        )
+    </delete>
 </mapper>

@@ -731,7 +731,7 @@
         where
         RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR}
         and
-        RELEVANCE_STATUS = 0
+        RELEVANCE_STATUS in (0,2)
     </update>
 
     <update id="updateStatusByOrderChangeId" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasic">
@@ -777,9 +777,9 @@
     <update id="updateStatusList" parameterType="java.util.List">
         <foreach collection="list" index="index" item="item" open="begin" separator=";" close=";end;">
             update HZ_RELEVANCE_BASIC
-            set RELEVANCE_STATUS = #{relevanceStatus,jdbcType=DECIMAL}
+            set RELEVANCE_STATUS = #{item.relevanceStatus,jdbcType=DECIMAL}
             where
-            ID = #{id,jdbcType=DECIMAL}
+            ID = #{item.id,jdbcType=DECIMAL}
         </foreach>
     </update>
 
@@ -814,4 +814,13 @@
         and
         RELEVANCE_STATUS = 0
     </select>
+
+    <delete id="deleteByOrderId" parameterType="java.lang.Long">
+        delete from
+        HZ_RELEVANCE_BASIC
+        where
+        ID in(
+          select SRC_ID from HZ_RELEVANCE_BASIC_CHANGE where RELEVANCE_STATUS = 2 and CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL}
+        )
+    </delete>
 </mapper>

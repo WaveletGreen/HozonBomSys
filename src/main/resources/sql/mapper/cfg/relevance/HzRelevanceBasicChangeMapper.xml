@@ -383,4 +383,30 @@
     where
     ID = (select ID from (select ID,MAX(CHANGE_VERSION) from HZ_RELEVANCE_BASIC_CHANGE where SRC_ID = #{srcId,jdbcType=DECIMAL}))
   </select>
+
+  <select id="selectLastVersion" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from HZ_RELEVANCE_BASIC_CHANGE
+    where
+    RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR}
+    and
+    CHANGE_VERSION = #{changeVersion,jdbcType=VARCHAR}
+    and
+    SRC_ID = #{srcId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectMaxVersion" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from HZ_RELEVANCE_BASIC_CHANGE
+    where
+    CHANGE_VERSION = (
+       select MAX(CHANGE_VERSION) from HZ_RELEVANCE_BASIC_CHANGE where RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR} and SRC_ID = #{srcId,jdbcType=DECIMAL}
+    )
+    and
+    RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR}
+    and
+    SRC_ID = #{srcId,jdbcType=DECIMAL}
+  </select>
 </mapper>

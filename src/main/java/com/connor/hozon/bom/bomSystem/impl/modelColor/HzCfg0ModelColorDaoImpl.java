@@ -108,4 +108,9 @@ public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> impl
     public int updateByChangeIds(List<Long> changeColorModelIds) {
         return baseSQLUtil.executeUpdate(changeColorModelIds,clzName+".updateByChangeIds");
     }
+
+    @Override
+    public int deleteByOrderId(Long orderId) {
+        return baseSQLUtil.executeDelete(orderId,clzName+".deleteByOrderId");
+    }
 }

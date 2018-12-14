@@ -2865,71 +2865,73 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         if(hzRelevanceBasicChangesAfter==null||hzRelevanceBasicChangesAfter.size()<=0){
             return map;
         }
-        Integer version = hzRelevanceBasicChangesAfter.get(0).getChangeVersion();
-        //如果当前变更是否为第一次变更
-        if(version!=null&&version>=1){
-            HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor = new HzRelevanceBasicChange();
-            hzRelevanceBasicChangeQueryBefor.setChangeVersion(version-1);
-            hzRelevanceBasicChangeQueryBefor.setRbProjectUid(projectUid);
-            List<HzRelevanceBasicChange> hzRelevanceBasicChangesBefor = hzRelevanceBasicChangeDao.selectByVersionAndProjectId(hzRelevanceBasicChangeQueryBefor);
 
-//            Iterator<HzRelevanceBasicChange> iteratorBefor = hzRelevanceBasicChangesBefor.iterator();
 
-//            while (iteratorBefor.hasNext()){
-//                boolean deleteFlag = true;
-//                HzRelevanceBasicChange hzRelevanceBasicChangeBefor = iteratorBefor.next();
-//                Iterator<HzRelevanceBasicChange> iteratorAfter = hzRelevanceBasicChangesAfter.iterator();
-//                while (iteratorAfter.hasNext()){
-//                    HzRelevanceBasicChange hzRelevanceBasicChangeAfter = iteratorAfter.next();
-////                    if(hzRelevanceBasicChangeBefor.getRbRelevance().equals(hzRelevanceBasicChangeAfter.getRbRelevance())&&hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
+//        Integer version = hzRelevanceBasicChangesAfter.get(0).getChangeVersion();
+//        //如果当前变更是否为第一次变更
+//        if(version!=null&&version>0){
+//            HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor = new HzRelevanceBasicChange();
+//            hzRelevanceBasicChangeQueryBefor.setChangeVersion(version-1);
+//            hzRelevanceBasicChangeQueryBefor.setRbProjectUid(projectUid);
+//            List<HzRelevanceBasicChange> hzRelevanceBasicChangesBefor = hzRelevanceBasicChangeDao.selectByVersionAndProjectId(hzRelevanceBasicChangeQueryBefor);
+//
+//            for(HzRelevanceBasicChange hzRelevanceBasicChangeAfter : hzRelevanceBasicChangesAfter){
+//                //删除状态数据
+//                if(hzRelevanceBasicChangeAfter.getRelevanceStatus()==2){
+//                    hzRelevanceBasicChangesDelete.add(hzRelevanceBasicChangeAfter);
+//                    continue;
+//                }
+//                boolean addFlag = true;
+//                //对比变更前数据
+//                for(HzRelevanceBasicChange hzRelevanceBasicChangeBefor : hzRelevanceBasicChangesBefor){
 //                    if(hzRelevanceBasicChangeBefor.getRbRelevance().equals(hzRelevanceBasicChangeAfter.getRbRelevance())){
+//                        addFlag = false;
 //                        if(hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
-//                            deleteFlag = false;
-//                            iteratorAfter.remove();
-//                            iteratorBefor.remove();
 //                            break;
 //                        }
-//                        deleteFlag = false;
+//
 //                        hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeBefor);
 //                        hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeAfter);
-//                        iteratorAfter.remove();
-//                        break;
 //                    }
 //                }
-//                if (deleteFlag){
-//                    hzRelevanceBasicChangesDelete.add(hzRelevanceBasicChangeBefor);
-//                    iteratorBefor.remove();
+//                if(addFlag){
+//                    hzRelevanceBasicChangesAdd.add(hzRelevanceBasicChangeAfter);
 //                }
+//
 //            }
+//        }else {
 //            hzRelevanceBasicChangesAdd.addAll(hzRelevanceBasicChangesAfter);
-            Iterator<HzRelevanceBasicChange> iteratorAfter = hzRelevanceBasicChangesAfter.iterator();
-            for(HzRelevanceBasicChange hzRelevanceBasicChangeAfter : hzRelevanceBasicChangesAfter){
-                //删除状态数据
+//        }
+
+        for(HzRelevanceBasicChange hzRelevanceBasicChangeAfter : hzRelevanceBasicChangesAfter){
+            Integer version = hzRelevanceBasicChangeAfter.getChangeVersion();
+            if(version!=null&&version>0){
+                HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor = new HzRelevanceBasicChange();
+                hzRelevanceBasicChangeQueryBefor.setChangeVersion(version-1);
+                hzRelevanceBasicChangeQueryBefor.setRbProjectUid(projectUid);
+                hzRelevanceBasicChangeQueryBefor.setSrcId(hzRelevanceBasicChangeAfter.getSrcId());
+                HzRelevanceBasicChange hzRelevanceBasicChangeBefor = hzRelevanceBasicChangeDao.selectByVersion(hzRelevanceBasicChangeQueryBefor);
+
+                if(hzRelevanceBasicChangeBefor==null){
+                    continue;
+                }
                 if(hzRelevanceBasicChangeAfter.getRelevanceStatus()==2){
                     hzRelevanceBasicChangesDelete.add(hzRelevanceBasicChangeAfter);
                     continue;
                 }
-                boolean addFlag = true;
-                //对比变更前数据
-                for(HzRelevanceBasicChange hzRelevanceBasicChangeBefor : hzRelevanceBasicChangesBefor){
-                    if(hzRelevanceBasicChangeBefor.getRbRelevance().equals(hzRelevanceBasicChangeAfter.getRbRelevance())){
-                        addFlag = false;
-                        if(hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
-                            break;
-                        }
-
-                        hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeBefor);
-                        hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeAfter);
-                    }
+                if(hzRelevanceBasicChangeBefor.getRbRelevanceDesc().equals(hzRelevanceBasicChangeAfter.getRbRelevanceDesc())&&hzRelevanceBasicChangeBefor.getRbRelevanceCode().equals(hzRelevanceBasicChangeAfter.getRbRelevanceCode())){
+                    continue;
+                }else {
+                    hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeBefor);
+                    hzRelevanceBasicChangesUpdate.add(hzRelevanceBasicChangeAfter);
                 }
-                if(addFlag){
-                    hzRelevanceBasicChangesAdd.add(hzRelevanceBasicChangeAfter);
-                }
-
+            }else {
+                hzRelevanceBasicChangesAdd.add(hzRelevanceBasicChangeAfter);
             }
-        }else {
-            hzRelevanceBasicChangesAdd.addAll(hzRelevanceBasicChangesAfter);
         }
+
+
+
         //填充新增数据
         if(hzRelevanceBasicChangesAdd!=null&&hzRelevanceBasicChangesAdd.size()>0){
             for(HzRelevanceBasicChange hzRelevanceBasicChange : hzRelevanceBasicChangesAdd){

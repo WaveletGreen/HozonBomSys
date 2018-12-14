@@ -214,4 +214,9 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         return baseSQLUtil.executeQueryByPass(new HzCfg0Record(),vwoId,clzName+".selectByChangeOrderId");
     }
 
+    @Override
+    public int deleteByOrderId(Long orderId) {
+        return baseSQLUtil.executeDelete(orderId,clzName+".deleteByOrderId");
+    }
+
 }

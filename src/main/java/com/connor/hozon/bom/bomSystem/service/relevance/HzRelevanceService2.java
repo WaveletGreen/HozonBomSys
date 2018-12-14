@@ -65,8 +65,7 @@ public class HzRelevanceService2 {
      * @param projectPuid
      * @return
      */
-    public JSONObject
-    addRelevance(String projectPuid) {
+    public JSONObject addRelevance(String projectPuid) {
         JSONObject response = new JSONObject();
         JSONArray datas = new JSONArray();
         Long index = 1L;
@@ -84,7 +83,7 @@ public class HzRelevanceService2 {
         //搜索全部特性值，并经过P_CFG0_OBJECT_ID 升序排序
         QueryBase queryBase = new QueryBase();
         queryBase.setSort("P_CFG0_OBJECT_ID");
-         List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
+        List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
 
         //查询该项目下所有配色方案
         List<HzColorModel2> hzColorModel2s = hzColorModelDao.selectByProjectPuid(projectPuid);
@@ -188,10 +187,12 @@ public class HzRelevanceService2 {
                     hzRelevanceBasic.setRelevanceStatus(0);
 
                     Long relevanceUid;
-                    //是否发送至sap
+                    //判断原相关性是否存在新生成的相关性，有则修改，无则新增
                     HzRelevanceBasic hzRelevanceBasic1Old = hzRelevanceBasicsOldMap.get(relevance);
                     if(hzRelevanceBasic1Old!=null){
+                        //判断新生成的相关性与源相关性是否一模一样，一样则不修改
                         if(hzRelevanceBasic1Old.getRbRelevanceDesc().equals(relevanceDesc)&&hzRelevanceBasic1Old.getRbRelevanceCode().equals(relevanceCode)){
+                            //判断一模一样的数据是否为删除状态，如果是则改为已生效状态
                             if(hzRelevanceBasic1Old.getRelevanceStatus()==2){
                                 hzRelevanceBasic1Old.setRelevanceStatus(1);
                                 hzRelevanceBasicDao.updateByPrimaryKey(hzRelevanceBasic1Old);
@@ -473,15 +474,18 @@ public class HzRelevanceService2 {
             return result;
         }
         //根据项目查询该项目下的相关性最大版本
-        HzRelevanceBasicChange maxVersion = hzRelevanceBasicChangeDao.selectMaxVersionByProject(projectPuid);
         List<HzRelevanceBasicChange> hzRelevanceBasicChanges = new ArrayList<>();
         for(HzRelevanceBasic hzRelevanceBasic : hzRelevanceBasics){
-            if(hzRelevanceBasic.getRelevanceStatus()==0){
+            if(hzRelevanceBasic.getRelevanceStatus()==1){
                 continue;
             }
             HzRelevanceBasicChange hzRelevanceBasicChange = new HzRelevanceBasicChange(hzRelevanceBasic);
+            HzRelevanceBasicChange maxVersion = hzRelevanceBasicChangeDao.selectMaxVersion(hzRelevanceBasicChange);
+//            if(hzRelevanceBasic.getRelevanceStatus()==0){
+//                continue;
+//            }
             if(maxVersion==null){
-                hzRelevanceBasicChange.setChangeVersion(1);
+                hzRelevanceBasicChange.setChangeVersion(0);
             }else {
                 hzRelevanceBasicChange.setChangeVersion(maxVersion.getChangeVersion()+1);
             }

@@ -200,6 +200,8 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     if(!iHzFeatureChangeService.updateStatusByOrderId(orderId,1)){
                         return false;
                     }
+                    //删除状态为删除状态的源数据
+                    hzCfg0RecordDao.deleteByOrderId(orderId);
                     //将源数据修改为已生效
                     if(hzCfg0RecordDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
@@ -210,6 +212,9 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     if(hzCmcrChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
+                    //删除状态为删除状态的源数据
+                    hzCfg0ModelColorDao.deleteByOrderId(orderId);
+
                     if(hzCfg0ModelColorDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
@@ -222,6 +227,8 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     if(hzDMBasicChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
+                    //删除状态为删除状态的源数据
+                    hzDerivativeMaterielBasicDao.deleteByOrderId(orderId);
                     if(hzDerivativeMaterielBasicDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
@@ -247,6 +254,8 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     if(hzRelevanceBasicChangeDao.updateStatusByIOrderId(hzRelevanceBasicChange)<=0?true:false){
                         return false;
                     }
+                    //删除 状态为删除状态的源数据
+                    hzRelevanceBasicDao.deleteByOrderId(orderId);
                     if(hzRelevanceBasicDao.updateStatusByOrderChangeId(hzRelevanceBasic)<=0?true:false){
                         return false;
                     }

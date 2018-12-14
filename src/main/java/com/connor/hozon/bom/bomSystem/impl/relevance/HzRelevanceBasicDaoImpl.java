@@ -138,4 +138,9 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
         return baseSQLUtil.executeQueryByPass(new HzRelevanceBasic(),projectPuid,clz.getCanonicalName()+".selectByProjectPuidAndStatus");
     }
 
+    @Override
+    public int deleteByOrderId(Long orderId) {
+        return baseSQLUtil.executeDelete(orderId,clz.getCanonicalName()+".deleteByOrderId");
+    }
+
 }

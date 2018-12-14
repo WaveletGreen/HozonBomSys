@@ -417,4 +417,13 @@
         where
           CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
     </select>
+
+    <delete id="deleteByOrderId" parameterType="java.lang.Long">
+        delete from
+        HZ_DERIVATIVE_MATERIEL_BASIC
+        where
+        ID in (
+          select DMB_SRC_ID from  where FORMID = #{orderId,jdbcType=DECIMAL} and DMB_SRC_STATUS = 2
+        )
+    </delete>
 </mapper>

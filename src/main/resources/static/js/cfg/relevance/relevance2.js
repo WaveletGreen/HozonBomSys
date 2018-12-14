@@ -110,7 +110,7 @@ var column = [
             else if (value == 0 || "0" == value) {
                 return "<span style='color: #ff7cf4'>草稿状态</span>";
             }
-            else if (2 == row.cfgStatus || "2" == row.cfgStatus) {
+            else if (2 == value || "2" == value) {
                 return "<span style='color: #a90009'>删除状态</span>";
             }
             else if (-1 == value || "-1" == value) {
@@ -271,12 +271,12 @@ function getChange() {
             window.Ewin.alert({message: "相关性数据已关联变更单号，不能再次关联变更单号"});
             return false;
         }
-        if(rows[i].status==0){
+        if(rows[i].status==0||rows[i].status==2){
             changeFlag = false;
         }
     }
     if(changeFlag){
-        window.Ewin.alert({message: "相关性数据不存在草稿状态数据，不能关联变更单号"});
+        window.Ewin.alert({message: "相关性数据不存在草稿状态或删除状态的数据，不能关联变更单号"});
         return false;
     }
     var msg = "您确定关联变更单号吗！";
