@@ -78,4 +78,8 @@ public interface HzRelevanceBasicDao extends BasicDao<HzRelevanceBasic> {
     int updateStatusByChange(List<HzRelevanceBasicChange> hzRelevanceBasicChanges);
 
     int doUpdateIsSent(Map<String,Object> map);
+
+    List<HzRelevanceBasic> selectByProjectPuidAndStatus(String projectPuid);
+
+    int deleteByOrderId(Long orderId);
 }

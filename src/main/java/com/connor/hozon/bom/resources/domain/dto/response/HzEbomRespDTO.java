@@ -167,6 +167,18 @@ public class HzEbomRespDTO extends BaseChangeRespDTO {
     private Integer changeFlag;
 
     private String colorPart;
+    /**
+     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
+     */
+    private Integer updateType;
+
+    public Integer getUpdateType() {
+        return updateType;
+    }
+
+    public void setUpdateType(Integer updateType) {
+        this.updateType = updateType;
+    }
 
     public String getColorPart() {
         return colorPart;

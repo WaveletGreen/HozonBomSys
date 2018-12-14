@@ -151,6 +151,10 @@ public class HzRelevanceBasic {
      */
     private Integer isSent;
 
+    /**
+     * 生效时间
+     */
+    private Date effectedDate;
 
     public HzRelevanceBasic(){}
 
@@ -453,5 +457,13 @@ public class HzRelevanceBasic {
 
     public void setIsSent(Integer isSent) {
         this.isSent = isSent;
+    }
+
+    public Date getEffectedDate() {
+        return effectedDate;
+    }
+
+    public void setEffectedDate(Date effectedDate) {
+        this.effectedDate = effectedDate;
     }
 }

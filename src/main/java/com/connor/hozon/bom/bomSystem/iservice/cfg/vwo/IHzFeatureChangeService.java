@@ -156,4 +156,6 @@ public interface IHzFeatureChangeService {
     int doDeleteByPrimaryKeys(List<Long> changeFeatureIds);
 
     List<HzFeatureChangeBean> doselectByChangeId(Long orderId);
+
+    List<HzFeatureChangeBean> doSelectHasNotEffect(List<Long> changeFeatureIds);
 }

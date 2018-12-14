@@ -188,11 +188,12 @@ public class HzMbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateMBom", method = RequestMethod.GET)
-    public String updateMbomToPage(String projectId,String eBomPuid,Model model) {
+    public String updateMbomToPage(String projectId,String eBomPuid,Integer updateType,Model model) {
         HzMbomByIdQuery query = new HzMbomByIdQuery();
         query.setProjectId(projectId);
         query.setPuid(eBomPuid);
         HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(query);
+        respDTO.setUpdateType(updateType);
         if(respDTO== null){
             return "";
         }
@@ -244,12 +245,13 @@ public class HzMbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateProduction", method = RequestMethod.GET)
-    public String updateWhiteBodyProduction(String projectId,String eBomPuid,Integer type,Model model) {
+    public String updateWhiteBodyProduction(String projectId,String eBomPuid,Integer type,Integer updateType,Model model) {
         HzMbomByIdQuery query = new HzMbomByIdQuery();
         query.setProjectId(projectId);
         query.setType(type);
         query.setPuid(eBomPuid);
         HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(query);
+        respDTO.setUpdateType(updateType);
         if(respDTO== null){
             return "";
         }
@@ -262,12 +264,13 @@ public class HzMbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateFinancial", method = RequestMethod.GET)
-    public String updateWhiteBodyFinancial(String projectId,String eBomPuid,Integer type,Model model) {
+    public String updateWhiteBodyFinancial(String projectId,String eBomPuid,Integer type,Integer updateType,Model model) {
         HzMbomByIdQuery query = new HzMbomByIdQuery();
         query.setProjectId(projectId);
         query.setType(type);
         query.setPuid(eBomPuid);
         HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(query);
+        respDTO.setUpdateType(updateType);
         if(respDTO== null){
             return "";
         }

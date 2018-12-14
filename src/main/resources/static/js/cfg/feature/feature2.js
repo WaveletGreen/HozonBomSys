@@ -89,18 +89,21 @@ var toolbar = [
         }
     },
     {
-        text: '发起流程',
+        text: '关联变更单号',
         iconCls: 'glyphicon glyphicon-log-out',
         handler: function () {
             var rows = $table.bootstrapTable('getSelections');
             if (rows.length == 0) {
-                window.Ewin.alert({message: '请至少选择一条需要发送的数据!'});
+                window.Ewin.alert({message: '请至少选择一条需要关联变更单号的数据!'});
                 return false;
             }
             let msg = "<div style='max-height: 350px;overflow:scroll'>";
             for (let i in rows) {
                 if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
-                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许重复发起VWO流程"});
+                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已关联变更单号"});
+                    return false;
+                }else if(1 == rows[i].cfgStatus || "1" == rows[i].cfgStatus){
+                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已生效，不能关联变更单"});
                     return false;
                 }
                 msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
@@ -116,7 +119,7 @@ var toolbar = [
                         return false;
                     }
                     else {
-                        window.Ewin.confirm({title: '请确认发起流程的特性值', message: msg, width: 500}).on(function (e) {
+                        window.Ewin.confirm({title: '请确认关联变更单号的特性值', message: msg, width: 500}).on(function (e) {
                             if (e) {
                                 var puids = "";
                                 for (let i in rows) {
@@ -151,7 +154,7 @@ var toolbar = [
             }
             for (let i in rows) {
                 if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
-                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已在VWO流程中，不允许撤销"});
+                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已关联变更单号，不允许撤销"});
                     return false;
                 }
             }
@@ -332,7 +335,7 @@ function loadData(_projectPuid) {
         pagination: true,                   //是否显示分页（*）
         pageNumber: 1,                       //初始化加载第一页，默认第一页
         pageSize: 20,                       //每页的记录行数（*）
-        pageList: [20, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
+        pageList: ['ALL',20, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
         smartDisplay: false,
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         formId: "queryFeature",

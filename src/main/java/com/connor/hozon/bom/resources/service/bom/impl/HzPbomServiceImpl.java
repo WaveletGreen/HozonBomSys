@@ -100,8 +100,8 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
             HzPbomLineRecord hzPbomRecord = new HzPbomLineRecord();
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
-            String buyUnit = recordReqDTO.getBuyUnit();
-            String type = recordReqDTO.getType();
+            String buyUnit = recordReqDTO.getBuyUnit();//采购单元
+            String type = recordReqDTO.getType();//焊接/装配
             if (buyUnit.equals("Y")) {
                 hzPbomRecord.setBuyUnit(1);
             } else if (buyUnit.equals("N")) {
@@ -126,6 +126,9 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomRecord.setStatus(2);
             hzPbomRecord.setBomDigifaxId(record.getPuid());
             hzPbomRecord.setLineId(recordReqDTO.getLineId());
+            if(recordReqDTO.getUpdateType()==1){
+                hzPbomRecord.setPuid(recordReqDTO.getPuid());
+            }
             List<HzPbomLineRecord> recordList = new ArrayList<>();
             recordList.add(hzPbomRecord);
             int i = hzPbomRecordDAO.updateList(recordList);

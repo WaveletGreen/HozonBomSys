@@ -684,7 +684,6 @@
                 P_CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
             </if>
                 P_UPDATE_TIME = sysdate,
-
             <if test="updateName != null">
                 P_UPDATE_NAME = #{updateName,jdbcType=VARCHAR},
             </if>
@@ -704,10 +703,12 @@
                 P_MBOM_STATUS = #{status,jdbcType=INTEGER}
             </if>
         </set>
-
         where P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
         and P_BOM_DIGIFAX_ID=#{bomDigifaxId,jdbcType=VARCHAR}
         and P_MBOM_STATUS <![CDATA[ <> ]]>0
+        <if test="puid != null">
+            and PUID = #{puid,jdbcType=VARCHAR}
+        </if>
     </update>
 
     <!--批量更新 根据零件号来更新-->

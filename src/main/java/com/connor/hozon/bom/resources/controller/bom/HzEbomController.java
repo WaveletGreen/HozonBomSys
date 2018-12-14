@@ -309,11 +309,12 @@ public class HzEbomController extends BaseController {
 
 
     @RequestMapping(value = "updateEbom",method = RequestMethod.GET)
-    public String updateEbom(String projectId,String puid,Model model) {
+    public String updateEbom(String projectId,String puid,Integer updateType,Model model) {
         if(StringUtil.isEmpty(projectId)){
             return "";
         }
         HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
+        recordRespDTO.setUpdateType(updateType);
         model.addAttribute("data",recordRespDTO);
 
         return "bomManage/ebom/ebomManage/updateEbomManage";

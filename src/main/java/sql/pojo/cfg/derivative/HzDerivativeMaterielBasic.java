@@ -78,4 +78,6 @@ public class HzDerivativeMaterielBasic {
     private Long changeOrderId;
 
     private String changeOrderNo;
+
+    private Date effectedDate;
 }

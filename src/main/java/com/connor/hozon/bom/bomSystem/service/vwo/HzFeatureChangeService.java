@@ -356,6 +356,11 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         return hzFeatureChangeDao.doselectByChangeId(orderId);
     }
 
+    @Override
+    public List<HzFeatureChangeBean> doSelectHasNotEffect(List<Long> changeFeatureIds) {
+        return hzFeatureChangeDao.doSelectHasNotEffect(changeFeatureIds);
+    }
+
     /**
      * 查询变更前的数据和当前数据
      * @param cfgPuid

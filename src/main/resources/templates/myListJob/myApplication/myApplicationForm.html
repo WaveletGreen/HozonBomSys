@@ -107,6 +107,19 @@
         </div>
     </form>
 </div>
+<div id="TCForm">
+    <h4><i class="fa fa-minus-square" aria-hidden="true">变更清单</i></h4>
+    <div class="panel-body" style="padding:0px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="content col-lg-12 col-md-12" style="padding:0px;">
+                    <table class="table table-striped tableNormalStyle" id="myApplicationTCTable">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
 <div class="panel-body" style="padding:0px;">
     <div class="panel panel-default">
@@ -223,7 +236,7 @@
 
     var changeList = [[${changeList}]];
     $(document).ready(function () {
-        var $table = $("#untreatedTCTable");//变更清单
+        var $table = $("#myApplicationTCTable");//变更清单
         var column = [];
         column.push({
             field: "itemId",
@@ -243,7 +256,7 @@
             data: changeList,
             height: $(window.parent.document).find("#wrapper").height() - 250,
             width: $(window).width(),
-            formId: 'processedTCTable',
+            formId: 'myApplicationTCTable',
             undefinedText: "",//当数据为 undefined 时显示的字符
             pagination: false,
             columns: column,

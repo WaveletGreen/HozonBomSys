@@ -225,6 +225,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("lineId",query.getLineId().trim());
         map.put("pBomLinePartClass",query.getpBomLinePartClass());
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
+        map.put("pIsNewPart",query.getpIsNewPart());
         request.setPageNumber(query.getPage());
 
         request.setPageSize(query.getPageSize());

@@ -591,7 +591,8 @@
         update HZ_CFG0_RECORD
         set CFG_STATUS = #{status,jdbcType=INTEGER},
         CFG_IS_IN_PROCESS = 0 ,
-        CHANGE_ORDER_ID = null
+        CHANGE_ORDER_ID = null,
+        CFG_EFFECTED_DATE = #{effectedDate,jdbcType=TIMESTAMP}
         where
         PUID in (select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL})
     </update>
@@ -655,4 +656,14 @@
         where
         CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL}
     </select>
+
+    <delete id="deleteByOrderId" parameterType="java.lang.Long">
+        delete
+          from
+        HZ_CFG0_RECORD
+        where
+        PUID in (
+        select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL} and CFG_STATUS=2
+        )
+    </delete>
 </mapper>

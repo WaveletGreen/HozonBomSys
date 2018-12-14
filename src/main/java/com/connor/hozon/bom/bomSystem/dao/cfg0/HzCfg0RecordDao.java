@@ -149,4 +149,6 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     List<HzCfg0Record> selectByDictionaryLibId(String puid);
 
     List<HzCfg0Record> selectByChangeOrderId(Long vwoId);
+
+    int deleteByOrderId(Long orderId);
 }

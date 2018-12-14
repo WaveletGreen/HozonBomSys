@@ -54,6 +54,8 @@
         <result column="CMCR_RESERVE4" jdbcType="VARCHAR" property="cmcrReserve4"/>
         <!--状态，0：草稿状态，10：在流程中，99：已发布-->
         <result column="CMCR_STATUS" jdbcType="VARCHAR" property="cmcrStatus"/>
+        <!--生效时间-->
+        <result column="CMCR_EFFECTED_DATE" jdbcType="DATE" property="cmcrEffectedDate"/>
     </resultMap>
 
     <resultMap extends="ResultMapWithColorJudge" id="VwoMap" type="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
@@ -82,7 +84,8 @@
         CMCR_RESERVE2,
         CMCR_RESERVE3,
         CMCR_RESERVE4,
-        CMCR_STATUS
+        CMCR_STATUS,
+        CMCR_EFFECTED_DATE
     </sql>
     <sql id="values">
         #{puid,jdbcType=VARCHAR},
@@ -235,7 +238,8 @@
 
     <update id="updateStatusByOrderId" parameterType="java.util.Map">
         update HZ_CFG0_MODEL_COLOR_RECORD
-        set CMCR_STATUS = #{status,jdbcType=INTEGER}
+        set CMCR_STATUS = #{status,jdbcType=INTEGER},
+        CMCR_EFFECTED_DATE = #{effectedDate,jdbcType=DATE}
         where
         CMCR_CHANGE_ORDER_UID = #{orderId,jdbcType=BIGINT}
     </update>
@@ -253,4 +257,14 @@
               0=(select CMCR_CHANGE_STATUS from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL})
         </foreach>
     </update>
+
+
+    <delete id="deleteByOrderId" parameterType="java.lang.Long">
+        delete from
+        HZ_CFG0_MODEL_COLOR_RECORD
+        where
+        PUID in (
+          select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_SRC_STATUS = 2 and CMCR_CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+        )
+    </delete>
 </mapper>

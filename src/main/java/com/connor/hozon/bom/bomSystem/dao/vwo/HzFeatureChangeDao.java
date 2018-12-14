@@ -62,4 +62,5 @@ public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
 
     List<HzFeatureChangeBean> doselectByChangeId(Long orderId);
 
+    List<HzFeatureChangeBean> doSelectHasNotEffect(List<Long> changeFeatureIds);
 }

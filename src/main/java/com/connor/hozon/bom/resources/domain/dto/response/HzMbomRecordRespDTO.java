@@ -114,7 +114,6 @@ public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
      * 发货料库存地点
      */
     private String pStockLocation;
-
     /**
      * 工厂
      */
@@ -125,11 +124,22 @@ public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
      * 1 已生效 0 删除  2草稿状态  3废除状态 4删除状态
      */
     private Integer status;
-
     /**
      * 对应的颜色件id
      */
     private String colorId;
+    /**
+     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
+     */
+    private Integer updateType;
+
+    public Integer getUpdateType() {
+        return updateType;
+    }
+
+    public void setUpdateType(Integer updateType) {
+        this.updateType = updateType;
+    }
 
     /**
      * 生效时间

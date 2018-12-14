@@ -71,18 +71,18 @@ public class HzMyApplicationController {
                 }
             }
         }
-//        List<HzChangeListRecord> changeList = hzChangeListDAO.findChangeList(respDTO.getChangeNo());
-//
-//        if(changeList.size()>0){
-//            List<Map<String,String>> resultMaps = new ArrayList<>();
-//            for(HzChangeListRecord hzChangeListRecord : changeList){
-//                Map<String,String> map = new HashMap<>();
-//                map.put("itemId",hzChangeListRecord.getItemId());
-//                map.put("itemRevision",hzChangeListRecord.getItemRevision());
-//                resultMaps.add(map);
-//            }
-//            model.addAttribute("changeList",resultMaps);
-//        }
+        List<HzChangeListRecord> changeList = hzChangeListDAO.findChangeList(respDTO.getChangeNo());
+
+        if(changeList.size()>0){
+            List<Map<String,String>> resultMaps = new ArrayList<>();
+            for(HzChangeListRecord hzChangeListRecord : changeList){
+                Map<String,String> map = new HashMap<>();
+                map.put("itemId",hzChangeListRecord.getItemId());
+                map.put("itemRevision",hzChangeListRecord.getItemRevision());
+                resultMaps.add(map);
+            }
+            model.addAttribute("changeList",resultMaps);
+        }
         if(respDTO != null){
             model.addAttribute("data",respDTO);
         }

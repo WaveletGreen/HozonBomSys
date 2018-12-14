@@ -555,12 +555,12 @@ $(document).ready(
                 }
                 var stage = $("#row1").html();
                 if (stage == "阶段：") {
-                    window.Ewin.alert({message: "请设置完阶段后再发起变更"});
+                    window.Ewin.alert({message: "请设置完阶段后再关联变更单号"});
                     return false;
                 }
 
                 if (mainStatus != 0 && mainStatus != 5) {
-                    window.Ewin.alert({message: "非编辑状态不能发起变更"});
+                    window.Ewin.alert({message: "非编辑状态不能关联变更单号"});
                     return false;
                 }
                 var url = "bomAllCfg/setChangeFromPage";

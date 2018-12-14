@@ -110,7 +110,7 @@ var column = [
             else if (value == 0 || "0" == value) {
                 return "<span style='color: #ff7cf4'>草稿状态</span>";
             }
-            else if (2 == row.cfgStatus || "2" == row.cfgStatus) {
+            else if (2 == value || "2" == value) {
                 return "<span style='color: #a90009'>删除状态</span>";
             }
             else if (-1 == value || "-1" == value) {
@@ -120,7 +120,15 @@ var column = [
                 return "<span style='color: #a90009'>未知状态</span>";
             }
         }
-    },
+    },{
+        field: 'effectedDate',
+        title: '生效时间',
+        align: 'center',
+        valign: 'middle',
+        formatter: function (value, row, index) {
+            return dateToStringFormat(value)
+        }
+    }
     // {
     //     field: 'puid',
     //     title: 'puid',
@@ -212,6 +220,14 @@ $(document).ready(
 );
 
 function generateRelevance() {
+    var rows = $table.bootstrapTable('getData');
+    for(let i in rows){
+        if(rows[i].status==10){
+            window.Ewin.alert({message: "相关性数据已关联变更单号" +
+                "，不能生成相关性"});
+            return false;
+        }
+    }
     var msg = "您确定生成相关性吗！";
     var projectPuid = $("#project", window.top.document).val();
     var url = "relevance/addRelevance";
@@ -248,7 +264,22 @@ function generateRelevance() {
 }
 
 function getChange() {
-    var msg = "您确定发起流程吗！";
+    var rows = $table.bootstrapTable('getData');
+    var changeFlag = true;
+    for(let i in rows){
+        if(rows[i].status==10){
+            window.Ewin.alert({message: "相关性数据已关联变更单号，不能再次关联变更单号"});
+            return false;
+        }
+        if(rows[i].status==0||rows[i].status==2){
+            changeFlag = false;
+        }
+    }
+    if(changeFlag){
+        window.Ewin.alert({message: "相关性数据不存在草稿状态或删除状态的数据，不能关联变更单号"});
+        return false;
+    }
+    var msg = "您确定关联变更单号吗！";
     var projectPuid = $("#project", window.top.document).val();
     var url = "relevance/getChangePage";
     $.ajax({
@@ -294,6 +325,21 @@ function getChange() {
 }
 
 function goBackData() {
+    var rows = $table.bootstrapTable('getData');
+    var backFlag = true;
+    for(let i in rows){
+        if(rows[i].status==10){
+            window.Ewin.alert({message: "相关性数据已关联变更单号，不能撤销"});
+            return false;
+        }
+        if(rows[i].status==0){
+            backFlag = false;
+        }
+    }
+    if(backFlag){
+        window.Ewin.alert({message: "相关性数据不存在草稿状态数据，不能撤销"});
+        return false;
+    }
     var msg = "您确定撤销吗！";
     var projectPuid = $("#project", window.top.document).val();
     var url = "relevance/goBackData";
