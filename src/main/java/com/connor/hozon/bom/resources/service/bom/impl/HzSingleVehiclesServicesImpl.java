@@ -65,9 +65,9 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     @Override
     public WriteResultRespDTO updateSingleVehicle(UpdateHzSingleVehiclesReqDTO reqDTO) {
         try {
-            if(!PrivilegeUtil.writePrivilege()){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
+//            if(!PrivilegeUtil.writePrivilege()){
+//                return WriteResultRespDTO.getFailPrivilege();
+//            }
             HzSingleVehicles hzSingleVehicles = HzSingleVehiclesFactory.updateReqDTOSingleVehicles(reqDTO);
             int i = hzSingleVehiclesDao.updateSingleVehicles(hzSingleVehicles);
             if(i>0){

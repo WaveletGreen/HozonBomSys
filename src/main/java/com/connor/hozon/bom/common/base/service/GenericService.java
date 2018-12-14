@@ -5,6 +5,7 @@ package com.connor.hozon.bom.common.base.service;
 import com.connor.hozon.bom.common.base.dao.GenericDao;
 import com.connor.hozon.bom.common.base.entity.Page;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
+import com.connor.hozon.bom.sys.entity.User;
 
 
 import java.util.List;

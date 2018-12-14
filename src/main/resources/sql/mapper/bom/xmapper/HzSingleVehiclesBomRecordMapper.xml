@@ -263,4 +263,16 @@
             )
         </if>
     </select>
+
+
+
+    <!--获取单车BOM的全部PUID-->
+    <select id="HzSingleVehiclesBomDAOImpl_getAllPuidByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select P_MBOM_PUID
+        from HZ_SINGLE_VEHICLES_BOM
+        where p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=
+        #{projectId,jdbcType=VARCHAR})
+    </select>
+
 </mapper>

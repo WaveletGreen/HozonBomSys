@@ -774,7 +774,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         if(changeOrderRecord == null){
             str = WriteResultRespDTO.FAILED_MSG;
         }
-        if(2!=changeOrderRecord.getState()){
+        if(!Integer.valueOf(2).equals(changeOrderRecord.getState())){
             str ="流程中和已完成的表单数据不允许删除!";
         }
         WriteResultRespDTO respDTO = new WriteResultRespDTO();

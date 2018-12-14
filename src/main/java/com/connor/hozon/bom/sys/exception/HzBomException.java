@@ -19,6 +19,11 @@ public class HzBomException extends RuntimeException {
     }
 
 
+    public HzBomException(String errMsg,Throwable e) {
+        super(e.getMessage(),e);
+        this.errMsg = e.getMessage();
+    }
+
     public HzBomException(WriteResultRespDTO respDTO){
         this.errCode = respDTO.getErrCode();
         this.errMsg = respDTO.getErrMsg();
@@ -33,6 +38,11 @@ public class HzBomException extends RuntimeException {
     public HzBomException(Long errCode, String errMsg) {
         super(errMsg);
         this.errCode = errCode;
+        this.errMsg = errMsg;
+    }
+
+    public HzBomException(String errMsg) {
+        super(errMsg);
         this.errMsg = errMsg;
     }
 

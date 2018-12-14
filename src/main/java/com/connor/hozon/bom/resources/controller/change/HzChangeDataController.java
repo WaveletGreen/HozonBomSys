@@ -109,7 +109,7 @@ public class HzChangeDataController extends BaseController {
         tableTitle.put("colorPart","是否颜色件");
 
         //获取该项目下的所有车型模型
-        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle("1c128c60-84a2-4076-9b1c-f7093e56e4df"));
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         toJSONResponse(Result.build(tableTitle), response);
     }
 
@@ -327,6 +327,60 @@ public class HzChangeDataController extends BaseController {
         }
     }
 
+    //这个暂时先注释掉
+//    @RequestMapping(value = "download",method = RequestMethod.GET)
+//    public void export(Long filePath,HttpServletResponse response)  {
+//        HzAttachmentRecord hzAttachmentRecord = hzAttachmentRecordDao.selectByPrimaryKey(filePath);
+//        File file = new File("D:\\接口连接信息111-TC.xlsx");
+//        String fileName = "";
+//        try {
+//            fileName = new String(file.getName().getBytes("UTF-8"),"ISO-8859-1");
+//        }catch (Exception e){
+//
+//        }
+//        if(!file.exists()){
+//            toJSONResponse(Result.build(false,"文件不存在！"),response);
+//            return;
+//        }
+//
+//        if(file.exists()){
+//            response.setContentType("application/force-download");// 设置强制下载不打开
+//            response.addHeader("Content-Disposition",
+//                    "attachment;fileName=" + fileName);
+//
+//            byte[] buffer = new byte[1024];
+//            FileInputStream fis = null;
+//            BufferedInputStream bis = null;
+//            try {
+//                fis = new FileInputStream(file);
+//                bis = new BufferedInputStream(fis);
+//                OutputStream os = response.getOutputStream();
+//                int i = bis.read(buffer);
+//                while (i != -1) {
+//                    os.write(buffer, 0, i);
+//                    i = bis.read(buffer);
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            } finally {
+//                if (bis != null) {
+//                    try {
+//                        bis.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                if (fis != null) {
+//                    try {
+//                        fis.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     @RequestMapping(value = "ebom/data",method = RequestMethod.GET)
     @ResponseBody

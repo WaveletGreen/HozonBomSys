@@ -71,6 +71,7 @@ public class HzPbomController extends BaseController {
         tableTitle.put("station", "工位");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
+        tableTitle.put("effectTime","生效时间");
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
@@ -124,6 +125,7 @@ public class HzPbomController extends BaseController {
             _res.put("outerPart", dto.getOuterPart());
             _res.put("station", dto.getStation());
             _res.put("status", dto.getStatus());
+            _res.put("effectTime",dto.getEffectTime());
             if(null != dto.getObject()){
                 _res.putAll(dto.getObject());
             }

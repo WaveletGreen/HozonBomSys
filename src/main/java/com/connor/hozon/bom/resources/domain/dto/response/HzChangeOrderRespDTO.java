@@ -330,7 +330,7 @@ public class HzChangeOrderRespDTO {
     }
 
     public void setOrderResource(Integer from) {
-        this.orderResource = 1==from?ORDER_FROM_TC:ORDER_FROM_BOM;
+        this.orderResource = Integer.valueOf(1).equals(from)?ORDER_FROM_TC:ORDER_FROM_BOM;
     }
 
     public Integer getStatus() {

@@ -57,6 +57,20 @@ function initTable(){
                 striped: true,                      //是否显示行间隔色
                 search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true,                 //是否显示所有的列
+                //>>>>>>>>>>>>>>导出excel表格设置
+                showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
+                exportDataType: "selected",              //basic', 'all', 'selected'.
+                exportTypes: ['xlsx'],	    //导出类型
+                //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
+                exportOptions: {
+                    //ignoreColumn: [0,0],            //忽略某一列的索引
+                    fileName: '工艺辅料库导出',              //文件名称设置
+                    worksheetName: 'Sheet1',          //表格工作区名称
+                    tableName: '工艺辅料表',
+                    excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+                    //onMsoNumberFormat: DoOnMsoNumberFormat
+                },
+                //导出excel表格设置<<<<<<<<<<<<<<<<
                 toolbars: [
                     {
                         text: '添加',
@@ -162,7 +176,7 @@ function initTable(){
                                                         else if(!result.success){
                                                             window.Ewin.alert({message: result.errMsg})
                                                         }
-                                                        $table.bootstrapTable("refresh");
+                                                        $('#accessoriesLibraryTable').bootstrapTable('refresh');
                                                     },
                                                     error: function (info) {
                                                         window.Ewin.alert({message: "操作删除:" + info.status});
@@ -174,7 +188,32 @@ function initTable(){
                                 }
                             })
                         }
-                    }
+                    },
+                    {
+                        text: '导入Excel',
+                        iconCls: 'glyphicon glyphicon-share',
+                        handler: function () {
+                            var url = "acce/importExcel";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "导入",
+                                            url: "acce/importExcel",
+                                            width: 600,
+                                            height: 500
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    },
                 ],
             });
         }

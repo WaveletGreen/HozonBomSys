@@ -33,7 +33,7 @@ public class UserInfo {
         Map<Long, Tree> treeMap = new HashMap<Long, Tree>();
         User user = getUser();
         List<Tree> trees = treeService.loadUserTree(user);
-        for (Tree tree : treeService.loadUserTree(user)) {
+        for (Tree tree : trees) {
             treeMap.put(tree.getId(), tree);
         }
         List<Tree> treeList = NodeUtil.getChildNodes(new ArrayList<Tree>(treeMap.values()), 0l);

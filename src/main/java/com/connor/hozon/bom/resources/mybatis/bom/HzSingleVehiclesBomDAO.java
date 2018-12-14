@@ -27,6 +27,13 @@ public interface HzSingleVehiclesBomDAO {
      */
     int deleteByProjectId(String projectId);
 
+
+    /**
+     * 查询当前项目下单车BOM的全部的puid
+     * @param projectId
+     * @return
+     */
+    List<String> getAllPuidByProjectId(String projectId);
     /**
      * 分页查询单车BOM清单
      * @param query

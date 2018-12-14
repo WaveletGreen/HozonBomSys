@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.domain.model;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
@@ -132,6 +133,7 @@ public class HzMbomRecordFactory {
         }else {
             respDTO.setpFactoryCode(record.getFactoryCode());
         }
+        respDTO.setEffectTime(DateUtil.formatTimestampDate(record.getEffectTime()));
         respDTO.setStatus(record.getStatus());
         respDTO.setpStockLocation(record.getpStockLocation());
         respDTO.setColorId(record.getColorId());

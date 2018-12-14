@@ -26,7 +26,6 @@ public interface HzEbomService {
      * @return
      */
     Page<HzEbomRespDTO> getHzEbomPage(HzEbomByPageQuery query);
-
     /**
      * 查询一条bom信息
      * @param puid
@@ -92,7 +91,7 @@ public interface HzEbomService {
     HzBomLineRecord findParentFor2Y(String projectId,String puid);
 
     /**
-     * 设置LOU
+     * 设置当前BOM为LOU
      * @param reqDTO
      * @return
      */
@@ -100,20 +99,17 @@ public interface HzEbomService {
 
 
     /**
-     * 获取LOA 信息
+     * 获取LOA信息
      * @param query
      * @return
      */
     HzLouRespDTO getHzLouInfoById(HzLouaQuery query);
-
-
     /**
      * EBOM数据  到变更表单
      * @param reqDTO
      * @return
      */
     WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
-
     /**
      * BOM数据撤销
      * @param reqDTO

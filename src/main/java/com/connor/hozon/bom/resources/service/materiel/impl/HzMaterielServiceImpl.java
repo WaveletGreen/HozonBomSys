@@ -243,6 +243,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             List<HzMaterielRecord> afterRecords = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){
                 //核查参数信息
+                this.errorCount = 0;
                 String errMsg = checkMaterielParamResult(records);
                 if(this.errorCount>0){
                     WriteResultRespDTO respDTO = new WriteResultRespDTO();

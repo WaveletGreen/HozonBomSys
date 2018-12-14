@@ -19,7 +19,7 @@ $(document).ready((function () {
 }))
 
 function doRefresh(projectPuid) {
-    $('#offerManageTable').bootstrapTable('destroy');
+    $('#paymentTable').bootstrapTable('destroy');
     var url = ""
     initTable(url);
 }
@@ -28,7 +28,7 @@ function doQuery() {
     var projectPuid = $("#project", window.top.document).val();
     var url = ""
     initTable(url);
-    $('#offerManageTable').bootstrapTable('destroy');
+    $('#paymentTable').bootstrapTable('destroy');
 }
 
 function initTable(url) {
@@ -36,65 +36,7 @@ function initTable(url) {
     if (!checkIsSelectProject(projectPuid)) {
         return;
     }
-    var $table = $("#offerManageTable");
-    var column = [];
-    column.push({
-        field: '',
-        title: '序号',
-        align: 'center',
-        width: 50,
-        colspan: 1,
-        rowspan: 2,
-        formatter: function (value, row, index) {
-            var options = $table.bootstrapTable('getOptions');
-            return options.pageSize * (options.pageNumber - 1) + index + 1;
-
-        }
-    }),
-    column.push({field: 'status', title: '合同完工状态', align: 'center', valign: 'middle',colspan: 1,rowspan: 2,})
-    column.push({field: 'status', title: '付款比例', align: 'center', valign: 'middle',colspan: 1,rowspan: 2,})
-    column.push({field: 'status', title: '一级模块', align: 'center', valign: 'middle',colspan: 1,rowspan: 2,})
-    column.push({field: 'status', title: '二级模块', align: 'center', valign: 'middle',colspan: 1,rowspan: 2,})
-    column.push({field: 'status', title: '需求部门', align: 'center', valign: 'middle',colspan: 1,rowspan: 2,})
-    column.push({field: 'status', title: '项目费用描述', align: 'center', valign: 'middle',colspan: 1,rowspan: 2,})
-    column.push({field: 'status', title: '合同信息', align: 'center', valign: 'middle',colspan: 5, rowspan: 1})
-    column.push({field: 'status', title: '更新时间:2018-08-14', align: 'center', valign: 'middle',colspan: 2, rowspan: 1})
-    column.push({field: 'status', title: '模具费付费情况', align: 'center', valign: 'middle',})
-    column.push({field: 'status', title: '检具费(不含税)', align: 'center', valign: 'middle',})
-    column.push({field: 'status', title: '开发费(不含税)', align: 'center', valign: 'middle',})
-    column.push({field: 'status', title: 'A样件', align: 'center', valign: 'middle',})
-    column.push({field: 'status', title: 'B样件', align: 'center', valign: 'middle',})
-    column.push({field: 'status', title: 'C样件', align: 'center', valign: 'middle',})
-    column.push({field: 'status', title: '供应商降本计划', align: 'center', valign: 'middle',})
-    column.push({field: 'status', title: '备注', align: 'center', valign: 'middle',})
-    column.push({field: 'status', title: '专业', align: 'center', valign: 'middle',})
-    column.push({
-        field: 'status',
-        title: '状态',
-        align: 'center',
-        valign: 'middle',
-
-        formatter: function (value, row, index) {
-            if (value == 1 || "1" == value) {
-                return "<span style='color: #00B83F'>已生效</span>";
-            }
-            if (value == 2 || "2" == value) {
-                return "<span style='color: #ff7cf4'>草稿状态</span>";
-            }
-            if (3 == value || "3" == value) {
-                return "<span style='color: #9492a9'>废除状态</span>";
-            }
-            if (4 == value || "4" == value) {
-                return "<span style='color: #a90009'>删除状态</span>";
-            }
-            if (value == 5 || value == "5") {
-                return "<span style='color: #e2ab2f'>审核中</span>"
-            }
-            if (value == 6 || value == "6") {
-                return "<span style='color: #e2ab2f'>审核中</span>"
-            }
-        }
-    })
+    var $table = $("#paymentTable");
     $table.bootstrapTable({
         url: url,
         method: 'GET',
@@ -102,18 +44,92 @@ function initTable(url) {
         sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
         height: $(window.parent.document).find("#wrapper").height() - 150,
         width: $(window).width(),
-        formId: "queryOfferManage",
+        formId: "queryPayment",
         undefinedText: "",//当数据为 undefined 时显示的字符
         pagination: true,
         pageNumber: 1,                       //初始化加载第一页，默认第一页
         pageSize: 20,                       //每页的记录行数（*）
         pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
-        columns: column,
         sortOrder: "asc",                   //排序方式
         clickToSelect: true,// 单击某一行的时候选中某一条记录
         showColumns: true, //是否显示所有的列
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
+        columns:[
+            [
+                {
+                    field: '',
+                    title: '序号',
+                    align: 'center',
+                    valign: 'middle',
+                    width: 50,
+                    colspan: 1,
+                    rowspan: 2,
+                    formatter: function (value, row, index) {
+                        var options = $table.bootstrapTable('getOptions');
+                        return options.pageSize * (options.pageNumber - 1) + index + 1;
+
+                    }
+                },
+                {field: 'status', title: '合同完工状态', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '一级模块', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '二级模块', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '需求部门', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '项目费用描述', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '合同信息', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
+                {field: 'status', title: '已付', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '未付', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '第一次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
+                {field: 'status', title: '第二次付款', align: 'center', valign: 'middle',colspan: 3, rowspan: 1,},
+                {field: 'status', title: '第三次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
+                {field: 'status', title: '第四次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
+                {field: 'status', title: '第五次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
+                {field: 'status', title: '第六次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
+                {field: 'status', title: '第七次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
+                {field: 'status', title: '备注', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+            ],
+            [
+                {field: 'status', title: '供应商', align: 'center', valign: 'middle',},
+                {field: 'status', title: '合同签订时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '合同编号', align: 'center', valign: 'middle',},
+                {field: 'status', title: '合同金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款条款', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
+                {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
+                {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
+            ],
+        ],
         toolbars: [
             {
                 text: '添加',
@@ -239,49 +255,6 @@ function initTable(url) {
                                             }
                                         })
                                     }
-                                });
-                            }
-                        }
-                    })
-                }
-            },
-            {
-                text: '发起流程',
-                iconCls: 'glyphicon glyphicon-log-out',
-                handler: function () {
-                    var rows = $table.bootstrapTable('getSelections');
-                    var puids = "";
-                    for (var i = 0; i < rows.length; i++) {
-                        puids += rows[i].puid + ",";
-                    }
-                    if (rows.length == 0) {
-                        window.Ewin.alert({message: '请选择一条需要变更的数据!'});
-                        return false;
-                    }
-                    else {
-                        for (var i = 0; i < rows.length; i++) {
-                            if (rows[i].status != 4 && rows[i].status != 2) {
-                                window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
-                                return false;
-                            }
-                        }
-                    }
-                    var url = "";
-                    $.ajax({
-                        url: "privilege/write?url=" + url,
-                        type: "GET",
-                        success: function (result) {
-                            if (!result.success) {
-                                window.Ewin.alert({message: result.errMsg});
-                                return false;
-                            }
-                            else {
-                                window.Ewin.dialog({
-                                    title: "选择变更表单",
-                                    url: "",
-                                    gridId: "gridId",
-                                    width: 450,
-                                    height: 450
                                 });
                             }
                         }

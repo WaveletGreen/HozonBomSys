@@ -14,9 +14,9 @@ import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
+import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
@@ -31,7 +31,6 @@ import com.connor.hozon.bom.resources.domain.model.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
-import com.connor.hozon.bom.resources.enumtype.ChangeTypeEnum;
 import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
@@ -42,13 +41,17 @@ import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
@@ -64,6 +67,7 @@ import sql.pojo.work.HzWorkProcedure;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -73,8 +77,7 @@ import java.util.concurrent.Executors;
  */
 @Component
 @EnableTransactionManagement(proxyTargetClass = true)
-//要在事务的类中抛出RuntimeException异常，而不是抛出Exception，也不知道对不对
-@Transactional(rollbackFor = {IllegalArgumentException.class, RuntimeException.class, Exception.class})
+@Transactional(rollbackFor = {IllegalArgumentException.class, RuntimeException.class,HzBomException.class, Exception.class})
 public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModifier {
 
     /***
@@ -121,6 +124,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
 
     @Autowired
     private HzFullCfgMainDao hzFullCfgMainDao;
+
     @Autowired
     private HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
 
@@ -139,8 +143,22 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
 
     @Autowired
     private SynProcessRouteService synProcessRouteService;
+
     @Autowired
     private IHzVWOManagerService hzVWOManagerService;
+
+    private String errMsg ="";
+
+    @Autowired
+    private TransactionTemplate configTransactionTemplate;
+
+    public TransactionTemplate getConfigTransactionTemplate() {
+        return configTransactionTemplate;
+    }
+
+    public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
+        this.configTransactionTemplate = configTransactionTemplate;
+    }
     @Override
     public void interruptionFunctionDesc() {
 
@@ -278,7 +296,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     //这里是流程审核完成后 要传输的全部数据
     //传输数据 包括 物料 MBOM 和工艺路线
     @Override
-    @Transactional(rollbackFor = HzBomException.class)
+    @Transactional(rollbackFor = {HzBomException.class, Exception.class})
     public boolean bom(Long orderId, Object... params) {
         //根据表单id 获取全部的变更数据
         HzChangeDataQuery hzChangeDataQuery = new HzChangeDataQuery();
@@ -298,41 +316,53 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             try {
                 for (HzChangeDataRecord record : list) {
                     if (ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
+                        Future future = service.submit(() -> {
                             ebomChange(record.getTableName(), orderId, projectId);
                         });
+                        future.get();
                     } else if (ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
+                        Future future = service.submit(() -> {
                             pbomChange(record.getTableName(), orderId, projectId);
                         });
+                        future.get();
                     } else if (ChangeTableNameEnum.HZ_MBOM_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
+                        Future future =service.submit(() -> {
                             mbomChange(record.getTableName(), orderId, projectId);
                         });
+                        future.get();
                     } else if (ChangeTableNameEnum.HZ_MBOM_PRODUCT_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
+                        Future future =service.submit(() -> {
                             mbomProductChange(record.getTableName(), orderId, projectId);
                         });
+                        future.get();
                     } else if (ChangeTableNameEnum.HZ_MBOM_FINANCE_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
+                        Future future =service.submit(() -> {
                             mbomFinanceChange(record.getTableName(), orderId, projectId);
                         });
+                        future.get();
                     } else if (ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
+                        Future future = service.submit(() -> {
                             materielChange(record.getTableName(), orderId, projectId);
                         });
+                        future.get();
                     } else if (ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName().equals(record.getTableName())) {
-                        service.submit(() -> {
+                        Future future =service.submit(() -> {
                             workProduceChange(record.getTableName(), orderId, projectId);
                         });
+                        future.get();
                     }
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
-                throw new HzBomException(WriteResultRespDTO.getFailResult());
-            } finally {
+                throw new HzBomException(e);
+            }
+            finally {
                 if (service != null) {
                     service.shutdown();
+                }
+                if(StringUtils.isNotBlank(this.errMsg)){
+                    this.errMsg ="";
                 }
             }
         }
@@ -341,108 +371,126 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
 
     /**
      * EBOM变更审核通过
-     *
      * @param tableName
      */
     private void ebomChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-        dataDetailQuery.setOrderId(orderId);
-        dataDetailQuery.setTableName(tableName);
-        dataDetailQuery.setProjectId(projectId);
-        List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);
-        //即将要更新的数据
-        List<HzBomLineRecord> updateList = new ArrayList<>();
-        //即将要删除的数据
-        List<String> deletePuids = new ArrayList<>();
-        //要新增的数据
-        List<HzEPLManageRecord> addList = new ArrayList<>();
+        configTransactionTemplate.execute(new TransactionCallback<Void>() {
+            @Override
+            public Void doInTransaction(TransactionStatus status) {
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setOrderId(orderId);
+                dataDetailQuery.setTableName(tableName);
+                dataDetailQuery.setProjectId(projectId);
+                List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);
+                //即将要更新的数据
+                List<HzBomLineRecord> updateList = new ArrayList<>();
+                //即将要删除的数据
+                List<String> deletePuids = new ArrayList<>();
+                //要新增的数据
+                List<HzEPLManageRecord> addList = new ArrayList<>();
 
+                try {
+                    if (ListUtil.isNotEmpty(records)) {
+                        Date date = new Date();
+                        records.forEach(record -> {
+                            if (Integer.valueOf(4).equals(record.getStatus())) {
+                                deletePuids.add(record.getPuid());
+                            } else {
+                                HzBomLineRecord bomLineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(record);
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                bomLineRecord.setStatus(1);
+                                bomLineRecord.setEffectTime(date);
+                                bomLineRecord.setRevision(revision);
+                                bomLineRecord.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
 
-        if (ListUtil.isNotEmpty(records)) {
-            Date date = new Date();
-            records.forEach(record -> {
-                if (4 == record.getStatus()) {
-                    deletePuids.add(record.getPuid());
-                } else {
-                    HzBomLineRecord bomLineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(record);
-                    String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
-                    bomLineRecord.setStatus(1);
-                    bomLineRecord.setEffectTime(date);
-                    bomLineRecord.setRevision(revision);
-                    bomLineRecord.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
+                                record.setStatus(1);
+                                record.setRevision(revision);
+                                record.setEffectTime(date);
+                                updateList.add(bomLineRecord);
+                                addList.add(record);
+                            }
 
-                    record.setStatus(1);
-                    record.setRevision(revision);
-                    record.setEffectTime(date);
-                    updateList.add(bomLineRecord);
-                    addList.add(record);
+                        });
+                    }
+
+                    if (ListUtil.isNotEmpty(deletePuids)) {
+                        hzEbomRecordDAO.deleteByPuids(deletePuids,ChangeTableNameEnum.HZ_EBOM.getTableName());
+                    }
+                    if (ListUtil.isNotEmpty(updateList)) {
+                        hzEbomRecordDAO.updateList(updateList);
+                    }
+                    if (ListUtil.isNotEmpty(addList)) {
+                        hzEbomRecordDAO.insertList(addList, ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());
+                    }
+                }catch (Exception  e){
+                    e.printStackTrace();
+                    throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
                 }
-
-            });
-        }
-
-        if (ListUtil.isNotEmpty(deletePuids)) {
-            hzEbomRecordDAO.deleteByPuids(deletePuids,ChangeTableNameEnum.HZ_EBOM.getTableName());
-        }
-        if (ListUtil.isNotEmpty(updateList)) {
-            hzEbomRecordDAO.updateList(updateList);
-        }
-        if (ListUtil.isNotEmpty(addList)) {
-            hzEbomRecordDAO.insertList(addList, ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());
-        }
-
+                return null;
+            };
+        });
 
     }
 
     /**
      * PBOM变更审核通过
-     *
      * @param tableName
      */
     private void pbomChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-        dataDetailQuery.setOrderId(orderId);
-        dataDetailQuery.setTableName(tableName);
-        dataDetailQuery.setProjectId(projectId);
-        List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecordsByOrderId(dataDetailQuery);
-        //即将要更新的数据
-        List<HzPbomLineRecord> updateList = new ArrayList<>();
-        //即将要删除的数据 线程安全
-        StringBuffer stringBuffer = new StringBuffer();
-        //要新增的数据
-        List<HzPbomLineRecord> addList = new ArrayList<>();
+        configTransactionTemplate.execute(new TransactionCallback<Void>() {
+            @Override
+            public Void doInTransaction(TransactionStatus status) {
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setOrderId(orderId);
+                dataDetailQuery.setTableName(tableName);
+                dataDetailQuery.setProjectId(projectId);
+                List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecordsByOrderId(dataDetailQuery);
+                //即将要更新的数据
+                List<HzPbomLineRecord> updateList = new ArrayList<>();
+                //即将要删除的数据 线程安全
+                StringBuffer stringBuffer = new StringBuffer();
+                //要新增的数据
+                List<HzPbomLineRecord> addList = new ArrayList<>();
+                try {
+                    if (ListUtil.isNotEmpty(records)) {
+                        Date date = new Date();
+                        records.forEach(record -> {
+                            if (Integer.valueOf(4).equals(record.getStatus())) {
+                                stringBuffer.append(record.geteBomPuid() + ",");
+                            } else {
+                                HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                hzPbomLineRecord.setStatus(1);
+                                hzPbomLineRecord.setEffectTime(date);
+                                hzPbomLineRecord.setRevision(revision);
 
-        if (ListUtil.isNotEmpty(records)) {
-            Date date = new Date();
-            records.forEach(record -> {
-                if (4 == record.getStatus()) {
-                    stringBuffer.append(record.geteBomPuid() + ",");
-                } else {
-                    HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
-                    String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
-                    hzPbomLineRecord.setStatus(1);
-                    hzPbomLineRecord.setEffectTime(date);
-                    hzPbomLineRecord.setRevision(revision);
+                                record.setStatus(1);
+                                record.setRevision(revision);
+                                record.setEffectTime(date);
+                                updateList.add(hzPbomLineRecord);
+                                addList.add(record);
+                            }
 
-                    record.setStatus(1);
-                    record.setRevision(revision);
-                    record.setEffectTime(date);
-                    updateList.add(hzPbomLineRecord);
-                    addList.add(record);
+                        });
+                    }
+
+                    if (StringUtils.isNotBlank(stringBuffer.toString())) {
+                        hzPbomRecordDAO.deleteListByPuids(stringBuffer.toString(),ChangeTableNameEnum.HZ_PBOM.getTableName());
+                    }
+                    if (ListUtil.isNotEmpty(updateList)) {
+                        hzPbomRecordDAO.updateList(updateList);
+                    }
+                    if (ListUtil.isNotEmpty(addList)) {
+                        hzPbomRecordDAO.insertListForChange(addList, ChangeTableNameEnum.HZ_PBOM_BEFORE.getTableName());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
                 }
 
-            });
-        }
-
-        if (StringUtils.isNotBlank(stringBuffer.toString())) {
-            hzPbomRecordDAO.deleteListByPuids(stringBuffer.toString(),ChangeTableNameEnum.HZ_PBOM.getTableName());
-        }
-        if (ListUtil.isNotEmpty(updateList)) {
-            hzPbomRecordDAO.updateList(updateList);
-        }
-        if (ListUtil.isNotEmpty(addList)) {
-            hzPbomRecordDAO.insertListForChange(addList, ChangeTableNameEnum.HZ_PBOM_BEFORE.getTableName());
-        }
+                return null;
+            };
+        });
 
 
     }
@@ -453,60 +501,68 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void mbomChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-        dataDetailQuery.setOrderId(orderId);
-        dataDetailQuery.setTableName(tableName);
-        dataDetailQuery.setProjectId(projectId);
-        List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
-        //即将要更新的数据
-        List<HzMbomLineRecord> updateList = new ArrayList<>();
-        //即将要删除的数据
-        List<HzMbomLineRecord> deleteMbom = new ArrayList<>();
-        //要新增的数据
-        List<HzMbomLineRecord> addList = new ArrayList<>();
+        configTransactionTemplate.execute(new TransactionCallback<Void>() {
+            @Override
+            public Void doInTransaction(TransactionStatus status) {
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setOrderId(orderId);
+                dataDetailQuery.setTableName(tableName);
+                dataDetailQuery.setProjectId(projectId);
+                List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
+                //即将要更新的数据
+                List<HzMbomLineRecord> updateList = new ArrayList<>();
+                //即将要删除的数据
+                List<HzMbomLineRecord> deleteMbom = new ArrayList<>();
+                //要新增的数据
+                List<HzMbomLineRecord> addList = new ArrayList<>();
 
-        if (ListUtil.isNotEmpty(records)) {
-            Date date = new Date();
-            records.forEach(record -> {
-                if (4 == record.getStatus()) {
-                    deleteMbom.add(record);
-                } else {
-                    HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
-                    String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
-                    bomLineRecord.setStatus(1);
-                    bomLineRecord.setEffectTime(date);
-                    bomLineRecord.setRevision(revision);
-                    bomLineRecord.setTableName(ChangeTableNameEnum.HZ_MBOM.getTableName());
+                try {
+                    if (ListUtil.isNotEmpty(records)) {
+                        Date date = new Date();
+                        records.forEach(record -> {
+                            if (Integer.valueOf(4).equals(record.getStatus())) {
+                                deleteMbom.add(record);
+                            } else {
+                                HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                bomLineRecord.setStatus(1);
+                                bomLineRecord.setEffectTime(date);
+                                bomLineRecord.setRevision(revision);
+                                bomLineRecord.setTableName(ChangeTableNameEnum.HZ_MBOM.getTableName());
 
-                    record.setStatus(1);
-                    record.setRevision(revision);
-                    record.setEffectTime(date);
-                    updateList.add(bomLineRecord);
-                    addList.add(record);
+                                record.setStatus(1);
+                                record.setRevision(revision);
+                                record.setEffectTime(date);
+                                updateList.add(bomLineRecord);
+                                addList.add(record);
+                            }
+
+                        });
+                    }
+
+                    if (ListUtil.isNotEmpty(deleteMbom)) {
+                        HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
+                        vo.setTableName(ChangeTableNameEnum.HZ_MBOM.getTableName());
+                        vo.setRecordList(deleteMbom);
+                        hzMbomRecordDAO.deleteMbomList(vo);
+                    }
+                    if (ListUtil.isNotEmpty(updateList)) {
+                        hzMbomRecordDAO.updateList(updateList);
+                    }
+                    if (ListUtil.isNotEmpty(addList)) {
+                        HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
+                        vo.setTableName(ChangeTableNameEnum.HZ_MBOM_BEFORE.getTableName());
+                        vo.setRecordList(addList);
+                        hzMbomRecordDAO.insertVO(vo);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
                 }
 
-            });
-        }
-
-        //需要发送数据 给 sap？
-//        synBomService.updateByUids();//更新
-//        synBomService.addOne();//新增
-//        synBomService.deleteByUids();//删除
-        if (ListUtil.isNotEmpty(deleteMbom)) {
-            HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-            vo.setTableName(ChangeTableNameEnum.HZ_MBOM.getTableName());
-            vo.setRecordList(deleteMbom);
-            hzMbomRecordDAO.deleteMbomList(vo);
-        }
-        if (ListUtil.isNotEmpty(updateList)) {
-            hzMbomRecordDAO.updateList(updateList);
-        }
-        if (ListUtil.isNotEmpty(addList)) {
-            HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-            vo.setTableName(ChangeTableNameEnum.HZ_MBOM_BEFORE.getTableName());
-            vo.setRecordList(addList);
-            hzMbomRecordDAO.insertVO(vo);
-        }
+                return null;
+            };
+        });
 
     }
 
@@ -516,57 +572,67 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void mbomFinanceChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-        dataDetailQuery.setOrderId(orderId);
-        dataDetailQuery.setTableName(tableName);
-        dataDetailQuery.setProjectId(projectId);
-        List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
-        //即将要更新的数据
-        List<HzMbomLineRecord> updateList = new ArrayList<>();
-        //即将要删除的数据
-        List<HzMbomLineRecord> deleteMbom = new ArrayList<>();
-        //要新增的数据
-        List<HzMbomLineRecord> addList = new ArrayList<>();
+        configTransactionTemplate.execute(new TransactionCallback<Void>() {
+            @Override
+            public Void doInTransaction(TransactionStatus status) {
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setOrderId(orderId);
+                dataDetailQuery.setTableName(tableName);
+                dataDetailQuery.setProjectId(projectId);
+                List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
+                //即将要更新的数据
+                List<HzMbomLineRecord> updateList = new ArrayList<>();
+                //即将要删除的数据
+                List<HzMbomLineRecord> deleteMbom = new ArrayList<>();
+                //要新增的数据
+                List<HzMbomLineRecord> addList = new ArrayList<>();
 
-        if (ListUtil.isNotEmpty(records)) {
-            Date date = new Date();
-            records.forEach(record -> {
-                if (4 == record.getStatus()) {
-                    deleteMbom.add(record);
-                } else {
-                    HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
-                    String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
-                    bomLineRecord.setStatus(1);
-                    bomLineRecord.setEffectTime(date);
-                    bomLineRecord.setRevision(revision);
-                    bomLineRecord.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE.getTableName());
+                try {
+                    if (ListUtil.isNotEmpty(records)) {
+                        Date date = new Date();
+                        records.forEach(record -> {
+                            if (Integer.valueOf(4).equals(record.getStatus())) {
+                                deleteMbom.add(record);
+                            } else {
+                                HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                bomLineRecord.setStatus(1);
+                                bomLineRecord.setEffectTime(date);
+                                bomLineRecord.setRevision(revision);
+                                bomLineRecord.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE.getTableName());
 
-                    record.setStatus(1);
-                    record.setRevision(revision);
-                    record.setEffectTime(date);
-                    updateList.add(bomLineRecord);
-                    addList.add(record);
+                                record.setStatus(1);
+                                record.setRevision(revision);
+                                record.setEffectTime(date);
+                                updateList.add(bomLineRecord);
+                                addList.add(record);
+                            }
+
+                        });
+                    }
+
+                    if (ListUtil.isNotEmpty(deleteMbom)) {
+                        HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
+                        vo.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE.getTableName());
+                        vo.setRecordList(deleteMbom);
+                        hzMbomRecordDAO.deleteMbomList(vo);
+                    }
+                    if (ListUtil.isNotEmpty(updateList)) {
+                        hzMbomRecordDAO.updateList(updateList);
+                    }
+                    if (ListUtil.isNotEmpty(addList)) {
+                        HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
+                        vo.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE_BRFORE.getTableName());
+                        vo.setRecordList(addList);
+                        hzMbomRecordDAO.insertVO(vo);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
                 }
-
-            });
-        }
-
-        if (ListUtil.isNotEmpty(deleteMbom)) {
-            HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-            vo.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE.getTableName());
-            vo.setRecordList(deleteMbom);
-            hzMbomRecordDAO.deleteMbomList(vo);
-        }
-        if (ListUtil.isNotEmpty(updateList)) {
-            hzMbomRecordDAO.updateList(updateList);
-        }
-        if (ListUtil.isNotEmpty(addList)) {
-            HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-            vo.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE_BRFORE.getTableName());
-            vo.setRecordList(addList);
-
-            hzMbomRecordDAO.insertVO(vo);
-        }
+                return null;
+            };
+        });
 
 
     }
@@ -577,137 +643,164 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void mbomProductChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-        dataDetailQuery.setOrderId(orderId);
-        dataDetailQuery.setTableName(tableName);
-        dataDetailQuery.setProjectId(projectId);
-        List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
-        //即将要更新的数据
-        List<HzMbomLineRecord> updateList = new ArrayList<>();
-        //即将要删除的数据
-        List<HzMbomLineRecord> deleteMbom = new ArrayList<>();
-        //要新增的数据
-        List<HzMbomLineRecord> addList = new ArrayList<>();
+        configTransactionTemplate.execute(new TransactionCallback<Void>() {
+            @Override
+            public Void doInTransaction(TransactionStatus status) {
+                HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+                dataDetailQuery.setOrderId(orderId);
+                dataDetailQuery.setTableName(tableName);
+                dataDetailQuery.setProjectId(projectId);
+                List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
+                //即将要更新的数据
+                List<HzMbomLineRecord> updateList = new ArrayList<>();
+                //即将要删除的数据
+                List<HzMbomLineRecord> deleteMbom = new ArrayList<>();
+                //要新增的数据
+                List<HzMbomLineRecord> addList = new ArrayList<>();
 
-        if (ListUtil.isNotEmpty(records)) {
-            Date date = new Date();
-            records.forEach(record -> {
-                if (4 == record.getStatus()) {
-                    deleteMbom.add(record);
-                } else {
-                    HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
-                    String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
-                    bomLineRecord.setStatus(1);
-                    bomLineRecord.setEffectTime(date);
-                    bomLineRecord.setRevision(revision);
-                    bomLineRecord.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT.getTableName());
+                try {
+                    if (ListUtil.isNotEmpty(records)) {
+                        Date date = new Date();
+                        records.forEach(record -> {
+                            if (Integer.valueOf(4).equals(record.getStatus())) {
+                                deleteMbom.add(record);
+                            } else {
+                                HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                bomLineRecord.setStatus(1);
+                                bomLineRecord.setEffectTime(date);
+                                bomLineRecord.setRevision(revision);
+                                bomLineRecord.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT.getTableName());
 
-                    record.setStatus(1);
-                    record.setRevision(revision);
-                    record.setEffectTime(date);
-                    updateList.add(bomLineRecord);
-                    addList.add(record);
+                                record.setStatus(1);
+                                record.setRevision(revision);
+                                record.setEffectTime(date);
+                                updateList.add(bomLineRecord);
+                                addList.add(record);
+                            }
+
+                        });
+                    }
+
+                    if (ListUtil.isNotEmpty(deleteMbom)) {
+                        HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
+                        vo.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT.getTableName());
+                        vo.setRecordList(deleteMbom);
+                        hzMbomRecordDAO.deleteMbomList(vo);
+                    }
+                    if (ListUtil.isNotEmpty(updateList)) {
+                        hzMbomRecordDAO.updateList(updateList);
+                    }
+                    if (ListUtil.isNotEmpty(addList)) {
+                        HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
+                        vo.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT_BEFORE.getTableName());
+                        vo.setRecordList(addList);
+                        hzMbomRecordDAO.insertVO(vo);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
                 }
+                return null;
+            };
+        });
 
-            });
-        }
 
-        if (ListUtil.isNotEmpty(deleteMbom)) {
-            HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-            vo.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT.getTableName());
-            vo.setRecordList(deleteMbom);
-            hzMbomRecordDAO.deleteMbomList(vo);
-        }
-        if (ListUtil.isNotEmpty(updateList)) {
-            hzMbomRecordDAO.updateList(updateList);
-        }
-        if (ListUtil.isNotEmpty(addList)) {
-            HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-            vo.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT_BEFORE.getTableName());
-            vo.setRecordList(addList);
-            hzMbomRecordDAO.insertVO(vo);
-        }
 
 
     }
 
     /**
      * 物料变更审核通过
-     *
      * @param tableName
      */
-    private void materielChange(String tableName, Long orderId, String projectId) {
-        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-        dataDetailQuery.setOrderId(orderId);
-        dataDetailQuery.setTableName(tableName);
-        dataDetailQuery.setProjectId(projectId);
-        List<HzMaterielRecord> records = hzMaterielDAO.getMaterielRecordsByOrderId(dataDetailQuery);
-        //即将要更新的数据
-        List<HzMaterielRecord> updateList = new ArrayList<>();
-        //即将要删除的数据 线程安全
-        List<HzMaterielRecord> deleteList = new ArrayList<>();
-        //要新增的数据
-        List<HzMaterielRecord> addList = new ArrayList<>();
+    private void materielChange(final String tableName, final Long orderId, final String projectId) {
+        configTransactionTemplate.execute(new TransactionCallback<Void>() {
+          @Override
+          public Void doInTransaction(TransactionStatus status) {
+              HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+              dataDetailQuery.setOrderId(orderId);
+              dataDetailQuery.setTableName(tableName);
+              dataDetailQuery.setProjectId(projectId);
+              List<HzMaterielRecord> records = hzMaterielDAO.getMaterielRecordsByOrderId(dataDetailQuery);
+              //即将要更新的数据
+              List<HzMaterielRecord> updateList = new ArrayList<>();
+              //即将要删除的数据 线程安全
+              List<HzMaterielRecord> deleteList = new ArrayList<>();
+              //要新增的数据
+              List<HzMaterielRecord> addList = new ArrayList<>();
 
-        //给SAP传输 删除
-        List<EditHzMaterielReqDTO> sapDeleteList = new ArrayList<>();
-        //给SAP传输 更新
-        List<EditHzMaterielReqDTO> sapUpdateList = new ArrayList<>();
-        //给SAP传输 新增
-        List<EditHzMaterielReqDTO> sapInsertList = new ArrayList<>();
+              //给SAP传输 删除
+              List<EditHzMaterielReqDTO> sapDeleteList = new ArrayList<>();
+              //给SAP传输 更新
+              List<EditHzMaterielReqDTO> sapUpdateList = new ArrayList<>();
+              //给SAP传输 新增
+              List<EditHzMaterielReqDTO> sapInsertList = new ArrayList<>();
+              //SAP 传输失败信息
+              StringBuffer stringBuffer = new StringBuffer();
 
+              Integer errorCount = 0;
 
-        if (ListUtil.isNotEmpty(records)) {
-            Date date = new Date();
-            records.forEach(record -> {
-                if (4 == record.getpValidFlag()) {
-                    deleteList.add(record);
-                    EditHzMaterielReqDTO reqDTO = new EditHzMaterielReqDTO();
-                    reqDTO.setPuid(record.getPuid());
-                    sapDeleteList.add(reqDTO);
-                } else {
-                    HzMaterielRecord hzPbomLineRecord = HzMaterielFactory.hzMaterielRecordToMaterielRecord(record);
-                    EditHzMaterielReqDTO reqDTO = new EditHzMaterielReqDTO();
-                    String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
-                    hzPbomLineRecord.setpValidFlag(1);
-                    hzPbomLineRecord.setEffectTime(date);
-                    hzPbomLineRecord.setRevision(revision);
-                    reqDTO.setPuid(record.getPuid());
+              if (ListUtil.isNotEmpty(records)) {
+                  Date date = new Date();
+                  records.forEach(record -> {
+                      if (Integer.valueOf(4) .equals(record.getpValidFlag())) {
+                          deleteList.add(record);
+                          EditHzMaterielReqDTO reqDTO = new EditHzMaterielReqDTO();
+                          reqDTO.setPuid(record.getPuid());
+                          sapDeleteList.add(reqDTO);
+                      } else {
+                          HzMaterielRecord hzPbomLineRecord = HzMaterielFactory.hzMaterielRecordToMaterielRecord(record);
+                          EditHzMaterielReqDTO reqDTO = new EditHzMaterielReqDTO();
+                          String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                          hzPbomLineRecord.setpValidFlag(1);
+                          hzPbomLineRecord.setEffectTime(date);
+                          hzPbomLineRecord.setRevision(revision);
+                          reqDTO.setPuid(record.getPuid());
+                          //不要用 1==record.getSendSapFlag() 可能会报NPE
+                          if(Integer.valueOf(1).equals(record.getSendSapFlag())){
+                              sapUpdateList.add(reqDTO);
+                          }else {
+                              sapInsertList.add(reqDTO);
+                          }
+                          record.setpValidFlag(1);
+                          record.setRevision(revision);
+                          record.setEffectTime(date);
+                          updateList.add(hzPbomLineRecord);
+                          addList.add(record);
+                      }
 
-                    if(1==record.getSendSapFlag()){
-                        sapUpdateList.add(reqDTO);
-                    }else {
-                        sapInsertList.add(reqDTO);
-                    }
-                    record.setpValidFlag(1);
-                    record.setRevision(revision);
-                    record.setEffectTime(date);
-                    updateList.add(hzPbomLineRecord);
-                    addList.add(record);
-                }
-
-            });
-        }
-
-        //需要传输数据到SAP BOM端需要记录数据传输结果
-        if (ListUtil.isNotEmpty(deleteList)) {
+                  });
+              }
+              stringBuffer.append("审核中的物料数据传输到SAP系统失败，请核实后重试!<br>");
+              //需要传输数据到SAP BOM端需要记录数据传输结果
+              if (ListUtil.isNotEmpty(deleteList)) {
 //            synMaterielService.deleteByPuids();
-            synMaterielService.deleteByPuids(sapDeleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"puid");
-            hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
-        }
-        if (ListUtil.isNotEmpty(updateList)) {
-            hzMaterielDAO.updateList(updateList);
-            if(ListUtil.isNotEmpty(sapInsertList)){
-                synMaterielService.updateOrAddByUids(sapInsertList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
-            }
-            if(ListUtil.isNotEmpty(sapUpdateList)){
-                synMaterielService.updateOrAddByUids(sapUpdateList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
-            }
-        }
-        if (ListUtil.isNotEmpty(addList)) {
-            hzMaterielDAO.insertList(addList, ChangeTableNameEnum.HZ_MATERIEL_BEFORE.getTableName());
-        }
-
+                  JSONObject object = synMaterielService.deleteByPuids(sapDeleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"puid");
+                  errorCount += sapTransDataErrMsg(stringBuffer,object);
+                  hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
+              }
+              if (ListUtil.isNotEmpty(updateList)) {
+                  hzMaterielDAO.updateList(updateList);
+                  if(ListUtil.isNotEmpty(sapInsertList)){
+                      JSONObject object = synMaterielService.updateOrAddByUids(sapInsertList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
+                      errorCount += sapTransDataErrMsg(stringBuffer,object);
+                  }
+                  if(ListUtil.isNotEmpty(sapUpdateList)){
+                      JSONObject object = synMaterielService.updateOrAddByUids(sapUpdateList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
+                      errorCount += sapTransDataErrMsg(stringBuffer,object);
+                  }
+              }
+              if (ListUtil.isNotEmpty(addList)) {
+                  hzMaterielDAO.insertList(addList, ChangeTableNameEnum.HZ_MATERIEL_BEFORE.getTableName());
+              }
+              if(errorCount >0){
+                  errMsg = stringBuffer.toString();
+                  throw new HzBomException(errMsg);
+              }
+              return null;
+          };
+        });
 
 //        }
     }
@@ -717,61 +810,101 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @param tableName
      */
     private void workProduceChange(String tableName, Long orderId, String projectId) {
+        configTransactionTemplate.execute(new TransactionCallback<Void>() {
+          @Override
+          public Void doInTransaction(TransactionStatus status) {
+              HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+              dataDetailQuery.setOrderId(orderId);
+              dataDetailQuery.setTableName(tableName);
+              dataDetailQuery.setProjectId(projectId);
+              List<HzWorkProcedure> records = hzWorkProcedureDAO.getWorkProcedureByOrderId(dataDetailQuery);
+              //即将要更新的数据
+              List<HzWorkProcedure> updateList = new ArrayList<>();
+              //即将要删除的数据 线程安全
+              List<String> deleteList = new ArrayList<>();
+              Set<String> materielIds = new HashSet<>();//传SAP 删除
+              //要新增的数据
+              List<HzWorkProcedure> addList = new ArrayList<>();
+              Set<String> addSapSet = new HashSet<>();//传SAP 新增
 
-        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-        dataDetailQuery.setOrderId(orderId);
-        dataDetailQuery.setTableName(tableName);
-        dataDetailQuery.setProjectId(projectId);
-        List<HzWorkProcedure> records = hzWorkProcedureDAO.getWorkProcedureByOrderId(dataDetailQuery);
-        //即将要更新的数据
-        List<HzWorkProcedure> updateList = new ArrayList<>();
-        //即将要删除的数据 线程安全
-        List<String> deleteList = new ArrayList<>();
-        Set<String> materielIds = new HashSet<>();//传SAP 删除
-        //要新增的数据
-        List<HzWorkProcedure> addList = new ArrayList<>();
+              try {
+                  if (ListUtil.isNotEmpty(records)) {
+                      Date date = new Date();
+                      records.forEach(record -> {
+                          if (Integer.valueOf(4).equals(record.getpStatus())) {
+                              deleteList.add(record.getPuid());
+                              materielIds.add(record.getMaterielId());
+                          } else {
+                              HzWorkProcedure hzPbomLineRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
+                              String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                              hzPbomLineRecord.setpStatus(1);
+                              hzPbomLineRecord.setEffectTime(date);
+                              hzPbomLineRecord.setRevision(revision);
 
-        Set<String> addSapSet = new HashSet<>();//传SAP 新增
+                              record.setpStatus(1);
+                              record.setRevision(revision);
+                              record.setEffectTime(date);
+                              updateList.add(hzPbomLineRecord);
+                              addSapSet.add(hzPbomLineRecord.getMaterielId());
+                              addList.add(record);
+                          }
 
-        if (ListUtil.isNotEmpty(records)) {
-            Date date = new Date();
-            records.forEach(record -> {
-                if (4 == record.getpStatus()) {
-                    deleteList.add(record.getPuid());
-                    materielIds.add(record.getMaterielId());
-                } else {
-                    HzWorkProcedure hzPbomLineRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
-                    String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
-                    hzPbomLineRecord.setpStatus(1);
-                    hzPbomLineRecord.setEffectTime(date);
-                    hzPbomLineRecord.setRevision(revision);
+                      });
+                  }
 
-                    record.setpStatus(1);
-                    record.setRevision(revision);
-                    record.setEffectTime(date);
-                    updateList.add(hzPbomLineRecord);
-                    addSapSet.add(hzPbomLineRecord.getMaterielId());
-                    addList.add(record);
-                }
+                  //传数据到SAP
+                  // todo  工艺路线 SAP的接口目前有问题 待和SAP方沟通
+                  if (ListUtil.isNotEmpty(deleteList)) {
+                      try {
+                          String[] strings = materielIds.toArray(new String[materielIds.size()]);
+                          synProcessRouteService.deleteRouting(strings,projectId);
+                      }catch (Exception e){
+                          // todo  接口有问题 暂时不负责
+                      }
+                      hzWorkProcedureDAO.deleteByPuids(deleteList,ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
+                  }
+                  if (ListUtil.isNotEmpty(updateList)) {
+                      try {
+                          String[] strings = materielIds.toArray(new String[addSapSet.size()]);
+                          synProcessRouteService.addRouting(strings,projectId);
+                      }catch (Exception e){
+                          // todo  接口有问题 暂时不负责
+                      }
+                      hzWorkProcedureDAO.updateList(updateList);
+                  }
+                  if (ListUtil.isNotEmpty(addList)) {
+                      hzWorkProcedureDAO.insertList(addList, ChangeTableNameEnum.HZ_WORK_PROCEDURE_BEFORE.getTableName());
+                  }
+              }catch (Exception e){
+                  e.printStackTrace();
+                  throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
+              }
+              return null;
+          };
+        });
 
-            });
+    }
+
+
+    /**
+     * 传输SAP途中的磨难 9x9 81难 也未能修成正果
+     * @param stringBuffer
+     * @param object
+     * @return
+     */
+    private int sapTransDataErrMsg(StringBuffer stringBuffer,JSONObject object){
+        Object fail = object.get("fail");
+//        Object fail = object.get("success");
+        int errorCount = 0;
+        if(fail instanceof List){
+            List failList = (List)fail;
+            for(int i=0;i<failList.size();i++ ){
+                String str = (String)((JSONObject) failList.get(i)).get("msg");
+                stringBuffer.append(str+"<br>");
+                errorCount++;
+            }
         }
-
-        //传数据到SAP
-        if (ListUtil.isNotEmpty(deleteList)) {
-            String[] strings = materielIds.toArray(new String[materielIds.size()]);
-            synProcessRouteService.deleteRouting(strings,projectId);
-            hzWorkProcedureDAO.deleteByPuids(deleteList,ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
-        }
-        if (ListUtil.isNotEmpty(updateList)) {
-            String[] strings = materielIds.toArray(new String[addSapSet.size()]);
-            synProcessRouteService.addRouting(strings,projectId);
-            hzWorkProcedureDAO.updateList(updateList);
-        }
-        if (ListUtil.isNotEmpty(addList)) {
-            hzWorkProcedureDAO.insertList(addList, ChangeTableNameEnum.HZ_WORK_PROCEDURE_BEFORE.getTableName());
-        }
-
+        return errorCount;
     }
 
 }

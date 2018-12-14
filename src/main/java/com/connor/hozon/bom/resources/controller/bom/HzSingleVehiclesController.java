@@ -232,8 +232,8 @@ public class HzSingleVehiclesController extends BaseController {
 
     @RequestMapping(value = "bom/refresh",method = RequestMethod.POST)
     public void refreshSingleVehiclesBOM(String projectId,HttpServletResponse response){
-        hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
-        toJSONResponse(Result.build(true),response);
+        WriteResultRespDTO respDTO = hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**

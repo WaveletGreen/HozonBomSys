@@ -144,7 +144,17 @@ function saveAgreement() {
                         }
                     },
                 error: function (status) {
-                    window.Ewin.alert({message: "提交失败:" + status.status});
+                    if(status.responseJSON.message != 'No message available'){
+                        console.log(status)
+                        var errMsg = status.responseJSON.message;
+                        if(errMsg.match("Exception:")){
+                            errMsg = errMsg.split("Exception:")[1];
+                        }
+                        var msg = "<div style='height: 30%;overflow: auto'>" + errMsg+ "</div>"
+                        window.Ewin.confirm({title: '提交失败', message: msg})
+                    }else {
+                        window.Ewin.alert({message: "提交失败:" + status.status});
+                    }
                 }
             })
         }

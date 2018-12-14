@@ -54,7 +54,6 @@ public class HzSingleVehiclesFactory {
 
     public static HzSingleVehiclesBomRecord mbomRecordToSingleVehiclesBom(HzMbomLineRecord record,Long singleVehiclesId){
         HzSingleVehiclesBomRecord vehiclesBomRecord = new HzSingleVehiclesBomRecord();
-
         vehiclesBomRecord.setBomDigifaxId(record.getBomDigifaxId());
         vehiclesBomRecord.setChange(record.getChange());
         vehiclesBomRecord.setChangeNum(record.getChangeNum());
@@ -88,6 +87,7 @@ public class HzSingleVehiclesFactory {
         vehiclesBomRecord.setStandardPart(record.getStandardPart());
         vehiclesBomRecord.setTools(record.getTools());
         vehiclesBomRecord.setUpdateName("system");
+        vehiclesBomRecord.setBomType(record.getpBomType());
         vehiclesBomRecord.setWasterProduct(record.getWasterProduct());
         vehiclesBomRecord.setCreateTime(new Date());
         vehiclesBomRecord.setUpdateTime(new Date());

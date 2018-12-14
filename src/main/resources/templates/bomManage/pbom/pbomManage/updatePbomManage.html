@@ -84,40 +84,32 @@
     <div class="form-group">
         <label for="workShop1">车间1</label>
         <input class="form-control" id="workShop1" name="workShop1" type="text" th:value="${data.workShop1}"
-               placeholder="请输入车间1"/><!--th:value="${entity.level}"-->
+               placeholder="请输入车间1"/>
     </div>
     <div class="form-group">
         <label for="workShop2">车间2</label>
         <input class="form-control" id="workShop2" name="workShop2" type="text" th:value="${data.workShop2}"
-               placeholder="请输入车间2"/><!--th:value="${entity.level}"-->
+               placeholder="请输入车间2"/>
     </div>
     <div class="form-group">
         <label for="productLine">生产线</label>
         <input class="form-control" id="productLine" name="productLine" type="text" th:value="${data.productLine}"
-               placeholder="请输入生产线"/><!--th:value="${entity.level}"-->
+               placeholder="请输入生产线"/>
     </div>
     <div class="form-group">
         <label for="mouldType">模具类型</label>
         <input class="form-control" id="mouldType" name="mouldType" type="text" th:value="${data.mouldType}"
-               placeholder="请输入模具类型"/><!--th:value="${entity.level}"-->
+               placeholder="请输入模具类型"/>
     </div>
     <div class="form-group">
         <label for="outerPart">外委件</label>
         <input class="form-control" id="outerPart" name="outerPart" type="text" th:value="${data.outerPart}"
-               placeholder="请输入外委件"/><!--th:value="${entity.level}"-->
+               placeholder="请输入外委件"/>
     </div>
-    <!--<div class="form-group">-->
-    <!--<label for="colorPart">颜色件</label>-->
-    <!--<select class="form-control" name="colorPart" id="colorPart" placeholder="请选择是否为颜色件">-->
-    <!--<option></option>-->
-    <!--<option th:selected="${data.getColorPart()=='Y'?true:false}">Y</option>-->
-    <!--<option th:selected="${data.getColorPart()=='N'?true:false}">N</option>-->
-    <!--</select>-->
-    <!--</div>-->
     <div class="form-group">
         <label for="station">工位</label>
         <input class="form-control" id="station" name="station" type="text" th:value="${data.station}"
-               placeholder="请输入工位"/><!--th:value="${entity.level}"-->
+               placeholder="请输入工位"/>
     </div>
 </form>
 
@@ -153,18 +145,7 @@
                 var myData = JSON.stringify({
                     "eBomPuid": $("#eBomPuid").val(),
                     "projectId": projectId,
-                    // "rank": $("#rank").val(),
-                    // "level": $("#level").val(),
                     "lineId": $("#lineId").val(),
-                    "updateType": $("#updateType").val(),
-                    "puid": $("#puid").val(),
-
-                    // "pBomLinePartName": $("#pBomLinePartName").val(),
-                    // "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
-                    // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    // "groupNum": $("#groupNum").val(),
-                    // "h9_IsCommon": $("#h9_IsCommon").val(),
-                    // "H9_Mat_Status": $("#H9_Mat_Status").val(),
                     "resource": $("#resource").val(),
                     "type": $("#type").val(),
                     "buyUnit": $("#buyUnit").val(),
@@ -184,10 +165,6 @@
                     url: url,
                     data: myData,
                     success: function (result) {
-                        // $('.modal-dialog', window.top.document).parent('div').remove()
-                        // $('body', window.top.document).find('.modal-backdrop').remove();
-                        // jquery 调用刷新当前操作的table页面的refresh方法
-                        // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                         activeTabBodyRefresh();
                         if (result.success) {
                             layer.msg('修改成功', {icon: 1, time: 2000})

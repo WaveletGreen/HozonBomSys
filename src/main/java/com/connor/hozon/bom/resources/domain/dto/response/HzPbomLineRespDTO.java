@@ -130,6 +130,16 @@ public class HzPbomLineRespDTO extends BaseChangeRespDTO {
         this.updateType = updateType;
     }
 
+    private String effectTime;
+
+    public String getEffectTime() {
+        return effectTime;
+    }
+
+    public void setEffectTime(String effectTime) {
+        this.effectTime = effectTime;
+    }
+
     public JSONObject getObject() {
         return object;
     }

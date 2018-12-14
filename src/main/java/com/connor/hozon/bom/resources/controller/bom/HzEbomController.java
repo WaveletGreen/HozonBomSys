@@ -104,6 +104,7 @@ public class HzEbomController extends BaseController {
         tableTitle.put("colorPart","是否颜色件");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
+        tableTitle.put("effectTime","生效时间");
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }

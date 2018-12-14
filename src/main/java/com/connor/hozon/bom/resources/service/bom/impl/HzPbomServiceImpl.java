@@ -30,6 +30,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
+import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
@@ -938,6 +939,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setOrderNum(record.getOrderNum());
                 respDTO.setpBomLinePartName(record.getpBomLinePartName());
                 respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
+                respDTO.setEffectTime(DateUtil.formatDefaultDate(record.getEffectTime()));
                 if (Integer.valueOf(1).equals(record.getpLouaFlag())) {
                     respDTO.setpLouaFlag("LOU");
                 }

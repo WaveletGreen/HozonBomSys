@@ -26,6 +26,7 @@ import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import com.google.common.collect.Lists;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -730,7 +731,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             if(ListUtil.isNotEmpty(records)){//根据查询结果 记录数据
                 //到 after表中查询看是否存在记录
                 //存在记录则过滤 不存在记录则插入
-
+                this.errorCount=0;
                 //审核通过的数据需要传输给SAP系统 所以这里要进行严格参数校验
                 //不符合SAP系统规定的数据 全部打回 不允许发起流程
                 String str = checkWorkProcessDataValid(records);
@@ -895,7 +896,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         for(int i=0;i<hzWorkProcedures.size();i++){
             HzWorkProcedure workProcedure = hzWorkProcedures.get(i);
             count++;
-            if(11==workProcedure.getDataType() || 21 == workProcedure.getDataType()){//整车工艺路线
+            if(Integer.valueOf(11).equals(workProcedure.getDataType()) || Integer.valueOf(21).equals(workProcedure.getDataType())){//整车工艺路线
                 for(int j=i+1;j<hzWorkProcedures.size();j++){
                     if(workProcedure.equals(hzWorkProcedures.get(j))){
                         count++;
@@ -947,7 +948,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
 
         for(HzWorkProcedure hzWorkProcedure:set){
-            if(11 == hzWorkProcedure.getDataType() || 21== hzWorkProcedure.getDataType()){
+            if(Integer.valueOf(11).equals(hzWorkProcedure.getDataType()) || Integer.valueOf(21).equals(hzWorkProcedure.getDataType())){//整车工艺路线
                 stringBuffer.append("<strong style='color:deeppink'>"+hzWorkProcedure.getpMaterielCode()+"</strong>:每条整车工艺路线必须生成<strong style='color:blue'>3</strong>对不同四大工艺路线才允许发起流程<br>");
             }else {
                 stringBuffer.append("<strong style='color:deeppink'>"+hzWorkProcedure.getpMaterielCode()+"</strong>:每条普通工艺路线必须生成<strong style='color:blue'>1</strong>对不同四大工艺路线才允许发起流程<br>");

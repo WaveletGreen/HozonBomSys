@@ -89,6 +89,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("pFactoryCode", "工厂代码");
         tableTitle.put("pStockLocation", "发货料库存地点");
         tableTitle.put("pBomType", "BOM类型");
+        tableTitle.put("effectTime","生效时间");
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
@@ -148,6 +149,7 @@ public class HzMbomController extends BaseController {
             _res.put("pStockLocation",dto.getpStockLocation());
             _res.put("pBomType", dto.getpBomType());
             _res.put("status",dto.getStatus());
+            _res.put("effectTime",dto.getEffectTime());
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());

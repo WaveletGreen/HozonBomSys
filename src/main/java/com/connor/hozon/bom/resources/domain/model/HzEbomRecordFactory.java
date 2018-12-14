@@ -6,6 +6,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
+import com.connor.hozon.bom.resources.util.DateUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -257,6 +258,7 @@ public class HzEbomRecordFactory {
         }else {
             jsonObject.put("colorPart", "");
         }
+        jsonObject.put("effectTime",DateUtil.formatDefaultDate(record.getEffectTime()));
         return jsonObject;
     }
 

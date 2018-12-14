@@ -110,12 +110,12 @@ public class SynBomService implements ISynBomService {
      * 否则SAP会存在2条同名的BOM
      *
      *  @param projectUid 项目的UID
-     * @param addedPuids   被添加的BOM行的puid
+     * @param addPuids   被添加的BOM行的puid
     * @return
      */
     @Override
-    public JSONObject addByUids(String projectUid, List<String> addedPuids) {
-        return execute(projectUid, addedPuids, ActionFlagOption.ADD);
+    public JSONObject addByUids(String projectUid, List<String> addPuids) {
+        return execute(projectUid, addPuids, ActionFlagOption.ADD);
     }
 
     /**
@@ -730,7 +730,7 @@ public class SynBomService implements ISynBomService {
             return result;
         } else if (puids == null || puids.isEmpty()) {
             result.put("status", false);
-            result.put("result", "没有选择要删除的BOM行");
+            result.put("result", "没有选择要执行的BOM行");
             return result;
         }
         List<HzMBomToERPBean> bean = splitListThenQuery(bom, projectPuid, puids, 1);
