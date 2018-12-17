@@ -21,6 +21,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -48,6 +49,7 @@ import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 import sql.pojo.change.HzApplicantChangeRecord;
 import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeDataRecord;
+import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.interaction.HzConfigBomColorBean;
@@ -103,6 +105,9 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
+
+    @Autowired
+    private HzChangeOrderDAO hzChangeOrderDAO;
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
@@ -940,32 +945,35 @@ public class HzMbomServiceImpl implements HzMbomService{
                 || null == reqDTO.getOrderId()){
             return WriteResultRespDTO.IllgalArgument();
         }
+        //对应的表
+        Integer type = reqDTO.getType();
+        //表单id
+        Long orderId = reqDTO.getOrderId();
+
+        //根据变更单id 获取变更号 SAP那边的ECN
+        HzChangeOrderRecord orderRecord = hzChangeOrderDAO.selectById(orderId);
+
+        if(orderRecord == null){
+            return WriteResultRespDTO.changeOrderNotExist();
+        }
+
+        //变更单号
+        String changeNo = orderRecord.getChangeNo();
+        //数据库表名
+        String tableName = ChangeTableNameEnum.getMbomTableName(type,"MA");
+        //获取数据信息
+        List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
+
+        //统计操作数据
+        Map<String,Object> map = new HashMap<>();
+
+        //查询MBOM表数据 保存历史记录
+        HzChangeDataDetailQuery query  = new HzChangeDataDetailQuery();
+        query.setProjectId(reqDTO.getProjectId());
+        query.setPuids(puids);
+        query.setTableName(ChangeTableNameEnum.getMbomTableName(type,"M"));
 
         try {
-            //获取申请人信息
-//            User user = UserInfo.getUser();
-//            Long applicantId = Long.valueOf(user.getId());
-            //对应的表
-            Integer type = reqDTO.getType();
-            //表单id
-            Long orderId = reqDTO.getOrderId();
-
-            //获取审核人信息
-//            Long auditorId = reqDTO.getAuditorId();
-            //数据库表名
-            String tableName = ChangeTableNameEnum.getMbomTableName(type,"MA");
-            //获取数据信息
-            List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
-
-            //统计操作数据
-            Map<String,Object> map = new HashMap<>();
-
-            //查询MBOM表数据 保存历史记录
-            HzChangeDataDetailQuery query  = new HzChangeDataDetailQuery();
-            query.setProjectId(reqDTO.getProjectId());
-            query.setPuids(puids);
-            query.setTableName(ChangeTableNameEnum.getMbomTableName(type,"M"));
-
 
             List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByPuids(query);
             List<HzMbomLineRecord> afterRecords = new ArrayList<>();
@@ -982,6 +990,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     records.forEach(record -> {
                         HzMbomLineRecord manageRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
                         manageRecord.setOrderId(orderId);
+                        manageRecord.setChangeNum(changeNo);
                         afterRecords.add(manageRecord);
                     });
                 }else {
@@ -1009,6 +1018,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     lineRecord.setLineId(record.getLineId());
                     lineRecord.setBomDigifaxId(record.getBomDigifaxId());
                     lineRecord.setStatus(5);
+                    lineRecord.setChangeNum(changeNo);
                     lineRecord.setTableName(ChangeTableNameEnum.getMbomTableName(type,"M"));
                     bomLineRecords.add(lineRecord);
                 }

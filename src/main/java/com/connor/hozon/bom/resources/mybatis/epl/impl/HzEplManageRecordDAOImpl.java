@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by haozt on 2018/06/05
  */
-@Service("HzEplMangeRecordDAO")
+@Service("hzEplMangeRecordDAO")
 public class HzEplManageRecordDAOImpl extends BaseSQLUtil implements HzEplMangeRecordDAO {
 //    @Override
 //    public List<HzEPLManageRecord> getHzEplManageRecord() {

@@ -36,7 +36,7 @@ public class HzBomSysApplication extends SpringBootServletInitializer {
         return new EmbeddedServletContainerCustomizer() {
             @Override
             public void customize(ConfigurableEmbeddedServletContainer container) {
-                container.setSessionTimeout(3600);// 单位为S
+                container.setSessionTimeout(7200);// 单位为S
             }
         };
     }

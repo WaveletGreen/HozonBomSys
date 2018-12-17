@@ -9,9 +9,10 @@ import sql.pojo.bom.HzBomState;
 /**
  * @Author: haozt
  * @Date: 2018/6/14
- * @Description:
+ * @Description: 已不再使用
  */
 @Service("hzBomStateDAO")
+@Deprecated
 public class HzBomStateDAOImpl extends BaseSQLUtil implements HzBomStateDAO {
 
     @Override

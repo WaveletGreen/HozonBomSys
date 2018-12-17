@@ -8,7 +8,10 @@ import java.util.Objects;
 
 /**
  * Created by haozt on 2018/06/05
- * EPL管理全字段
+ * EPL管理全字段 E+P+M BOM 字段统称
+ * 后期需求做过变更 EPL字段又改为零部件数据字段
+ * 为了与之前代码做兼容性 EBOM 的字段取值未做改动
+ * 依然使用这里的字段
  */
 public class HzEPLManageRecord extends BaseChangePOJO {
 

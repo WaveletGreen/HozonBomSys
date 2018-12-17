@@ -172,8 +172,8 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
 
     @Override
     public HzChangeOrderRecord selectById(Long vwoId) {
-        HzChangeOrderRecord hzChangeOrderRecord = new HzChangeOrderRecord();
-        hzChangeOrderRecord.setId(vwoId);
-        return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_selectById",hzChangeOrderRecord);
+//        HzChangeOrderRecord hzChangeOrderRecord = new HzChangeOrderRecord();
+//        hzChangeOrderRecord.setId(vwoId);
+        return (HzChangeOrderRecord)super.findForObject("HzChangeOrderDAOImpl_selectById",vwoId);
     }
 }

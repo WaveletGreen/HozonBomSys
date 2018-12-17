@@ -152,10 +152,6 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     @Autowired
     private TransactionTemplate configTransactionTemplate;
 
-    public TransactionTemplate getConfigTransactionTemplate() {
-        return configTransactionTemplate;
-    }
-
     public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
         this.configTransactionTemplate = configTransactionTemplate;
     }

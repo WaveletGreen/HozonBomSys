@@ -775,7 +775,10 @@
                     P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
                 </if>
                 <if test="item.status != null">
-                    P_MBOM_STATUS = #{item.status,jdbcType=INTEGER}
+                    P_MBOM_STATUS = #{item.status,jdbcType=INTEGER},
+                </if>
+                <if test="item.changeNum != null">
+                    P_CHANGE_NUM = #{item.changeNum,jdbcType=VARCHAR}
                 </if>
             </set>
             where P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR}

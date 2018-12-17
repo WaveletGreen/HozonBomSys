@@ -488,7 +488,7 @@
         STATE = 2
   </select>
 
-    <select id="HzChangeOrderDAOImpl_selectById" parameterType="sql.pojo.change.HzChangeOrderRecord" resultMap="BaseResultMap">
+    <select id="HzChangeOrderDAOImpl_selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from

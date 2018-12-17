@@ -133,7 +133,7 @@ public class HzMbomRecordFactory {
         }else {
             respDTO.setpFactoryCode(record.getFactoryCode());
         }
-        respDTO.setEffectTime(DateUtil.formatTimestampDate(record.getEffectTime()));
+        respDTO.setEffectTime(DateUtil.formatDefaultDate(record.getEffectTime()));
         respDTO.setStatus(record.getStatus());
         respDTO.setpStockLocation(record.getpStockLocation());
         respDTO.setColorId(record.getColorId());

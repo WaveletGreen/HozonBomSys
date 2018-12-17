@@ -32,7 +32,8 @@
         <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzMbomRecordMapper.xml"/>
-        <mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzEBomRecordMapper.xml"/>
+        <!--<mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>-->
         <mapper resource="sql/mapper/bom/xmapper/HzMBomToERPMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzSingleVehiclesBomRecordMapper.xml"/>
         <!--<mapper resource="sql/mapper/bom/xmapper/HzSingleVehicleDosageMapper.xml"/>-->

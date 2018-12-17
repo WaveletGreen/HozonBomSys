@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
+import lombok.Data;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;

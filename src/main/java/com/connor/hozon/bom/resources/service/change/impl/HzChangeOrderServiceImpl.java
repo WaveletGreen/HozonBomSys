@@ -188,4 +188,15 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
         }
         return null;
     }
+
+    @Override
+    public boolean changeOrderRelatedChangeData(Long orderId) {
+        HzChangeDataQuery query = new HzChangeDataQuery();
+        query.setOrderId(orderId);
+        List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(query);
+        if(ListUtil.isNotEmpty(list)){
+            return true;
+        }
+        return false;
+    }
 }

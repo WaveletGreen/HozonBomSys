@@ -184,7 +184,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
 
 
     /**
-     * 配定时任务 进行定时调用
+     * todo 配定时任务 进行定时调用
      */
     @Override
     public void analysisAllSingleVehicles() {

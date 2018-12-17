@@ -20,6 +20,7 @@ public class WriteResultRespDTO {
     public static final String FILE_FORMAT_ERROR="文件列信息不全,不进行导入操作！";
     public static final String FILE_ERROR = "文件格式错误！";
 
+    public static final String CHANGE_ORDER_NOT_EXIST="变更单不存在！";
     public static final Long SUCCESS_CODE = 1000L;
     public static final Long FAILED_CODE = 1001L;
     /**
@@ -115,6 +116,13 @@ public class WriteResultRespDTO {
     public static WriteResultRespDTO fileError(){
         WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
         writeResultRespDTO.setErrMsg(FILE_ERROR);
+        writeResultRespDTO.setErrCode(FAILED_CODE);
+        return writeResultRespDTO;
+    }
+
+    public static WriteResultRespDTO changeOrderNotExist(){
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+        writeResultRespDTO.setErrMsg(CHANGE_ORDER_NOT_EXIST);
         writeResultRespDTO.setErrCode(FAILED_CODE);
         return writeResultRespDTO;
     }

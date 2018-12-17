@@ -93,7 +93,8 @@ public class FileUploadServiceImpl implements FileUploadService {
                 if(row.getLastCellNum()<50){
                     return WriteResultRespDTO.fileFormatError();
                 }
-                if( row.getCell(row.getLastCellNum()-1).getStringCellValue().equals("是否颜色件")
+                if( "是否颜色件".equals(row.getCell(row.getLastCellNum()-1).getStringCellValue())
+                        || "生效时间".equals(row.getCell(row.getLastCellNum()-1).getStringCellValue())
                         ){
                     return importEbomExcelContentToDB(projectId,sheet);
                 }else {
