@@ -126,4 +126,19 @@ public class WriteResultRespDTO {
         writeResultRespDTO.setErrCode(FAILED_CODE);
         return writeResultRespDTO;
     }
+
+
+    public static WriteResultRespDTO failResultRespDTO(String errMsg){
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+        writeResultRespDTO.setErrMsg(errMsg);
+        writeResultRespDTO.setErrCode(FAILED_CODE);
+        return writeResultRespDTO;
+    }
+
+    public static WriteResultRespDTO resultRespDTO(Long errCode,String errMsg){
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+        writeResultRespDTO.setErrMsg(errMsg);
+        writeResultRespDTO.setErrCode(errCode);
+        return writeResultRespDTO;
+    }
 }

@@ -131,10 +131,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             this.errorCount = 0;
             String errorMsg = errorLogInfo(sheet);
             if(this.errorCount!=0){
-                WriteResultRespDTO respDTO = new WriteResultRespDTO();
-                respDTO.setErrMsg(errorMsg);
-                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-                return  respDTO;
+                return  WriteResultRespDTO.failResultRespDTO(errorMsg);
             }
 
             List<List<HzImportEbomRecord>> list1 = new ArrayList<>();
@@ -865,11 +862,8 @@ public class FileUploadServiceImpl implements FileUploadService {
             List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
             String errorMsg = singleVehiclesDosageExcelErrorMsg(hzCfg0ModelRecords,sheet,projectId);
             if(this.errorCount!=0){
-                respDTO.setErrMsg(errorMsg);
-                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-                return  respDTO;
+                return WriteResultRespDTO.failResultRespDTO(errorMsg);
             }
-
            //存单车版型 名称和id信息
             Map<String,String> objectMap = new HashMap<>();
 

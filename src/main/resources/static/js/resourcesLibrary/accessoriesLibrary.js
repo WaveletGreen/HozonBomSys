@@ -49,7 +49,6 @@ function initTable(){
                 pageNumber:1,
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                sidePagination : "server",          //分页方式：client客户端分页，server服务端分页（*）
                 clickToSelect: true,                // 单击某一行的时候选中某一条记录
-                showExport: true,
                 formId: "formId",
                 columns: column,                     //列信息，需要预先定义好
                 sortable: true,                     //是否启用排序
@@ -59,9 +58,9 @@ function initTable(){
                 showColumns: true,                 //是否显示所有的列
                 //>>>>>>>>>>>>>>导出excel表格设置
                 showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
-                exportDataType: "selected",              //basic', 'all', 'selected'.
+                exportDataType:'selected',              //basic', 'all', 'selected'.
                 exportTypes: ['xlsx'],	    //导出类型
-                //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
+                // exportButton: $('#btn_download'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
                 exportOptions: {
                     //ignoreColumn: [0,0],            //忽略某一列的索引
                     fileName: '工艺辅料库导出',              //文件名称设置
@@ -214,6 +213,29 @@ function initTable(){
                             })
                         }
                     },
+                    // {
+                    //     text: '导出Excel',
+                    //     iconCls: 'glyphicon glyphicon-share',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         if (rows.length == 0) {
+                    //             window.Ewin.alert({message: '请选择要导出的数据!'});
+                    //             return false;
+                    //         }
+                    //         var button = document.getElementById('download');
+                    //         button.onclick = $table.tableExport(
+                    //             {
+                    //                 type: 'excel',
+                    //                 escape: false,
+                    //                 fileName: '工艺辅料库导出',              //文件名称设置
+                    //                 worksheetName: 'Sheet1',          //表格工作区名称
+                    //                 tableName: '工艺辅料表',
+                    //                 excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+                    //                 exportTypes:['xlsx'],
+                    //                 jsonScope:'selected'
+                    //             });
+                    //     }
+                    // }
                 ],
             });
         }
@@ -225,6 +247,7 @@ function toPage() {
         $('#accessoriesLibraryTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
+
 $(document).keydown(function(event) {
     if (event.keyCode == 13) {
         $('form').each(function() {

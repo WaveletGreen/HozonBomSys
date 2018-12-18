@@ -10,8 +10,10 @@ import java.util.List;
 /**
  * @Author: haozt
  * @Date: 2018/7/16
- * @Description:
+ * @Description: 废除 已不再使用
+ *  新DAO层代码 替换为 {@link HzAccessoriesLibsDAO}
  */
+@Deprecated
 public interface HzAccessoriesDAO {
     int insert(HzAccessoriesLib accessoriesLib);
 

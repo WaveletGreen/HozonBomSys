@@ -16,8 +16,10 @@ import java.util.Map;
 /**
  * @Author: haozt
  * @Date: 2018/7/16
- * @Description:
+ * @Description: 废除 已不再使用
+ * 功能移至 {@link HzAccessoriesLibsDAOImpl}
  */
+@Deprecated
 @Service("hzAccessoriesDAO")
 public class HzAccessoriesDAOImpl  extends BaseSQLUtil implements HzAccessoriesDAO {
     @Override

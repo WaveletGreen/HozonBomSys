@@ -22,10 +22,12 @@ import java.util.*;
 /**
  * @Author: haozt
  * @Date: 2018/7/16
- * @Description:
+ * @Description: 废除 不再使用
+ * 新功能 见 {@link HzAccessoriesLibsController}
  */
 @Controller
 @RequestMapping(value = "accessories")
+@Deprecated
 public class HzAccessoriesController extends BaseController {
     @Autowired
     private HzAccessoriesDAO hzAccessoriesDAO;

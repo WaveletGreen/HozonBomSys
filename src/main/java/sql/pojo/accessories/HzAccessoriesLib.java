@@ -7,8 +7,9 @@ import java.util.Date;
 /**
  * @Author: haozt
  * @Date: 2018/7/16
- * @Description:
+ * @Description: 废除 新工艺辅料库为 {@link HzAccessoriesLibs}
  */
+@Deprecated
 public class HzAccessoriesLib {
 
     /**
