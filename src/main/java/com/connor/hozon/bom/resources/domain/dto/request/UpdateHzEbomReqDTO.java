@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 import java.util.Map;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Map;
  * @Date: 2018/6/25
  * @Description:
  */
-public class UpdateHzEbomReqDTO {
+public class UpdateHzEbomReqDTO extends BaseDTO {
 
     /**
      * 项目id

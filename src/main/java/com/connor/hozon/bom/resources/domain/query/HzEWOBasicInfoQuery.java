@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/8/8
  * @Description:
  */
-public class HzEWOBasicInfoQuery {
+public class HzEWOBasicInfoQuery extends DefaultQuery{
     private Long id;
 
     private String ewoNo;

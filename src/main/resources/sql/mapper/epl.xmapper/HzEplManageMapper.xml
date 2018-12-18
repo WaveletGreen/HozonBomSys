@@ -1,1265 +1,263 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="HzEplManageRecord">
+<mapper namespace="HzEplRecordMapper">
+    <resultMap id="BaseResultMap" type="sql.pojo.epl.HzEPLRecord">
+        <id column="ID" jdbcType="DOUBLE" property="id" />
+        <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
+        <result column="PART_ID" jdbcType="VARCHAR" property="partId" />
+        <result column="PART_OF_WHICH_DEPT" jdbcType="VARCHAR" property="partOfWhichDept" />
+        <result column="PART_NAME" jdbcType="VARCHAR" property="partName" />
+        <result column="PART_CLASS" jdbcType="VARCHAR" property="partClass" />
+        <result column="PART_EN_NAME" jdbcType="VARCHAR" property="partEnName" />
+        <result column="PART_RESOURCE" jdbcType="VARCHAR" property="partResource" />
+        <result column="STATUS" jdbcType="INTEGER" property="status" />
+        <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+        <result column="UPDATE_TIME" jdbcType="DATE" property="updateTime" />
+        <result column="FASTENER" jdbcType="VARCHAR" property="fastener" />
+        <result column="IS_3CPART" jdbcType="INTEGER" property="is3cpart" />
+        <result column="IN_OUT_SIDE_FLAG" jdbcType="INTEGER" property="inOutSideFlag" />
+        <result column="CREATE_ID" jdbcType="DOUBLE" property="createId" />
+        <result column="UPDATE_ID" jdbcType="DOUBLE" property="updateId" />
+        <result column="UNIT" jdbcType="VARCHAR" property="unit" />
+        <result column="PICTURE_NO" jdbcType="VARCHAR" property="pictureNo" />
+        <result column="PICTURE_SHEET" jdbcType="VARCHAR" property="pictureSheet" />
+        <result column="MATERIAL_HIGH" jdbcType="VARCHAR" property="materialHigh" />
+        <result column="MATERIAL1" jdbcType="VARCHAR" property="material1" />
+        <result column="MATERIAL2" jdbcType="VARCHAR" property="material2" />
+        <result column="MATERIAL3" jdbcType="VARCHAR" property="material3" />
+        <result column="DENSITY" jdbcType="VARCHAR" property="density" />
+        <result column="MATERIAL_STANDARD" jdbcType="VARCHAR" property="materialStandard" />
+        <result column="SURFACE_TREAT" jdbcType="VARCHAR" property="surfaceTreat" />
+        <result column="TEXTURE_COLOR_NUM" jdbcType="VARCHAR" property="textureColorNum" />
+        <result column="MANU_PROCESS" jdbcType="VARCHAR" property="manuProcess" />
+        <result column="SYMMETRY" jdbcType="VARCHAR" property="symmetry" />
+        <result column="IMPORTANCE" jdbcType="VARCHAR" property="importance" />
+        <result column="REGULATION_FLAG" jdbcType="INTEGER" property="regulationFlag" />
+        <result column="BWG_BOX_PART" jdbcType="VARCHAR" property="bwgBoxPart" />
+        <result column="DEVELOP_TYPE" jdbcType="VARCHAR" property="developType" />
+        <result column="DATA_VERSION" jdbcType="VARCHAR" property="dataVersion" />
+        <result column="TARGET_WEIGHT" jdbcType="VARCHAR" property="targetWeight" />
+        <result column="FEATURE_WEIGHT" jdbcType="VARCHAR" property="featureWeight" />
+        <result column="ACTUAL_WEIGHT" jdbcType="VARCHAR" property="actualWeight" />
+        <result column="FASTENER_STANDARD" jdbcType="VARCHAR" property="fastenerStandard" />
+        <result column="FASTENER_LEVEL" jdbcType="VARCHAR" property="fastenerLevel" />
+        <result column="TORQUE" jdbcType="VARCHAR" property="torque" />
+        <result column="DUTY_ENGINEER" jdbcType="VARCHAR" property="dutyEngineer" />
+        <result column="SUPPLY" jdbcType="VARCHAR" property="supply" />
+        <result column="SUPPLY_CODE" jdbcType="VARCHAR" property="supplyCode" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+        <result column="REGULATION_CODE" jdbcType="VARCHAR" property="regulationCode" />
+        <result column="BUY_ENGINEER" jdbcType="VARCHAR" property="buyEngineer" />
+        <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId" />
+        <result column="REVISION" jdbcType="VARCHAR" property="revision" />
+        <result column="EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime" />
+    </resultMap>
 
-  <resultMap  id="BaseResultMap" type="sql.pojo.epl.HzEPLManageRecord">
-    <id column="PUID" jdbcType="VARCHAR" property="puid" />
-    <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
-    <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
-    <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID" />
-    <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
-    <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
-    <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid"/>
-    <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId"/>
-    <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid"/>
-    <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart"/>
-    <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum"/>
-    <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept"/>
-    <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>
-    <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>
-      <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName" />
-      <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource" />
-      <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
-
-      <result column="P_FNA_INFO" jdbcType="VARCHAR" property="fna" />
-      <result column="P_FASTENER" jdbcType="VARCHAR" property="pFastener" />
-      <!--<result column="P_LOUA_FLAG" jdbcType="INTEGER" property="pLouaFlag" />-->
-      <result column="P_3CPART_FLAG" jdbcType="INTEGER" property="p3cpartFlag" />
-      <result column="P_IN_OUT_SIDE_FLAG" jdbcType="INTEGER" property="pInOutSideFlag" />
-      <result column="P_UPC" jdbcType="VARCHAR" property="pUpc" />
-      <result column="P_FNA_DESC" jdbcType="VARCHAR" property="pFnaDesc" />
-      <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
-      <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
-      <result column="P_UNIT" jdbcType="VARCHAR" property="pUnit" />
-      <result column="P_PICTURE_NO" jdbcType="VARCHAR" property="pPictureNo" />
-      <result column="P_PICTURE_SHEET" jdbcType="VARCHAR" property="pPictureSheet" />
-      <result column="P_MATERIAL_HIGH" jdbcType="VARCHAR" property="pMaterialHigh" />
-      <result column="P_MATERIAL1" jdbcType="VARCHAR" property="pMaterial1" />
-      <result column="P_MATERIAL2" jdbcType="VARCHAR" property="pMaterial2" />
-      <result column="P_MATERIAL3" jdbcType="VARCHAR" property="pMaterial3" />
-      <result column="P_DENSITY" jdbcType="VARCHAR" property="pDensity" />
-      <result column="P_MATERIAL_STANDARD" jdbcType="VARCHAR" property="pMaterialStandard" />
-      <result column="P_SURFACE_TREAT" jdbcType="VARCHAR" property="pSurfaceTreat" />
-      <result column="P_TEXTURE_COLOR_NUM" jdbcType="VARCHAR" property="pTextureColorNum" />
-      <result column="P_MANU_PROCESS" jdbcType="VARCHAR" property="pManuProcess" />
-      <result column="P_SYMMETRY" jdbcType="VARCHAR" property="pSymmetry" />
-      <result column="P_IMPORTANCE" jdbcType="VARCHAR" property="pImportance" />
-      <result column="P_REGULATION_FLAG" jdbcType="INTEGER" property="pRegulationFlag" />
-      <result column="P_BWG_BOX_PART" jdbcType="VARCHAR" property="pBwgBoxPart" />
-      <result column="P_DEVELOP_TYPE" jdbcType="VARCHAR" property="pDevelopType" />
-      <result column="P_DATA_VERSION" jdbcType="VARCHAR" property="pDataVersion" />
-      <result column="P_TARGET_WEIGHT" jdbcType="VARCHAR" property="pTargetWeight" />
-      <result column="P_FEATURE_WEIGHT" jdbcType="VARCHAR" property="pFeatureWeight" />
-      <result column="P_ACTUAL_WEIGHT" jdbcType="VARCHAR" property="pActualWeight" />
-      <result column="P_FASTENER_STANDARD" jdbcType="VARCHAR" property="pFastenerStandard" />
-      <result column="P_FASTENER_LEVEL" jdbcType="VARCHAR" property="pFastenerLevel" />
-      <result column="P_TORQUE" jdbcType="VARCHAR" property="pTorque" />
-      <result column="P_DUTY_ENGINEER" jdbcType="VARCHAR" property="pDutyEngineer" />
-      <result column="P_SUPPLY" jdbcType="VARCHAR" property="pSupply" />
-      <result column="P_SUPPLY_CODE" jdbcType="VARCHAR" property="pSupplyCode" />
-      <result column="P_REMARK" jdbcType="VARCHAR" property="pRemark" />
-      <result column="P_REGULATION_CODE" jdbcType="VARCHAR" property="pRegulationCode" />
-      <result column="P_EBOM_STATUS" jdbcType="VARCHAR" property="status" />
-      <result column="P_NUMBER" jdbcType="VARCHAR" property="number" />
-      <result column="P_BUY_ENGINEER" jdbcType="INTEGER" property="pBuyEngineer" />
-      <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
-      <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
-      <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
-      <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
-
-    <!--PBOM-->
-    <result column="P_ITEM_RESOURCE" jdbcType="VARCHAR" property="itemResource" />
-    <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
-    <result column="P_TYPE" jdbcType="INTEGER" property="type" />
-    <result column="P_BUY_UNIT" jdbcType="INTEGER" property="buyUnit" />
-    <result column="P_WORK_SHOP1" jdbcType="VARCHAR" property="workShop1" />
-    <result column="P_WORK_SHOP2" jdbcType="VARCHAR" property="workShop2" />
-    <result column="P_PRODUCT_LINE" jdbcType="VARCHAR" property="productLine" />
-    <result column="P_MOULD_TYPE" jdbcType="VARCHAR" property="mouldType" />
-    <result column="P_OUTER_PART" jdbcType="VARCHAR" property="outerPart" />
-    <result column="P_COLOR_PART" jdbcType="INTEGER" property="colorPart" />
-    <!--MBOM-->
-    <result column="P_SPARE_PART" jdbcType="VARCHAR" property="sparePart" />
-    <result column="P_SPARE_PART_NUM" jdbcType="VARCHAR" property="sparePartNum" />
-    <result column="P_PROCESS_ROUTE" jdbcType="VARCHAR" property="processRoute" />
-    <result column="P_LABOR_HOUR" jdbcType="VARCHAR" property="laborHour" />
-    <result column="P_RHYTHM" jdbcType="VARCHAR" property="rhythm" />
-    <result column="P_SOLDER_JOINT" jdbcType="VARCHAR" property="solderJoint" />
-    <!--<result column="P_MACHINE_MATERIAL" jdbcType="VARCHAR" property="machineMaterial" />-->
-    <result column="P_STANDARD_PART" jdbcType="VARCHAR" property="standardPart" />
-    <result column="P_TOOLS" jdbcType="VARCHAR" property="tools" />
-    <result column="P_WASTER_PRODUCT" jdbcType="VARCHAR" property="wasterProduct" />
-    <result column="P_CHANGE" jdbcType="VARCHAR" property="change" />
-    <result column="P_CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
-
-    <result column="UPDATE_TYPE" jdbcType="INTEGER" property="updateType"/>
-  </resultMap>
-
-    <sql id="EBOM_COLUMN">
-    PUID, P_PARENT_UID, P_BOM_DIGIFAX_ID, P_LINE_INDEX, P_BOM_LINE_IS_HAS, P_BOM_LINE_PUID,
-    P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_ORDER_NUM, P_BOM_LINE_IS_DEPT,
-    P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
-    P_BOM_LINE_PART_RESOURCE
+    <sql id="Base_Column_List">
+    ID, PROJECT_ID, PART_ID, PART_OF_WHICH_DEPT, PART_NAME, PART_CLASS, PART_EN_NAME,
+    PART_RESOURCE, STATUS, CREATE_TIME, UPDATE_TIME, FASTENER, IS_3CPART, IN_OUT_SIDE_FLAG,
+    CREATE_ID, UPDATE_ID, UNIT, PICTURE_NO, PICTURE_SHEET, MATERIAL_HIGH, MATERIAL1,
+    MATERIAL2, MATERIAL3, DENSITY, MATERIAL_STANDARD, SURFACE_TREAT, TEXTURE_COLOR_NUM,
+    MANU_PROCESS, SYMMETRY, IMPORTANCE, REGULATION_FLAG, BWG_BOX_PART, DEVELOP_TYPE,
+    DATA_VERSION, TARGET_WEIGHT, FEATURE_WEIGHT, ACTUAL_WEIGHT, FASTENER_STANDARD, FASTENER_LEVEL,
+    TORQUE, DUTY_ENGINEER, SUPPLY, SUPPLY_CODE, REMARK, REGULATION_CODE, BUY_ENGINEER,
+    ORDER_ID, REVISION, EFFECT_TIME
   </sql>
 
-
-  <sql id="EPL_COLUMN1">
-        t.P_LINE_INDEX 	P_LINE_INDEX,
-        t.P_BOM_LINE_IS_HAS 	P_BOM_LINE_IS_HAS,
-        t.P_BOM_LINE_ID 	P_BOM_LINE_ID,
-        t.P_BOM_LINE_IS_2Y 		P_BOM_LINE_IS_2Y,
-        t.P_BOM_OF_WHICH_DEPT 	P_BOM_OF_WHICH_DEPT,
-        t.P_PARENT_UID 		P_PARENT_UID,
-        t.P_BOM_DIGIFAX_ID 		P_BOM_DIGIFAX_ID,
-        t.P_BOM_LINE_PUID 		P_BOM_LINE_PUID,
-        t.P_BOM_LINE_IS_PART 		P_BOM_LINE_IS_PART,
-        t.P_BOM_ORDER_NUM 		P_BOM_ORDER_NUM,
-        t.P_BOM_LINE_IS_DEPT 		P_BOM_LINE_IS_DEPT,
-        t.P_BOM_LINE_PART_NAME 		P_BOM_LINE_PART_NAME,
-        t.P_BOM_LINE_PART_CLASS 		P_BOM_LINE_PART_CLASS,
-        t.P_BOM_LINE_PART_EN_NAME 		P_BOM_LINE_PART_EN_NAME,
-        t.P_BOM_LINE_PART_RESOURCE 		P_BOM_LINE_PART_RESOURCE,
-        t.P_SORT_NUM 		P_SORT_NUM,
-        t.P_FNA_INFO 		P_FNA_INFO,
-        t.P_FASTENER 		P_FASTENER,
-
-        t.P_3CPART_FLAG 		P_3CPART_FLAG,
-        t.P_IN_OUT_SIDE_FLAG 		P_IN_OUT_SIDE_FLAG,
-        t.P_UPC 		P_UPC,
-        t.P_FNA_DESC 		P_FNA_DESC,
-        t.P_CREATE_NAME 		P_CREATE_NAME,
-        t.P_UPDATE_NAME		P_UPDATE_NAME,
-        t.P_UNIT 		P_UNIT,
-        t.P_PICTURE_NO		P_PICTURE_NO,
-        t.P_PICTURE_SHEET		P_PICTURE_SHEET,
-        t.P_MATERIAL_HIGH		P_MATERIAL_HIGH,
-        t.P_MATERIAL1		P_MATERIAL1,
-        t.P_MATERIAL2		P_MATERIAL2,
-        t.P_MATERIAL3		P_MATERIAL3,
-        t.P_DENSITY		P_DENSITY	,
-        t.P_MATERIAL_STANDARD		P_MATERIAL_STANDARD,
-        t.P_SURFACE_TREAT		P_SURFACE_TREAT,
-        t.P_TEXTURE_COLOR_NUM		P_TEXTURE_COLOR_NUM,
-        t.P_MANU_PROCESS		P_MANU_PROCESS,
-        t.P_SYMMETRY		P_SYMMETRY,
-        t.P_IMPORTANCE		P_IMPORTANCE,
-        t.P_REGULATION_FLAG		P_REGULATION_FLAG,
-        t.P_BWG_BOX_PART		P_BWG_BOX_PART,
-        t.P_DEVELOP_TYPE		P_DEVELOP_TYPE,
-        t.P_DATA_VERSION		P_DATA_VERSION,
-        t.P_TARGET_WEIGHT		P_TARGET_WEIGHT,
-        t.P_FEATURE_WEIGHT		P_FEATURE_WEIGHT,
-        t.P_ACTUAL_WEIGHT		P_ACTUAL_WEIGHT,
-        t.P_FASTENER_STANDARD		P_FASTENER_STANDARD,
-        t.P_FASTENER_LEVEL		P_FASTENER_LEVEL,
-        t.P_TORQUE		P_TORQUE,
-        t.P_DUTY_ENGINEER		P_DUTY_ENGINEER,
-        t.P_SUPPLY		P_SUPPLY,
-        t.P_SUPPLY_CODE		P_SUPPLY_CODE,
-        t.P_REMARK		P_REMARK,
-        t.P_REGULATION_CODE		P_REGULATION_CODE,
-        t.P_EBOM_STATUS		P_EBOM_STATUS,
-        t.P_NUMBER		P_NUMBER,
-        t.P_BUY_ENGINEER		P_BUY_ENGINEER,
-        t.P_EWO_NO		P_EWO_NO,
-        t.P_LOU_LOA_FLAG		P_LOU_LOA_FLAG
-  </sql>
-
-  <sql id="EPL_COLUMN2">
-        t2.P_RESOURCE		P_RESOURCE,
-        t2.P_TYPE		P_TYPE,
-        t2.P_BUY_UNIT		P_BUY_UNIT,
-        t2.P_WORK_SHOP1		P_WORK_SHOP1,
-        t2.P_WORK_SHOP2		P_WORK_SHOP2,
-        t2.P_PRODUCT_LINE		P_PRODUCT_LINE,
-        t2.P_MOULD_TYPE		P_MOULD_TYPE,
-        t2.P_OUTER_PART		P_OUTER_PART,
-        t2.P_COLOR_PART		P_COLOR_PART
-  </sql>
-  <!--<sql id="Pbom_List">-->
-    <!--P_PUID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,P_BOM_OF_WHICH_DEPT-->
-  <!--</sql>-->
-
-
-
-
-  <!--联表查询 EPL全信息-->
-  <!--<select id="HzEplManageRecordDAOImpl_getHzEplManageRecord" resultMap="BaseResultMap">-->
-      <!--SELECT t1.* from HZ_BOM_LINE_RECORD t1-->
-      <!--LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID-->
-      <!--LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID-->
-      <!--where t1.p_bom_digifax_id=(-->
-      <!--select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(-->
-      <!--select t2.puid from Hz_project_libs t2-->
-      <!--<where>-->
-        <!--t2.puid=#{projectId,jdbcType=VARCHAR}))-->
-      <!--<if test="lineIndex != null and lineIndex!=''">-->
-        <!--and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}-->
-      <!--</if>-->
-      <!--<if test="isHas != null and isHas==0">-->
-          <!--and (t1.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)-->
-      <!--</if>-->
-      <!--<if test="isHas != null and isHas==1">-->
-          <!--and t1.P_BOM_LINE_IS_HAS = 1-->
-      <!--</if>-->
-      <!--<if test="lineId != null and lineId!=''" >-->
-          <!--and t1.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')-->
-      <!--</if>-->
-      <!--<if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >-->
-          <!--and t1.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')-->
-      <!--</if>-->
-      <!--<if test="pFastener ==1 " >-->
-          <!--and t1.P_FASTENER is not null-->
-      <!--</if>-->
-      <!--<if test="pFastener ==2 " >-->
-          <!--and t1.P_FASTENER is  null-->
-      <!--</if>-->
-      <!--</where>-->
-  <!--</select>-->
-
-
-
-
-    <!--<select id="HzEplManageRecordDAOImpl_getHzEplManageRecord2" resultMap="BaseResultMap">-->
-        <!--select * FROM(-->
-        <!--SELECT u.*,rownum as rn from(-->
-        <!--select * from (-->
-
-
-        <!--&lt;!&ndash; 两表UNION&ndash;&gt;-->
-        <!--select-->
-        <!--t.PUID PUID,-->
-
-        <!--t.P_LINE_INDEX 	P_LINE_INDEX,-->
-        <!--t.P_BOM_LINE_IS_HAS 	P_BOM_LINE_IS_HAS,-->
-        <!--t.P_BOM_LINE_ID 	P_BOM_LINE_ID,-->
-        <!--t.P_BOM_LINE_IS_2Y 		P_BOM_LINE_IS_2Y,-->
-        <!--t.P_BOM_OF_WHICH_DEPT 	P_BOM_OF_WHICH_DEPT,-->
-        <!--t.P_PARENT_UID 		P_PARENT_UID,-->
-        <!--t.P_BOM_DIGIFAX_ID 		P_BOM_DIGIFAX_ID,-->
-        <!--t.P_BOM_LINE_PUID 		P_BOM_LINE_PUID,-->
-        <!--t.P_BOM_LINE_IS_PART 		P_BOM_LINE_IS_PART,-->
-        <!--t.P_BOM_ORDER_NUM 		P_BOM_ORDER_NUM,-->
-        <!--t.P_BOM_LINE_IS_DEPT 		P_BOM_LINE_IS_DEPT,-->
-        <!--t.P_BOM_LINE_PART_NAME 		P_BOM_LINE_PART_NAME,-->
-        <!--t.P_BOM_LINE_PART_CLASS 		P_BOM_LINE_PART_CLASS,-->
-        <!--t.P_BOM_LINE_PART_EN_NAME 		P_BOM_LINE_PART_EN_NAME,-->
-        <!--t.P_BOM_LINE_PART_RESOURCE 		P_BOM_LINE_PART_RESOURCE,-->
-        <!--t.P_SORT_NUM 		P_SORT_NUM,-->
-        <!--t.P_FNA_INFO 		P_FNA_INFO,-->
-        <!--t.P_FASTENER 		P_FASTENER,-->
-
-        <!--t.P_3CPART_FLAG 		P_3CPART_FLAG,-->
-        <!--t.P_IN_OUT_SIDE_FLAG 		P_IN_OUT_SIDE_FLAG,-->
-        <!--t.P_UPC 		P_UPC,-->
-        <!--t.P_FNA_DESC 		P_FNA_DESC,-->
-        <!--t.P_CREATE_NAME 		P_CREATE_NAME,-->
-        <!--t.P_UPDATE_NAME		P_UPDATE_NAME,-->
-        <!--t.P_UNIT 		P_UNIT,-->
-        <!--t.P_PICTURE_NO		P_PICTURE_NO,-->
-        <!--t.P_PICTURE_SHEET		P_PICTURE_SHEET,-->
-        <!--t.P_MATERIAL_HIGH		P_MATERIAL_HIGH,-->
-        <!--t.P_MATERIAL1		P_MATERIAL1,-->
-        <!--t.P_MATERIAL2		P_MATERIAL2,-->
-        <!--t.P_MATERIAL3		P_MATERIAL3,-->
-        <!--t.P_DENSITY		P_DENSITY	,-->
-        <!--t.P_MATERIAL_STANDARD		P_MATERIAL_STANDARD,-->
-        <!--t.P_SURFACE_TREAT		P_SURFACE_TREAT,-->
-        <!--t.P_TEXTURE_COLOR_NUM		P_TEXTURE_COLOR_NUM,-->
-        <!--t.P_MANU_PROCESS		P_MANU_PROCESS,-->
-        <!--t.P_SYMMETRY		P_SYMMETRY,-->
-        <!--t.P_IMPORTANCE		P_IMPORTANCE,-->
-        <!--t.P_REGULATION_FLAG		P_REGULATION_FLAG,-->
-        <!--t.P_BWG_BOX_PART		P_BWG_BOX_PART,-->
-        <!--t.P_DEVELOP_TYPE		P_DEVELOP_TYPE,-->
-        <!--t.P_DATA_VERSION		P_DATA_VERSION,-->
-        <!--t.P_TARGET_WEIGHT		P_TARGET_WEIGHT,-->
-        <!--t.P_FEATURE_WEIGHT		P_FEATURE_WEIGHT,-->
-        <!--t.P_ACTUAL_WEIGHT		P_ACTUAL_WEIGHT,-->
-        <!--t.P_FASTENER_STANDARD		P_FASTENER_STANDARD,-->
-        <!--t.P_FASTENER_LEVEL		P_FASTENER_LEVEL,-->
-        <!--t.P_TORQUE		P_TORQUE,-->
-        <!--t.P_DUTY_ENGINEER		P_DUTY_ENGINEER,-->
-        <!--t.P_SUPPLY		P_SUPPLY,-->
-        <!--t.P_SUPPLY_CODE		P_SUPPLY_CODE,-->
-        <!--t.P_REMARK		P_REMARK,-->
-        <!--t.P_REGULATION_CODE		P_REGULATION_CODE,-->
-        <!--t.P_EBOM_STATUS		P_EBOM_STATUS,-->
-        <!--t.P_NUMBER		P_NUMBER,-->
-        <!--t.P_BUY_ENGINEER		P_BUY_ENGINEER,-->
-        <!--t.P_EWO_NO		P_EWO_NO,-->
-        <!--t.P_LOU_LOA_FLAG		P_LOU_LOA_FLAG,-->
-
-
-        <!--t2.P_SPARE_PART 	P_SPARE_PART,-->
-        <!--t2.P_SPARE_PART_NUM		P_SPARE_PART_NUM,-->
-        <!--t2.P_PROCESS_ROUTE		P_PROCESS_ROUTE,-->
-        <!--t2.P_LABOR_HOUR		P_LABOR_HOUR,-->
-        <!--t2.P_RHYTHM		P_RHYTHM,-->
-        <!--t2.P_SOLDER_JOINT		P_SOLDER_JOINT,-->
-
-        <!--t2.P_STANDARD_PART		P_STANDARD_PART,-->
-        <!--t2.P_TOOLS		P_TOOLS,-->
-        <!--t2.P_WASTER_PRODUCT		P_WASTER_PRODUCT,-->
-        <!--t2.P_CHANGE		P_CHANGE,-->
-        <!--t2.P_CHANGE_NUM		P_CHANGE_NUM,-->
-
-
-
-
-
-        <!--t3.P_RESOURCE		P_RESOURCE,-->
-        <!--t3.P_TYPE		P_TYPE,-->
-        <!--t3.P_BUY_UNIT		P_BUY_UNIT,-->
-        <!--t3.P_WORK_SHOP1		P_WORK_SHOP1,-->
-        <!--t3.P_WORK_SHOP2		P_WORK_SHOP2,-->
-        <!--t3.P_PRODUCT_LINE		P_PRODUCT_LINE,-->
-        <!--t3.P_MOULD_TYPE		P_MOULD_TYPE,-->
-        <!--t3.P_OUTER_PART		P_OUTER_PART,-->
-        <!--t3.P_COLOR_PART		P_COLOR_PART-->
-
-
-        <!--from (-->
-        <!--select-->
-
-
-
-
-        <!--t1.PUID PUID,-->
-
-        <!--t1.P_LINE_INDEX 	P_LINE_INDEX,-->
-        <!--t1.P_BOM_LINE_IS_HAS 	P_BOM_LINE_IS_HAS,-->
-        <!--t1.P_BOM_LINE_ID 	P_BOM_LINE_ID,-->
-        <!--t1.P_BOM_LINE_IS_2Y 		P_BOM_LINE_IS_2Y,-->
-        <!--t1.P_BOM_OF_WHICH_DEPT 	P_BOM_OF_WHICH_DEPT,-->
-        <!--t1.P_PARENT_UID 		P_PARENT_UID,-->
-        <!--t1.P_BOM_DIGIFAX_ID 		P_BOM_DIGIFAX_ID,-->
-        <!--t1.P_BOM_LINE_PUID 		P_BOM_LINE_PUID,-->
-        <!--t1.P_BOM_LINE_IS_PART 		P_BOM_LINE_IS_PART,-->
-        <!--t1.P_BOM_ORDER_NUM 		P_BOM_ORDER_NUM,-->
-        <!--t1.P_BOM_LINE_IS_DEPT 		P_BOM_LINE_IS_DEPT,-->
-        <!--t1.P_BOM_LINE_PART_NAME 		P_BOM_LINE_PART_NAME,-->
-        <!--t1.P_BOM_LINE_PART_CLASS 		P_BOM_LINE_PART_CLASS,-->
-        <!--t1.P_BOM_LINE_PART_EN_NAME 		P_BOM_LINE_PART_EN_NAME,-->
-        <!--t1.P_BOM_LINE_PART_RESOURCE 		P_BOM_LINE_PART_RESOURCE,-->
-        <!--t1.P_SORT_NUM 		P_SORT_NUM,-->
-        <!--t1.P_FNA_INFO 		P_FNA_INFO,-->
-        <!--t1.P_FASTENER 		P_FASTENER,-->
-
-        <!--t1.P_3CPART_FLAG 		P_3CPART_FLAG,-->
-        <!--t1.P_IN_OUT_SIDE_FLAG 		P_IN_OUT_SIDE_FLAG,-->
-        <!--t1.P_UPC 		P_UPC,-->
-        <!--t1.P_FNA_DESC 		P_FNA_DESC,-->
-        <!--t1.P_CREATE_NAME 		P_CREATE_NAME,-->
-        <!--t1.P_UPDATE_NAME		P_UPDATE_NAME,-->
-        <!--t1.P_UNIT 		P_UNIT,-->
-        <!--t1.P_PICTURE_NO		P_PICTURE_NO,-->
-        <!--t1.P_PICTURE_SHEET		P_PICTURE_SHEET,-->
-        <!--t1.P_MATERIAL_HIGH		P_MATERIAL_HIGH,-->
-        <!--t1.P_MATERIAL1		P_MATERIAL1,-->
-        <!--t1.P_MATERIAL2		P_MATERIAL2,-->
-        <!--t1.P_MATERIAL3		P_MATERIAL3,-->
-        <!--t1.P_DENSITY		P_DENSITY	,-->
-        <!--t1.P_MATERIAL_STANDARD		P_MATERIAL_STANDARD,-->
-        <!--t1.P_SURFACE_TREAT		P_SURFACE_TREAT,-->
-        <!--t1.P_TEXTURE_COLOR_NUM		P_TEXTURE_COLOR_NUM,-->
-        <!--t1.P_MANU_PROCESS		P_MANU_PROCESS,-->
-        <!--t1.P_SYMMETRY		P_SYMMETRY,-->
-        <!--t1.P_IMPORTANCE		P_IMPORTANCE,-->
-        <!--t1.P_REGULATION_FLAG		P_REGULATION_FLAG,-->
-        <!--t1.P_BWG_BOX_PART		P_BWG_BOX_PART,-->
-        <!--t1.P_DEVELOP_TYPE		P_DEVELOP_TYPE,-->
-        <!--t1.P_DATA_VERSION		P_DATA_VERSION,-->
-        <!--t1.P_TARGET_WEIGHT		P_TARGET_WEIGHT,-->
-        <!--t1.P_FEATURE_WEIGHT		P_FEATURE_WEIGHT,-->
-        <!--t1.P_ACTUAL_WEIGHT		P_ACTUAL_WEIGHT,-->
-        <!--t1.P_FASTENER_STANDARD		P_FASTENER_STANDARD,-->
-        <!--t1.P_FASTENER_LEVEL		P_FASTENER_LEVEL,-->
-        <!--t1.P_TORQUE		P_TORQUE,-->
-        <!--t1.P_DUTY_ENGINEER		P_DUTY_ENGINEER,-->
-        <!--t1.P_SUPPLY		P_SUPPLY,-->
-        <!--t1.P_SUPPLY_CODE		P_SUPPLY_CODE,-->
-        <!--t1.P_REMARK		P_REMARK,-->
-        <!--t1.P_REGULATION_CODE		P_REGULATION_CODE,-->
-        <!--t1.P_EBOM_STATUS		P_EBOM_STATUS,-->
-        <!--t1.P_NUMBER		P_NUMBER,-->
-        <!--t1.P_BUY_ENGINEER		P_BUY_ENGINEER,-->
-        <!--t1.P_EWO_NO		P_EWO_NO,-->
-        <!--t1.P_LOU_LOA_FLAG		P_LOU_LOA_FLAG-->
-
-
-
-
-
-
-        <!--from HZ_BOM_LINE_RECORD t1-->
-        <!--where t1.P_BOM_LINE_ID in(-->
-
-        <!--SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where-->
-        <!--t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)-->
-        <!--AND-->
-        <!--rowid  in(-->
-        <!--SELECT min(rowid) FROM(-->
-        <!--SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID-->
-        <!--)-->
-        <!--)t-->
-        <!--LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID-->
-        <!--LEFT OUTER JOIN HZ_PBOM_RECORD t3 on t.PUID=t3.P_E_BOM_PUID-->
-
-        <!--UNION ALL-->
-
-
-
-        <!--select-->
-
-
-
-        <!--t3.PUID		PUID,-->
-        <!--t.P_LINE_INDEX 	P_LINE_INDEX,-->
-        <!--t.P_BOM_LINE_IS_HAS 	P_BOM_LINE_IS_HAS,-->
-        <!--t3.P_BOM_LINE_ID		P_BOM_LINE_ID,-->
-        <!--t.P_BOM_LINE_IS_2Y 		P_BOM_LINE_IS_2Y,-->
-        <!--t.P_BOM_OF_WHICH_DEPT 	P_BOM_OF_WHICH_DEPT,-->
-        <!--t.P_PARENT_UID 		P_PARENT_UID,-->
-        <!--t.P_BOM_DIGIFAX_ID 		P_BOM_DIGIFAX_ID,-->
-        <!--t.P_BOM_LINE_PUID 		P_BOM_LINE_PUID,-->
-        <!--t.P_BOM_LINE_IS_PART 		P_BOM_LINE_IS_PART,-->
-        <!--t.P_BOM_ORDER_NUM 		P_BOM_ORDER_NUM,-->
-        <!--t.P_BOM_LINE_IS_DEPT 		P_BOM_LINE_IS_DEPT,-->
-        <!--t.P_BOM_LINE_PART_NAME 		P_BOM_LINE_PART_NAME,-->
-        <!--t.P_BOM_LINE_PART_CLASS 		P_BOM_LINE_PART_CLASS,-->
-        <!--t.P_BOM_LINE_PART_EN_NAME 		P_BOM_LINE_PART_EN_NAME,-->
-        <!--t.P_BOM_LINE_PART_RESOURCE 		P_BOM_LINE_PART_RESOURCE,-->
-        <!--t.P_SORT_NUM 		P_SORT_NUM,-->
-        <!--t.P_FNA_INFO 		P_FNA_INFO,-->
-        <!--t.P_FASTENER 		P_FASTENER,-->
-
-        <!--t.P_3CPART_FLAG 		P_3CPART_FLAG,-->
-        <!--t.P_IN_OUT_SIDE_FLAG 		P_IN_OUT_SIDE_FLAG,-->
-        <!--t.P_UPC 		P_UPC,-->
-        <!--t.P_FNA_DESC 		P_FNA_DESC,-->
-        <!--t.P_CREATE_NAME 		P_CREATE_NAME,-->
-        <!--t.P_UPDATE_NAME		P_UPDATE_NAME,-->
-        <!--t.P_UNIT 		P_UNIT,-->
-        <!--t.P_PICTURE_NO		P_PICTURE_NO,-->
-        <!--t.P_PICTURE_SHEET		P_PICTURE_SHEET,-->
-        <!--t.P_MATERIAL_HIGH		P_MATERIAL_HIGH,-->
-        <!--t.P_MATERIAL1		P_MATERIAL1,-->
-        <!--t.P_MATERIAL2		P_MATERIAL2,-->
-        <!--t.P_MATERIAL3		P_MATERIAL3,-->
-        <!--t.P_DENSITY		P_DENSITY	,-->
-        <!--t.P_MATERIAL_STANDARD		P_MATERIAL_STANDARD,-->
-        <!--t.P_SURFACE_TREAT		P_SURFACE_TREAT,-->
-        <!--t.P_TEXTURE_COLOR_NUM		P_TEXTURE_COLOR_NUM,-->
-        <!--t.P_MANU_PROCESS		P_MANU_PROCESS,-->
-        <!--t.P_SYMMETRY		P_SYMMETRY,-->
-        <!--t.P_IMPORTANCE		P_IMPORTANCE,-->
-        <!--t.P_REGULATION_FLAG		P_REGULATION_FLAG,-->
-        <!--t.P_BWG_BOX_PART		P_BWG_BOX_PART,-->
-        <!--t.P_DEVELOP_TYPE		P_DEVELOP_TYPE,-->
-        <!--t.P_DATA_VERSION		P_DATA_VERSION,-->
-        <!--t.P_TARGET_WEIGHT		P_TARGET_WEIGHT,-->
-        <!--t.P_FEATURE_WEIGHT		P_FEATURE_WEIGHT,-->
-        <!--t.P_ACTUAL_WEIGHT		P_ACTUAL_WEIGHT,-->
-        <!--t.P_FASTENER_STANDARD		P_FASTENER_STANDARD,-->
-        <!--t.P_FASTENER_LEVEL		P_FASTENER_LEVEL,-->
-        <!--t.P_TORQUE		P_TORQUE,-->
-        <!--t.P_DUTY_ENGINEER		P_DUTY_ENGINEER,-->
-        <!--t.P_SUPPLY		P_SUPPLY,-->
-        <!--t.P_SUPPLY_CODE		P_SUPPLY_CODE,-->
-        <!--t.P_REMARK		P_REMARK,-->
-        <!--t.P_REGULATION_CODE		P_REGULATION_CODE,-->
-        <!--t.P_EBOM_STATUS		P_EBOM_STATUS,-->
-        <!--t.P_NUMBER		P_NUMBER,-->
-        <!--t.P_BUY_ENGINEER		P_BUY_ENGINEER,-->
-        <!--t.P_EWO_NO		P_EWO_NO,-->
-        <!--t.P_LOU_LOA_FLAG		P_LOU_LOA_FLAG,-->
-
-
-        <!--t2.P_SPARE_PART 	P_SPARE_PART,-->
-        <!--t2.P_SPARE_PART_NUM		P_SPARE_PART_NUM,-->
-        <!--t2.P_PROCESS_ROUTE		P_PROCESS_ROUTE,-->
-        <!--t2.P_LABOR_HOUR		P_LABOR_HOUR,-->
-        <!--t2.P_RHYTHM		P_RHYTHM,-->
-        <!--t2.P_SOLDER_JOINT		P_SOLDER_JOINT,-->
-
-        <!--t2.P_STANDARD_PART		P_STANDARD_PART,-->
-        <!--t2.P_TOOLS		P_TOOLS,-->
-        <!--t2.P_WASTER_PRODUCT		P_WASTER_PRODUCT,-->
-        <!--t2.P_CHANGE		P_CHANGE,-->
-        <!--t2.P_CHANGE_NUM		P_CHANGE_NUM,-->
-
-
-
-        <!--t3.P_RESOURCE		P_RESOURCE,-->
-        <!--t3.P_TYPE		P_TYPE,-->
-        <!--t3.P_BUY_UNIT		P_BUY_UNIT,-->
-        <!--t3.P_WORK_SHOP1		P_WORK_SHOP1,-->
-        <!--t3.P_WORK_SHOP2		P_WORK_SHOP2,-->
-        <!--t3.P_PRODUCT_LINE		P_PRODUCT_LINE,-->
-        <!--t3.P_MOULD_TYPE		P_MOULD_TYPE,-->
-        <!--t3.P_OUTER_PART		P_OUTER_PART,-->
-        <!--t3.P_COLOR_PART		P_COLOR_PART-->
-
-
-        <!--from HZ_BOM_LINE_RECORD t-->
-        <!--LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID-->
-        <!--RIGHT  OUTER JOIN-->
-        <!--(-->
-        <!--select-->
-        <!--t1.PUID		PUID,-->
-        <!--t1.P_BOM_LINE_ID		P_BOM_LINE_ID,-->
-        <!--t1.P_E_BOM_PUID		P_E_BOM_PUID ,-->
-
-        <!--t1.P_RESOURCE		P_RESOURCE,-->
-        <!--t1.P_TYPE		P_TYPE,-->
-        <!--t1.P_BUY_UNIT		P_BUY_UNIT,-->
-        <!--t1.P_WORK_SHOP1		P_WORK_SHOP1,-->
-        <!--t1.P_WORK_SHOP2		P_WORK_SHOP2,-->
-        <!--t1.P_PRODUCT_LINE		P_PRODUCT_LINE,-->
-        <!--t1.P_MOULD_TYPE		P_MOULD_TYPE,-->
-        <!--t1.P_OUTER_PART		P_OUTER_PART,-->
-        <!--t1.P_COLOR_PART		P_COLOR_PART-->
-
-
-        <!--from HZ_PBOM_RECORD t1-->
-        <!--where t1.P_BOM_LINE_ID in(-->
-
-        <!--SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where-->
-        <!--t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)-->
-        <!--AND-->
-        <!--rowid  in(-->
-        <!--SELECT min(rowid) FROM(-->
-        <!--SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID-->
-        <!--)-->
-        <!--)t3	on t.PUID=t3.P_E_BOM_PUID-->
-
-        <!--&lt;!&ndash; 两表UNION&ndash;&gt;-->
-
-
-
-
-        <!--)-->
-        <!--where PUID in(-->
-
-        <!--select MAX(PUID) from (-->
-        <!--select-->
-        <!--t.PUID PUID,-->
-        <!--t.P_BOM_LINE_ID-->
-        <!--from (-->
-        <!--select-->
-        <!--t1.PUID PUID,-->
-        <!--t1.P_BOM_LINE_ID-->
-
-        <!--from HZ_BOM_LINE_RECORD t1-->
-        <!--where t1.P_BOM_LINE_ID in(-->
-
-        <!--SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where-->
-        <!--t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)-->
-
-        <!--AND-->
-        <!--rowid  in(-->
-        <!--SELECT min(rowid) FROM(-->
-        <!--SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID-->
-        <!--)-->
-
-        <!--)t-->
-        <!--LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID-->
-        <!--LEFT OUTER JOIN HZ_PBOM_RECORD t3 on t.PUID=t3.P_E_BOM_PUID-->
-
-        <!--UNION ALL-->
-
-        <!--select-->
-        <!--t3.PUID		PUID,-->
-        <!--t3.P_BOM_LINE_ID-->
-        <!--from HZ_BOM_LINE_RECORD t-->
-        <!--LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID-->
-        <!--RIGHT  OUTER JOIN-->
-        <!--(-->
-        <!--select-->
-        <!--t1.PUID		PUID,-->
-        <!--t1.P_BOM_LINE_ID,-->
-        <!--t1.P_E_BOM_PUID		P_E_BOM_PUID-->
-        <!--from HZ_PBOM_RECORD t1-->
-        <!--where t1.P_BOM_LINE_ID in(-->
-
-        <!--SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where-->
-        <!--t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)-->
-        <!--AND-->
-        <!--rowid  in(-->
-        <!--SELECT min(rowid) FROM(-->
-        <!--SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID-->
-        <!--)-->
-        <!--)t3	on t.PUID=t3.P_E_BOM_PUID-->
-
-
-        <!--)t-->
-
-        <!--GROUP BY t.P_BOM_LINE_ID-->
-
-        <!--)-->
-        <!--)u-->
-        <!--WHERE-->
-        <!--ROWNUM &lt;=(#{limit,jdbcType=INTEGER}*(#{offset,jdbcType=INTEGER}+1))-->
-        <!--<if test="lineId != null and lineId!='' ">-->
-            <!--and u.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')-->
-        <!--</if>-->
-        <!--<if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">-->
-            <!--and u.P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')-->
-        <!--</if>-->
-        <!--<if test="pFastener==1">-->
-            <!--and u.P_FASTENER is not null and u.P_FASTENER!='/'-->
-        <!--</if>-->
-        <!--<if test="pFastener==2">-->
-            <!--and (u.P_FASTENER is null or u.P_FASTENER='/')-->
-        <!--</if>-->
-        <!--order by CAST(P_SORT_NUM as FLOAT)) where rn &gt;(#{limit,jdbcType=INTEGER}*#{offset,jdbcType=INTEGER})-->
-    <!--</select>-->
-    <select id="HzEplManageRecordDAOImpl_getHzEplManageRecord2"  resultMap="BaseResultMap">
-        select * FROM(
-          SELECT
-            u.*,rownum as rn
-          from(
-            select * from (
-            <!-- 两表UNION-->
-                select
-                    t.PUID PUID,
-                    <include refid="EPL_COLUMN1"/>,
-                    <include refid="EPL_COLUMN2"/>
-                from (
-                    select
-                      t.PUID PUID,
-                      <include refid="EPL_COLUMN1"/>
-                    from
-                      HZ_BOM_LINE_RECORD t
-                    where
-                      t.P_BOM_LINE_ID in(
-                        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(
-                        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-                        SELECT t2.puid FROM Hz_project_libs t2 where
-                        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)
-                    AND
-                        rowid  in(
-                        SELECT min(rowid) FROM(
-                        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (
-                        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-                        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-                        )
-                    )t
-                    LEFT OUTER JOIN HZ_PBOM_RECORD t2 on t.PUID=t2.P_E_BOM_PUID
-                UNION ALL
-                    select
-                        t2.PUID		PUID,
-                        <include refid="EPL_COLUMN1"/>,
-                        <include refid="EPL_COLUMN2"/>
-                    from
-                        HZ_BOM_LINE_RECORD t
-                        RIGHT  OUTER JOIN
-                            (
-                                select
-                                    t2.PUID		PUID,
-                                    t2.P_BOM_LINE_ID		P_BOM_LINE_ID,
-                                    t2.P_E_BOM_PUID		P_E_BOM_PUID ,
-                                    <include refid="EPL_COLUMN2"/>
-                                from
-                                    HZ_PBOM_RECORD t2
-                                where
-                                    t2.P_BOM_LINE_ID in(
-                                    SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(
-                                    SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-                                    SELECT t2.puid FROM Hz_project_libs t2 where
-                                    t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)
-                                AND
-                                    rowid  in(
-                                    SELECT min(rowid) FROM(
-                                    SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (
-                                    SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-                                    SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-                                    )
-                            )t2
-                        on
-                             t.PUID=t2.P_E_BOM_PUID
-                )
-            where
-              PUID in(
-                select
-                  MAX(PUID)
-                from (
-                    select
-                        t.PUID PUID,
-                        t.P_BOM_LINE_ID
-                    from (
-                        select
-                            t1.PUID PUID,
-                            t1.P_BOM_LINE_ID
-                        from
-                            HZ_BOM_LINE_RECORD t1
-                        where
-                            t1.P_BOM_LINE_ID in(
-                                SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(
-                                SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-                                SELECT t2.puid FROM Hz_project_libs t2 where
-                                t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID
-                            )
-                        AND
-                            rowid  in(
-                            SELECT min(rowid) FROM(
-                            SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (
-                            SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-                            SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-                        )
-                    )t
-                    LEFT OUTER JOIN HZ_PBOM_RECORD t3 on t.PUID=t3.P_E_BOM_PUID
-                  UNION ALL
-                    select
-                        t3.PUID		PUID,
-                        t3.P_BOM_LINE_ID
-                    from
-                        HZ_BOM_LINE_RECORD t
-                    RIGHT  OUTER JOIN
-                    (
-                        select
-                            t1.PUID		PUID,
-                            t1.P_BOM_LINE_ID,
-                            t1.P_E_BOM_PUID		P_E_BOM_PUID
-                        from
-                            HZ_PBOM_RECORD t1
-                        where
-                            t1.P_BOM_LINE_ID in(
-                            SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(
-                            SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-                            SELECT t2.puid FROM Hz_project_libs t2 where
-                            t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID
-                            )
-                        AND
-                            rowid  in(
-                            SELECT min(rowid) FROM(
-                            SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (
-                            SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-                            SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-                            )
-                    )t3	on t.PUID=t3.P_E_BOM_PUID
-                )t
-                GROUP BY t.P_BOM_LINE_ID
-              )
-           )u
-        WHERE
-            ROWNUM &lt;=(#{limit,jdbcType=INTEGER})
-            <if test="lineId != null and lineId!='' ">
-                and u.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')
+    <!--insert-->
+    <insert id="HzEPLDAOImpl_insert" parameterType="sql.pojo.epl.HzEPLRecord">
+    insert into HZ_EPL_RECORD (ID, PROJECT_ID, PART_ID,
+      PART_OF_WHICH_DEPT, PART_NAME, PART_CLASS,
+      PART_EN_NAME, PART_RESOURCE, STATUS,
+      CREATE_TIME, UPDATE_TIME, FASTENER,
+      IS_3CPART, IN_OUT_SIDE_FLAG, CREATE_ID,
+      UPDATE_ID, UNIT, PICTURE_NO,
+      PICTURE_SHEET, MATERIAL_HIGH, MATERIAL1,
+      MATERIAL2, MATERIAL3, DENSITY,
+      MATERIAL_STANDARD, SURFACE_TREAT, TEXTURE_COLOR_NUM,
+      MANU_PROCESS, SYMMETRY, IMPORTANCE,
+      REGULATION_FLAG, BWG_BOX_PART, DEVELOP_TYPE,
+      DATA_VERSION, TARGET_WEIGHT, FEATURE_WEIGHT,
+      ACTUAL_WEIGHT, FASTENER_STANDARD, FASTENER_LEVEL,
+      TORQUE, DUTY_ENGINEER, SUPPLY,
+      SUPPLY_CODE, REMARK, REGULATION_CODE,
+      BUY_ENGINEER)
+    values (SEQ_HZ_EWO_BASIC_INFO.nextval, #{projectId,jdbcType=VARCHAR}, #{partId,jdbcType=VARCHAR},
+      #{partOfWhichDept,jdbcType=VARCHAR}, #{partName,jdbcType=VARCHAR}, #{partClass,jdbcType=VARCHAR},
+      #{partEnName,jdbcType=VARCHAR}, #{partResource,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+      #{createTime,jdbcType=DATE}, #{updateTime,jdbcType=DATE}, #{fastener,jdbcType=VARCHAR},
+      #{is3cpart,jdbcType=INTEGER}, #{inOutSideFlag,jdbcType=INTEGER}, #{createId,jdbcType=DOUBLE},
+      #{updateId,jdbcType=DOUBLE}, #{unit,jdbcType=VARCHAR}, #{pictureNo,jdbcType=VARCHAR},
+      #{pictureSheet,jdbcType=VARCHAR}, #{materialHigh,jdbcType=VARCHAR}, #{material1,jdbcType=VARCHAR},
+      #{material2,jdbcType=VARCHAR}, #{material3,jdbcType=VARCHAR}, #{density,jdbcType=VARCHAR},
+      #{materialStandard,jdbcType=VARCHAR}, #{surfaceTreat,jdbcType=VARCHAR}, #{textureColorNum,jdbcType=VARCHAR},
+      #{manuProcess,jdbcType=VARCHAR}, #{symmetry,jdbcType=VARCHAR}, #{importance,jdbcType=VARCHAR},
+      #{regulationFlag,jdbcType=INTEGER}, #{bwgBoxPart,jdbcType=VARCHAR}, #{developType,jdbcType=VARCHAR},
+      #{dataVersion,jdbcType=VARCHAR}, #{targetWeight,jdbcType=VARCHAR}, #{featureWeight,jdbcType=VARCHAR},
+      #{actualWeight,jdbcType=VARCHAR}, #{fastenerStandard,jdbcType=VARCHAR}, #{fastenerLevel,jdbcType=VARCHAR},
+      #{torque,jdbcType=VARCHAR}, #{dutyEngineer,jdbcType=VARCHAR}, #{supply,jdbcType=VARCHAR},
+      #{supplyCode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{regulationCode,jdbcType=VARCHAR},
+      #{buyEngineer,jdbcType=VARCHAR})
+  </insert>
+
+    <!--update-->
+    <update id="HzEPLDAOImpl_update" parameterType="sql.pojo.epl.HzEPLRecord">
+        update HZ_EPL_RECORD
+        <set>
+            <if test="partId != null">
+                PART_ID = #{partId,jdbcType=VARCHAR},
             </if>
-            <if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">
-                and u.P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
+            <if test="partOfWhichDept != null">
+                PART_OF_WHICH_DEPT = #{partOfWhichDept,jdbcType=VARCHAR},
             </if>
-            <if test="pFastener==1">
-                and u.P_FASTENER is not null and u.P_FASTENER!='/'
+            <if test="partName != null">
+                PART_NAME = #{partName,jdbcType=VARCHAR},
             </if>
-            <if test="pFastener==2">
-                and (u.P_FASTENER is null or u.P_FASTENER='/')
+            <if test="partClass != null">
+                PART_CLASS = #{partClass,jdbcType=VARCHAR},
             </if>
-            order by CAST(P_SORT_NUM as FLOAT)
-        )
-        where
-          rn &gt;(#{offset,jdbcType=INTEGER})
+            <if test="partEnName != null">
+                PART_EN_NAME = #{partEnName,jdbcType=VARCHAR},
+            </if>
+            <if test="partResource != null">
+                PART_RESOURCE = #{partResource,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=INTEGER},
+            </if>
+                UPDATE_TIME = sysdate,
+            <if test="fastener != null">
+                FASTENER = #{fastener,jdbcType=VARCHAR},
+            </if>
+            <if test="is3cpart != null">
+                IS_3CPART = #{is3cpart,jdbcType=INTEGER},
+            </if>
+            <if test="inOutSideFlag != null">
+                IN_OUT_SIDE_FLAG = #{inOutSideFlag,jdbcType=INTEGER},
+            </if>
+            <if test="updateId != null">
+                UPDATE_ID = #{updateId,jdbcType=DOUBLE},
+            </if>
+            <if test="unit != null">
+                UNIT = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureNo != null">
+                PICTURE_NO = #{pictureNo,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureSheet != null">
+                PICTURE_SHEET = #{pictureSheet,jdbcType=VARCHAR},
+            </if>
+            <if test="materialHigh != null">
+                MATERIAL_HIGH = #{materialHigh,jdbcType=VARCHAR},
+            </if>
+            <if test="material1 != null">
+                MATERIAL1 = #{material1,jdbcType=VARCHAR},
+            </if>
+            <if test="material2 != null">
+                MATERIAL2 = #{material2,jdbcType=VARCHAR},
+            </if>
+            <if test="material3 != null">
+                MATERIAL3 = #{material3,jdbcType=VARCHAR},
+            </if>
+            <if test="density != null">
+                DENSITY = #{density,jdbcType=VARCHAR},
+            </if>
+            <if test="materialStandard != null">
+                MATERIAL_STANDARD = #{materialStandard,jdbcType=VARCHAR},
+            </if>
+            <if test="surfaceTreat != null">
+                SURFACE_TREAT = #{surfaceTreat,jdbcType=VARCHAR},
+            </if>
+            <if test="textureColorNum != null">
+                TEXTURE_COLOR_NUM = #{textureColorNum,jdbcType=VARCHAR},
+            </if>
+            <if test="manuProcess != null">
+                MANU_PROCESS = #{manuProcess,jdbcType=VARCHAR},
+            </if>
+            <if test="symmetry != null">
+                SYMMETRY = #{symmetry,jdbcType=VARCHAR},
+            </if>
+            <if test="importance != null">
+                IMPORTANCE = #{importance,jdbcType=VARCHAR},
+            </if>
+            <if test="regulationFlag != null">
+                REGULATION_FLAG = #{regulationFlag,jdbcType=INTEGER},
+            </if>
+            <if test="bwgBoxPart != null">
+                BWG_BOX_PART = #{bwgBoxPart,jdbcType=VARCHAR},
+            </if>
+            <if test="developType != null">
+                DEVELOP_TYPE = #{developType,jdbcType=VARCHAR},
+            </if>
+            <if test="dataVersion != null">
+                DATA_VERSION = #{dataVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="targetWeight != null">
+                TARGET_WEIGHT = #{targetWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="featureWeight != null">
+                FEATURE_WEIGHT = #{featureWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="actualWeight != null">
+                ACTUAL_WEIGHT = #{actualWeight,jdbcType=VARCHAR},
+            </if>
+            <if test="fastenerStandard != null">
+                FASTENER_STANDARD = #{fastenerStandard,jdbcType=VARCHAR},
+            </if>
+            <if test="fastenerLevel != null">
+                FASTENER_LEVEL = #{fastenerLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="torque != null">
+                TORQUE = #{torque,jdbcType=VARCHAR},
+            </if>
+            <if test="dutyEngineer != null">
+                DUTY_ENGINEER = #{dutyEngineer,jdbcType=VARCHAR},
+            </if>
+            <if test="supply != null">
+                SUPPLY = #{supply,jdbcType=VARCHAR},
+            </if>
+            <if test="supplyCode != null">
+                SUPPLY_CODE = #{supplyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="regulationCode != null">
+                REGULATION_CODE = #{regulationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="buyEngineer != null">
+                BUY_ENGINEER = #{buyEngineer,jdbcType=VARCHAR},
+            </if>
+            <if test="orderId != null">
+                ORDER_ID = #{orderId,jdbcType=DOUBLE},
+            </if>
+            <if test="revision != null">
+                REVISION = #{revision,jdbcType=VARCHAR},
+            </if>
+            <if test="effectTime != null">
+                EFFECT_TIME = #{effectTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DOUBLE}
+    </update>
+
+    <!--delete-->
+    <delete id="HzEPLDAOImpl_delete" parameterType="java.util.List">
+        delete ${tableName}
+        where id
+        in
+        <foreach collection="ids" index="index" item="item"  open="(" separator="," close=")">
+            #{ids[${index}]}
+        </foreach>
+    </delete>
+
+    <!--select-->
+    <select id="HzEPLDAOImpl_getEplRecordByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+
     </select>
 
-  <!--查询EPL信息总数-->
-  <!--<select id="HzEplManageRecordDAOImpl_findTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">-->
-      <!--select count(*) from HZ_BOM_LINE_RECORD t1-->
-      <!--LEFT OUTER JOIN HZ_MBOM_RECORD t4 on t1.Puid = t4.P_BOM_PUID-->
-      <!--LEFT OUTER JOIN HZ_PBOM_RECORD t5 on t1.PUID=t5.P_E_BOM_PUID-->
-      <!--where t1.p_bom_digifax_id=(-->
-      <!--select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(-->
-      <!--select t2.puid from Hz_project_libs t2-->
-      <!--<where>-->
-          <!--t2.puid=#{projectId,jdbcType=VARCHAR}))-->
-      <!--<if test="lineIndex != null and lineIndex!=''">-->
-          <!--and LENGTH(TRANSLATE(t1.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}-->
-      <!--</if>-->
-      <!--<if test="isHas != null and isHas==0">-->
-          <!--and (t1.P_BOM_LINE_IS_HAS = 0 or t1.P_BOM_LINE_IS_HAS = 1)-->
-      <!--</if>-->
-      <!--<if test="isHas != null and isHas==1">-->
-          <!--and t1.P_BOM_LINE_IS_HAS = 1-->
-      <!--</if>-->
-      <!--<if test="lineId != null and lineId!=''" >-->
-          <!--and t1.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')-->
-      <!--</if>-->
-      <!--<if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >-->
-          <!--and t1.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')-->
-      <!--</if>-->
-      <!--<if test="pFastener=1" >-->
-          <!--and t1.P_FASTENER is not null-->
-      <!--</if>-->
-      <!--<if test="pFastener=2 " >-->
-          <!--and t1.P_FASTENER is  null-->
-      <!--</if>-->
-      <!--</where>-->
-  <!--</select>-->
+    <select id="HzEPLDAOImpl_getEplTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
 
-    <select id="HzEplManageRecordDAOImpl_findTotalCount3" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-        select count(*) FROM(
-        SELECT
-        u.*,rownum as rn
-        from(
-        select * from (
-        <!-- 两表UNION-->
-        select
-        t.PUID PUID,
-        <include refid="EPL_COLUMN1"/>,
-        <include refid="EPL_COLUMN2"/>
-        from (
-        select
-        t.PUID PUID,
-        <include refid="EPL_COLUMN1"/>
-        from
-        HZ_BOM_LINE_RECORD t
-        where
-        t.P_BOM_LINE_ID in(
-        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where
-        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)
-        AND
-        rowid  in(
-        SELECT min(rowid) FROM(
-        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-        )
-        )t
-        LEFT OUTER JOIN HZ_PBOM_RECORD t2 on t.PUID=t2.P_E_BOM_PUID
-        UNION ALL
-        select
-        t2.PUID		PUID,
-        <include refid="EPL_COLUMN1"/>,
-        <include refid="EPL_COLUMN2"/>
-        from
-        HZ_BOM_LINE_RECORD t
-        RIGHT  OUTER JOIN
-        (
-        select
-        t2.PUID		PUID,
-        t2.P_BOM_LINE_ID		P_BOM_LINE_ID,
-        t2.P_E_BOM_PUID		P_E_BOM_PUID ,
-        <include refid="EPL_COLUMN2"/>
-        from
-        HZ_PBOM_RECORD t2
-        where
-        t2.P_BOM_LINE_ID in(
-        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where
-        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)
-        AND
-        rowid  in(
-        SELECT min(rowid) FROM(
-        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-        )
-        )t2
-        on
-        t.PUID=t2.P_E_BOM_PUID
-        )
-        where
-        PUID in(
-        select
-        MAX(PUID)
-        from (
-        select
-        t.PUID PUID,
-        t.P_BOM_LINE_ID
-        from (
-        select
-        t1.PUID PUID,
-        t1.P_BOM_LINE_ID
-        from
-        HZ_BOM_LINE_RECORD t1
-        where
-        t1.P_BOM_LINE_ID in(
-        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where
-        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID
-        )
-        AND
-        rowid  in(
-        SELECT min(rowid) FROM(
-        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-        )
-        )t
-        LEFT OUTER JOIN HZ_PBOM_RECORD t3 on t.PUID=t3.P_E_BOM_PUID
-        UNION ALL
-        select
-        t3.PUID		PUID,
-        t3.P_BOM_LINE_ID
-        from
-        HZ_BOM_LINE_RECORD t
-        RIGHT  OUTER JOIN
-        (
-        select
-        t1.PUID		PUID,
-        t1.P_BOM_LINE_ID,
-        t1.P_E_BOM_PUID		P_E_BOM_PUID
-        from
-        HZ_PBOM_RECORD t1
-        where
-        t1.P_BOM_LINE_ID in(
-        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where
-        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID
-        )
-        AND
-        rowid  in(
-        SELECT min(rowid) FROM(
-        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-        )
-        )t3	on t.PUID=t3.P_E_BOM_PUID
-        )t
-        GROUP BY t.P_BOM_LINE_ID
-        )
-        )u
-        where
-        1=1
-        <if test="lineId != null and lineId!='' ">
-            and P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')
-        </if>
-        <if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">
-            and P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
-        </if>
-        <if test="pFastener==1">
-            and P_FASTENER is not null and P_FASTENER!='/'
-        </if>
-        <if test="pFastener==2">
-            and (P_FASTENER is null or P_FASTENER='/')
-        </if>
-        )
     </select>
-
-    <select id="HzEplManageRecordDAOImpl_findTotalCount2" resultType="java.lang.Integer" parameterType="java.util.HashMap">
-        <!--select count(count(*)) from (-->
-        <!--select-->
-        <!--t.PUID PUID,-->
-        <!--t.P_BOM_LINE_ID,-->
-        <!--t.P_BOM_OF_WHICH_DEPT,-->
-        <!--t.P_FASTENER-->
-        <!--from (-->
-        <!--select-->
-        <!--t1.PUID PUID,-->
-        <!--t1.P_BOM_LINE_ID,-->
-        <!--t1.P_BOM_OF_WHICH_DEPT,-->
-        <!--t1.P_FASTENER-->
-        <!--from HZ_BOM_LINE_RECORD t1-->
-        <!--where t1.P_BOM_LINE_ID in(-->
-
-        <!--SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where-->
-        <!--t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)-->
-        <!--AND-->
-        <!--rowid  in(-->
-        <!--SELECT min(rowid) FROM(-->
-        <!--SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID-->
-        <!--)-->
-
-        <!--)t-->
-        <!--LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID-->
-        <!--LEFT OUTER JOIN HZ_PBOM_RECORD t3 on t.PUID=t3.P_E_BOM_PUID-->
-
-        <!--UNION ALL-->
-
-        <!--select-->
-        <!--t3.PUID		PUID,-->
-        <!--t3.P_BOM_LINE_ID,-->
-        <!--t.P_BOM_OF_WHICH_DEPT,-->
-        <!--t.P_FASTENER-->
-        <!--from HZ_BOM_LINE_RECORD t-->
-        <!--LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID-->
-        <!--RIGHT  OUTER JOIN-->
-        <!--(-->
-        <!--select-->
-        <!--t1.PUID		PUID,-->
-        <!--t1.P_BOM_LINE_ID,-->
-        <!--t1.P_E_BOM_PUID		P_E_BOM_PUID-->
-        <!--from HZ_PBOM_RECORD t1-->
-        <!--where t1.P_BOM_LINE_ID in(-->
-
-        <!--SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where-->
-        <!--t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)-->
-        <!--AND-->
-        <!--rowid  in(-->
-        <!--SELECT min(rowid) FROM(-->
-        <!--SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (-->
-        <!--SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (-->
-        <!--SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID-->
-        <!--)-->
-        <!--)t3	on t.PUID=t3.P_E_BOM_PUID-->
-        <!--)t-->
-        <!--where-->
-          <!--1=1-->
-        <!--<if test="lineId != null and lineId!='' ">-->
-            <!--and t.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')-->
-        <!--</if>-->
-        <!--<if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">-->
-            <!--and t.P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')-->
-        <!--</if>-->
-        <!--<if test="pFastener==1">-->
-            <!--and t.P_FASTENER is not null and t.P_FASTENER!='/'-->
-        <!--</if>-->
-        <!--<if test="pFastener==2">-->
-            <!--and (t.P_FASTENER is null or t.P_FASTENER='/')-->
-        <!--</if>-->
-        <!--GROUP BY t.P_BOM_LINE_ID-->
-        select count(*) from (
-        select
-        t.PUID PUID,
-        t.P_BOM_LINE_ID,
-        t.P_BOM_OF_WHICH_DEPT,
-        t.P_FASTENER
-        from (
-        select
-        t1.PUID PUID,
-        t1.P_BOM_LINE_ID,
-        t1.P_BOM_OF_WHICH_DEPT,
-        t1.P_FASTENER
-        from HZ_BOM_LINE_RECORD t1
-        where t1.P_BOM_LINE_ID in(
-
-        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 where t1.p_bom_digifax_id =(
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where
-        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)
-        AND
-        rowid  in(
-        SELECT min(rowid) FROM(
-        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD t1 WHERE t1.p_bom_digifax_id = (
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-        )
-
-        )t
-        LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID
-        LEFT OUTER JOIN HZ_PBOM_RECORD t3 on t.PUID=t3.P_E_BOM_PUID
-
-        UNION ALL
-
-        select
-        t3.PUID		PUID,
-        t3.P_BOM_LINE_ID,
-        t.P_BOM_OF_WHICH_DEPT,
-        t.P_FASTENER
-        from HZ_BOM_LINE_RECORD t
-        LEFT OUTER JOIN HZ_MBOM_RECORD t2 on t.Puid = t2.P_BOM_PUID
-        RIGHT  OUTER JOIN
-        (
-        select
-        t1.PUID		PUID,
-        t1.P_BOM_LINE_ID,
-        t1.P_E_BOM_PUID		P_E_BOM_PUID
-        from HZ_PBOM_RECORD t1
-        where t1.P_BOM_LINE_ID in(
-
-        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 where t1.p_bom_digifax_id =(
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where
-        t2.puid=#{projectId,jdbcType=VARCHAR}))GROUP BY P_BOM_LINE_ID)
-        AND
-        rowid  in(
-        SELECT min(rowid) FROM(
-        SELECT P_BOM_LINE_ID FROM HZ_PBOM_RECORD t1 WHERE t1.p_bom_digifax_id = (
-        SELECT t3.puid FROM Hz_Bom_Main_Record t3 WHERE t3.p_cfg0_of_which_project_puid = (
-        SELECT t2.puid FROM Hz_project_libs t2 where t2.puid=#{projectId,jdbcType=VARCHAR})) ) GROUP BY P_BOM_LINE_ID
-        )
-        )t3	on t.PUID=t3.P_E_BOM_PUID
-        )t
-        where
-
-        PUID IN (
-        SELECT
-        MAX (PUID)
-        FROM
-        (
-        SELECT
-        T .PUID PUID,
-        T .P_BOM_LINE_ID
-        FROM
-        (
-        SELECT
-        t1.PUID PUID,
-        t1.P_BOM_LINE_ID
-        FROM
-        HZ_BOM_LINE_RECORD t1
-        WHERE
-        t1.P_BOM_LINE_ID IN (
-        SELECT
-        P_BOM_LINE_ID
-        FROM
-        HZ_BOM_LINE_RECORD t1
-        WHERE
-        t1.p_bom_digifax_id = (
-        SELECT
-        t3.puid
-        FROM
-        Hz_Bom_Main_Record t3
-        WHERE
-        t3.p_cfg0_of_which_project_puid = (
-        SELECT
-        t2.puid
-        FROM
-        Hz_project_libs t2
-        WHERE
-        t2.puid = #{projectId,jdbcType=VARCHAR}
-        )
-        )
-        GROUP BY
-        P_BOM_LINE_ID
-        )
-        AND ROWID IN (
-        SELECT
-        MIN (ROWID)
-        FROM
-        (
-        SELECT
-        P_BOM_LINE_ID
-        FROM
-        HZ_BOM_LINE_RECORD t1
-        WHERE
-        t1.p_bom_digifax_id = (
-        SELECT
-        t3.puid
-        FROM
-        Hz_Bom_Main_Record t3
-        WHERE
-        t3.p_cfg0_of_which_project_puid = (
-        SELECT
-        t2.puid
-        FROM
-        Hz_project_libs t2
-        WHERE
-        t2.puid = #{projectId,jdbcType=VARCHAR}
-        )
-        )
-        )
-        GROUP BY
-        P_BOM_LINE_ID
-        )
-        ) T
-        LEFT OUTER JOIN HZ_MBOM_RECORD t2 ON T .Puid = t2.P_BOM_PUID
-        LEFT OUTER JOIN HZ_PBOM_RECORD t3 ON T .PUID = t3.P_E_BOM_PUID
-        UNION ALL
-        SELECT
-        t3.PUID PUID,
-        t3.P_BOM_LINE_ID
-        FROM
-        HZ_BOM_LINE_RECORD T
-        LEFT OUTER JOIN HZ_MBOM_RECORD t2 ON T .Puid = t2.P_BOM_PUID
-        RIGHT OUTER JOIN (
-        SELECT
-        t1.PUID PUID,
-        t1.P_BOM_LINE_ID,
-        t1.P_E_BOM_PUID P_E_BOM_PUID
-        FROM
-        HZ_PBOM_RECORD t1
-        WHERE
-        t1.P_BOM_LINE_ID IN (
-        SELECT
-        P_BOM_LINE_ID
-        FROM
-        HZ_PBOM_RECORD t1
-        WHERE
-        t1.p_bom_digifax_id = (
-        SELECT
-        t3.puid
-        FROM
-        Hz_Bom_Main_Record t3
-        WHERE
-        t3.p_cfg0_of_which_project_puid = (
-        SELECT
-        t2.puid
-        FROM
-        Hz_project_libs t2
-        WHERE
-        t2.puid = #{projectId,jdbcType=VARCHAR}
-        )
-        )
-        GROUP BY
-        P_BOM_LINE_ID
-        )
-        AND ROWID IN (
-        SELECT
-        MIN (ROWID)
-        FROM
-        (
-        SELECT
-        P_BOM_LINE_ID
-        FROM
-        HZ_PBOM_RECORD t1
-        WHERE
-        t1.p_bom_digifax_id = (
-        SELECT
-        t3.puid
-        FROM
-        Hz_Bom_Main_Record t3
-        WHERE
-        t3.p_cfg0_of_which_project_puid = (
-        SELECT
-        t2.puid
-        FROM
-        Hz_project_libs t2
-        WHERE
-        t2.puid = #{projectId,jdbcType=VARCHAR}
-        )
-        )
-        )
-        GROUP BY
-        P_BOM_LINE_ID
-        )
-        ) t3 ON T .PUID = t3.P_E_BOM_PUID
-        ) T
-        GROUP BY
-        T .P_BOM_LINE_ID
-        )
-
-        <if test="lineId != null and lineId!='' ">
-            and t.P_BOM_LINE_ID like concat(concat('%', #{lineId, jdbcType=VARCHAR}), '%')
-        </if>
-        <if test="pBomOfWhichDept !=null and pBomOfWhichDept!='' ">
-            and t.P_BOM_OF_WHICH_DEPT like concat(concat('%', #{pBomOfWhichDept, jdbcType=VARCHAR}), '%')
-        </if>
-        <if test="pFastener==1">
-            and t.P_FASTENER is not null and t.P_FASTENER!='/'
-        </if>
-        <if test="pFastener==2">
-            and (t.P_FASTENER is null or t.P_FASTENER='/')
-        </if>
-
-  </select>
-
 
 </mapper>

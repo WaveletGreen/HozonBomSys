@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  * @Date: 2018/6/25
  * @Description:
  */
-public class WriteResultRespDTO {
+public class WriteResultRespDTO extends BaseDTO {
 
     public static final String SUCCESS_MSG ="操作成功！";
     public static final String FAILED_MSG ="操作失败,请稍后重试！";

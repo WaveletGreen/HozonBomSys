@@ -1,8 +1,7 @@
 package sql.pojo.epl;
 
-import sql.pojo.BaseChangePOJO;
+import sql.pojo.BaseChangeDO;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,7 +12,7 @@ import java.util.Objects;
  * 为了与之前代码做兼容性 EBOM 的字段取值未做改动
  * 依然使用这里的字段
  */
-public class HzEPLManageRecord extends BaseChangePOJO {
+public class HzEPLManageRecord extends BaseChangeDO {
 
     /**
      * puid

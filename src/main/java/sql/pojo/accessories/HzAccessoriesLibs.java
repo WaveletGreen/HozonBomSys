@@ -1,12 +1,14 @@
 package sql.pojo.accessories;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 工艺辅料库
  */
-public class HzAccessoriesLibs {
+public class HzAccessoriesLibs implements Serializable {
 
+    private static final long serialVersionUID = 7421368056821901231L;
     private String puid;
 
     private String pMaterielCode;

@@ -1,5 +1,6 @@
 package sql.pojo.bom;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -7,8 +8,9 @@ import java.util.Objects;
  * @Date: 2018/8/23
  * @Description: excel导入EBOM专用
  */
-public class HzImportEbomRecord {
+public class HzImportEbomRecord implements Serializable {
 
+    private static final long serialVersionUID = -6559274579058619219L;
     private Integer No;
 
     private String puid;

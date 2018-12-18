@@ -1,5 +1,6 @@
 package sql.pojo.factory;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,8 @@ import java.util.Date;
  * @Date: 2018/6/29
  * @Description: 加工工厂
  */
-public class HzFactory {
+public class HzFactory implements Serializable {
+    private static final long serialVersionUID = -2255644079808155816L;
     private String puid;
     /**
      * 工厂代码

@@ -1,6 +1,6 @@
 package sql.pojo.change;
 
-import sql.pojo.BasePOJO;
+import sql.pojo.BaseDO;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  * @Date: 2018/11/12
  * @Description: 变更清单
  */
-public class HzChangeOrderRecord extends BasePOJO {
+public class HzChangeOrderRecord extends BaseDO {
     /**
      * 主键id
      */

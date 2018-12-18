@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.util;
 
-import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.formula.FormulaParseException;
 import org.apache.poi.ss.usermodel.*;
@@ -15,7 +14,6 @@ import java.io.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * @Author: haozt

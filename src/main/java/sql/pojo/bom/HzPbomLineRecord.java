@@ -1,16 +1,14 @@
 package sql.pojo.bom;
 
-import lombok.Data;
-import sql.pojo.BaseChangePOJO;
+import sql.pojo.BaseChangeDO;
 
-import java.util.Date;
 import java.util.Objects;
 
 /**
  * Created by haozt on 2018/5/25
  * EBOM 和PBOM 两张表信息  继承自EBOM  维护PBOM
  */
-public class HzPbomLineRecord extends BaseChangePOJO implements Cloneable{
+public class HzPbomLineRecord extends BaseChangeDO implements Cloneable{
     private String parentUid;
     private Integer isDept;
     private String bomDigifaxId;
@@ -431,7 +429,7 @@ public class HzPbomLineRecord extends BaseChangePOJO implements Cloneable{
     }
 
     @Override
-    public HzPbomLineRecord clone() throws CloneNotSupportedException {
+    public HzPbomLineRecord clone(){
         return (HzPbomLineRecord) super.clone();
     }
 }

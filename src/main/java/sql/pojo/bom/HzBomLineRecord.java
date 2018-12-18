@@ -1,11 +1,11 @@
 package sql.pojo.bom;
 
-import sql.pojo.BaseChangePOJO;
+import sql.pojo.BaseChangeDO;
 
 import java.util.Date;
 import java.util.Objects;
 
-public class HzBomLineRecord extends BaseChangePOJO {
+public class HzBomLineRecord extends BaseChangeDO {
 
     private Long id;
     /**

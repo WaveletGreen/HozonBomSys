@@ -1,11 +1,13 @@
 package sql.pojo.workList;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 我的工作列表全字段
  */
-public class HzWorkListRecord {
+public class HzWorkListRecord implements Serializable {
+    private static final long serialVersionUID = -8481871072615198264L;
     /**
      * 主键
      */

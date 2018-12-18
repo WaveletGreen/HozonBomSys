@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/11/12
  * @Description:
  */
-public class HzChangeOrderRespDTO {
+public class HzChangeOrderRespDTO extends BaseDTO {
 
     private static final String ORDER_FROM_TC="TC端";
 

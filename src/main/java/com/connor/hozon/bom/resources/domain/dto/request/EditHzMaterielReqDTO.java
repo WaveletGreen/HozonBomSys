@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 import java.util.List;
 
 /**
@@ -8,7 +10,7 @@ import java.util.List;
  * @Date: 2018/7/3
  * @Description:
  */
-public class EditHzMaterielReqDTO {
+public class EditHzMaterielReqDTO extends BaseDTO {
 
     private String puid;
 

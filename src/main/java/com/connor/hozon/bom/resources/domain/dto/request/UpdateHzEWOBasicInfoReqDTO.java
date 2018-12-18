@@ -7,6 +7,7 @@ import java.util.Date;
  * @Date: 2018/8/8
  * @Description: 更新EWO基本信息 页面传值
  */
+@Deprecated
 public class UpdateHzEWOBasicInfoReqDTO {
     /**
      * 主键

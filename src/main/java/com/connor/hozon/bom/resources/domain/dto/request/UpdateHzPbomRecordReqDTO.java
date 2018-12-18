@@ -1,20 +1,22 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * Created by haozt on 2018/5/29
  */
-public class UpdateHzPbomRecordReqDTO {
+public class UpdateHzPbomRecordReqDTO extends BaseDTO {
 
     /**
      * 来源（自制/采购）
      */
     private String resource;
     /**
-     * 类型 是否为焊接/装配（0是  1不是 2不明确）
+     * 类型 是否为焊接/装配
      */
     private String type;
     /**
-     * 是否采购单元 （0是  1不是 2不明确）
+     * 是否采购单元
      */
     private String buyUnit;
     /**

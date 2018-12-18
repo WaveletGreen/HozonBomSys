@@ -1,5 +1,6 @@
 package sql.pojo.work;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
@@ -8,7 +9,8 @@ import java.util.Objects;
  * @Date: 2018/6/29
  * @Description: 工作中心主数据
  */
-public class HzWorkCenter {
+public class HzWorkCenter implements Serializable {
+    private static final long serialVersionUID = 7231886716932180279L;
     /**
      * 主键id
      */

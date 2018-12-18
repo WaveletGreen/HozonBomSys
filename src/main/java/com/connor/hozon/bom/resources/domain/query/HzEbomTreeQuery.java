@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/7/12
  * @Description:
  */
-public class HzEbomTreeQuery {
+public class HzEbomTreeQuery extends DefaultQuery{
     /**
      * 项目id
      */

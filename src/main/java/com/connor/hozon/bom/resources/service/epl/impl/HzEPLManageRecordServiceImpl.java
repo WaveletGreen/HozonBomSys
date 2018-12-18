@@ -361,21 +361,6 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
             HzEPLRecordRespDTO recordRespDTO = new HzEPLRecordRespDTO();
             JSONArray array = new JSONArray();
             List<HzEPLRecordRespDTO> recordRespDTOList = new ArrayList<>();
-            //需要加入搜索功能
-            String level = query.getLevel();
-            if (level != null && level!="") {
-                if(level.length()==1 && level.toUpperCase().endsWith("Y")){
-                    query.setIsHas(Integer.valueOf(1));
-                }else {
-                    int length = level.charAt(0) - 48;
-                    if (level.toUpperCase().endsWith("Y")) {
-                        query.setIsHas(Integer.valueOf(1));
-                    } else {
-                        query.setIsHas(Integer.valueOf(0));
-                    }
-                    query.setLineIndex(String.valueOf(length - 1));
-                }
-            }
             Page<HzEPLManageRecord> recordPage = hzEplMangeRecordDAO.getEPLListForPage2(query);
             int num = (recordPage.getPageNumber()-1)*recordPage.getPageSize();
             if(recordPage == null || recordPage.getResult() == null || recordPage.getResult().size()==0){

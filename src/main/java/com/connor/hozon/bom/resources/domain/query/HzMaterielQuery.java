@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/7/4
  * @Description:
  */
-public class HzMaterielQuery {
+public class HzMaterielQuery extends DefaultQuery{
     /**
      * 项目id
      */

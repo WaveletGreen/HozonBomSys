@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
-public class UpdateHzEbomLeveReqDTO {
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
+public class UpdateHzEbomLeveReqDTO extends BaseDTO {
     /**
      *查找编号
      */

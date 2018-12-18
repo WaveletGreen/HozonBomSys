@@ -1,12 +1,14 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * Created with IntelliJ IDEA.
  * User: xlf
  * Date: 2018/9/27
  * Time: 15:15
  */
-public class DeleteHzAccessoriesLibsDTO {
+public class DeleteHzAccessoriesLibsDTO extends BaseDTO {
 
     /**
      * 要删除的puid

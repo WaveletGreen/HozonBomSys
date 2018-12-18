@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/7/18
  * @Description:
  */
-public class HzLouaQuery {
+public class HzLouaQuery  extends DefaultQuery{
     private String projectId;
 
     private String puid;

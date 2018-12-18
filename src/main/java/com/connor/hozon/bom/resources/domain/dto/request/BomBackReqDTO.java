@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * @Description: bom撤销前端参数
  */
 @Data
-public class BomBackReqDTO {
+public class BomBackReqDTO extends BaseDTO {
     /**
      * puids
      */

@@ -3,7 +3,9 @@ package sql.pojo.bom;
 /**
  * @Author: haozt
  * @Date: 2018/6/14
+ * 废除 不在使用
  */
+@Deprecated
 public class HzBomState {
 
     private String puid;

@@ -1,6 +1,7 @@
 package sql.pojo.work;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,8 +9,9 @@ import java.util.Date;
  * @Date: 2018/7/5
  * @Description: 工艺
  */
-public class HzWorkProcess {
+public class HzWorkProcess implements Serializable {
 
+    private static final long serialVersionUID = 6576353062862882209L;
     /**
      * 主键id
      */

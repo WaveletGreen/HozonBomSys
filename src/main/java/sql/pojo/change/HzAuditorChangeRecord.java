@@ -2,6 +2,7 @@ package sql.pojo.change;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -11,7 +12,8 @@ import java.util.Date;
  * @Description: 审核人审核变更表单历史记录
  */
 @Data
-public class HzAuditorChangeRecord {
+public class HzAuditorChangeRecord implements Serializable {
+    private static final long serialVersionUID = 505704635995842953L;
     /**
      * 主键id
      */

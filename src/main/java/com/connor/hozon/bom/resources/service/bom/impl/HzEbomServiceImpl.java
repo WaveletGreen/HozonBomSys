@@ -746,9 +746,6 @@ public class HzEbomServiceImpl implements HzEbomService {
              * 这里每次走更新数据的时候先将原来未更新的数据保存一份，更新后的数据也保存一份，类似于查看变更历史记录的
              * 功能。
              */
-            if(!PrivilegeUtil.writePrivilege()){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
             if(StringUtil.isEmpty(reqDTO.getProjectId())){
                 return WriteResultRespDTO.IllgalArgument();
             }
@@ -796,10 +793,10 @@ public class HzEbomServiceImpl implements HzEbomService {
             map.put("projectId", reqDTO.getProjectId());
             map.put("lineID", lineId);
             map.put("lineId", lineId);
-            if(reqDTO.getUpdateType()==1){
-                //修改当前数据时添加
-                map.put("puid", reqDTO.getPuid());
-            }
+//            if(reqDTO.getUpdateType()==1){
+//                //修改当前数据时添加
+//                map.put("puid", reqDTO.getPuid());
+//            }
             List<HzEPLManageRecord> hzEPLManageRecords = hzEbomRecordDAO.findEbom(map);
 
             //pbom要同步更新数据,  MBOM和物料中不再做同步数据更新

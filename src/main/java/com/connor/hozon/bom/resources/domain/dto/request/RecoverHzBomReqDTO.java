@@ -5,6 +5,7 @@ package com.connor.hozon.bom.resources.domain.dto.request;
  * @Date: 2018/7/16
  * @Description:
  */
+@Deprecated
 public class RecoverHzBomReqDTO {
     private Integer type;
 
