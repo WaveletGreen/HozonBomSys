@@ -13,12 +13,14 @@ function doRefresh(projectId) {
 function doQuery() {
     var projectPuid = $("#project", window.top.document).val();
     var eplUrl = "epl/record?projectId=" + projectPuid;
-    var pFastener = $("#pFastener").val();
-    if (pFastener == "请选择是否紧固件") {
-        eplUrl += "&pFastener=" + "";
+    var status = $("#status").val();
+        eplUrl += "&status=" + status;
+    var partResource = $("#partResource").val();
+    if (partResource == "请选择零件来源") {
+        eplUrl += "&partResource=" + "";
     }
     else {
-        eplUrl += "&pFastener=" + pFastener;
+        eplUrl += "&partResource=" + partResource;
     }
     initTable(eplUrl);
     $('#eplTable').bootstrapTable('destroy');
@@ -76,9 +78,6 @@ function initTable(eplUrl) {
                     if (value == 5 || value == "5") {
                         return "<span style='color: #e2ab2f'>审核中</span>"
                     }
-                    if (value == 6 || value == "6") {
-                        return "<span style='color: #e2ab2f'>审核中</span>"
-                    }
                 }
             })
             $('#eplTable').bootstrapTable({
@@ -111,6 +110,32 @@ function initTable(eplUrl) {
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
                 toolbars: [
                     {
+                        text: '添加',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var url = "epl/add/page";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "添加",
+                                            url: "epl/add/page",
+                                            gridId: "gridId",
+                                            width: 500,
+                                            height: 500
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    },
+                    {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
@@ -120,11 +145,11 @@ function initTable(eplUrl) {
                                 window.Ewin.alert({message: '请选择一条需要修改的数据!'});
                                 return false;
                             }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
+                            else if (rows[0].status == 5) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
                                 return false;
                             }
-                            var url = "";
+                            var url = "epl/update/page";
                             $.ajax({
                                 url: "privilege/write?url=" + url,
                                 type: "GET",
@@ -136,7 +161,7 @@ function initTable(eplUrl) {
                                     else {
                                         window.Ewin.dialog({
                                             title: "修改",
-                                            url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
+                                            url: "epl/update/page?&id=" + rows[0].id,
                                             gridId: "gridId",
                                             width: 500,
                                             height: 500

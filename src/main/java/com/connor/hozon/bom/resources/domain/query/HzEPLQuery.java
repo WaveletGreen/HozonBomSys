@@ -18,4 +18,9 @@ public class HzEPLQuery extends DefaultQuery {
      * 主键id
      */
     private Long id;
+
+    /**
+     * 项目id
+     */
+    private String projectId;
 }

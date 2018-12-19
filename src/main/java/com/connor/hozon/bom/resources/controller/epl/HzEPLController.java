@@ -3,8 +3,10 @@ package com.connor.hozon.bom.resources.controller.epl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
+import com.connor.hozon.bom.resources.domain.dto.request.EditHzEPLReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEplRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -15,6 +17,7 @@ import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,7 +42,6 @@ public class HzEPLController extends BaseController {
     public void getEplTitle(HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
-        tableTitle.put("status","状态值");
         tableTitle.put("partOfWhichDept","专业" );
         tableTitle.put("partId","零件号" );
         tableTitle.put("partName","名称" );
@@ -55,7 +57,6 @@ public class HzEPLController extends BaseController {
         tableTitle.put("materialStandard","材料标准");
         tableTitle.put("surfaceTreat","表面处理" );
         tableTitle.put("textureColorNum","纹理编号/色彩编号");
-        
         tableTitle.put("manuProcess","制造工艺");
         tableTitle.put("symmetry","对称" );
         tableTitle.put("importance","重要度");
@@ -150,6 +151,29 @@ public class HzEPLController extends BaseController {
 
 
     /**
+     * 跳转到新增EPL页面
+     * @return
+     */
+    @RequestMapping(value = "add/page",method = RequestMethod.GET)
+    public String toAddEplPage(){
+        return "bomManage/epl/addEpl";
+    }
+
+    /**
+     * 跳转到编辑EPL页面
+     * @return
+     */
+    @RequestMapping(value = "update/page",method = RequestMethod.GET)
+    public String toUpdatePage(Long id,Model model){
+        HzEplRespDTO  respDTO = hzEPLService.getEplById(id);
+        if(respDTO != null){
+            model.addAttribute("data",respDTO);
+            model.addAttribute("id",id);
+        }
+        return "bomManage/epl/updateEpl";
+    }
+
+    /**
      * 跳转到EPL选择变更单
      * @return
      */
@@ -161,5 +185,38 @@ public class HzEPLController extends BaseController {
             model.addAttribute("puids",puids);
         }
         return "bomManage/epl/eplSetChangeForm";
+    }
+
+    /**
+     * 新增一条记录
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "add",method = RequestMethod.POST)
+    public void addEpl(@RequestBody EditHzEPLReqDTO reqDTO,HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzEPLService.addPartToEPL(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 编辑一条记录
+     * @param reqDTO
+     * @param response
+     */
+    @RequestMapping(value = "update",method = RequestMethod.POST)
+    public void updateEpl(@RequestBody EditHzEPLReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzEPLService.updatePartFromEPLRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    /**
+     * 删除 批量删
+     * @param ids
+     * @param response
+     */
+    @RequestMapping(value = "delete",method = RequestMethod.DELETE)
+    public void deleteEpl(String ids,HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzEPLService.deletePartFromEPLByIds(ids);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 }

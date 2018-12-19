@@ -31,7 +31,7 @@ public interface HzEPLService {
      * @param ids
      * @return
      */
-    WriteResultRespDTO deletePartFromEPLRecordById(String ids);
+    WriteResultRespDTO deletePartFromEPLByIds(String ids);
 
     /**
      * 分页查询EPL清单

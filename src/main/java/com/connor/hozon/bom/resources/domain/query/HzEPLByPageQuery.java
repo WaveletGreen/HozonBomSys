@@ -33,4 +33,9 @@ public class HzEPLByPageQuery extends DefaultPageQuery {
      * 零件来源
      */
     private String partResource;
+
+    /**
+     * 状态
+     */
+    private Integer status;
 }

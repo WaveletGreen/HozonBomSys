@@ -41,24 +41,38 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
 
     @Override
     public boolean partIdRepeat(HzEPLQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",query.getId());
-        map.put("partId",query.getPartId());
-        return (int)super.findForObject("HzEPLDAOImpl_partIdRepeat",query)>0;
+        try {
+            Long id = query.getId();
+            if(id != null){
+                query.setId(null);//不根据id 来查重
+            }
+            HzEPLRecord record  = getEPLRecordById(query);
+            if(record == null){
+                return false;
+            }
+            if(record.getId().equals(id)){
+                return false;
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return true;
+        }
     }
 
     @Override
-    public HzEPLRecord getPartFromEPLRecordById(HzEPLQuery query) {
+    public HzEPLRecord getEPLRecordById(HzEPLQuery query) {
         Map<String,Object> map = new HashMap<>();
         map.put("id",query.getId());
         map.put("partId",query.getPartId());
-        return (HzEPLRecord)super.findForObject("HzEPLDAOImpl_getPartFromEPLRecordById",query);
+        map.put("projectId",query.getProjectId());
+        return (HzEPLRecord)super.findForObject("HzEPLDAOImpl_getEPLRecordById",query);
     }
 
     @Override
     public Page<HzEPLRecord> getEplRecordByPage(HzEPLByPageQuery query) {
         PageRequestParam param = new PageRequestParam();
-        param.setPageSize(query.getPageSize());
+        param.setPageNumber(query.getPage());
         if(BOMTransConstants.ALL.equals(query.getLimit())){
             param.setAllNumber(true);
         }else {
@@ -66,10 +80,10 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
         }
         Map<String,Object> map = new HashMap<>();
         map.put("partId",query.getPartId().trim());
-        map.put("partName",query.getPartName().trim());
         map.put("partOfWhichDept",query.getPartOfWhichDept().trim());
-        map.put("partResource",query.getPartResource().trim());
+        map.put("partResource",query.getPartResource());
         map.put("projectId",query.getProjectId());
+        map.put("status",query.getStatus());
         param.setFilters(map);
         return super.findPage("HzEPLDAOImpl_getEplRecordByPage","HzEPLDAOImpl_getEplTotalCount",param);
     }

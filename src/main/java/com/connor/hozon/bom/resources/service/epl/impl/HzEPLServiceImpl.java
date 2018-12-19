@@ -30,6 +30,13 @@ public class HzEPLServiceImpl implements HzEPLService {
     @Override
     public WriteResultRespDTO addPartToEPL(EditHzEPLReqDTO reqDTO) {
         try {
+            HzEPLQuery query = new HzEPLQuery();
+            query.setPartId(reqDTO.getPartId());
+            query.setProjectId(reqDTO.getProjectId());
+            boolean repeat = hzEPLDAO.partIdRepeat(query);
+            if(repeat){
+                return WriteResultRespDTO.failResultRespDTO("当前添加的零件号已存在！");
+            }
             int i = hzEPLDAO.insert(HzEPLFactory.eplReqDTOToRecord(reqDTO));
             if(i<=0){
                 return WriteResultRespDTO.getFailResult();
@@ -44,6 +51,15 @@ public class HzEPLServiceImpl implements HzEPLService {
     @Override
     public WriteResultRespDTO updatePartFromEPLRecord(EditHzEPLReqDTO reqDTO) {
         try {
+            //判断一下重复 前端也会判断
+            HzEPLQuery query = new HzEPLQuery();
+            query.setId(reqDTO.getId());
+            query.setPartId(reqDTO.getPartId());
+            query.setProjectId(reqDTO.getProjectId());
+            boolean repeat = hzEPLDAO.partIdRepeat(query);
+            if(repeat){
+                return WriteResultRespDTO.failResultRespDTO("零件号已存在！");
+            }
             int i = hzEPLDAO.update(HzEPLFactory.eplReqDTOToRecord(reqDTO));
             if(i<=0){
                 return WriteResultRespDTO.getFailResult();
@@ -56,7 +72,7 @@ public class HzEPLServiceImpl implements HzEPLService {
     }
 
     @Override
-    public WriteResultRespDTO deletePartFromEPLRecordById(String ids) {
+    public WriteResultRespDTO deletePartFromEPLByIds(String ids) {
         try {
             int i = hzEPLDAO.delete(ids);
             if(i<=0){
@@ -96,7 +112,7 @@ public class HzEPLServiceImpl implements HzEPLService {
         HzEPLQuery query = new HzEPLQuery();
         query.setId(id);
         try {
-            HzEPLRecord record = hzEPLDAO.getPartFromEPLRecordById(query);
+            HzEPLRecord record = hzEPLDAO.getEPLRecordById(query);
             if(null != record){
                 HzEplRespDTO respDTO  = HzEPLFactory.eplRecordToRespDTO(record);
                 return respDTO;

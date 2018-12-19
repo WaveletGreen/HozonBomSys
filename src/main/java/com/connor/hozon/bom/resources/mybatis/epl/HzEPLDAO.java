@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.mybatis.epl;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
 import com.connor.hozon.bom.resources.page.Page;
@@ -35,6 +34,7 @@ public interface HzEPLDAO {
 
     /**
      * 检查重复 零件号是否重复
+     * 同项目内 不允许出现重复零件号
      * @param query
      * @return
      */
@@ -45,7 +45,7 @@ public interface HzEPLDAO {
      * @param query
      * @return
      */
-    HzEPLRecord getPartFromEPLRecordById(HzEPLQuery query);
+    HzEPLRecord getEPLRecordById(HzEPLQuery query);
     /**
      * 分页查询
      * @param query

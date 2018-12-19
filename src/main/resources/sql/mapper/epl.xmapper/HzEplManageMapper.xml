@@ -82,7 +82,7 @@
       TORQUE, DUTY_ENGINEER, SUPPLY,
       SUPPLY_CODE, REMARK, REGULATION_CODE,
       BUY_ENGINEER)
-    values (SEQ_HZ_EWO_BASIC_INFO.nextval, #{projectId,jdbcType=VARCHAR}, #{partId,jdbcType=VARCHAR},
+    values (SEQ_HZ_EPL_RECORD.nextval, #{projectId,jdbcType=VARCHAR}, #{partId,jdbcType=VARCHAR},
       #{partOfWhichDept,jdbcType=VARCHAR}, #{partName,jdbcType=VARCHAR}, #{partClass,jdbcType=VARCHAR},
       #{partEnName,jdbcType=VARCHAR}, #{partResource,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
       #{createTime,jdbcType=DATE}, #{updateTime,jdbcType=DATE}, #{fastener,jdbcType=VARCHAR},
@@ -253,11 +253,85 @@
 
     <!--select-->
     <select id="HzEPLDAOImpl_getEplRecordByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select * from (
+        select u.*,rownum as rn from(
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_EPL_RECORD t1
+        <where>
+            1=1
+            <if test="projectId != null and projectId != ''">
+                and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+            <if test="partId != null and partId != ''">
+                and t1.PART_ID like CONCAT(CONCAT('%',#{partId,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="partName != null and partName!=''">
+                and t1.PART_NAME like CONCAT(CONCAT('%',#{partName,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="partOfWhichDept != null and partOfWhichDept!=''">
+                and t1.PART_OF_WHICH_DEPT = #{partOfWhichDept,jdbcType=VARCHAR}
+            </if>
+            <if test="partResource != null and partResource!=''">
+                and t1.PART_RESOURCE = #{partResource,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and t1.STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            and t1.STATUS <![CDATA[ <> ]]>0 order by t1.PART_ID
+        </where>
+        )u
+        where ROWNUM &lt;=#{limit,jdbcType=INTEGER} )
+        where rn &gt;#{offset,jdbcType=INTEGER}
+
 
     </select>
 
     <select id="HzEPLDAOImpl_getEplTotalCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
-
+        select
+        count (*)
+        from HZ_EPL_RECORD t1
+        <where>
+            1=1
+            <if test="projectId != null and projectId != ''">
+                and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+            <if test="partId != null and partId != ''">
+                and t1.PART_ID like CONCAT(CONCAT('%',#{partId,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="partName != null and partName!=''">
+                and t1.PART_NAME like CONCAT(CONCAT('%',#{partName,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="partOfWhichDept != null and partOfWhichDept!=''">
+                and t1.PART_OF_WHICH_DEPT = #{partOfWhichDept,jdbcType=VARCHAR}
+            </if>
+            <if test="partResource != null and partResource!=''">
+                and t1.PART_RESOURCE = #{partResource,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and t1.STATUS = #{status,jdbcType=VARCHAR}
+            </if>
+            and t1.STATUS <![CDATA[ <> ]]>0
+        </where>
     </select>
 
+
+    <select id="HzEPLDAOImpl_getEPLRecordById" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_EPL_RECORD t1
+        <where>
+            1=1
+            <if test="projectId != null and projectId != ''">
+                and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+            <if test="partId != null and partId != ''">
+                and t1.PART_ID =#{partId,jdbcType=VARCHAR}
+            </if>
+            <if test="id != null">
+                and t1.ID =#{id,jdbcType=DOUBLE}
+            </if>
+            and t1.STATUS <![CDATA[ <> ]]>0
+        </where>
+    </select>
 </mapper>
