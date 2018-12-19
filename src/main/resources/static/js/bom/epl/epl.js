@@ -14,7 +14,9 @@ function doQuery() {
     var projectPuid = $("#project", window.top.document).val();
     var eplUrl = "epl/record?projectId=" + projectPuid;
     var status = $("#status").val();
+    if (status != "请选择数据状态") {
         eplUrl += "&status=" + status;
+    }
     var partResource = $("#partResource").val();
     if (partResource == "请选择零件来源") {
         eplUrl += "&partResource=" + "";
