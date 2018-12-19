@@ -11,6 +11,7 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
+import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 
 import java.util.Date;
@@ -97,8 +98,8 @@ public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeM
     }
 
     @Override
-    public int updateByChangeIds(List<Long> changeMaterielFeatureIds) {
-        return baseSQLUtil.executeUpdate(changeMaterielFeatureIds,clz.getCanonicalName()+".updateByChangeIds");
+    public int updateByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans) {
+        return baseSQLUtil.executeUpdate(hzDMBasicChangeBeans,clz.getCanonicalName()+".updateByChangeIds");
     }
 
     @Override

@@ -58,7 +58,12 @@ public class HzDMBasicChangeDaoImpl extends BasicDaoImpl<HzDMBasicChangeBean> im
     }
 
     @Override
-    public int updateByChangeIds(List<Long> changeMaterielFeatureIds) {
-        return baseSQLUtil.executeDelete(changeMaterielFeatureIds,clz.getCanonicalName()+".updateByChangeIds");
+    public int deleteByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans) {
+        return baseSQLUtil.executeDelete(hzDMBasicChangeBeans,clz.getCanonicalName()+".deleteByChangeIds");
+    }
+
+    @Override
+    public List<HzDMBasicChangeBean> selectNotEffect(List<Long> changeMaterielFeatureIds) {
+        return baseSQLUtil.executeQueryByPass(new HzDMBasicChangeBean(),changeMaterielFeatureIds,clz.getCanonicalName()+".selectNotEffect");
     }
 }

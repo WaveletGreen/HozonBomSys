@@ -3897,13 +3897,13 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         JSONObject result = new JSONObject();
         result.put("status",true);
         result.put("msg","删除成功");
-        List<HzFeatureChangeBean> hzFeatureChangeBeans1 = new ArrayList<>();
-        for(Long changeFeatureId : changeFeatureIds){
-            HzFeatureChangeBean hzFeatureChangeBean = new HzFeatureChangeBean();
-            hzFeatureChangeBean.setVwoId(orderId);
-            hzFeatureChangeBean.setId(changeFeatureId);
-            hzFeatureChangeBeans1.add(hzFeatureChangeBean);
-        }
+//        List<HzFeatureChangeBean> hzFeatureChangeBeans1 = new ArrayList<>();
+//        for(Long changeFeatureId : changeFeatureIds){
+//            HzFeatureChangeBean hzFeatureChangeBean = new HzFeatureChangeBean();
+//            hzFeatureChangeBean.setVwoId(orderId);
+//            hzFeatureChangeBean.setId(changeFeatureId);
+//            hzFeatureChangeBeans1.add(hzFeatureChangeBean);
+//        }
 //        if(hzCfg0RecordDao.updateByChangeId(changeFeatureIds)<=0?true:false){
 //            result.put("status",false);
 //            result.put("msg","修改源数据状态失败");
@@ -3943,18 +3943,32 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         JSONObject result = new JSONObject();
         result.put("status",true);
         result.put("msg","修改成功");
-        //根据变更数据修改源数据状态
+        /*******根据变更数据修改源数据状态*********/
+        //找到变更后数据
+        List<HzCmcrChange> hzCmcrChanges = hzCmcrChangeDao.selectNotEffect(changeColorModelIds);
         try {
-            hzCfg0ModelColorDao.updateByChangeIds(changeColorModelIds);
+            hzCfg0ModelColorDao.updateByChangeIds(hzCmcrChanges);
         }catch (Exception e){
             result.put("status",false);
             result.put("msg","修改源数据失败");
             return result;
         }
-        if(hzCmcrChangeDao.doDeleteIds(changeColorModelIds)<=0?true:false){
+        if(hzCmcrChangeDao.doDeleteIds(hzCmcrChanges)<=0?true:false){
             result.put("status",false);
-            result.put("msg","删除的为变更前数据或删除变更数据失败");
+            result.put("msg","删除变更数据失败");
             return result;
+        }
+        //判断是否还要变更数据
+        List<HzCmcrChange> hzCmcrChangeList = hzCmcrChangeDao.doQueryCmcrChangByChangeId(orderId);
+        if(hzCmcrChangeList==null||hzCmcrChangeList.size()<=0){
+            HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
+            hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_CMCR_AFTER_CHANGE.getTableName());
+            hzChangeDataRecord.setOrderId(orderId);
+            if(hzChangeDataRecordDAO.deleteByOrderIdAndTableName(hzChangeDataRecord)<=0?true:false){
+                result.put("status",false);
+                result.put("msg","删除关系表失败");
+                return result;
+            }
         }
         return result;
     }
@@ -3964,17 +3978,19 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         JSONObject result = new JSONObject();
         result.put("status",true);
         result.put("msg","修改成功");
-        //根据变更数据修改源数据状态
+        /*********根据变更数据修改源数据状态************/
+        //找到变更后的数据
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeansAfter = hzDMBasicChangeDao.selectNotEffect(changeMaterielFeatureIds);
         try {
-            hzDerivativeMaterielBasicDao.updateByChangeIds(changeMaterielFeatureIds);
+            hzDerivativeMaterielBasicDao.updateByChangeIds(hzDMBasicChangeBeansAfter);
         }catch (Exception e){
             result.put("status",false);
             result.put("msg","修改源数据失败");
             return result;
         }
-        if(hzDMBasicChangeDao.updateByChangeIds(changeMaterielFeatureIds)<=0?true:false){
+        if(hzDMBasicChangeDao.deleteByChangeIds(hzDMBasicChangeBeansAfter)<=0?true:false){
             result.put("status",false);
-            result.put("msg","删除变更数据失败,请确定数据是否存在变更前数据");
+            result.put("msg","删除变更数据失败");
             return result;
         }
         //判断是否还有变更数据

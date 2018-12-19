@@ -247,15 +247,22 @@
     <update id="updateByChangeIds" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
             update HZ_CFG0_MODEL_COLOR_RECORD
-            set CMCR_STATUS = (select CMCR_SRC_STATUS from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL}),
+            set CMCR_STATUS = #{item.cmcrSrcStatus,jdbcType=DECIMAL},
             CMCR_CHANGE_ORDER_UID = null
             where
-            PUID = (
-            select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL}
-            )
-            and
-              0=(select CMCR_CHANGE_STATUS from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL})
+            PUID = #{item.cmcrSrcPuid,jdbcType=DECIMAL}
         </foreach>
+        <!--<foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">-->
+            <!--update HZ_CFG0_MODEL_COLOR_RECORD-->
+            <!--set CMCR_STATUS = (select CMCR_SRC_STATUS from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL}),-->
+            <!--CMCR_CHANGE_ORDER_UID = null-->
+            <!--where-->
+            <!--PUID = (-->
+            <!--select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL}-->
+            <!--)-->
+            <!--and-->
+              <!--0=(select CMCR_CHANGE_STATUS from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID = #{item,jdbcType=DECIMAL})-->
+        <!--</foreach>-->
     </update>
 
 

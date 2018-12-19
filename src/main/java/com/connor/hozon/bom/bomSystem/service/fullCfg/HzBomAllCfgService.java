@@ -31,6 +31,14 @@ import com.connor.hozon.bom.sys.entity.User;
 import io.swagger.models.auth.In;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFCell;
+import org.apache.poi.xssf.streaming.SXSSFRow;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +59,7 @@ import sql.pojo.project.HzPlatformRecord;
 import sql.pojo.project.HzProjectLibs;
 import sql.pojo.project.HzVehicleRecord;
 
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1222,5 +1231,225 @@ public class HzBomAllCfgService {
             }
         }
         return result;
+    }
+
+    public SXSSFWorkbook getWorkBook(String projectUid) {
+
+        HzFeatureQueryDto queryBase = new HzFeatureQueryDto();
+        queryBase.setSort("P_CFG0_OBJECT_ID");
+        List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectUid, queryBase);
+        //获取该项目下的所有车型模型
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectUid);
+        //搜素所属有2Y层
+        List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectUid);
+        if (lines == null) {
+            lines = new ArrayList<HzBomLineRecord>();
+        }
+        initLoad(projectUid, hzCfg0ModelRecords, lines);
+
+        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectUid);
+        HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
+        HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+        HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+
+        //获取主数据
+        HzFullCfgMain hzFullCfgMain  = hzFullCfgMainDao.selectByProjectId(projectUid);
+        //model数据
+        List<HzFullCfgModel> hzFullCfgModels = hzFullCfgModelDao.selectByMainPuid(hzFullCfgMain.getId());
+        //withcfg数据
+        List<HzFullCfgWithCfg> hzFullCfgWithCfgs = hzFullCfgWithCfgDao.selectByMainID(hzFullCfgMain.getId());
+
+
+        List<HzCfg0ModelDetail> hzCfg0ModelDetailList = new ArrayList<HzCfg0ModelDetail>();
+        for (HzCfg0ModelRecord hzCfg0ModelRecord : hzCfg0ModelRecords) {
+            HzCfg0ModelDetail hzCfg0ModelDetail = new HzCfg0ModelDetail();
+            hzCfg0ModelDetail.setpModelPuid(hzCfg0ModelRecord.getPuid());
+            hzCfg0ModelDetailList.add(hzCfg0ModelDetail);
+        }
+        //为detail赋值
+        List<HzCfg0ModelDetail> hzCfg0ModelDetails = null;
+        if (hzCfg0ModelDetailList.size() != 0) {
+            hzCfg0ModelDetails = hzCfg0ModelDetailDao.selectByModelIds(hzCfg0ModelDetailList);
+        }
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        // 声明一个工作薄
+        SXSSFWorkbook workbook= new SXSSFWorkbook();
+        // 生成一个表格
+        SXSSFSheet sheet = workbook.createSheet("全配置BOM一级清单导出");
+        // 设置表格默认列宽度为15个字节
+        sheet.setDefaultColumnWidth((short) 15);
+        // 产生表格标题行
+
+        SXSSFRow row0 = sheet.createRow(0);
+        SXSSFRow row1 = sheet.createRow(1);
+        SXSSFRow row2 = sheet.createRow(2);
+        SXSSFRow row3 = sheet.createRow(3);
+        SXSSFRow row4 = sheet.createRow(4);
+        SXSSFRow row5 = sheet.createRow(5);
+        SXSSFRow row6 = sheet.createRow(6);
+        SXSSFRow row7 = sheet.createRow(7);
+        SXSSFRow row8 = sheet.createRow(8);
+        SXSSFRow row9 = sheet.createRow(9);
+        SXSSFRow row10 = sheet.createRow(10);
+
+        /*******主数据******/
+        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 9));
+        sheet.addMergedRegion(new CellRangeAddress(1, 1, 0, 9));
+        sheet.addMergedRegion(new CellRangeAddress(2, 2, 0, 9));
+        sheet.addMergedRegion(new CellRangeAddress(3, 3, 0, 9));
+        sheet.addMergedRegion(new CellRangeAddress(4, 9, 0, 9));
+
+
+
+        row0.createCell(0).setCellValue("阶段："+hzFullCfgMain.getStage());
+        row1.createCell(0).setCellValue("版本："+hzFullCfgMain.getVersion());
+        row2.createCell(0).setCellValue("生效日期："+sdf.format(hzFullCfgMain.getEffectiveDate()));
+        Integer status = hzFullCfgMain.getStatus();
+        row3.createCell(0).setCellValue("状态："+(status==null?"编辑":status==0?"编辑":status==1?"已生效":status==10?"审核中":""));
+
+        SXSSFCell cell4 = row4.createCell(0);
+//        cell4.getCellStyle().setAlignment(CellStyle.ALIGN_CENTER);
+        cell4.setCellValue("全配置一级BOM清单");
+
+        CellStyle cStyle = workbook.createCellStyle();
+        cStyle .cloneStyleFrom(cell4.getCellStyle());
+        cStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        cStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+
+        Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 12);
+        cStyle.setFont(font);
+        cell4.setCellStyle(cStyle);
+
+        /*******车辆模型************/
+        row0.createCell(10).setCellValue("品牌");
+        row1.createCell(10).setCellValue("平台");
+        row2.createCell(10).setCellValue("车型");
+        row3.createCell(10).setCellValue("版型");
+        row4.createCell(10).setCellValue("车身形式");
+        row5.createCell(10).setCellValue("公告");
+        row6.createCell(10).setCellValue("配置描述");
+        row7.createCell(10).setCellValue("配置管理");
+        row8.createCell(10).setCellValue("试制号");
+        row9.createCell(10).setCellValue("商品号");
+
+        for(int i=0;i<hzCfg0ModelRecords.size();i++){
+            row0.createCell(11+i).setCellValue(brand.getpBrandName());
+            row1.createCell(11+i).setCellValue(platform.getpPlatformName());
+            row2.createCell(11+i).setCellValue(vehicle.getpVehicleName());
+            row3.createCell(11+i).setCellValue(hzCfg0ModelRecords.get(i).getObjectName());
+            row4.createCell(11+i).setCellValue(hzCfg0ModelRecords.get(i).getPuid());
+            row5.createCell(11+i).setCellValue("公告");
+            row6.createCell(11+i).setCellValue("配置描述");
+            row7.createCell(11+i).setCellValue("配置管理");
+            row8.createCell(11+i).setCellValue("试制号");
+            row9.createCell(11+i).setCellValue("商品号");
+
+            if (hzCfg0ModelDetails != null && hzCfg0ModelDetails.size()> 0) {
+                boolean flag = false;
+                for (HzCfg0ModelDetail hzCfg0ModelDetail : hzCfg0ModelDetails) {
+                    if (hzCfg0ModelDetail.getpModelPuid().equals(hzCfg0ModelRecords.get(i).getPuid())) {
+                        row4.createCell(11+i).setCellValue(hzCfg0ModelDetail.getpModelShape() == null ? "" : hzCfg0ModelDetail.getpModelShape());
+                        row5.createCell(11+i).setCellValue(hzCfg0ModelDetail.getpModelAnnouncement() == null ? "" : hzCfg0ModelDetail.getpModelAnnouncement());
+                        row6.createCell(11+i).setCellValue(hzCfg0ModelDetail.getpModelCfgDesc() == null ? "" : hzCfg0ModelDetail.getpModelCfgDesc());
+                        row7.createCell(11+i).setCellValue(hzCfg0ModelDetail.getpModelCfgMng() == null ? "" : hzCfg0ModelDetail.getpModelCfgMng());
+                        row8.createCell(11+i).setCellValue(hzCfg0ModelDetail.getpModelTrailNum() == null ? "" : hzCfg0ModelDetail.getpModelTrailNum());
+                        row9.createCell(11+i).setCellValue(hzCfg0ModelDetail.getpModelGoodsNum() == null ? "" : hzCfg0ModelDetail.getpModelGoodsNum());
+                        flag = true;
+                    }
+                }
+            }
+        }
+
+        /*********2Y层*************/
+        row10.createCell(0).setCellValue("序号");
+        row10.createCell(1).setCellValue("操作类型");
+        row10.createCell(2).setCellValue("系统");
+        row10.createCell(3).setCellValue("总成零件号");
+        row10.createCell(4).setCellValue("总成零件名称");
+        row10.createCell(5).setCellValue("总成英文名");
+        row10.createCell(6).setCellValue("责任工程师");
+        row10.createCell(7).setCellValue("配置描述");
+        row10.createCell(8).setCellValue("配置代码");
+        row10.createCell(9).setCellValue("是否颜色件");
+        row10.createCell(10).setCellValue("备注");
+
+        for (int i=0;i<lines.size();i++) {
+            SXSSFRow row = sheet.createRow(11+i);
+            HzFullCfgWithCfg cfg = hzFullCfgWithCfgDao.selectByBomLineUidWithVersion(hzFullCfgMain.getId(), lines.get(i).getPuid());
+            row.createCell(0).setCellValue(i+1);
+            row.createCell(1).setCellValue(cfg == null ? "" : cfg.getFlOperationType() == 1 ? "新增" : cfg.getFlOperationType() == 2 ? "更新" : cfg.getFlOperationType() == 0 ? "删除" : "新增");
+            row.createCell(2).setCellValue(lines.get(i).getpBomOfWhichDept() == null ? "" : lines.get(i).getpBomOfWhichDept());
+            row.createCell(3).setCellValue(lines.get(i).getLineID() == null ? "" : lines.get(i).getLineID());
+            row.createCell(4).setCellValue(lines.get(i).getpBomLinePartName() == null ? "" : lines.get(i).getpBomLinePartName());
+            row.createCell(5).setCellValue(lines.get(i).getpBomLinePartEnName() == null ? "" : lines.get(i).getpBomLinePartEnName());
+            //颜色件
+            row.createCell(9).setCellValue((null == lines.get(i).getColorPart() || lines.get(i).getColorPart() == 0) ? "N" : "Y");
+            row.createCell(10).setCellValue(cfg == null ? "" : cfg.getFlComment() == null ? "" : "1".equals(cfg.getFlComment())?"标配":"选配");
+            for (HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs) {
+                if (hzFullCfgWithCfg.getCfgBomlineUid().equals(lines.get(i).getPuid())) {
+                    row.createCell(6).setCellValue(lines.get(i).getpDutyEngineer() == null ? "" : lines.get(i).getpDutyEngineer()/*hzFullCfgWithCfg.getFlCfgCreator() == null ? "" : hzFullCfgWithCfg.getFlCfgCreator()*/);
+                    for (HzCfg0Record hzCfg0Record : hzCfg0Records) {
+                        if (hzCfg0Record.getPuid().equals(hzFullCfgWithCfg.getCfgCfg0Uid())) {
+                            row.createCell(7).setCellValue(hzCfg0Record.getpCfg0Desc() == null ? "" : hzCfg0Record.getpCfg0Desc());
+                            row.createCell(8).setCellValue(hzCfg0Record.getpCfg0ObjectId() == null ? "" : hzCfg0Record.getpCfg0ObjectId());
+                        }
+                    }
+                }
+            }
+
+
+
+            /**********打点图***********/
+            HzBomLineRecord hzBomLineRecord = lines.get(i);
+            for (int j=0;j<hzCfg0ModelRecords.size();j++) {
+                HzCfg0ModelRecord hzCfg0ModelRecord = hzCfg0ModelRecords.get(j);
+                for (HzFullCfgModel hzFullCfgModel : hzFullCfgModels) {
+                    if (hzBomLineRecord.getPuid().equals(hzFullCfgModel.getFlModelBomlineUid()) && hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
+                        Short sPoint = hzFullCfgModel.getModPointType();
+                        String point;
+                        if (sPoint == null) {
+                            point = "";
+                        } else if (sPoint == 0) {
+                            point = "-";
+                        } else if (sPoint == 1) {
+                            point = "○";
+                        } else {
+                            point = "●";
+                        }
+                        row.createCell(11+j).setCellValue(point);
+                    }
+                }
+            }
+        }
+
+        /**********打点图***********/
+//        for (int i=0;i<hzCfg0ModelRecords.size();i++) {
+//            HzCfg0ModelRecord hzCfg0ModelRecord = hzCfg0ModelRecords.get(i);
+//            for (int j=0;j<lines.size();j++) {
+//                HzBomLineRecord hzBomLineRecord = lines.get(j);
+//                for (HzFullCfgModel hzFullCfgModel : hzFullCfgModels) {
+//                    if (hzBomLineRecord.getPuid().equals(hzFullCfgModel.getFlModelBomlineUid()) && hzFullCfgModel.getModModelUid().equals(hzCfg0ModelRecord.getPuid())) {
+//                        Short sPoint = hzFullCfgModel.getModPointType();
+//                        String point;
+//                        if (sPoint == null) {
+//                            point = "";
+//                        } else if (sPoint == 0) {
+//                            point = "-";
+//                        } else if (sPoint == 1) {
+//                            point = "○";
+//                        } else {
+//                            point = "●";
+//                        }
+//                        sheet.createRow(11+j).createCell(i).setCellValue(point);
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+        return workbook;
     }
 }

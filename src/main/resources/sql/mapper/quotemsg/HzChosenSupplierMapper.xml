@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.bom.resources.mybatis.quotemsg.HzChosenSupplierDAO">
+  <resultMap id="BaseResultMap" type="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier">
+    <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CS_CREATE_DATE" jdbcType="TIMESTAMP" property="csCreateDate" />
+    <result column="CS_CREATOR" jdbcType="VARCHAR" property="csCreator" />
+    <result column="CS_UPDATE_DATE" jdbcType="TIMESTAMP" property="csUpdateDate" />
+    <result column="CS_UPDATER" jdbcType="VARCHAR" property="csUpdater" />
+    <result column="ITEM_ID" jdbcType="VARCHAR" property="itemId" />
+    <result column="ITEM_NAME" jdbcType="VARCHAR" property="itemName" />
+    <result column="EACH_CAR_QUANTITY" jdbcType="DECIMAL" property="eachCarQuantity" />
+    <result column="CHOSEN_SUPPLIER" jdbcType="VARCHAR" property="chosenSupplier" />
+    <result column="PARTS" jdbcType="VARCHAR" property="parts" />
+    <result column="SINGLE_CAR_PRICE" jdbcType="DECIMAL" property="singleCarPrice" />
+    <result column="MOLDS_COST_NOT_REVENUE" jdbcType="DECIMAL" property="moldsCostNotRevenue" />
+    <result column="MOLDS_COST_HAS_REVENUE" jdbcType="DECIMAL" property="moldsCostHasRevenue" />
+    <result column="MOLDS_COST_DETAILS" jdbcType="VARCHAR" property="moldsCostDetails" />
+    <result column="GAUGE_COST" jdbcType="DECIMAL" property="gaugeCost" />
+    <result column="EXPLOITATION_COST" jdbcType="DECIMAL" property="exploitationCost" />
+    <result column="A_SAMPLE_PIECE" jdbcType="VARCHAR" property="aSamplePiece" />
+    <result column="B_SAMPLE_PIECE" jdbcType="VARCHAR" property="bSamplePiece" />
+    <result column="C_SAMPLE_PIECE" jdbcType="VARCHAR" property="cSamplePiece" />
+    <result column="CS_LOWER_COSTINGO_PLAN" jdbcType="VARCHAR" property="csLowerCostingoPlan" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="SPECIALTY" jdbcType="VARCHAR" property="specialty" />
+    <result column="PROJECTPUID" jdbcType="VARCHAR" property="projectPuid" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+      ID, CS_CREATE_DATE, CS_CREATOR,
+      CS_UPDATE_DATE, CS_UPDATER, ITEM_ID,
+      ITEM_NAME, EACH_CAR_QUANTITY, CHOSEN_SUPPLIER,
+      PARTS, SINGLE_CAR_PRICE, MOLDS_COST_NOT_REVENUE,
+      MOLDS_COST_HAS_REVENUE, MOLDS_COST_DETAILS,
+      GAUGE_COST, EXPLOITATION_COST, A_SAMPLE_PIECE,
+      B_SAMPLE_PIECE, C_SAMPLE_PIECE, CS_LOWER_COSTINGO_PLAN,
+      REMARK, SPECIALTY,PROJECTPUID
+  </sql>
+
+  <insert id="insert" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier">
+    <selectKey keyProperty="id" order="BEFORE" resultType="Long">
+      select SEQ_HZ_CHOSEN_SUPPLIER.NEXTVAL from dual
+    </selectKey>
+    insert into HZ_CHOSEN_SUPPLIER (ID, CS_CREATE_DATE, CS_CREATOR, 
+      CS_UPDATE_DATE, CS_UPDATER, ITEM_ID, 
+      ITEM_NAME, EACH_CAR_QUANTITY, CHOSEN_SUPPLIER, 
+      PARTS, SINGLE_CAR_PRICE, MOLDS_COST_NOT_REVENUE, 
+      MOLDS_COST_HAS_REVENUE, MOLDS_COST_DETAILS, 
+      GAUGE_COST, EXPLOITATION_COST, A_SAMPLE_PIECE, 
+      B_SAMPLE_PIECE, C_SAMPLE_PIECE, CS_LOWER_COSTINGO_PLAN, 
+      REMARK, SPECIALTY,PROJECTPUID)
+    values (#{id,jdbcType=DECIMAL}, #{csCreateDate,jdbcType=TIMESTAMP}, #{csCreator,jdbcType=VARCHAR}, 
+      #{csUpdateDate,jdbcType=TIMESTAMP}, #{csUpdater,jdbcType=VARCHAR}, #{itemId,jdbcType=VARCHAR}, 
+      #{itemName,jdbcType=VARCHAR}, #{eachCarQuantity,jdbcType=DECIMAL}, #{chosenSupplier,jdbcType=VARCHAR}, 
+      #{parts,jdbcType=VARCHAR}, #{singleCarPrice,jdbcType=DECIMAL}, #{moldsCostNotRevenue,jdbcType=DECIMAL}, 
+      #{moldsCostHasRevenue,jdbcType=DECIMAL}, #{moldsCostDetails,jdbcType=VARCHAR}, 
+      #{gaugeCost,jdbcType=DECIMAL}, #{exploitationCost,jdbcType=DECIMAL}, #{aSamplePiece,jdbcType=VARCHAR}, 
+      #{bSamplePiece,jdbcType=VARCHAR}, #{cSamplePiece,jdbcType=VARCHAR}, #{csLowerCostingoPlan,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{specialty,jdbcType=VARCHAR},#{projectPuid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier">
+    insert into HZ_CHOSEN_SUPPLIER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="csCreateDate != null">
+        CS_CREATE_DATE,
+      </if>
+      <if test="csCreator != null">
+        CS_CREATOR,
+      </if>
+      <if test="csUpdateDate != null">
+        CS_UPDATE_DATE,
+      </if>
+      <if test="csUpdater != null">
+        CS_UPDATER,
+      </if>
+      <if test="itemId != null">
+        ITEM_ID,
+      </if>
+      <if test="itemName != null">
+        ITEM_NAME,
+      </if>
+      <if test="eachCarQuantity != null">
+        EACH_CAR_QUANTITY,
+      </if>
+      <if test="chosenSupplier != null">
+        CHOSEN_SUPPLIER,
+      </if>
+      <if test="parts != null">
+        PARTS,
+      </if>
+      <if test="singleCarPrice != null">
+        SINGLE_CAR_PRICE,
+      </if>
+      <if test="moldsCostNotRevenue != null">
+        MOLDS_COST_NOT_REVENUE,
+      </if>
+      <if test="moldsCostHasRevenue != null">
+        MOLDS_COST_HAS_REVENUE,
+      </if>
+      <if test="moldsCostDetails != null">
+        MOLDS_COST_DETAILS,
+      </if>
+      <if test="gaugeCost != null">
+        GAUGE_COST,
+      </if>
+      <if test="exploitationCost != null">
+        EXPLOITATION_COST,
+      </if>
+      <if test="aSamplePiece != null">
+        A_SAMPLE_PIECE,
+      </if>
+      <if test="bSamplePiece != null">
+        B_SAMPLE_PIECE,
+      </if>
+      <if test="cSamplePiece != null">
+        C_SAMPLE_PIECE,
+      </if>
+      <if test="csLowerCostingoPlan != null">
+        CS_LOWER_COSTINGO_PLAN,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="specialty != null">
+        SPECIALTY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="csCreateDate != null">
+        #{csCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="csCreator != null">
+        #{csCreator,jdbcType=VARCHAR},
+      </if>
+      <if test="csUpdateDate != null">
+        #{csUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="csUpdater != null">
+        #{csUpdater,jdbcType=VARCHAR},
+      </if>
+      <if test="itemId != null">
+        #{itemId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="eachCarQuantity != null">
+        #{eachCarQuantity,jdbcType=DECIMAL},
+      </if>
+      <if test="chosenSupplier != null">
+        #{chosenSupplier,jdbcType=VARCHAR},
+      </if>
+      <if test="parts != null">
+        #{parts,jdbcType=VARCHAR},
+      </if>
+      <if test="singleCarPrice != null">
+        #{singleCarPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="moldsCostNotRevenue != null">
+        #{moldsCostNotRevenue,jdbcType=DECIMAL},
+      </if>
+      <if test="moldsCostHasRevenue != null">
+        #{moldsCostHasRevenue,jdbcType=DECIMAL},
+      </if>
+      <if test="moldsCostDetails != null">
+        #{moldsCostDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="gaugeCost != null">
+        #{gaugeCost,jdbcType=DECIMAL},
+      </if>
+      <if test="exploitationCost != null">
+        #{exploitationCost,jdbcType=DECIMAL},
+      </if>
+      <if test="aSamplePiece != null">
+        #{aSamplePiece,jdbcType=VARCHAR},
+      </if>
+      <if test="bSamplePiece != null">
+        #{bSamplePiece,jdbcType=VARCHAR},
+      </if>
+      <if test="cSamplePiece != null">
+        #{cSamplePiece,jdbcType=VARCHAR},
+      </if>
+      <if test="csLowerCostingoPlan != null">
+        #{csLowerCostingoPlan,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="specialty != null">
+        #{specialty,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selectPage" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/> from (
+      select
+      <include refid="Base_Column_List"/>,ROWNUM as rowno
+      from
+      HZ_CHOSEN_SUPPLIER
+      where
+      PROJECTPUID = #{projectPuid,jdbcType=VARCHAR}
+      <if test="itemId != null and itemId !=''">
+        and ITEM_ID like CONCAT(CONCAT('%',#{itemId,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="itemName != null and itemName !=''">
+        and ITEM_NAME = CONCAT(CONCAT('%',#{itemName,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="chosenSupplier != null and chosenSupplier !=''">
+        and CHOSEN_SUPPLIER = CONCAT(CONCAT('%',#{chosenSupplier,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="specialty != null and specialty !=''">
+        and SPECIALTY = CONCAT(CONCAT('%',#{specialty,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="limit!=null and  page!=null">
+        and ROWNUM &lt;= ${page}*${limit}
+      </if>
+      <if test="sort!=null">
+        order by ${sort}
+      </if>
+      <if test="sort!=null and order!=null">
+        ${order}
+      </if>
+    )
+    where
+    1=1
+    <if test="offset!=null">
+       and rowno &gt;= ${offset}+1
+    </if>
+  </select>
+
+  <select id="selectById" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      HZ_CHOSEN_SUPPLIER
+    where
+      ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+    <select id="selectProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      from
+      HZ_CHOSEN_SUPPLIER
+      where
+      PROJECTPUID = #{projectPuid,jdbcType=VARCHAR}
+    </select>
+
+  <update id="update" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier">
+    update
+      HZ_CHOSEN_SUPPLIER
+    set
+      CS_CREATE_DATE = #{csCreateDate,jdbcType=TIMESTAMP},
+      CS_CREATOR = #{csCreator,jdbcType=VARCHAR},
+      CS_UPDATE_DATE = #{csUpdateDate,jdbcType=TIMESTAMP},
+      CS_UPDATER = #{csUpdater,jdbcType=VARCHAR},
+      ITEM_ID = #{itemId,jdbcType=VARCHAR},
+      ITEM_NAME = #{itemName,jdbcType=VARCHAR},
+      EACH_CAR_QUANTITY = #{eachCarQuantity,jdbcType=DECIMAL},
+      CHOSEN_SUPPLIER = #{chosenSupplier,jdbcType=VARCHAR},
+      PARTS = #{parts,jdbcType=VARCHAR},
+      SINGLE_CAR_PRICE = #{singleCarPrice,jdbcType=DECIMAL},
+      MOLDS_COST_NOT_REVENUE = #{moldsCostNotRevenue,jdbcType=DECIMAL},
+      MOLDS_COST_HAS_REVENUE = #{moldsCostHasRevenue,jdbcType=DECIMAL},
+      MOLDS_COST_DETAILS = #{moldsCostDetails,jdbcType=VARCHAR},
+      GAUGE_COST = #{gaugeCost,jdbcType=DECIMAL},
+      EXPLOITATION_COST = #{exploitationCost,jdbcType=DECIMAL},
+      A_SAMPLE_PIECE = #{aSamplePiece,jdbcType=VARCHAR},
+      B_SAMPLE_PIECE = #{bSamplePiece,jdbcType=VARCHAR},
+      C_SAMPLE_PIECE = #{cSamplePiece,jdbcType=VARCHAR},
+      CS_LOWER_COSTINGO_PLAN = #{csLowerCostingoPlan,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      SPECIALTYs = #{specialty,jdbcType=VARCHAR}
+      where
+      ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -402,11 +402,17 @@
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
             update HZ_DERIVATIVE_MATERIEL_BASIC
             set CHANGE_ORDER_UID = null,
-            DMB_STATUS = (select DMB_SRC_STATUS from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})
-            where ID = (select DMB_SRC_ID from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})
-            and DMB_STATUS = 10
-            and 0 = (select DMB_CHANGE_STATUS from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})
+            DMB_STATUS = #{item.dmbSrcStatus,jdbcType=DECIMAL}
+            where ID = #{item.dmbSrcId,jdbcType=DECIMAL}
         </foreach>
+        <!--<foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">-->
+            <!--update HZ_DERIVATIVE_MATERIEL_BASIC-->
+            <!--set CHANGE_ORDER_UID = null,-->
+            <!--DMB_STATUS = (select DMB_SRC_STATUS from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})-->
+            <!--where ID = (select DMB_SRC_ID from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})-->
+            <!--and DMB_STATUS = 10-->
+            <!--and 0 = (select DMB_CHANGE_STATUS from HZ_DM_BASIC_CHANGE where ID = #{item,jdbcType=DECIMAL})-->
+        <!--</foreach>-->
     </update>
 
     <select id="selectByChangeOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
