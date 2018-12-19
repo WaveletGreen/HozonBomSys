@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.IBaseSQLUtil;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
+import sql.pojo.cfg.modelColor.HzCmcrChange;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -105,8 +106,8 @@ public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> impl
     }
 
     @Override
-    public int updateByChangeIds(List<Long> changeColorModelIds) {
-        return baseSQLUtil.executeUpdate(changeColorModelIds,clzName+".updateByChangeIds");
+    public int updateByChangeIds(List<HzCmcrChange> hzCmcrChanges) {
+        return baseSQLUtil.executeUpdate(hzCmcrChanges,clzName+".updateByChangeIds");
     }
 
     @Override

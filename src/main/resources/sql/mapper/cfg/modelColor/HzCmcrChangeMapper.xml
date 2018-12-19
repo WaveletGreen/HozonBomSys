@@ -671,10 +671,8 @@
         where
         CMCR_CG_ID in
         <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
-            #{item,jdbcType=DECIMAL}
+            #{item.cmcrCgId,jdbcType=DECIMAL}
         </foreach>
-        and
-        CMCR_CHANGE_STATUS = 0
         <!--CMCR_CHANGE_ORDER_UID = (-->
         <!--select CMCR_CHANGE_ORDER_UID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID in-->
           <!--<foreach collection="list" index="index" item="item" open="(" close=")" separator=",">-->
@@ -701,5 +699,32 @@
         (
         select Max(CMCR_CG_ID) from HZ_CMCR_AFTER_CHANGE where CMCR_SRC_PUID = #{cmcrSrcPuid,jdbcType=VARCHAR} and CMCR_CHANGE_STATUS=1 and  CMCR_CG_ID&lt;#{cmcrCgId,jdbcType=DECIMAL}
         )
+    </select>
+
+    <select id="selectNotEffect" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CMCR_AFTER_CHANGE
+        where
+        CMCR_SRC_PUID in (
+        select CMCR_SRC_PUID from HZ_CMCR_AFTER_CHANGE where CMCR_CG_ID in
+        <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+          #{item,jdbcType=DECIMAL}
+        </foreach>
+        )
+        and
+        CMCR_CHANGE_STATUS = 0
+    </select>
+
+    <select id="doQueryCmcrChangByChangeId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CMCR_AFTER_CHANGE
+        where
+        CMCR_CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+        and
+        CMCR_CHANGE_STATUS = 0
     </select>
 </mapper>

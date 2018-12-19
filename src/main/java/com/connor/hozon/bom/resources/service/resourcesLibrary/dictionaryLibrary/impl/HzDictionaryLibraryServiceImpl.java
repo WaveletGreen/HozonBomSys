@@ -88,13 +88,13 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
             //判断其修改数据是否特性和特性值没变，如没变则修改特性表中的特性描述和特性值描述
             List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByDictionaryLibId(reqDTO.getPuid());
             for(HzCfg0Record hzCfg0Record : hzCfg0RecordList){
-                if(hzCfg0Record.getCfgIsInProcess()==1){
+                if(hzCfg0Record.getCfgIsInProcess()!=null&&hzCfg0Record.getCfgIsInProcess()==1){
                     resultMessageRespDTO.setErrMsg("修改的特性已在特性变更流程中，请先结束流程后再进行修改");
                     return resultMessageRespDTO;
                 }
             }
-            HzDictionaryLibrary hzDictionaryLibrary1 = hzDictionaryLibraryDao.findDictionaryLibrary(reqDTO.getPuid());
             if(hzCfg0RecordList!=null&&hzCfg0RecordList.size()>0){
+                HzDictionaryLibrary hzDictionaryLibrary1 = hzDictionaryLibraryDao.findDictionaryLibrary(reqDTO.getPuid());
                 if(hzDictionaryLibrary1.getFamillyCode().equals(reqDTO.getFamillyCode())&&hzDictionaryLibrary1.getEigenValue().equals(reqDTO.getEigenValue())) {
                     HzCfg0Record hzCfg0Record = new HzCfg0Record();
                     hzCfg0Record.setCfgDicLibUid(hzDictionaryLibrary1.getPuid());
@@ -105,7 +105,7 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
                         return resultMessageRespDTO;
                     }
                 }else {
-                    resultMessageRespDTO.setErrMsg("您修改的了配置字典的特性或特性值，但该条数据已在特性中引用，请在特性中删除引用后再进行修改");
+                    resultMessageRespDTO.setErrMsg("您修改了配置字典的特性或特性值，但该条数据已在特性中被引用，请在特性中删除引用后再进行修改");
                     return resultMessageRespDTO;
                 }
             }
@@ -171,6 +171,13 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
      */
     @Override
     public WriteResultRespDTO deleteHzDictionaryLibrary(String puid) {
+        List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByDictionaryLibId(puid);
+        if(hzCfg0RecordList!=null&&hzCfg0RecordList.size()>=0){
+            WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+            writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+            writeResultRespDTO.setErrMsg("该特性已被引用，不能被删除");
+            return writeResultRespDTO;
+        }
         try {
             boolean b  = PrivilegeUtil.writePrivilege();
             if(!b){

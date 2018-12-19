@@ -34,5 +34,7 @@ public interface HzDMBasicChangeDao extends BasicDao<HzDMBasicChangeBean> {
 
     int updateStatusByOrderId(Long orderId, int status);
 
-    int updateByChangeIds(List<Long> changeMaterielFeatureIds);
+    int deleteByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);
+
+    List<HzDMBasicChangeBean> selectNotEffect(List<Long> changeMaterielFeatureIds);
 }

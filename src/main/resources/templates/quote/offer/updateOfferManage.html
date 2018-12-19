@@ -3,91 +3,93 @@
 <!--User: xulf Date: 2018/12/6 Time: 14:28-->
 <link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
-<form id="offerForm" role="form" method="post" action="">
+<form id="offerForm" role="form" method="post" th:action="${action}">
+    <input class="form-control" id="id" name="lineId1" type="text" style="display: none"
+           th:value="${hzChosenSupplier.id}"/>
     <div class="form-group">
-        <label for="lineId1">零件号<span>*</span></label>
-        <input class="form-control" id="lineId1" name="lineId1" type="text"
-               placeholder="请输入零件号"/>
+        <label for="itemId">零件号<span>*</span></label>
+        <input class="form-control" id="itemId" name="itemId" type="text"
+               th:value="${hzChosenSupplier.itemId}"/>
     </div>
     <div class="form-group">
-        <label for="lineId2">零件名称<span>*</span></label>
-        <input class="form-control" id="lineId2" name="lineId2" type="text"
-               placeholder="请输入零件名称"/>
+        <label for="itemName">零件名称<span>*</span></label>
+        <input class="form-control" id="itemName" name="itemName" type="text"
+               th:value="${hzChosenSupplier.itemName}"/>
     </div>
     <div class="form-group">
-        <label for="lineId3">每车数量</label>
-        <input class="form-control" id="lineId3" name="lineId3" type="text"
-               placeholder="请输入每车数量"/>
+        <label for="eachCarQuantity">每车数量</label>
+        <input class="form-control" id="eachCarQuantity" name="eachCarQuantity" type="text"
+               th:value="${hzChosenSupplier.eachCarQuantity}"/>
     </div>
     <div class="form-group">
-        <label for="lineId4">中选供应商<span>*</span></label>
-        <input class="form-control" id="lineId4" name="lineId4" type="text"
-               placeholder="请输入中选供应商"/>
+        <label for="chosenSupplier">中选供应商<span>*</span></label>
+        <input class="form-control" id="chosenSupplier" name="chosenSupplier" type="text"
+               th:value="${hzChosenSupplier.chosenSupplier}"/>
     </div>
     <div class="form-group">
-        <label for="lineId5">零部件(不含税)</label>
-        <input class="form-control" id="lineId5" name="lineId5" type="text"
-               placeholder="请输入零部件(不含税)"/>
+        <label for="parts">零部件(不含税)</label>
+        <input class="form-control" id="parts" name="parts" type="text"
+               th:value="${hzChosenSupplier.parts}"/>
     </div>
     <div class="form-group">
-        <label for="lineId6">单车零部件价格(不含税)</label>
-        <input class="form-control" id="lineId6" name="lineId6" type="text"
-               placeholder="请输入单车零部件价格(不含税)"/>
+        <label for="singleCarPrice">单车零部件价格(不含税)</label>
+        <input class="form-control" id="singleCarPrice" name="singleCarPrice" type="text"
+               th:value="${hzChosenSupplier.singleCarPrice}"/>
     </div>
     <div class="form-group">
-        <label for="lineId7">模具费(不含税)</label>
-        <input class="form-control" id="lineId7" name="lineId7" type="text"
-               placeholder="请输入模具费(不含税)"/>
+        <label for="moldsCostNotRevenue">模具费(不含税)</label>
+        <input class="form-control" id="moldsCostNotRevenue" name="moldsCostNotRevenue" type="text"
+               th:value="${hzChosenSupplier.moldsCostNotRevenue}"/>
     </div>
     <div class="form-group">
-        <label for="lineId8">模具费(含税)</label>
-        <input class="form-control" id="lineId8" name="lineId8" type="text"
-               placeholder="请输入模具费(含税)"/>
+        <label for="moldsCostHasRevenue">模具费(含税)</label>
+        <input class="form-control" id="moldsCostHasRevenue" name="moldsCostHasRevenue" type="text"
+               th:value="${hzChosenSupplier.moldsCostHasRevenue}"/>
     </div>
     <div class="form-group">
-        <label for="lineId9">模具费付费情况</label>
-        <input class="form-control" id="lineId9" name="lineId9" type="text"
-               placeholder="请输入模具费付费情况"/>
+        <label for="moldsCostDetails">模具费付费情况</label>
+        <input class="form-control" id="moldsCostDetails" name="moldsCostDetails" type="text"
+               th:value="${hzChosenSupplier.moldsCostDetails}"/>
     </div>
     <div class="form-group">
-        <label for="lineId10">检具费(不含税)</label>
-        <input class="form-control" id="lineId10" name="lineId10" type="text"
-               placeholder="请输入检具费(不含税)"/>
+        <label for="gaugeCost">检具费(不含税)</label>
+        <input class="form-control" id="gaugeCost" name="gaugeCost" type="text"
+               th:value="${hzChosenSupplier.gaugeCost}"/>
     </div>
     <div class="form-group">
-        <label for="lineId11">开发费(不含税)</label>
-        <input class="form-control" id="lineId11" name="lineId11" type="text"
-               placeholder="请输入开发费(不含税)"/>
+        <label for="exploitationCost">开发费(不含税)</label>
+        <input class="form-control" id="exploitationCost" name="exploitationCost" type="text"
+               th:value="${hzChosenSupplier.exploitationCost}"/>
     </div>
     <div class="form-group">
-        <label for="lineId12">A样件</label>
-        <input class="form-control" id="lineId12" name="lineId12" type="text"
-               placeholder="请输入A样件"/>
+        <label for="aSamplePiece">A样件</label>
+        <input class="form-control" id="aSamplePiece" name="aSamplePiece" type="text"
+               th:value="${hzChosenSupplier.aSamplePiece}"/>
     </div>
     <div class="form-group">
-        <label for="lineId13">B样件</label>
-        <input class="form-control" id="lineId13" name="lineId13" type="text"
-               placeholder="请输入B样件"/>
+        <label for="bSamplePiece">B样件</label>
+        <input class="form-control" id="bSamplePiece" name="bSamplePiece" type="text"
+               th:value="${hzChosenSupplier.bSamplePiece}"/>
     </div>
     <div class="form-group">
-        <label for="lineId14">C样件</label>
-        <input class="form-control" id="lineId14" name="lineId14" type="text"
-               placeholder="请输入C样件"/>
+        <label for="cSamplePiece">C样件</label>
+        <input class="form-control" id="cSamplePiece" name="cSamplePiece" type="text"
+               th:value="${hzChosenSupplier.cSamplePiece}"/>
     </div>
     <div class="form-group">
-        <label for="lineId15">供应商降本计划</label>
-        <input class="form-control" id="lineId15" name="lineId15" type="text"
-               placeholder="请输入供应商降本计划"/>
+        <label for="csLowerCostingoPlan">供应商降本计划</label>
+        <input class="form-control" id="csLowerCostingoPlan" name="csLowerCostingoPlan" type="text"
+               th:value="${hzChosenSupplier.csLowerCostingoPlan}"/>
     </div>
     <div class="form-group">
-        <label for="lineId16">备注</label>
-        <input class="form-control" id="lineId16" name="lineId16" type="text"
-               placeholder="请输入备注"/>
+        <label for="remark">备注</label>
+        <input class="form-control" id="remark" name="remark" type="text"
+               th:value="${hzChosenSupplier.remark}"/>
     </div>
     <div class="form-group">
-        <label for="lineId17">专业<span>*</span></label>
-        <input class="form-control" id="lineId17" name="lineId17" type="text"
-               placeholder="请输入零件号"/>
+        <label for="specialty">专业<span>*</span></label>
+        <input class="form-control" id="specialty" name="specialty" type="text"
+               th:value="${hzChosenSupplier.specialty}"/>
     </div>
 </form>
 <script th:inline="javascript">
@@ -117,25 +119,26 @@
             bootstrapValidator.validate();
             if (bootstrapValidator.isValid()) {
                 var url = $("#offerForm ", window.top.document).attr('action');
-                var myData = JSON.stringify({
-                    "puid": $("#puid").val(),
-                    "projectId":$("#project", window.top.document).val()
-                });
+                var data = {};
+                var _d = $("#offerForm").serializeArray();
+                for (var p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
                 $.ajax({
                     contentType:
                         "application/json",
                     type:
                         'POST',
                     url: url,
-                    data: myData,
+                    data: JSON.stringify(data),
                     success:
                         function (result) {
                             activeTabBodyRefresh();
-                            if (result.success) {
-                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            if (result.status) {
+                                layer.msg(result.msg, {icon: 1, time: 2000})
                             }
-                            else if(!result.success){
-                                window.Ewin.alert({message: result.errMsg})
+                            else{
+                                window.Ewin.alert({message: result.msg})
                             }
                         },
                     error: function (status) {
@@ -153,6 +156,7 @@
         }
     });
     ]]>
+</script>
 <script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>
