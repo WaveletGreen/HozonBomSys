@@ -42,9 +42,9 @@ public class HzEPLController extends BaseController {
     public void getEplTitle(HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
-        tableTitle.put("partOfWhichDept","专业" );
         tableTitle.put("partId","零件号" );
         tableTitle.put("partName","名称" );
+        tableTitle.put("partOfWhichDept","专业" );
         tableTitle.put("partEnName","英文名称");
         tableTitle.put("unit","单位");
         tableTitle.put("pictureNo","图号");

@@ -186,14 +186,14 @@ public class HzEplRespDTO  extends BaseChangeRespDTO{
 
 
     public void setIs3cpart(Integer is3cpart) {
-        this.is3cpart =BOMTransConstants.YNStringToInteger(is3cpart);
+        this.is3cpart =BOMTransConstants.integerToYNString(is3cpart);
     }
 
     public void setInOutSideFlag(Integer inOutSideFlag) {
-        this.inOutSideFlag = BOMTransConstants.inOutSideStringToInteger(inOutSideFlag);
+        this.inOutSideFlag = BOMTransConstants.integerToInOutSideString(inOutSideFlag);
     }
 
     public void setRegulationFlag(Integer regulationFlag) {
-        this.regulationFlag = BOMTransConstants.YNStringToInteger(regulationFlag);
+        this.regulationFlag = BOMTransConstants.integerToYNString(regulationFlag);
     }
 }

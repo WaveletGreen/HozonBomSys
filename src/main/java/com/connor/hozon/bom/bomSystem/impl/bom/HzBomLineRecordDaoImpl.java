@@ -65,19 +65,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
         map.put("colorPart",isColorPart);
         return super.update("HzBomLineRecordDaoImpl_updateColorPart",map);
     }
-    /**
-     * 找出最大排序号
-     *
-     * @return
-     * @author haozt
-     */
-    public Double findMaxBomOrderNum(String projectId) {
-        String maxSortNum = (String)super.findForObject("HzBomLineRecordDaoImpl_findMaxBomOrderNum", projectId);
-        if(maxSortNum == null){
-            return null;
-        }
-        return Double.parseDouble(maxSortNum);
-    }
+
 
     /**
      * 找出一条BOMLine 对象 走变更查询单一条记录
@@ -161,7 +149,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
                             list.add(records.get(cout));
                             cout++;
                         }
-                        super.update("HzEbomRecordDAOImpl_updateBatch",list);
+                        super.update("HzEbomRecordDAOImpl_updateBatch", list);
                     }
                 }
                 if (i * 1000 < size) {
@@ -170,20 +158,15 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
                         list.add(records.get(cout));
                         cout++;
                     }
-                    super.update("HzEbomRecordDAOImpl_updateBatch",list);
+                    super.update("HzEbomRecordDAOImpl_updateBatch", list);
                 }
 
             }
             return 1;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-    }
-
-
-    public Integer getMaxLineIndexFirstNum(String projectId){
-        return (Integer) super.findForObject("HzBomLineRecordDaoImpl_getMaxLineIndexFirstNum",projectId);
     }
 
     public List<HzBomLineRecord> selectByPuids(List<String> withCfgPuids) {

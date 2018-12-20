@@ -33,11 +33,11 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setLinePuid(UUID.randomUUID().toString());
         hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
         hzPbomLineRecord.setCreateName(UserInfo.getUser().getUserName());
-        hzPbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-        hzPbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-        hzPbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-        hzPbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-        hzPbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
+//        hzPbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
+//        hzPbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+//        hzPbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
+//        hzPbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
+//        hzPbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
         hzPbomLineRecord.setLineId(reqDTO.getLineId());
         hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
         hzPbomLineRecord.setIsNewPart(0);
@@ -47,11 +47,11 @@ public class HzPbomRecordFactory {
     public static HzPbomLineRecord updateHzEbomReqDTOPbomRecord(UpdateHzEbomReqDTO reqDTO){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
         hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
-        hzPbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-        hzPbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-        hzPbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-        hzPbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-        hzPbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
+//        hzPbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
+//        hzPbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+//        hzPbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
+//        hzPbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
+//        hzPbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
         hzPbomLineRecord.setLinePuid(UUID.randomUUID().toString());
         hzPbomLineRecord.setLineId(reqDTO.getLineId());
         if("Y".equals(reqDTO.getColorPart())){
@@ -74,10 +74,10 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
         hzPbomLineRecord.seteBomPuid(record.getPuid());
         hzPbomLineRecord.setLineId(record.getLineId());
-        hzPbomLineRecord.setIsPart(record.getIsPart());
+//        hzPbomLineRecord.setIsPart(record.getIsPart());
         hzPbomLineRecord.setIs2Y(record.getIs2Y());
         hzPbomLineRecord.setLineIndex(record.getLineIndex());
-        hzPbomLineRecord.setParentUid(record.getParentId());
+        hzPbomLineRecord.setParentUid(record.getParentUid());
         hzPbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
         hzPbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
         hzPbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());

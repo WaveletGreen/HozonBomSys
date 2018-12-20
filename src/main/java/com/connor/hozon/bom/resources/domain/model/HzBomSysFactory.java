@@ -103,7 +103,7 @@ public class HzBomSysFactory<T> {
      * @param list
      * @return
      */
-    public  Map<Integer,List<T>> spiltList(List<T> list){
+    public static<T> Map<Integer,List<T>> spiltList(List<T> list){
         Map<Integer,List<T>> map = new HashMap<>();
         int size = list.size();
         int mapIndex =1;

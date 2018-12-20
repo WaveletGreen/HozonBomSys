@@ -5,7 +5,7 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.*;
-import com.connor.hozon.bom.resources.service.bom.HzEbomService;
+import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -35,7 +35,7 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
 @RequestMapping("/loa")
 public class LouaContorller extends BaseController {
     @Autowired
-    private HzEbomService hzEbomService;
+    private HzEBOMReadService hzEBOMReadService;
 
     @Autowired
     private HzPbomService hzPbomService;
@@ -55,7 +55,7 @@ public class LouaContorller extends BaseController {
          hzEbomTreeQuery.setPuid(query.getPuid());
          hzEbomTreeQuery.setProjectId(query.getProjectId());
          List<HzLoaRespDTO> loaRespDTOS = new ArrayList<>();
-         List<HzEPLManageRecord> recordList = hzEbomService.findCurrentBomChildren(hzEbomTreeQuery);//子
+         List<HzEPLManageRecord> recordList = hzEBOMReadService.findCurrentBomChildren(hzEbomTreeQuery);//子
         List<HzEPLManageRecord> hzEPLManageRecords = new ArrayList<>();
         HzEbomRespDTO respDTO = new HzEbomRespDTO();
          if(ListUtil.isNotEmpty(recordList)){
@@ -68,7 +68,7 @@ public class LouaContorller extends BaseController {
            }
            String parentId = record.getParentUid();
            if(parentId != null)
-           respDTO = hzEbomService.fingEbomById(parentId,query.getProjectId());//父
+           respDTO = hzEBOMReadService.fingEbomById(parentId,query.getProjectId());//父
          }
         hzEPLManageRecords.forEach(record -> {
              HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
@@ -207,7 +207,7 @@ public class LouaContorller extends BaseController {
 
     @RequestMapping(value = "setLou",method = RequestMethod.POST)
     public void setBomAsLou(@RequestBody SetLouReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO = hzEbomService.setCurrentBomAsLou(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMReadService.setCurrentBomAsLou(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO),response);
     }
 
@@ -218,12 +218,12 @@ public class LouaContorller extends BaseController {
             return;
         }
         JSONObject jsonObject = new JSONObject();
-        HzLouRespDTO resp = hzEbomService.getHzLouInfoById(query);
+        HzLouRespDTO resp = hzEBOMReadService.getHzLouInfoById(query);
         HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
         hzEbomTreeQuery.setPuid(query.getPuid());
         hzEbomTreeQuery.setProjectId(query.getProjectId());
         List<HzLoaRespDTO> loaRespDTOS = new ArrayList<>();
-        List<HzEPLManageRecord> recordList = hzEbomService.findCurrentBomChildren(hzEbomTreeQuery);//子
+        List<HzEPLManageRecord> recordList = hzEBOMReadService.findCurrentBomChildren(hzEbomTreeQuery);//子
         List<HzEPLManageRecord> hzEPLManageRecords = new ArrayList<>();
         HzEbomRespDTO respDTO = new HzEbomRespDTO();
         if(ListUtil.isNotEmpty(recordList)){
@@ -236,7 +236,7 @@ public class LouaContorller extends BaseController {
             }
             String parentId = record.getParentUid();
             if(parentId != null)
-                respDTO = hzEbomService.fingEbomById(parentId,query.getProjectId());//父
+                respDTO = hzEBOMReadService.fingEbomById(parentId,query.getProjectId());//父
         }
         hzEPLManageRecords.forEach(record -> {
             HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
