@@ -1,10 +1,12 @@
 package com.connor.hozon.bom.resources.service.epl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzEPLReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEplRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Author: haozt
@@ -46,4 +48,8 @@ public interface HzEPLService {
      * @return
      */
     HzEplRespDTO getEplById(Long id);
+
+    boolean partIdIsRepeat(String partId);
+
+    JSONObject excelImport(MultipartFile file, String projectPuid);
 }

@@ -87,4 +87,26 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
         param.setFilters(map);
         return super.findPage("HzEPLDAOImpl_getEplRecordByPage","HzEPLDAOImpl_getEplTotalCount",param);
     }
+
+    @Override
+    public HzEPLRecord selectByPartId(String partId) {
+        HzEPLRecord hzEPLRecord = new HzEPLRecord();
+        hzEPLRecord.setPartId(partId);
+        return (HzEPLRecord)super.findForObject("HzEPLDAOImpl_selectByPartId",hzEPLRecord);
+    }
+
+    @Override
+    public List<HzEPLRecord> selectByprojectPuid(String projectPuid) {
+        return super.findForList("HzEPLDAOImpl_selectByprojectPuid",projectPuid);
+    }
+
+    @Override
+    public int updateList(List<HzEPLRecord> hzEPLRecordsUpdate) {
+        return super.update("HzEPLDAOImpl_updateList",hzEPLRecordsUpdate);
+    }
+
+    @Override
+    public int insertList(List<HzEPLRecord> hzEPLRecords) {
+        return super.insert("HzEPLDAOImpl_insertList",hzEPLRecords);
+    }
 }

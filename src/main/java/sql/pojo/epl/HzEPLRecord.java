@@ -3,6 +3,9 @@ package sql.pojo.epl;
 import lombok.Data;
 import sql.pojo.BaseChangeDO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/12/18
@@ -130,13 +133,13 @@ public class HzEPLRecord extends BaseChangeDO {
      */
     private String developType;
     /**
-     * 数据版本
-     */
-    private String dataVersion;
-    /**
      * 目标重量
      */
     private String targetWeight;
+    /**
+     * 数据版本
+     */
+    private String dataVersion;
     /**
      * 预估重量
      */
@@ -178,9 +181,60 @@ public class HzEPLRecord extends BaseChangeDO {
      */
     private String regulationCode;
     /**
-     * 责任工程师
+     * 采购工程师
      */
     private String buyEngineer;
 
 
+    public static List<HzEPLRecord> getListBeen(List<String[]> data,String projectId){
+        List<HzEPLRecord> hzEPLRecords = new ArrayList<>();
+
+        for(String[] properties : data){
+            HzEPLRecord hzEPLRecord = new HzEPLRecord();
+            hzEPLRecord.setProjectId(projectId);
+            hzEPLRecord.setPartId(properties[1]);
+            hzEPLRecord.setPartName(properties[2]);
+            hzEPLRecord.setPartOfWhichDept(properties[3]);
+            hzEPLRecord.setPartEnName(properties[4]);
+            hzEPLRecord.setUnit(properties[5]);
+            hzEPLRecord.setPictureNo(properties[6]);
+            hzEPLRecord.setPictureSheet(properties[7]);
+            hzEPLRecord.setMaterialHigh(properties[8]);
+            hzEPLRecord.setMaterial1(properties[9]);
+            hzEPLRecord.setMaterial2(properties[10]);
+            hzEPLRecord.setMaterial3(properties[11]);
+            hzEPLRecord.setDensity(properties[12]);
+            hzEPLRecord.setMaterialStandard(properties[13]);
+            hzEPLRecord.setSurfaceTreat(properties[14]);
+            hzEPLRecord.setTextureColorNum(properties[15]);
+            hzEPLRecord.setManuProcess(properties[16]);
+            hzEPLRecord.setSymmetry(properties[17]);
+            hzEPLRecord.setImportance(properties[18]);
+            hzEPLRecord.setRegulationFlag("".equals(properties[19])?null:"/".equals(properties[19])?null:"Y".equals(properties[19])?1:0);
+            hzEPLRecord.setIs3cpart("".equals(properties[20])?null:"/".equals(properties[20])?null:"Y".equals(properties[20])?1:0);
+            hzEPLRecord.setRegulationCode(properties[21]);
+            hzEPLRecord.setBwgBoxPart(properties[22]);
+            hzEPLRecord.setDevelopType(properties[23]);
+            hzEPLRecord.setDataVersion(properties[24]);
+            hzEPLRecord.setTargetWeight(properties[25]);
+            hzEPLRecord.setFeatureWeight(properties[26]);
+            hzEPLRecord.setActualWeight(properties[27]);
+            hzEPLRecord.setFastener(properties[28]);
+            hzEPLRecord.setFastenerStandard(properties[29]);
+            hzEPLRecord.setFastenerLevel(properties[30]);
+            hzEPLRecord.setTorque(properties[31]);
+            hzEPLRecord.setDutyEngineer(properties[32]);
+            hzEPLRecord.setSupply(properties[33]);
+            hzEPLRecord.setSupplyCode(properties[34]);
+            hzEPLRecord.setBuyEngineer(properties[35]);
+            hzEPLRecord.setRemark(properties[36]);
+            hzEPLRecord.setPartClass(properties[37]);
+            hzEPLRecord.setPartResource(properties[38]);
+            hzEPLRecord.setInOutSideFlag("".equals(properties[39])?null:"/".equals(properties[39])?null:"内饰件".equals(properties[39])?1:0);
+
+            hzEPLRecords.add(hzEPLRecord);
+        }
+
+        return hzEPLRecords;
+    }
 }

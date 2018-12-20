@@ -99,12 +99,11 @@ function initTable(eplUrl) {
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                //queryParams:queryParam,
                 //uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
-                showExport: true,
-                exportDataType: 'all',
+                // showExport: true,
+                // exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
-                striped: true, //是否显示行间隔色
                 search: false, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: true, //是否显示所有的列
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
@@ -174,6 +173,54 @@ function initTable(eplUrl) {
                         }
                     },
                     {
+                        text: '删除',
+                        iconCls: 'glyphicon glyphicon-pencil',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length <=0) {
+                                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+                                return false;
+                            }
+                            else if (rows[0].status == 5) {
+                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
+                                return false;
+                            }
+                            var ids = "";
+                            for(let i in rows){
+                                ids += rows[i].id;
+                                if(i<rows.length-1){
+                                    ids+=",";
+                                }
+                            }
+                            var url = "epl/delete?ids="+ids;
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }else {
+                                        $.ajax({
+                                            url : url,
+                                            type : "DELETE",
+                                            success : function (result) {
+                                                if (!result.success) {
+                                                    window.Ewin.alert({message: result.errMsg});
+                                                    return false;
+                                                }else {
+                                                    layer.msg("删除成功", {icon: 1, time: 2000})
+                                                    window.location.reload();
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    },
+                    {
                         text: '关联变更单号',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
@@ -216,7 +263,47 @@ function initTable(eplUrl) {
                             })
                         }
                     },
+                    {
+                        text: 'Excel导入',
+                        iconCls: 'glyphicon glyphicon-log-out',
+                        handler: function () {
+                            var url = "epl/excelImportPage";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "选择变更表单",
+                                            url: "epl/excelImportPage",
+                                            gridId: "gridId",
+                                            width: 450,
+                                            height: 450
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    }
                 ],
+                //>>>>>>>>>>>>>>导出excel表格设置
+                showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
+                exportDataType: "selected",              //basic', 'all', 'selected'.
+                exportTypes: ['xlsx'],	    //导出类型
+                //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
+                exportOptions: {
+                    //ignoreColumn: [0,0],            //忽略某一列的索引
+                    fileName: 'EPL数据导出',              //文件名称设置
+                    worksheetName: 'Sheet1',          //表格工作区名称
+                    tableName: 'EPL数据表',
+                    excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+                    //onMsoNumberFormat: DoOnMsoNumberFormat
+                }
+                //导出excel表格设置<<<<<<<<<<<<<<<<
             });
         }
     })

@@ -17,10 +17,8 @@ import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletResponse;
@@ -42,9 +40,9 @@ public class HzEPLController extends BaseController {
     public void getEplTitle(HttpServletResponse response){
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No","序号");
-        tableTitle.put("partOfWhichDept","专业" );
         tableTitle.put("partId","零件号" );
         tableTitle.put("partName","名称" );
+        tableTitle.put("partOfWhichDept","专业" );
         tableTitle.put("partEnName","英文名称");
         tableTitle.put("unit","单位");
         tableTitle.put("pictureNo","图号");
@@ -218,5 +216,24 @@ public class HzEPLController extends BaseController {
     public void deleteEpl(String ids,HttpServletResponse response){
         WriteResultRespDTO respDTO = hzEPLService.deletePartFromEPLByIds(ids);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
+
+    @RequestMapping("exist")
+    @ResponseBody
+    public Map<String, Object> deptExist(String partId) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("valid",hzEPLService.partIdIsRepeat(partId));
+        return result;
+    }
+
+    @RequestMapping("excelImportPage")
+    public String excelImportPage(){
+        return "bomManage/epl/eplExcelImport";
+    }
+
+    @RequestMapping("excelImport")
+    @ResponseBody
+    public JSONObject excelImport(@RequestParam("file") MultipartFile file, @RequestParam("projectId") String projectPuid){
+        return hzEPLService.excelImport(file,projectPuid);
     }
 }
