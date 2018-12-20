@@ -276,7 +276,18 @@
                     validators: {
                         notEmpty: {
                             message: '零件号不能为空'
-                        }
+                        },
+                        remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+                            url: "epl/exist",//验证地址
+                            data: function (validator) {// 获取需要传送到后台的验证的数据
+                                return {
+                                    partId: $('#partId').val()
+                                }
+                            },
+                            message: '零件号已存在',//提示消息
+                            // delay :  500,
+                            type: 'POST'//请求方式，
+                        },
                     }
                 },
                 partName: {

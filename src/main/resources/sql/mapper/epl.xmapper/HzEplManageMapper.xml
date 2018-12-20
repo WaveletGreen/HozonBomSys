@@ -243,11 +243,12 @@
 
     <!--delete-->
     <delete id="HzEPLDAOImpl_delete" parameterType="java.util.List">
-        delete ${tableName}
+        <!--delete ${tableName}-->
+        delete HZ_EPL_RECORD
         where id
         in
-        <foreach collection="ids" index="index" item="item"  open="(" separator="," close=")">
-            #{ids[${index}]}
+        <foreach collection="list" index="index" item="item"  open="(" separator="," close=")">
+            #{list[${index}]}
         </foreach>
     </delete>
 
@@ -334,4 +335,204 @@
             and t1.STATUS <![CDATA[ <> ]]>0
         </where>
     </select>
+
+    <select id="HzEPLDAOImpl_selectByPartId" parameterType="sql.pojo.epl.HzEPLRecord" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_EPL_RECORD
+        where
+        PART_ID = #{partId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="HzEPLDAOImpl_selectByprojectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_EPL_RECORD
+        where
+        PROJECT_ID = #{projectPuid,jdbcType=VARCHAR}
+    </select>
+
+    <update id="HzEPLDAOImpl_updateList" parameterType="java.util.List">
+      <foreach collection="list" index="index" item="item" open="begin" separator=";" close=";end;">
+          update HZ_EPL_RECORD
+          <set>
+              <if test="item.partId != null">
+                  PART_ID = #{item.partId,jdbcType=VARCHAR},
+              </if>
+              <if test="item.partOfWhichDept != null">
+                  PART_OF_WHICH_DEPT = #{item.partOfWhichDept,jdbcType=VARCHAR},
+              </if>
+              <if test="item.partName != null">
+                  PART_NAME = #{item.partName,jdbcType=VARCHAR},
+              </if>
+              <if test="item.partClass != null">
+                  PART_CLASS = #{item.partClass,jdbcType=VARCHAR},
+              </if>
+              <if test="item.partEnName != null">
+                  PART_EN_NAME = #{item.partEnName,jdbcType=VARCHAR},
+              </if>
+              <if test="item.partResource != null">
+                  PART_RESOURCE = #{item.partResource,jdbcType=VARCHAR},
+              </if>
+              <if test="item.status != null">
+                  STATUS = #{item.status,jdbcType=INTEGER},
+              </if>
+              UPDATE_TIME = sysdate,
+              <if test="item.fastener != null">
+                  FASTENER = #{item.fastener,jdbcType=VARCHAR},
+              </if>
+              <if test="item.is3cpart != null">
+                  IS_3CPART = #{item.is3cpart,jdbcType=INTEGER},
+              </if>
+              <if test="item.inOutSideFlag != null">
+                  IN_OUT_SIDE_FLAG = #{item.inOutSideFlag,jdbcType=INTEGER},
+              </if>
+              <if test="item.updateId != null">
+                  UPDATE_ID = #{item.updateId,jdbcType=DOUBLE},
+              </if>
+              <if test="item.unit != null">
+                  UNIT = #{item.unit,jdbcType=VARCHAR},
+              </if>
+              <if test="item.pictureNo != null">
+                  PICTURE_NO = #{item.pictureNo,jdbcType=VARCHAR},
+              </if>
+              <if test="item.pictureSheet != null">
+                  PICTURE_SHEET = #{item.pictureSheet,jdbcType=VARCHAR},
+              </if>
+              <if test="item.materialHigh != null">
+                  MATERIAL_HIGH = #{item.materialHigh,jdbcType=VARCHAR},
+              </if>
+              <if test="item.material1 != null">
+                  MATERIAL1 = #{item.material1,jdbcType=VARCHAR},
+              </if>
+              <if test="item.material2 != null">
+                  MATERIAL2 = #{item.material2,jdbcType=VARCHAR},
+              </if>
+              <if test="item.material3 != null">
+                  MATERIAL3 = #{item.material3,jdbcType=VARCHAR},
+              </if>
+              <if test="item.density != null">
+                  DENSITY = #{item.density,jdbcType=VARCHAR},
+              </if>
+              <if test="item.materialStandard != null">
+                  MATERIAL_STANDARD = #{item.materialStandard,jdbcType=VARCHAR},
+              </if>
+              <if test="item.surfaceTreat != null">
+                  SURFACE_TREAT = #{item.surfaceTreat,jdbcType=VARCHAR},
+              </if>
+              <if test="item.textureColorNum != null">
+                  TEXTURE_COLOR_NUM = #{item.textureColorNum,jdbcType=VARCHAR},
+              </if>
+              <if test="item.manuProcess != null">
+                  MANU_PROCESS = #{item.manuProcess,jdbcType=VARCHAR},
+              </if>
+              <if test="item.symmetry != null">
+                  SYMMETRY = #{item.symmetry,jdbcType=VARCHAR},
+              </if>
+              <if test="item.importance != null">
+                  IMPORTANCE = #{item.importance,jdbcType=VARCHAR},
+              </if>
+              <if test="item.regulationFlag != null">
+                  REGULATION_FLAG = #{item.regulationFlag,jdbcType=INTEGER},
+              </if>
+              <if test="item.bwgBoxPart != null">
+                  BWG_BOX_PART = #{item.bwgBoxPart,jdbcType=VARCHAR},
+              </if>
+              <if test="item.developType != null">
+                  DEVELOP_TYPE = #{item.developType,jdbcType=VARCHAR},
+              </if>
+              <if test="item.dataVersion != null">
+                  DATA_VERSION = #{item.dataVersion,jdbcType=VARCHAR},
+              </if>
+              <if test="item.targetWeight != null">
+                  TARGET_WEIGHT = #{item.targetWeight,jdbcType=VARCHAR},
+              </if>
+              <if test="item.featureWeight != null">
+                  FEATURE_WEIGHT = #{item.featureWeight,jdbcType=VARCHAR},
+              </if>
+              <if test="item.actualWeight != null">
+                  ACTUAL_WEIGHT = #{item.actualWeight,jdbcType=VARCHAR},
+              </if>
+              <if test="item.fastenerStandard != null">
+                  FASTENER_STANDARD = #{item.fastenerStandard,jdbcType=VARCHAR},
+              </if>
+              <if test="item.fastenerLevel != null">
+                  FASTENER_LEVEL = #{item.fastenerLevel,jdbcType=VARCHAR},
+              </if>
+              <if test="item.torque != null">
+                  TORQUE = #{item.torque,jdbcType=VARCHAR},
+              </if>
+              <if test="item.dutyEngineer != null">
+                  DUTY_ENGINEER = #{item.dutyEngineer,jdbcType=VARCHAR},
+              </if>
+              <if test="item.supply != null">
+                  SUPPLY = #{item.supply,jdbcType=VARCHAR},
+              </if>
+              <if test="item.supplyCode != null">
+                  SUPPLY_CODE = #{item.supplyCode,jdbcType=VARCHAR},
+              </if>
+              <if test="item.remark != null">
+                  REMARK = #{item.remark,jdbcType=VARCHAR},
+              </if>
+              <if test="item.regulationCode != null">
+                  REGULATION_CODE = #{item.regulationCode,jdbcType=VARCHAR},
+              </if>
+              <if test="item.buyEngineer != null">
+                  BUY_ENGINEER = #{item.buyEngineer,jdbcType=VARCHAR},
+              </if>
+              <if test="item.orderId != null">
+                  ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+              </if>
+              <if test="item.revision != null">
+                  REVISION = #{item.revision,jdbcType=VARCHAR},
+              </if>
+              <if test="item.effectTime != null">
+                  EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP}
+              </if>
+          </set>
+          where ID = #{item.id,jdbcType=DOUBLE}
+      </foreach>
+    </update>
+
+    <insert id="HzEPLDAOImpl_insertList" parameterType="java.util.List">
+        insert into HZ_EPL_RECORD (ID, PROJECT_ID, PART_ID,
+          PART_OF_WHICH_DEPT, PART_NAME, PART_CLASS,
+          PART_EN_NAME, PART_RESOURCE, STATUS,
+          CREATE_TIME, UPDATE_TIME, FASTENER,
+          IS_3CPART, IN_OUT_SIDE_FLAG, CREATE_ID,
+          UPDATE_ID, UNIT, PICTURE_NO,
+          PICTURE_SHEET, MATERIAL_HIGH, MATERIAL1,
+          MATERIAL2, MATERIAL3, DENSITY,
+          MATERIAL_STANDARD, SURFACE_TREAT, TEXTURE_COLOR_NUM,
+          MANU_PROCESS, SYMMETRY, IMPORTANCE,
+          REGULATION_FLAG, BWG_BOX_PART, DEVELOP_TYPE,
+          DATA_VERSION, TARGET_WEIGHT, FEATURE_WEIGHT,
+          ACTUAL_WEIGHT, FASTENER_STANDARD, FASTENER_LEVEL,
+          TORQUE, DUTY_ENGINEER, SUPPLY,
+          SUPPLY_CODE, REMARK, REGULATION_CODE,
+          BUY_ENGINEER)
+          select SEQ_HZ_EPL_RECORD.nextval, A.* from(
+          <foreach collection="list" index="index" item="item" separator="union">
+              select
+              #{item.projectId,jdbcType=VARCHAR}, #{item.partId,jdbcType=VARCHAR},
+              #{item.partOfWhichDept,jdbcType=VARCHAR}, #{item.partName,jdbcType=VARCHAR}, #{item.partClass,jdbcType=VARCHAR},
+              #{item.partEnName,jdbcType=VARCHAR}, #{item.partResource,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER},
+              #{item.createTime,jdbcType=DATE}, #{item.updateTime,jdbcType=DATE}, #{item.fastener,jdbcType=VARCHAR},
+              #{item.is3cpart,jdbcType=INTEGER}, #{item.inOutSideFlag,jdbcType=INTEGER}, #{item.createId,jdbcType=DOUBLE},
+              #{item.updateId,jdbcType=DOUBLE}, #{item.unit,jdbcType=VARCHAR}, #{item.pictureNo,jdbcType=VARCHAR},
+              #{item.pictureSheet,jdbcType=VARCHAR}, #{item.materialHigh,jdbcType=VARCHAR}, #{item.material1,jdbcType=VARCHAR},
+              #{item.material2,jdbcType=VARCHAR}, #{item.material3,jdbcType=VARCHAR}, #{item.density,jdbcType=VARCHAR},
+              #{item.materialStandard,jdbcType=VARCHAR}, #{item.surfaceTreat,jdbcType=VARCHAR}, #{item.textureColorNum,jdbcType=VARCHAR},
+              #{item.manuProcess,jdbcType=VARCHAR}, #{item.symmetry,jdbcType=VARCHAR}, #{item.importance,jdbcType=VARCHAR},
+              #{item.regulationFlag,jdbcType=INTEGER}, #{item.bwgBoxPart,jdbcType=VARCHAR}, #{item.developType,jdbcType=VARCHAR},
+              #{item.dataVersion,jdbcType=VARCHAR}, #{item.targetWeight,jdbcType=VARCHAR}, #{item.featureWeight,jdbcType=VARCHAR},
+              #{item.actualWeight,jdbcType=VARCHAR}, #{item.fastenerStandard,jdbcType=VARCHAR}, #{item.fastenerLevel,jdbcType=VARCHAR},
+              #{item.torque,jdbcType=VARCHAR}, #{item.dutyEngineer,jdbcType=VARCHAR}, #{item.supply,jdbcType=VARCHAR},
+              #{item.supplyCode,jdbcType=VARCHAR}, #{item.remark,jdbcType=VARCHAR}, #{item.regulationCode,jdbcType=VARCHAR},
+              #{item.buyEngineer,jdbcType=VARCHAR}
+              from
+              dual
+          </foreach>
+          )A
+    </insert>
 </mapper>

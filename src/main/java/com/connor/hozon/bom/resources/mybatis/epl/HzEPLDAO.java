@@ -5,6 +5,8 @@ import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.epl.HzEPLRecord;
 
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/12/18
@@ -52,4 +54,12 @@ public interface HzEPLDAO {
      * @return
      */
     Page<HzEPLRecord> getEplRecordByPage(HzEPLByPageQuery query);
+
+    HzEPLRecord selectByPartId(String partId);
+
+    List<HzEPLRecord> selectByprojectPuid(String projectPuid);
+
+    int updateList(List<HzEPLRecord> hzEPLRecordsUpdate);
+
+    int insertList(List<HzEPLRecord> hzEPLRecords);
 }
