@@ -91,6 +91,22 @@ public class HzEbomRecordFactory {
         return hzBomLineRecord;
     }
 
+
+
+    public static HzEPLManageRecord addEbomDTOEBOMRecord(AddHzEbomReqDTO reqDTO){
+        HzEPLManageRecord record = new HzEPLManageRecord();
+        record.setPuid(UUID.randomUUID().toString());
+        record.setLineID(reqDTO.getLineId());
+        record.setpCreateName(UserInfo.getUser().getUserName());
+        record.setpUpdateName(UserInfo.getUser().getUserName());
+        record.setpFnaDesc(reqDTO.getpFnaDesc());
+        record.setpFnaInfo(reqDTO.getFna());
+        record.setpUpc(reqDTO.getpUpc());
+        record.setNumber(reqDTO.getNumber());
+        record.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
+        return record;
+    }
+
     public static HzBomLineRecord updateHzEbomDTOLineRecord(UpdateHzEbomReqDTO reqDTO){
         HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
         hzBomLineRecord.setLineID(reqDTO.getLineId());

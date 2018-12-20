@@ -14,6 +14,7 @@ import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -220,9 +221,12 @@ public class HzEPLController extends BaseController {
 
     @RequestMapping("exist")
     @ResponseBody
-    public Map<String, Object> deptExist(String partId) {
+    public Map<String, Object> deptExist(String partId,String projectId) {
+        if(StringUtils.isNotBlank(partId)){
+            partId = partId.trim();
+        }
         Map<String, Object> result = new HashMap<>();
-        result.put("valid",hzEPLService.partIdIsRepeat(partId));
+        result.put("valid",!hzEPLService.partIdIsRepeat(partId,projectId));
         return result;
     }
 

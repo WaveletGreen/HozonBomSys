@@ -49,7 +49,7 @@ public interface HzEPLService {
      */
     HzEplRespDTO getEplById(Long id);
 
-    boolean partIdIsRepeat(String partId);
+    boolean partIdIsRepeat(String partId,String projectId);
 
     JSONObject excelImport(MultipartFile file, String projectPuid);
 }

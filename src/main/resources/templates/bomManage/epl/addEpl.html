@@ -281,7 +281,8 @@
                             url: "epl/exist",//验证地址
                             data: function (validator) {// 获取需要传送到后台的验证的数据
                                 return {
-                                    partId: $('#partId').val()
+                                    partId: $('#partId').val(),
+                                    projectId:$("#project", window.top.document).val()
                                 }
                             },
                             message: '零件号已存在',//提示消息
