@@ -120,6 +120,11 @@ public class HzChangeOrderRecord extends BaseDO {
      */
     private String changeAccepter;
 
+    /**
+     * 审核人
+     */
+    private String auditor;
+
     public String getChangeAccepter() {
         return changeAccepter;
     }
@@ -326,5 +331,13 @@ public class HzChangeOrderRecord extends BaseDO {
 
     public void setCreateNameTC(String createNameTC) {
         this.createNameTC = createNameTC;
+    }
+
+    public String getAuditor() {
+        return auditor;
+    }
+
+    public void setAuditor(String auditor) {
+        this.auditor = auditor;
     }
 }

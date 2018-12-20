@@ -75,6 +75,7 @@ function initTable(url) {
     column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '发起人', align: 'center', valign: 'middle'});
     column.push({field: 'createName', title: '表单创建者', align: 'center', valign: 'middle'});
+    column.push({field: 'auditor', title: '审核人', align: 'center', valign: 'middle'});
     column.push({field: 'tel', title: '联系电话', align: 'center', valign: 'middle'});
     column.push({field: 'state', title: '变更单状态', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});

@@ -112,6 +112,11 @@ public class HzChangeOrderRespDTO extends BaseDTO {
      */
     private String changeAccepter;
 
+    /**
+     * 审核人
+     */
+    private String auditor;
+
     public String getChangeAccepter() {
         return changeAccepter;
     }
@@ -341,5 +346,13 @@ public class HzChangeOrderRespDTO extends BaseDTO {
 
     public void setStatus(Integer status) {
         Status = status;
+    }
+
+    public String getAuditor() {
+        return auditor;
+    }
+
+    public void setAuditor(String auditor) {
+        this.auditor = auditor;
     }
 }

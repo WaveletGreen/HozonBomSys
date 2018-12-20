@@ -121,6 +121,7 @@ public class HzChangeController extends BaseController {
             object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("createName",hzChangeOrderRespDTO.getCreateName());
+            object.put("auditor",hzChangeOrderRespDTO.getAuditor());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
             object.put("id",hzChangeOrderRespDTO.getId());
             object.put("marketType",hzChangeOrderRespDTO.getMarketType());
