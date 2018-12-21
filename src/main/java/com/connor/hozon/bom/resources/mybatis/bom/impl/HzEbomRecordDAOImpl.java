@@ -377,6 +377,30 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public HzEPLManageRecord getMaxLineIndexFirstNum(String projectId) {
+        return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_getMaxLineIndexFirstNum",projectId);
+    }
+
+    @Override
+    public Integer getMaxLineIndexLastNumFor2Y(String projectId) {
+        return (Integer) super.findForObject("HzEbomRecordDAOImpl_getMaxLineIndexLastNumFor2Y",projectId);
+    }
+
+    /**
+     * 找出最大排序号
+     *
+     * @return
+     * @author haozt
+     */
+    public Double findMaxBomOrderNum(String projectId) {
+        String maxSortNum = (String)super.findForObject("HzEbomRecordDAOImpl_findMaxBomOrderNum", projectId);
+        if(maxSortNum == null){
+            return null;
+        }
+        return Double.parseDouble(maxSortNum);
+    }
+
+    @Override
     public Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();

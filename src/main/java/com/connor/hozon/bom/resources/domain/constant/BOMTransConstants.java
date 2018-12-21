@@ -49,7 +49,7 @@ public class BOMTransConstants {
      * @param in
      * @return
      */
-    public static String inOutSideStringToInteger(Integer in){
+    public static String integerToInOutSideString(Integer in){
         if(null == in){
             return EMPTY;
         }
@@ -67,7 +67,7 @@ public class BOMTransConstants {
      * @param in
      * @return
      */
-    public static String YNStringToInteger(Integer in){
+    public static String integerToYNString(Integer in){
         if(null == in){
             return EMPTY;
         }

@@ -151,4 +151,24 @@ public interface HzEbomRecordDAO {
      */
     List<HzEPLManageRecord> getEbomRecordsByOrderId(HzChangeDataDetailQuery query);
 
+    /**
+     * 找EBOM 2Y层lineIndex的第一位最大值
+     * @param projectId
+     * @return maxLineIndexFirstNum  lineIndex
+     */
+    HzEPLManageRecord getMaxLineIndexFirstNum(String projectId);
+
+    /**
+     * 找EBOM 2Y层 lineIndex 最后一位最大值
+     * @param projectId
+     * @return
+     */
+    Integer getMaxLineIndexLastNumFor2Y(String projectId);
+
+    /**
+     * 找出最大排序号
+     * @param projectId
+     * @return
+     */
+    Double findMaxBomOrderNum(String projectId);
 }

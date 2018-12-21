@@ -18,8 +18,7 @@ import java.util.List;
 /**
  * Created by haozt on 2018/06/06
  */
-public interface HzEbomService {
-
+public interface HzEBOMReadService {
     /**
      * 分页获取EBOM信息
      * @param query
@@ -73,13 +72,13 @@ public interface HzEbomService {
      */
     List<HzEPLManageRecord> findCurrentBomChildren(HzEbomTreeQuery query);
 
-    Page<HzEbomRespDTO> getHzEbomRecycleByPage(HzBomRecycleByPageQuery query);
-
-    /**
-     * 删除记录恢复
-     * @return
-     */
-    WriteResultRespDTO recoverDeleteEbomRecord(String projectId, String puid);
+//    Page<HzEbomRespDTO> getHzEbomRecycleByPage(HzBomRecycleByPageQuery query);
+//
+//    /**
+//     * 删除记录恢复
+//     * @return
+//     */
+//    WriteResultRespDTO recoverDeleteEbomRecord(String projectId, String puid);
 
 
     /**

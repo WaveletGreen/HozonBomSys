@@ -10,7 +10,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.service.bom.HzEbomService;
+import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ import static org.hibernate.jpa.internal.QueryImpl.LOG;
 public class HzEbomController extends BaseController {
 
     @Autowired
-    private HzEbomService hzEbomService;
+    private HzEBOMReadService hzEBOMReadService;
 
     @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
@@ -59,7 +59,6 @@ public class HzEbomController extends BaseController {
         tableTitle.put("lineNo","查找编号");
         tableTitle.put("pBomLinePartEnName","英文名称");
         tableTitle.put("pLouaFlag","LOU/LOA");
-
         tableTitle.put("pUnit","单位");
         tableTitle.put("pPictureNo","图号");
         tableTitle.put("pPictureSheet","图幅" );
@@ -120,7 +119,7 @@ public class HzEbomController extends BaseController {
         }catch (Exception e){
 
         }
-        Page<HzEbomRespDTO> recordRespDTOPage = hzEbomService.getHzEbomPage(ebomByPageQuery);
+        Page<HzEbomRespDTO> recordRespDTOPage = hzEBOMReadService.getHzEbomPage(ebomByPageQuery);
         Map<String, Object> ret = new HashMap<>();
         if(recordRespDTOPage == null){
             return ret;
@@ -149,7 +148,7 @@ public class HzEbomController extends BaseController {
         if(puid == null || projectId == null){
             return ret;
         }
-        HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
+        HzEbomRespDTO recordRespDTO = hzEBOMReadService.fingEbomById(puid,projectId);
         if(recordRespDTO == null){
             return ret;
         }
@@ -182,10 +181,10 @@ public class HzEbomController extends BaseController {
             return "";
         }
         //判断勾选零件是否存在子层
-        int isHas = hzEbomService.findIsHasByPuid(puid,projectId);
+        int isHas = hzEBOMReadService.findIsHasByPuid(puid,projectId);
 
         //recordRespDTO传给updateEbomLevelManage界面的值，而非界面传回后台的值
-        HzEbomLevelRespDTO recordRespDTO = hzEbomService.fingEbomLevelById(puid,projectId);
+        HzEbomLevelRespDTO recordRespDTO = hzEBOMReadService.fingEbomLevelById(puid,projectId);
         recordRespDTO.setPuid(puid);//调整层级的当前零件puid
         recordRespDTO.setProjectId(projectId);//项目id
         //recordRespDTO.setLineId(object.getString("lineId"));//父层零件号
@@ -199,9 +198,9 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "update/ebomLevel",method = RequestMethod.POST)
     public void updateEbomLevelToDB(@RequestBody UpdateHzEbomLeveReqDTO reqDTO, HttpServletResponse response){
 
-        //WriteResultRespDTO respDTO= hzEbomService.updateHzEbomLevelRecord(reqDTO);
+        //WriteResultRespDTO respDTO= hzEBOMReadService.updateHzEbomLevelRecord(reqDTO);
         //测试
-        WriteResultRespDTO respDTO= hzEbomService.testbomLevelChange(reqDTO);
+        WriteResultRespDTO respDTO= hzEBOMReadService.testbomLevelChange(reqDTO);
 
         toJSONResponse(Result.build(
                 WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
@@ -313,7 +312,7 @@ public class HzEbomController extends BaseController {
         if(StringUtil.isEmpty(projectId)){
             return "";
         }
-        HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
+        HzEbomRespDTO recordRespDTO = hzEBOMReadService.fingEbomById(puid,projectId);
         recordRespDTO.setUpdateType(updateType);
         model.addAttribute("data",recordRespDTO);
 
@@ -331,7 +330,7 @@ public class HzEbomController extends BaseController {
             toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
-        WriteResultRespDTO respDTO = hzEbomService.addHzEbomRecord(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMReadService.addHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -344,7 +343,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(@RequestBody UpdateHzEbomReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO= hzEbomService.updateHzEbomRecord(reqDTO);
+        WriteResultRespDTO respDTO= hzEBOMReadService.updateHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -361,7 +360,7 @@ public class HzEbomController extends BaseController {
             toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
-        WriteResultRespDTO respDTO = hzEbomService.deleteHzEbomRecordById(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMReadService.deleteHzEbomRecordById(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -372,7 +371,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "data/change",method = RequestMethod.POST)
     public void ebomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO = hzEbomService.dataToChangeOrder(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMReadService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -406,7 +405,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "cancel",method = RequestMethod.POST)
     public void ebomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO = hzEbomService.backBomUtilLastValidState(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMReadService.backBomUtilLastValidState(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 }

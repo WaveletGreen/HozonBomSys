@@ -132,12 +132,11 @@ public class HzEPLServiceImpl implements HzEPLService {
     }
 
     @Override
-    public boolean partIdIsRepeat(String partId) {
-        HzEPLRecord hzEPLRecord = hzEPLDAO.selectByPartId(partId);
-        if(hzEPLRecord!=null){
-            return false;
-        }
-        return true;
+    public boolean partIdIsRepeat(String partId,String projectId) {
+        HzEPLQuery query = new HzEPLQuery();
+        query.setPartId(partId);
+        query.setProjectId(projectId);
+        return hzEPLDAO.partIdRepeat(query);
     }
 
     @Override

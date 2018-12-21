@@ -82,6 +82,7 @@
         <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
 
         <result column="UPDATE_TYPE" jdbcType="INTEGER" property="updateType"/>
+        <result column="EPL_ID" jdbcType="DOUBLE" property="eplId"/>
     </resultMap>
     <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"-->
                <!--type="sql.pojo.bom.HzBomLineRecord">-->
@@ -517,16 +518,7 @@
 
 
 
-    <!--查询orderNum的最大值信息-->
-    <select id="HzBomLineRecordDaoImpl_findMaxBomOrderNum" resultType="java.lang.String">
-        SELECT * FROM (
-        SELECT t1.P_SORT_NUM from HZ_BOM_LINE_RECORD t1
-         where t1.P_BOM_DIGIFAX_ID =(
-        select t2.puid from Hz_Bom_Main_Record t2
-        where
-        t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
-        )order by CAST(t1.P_SORT_NUM as FLOAT) DESC)WHERE rownum = 1
-    </select>
+
 
     <!--查询全部的2y层 lineindex 信息-->
     <select id="HzBomLineRecordDaoImpl_findBomLineIndex" resultType="java.lang.String"
@@ -828,19 +820,6 @@
             where PUID = #{item.puid,jdbcType=VARCHAR}
         </foreach>
     </update>
-
-    <!--获取EBOM 2Y层 对应的lineIndex的第一个字母最大值-->
-    <select id="HzBomLineRecordDaoImpl_getMaxLineIndexFirstNum" parameterType="java.lang.String" resultType="java.lang.Integer">
-        select max(TO_NUMBER((substr(P_LINE_INDEX,instr(P_LINE_INDEX,'.',0),instr(P_LINE_INDEX,'.',1)-1)))) m
-        from HZ_BOM_LINE_RECORD t
-        where t.p_bom_digifax_id=(
-        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-        select t2.puid from Hz_project_libs t2
-        <where>
-            t2.puid = #{projectId,jdbcType=VARCHAR}))
-            and LENGTH(TRANSLATE(P_LINE_INDEX,',0123456789','.'))=1
-        </where>
-    </select>
 
 
 

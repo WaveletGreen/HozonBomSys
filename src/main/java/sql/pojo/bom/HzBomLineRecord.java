@@ -240,6 +240,16 @@ public class HzBomLineRecord extends BaseChangeDO {
      */
     private byte[] singleVehDosage;
 
+    private Long eplId;
+
+    public Long getEplId() {
+        return eplId;
+    }
+
+    public void setEplId(Long eplId) {
+        this.eplId = eplId;
+    }
+
     public byte[] getSingleVehDosage() {
         return singleVehDosage;
     }

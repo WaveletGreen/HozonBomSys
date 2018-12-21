@@ -15,6 +15,10 @@ import java.util.Objects;
 public class HzEPLManageRecord extends BaseChangeDO {
 
     /**
+     * EPL 表主键
+     */
+    private Long eplId;
+    /**
      * puid
      */
     private String puid;
@@ -176,6 +180,8 @@ public class HzEPLManageRecord extends BaseChangeDO {
     private String pFnaInfo;
 
     private String fna;
+
+    private Integer maxLineIndexFirstNum;
     /**
      * 单车用量
      */
@@ -291,6 +297,22 @@ public class HzEPLManageRecord extends BaseChangeDO {
     public int hashCode() {
         int result = Objects.hash(puid);
         return result;
+    }
+
+    public Integer getMaxLineIndexFirstNum() {
+        return maxLineIndexFirstNum;
+    }
+
+    public void setMaxLineIndexFirstNum(Integer maxLineIndexFirstNum) {
+        this.maxLineIndexFirstNum = maxLineIndexFirstNum;
+    }
+
+    public Long getEplId() {
+        return eplId;
+    }
+
+    public void setEplId(Long eplId) {
+        this.eplId = eplId;
     }
 
     public String getSortNum() {

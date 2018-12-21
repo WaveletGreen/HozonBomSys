@@ -5,11 +5,11 @@
 <body>
 <form id="ebomMainForm" role="form" method="post" action="ebom/add/ebom">
     <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/><!--th:value="${entity.eBomPuid}"-->
-    <!--<div class="form-group">-->
-        <!--<label for="lineId">零件号<span>*</span></label>-->
-        <!--<input class="form-control" id="lineId" name="lineId" type="text"-->
-               <!--placeholder="请输入零件号"/>-->
-    <!--</div>-->
+    <div class="form-group">
+        <label for="lineId">零件号<span>*</span></label>
+        <input class="form-control" id="lineId" name="lineId" type="text"
+               placeholder="请输入零件号"/>
+    </div>
     <!--<div class="form-group">-->
         <!--<label for="pBomLinePartName">名称<span>*</span></label>-->
         <!--<input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"-->
@@ -249,14 +249,14 @@
             <!--<option>虚拟总成</option>-->
         <!--</select>-->
     <!--</div>-->
-    <div class="form-group">
-        <label for="pInOutSideFlag">内外饰标识</label>
-        <select class="form-control" name="pInOutSideFlag" id="pInOutSideFlag" placeholder="请选择内外饰标识">
-            <option></option>
-            <option>内饰件</option>
-            <option>外饰件</option>
-        </select>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="pInOutSideFlag">内外饰标识</label>-->
+        <!--<select class="form-control" name="pInOutSideFlag" id="pInOutSideFlag" placeholder="请选择内外饰标识">-->
+            <!--<option></option>-->
+            <!--<option>内饰件</option>-->
+            <!--<option>外饰件</option>-->
+        <!--</select>-->
+    <!--</div>-->
     <div class="form-group">
         <label for="pUpc">UPC</label>
         <input class="form-control" id="pUpc" name="pUpc" type="text" placeholder="请输入UPC"/>
@@ -300,7 +300,7 @@
             $("#lineNo").removeAttr("disabled");
         }*/
         var oTxt = document.getElementById("puid");
-        var oDiv = document.getElementById("lineNuber");
+        var oDiv = document.getElementById("lineNumber");
         // oTxt.onblur = function(){
         oTxt.value == "" ? oDiv.style.display = "none" : oDiv.style.display = "block";
         // };
@@ -364,7 +364,7 @@
                 // }
                 var myData = JSON.stringify({
                     "puid": $("#puid").val(),
-                    // "lineId": $("#lineId").val(),
+                    "lineId": $("#lineId").val(),
                     // "pBomLinePartName": $("#pBomLinePartName").val(),
                     // // "level": $("#level").val(),
                     // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
@@ -407,7 +407,7 @@
                     // "pRemark": $("#pRemark").val(),
                     // "pBomLinePartClass": $("#pBomLinePartClass").val(),
                     // "pBomLinePartResource": $("#pBomLinePartResource").val(),
-                    "pInOutSideFlag": $("#pInOutSideFlag").val(),
+                    // "pInOutSideFlag": $("#pInOutSideFlag").val(),
                     "pUpc": $("#pUpc").val(),
                     "fna": $("#fna").val(),
                     "pFnaDesc": $("#pFnaDesc").val(),

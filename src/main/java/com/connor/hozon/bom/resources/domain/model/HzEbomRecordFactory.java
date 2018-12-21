@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.domain.model;
 
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
@@ -20,156 +21,161 @@ import java.util.UUID;
 public class HzEbomRecordFactory {
     public static HzBomLineRecord addEbomDTOBomLineRecord(AddHzEbomReqDTO reqDTO){
         HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-        hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+//        hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
         hzBomLineRecord.setLinePuid(UUID.randomUUID().toString());
         hzBomLineRecord.setLineID(reqDTO.getLineId());
-        hzBomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-        hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-        if("Y".equals(reqDTO.getP3cpartFlag())){
-            hzBomLineRecord.setP3cpartFlag(1);
-        }else if("N".equals(reqDTO.getP3cpartFlag())){
-            hzBomLineRecord.setP3cpartFlag(0);
-        }else {
-            hzBomLineRecord.setP3cpartFlag(null);
-        }
-        hzBomLineRecord.setpBuyEngineer(reqDTO.getpBuyEngineer());
-        hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
-        hzBomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-        hzBomLineRecord.setpBwgBoxPart(reqDTO.getpBwgBoxPart());
-        hzBomLineRecord.setpDataVersion(reqDTO.getpDataVersion());
-        hzBomLineRecord.setpDensity(reqDTO.getpDensity());
+//        hzBomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
+//        hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
+//        if("Y".equals(reqDTO.getP3cpartFlag())){
+//            hzBomLineRecord.setP3cpartFlag(1);
+//        }else if("N".equals(reqDTO.getP3cpartFlag())){
+//            hzBomLineRecord.setP3cpartFlag(0);
+//        }else {
+//            hzBomLineRecord.setP3cpartFlag(null);
+//        }
+//        hzBomLineRecord.setpBuyEngineer(reqDTO.getpBuyEngineer());
+//        hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
+//        hzBomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
+//        hzBomLineRecord.setpBwgBoxPart(reqDTO.getpBwgBoxPart());
+//        hzBomLineRecord.setpDataVersion(reqDTO.getpDataVersion());
+//        hzBomLineRecord.setpDensity(reqDTO.getpDensity());
         hzBomLineRecord.setpCreateName(UserInfo.getUser().getUserName());
         hzBomLineRecord.setpUpdateName(UserInfo.getUser().getUserName());
-        hzBomLineRecord.setpDevelopType(reqDTO.getpDevelopType());
-        hzBomLineRecord.setpDutyEngineer(reqDTO.getpDutyEngineer());
-        hzBomLineRecord.setpFastener(reqDTO.getpFastener());
-        hzBomLineRecord.setpFastenerLevel(reqDTO.getpFastenerLevel());
-        hzBomLineRecord.setpFastenerStandard(reqDTO.getpFastenerStandard());
-        hzBomLineRecord.setpFeatureWeight(reqDTO.getpFeatureWeight());
+//        hzBomLineRecord.setpDevelopType(reqDTO.getpDevelopType());
+//        hzBomLineRecord.setpDutyEngineer(reqDTO.getpDutyEngineer());
+//        hzBomLineRecord.setpFastener(reqDTO.getpFastener());
+//        hzBomLineRecord.setpFastenerLevel(reqDTO.getpFastenerLevel());
+//        hzBomLineRecord.setpFastenerStandard(reqDTO.getpFastenerStandard());
+//        hzBomLineRecord.setpFeatureWeight(reqDTO.getpFeatureWeight());
         hzBomLineRecord.setpFnaDesc(reqDTO.getpFnaDesc());
         hzBomLineRecord.setpFnaInfo(reqDTO.getFna());
-        if("内饰件".equals(reqDTO.getpInOutSideFlag())){
-            hzBomLineRecord.setpInOutSideFlag(1);
-        }else if("外饰件".equals(reqDTO.getpInOutSideFlag())){
-            hzBomLineRecord.setpInOutSideFlag(0);
-        }else {
-            hzBomLineRecord.setpInOutSideFlag(null);
-        }
+//        if("内饰件".equals(reqDTO.getpInOutSideFlag())){
+//            hzBomLineRecord.setpInOutSideFlag(1);
+//        }else if("外饰件".equals(reqDTO.getpInOutSideFlag())){
+//            hzBomLineRecord.setpInOutSideFlag(0);
+//        }else {
+//            hzBomLineRecord.setpInOutSideFlag(null);
+//        }
 
-        hzBomLineRecord.setpImportance(reqDTO.getpImportance());
-        hzBomLineRecord.setpManuProcess(reqDTO.getpManuProcess());
-        hzBomLineRecord.setpMaterial1(reqDTO.getpMaterial1());
-        hzBomLineRecord.setpMaterial2(reqDTO.getpMaterial2());
-        hzBomLineRecord.setpMaterial3(reqDTO.getpMaterial3());
-        hzBomLineRecord.setpMaterialHigh(reqDTO.getpMaterialHigh());
-        hzBomLineRecord.setpMaterialStandard(reqDTO.getpMaterialStandard());
-        hzBomLineRecord.setpPictureNo(reqDTO.getpPictureNo());
-        hzBomLineRecord.setpPictureSheet(reqDTO.getpPictureSheet());
-        hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
+//        hzBomLineRecord.setpImportance(reqDTO.getpImportance());
+//        hzBomLineRecord.setpManuProcess(reqDTO.getpManuProcess());
+//        hzBomLineRecord.setpMaterial1(reqDTO.getpMaterial1());
+//        hzBomLineRecord.setpMaterial2(reqDTO.getpMaterial2());
+//        hzBomLineRecord.setpMaterial3(reqDTO.getpMaterial3());
+//        hzBomLineRecord.setpMaterialHigh(reqDTO.getpMaterialHigh());
+//        hzBomLineRecord.setpMaterialStandard(reqDTO.getpMaterialStandard());
+//        hzBomLineRecord.setpPictureNo(reqDTO.getpPictureNo());
+//        hzBomLineRecord.setpPictureSheet(reqDTO.getpPictureSheet());
+//        hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
         hzBomLineRecord.setpUpc(reqDTO.getpUpc());
-        hzBomLineRecord.setpUnit(reqDTO.getpUnit());
-        hzBomLineRecord.setpRemark(reqDTO.getpRemark());
-        hzBomLineRecord.setpSymmetry(reqDTO.getpSymmetry());
-        hzBomLineRecord.setpTextureColorNum(reqDTO.getpTextureColorNum());
-        hzBomLineRecord.setpSurfaceTreat(reqDTO.getpSurfaceTreat());
-        hzBomLineRecord.setpTargetWeight(reqDTO.getpTargetWeight());
-        hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
-        hzBomLineRecord.setpSupply(reqDTO.getpSupply());
-        hzBomLineRecord.setpTorque(reqDTO.getpTorque());
-        hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
+//        hzBomLineRecord.setpUnit(reqDTO.getpUnit());
+//        hzBomLineRecord.setpRemark(reqDTO.getpRemark());
+//        hzBomLineRecord.setpSymmetry(reqDTO.getpSymmetry());
+//        hzBomLineRecord.setpTextureColorNum(reqDTO.getpTextureColorNum());
+//        hzBomLineRecord.setpSurfaceTreat(reqDTO.getpSurfaceTreat());
+//        hzBomLineRecord.setpTargetWeight(reqDTO.getpTargetWeight());
+//        hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
+//        hzBomLineRecord.setpSupply(reqDTO.getpSupply());
+//        hzBomLineRecord.setpTorque(reqDTO.getpTorque());
+//        hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
         hzBomLineRecord.setNumber(reqDTO.getNumber());
-        if("Y".equals(reqDTO.getpRegulationFlag())){
-            hzBomLineRecord.setpRegulationFlag(1);
-        }else if("N".equals(reqDTO.getpRegulationFlag())){
-            hzBomLineRecord.setpRegulationFlag(0);
-        }else {
-            hzBomLineRecord.setpRegulationFlag(null);
-        }
+//        if("Y".equals(reqDTO.getpRegulationFlag())){
+//            hzBomLineRecord.setpRegulationFlag(1);
+//        }else if("N".equals(reqDTO.getpRegulationFlag())){
+//            hzBomLineRecord.setpRegulationFlag(0);
+//        }else {
+//            hzBomLineRecord.setpRegulationFlag(null);
+//        }
 
-        if("Y".equals(reqDTO.getColorPart())){
-            hzBomLineRecord.setColorPart(1);
-        }else if("N".equals(reqDTO.getColorPart())){
-            hzBomLineRecord.setColorPart(0);
-        }else {
-            hzBomLineRecord.setColorPart(null);
-        }
+        hzBomLineRecord.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
         return hzBomLineRecord;
+    }
+
+
+
+    public static HzEPLManageRecord addEbomDTOEBOMRecord(AddHzEbomReqDTO reqDTO){
+        HzEPLManageRecord record = new HzEPLManageRecord();
+        record.setPuid(UUID.randomUUID().toString());
+        record.setLineID(reqDTO.getLineId());
+        record.setpCreateName(UserInfo.getUser().getUserName());
+        record.setpUpdateName(UserInfo.getUser().getUserName());
+        record.setpFnaDesc(reqDTO.getpFnaDesc());
+        record.setpFnaInfo(reqDTO.getFna());
+        record.setpUpc(reqDTO.getpUpc());
+        record.setNumber(reqDTO.getNumber());
+        record.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
+        return record;
     }
 
     public static HzBomLineRecord updateHzEbomDTOLineRecord(UpdateHzEbomReqDTO reqDTO){
         HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
         hzBomLineRecord.setLineID(reqDTO.getLineId());
-        hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-        hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-        hzBomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-        hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-        hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
-        hzBomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-        hzBomLineRecord.setpBwgBoxPart(reqDTO.getpBwgBoxPart());
-        hzBomLineRecord.setpDataVersion(reqDTO.getpDataVersion());
-        hzBomLineRecord.setpDensity(reqDTO.getpDensity());
+//        hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
+//        hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
+//        hzBomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
+//        hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
+//        hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
+//        hzBomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
+//        hzBomLineRecord.setpBwgBoxPart(reqDTO.getpBwgBoxPart());
+//        hzBomLineRecord.setpDataVersion(reqDTO.getpDataVersion());
+//        hzBomLineRecord.setpDensity(reqDTO.getpDensity());
         hzBomLineRecord.setpUpdateName(UserInfo.getUser().getUserName());
-        hzBomLineRecord.setpDevelopType(reqDTO.getpDevelopType());
-        hzBomLineRecord.setpDutyEngineer(reqDTO.getpDutyEngineer());
-        hzBomLineRecord.setpFastener(reqDTO.getpFastener());
-        hzBomLineRecord.setpFastenerLevel(reqDTO.getpFastenerLevel());
-        hzBomLineRecord.setpFastenerStandard(reqDTO.getpFastenerStandard());
-        hzBomLineRecord.setpFeatureWeight(reqDTO.getpFeatureWeight());
+//        hzBomLineRecord.setpDevelopType(reqDTO.getpDevelopType());
+//        hzBomLineRecord.setpDutyEngineer(reqDTO.getpDutyEngineer());
+//        hzBomLineRecord.setpFastener(reqDTO.getpFastener());
+//        hzBomLineRecord.setpFastenerLevel(reqDTO.getpFastenerLevel());
+//        hzBomLineRecord.setpFastenerStandard(reqDTO.getpFastenerStandard());
+//        hzBomLineRecord.setpFeatureWeight(reqDTO.getpFeatureWeight());
         hzBomLineRecord.setpFnaDesc(reqDTO.getpFnaDesc());
         hzBomLineRecord.setpFnaInfo(reqDTO.getFna());
 
-        hzBomLineRecord.setpImportance(reqDTO.getpImportance());
-        hzBomLineRecord.setpManuProcess(reqDTO.getpManuProcess());
-        hzBomLineRecord.setpMaterial1(reqDTO.getpMaterial1());
-        hzBomLineRecord.setpMaterial2(reqDTO.getpMaterial2());
-        hzBomLineRecord.setpMaterial3(reqDTO.getpMaterial3());
-        hzBomLineRecord.setpMaterialHigh(reqDTO.getpMaterialHigh());
-        hzBomLineRecord.setpMaterialStandard(reqDTO.getpMaterialStandard());
-        hzBomLineRecord.setpPictureNo(reqDTO.getpPictureNo());
-        hzBomLineRecord.setpPictureSheet(reqDTO.getpPictureSheet());
-        hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
+//        hzBomLineRecord.setpImportance(reqDTO.getpImportance());
+//        hzBomLineRecord.setpManuProcess(reqDTO.getpManuProcess());
+//        hzBomLineRecord.setpMaterial1(reqDTO.getpMaterial1());
+//        hzBomLineRecord.setpMaterial2(reqDTO.getpMaterial2());
+//        hzBomLineRecord.setpMaterial3(reqDTO.getpMaterial3());
+//        hzBomLineRecord.setpMaterialHigh(reqDTO.getpMaterialHigh());
+//        hzBomLineRecord.setpMaterialStandard(reqDTO.getpMaterialStandard());
+//        hzBomLineRecord.setpPictureNo(reqDTO.getpPictureNo());
+//        hzBomLineRecord.setpPictureSheet(reqDTO.getpPictureSheet());
+//        hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
         hzBomLineRecord.setpUpc(reqDTO.getpUpc());
-        hzBomLineRecord.setpRemark(reqDTO.getpRemark());
-        hzBomLineRecord.setpRemark(reqDTO.getpRemark());
-        hzBomLineRecord.setpUnit(reqDTO.getpUnit());
-        hzBomLineRecord.setpTorque(reqDTO.getpTorque());
-        hzBomLineRecord.setpSymmetry(reqDTO.getpSymmetry());
-        hzBomLineRecord.setpTextureColorNum(reqDTO.getpTextureColorNum());
-        hzBomLineRecord.setpSurfaceTreat(reqDTO.getpSurfaceTreat());
-        hzBomLineRecord.setpTargetWeight(reqDTO.getpTargetWeight());
-        hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
-        hzBomLineRecord.setpSupply(reqDTO.getpSupply());
+//        hzBomLineRecord.setpRemark(reqDTO.getpRemark());
+//        hzBomLineRecord.setpRemark(reqDTO.getpRemark());
+//        hzBomLineRecord.setpUnit(reqDTO.getpUnit());
+//        hzBomLineRecord.setpTorque(reqDTO.getpTorque());
+//        hzBomLineRecord.setpSymmetry(reqDTO.getpSymmetry());
+//        hzBomLineRecord.setpTextureColorNum(reqDTO.getpTextureColorNum());
+//        hzBomLineRecord.setpSurfaceTreat(reqDTO.getpSurfaceTreat());
+//        hzBomLineRecord.setpTargetWeight(reqDTO.getpTargetWeight());
+//        hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
+//        hzBomLineRecord.setpSupply(reqDTO.getpSupply());
         hzBomLineRecord.setNumber(reqDTO.getNumber());
-        hzBomLineRecord.setpBuyEngineer(reqDTO.getpDutyEngineer());
-        if("Y".equals(reqDTO.getpRegulationFlag())){
-            hzBomLineRecord.setpRegulationFlag(1);
-        }else if("N".equals(reqDTO.getpRegulationFlag())){
-            hzBomLineRecord.setpRegulationFlag(0);
-        }else {
-            hzBomLineRecord.setpRegulationFlag(null);
-        }
+//        hzBomLineRecord.setpBuyEngineer(reqDTO.getpDutyEngineer());
+//        if("Y".equals(reqDTO.getpRegulationFlag())){
+//            hzBomLineRecord.setpRegulationFlag(1);
+//        }else if("N".equals(reqDTO.getpRegulationFlag())){
+//            hzBomLineRecord.setpRegulationFlag(0);
+//        }else {
+//            hzBomLineRecord.setpRegulationFlag(null);
+//        }
 
-        if("Y".equals(reqDTO.getColorPart())){
-            hzBomLineRecord.setColorPart(1);
-        }else if("N".equals(reqDTO.getColorPart())){
-            hzBomLineRecord.setColorPart(0);
-        }else {
-            hzBomLineRecord.setColorPart(null);
-        }
-        if("Y".equals(reqDTO.getP3cpartFlag())){
-            hzBomLineRecord.setP3cpartFlag(1);
-        }else if("N".equals(reqDTO.getP3cpartFlag())){
-            hzBomLineRecord.setP3cpartFlag(0);
-        }else {
-            hzBomLineRecord.setP3cpartFlag(null);
-        }
-        if("内饰件".equals(reqDTO.getpInOutSideFlag())){
-            hzBomLineRecord.setpInOutSideFlag(1);
-        }else if("外饰件".equals(reqDTO.getpInOutSideFlag())){
-            hzBomLineRecord.setpInOutSideFlag(0);
-        }else {
-            hzBomLineRecord.setpInOutSideFlag(null);
-        }
+        hzBomLineRecord.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
+
+//        if("Y".equals(reqDTO.getP3cpartFlag())){
+//            hzBomLineRecord.setP3cpartFlag(1);
+//        }else if("N".equals(reqDTO.getP3cpartFlag())){
+//            hzBomLineRecord.setP3cpartFlag(0);
+//        }else {
+//            hzBomLineRecord.setP3cpartFlag(null);
+//        }
+//        if("内饰件".equals(reqDTO.getpInOutSideFlag())){
+//            hzBomLineRecord.setpInOutSideFlag(1);
+//        }else if("外饰件".equals(reqDTO.getpInOutSideFlag())){
+//            hzBomLineRecord.setpInOutSideFlag(0);
+//        }else {
+//            hzBomLineRecord.setpInOutSideFlag(null);
+//        }
         return hzBomLineRecord;
     }
 
@@ -279,20 +285,8 @@ public class HzEbomRecordFactory {
         respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
         respDTO.setpBomLinePartResource( record.getpBomLinePartResource());
         respDTO.setpFastener( record.getpFastener());
-        if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
-            respDTO.setP3cpartFlag( "Y");
-        }else if(Integer.valueOf(0).equals(record.getP3cpartFlag())){
-            respDTO.setP3cpartFlag( "N");
-        }else {
-            respDTO.setP3cpartFlag( "");
-        }
-        if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
-            respDTO.setpInOutSideFlag( "内饰件");
-        }else if(Integer.valueOf(0).equals(record.getpInOutSideFlag())){
-            respDTO.setpInOutSideFlag( "外饰件");
-        }else {
-            respDTO.setpInOutSideFlag( "");
-        }
+        respDTO.setP3cpartFlag(BOMTransConstants.integerToYNString(record.getP3cpartFlag()));
+        respDTO.setpInOutSideFlag(BOMTransConstants.integerToInOutSideString(record.getpInOutSideFlag()));
         respDTO.setpUpc(record.getpUpc());
         respDTO.setpFnaDesc( record.getpFnaDesc());
         respDTO.setpUnit( record.getpUnit());
@@ -309,13 +303,9 @@ public class HzEbomRecordFactory {
         respDTO.setpManuProcess( record.getpManuProcess());
         respDTO.setpSymmetry( record.getpSymmetry());
         respDTO.setpImportance(record.getpImportance());
-        if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
-            respDTO.setpRegulationFlag( "Y");
-        }else if(Integer.valueOf(0).equals(record.getpRegulationFlag())){
-            respDTO.setpRegulationFlag( "N");
-        }else {
-            respDTO.setpRegulationFlag( "");
-        }
+
+        respDTO.setpRegulationFlag(BOMTransConstants.integerToYNString(record.getpRegulationFlag()));
+
         respDTO.setpBwgBoxPart( record.getpBwgBoxPart());
         respDTO.setpDevelopType(record.getpDevelopType());
         respDTO.setpDataVersion( record.getpDataVersion());
@@ -333,117 +323,110 @@ public class HzEbomRecordFactory {
         respDTO.setpRegulationCode( record.getpRegulationCode());
         respDTO.setNumber(record.getNumber());
         respDTO.setpBuyEngineer(record.getpBuyEngineer());
-        if(Integer.valueOf(1).equals(record.getColorPart())){
-            respDTO.setColorPart( "Y");
-        }else if(Integer.valueOf(0).equals(record.getColorPart())){
-            respDTO.setColorPart( "N");
-        }else {
-            respDTO.setColorPart( "");
-        }
-
+        respDTO.setColorPart(BOMTransConstants.integerToYNString(record.getColorPart()));
         return respDTO;
     }
 
 
     public static HzBomLineRecord importEbomRecordToBomLineRecord(HzImportEbomRecord record){
         HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-        hzBomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
-        hzBomLineRecord.setLinePuid(UUID.randomUUID().toString());
+//        hzBomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
+//        hzBomLineRecord.setLinePuid(UUID.randomUUID().toString());
         hzBomLineRecord.setLineID(record.getLineId());
-        hzBomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
-        hzBomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
-        hzBomLineRecord.setP3cpartFlag(record.getP3cpartFlag());
-        hzBomLineRecord.setpBuyEngineer(record.getpBuyEngineer());
-        hzBomLineRecord.setpActualWeight(record.getpActualWeight());
-        hzBomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
-        hzBomLineRecord.setpBwgBoxPart(record.getpBwgBoxPart());
-        hzBomLineRecord.setpDataVersion(record.getpDataVersion());
-        hzBomLineRecord.setpDensity(record.getpDensity());
+//        hzBomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
+//        hzBomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
+//        hzBomLineRecord.setP3cpartFlag(record.getP3cpartFlag());
+//        hzBomLineRecord.setpBuyEngineer(record.getpBuyEngineer());
+//        hzBomLineRecord.setpActualWeight(record.getpActualWeight());
+//        hzBomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
+//        hzBomLineRecord.setpBwgBoxPart(record.getpBwgBoxPart());
+//        hzBomLineRecord.setpDataVersion(record.getpDataVersion());
+//        hzBomLineRecord.setpDensity(record.getpDensity());
         hzBomLineRecord.setpUpdateName(UserInfo.getUser().getUserName());
-        hzBomLineRecord.setpDevelopType(record.getpDevelopType());
-        hzBomLineRecord.setpDutyEngineer(record.getpDutyEngineer());
-        hzBomLineRecord.setpFastener(record.getpFastener());
-        hzBomLineRecord.setpFastenerLevel(record.getpFastenerLevel());
-        hzBomLineRecord.setpFastenerStandard(record.getpFastenerStandard());
-        hzBomLineRecord.setpFeatureWeight(record.getpFeatureWeight());
+//        hzBomLineRecord.setpDevelopType(record.getpDevelopType());
+//        hzBomLineRecord.setpDutyEngineer(record.getpDutyEngineer());
+//        hzBomLineRecord.setpFastener(record.getpFastener());
+//        hzBomLineRecord.setpFastenerLevel(record.getpFastenerLevel());
+//        hzBomLineRecord.setpFastenerStandard(record.getpFastenerStandard());
+//        hzBomLineRecord.setpFeatureWeight(record.getpFeatureWeight());
         hzBomLineRecord.setpFnaDesc(record.getpFnaDesc());
         hzBomLineRecord.setpFnaInfo(record.getpFnaInfo());
-        hzBomLineRecord.setpInOutSideFlag(record.getpInOutSideFlag());
-        hzBomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
-        hzBomLineRecord.setpImportance(record.getpImportance());
-        hzBomLineRecord.setpManuProcess(record.getpManuProcess());
-        hzBomLineRecord.setpMaterial1(record.getpMaterial1());
-        hzBomLineRecord.setpMaterial2(record.getpMaterial2());
-        hzBomLineRecord.setpMaterial3(record.getpMaterial3());
-        hzBomLineRecord.setpMaterialHigh(record.getpMaterialHigh());
-        hzBomLineRecord.setpMaterialStandard(record.getpMaterialStandard());
-        hzBomLineRecord.setpPictureNo(record.getpPictureNo());
-        hzBomLineRecord.setpPictureSheet(record.getpPictureSheet());
-        hzBomLineRecord.setpRegulationCode(record.getpRegulationCode());
+//        hzBomLineRecord.setpInOutSideFlag(record.getpInOutSideFlag());
+//        hzBomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+//        hzBomLineRecord.setpImportance(record.getpImportance());
+//        hzBomLineRecord.setpManuProcess(record.getpManuProcess());
+//        hzBomLineRecord.setpMaterial1(record.getpMaterial1());
+//        hzBomLineRecord.setpMaterial2(record.getpMaterial2());
+//        hzBomLineRecord.setpMaterial3(record.getpMaterial3());
+//        hzBomLineRecord.setpMaterialHigh(record.getpMaterialHigh());
+//        hzBomLineRecord.setpMaterialStandard(record.getpMaterialStandard());
+//        hzBomLineRecord.setpPictureNo(record.getpPictureNo());
+//        hzBomLineRecord.setpPictureSheet(record.getpPictureSheet());
+//        hzBomLineRecord.setpRegulationCode(record.getpRegulationCode());
         hzBomLineRecord.setpUpc(record.getpUpc());
-        hzBomLineRecord.setpUnit(record.getpUnit());
-        hzBomLineRecord.setpRemark(record.getpRemark());
-        hzBomLineRecord.setpSymmetry(record.getpSymmetry());
-        hzBomLineRecord.setpTextureColorNum(record.getpTextureColorNum());
-        hzBomLineRecord.setpSurfaceTreat(record.getpSurfaceTreat());
-        hzBomLineRecord.setpTargetWeight(record.getpTargetWeight());
-        hzBomLineRecord.setpSupplyCode(record.getpSupplyCode());
-        hzBomLineRecord.setpSupply(record.getpSupply());
-        hzBomLineRecord.setpTorque(record.getpTorque());
-        hzBomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
+//        hzBomLineRecord.setpUnit(record.getpUnit());
+//        hzBomLineRecord.setpRemark(record.getpRemark());
+//        hzBomLineRecord.setpSymmetry(record.getpSymmetry());
+//        hzBomLineRecord.setpTextureColorNum(record.getpTextureColorNum());
+//        hzBomLineRecord.setpSurfaceTreat(record.getpSurfaceTreat());
+//        hzBomLineRecord.setpTargetWeight(record.getpTargetWeight());
+//        hzBomLineRecord.setpSupplyCode(record.getpSupplyCode());
+//        hzBomLineRecord.setpSupply(record.getpSupply());
+//        hzBomLineRecord.setpTorque(record.getpTorque());
+//        hzBomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzBomLineRecord.setNumber(record.getNumber());
         hzBomLineRecord.setStatus(2);
-        hzBomLineRecord.setpRegulationFlag(record.getpRegulationFlag());
+//        hzBomLineRecord.setpRegulationFlag(record.getpRegulationFlag());
         hzBomLineRecord.setColorPart(record.getColorPart());
         return hzBomLineRecord;
     }
 
     public static HzBomLineRecord eplRecordToBomLineRecord(HzEPLManageRecord record){
         HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-        hzBomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
+//        hzBomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
         hzBomLineRecord.setLineID(record.getLineID());
-        hzBomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
-        hzBomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
-        hzBomLineRecord.setP3cpartFlag(record.getP3cpartFlag());
-        hzBomLineRecord.setpBuyEngineer(record.getpBuyEngineer());
-        hzBomLineRecord.setpActualWeight(record.getpActualWeight());
-        hzBomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
-        hzBomLineRecord.setpBwgBoxPart(record.getpBwgBoxPart());
-        hzBomLineRecord.setpDataVersion(record.getpDataVersion());
-        hzBomLineRecord.setpDensity(record.getpDensity());
-        hzBomLineRecord.setpDevelopType(record.getpDevelopType());
-        hzBomLineRecord.setpDutyEngineer(record.getpDutyEngineer());
-        hzBomLineRecord.setpFastener(record.getpFastener());
-        hzBomLineRecord.setpFastenerLevel(record.getpFastenerLevel());
-        hzBomLineRecord.setpFastenerStandard(record.getpFastenerStandard());
-        hzBomLineRecord.setpFeatureWeight(record.getpFeatureWeight());
+//        hzBomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
+//        hzBomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
+//        hzBomLineRecord.setP3cpartFlag(record.getP3cpartFlag());
+//        hzBomLineRecord.setpBuyEngineer(record.getpBuyEngineer());
+//        hzBomLineRecord.setpActualWeight(record.getpActualWeight());
+//        hzBomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
+//        hzBomLineRecord.setpBwgBoxPart(record.getpBwgBoxPart());
+//        hzBomLineRecord.setpDataVersion(record.getpDataVersion());
+//        hzBomLineRecord.setpDensity(record.getpDensity());
+//        hzBomLineRecord.setpDevelopType(record.getpDevelopType());
+//        hzBomLineRecord.setpDutyEngineer(record.getpDutyEngineer());
+//        hzBomLineRecord.setpFastener(record.getpFastener());
+//        hzBomLineRecord.setpFastenerLevel(record.getpFastenerLevel());
+//        hzBomLineRecord.setpFastenerStandard(record.getpFastenerStandard());
+//        hzBomLineRecord.setpFeatureWeight(record.getpFeatureWeight());
         hzBomLineRecord.setpFnaDesc(record.getpFnaDesc());
         hzBomLineRecord.setpFnaInfo(record.getFna());
-        hzBomLineRecord.setpInOutSideFlag(record.getpInOutSideFlag());
-        hzBomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
-        hzBomLineRecord.setpImportance(record.getpImportance());
-        hzBomLineRecord.setpManuProcess(record.getpManuProcess());
-        hzBomLineRecord.setpMaterial1(record.getpMaterial1());
-        hzBomLineRecord.setpMaterial2(record.getpMaterial2());
-        hzBomLineRecord.setpMaterial3(record.getpMaterial3());
-        hzBomLineRecord.setpMaterialHigh(record.getpMaterialHigh());
-        hzBomLineRecord.setpMaterialStandard(record.getpMaterialStandard());
-        hzBomLineRecord.setpPictureNo(record.getpPictureNo());
-        hzBomLineRecord.setpPictureSheet(record.getpPictureSheet());
-        hzBomLineRecord.setpRegulationCode(record.getpRegulationCode());
+//        hzBomLineRecord.setpInOutSideFlag(record.getpInOutSideFlag());
+//        hzBomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+//        hzBomLineRecord.setpImportance(record.getpImportance());
+//        hzBomLineRecord.setpManuProcess(record.getpManuProcess());
+//        hzBomLineRecord.setpMaterial1(record.getpMaterial1());
+//        hzBomLineRecord.setpMaterial2(record.getpMaterial2());
+//        hzBomLineRecord.setpMaterial3(record.getpMaterial3());
+//        hzBomLineRecord.setpMaterialHigh(record.getpMaterialHigh());
+//        hzBomLineRecord.setpMaterialStandard(record.getpMaterialStandard());
+//        hzBomLineRecord.setpPictureNo(record.getpPictureNo());
+//        hzBomLineRecord.setpPictureSheet(record.getpPictureSheet());
+//        hzBomLineRecord.setpRegulationCode(record.getpRegulationCode());
         hzBomLineRecord.setpUpc(record.getpUpc());
-        hzBomLineRecord.setpUnit(record.getpUnit());
-        hzBomLineRecord.setpRemark(record.getpRemark());
-        hzBomLineRecord.setpSymmetry(record.getpSymmetry());
-        hzBomLineRecord.setpTextureColorNum(record.getpTextureColorNum());
-        hzBomLineRecord.setpSurfaceTreat(record.getpSurfaceTreat());
-        hzBomLineRecord.setpTargetWeight(record.getpTargetWeight());
-        hzBomLineRecord.setpSupplyCode(record.getpSupplyCode());
-        hzBomLineRecord.setpSupply(record.getpSupply());
-        hzBomLineRecord.setpTorque(record.getpTorque());
-        hzBomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
+//        hzBomLineRecord.setpUnit(record.getpUnit());
+//        hzBomLineRecord.setpRemark(record.getpRemark());
+//        hzBomLineRecord.setpSymmetry(record.getpSymmetry());
+//        hzBomLineRecord.setpTextureColorNum(record.getpTextureColorNum());
+//        hzBomLineRecord.setpSurfaceTreat(record.getpSurfaceTreat());
+//        hzBomLineRecord.setpTargetWeight(record.getpTargetWeight());
+//        hzBomLineRecord.setpSupplyCode(record.getpSupplyCode());
+//        hzBomLineRecord.setpSupply(record.getpSupply());
+//        hzBomLineRecord.setpTorque(record.getpTorque());
+//        hzBomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzBomLineRecord.setNumber(record.getNumber());
-        hzBomLineRecord.setpRegulationFlag(record.getpRegulationFlag());
+//        hzBomLineRecord.setpRegulationFlag(record.getpRegulationFlag());
         hzBomLineRecord.setColorPart(record.getColorPart());
         return hzBomLineRecord;
     }
