@@ -1,15 +1,14 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
-import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -121,8 +120,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         m.put("tableName",tableName);
         try {
             if(size>1000){
-                HzBomSysFactory<String> factory = new HzBomSysFactory();
-                Map<Integer,List<String>> map = factory.spiltList(puids);
+                Map<Integer,List<String>> map = HzBomSysFactory.spiltList(puids);
                 for(List<String> v:map.values()){
                     m.put("puids",v);
                     super.delete("HzEbomRecordDAOImpl_deleteByPuids",m);
@@ -209,6 +207,9 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
 
     @Override
     public int insert(HzEPLManageRecord record) {
+        if(StringUtils.isBlank(record.getTableName())){
+            record.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
+        }
         return super.insert("HzEbomRecordDAOImpl_insert",record);
     }
 
@@ -381,11 +382,6 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_getMaxLineIndexFirstNum",projectId);
     }
 
-    @Override
-    public Integer getMaxLineIndexLastNumFor2Y(String projectId) {
-        return (Integer) super.findForObject("HzEbomRecordDAOImpl_getMaxLineIndexLastNumFor2Y",projectId);
-    }
-
     /**
      * 找出最大排序号
      *
@@ -398,6 +394,26 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
             return null;
         }
         return Double.parseDouble(maxSortNum);
+    }
+
+    @Override
+    public HzEPLManageRecord findMinEBOMRecordWhichLineNoGreaterCurrentLineNo(HzEBOMQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("is2Y",query.getIs2Y());
+        map.put("parentId",query.getParentId());
+        map.put("projectId",query.getProjectId());
+        map.put("lineNo",query.getLineNo());
+        return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findMinEBOMRecordWhichLineNoGreaterCurrentLineNo",map);
+    }
+
+    @Override
+    public HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzEBOMQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("is2Y",query.getIs2Y());
+        map.put("parentId",query.getParentId());
+        map.put("projectId",query.getProjectId());
+        map.put("lineNo",query.getLineNo());
+        return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findMaxEBOMRecordWhichLineNoLessCurrentNo",map);
     }
 
     @Override

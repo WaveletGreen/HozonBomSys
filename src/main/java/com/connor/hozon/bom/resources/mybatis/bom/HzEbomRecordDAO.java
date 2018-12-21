@@ -1,9 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
 import lombok.Data;
 import sql.pojo.bom.HzBomLineRecord;
@@ -159,16 +156,24 @@ public interface HzEbomRecordDAO {
     HzEPLManageRecord getMaxLineIndexFirstNum(String projectId);
 
     /**
-     * 找EBOM 2Y层 lineIndex 最后一位最大值
-     * @param projectId
-     * @return
-     */
-    Integer getMaxLineIndexLastNumFor2Y(String projectId);
-
-    /**
      * 找出最大排序号
      * @param projectId
      * @return
      */
     Double findMaxBomOrderNum(String projectId);
+
+    /**
+     * 找出大于当前查找编号的最小记录 只找出当前父层的子一层 或者只找出2Y层
+     * @param query lineNo 查找编号
+     * @return
+     */
+    HzEPLManageRecord findMinEBOMRecordWhichLineNoGreaterCurrentLineNo(HzEBOMQuery query);
+
+    /**
+     * 找出小于当前查找编号的最大记录 只找出当前父层的子一层 或者只找出2Y层
+     * @param query
+     * @return
+     */
+    HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzEBOMQuery query);
+
 }

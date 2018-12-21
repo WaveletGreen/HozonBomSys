@@ -83,8 +83,7 @@ public class HzAccessoriesLibsDAOImpl  extends BaseSQLUtil implements HzAccessor
         }
         try {
             if(libs.size()>1000){ // 分批更新
-                HzBomSysFactory<HzAccessoriesLibs> factory  = new HzBomSysFactory<>();
-                Map<Integer,List<HzAccessoriesLibs>> map = factory.spiltList(libs);
+                Map<Integer,List<HzAccessoriesLibs>> map = HzBomSysFactory.spiltList(libs);
                 for(List<HzAccessoriesLibs> value :map.values()){
                     super.update("HzAccessoriesLibsDAOImpl_updateList",value);
                 }

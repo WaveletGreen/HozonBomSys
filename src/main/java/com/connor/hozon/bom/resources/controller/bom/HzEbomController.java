@@ -11,6 +11,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
+import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class HzEbomController extends BaseController {
     @Autowired
     private HzEBOMReadService hzEBOMReadService;
 
+    @Autowired
+    private HzEBOMWriteService hzEBOMWriteService;
     @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
 
@@ -326,11 +329,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "add/ebom",method = RequestMethod.POST)
     public void addEbomToDB(@RequestBody AddHzEbomReqDTO reqDTO, HttpServletResponse response){
-        if(reqDTO.getProjectId()==null){
-            toJSONResponse(Result.build(false,"非法参数！"), response);
-            return;
-        }
-        WriteResultRespDTO respDTO = hzEBOMReadService.addHzEbomRecord(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMWriteService.addHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -343,7 +342,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(@RequestBody UpdateHzEbomReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO= hzEBOMReadService.updateHzEbomRecord(reqDTO);
+        WriteResultRespDTO respDTO= hzEBOMWriteService.updateHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -360,7 +359,7 @@ public class HzEbomController extends BaseController {
             toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
-        WriteResultRespDTO respDTO = hzEBOMReadService.deleteHzEbomRecordById(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMWriteService.deleteHzEbomRecordById(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 

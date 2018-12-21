@@ -93,7 +93,8 @@ public class HzEbomRecordFactory {
 
 
 
-    public static HzEPLManageRecord addEbomDTOEBOMRecord(AddHzEbomReqDTO reqDTO){
+    public static HzEPLManageRecord addEbomTOEbomRecord(AddHzEbomReqDTO reqDTO,Long eplId,Integer is2Y,
+                                                        Integer hasChildren,String bomDigifaxId ){
         HzEPLManageRecord record = new HzEPLManageRecord();
         record.setPuid(UUID.randomUUID().toString());
         record.setLineID(reqDTO.getLineId());
@@ -103,6 +104,10 @@ public class HzEbomRecordFactory {
         record.setpFnaInfo(reqDTO.getFna());
         record.setpUpc(reqDTO.getpUpc());
         record.setNumber(reqDTO.getNumber());
+        record.setEplId(eplId);
+        record.setIsHas(hasChildren);
+        record.setIs2Y(is2Y);
+        record.setBomDigifaxId(bomDigifaxId);
         record.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
         return record;
     }

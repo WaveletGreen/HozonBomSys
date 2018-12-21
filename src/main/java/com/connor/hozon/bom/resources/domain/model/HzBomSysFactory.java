@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,7 +11,18 @@ import java.util.regex.Pattern;
  * @Date: 2018/9/6
  * @Description:
  */
-public class HzBomSysFactory<T> {
+public class HzBomSysFactory {
+    /*最小步进，用于产生随机数**/
+    private static final  int MIN_STEP = 2;
+    /*第一步进，用于产生随机数**/
+    private static final int FIRST_STEP = 10;
+    /*第二步进，用于产生随机数**/
+    private static final int SECOND_STEP = 50;
+    /*第三步进，用于产生随机数**/
+    private static final int THIRD_STEP = 100;
+    /*第四步进，用于产生随机数**/
+    private static final int FOURTH_STEP = 200;
+
     /**
      * 获取bom系统的层级和级别 和查找编号
      * @param lineIndex
@@ -50,23 +62,28 @@ public class HzBomSysFactory<T> {
      * @param s2 较大数
      * @return
      */
-    public static String generateBomSortNum(String projectId,String s1,String s2){
+    public static String generateBomSortNum(String s1,String s2){
         Double d1 = Double.parseDouble(s1);
         Double d2 = Double.parseDouble(s2);
-        if(d1>=d2){
+        if(d1 >= d2){
             return null;
         }
-        Random random = new Random();
-        String s = "";
-        while (true){
-            double d = random.nextDouble()+d1;
-            if(d<d2){
-                s = String.valueOf(d);
-                break;
-            }
+        Double diff = d2 -d1;
+        if(diff<= MIN_STEP){
+            return resultNum(d1,d2,0);
+        }else if(diff<= FIRST_STEP){
+            return resultNum(d1,d2,FIRST_STEP >> 1);
+        }else if(diff <=SECOND_STEP){
+            return resultNum(d1,d2,SECOND_STEP >> 1);
+        }else if( diff <= THIRD_STEP){
+            return resultNum(d1,d2,THIRD_STEP >> 1);
+        }else if(diff <=FOURTH_STEP){
+            return resultNum(d1,d2,FOURTH_STEP  >> 1);
+        }else {
+           return resultNum(d1,d2,FOURTH_STEP);
         }
-        return s;
     }
+
 
     public static String resultLineId(String lineId){
         String result = lineId; //S00-1001  S00-1001BA  S00-1001111BA
@@ -124,4 +141,25 @@ public class HzBomSysFactory<T> {
         map.put(mapIndex,l);
         return map;
     }
+
+    /**
+     * 产生以步进为基础的 介于两个数中间的某个数
+     * @param d1 较小数
+     * @param d2 较大数
+     * @param step 步进
+     * @return
+     */
+    private static String resultNum(Double d1,Double d2,int step){
+        String result ="";
+        while (true){
+            Random random = new Random();
+            Double d = random.nextDouble()+d1+step;
+            if(d <d2 ){
+                result  = String.valueOf(d);
+                break;
+            }
+        }
+        return result;
+    }
+
 }

@@ -1379,7 +1379,7 @@ public class HzPbomServiceImpl implements HzPbomService {
 
             //num
             String downNum = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectId, upNum);
-            String num = HzBomSysFactory.generateBomSortNum(projectId, upNum, downNum);
+            String num = HzBomSysFactory.generateBomSortNum(upNum, downNum);
             hzPbomLineRecordAddSon.setSortNum(num);
 
             //PUID
