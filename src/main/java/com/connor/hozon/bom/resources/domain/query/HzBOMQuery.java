@@ -8,7 +8,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class HzEBOMQuery extends DefaultQuery {
+public class HzBOMQuery extends DefaultQuery {
     /**
      * 项目id
      */
@@ -26,4 +26,14 @@ public class HzEBOMQuery extends DefaultQuery {
      * 父层puid
      */
     private String parentId;
+
+    /**
+     * 零件信息
+     */
+    private Long eplId;
+
+    /**
+     * 零件号
+     */
+    private String partId;
 }

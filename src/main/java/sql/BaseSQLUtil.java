@@ -306,7 +306,7 @@ public class BaseSQLUtil extends SqlSessionDaoSupport implements IBaseSQLUtil {
      * @param param    实体参数
      * @return
      */
-    public Object findForObject(final String sqlMapId, final Object param) {
+    public <T> T findForObject(final String sqlMapId, final Object param) {
         try {
             if (param != null) {
                 return getSqlSession().selectOne(sqlMapId, param);

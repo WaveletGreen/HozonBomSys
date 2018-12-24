@@ -401,53 +401,6 @@
 
     </insert>
 
-    <insert id="HzEbomRecordDAOImpl_insert2" parameterType="sql.pojo.epl.HzEPLManageRecord">
-        insert into HZ_BOM_LINE_RECORD
-        (
-        PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,
-        P_BOM_LINE_IS_2Y,P_BOM_LINE_IS_PART,P_SORT_NUM,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,
-        P_BOM_LINE_PART_NAME,P_BOM_LINE_PART_CLASS,
-        P_BOM_LINE_PART_EN_NAME,
-        P_BOM_LINE_PART_RESOURCE, P_FNA_INFO, P_EBOM_STATUS,
-        P_CREATE_TIME, P_UPDATE_TIME, P_FASTENER,
-        P_3CPART_FLAG, P_IN_OUT_SIDE_FLAG,
-        P_UPC, P_FNA_DESC, P_CREATE_NAME,
-        P_UPDATE_NAME, P_UNIT, P_PICTURE_NO,
-        P_PICTURE_SHEET, P_MATERIAL_HIGH, P_MATERIAL1,
-        P_MATERIAL2, P_MATERIAL3, P_DENSITY,
-        P_MATERIAL_STANDARD, P_SURFACE_TREAT, P_TEXTURE_COLOR_NUM,
-        P_MANU_PROCESS, P_SYMMETRY, P_IMPORTANCE,
-        P_REGULATION_FLAG, P_BWG_BOX_PART, P_DEVELOP_TYPE,
-        P_DATA_VERSION, P_TARGET_WEIGHT, P_FEATURE_WEIGHT,
-        P_ACTUAL_WEIGHT, P_FASTENER_STANDARD, P_FASTENER_LEVEL,
-        P_TORQUE, P_DUTY_ENGINEER, P_SUPPLY,
-        P_SUPPLY_CODE, P_REMARK, P_REGULATION_CODE,P_NUMBER,P_BUY_ENGINEER
-        )
-        values
-        (#{puid,jdbcType=VARCHAR},#{parentUid,jdbcType=VARCHAR},#{bomDigifaxId,jdbcType=VARCHAR},
-        #{lineIndex,jdbcType=VARCHAR},#{isHas,jdbcType=INTEGER},#{linePuid,jdbcType=VARCHAR},
-        #{lineID,jdbcType=VARCHAR},
-        #{is2Y,jdbcType=INTEGER},#{isPart,jdbcType=INTEGER},
-        #{sortNum,jdbcType=VARCHAR},#{isDept,jdbcType=INTEGER},
-        #{pBomOfWhichDept,jdbcType=VARCHAR},#{pBomLinePartName,jdbcType=VARCHAR},#{pBomLinePartClass,jdbcType=VARCHAR},
-        #{pBomLinePartEnName,jdbcType=VARCHAR},
-          #{pBomLinePartResource,jdbcType=VARCHAR}, #{fna,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},
-          sysdate,sysdate, #{pFastener,jdbcType=VARCHAR}, #{p3cpartFlag,jdbcType=INTEGER}, #{pInOutSideFlag,jdbcType=INTEGER},
-          #{pUpc,jdbcType=VARCHAR}, #{pFnaDesc,jdbcType=VARCHAR}, #{pCreateName,jdbcType=VARCHAR},
-          #{pUpdateName,jdbcType=VARCHAR}, #{pUnit,jdbcType=VARCHAR}, #{pPictureNo,jdbcType=VARCHAR},
-          #{pPictureSheet,jdbcType=VARCHAR}, #{pMaterialHigh,jdbcType=VARCHAR}, #{pMaterial1,jdbcType=VARCHAR},
-          #{pMaterial2,jdbcType=VARCHAR}, #{pMaterial3,jdbcType=VARCHAR}, #{pDensity,jdbcType=VARCHAR},
-          #{pMaterialStandard,jdbcType=VARCHAR}, #{pSurfaceTreat,jdbcType=VARCHAR}, #{pTextureColorNum,jdbcType=VARCHAR},
-          #{pManuProcess,jdbcType=VARCHAR}, #{pSymmetry,jdbcType=VARCHAR}, #{pImportance,jdbcType=VARCHAR},
-          #{pRegulationFlag,jdbcType=INTEGER}, #{pBwgBoxPart,jdbcType=VARCHAR}, #{pDevelopType,jdbcType=VARCHAR},
-          #{pDataVersion,jdbcType=VARCHAR}, #{pTargetWeight,jdbcType=VARCHAR}, #{pFeatureWeight,jdbcType=VARCHAR},
-          #{pActualWeight,jdbcType=VARCHAR}, #{pFastenerStandard,jdbcType=VARCHAR}, #{pFastenerLevel,jdbcType=VARCHAR},
-          #{pTorque,jdbcType=VARCHAR}, #{pDutyEngineer,jdbcType=VARCHAR}, #{pSupply,jdbcType=VARCHAR},
-          #{pSupplyCode,jdbcType=VARCHAR}, #{pRemark,jdbcType=VARCHAR}, #{pRegulationCode,jdbcType=VARCHAR},
-          #{number,jdbcType=VARCHAR},#{pBuyEngineer,jdbcType=INTEGER}
-      )
-
-    </insert>
 
     <!--导入excel文件到EBOM写的批量插入-->
     <insert id="HzEbomRecordDAOImpl_importList" parameterType="java.util.List">
@@ -459,20 +412,69 @@
         </foreach>
     </insert>
 
-
-    <select id="HzEbomRecordDAOImpl_sortNumRepeat" parameterType="java.util.HashMap" resultType="java.lang.Integer">
-        select count(*) from HZ_BOM_LINE_RECORD t1
-        where t1.p_bom_digifax_id=(
-        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-        select t2.puid from Hz_project_libs t2
-        <where>
-        t2.puid=#{projectId,jdbcType=VARCHAR}))
-            and P_SORT_NUM = #{sortNum,jdbcType=VARCHAR}
-            and t1.P_EBOM_STATUS <![CDATA[ <> ]]>0
-        </where>
-    </select>
-
-
+    <!-- 更新EBOM信息 根据主键更新-->
+    <update id="HzEbomRecordDAOImpl_updateListByPuids" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update Hz_Bom_Line_Record
+            <set>
+                P_UPDATE_TIME =sysdate,
+                <if test="item.singleVehDosage != null">
+                    P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR},
+                </if>
+                <if test="item.status != null">
+                    P_EBOM_STATUS = #{item.status,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pFnaInfo != null">
+                    P_FNA_INFO = #{item.pFnaInfo,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pInOutSideFlag != null">
+                    P_IN_OUT_SIDE_FLAG = #{item.pInOutSideFlag,jdbcType=INTEGER},
+                </if>
+                <if test="item.pUpc != null">
+                    P_UPC = #{item.pUpc,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pFnaDesc != null">
+                    P_FNA_DESC = #{item.pFnaDesc,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pUpdateName != null">
+                    P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.number != null">
+                    P_NUMBER = #{item.number,jdbcType=VARCHAR},
+                </if>
+                <if test="item.colorPart != null">
+                    P_COLOR_PART = #{item.colorPart,jdbcType=INTEGER},
+                </if>
+                <if test="item.orderId != null">
+                    P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.effectTime != null">
+                    P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.revision != null">
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR},
+                </if>
+                <if test="item.eplId != null">
+                    P_EPL_ID = #{item.eplId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.lineIndex != null">
+                    P_LINE_INDEX = #{item.lineIndex,jdbcType=VARCHAR},
+                </if>
+                <if test="item.parentUid != null">
+                    P_PARENT_UID = #{item.parentUid,jdbcType=VARCHAR},
+                </if>
+                <if test="item.sortNum != null">
+                    P_SORT_NUM = #{item.sortNum,jdbcType=VARCHAR},
+                </if>
+                <if test="item.isHas != null">
+                    P_BOM_LINE_IS_HAS = #{item.isHas,jdbcType=INTEGER}
+                </if>
+            </set>
+            where puid = #{item.puid,jdbcType=VARCHAR}
+            and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
+            and P_EBOM_STATUS <![CDATA[ <> ]]>0
+        </foreach>
+    </update>
 
     <select id="HzEbomRecordDAOImpl_lineIndexRepeat" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         select count(*) from HZ_BOM_LINE_RECORD t1
@@ -797,5 +799,26 @@
         WHERE rownum =1
     </select>
 
+
+    <!--根据eplId 查询相同零件号的BOM-->
+    <select id="HzEbomRecordDAOImpl_findEBOMRecordsByEPLId" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select <include refid="BASE_BOM_COLUMN"/> from HZ_BOM_LINE_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+          #{projectId,jdbcType=VARCHAR})
+        )
+        and t.P_EPL_ID = #{eplId,jdbcType=DOUBLE}
+    </select>
+
+    <!--查询当前父层的子一层记录-->
+    <select id="HzEbomRecordDAOImpl_findNextLevelRecordByParentId" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select <include refid="BASE_BOM_COLUMN"/> from HZ_BOM_LINE_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        #{projectId,jdbcType=VARCHAR})
+        )
+        and t.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
+        ORDER BY  CAST(t.P_SORT_NUM as FLOAT)
+    </select>
 
 </mapper>

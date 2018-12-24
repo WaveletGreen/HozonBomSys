@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 
+import org.apache.commons.lang.StringUtils;
+
 import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -14,14 +16,6 @@ import java.util.regex.Pattern;
 public class HzBomSysFactory {
     /*最小步进，用于产生随机数**/
     private static final  int MIN_STEP = 2;
-    /*第一步进，用于产生随机数**/
-    private static final int FIRST_STEP = 10;
-    /*第二步进，用于产生随机数**/
-    private static final int SECOND_STEP = 50;
-    /*第三步进，用于产生随机数**/
-    private static final int THIRD_STEP = 100;
-    /*第四步进，用于产生随机数**/
-    private static final int FOURTH_STEP = 200;
 
     /**
      * 获取bom系统的层级和级别 和查找编号
@@ -63,24 +57,29 @@ public class HzBomSysFactory {
      * @return
      */
     public static String generateBomSortNum(String s1,String s2){
-        Double d1 = Double.parseDouble(s1);
-        Double d2 = Double.parseDouble(s2);
-        if(d1 >= d2){
+        try {
+
+            if(StringUtils.isBlank(s1) || StringUtils.isBlank(s2)){
+                return null;
+            }
+
+            Double d1 = Double.parseDouble(s1);
+            Double d2 = Double.parseDouble(s2);
+
+            if(d1 >= d2){
+                return null;
+            }
+
+            double diff = d2 -d1;
+            int step = (int)diff;
+            if(diff<= MIN_STEP){
+                return resultNum(d1,d2,0);
+            } else {
+                return resultNum(d1,d2,step >> 1);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
             return null;
-        }
-        Double diff = d2 -d1;
-        if(diff<= MIN_STEP){
-            return resultNum(d1,d2,0);
-        }else if(diff<= FIRST_STEP){
-            return resultNum(d1,d2,FIRST_STEP >> 1);
-        }else if(diff <=SECOND_STEP){
-            return resultNum(d1,d2,SECOND_STEP >> 1);
-        }else if( diff <= THIRD_STEP){
-            return resultNum(d1,d2,THIRD_STEP >> 1);
-        }else if(diff <=FOURTH_STEP){
-            return resultNum(d1,d2,FOURTH_STEP  >> 1);
-        }else {
-           return resultNum(d1,d2,FOURTH_STEP);
         }
     }
 
@@ -153,7 +152,7 @@ public class HzBomSysFactory {
         String result ="";
         while (true){
             Random random = new Random();
-            Double d = random.nextDouble()+d1+step;
+            Double d = random.nextDouble() + d1 + step;
             if(d <d2 ){
                 result  = String.valueOf(d);
                 break;

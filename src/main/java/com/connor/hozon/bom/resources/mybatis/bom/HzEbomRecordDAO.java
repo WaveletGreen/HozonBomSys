@@ -2,7 +2,6 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
-import lombok.Data;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -24,16 +23,9 @@ public interface HzEbomRecordDAO {
      */
     int insertList(List<HzEPLManageRecord> records,String tableName);
 
-    /**
-     * 复制层级的单条插入EBOM
-     * @param record
-     * @return
-     */
-    int insert2(HzEPLManageRecord record);
 
     int importList(List<HzImportEbomRecord> records);
 
-    boolean sortNumRepeat(String projectId,String sortNum);
 
     boolean lineIndexRepeat(String projectId,String lineIndex);
 
@@ -66,6 +58,13 @@ public interface HzEbomRecordDAO {
      * @return
      */
     int updateList(List<HzBomLineRecord> records);
+
+    /**
+     * 根据主键进行批量更新
+     * @param records
+     * @return
+     */
+    int updateListByPuids(List<HzEPLManageRecord> records);
 
     int findIsHasByPuid(String puid, String projectId);
 
@@ -167,13 +166,26 @@ public interface HzEbomRecordDAO {
      * @param query lineNo 查找编号
      * @return
      */
-    HzEPLManageRecord findMinEBOMRecordWhichLineNoGreaterCurrentLineNo(HzEBOMQuery query);
+    HzEPLManageRecord findMinEBOMRecordWhichLineNoGreaterCurrentLineNo(HzBOMQuery query);
 
     /**
      * 找出小于当前查找编号的最大记录 只找出当前父层的子一层 或者只找出2Y层
      * @param query
      * @return
      */
-    HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzEBOMQuery query);
+    HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzBOMQuery query);
 
+    /**
+     * 根据EPLId 查询EBOM记录
+     * @param query
+     * @return
+     */
+    List<HzEPLManageRecord> findEBOMRecordsByEPLId(HzBOMQuery query);
+
+    /**
+     * 获取子一层记录
+     * @param query
+     * @return
+     */
+    List<HzEPLManageRecord> findNextLevelRecordByParentId(HzBOMQuery query);
 }

@@ -9,15 +9,13 @@ import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
+import sql.redis.HzDBException;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -172,6 +170,30 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public int updateListByPuids(List<HzEPLManageRecord> records) {
+        if(ListUtil.isEmpty(records)){
+            return 0;
+        }
+        try {
+            synchronized (this){
+                int size = records.size();
+                if(size > 1000){
+                    Map<Integer,List<HzEPLManageRecord>> map = HzBomSysFactory.spiltList(records);
+                    for(List<HzEPLManageRecord> value :map.values()){
+                        super.update("HzEbomRecordDAOImpl_updateListByPuids",value);
+                    }
+                }else {
+                    super.update("HzEbomRecordDAOImpl_updateListByPuids",records);
+                }
+                return size;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzDBException("数据更新失败！",e);
+        }
+    }
+
+    @Override
     public Page<HzEPLManageRecord> getHzRecycleRecord(HzBomRecycleByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
@@ -251,10 +273,6 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         }
     }
 
-    @Override
-    public int insert2(HzEPLManageRecord record) {
-        return super.insert("HzEbomRecordDAOImpl_insert2",record);
-    }
 
     @Override
     public int importList(List<HzImportEbomRecord> records) {
@@ -289,14 +307,6 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
             return 0;
         }
 
-    }
-
-    @Override
-    public boolean sortNumRepeat(String projectId, String sortNum) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",projectId);
-        map.put("sortNum",sortNum);
-        return (int)super.findForObject("HzEbomRecordDAOImpl_sortNumRepeat",map)>0;
     }
 
     @Override
@@ -397,7 +407,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
-    public HzEPLManageRecord findMinEBOMRecordWhichLineNoGreaterCurrentLineNo(HzEBOMQuery query) {
+    public HzEPLManageRecord findMinEBOMRecordWhichLineNoGreaterCurrentLineNo(HzBOMQuery query) {
         Map<String,Object> map = new HashMap<>();
         map.put("is2Y",query.getIs2Y());
         map.put("parentId",query.getParentId());
@@ -407,13 +417,29 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
-    public HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzEBOMQuery query) {
+    public HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzBOMQuery query) {
         Map<String,Object> map = new HashMap<>();
         map.put("is2Y",query.getIs2Y());
         map.put("parentId",query.getParentId());
         map.put("projectId",query.getProjectId());
         map.put("lineNo",query.getLineNo());
         return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findMaxEBOMRecordWhichLineNoLessCurrentNo",map);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> findEBOMRecordsByEPLId(HzBOMQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("eplId",query.getEplId());
+        map.put("projectId",query.getProjectId());
+        return super.findForList("HzEbomRecordDAOImpl_findEBOMRecordsByEPLId",map);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> findNextLevelRecordByParentId(HzBOMQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",query.getProjectId());
+        map.put("parentId",query.getParentId());
+        return super.findForList("HzEbomRecordDAOImpl_findNextLevelRecordByParentId",map);
     }
 
     @Override

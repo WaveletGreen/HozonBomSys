@@ -293,12 +293,10 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        /*var puid = $("#puid").val();
-        if (puid==""){
-            $("#lineNo").attr({"disabled": "disabled"});
-        } else {
-            $("#lineNo").removeAttr("disabled");
-        }*/
+        var puid = $("#puid").val();
+        if (puid == ""){
+            $("#colorPart").attr({"disabled": "disabled"});
+        } 
         // var oTxt = document.getElementById("puid");
         // var oDiv = document.getElementById("lineNumber");
         // oTxt.onblur = function(){
