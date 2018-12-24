@@ -744,4 +744,54 @@
         t2.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR}
         )order by CAST(t1.P_SORT_NUM as FLOAT) DESC)WHERE rownum = 1
     </select>
+
+
+    <select id="HzEbomRecordDAOImpl_findEbomChildrenByLineIndex" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+      select
+        <include refid="BASE_BOM_COLUMN"/>
+      from
+        (select <include refid="BASE_BOM_COLUMN"/> from HZ_BOM_LINE_RECORD t where PUID = #{puid,jdbcType=VARCHAR}) t
+      where
+        P_LINE_INDEX = #{lineIndex,jdbcType=VARCHAR}
+    </select>
+
+    <select id="HzEbomRecordDAOImpl_findPreviousEbom" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+        select
+        <include refid="BASE_BOM_COLUMN"/>
+        from
+        HZ_BOM_LINE_RECORD t
+        where
+        t.P_SORT_NUM = (
+          select MAX(P_SORT_NUM) from  HZ_BOM_LINE_RECORD where CAST(P_SORT_NUM as FLOAT)&lt; CAST(#{sortNum,jdbcType=VARCHAR} as FLOAT)
+        )
+    </select>
+
+    <select id="HzEbomRecordDAOImpl_findNextLineIndex" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+        select
+        <include refid="BASE_BOM_COLUMN"/>
+        from
+        (
+            SELECT
+              <include refid="BASE_BOM_COLUMN"/>
+            FROM
+            HZ_BOM_LINE_RECORD T
+            WHERE
+              t.P_PARENT_UID = #{puid,jdbcType=VARCHAR}
+            AND
+                TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1)))>11
+                ORDER BY
+                TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1)))
+        ) t
+        where rownum =1
+    </select>
+
+    <select id="HzEbomRecordDAOImpl_findBaseEbomById" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT <include refid="BASE_BOM_COLUMN"/>
+        from
+        HZ_BOM_LINE_RECORD t
+        where
+          t.p_bom_digifax_id=(select puid from Hz_Bom_Main_Record  where p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+        and
+          t.P_EPL_ID = (select ID from HZ_EPL_RECORD where PART_ID = #{lineId,jdbcType=VARCHAR} and PROJECT_ID =#{projectId,jdbcType=VARCHAR})
+    </select>
 </mapper>

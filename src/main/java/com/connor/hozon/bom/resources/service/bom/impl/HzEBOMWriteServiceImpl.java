@@ -7,6 +7,8 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
+import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.bom.sys.exception.HzBomException;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.epl.HzEPLRecord;
+
+import java.util.List;
 
 /**
  * @Author: haozt
@@ -28,7 +32,8 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
     @Autowired
     private HzEPLDAO hzEPLDAO;
 
-
+    @Autowired
+    private HzEbomRecordDAO hzEbomRecordDAO;
     @Override
     @Transactional(rollbackFor = {RuntimeException.class,HzBomException.class})
     public WriteResultRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
@@ -76,6 +81,65 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 
     @Override
     public WriteResultRespDTO extendsBomStructureInNewParent(UpdateHzEbomLeveReqDTO reqDTO) {
+        HzEbomTreeQuery query = new HzEbomTreeQuery();
+        query.setProjectId(reqDTO.getProjectId());
+        query.setPuid(reqDTO.getPuid());
+
+        //被添加的父
+        List<HzEPLManageRecord> hzEPLManageRecordsFather = hzEbomRecordDAO.findBaseEbomById(reqDTO.getLineId(), reqDTO.getProjectId());
+        if(hzEPLManageRecordsFather==null||hzEPLManageRecordsFather.size()<=0){
+            return WriteResultRespDTO.failResultRespDTO("父层不存在");
+        }
+
+        //添加的根
+        HzEPLManageRecord hzEPLManageRecordRoot = hzEbomRecordDAO.findEbomById(reqDTO.getPuid(), reqDTO.getProjectId());
+
+        //添加的子
+        List<HzEPLManageRecord> hzBomLineChildren = hzEbomRecordDAO.getHzBomLineChildren(query);
+
+        //判断子中是否存在父
+        for(HzEPLManageRecord hzEPLManageRecordChildren : hzBomLineChildren ){
+            if(hzEPLManageRecordChildren.getPuid().equals(hzEPLManageRecordsFather.get(0).getPuid())){
+                return WriteResultRespDTO.failResultRespDTO("父层为根的子，不能添加");
+            }
+        }
+        for(HzEPLManageRecord hzEPLManageRecordFather : hzEPLManageRecordsFather){
+            //校验插入点是否已存在数据
+            HzEPLManageRecord hzEPLManageRecordChildren = hzEbomRecordDAO.findEbomChildrenByLineIndex(hzEPLManageRecordFather.getPuid(),reqDTO.getLineNo());
+            if(hzEPLManageRecordChildren!=null){
+                return WriteResultRespDTO.failResultRespDTO("查找编号已存在，请重新输入");
+            }
+            //插入点下一个数据
+            HzEPLManageRecord hzEPLManageRecordNext = hzEbomRecordDAO.findNextLineIndex(hzEPLManageRecordFather.getPuid(),reqDTO.getLineNo());
+            //插入点上一个数据
+            HzEPLManageRecord hzEPLManageRecordPrevious = hzEbomRecordDAO.findPreviousEbom(hzEPLManageRecordNext);
+            //根据插入点上下数据生成插入数据的  排序号 并插入
+            //根节点的 查询编号
+            String rootLineIndex = hzEPLManageRecordFather.getLineIndex()+"."+reqDTO.getLineNo();
+            //排序号总增量
+            Double increment = 0.0;
+            if(hzEPLManageRecordNext==null){
+                increment = 1.0;
+            }else {
+                Double allNo = Double.valueOf(hzEPLManageRecordNext.getSortNum()) - Double.valueOf(hzEPLManageRecordPrevious.getSortNum());
+                //每次排序号增量
+                increment = allNo/(hzBomLineChildren.size()+2);
+            }
+            //根节点的排序号
+            Double rootLineNo = Double.valueOf(hzEPLManageRecordPrevious.getSortNum()) + increment;
+
+            String rootLineIndexOld = hzEPLManageRecordRoot.getLineIndex();
+            hzEPLManageRecordRoot.setLineIndex(rootLineIndex);
+            hzEPLManageRecordRoot.setSortNum(rootLineNo.toString());
+            //根据根的 排序号 和 查找编号 生成子数据并插入
+            String[] lineIndexs = hzEPLManageRecordFather.getLineIndex().split("\\.");
+            for(HzEPLManageRecord hzEPLManageRecord : hzBomLineChildren){
+                rootLineNo = rootLineNo+increment;
+                hzEPLManageRecord.setSortNum(rootLineNo.toString());
+                String childrenIndexOld = hzEPLManageRecord.getLineIndex();
+                String childrenIndexNew = hzEPLManageRecordRoot.getLineIndex()+childrenIndexOld.substring(rootLineIndexOld.length(),childrenIndexOld.length());
+            }
+        }
         return null;
     }
 

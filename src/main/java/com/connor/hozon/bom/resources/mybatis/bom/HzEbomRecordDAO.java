@@ -171,4 +171,12 @@ public interface HzEbomRecordDAO {
      * @return
      */
     Double findMaxBomOrderNum(String projectId);
+
+    HzEPLManageRecord findEbomChildrenByLineIndex(String lineId, String lineNo);
+
+    HzEPLManageRecord findPreviousEbom(HzEPLManageRecord hzEPLManageRecord);
+
+    HzEPLManageRecord findNextLineIndex(String lineId, String lineNo);
+
+    List<HzEPLManageRecord> findBaseEbomById(String lineId, String projectId);
 }

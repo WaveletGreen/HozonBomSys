@@ -400,6 +400,41 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return Double.parseDouble(maxSortNum);
     }
 
+    /**
+     * 找出子中对应排序号的数据
+     * @param lineId
+     * @param lineNo
+     * @return
+     */
+    @Override
+    public HzEPLManageRecord findEbomChildrenByLineIndex(String lineId, String lineNo) {
+        HzEPLManageRecord hzEPLManageRecord = new HzEPLManageRecord();
+        hzEPLManageRecord.setPuid(lineId);
+        hzEPLManageRecord.setLineIndex(lineNo);
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findEbomChildrenByLineIndex",hzEPLManageRecord);
+    }
+
+    @Override
+    public HzEPLManageRecord findPreviousEbom(HzEPLManageRecord hzEPLManageRecord) {
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findPreviousEbom",hzEPLManageRecord);
+    }
+
+    @Override
+    public HzEPLManageRecord findNextLineIndex(String lineId, String lineNo) {
+        HzEPLManageRecord hzEPLManageRecord = new HzEPLManageRecord();
+        hzEPLManageRecord.setPuid(lineId);
+        hzEPLManageRecord.setLineIndex(lineNo);
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findNextLineIndex",hzEPLManageRecord);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> findBaseEbomById(String lineId, String projectId) {
+        Map<String,String> map = new HashMap<>();
+        map.put("lineId",lineId);
+        map.put("projectId",projectId);
+        return super.findForList("HzEbomRecordDAOImpl_findBaseEbomById",map);
+    }
+
     @Override
     public Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();

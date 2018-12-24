@@ -11,6 +11,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
+import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class HzEbomController extends BaseController {
 
     @Autowired
     private HzEBOMReadService hzEBOMReadService;
+    @Autowired
+    private HzEBOMWriteService hzEBOMWriteService;
 
     @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
@@ -200,7 +203,7 @@ public class HzEbomController extends BaseController {
 
         //WriteResultRespDTO respDTO= hzEBOMReadService.updateHzEbomLevelRecord(reqDTO);
         //测试
-        WriteResultRespDTO respDTO= hzEBOMReadService.testbomLevelChange(reqDTO);
+        WriteResultRespDTO respDTO= hzEBOMWriteService.extendsBomStructureInNewParent(reqDTO);
 
         toJSONResponse(Result.build(
                 WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
