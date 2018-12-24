@@ -42,6 +42,8 @@ public class HzEbomController extends BaseController {
     private HzEBOMWriteService hzEBOMWriteService;
 
     @Autowired
+    private HzEBOMWriteService hzEBOMWriteService;
+    @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
 
     @Autowired
@@ -329,11 +331,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "add/ebom",method = RequestMethod.POST)
     public void addEbomToDB(@RequestBody AddHzEbomReqDTO reqDTO, HttpServletResponse response){
-        if(reqDTO.getProjectId()==null){
-            toJSONResponse(Result.build(false,"非法参数！"), response);
-            return;
-        }
-        WriteResultRespDTO respDTO = hzEBOMReadService.addHzEbomRecord(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMWriteService.addHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -346,7 +344,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(@RequestBody UpdateHzEbomReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO= hzEBOMReadService.updateHzEbomRecord(reqDTO);
+        WriteResultRespDTO respDTO= hzEBOMWriteService.updateHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -363,7 +361,7 @@ public class HzEbomController extends BaseController {
             toJSONResponse(Result.build(false,"非法参数！"), response);
             return;
         }
-        WriteResultRespDTO respDTO = hzEBOMReadService.deleteHzEbomRecordById(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMWriteService.deleteHzEbomRecordById(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 

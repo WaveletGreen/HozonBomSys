@@ -255,8 +255,7 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         m.put("tableName",tableName);
         try {
             if(size>1000){
-                HzBomSysFactory<String> factory = new HzBomSysFactory();
-                Map<Integer,List<String>> map = factory.spiltList(puids);
+                Map<Integer,List<String>> map = HzBomSysFactory.spiltList(puids);
                 for(List<String> v:map.values()){
                     m.put("puids",v);
                     super.delete("HzWorkProcedureDAOImpl_deleteByPuids",m);

@@ -410,8 +410,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
             m.put("tableName",tableName);
             synchronized (this){
                 if(size>1000){
-                    HzBomSysFactory<String> factory = new HzBomSysFactory();
-                    Map<Integer,List<String>> map = factory.spiltList(list);
+                    Map<Integer,List<String>> map = HzBomSysFactory.spiltList(list);
                     for(List<String> v:map.values()){
                         m.put("puids",v);
                         super.delete("HzPbomRecordDAOImpl_deleteListByPuids",m);
