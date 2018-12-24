@@ -436,6 +436,11 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public HzEPLManageRecord findNextSortNum(HzEPLManageRecord hzEPLManageRecordPrevious) {
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findNextSortNum",hzEPLManageRecordPrevious);
+    }
+
+    @Override
     public Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();

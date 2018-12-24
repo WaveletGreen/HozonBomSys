@@ -8,6 +8,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.epl.HzEPLRecord;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,6 +83,9 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 
     @Override
     public WriteResultRespDTO extendsBomStructureInNewParent(UpdateHzEbomLeveReqDTO reqDTO) {
+
+        List<HzEPLManageRecord> insertList = new ArrayList<>();
+
         HzEbomTreeQuery query = new HzEbomTreeQuery();
         query.setProjectId(reqDTO.getProjectId());
         query.setPuid(reqDTO.getPuid());
@@ -103,6 +108,8 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 return WriteResultRespDTO.failResultRespDTO("父层为根的子，不能添加");
             }
         }
+
+
         for(HzEPLManageRecord hzEPLManageRecordFather : hzEPLManageRecordsFather){
             //校验插入点是否已存在数据
             HzEPLManageRecord hzEPLManageRecordChildren = hzEbomRecordDAO.findEbomChildrenByLineIndex(hzEPLManageRecordFather.getPuid(),reqDTO.getLineNo());
@@ -112,17 +119,32 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             //插入点下一个数据
             HzEPLManageRecord hzEPLManageRecordNext = hzEbomRecordDAO.findNextLineIndex(hzEPLManageRecordFather.getPuid(),reqDTO.getLineNo());
             //插入点上一个数据
-            HzEPLManageRecord hzEPLManageRecordPrevious = hzEbomRecordDAO.findPreviousEbom(hzEPLManageRecordNext);
+            HzEPLManageRecord hzEPLManageRecordPrevious = null;
+            if(hzEPLManageRecordNext==null){
+                HzEbomTreeQuery queryPrevious = new HzEbomTreeQuery();
+                queryPrevious.setProjectId(reqDTO.getProjectId());
+                queryPrevious.setPuid(hzEPLManageRecordFather.getPuid());
+                List<HzEPLManageRecord> hzEPLManageRecordsPrevious = hzEbomRecordDAO.getHzBomLineChildren(queryPrevious);
+
+                hzEPLManageRecordPrevious = hzEPLManageRecordsPrevious.get(hzEPLManageRecordsPrevious.size()-1);
+
+                hzEPLManageRecordNext = hzEbomRecordDAO.findNextSortNum(hzEPLManageRecordPrevious);
+            }else {
+                hzEPLManageRecordPrevious = hzEbomRecordDAO.findPreviousEbom(hzEPLManageRecordNext);
+                if(hzEPLManageRecordPrevious==null){
+                    hzEPLManageRecordPrevious = hzEPLManageRecordFather;
+                }
+            }
             //根据插入点上下数据生成插入数据的  排序号 并插入
             //根节点的 查询编号
             String rootLineIndex = hzEPLManageRecordFather.getLineIndex()+"."+reqDTO.getLineNo();
-            //排序号总增量
+            //每次排序号增量
             Double increment = 0.0;
+            //如果存在下一个数据不存在上一个数据,将父作为上一个数据
             if(hzEPLManageRecordNext==null){
-                increment = 1.0;
+                increment = 100.0;
             }else {
                 Double allNo = Double.valueOf(hzEPLManageRecordNext.getSortNum()) - Double.valueOf(hzEPLManageRecordPrevious.getSortNum());
-                //每次排序号增量
                 increment = allNo/(hzBomLineChildren.size()+2);
             }
             //根节点的排序号
@@ -138,9 +160,19 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 hzEPLManageRecord.setSortNum(rootLineNo.toString());
                 String childrenIndexOld = hzEPLManageRecord.getLineIndex();
                 String childrenIndexNew = hzEPLManageRecordRoot.getLineIndex()+childrenIndexOld.substring(rootLineIndexOld.length(),childrenIndexOld.length());
+                hzEPLManageRecord.setLineIndex(childrenIndexNew);
             }
+
+            insertList.add(hzEPLManageRecordRoot);
+            insertList.addAll(hzBomLineChildren);
         }
-        return null;
+        try {
+            hzEbomRecordDAO.insertList(insertList,ChangeTableNameEnum.HZ_EBOM.getTableName());
+        }catch (Exception e){
+            WriteResultRespDTO.failResultRespDTO("引用层级失败");
+        }
+
+        return WriteResultRespDTO.getSuccessResult();
     }
 
     @Override

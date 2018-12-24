@@ -794,4 +794,14 @@
         and
           t.P_EPL_ID = (select ID from HZ_EPL_RECORD where PART_ID = #{lineId,jdbcType=VARCHAR} and PROJECT_ID =#{projectId,jdbcType=VARCHAR})
     </select>
+    
+    <select id="HzEbomRecordDAOImpl_findNextSortNum" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+        SELECT <include refid="BASE_BOM_COLUMN"/>
+        from
+        HZ_BOM_LINE_RECORD t
+        where
+        t.P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
+        and
+        t.P_SORT_NUM = (select MIN(P_SORT_NUM) from HZ_BOM_LINE_RECORD where P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR} and CAST(P_SORT_NUM as FLOAT) &gt; CAST(#{sortNum,jdbcType=VARCHAR} as FLOAT))
+    </select>
 </mapper>

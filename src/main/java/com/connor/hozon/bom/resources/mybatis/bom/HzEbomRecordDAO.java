@@ -179,4 +179,6 @@ public interface HzEbomRecordDAO {
     HzEPLManageRecord findNextLineIndex(String lineId, String lineNo);
 
     List<HzEPLManageRecord> findBaseEbomById(String lineId, String projectId);
+
+    HzEPLManageRecord findNextSortNum(HzEPLManageRecord hzEPLManageRecordPrevious);
 }
