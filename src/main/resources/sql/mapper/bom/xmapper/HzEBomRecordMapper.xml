@@ -804,9 +804,9 @@
       select
         <include refid="BASE_BOM_COLUMN"/>
       from
-        (select <include refid="BASE_BOM_COLUMN"/> from HZ_BOM_LINE_RECORD t where PUID = #{puid,jdbcType=VARCHAR}) t
+        (select <include refid="BASE_BOM_COLUMN"/> from HZ_BOM_LINE_RECORD t where P_PARENT_UID = #{puid,jdbcType=VARCHAR}) t
       where
-        P_LINE_INDEX = #{lineIndex,jdbcType=VARCHAR}
+        TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1))) = TO_NUMBER (#{lineIndex,jdbcType=VARCHAR})
     </select>
 
     <select id="HzEbomRecordDAOImpl_findPreviousEbom" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
@@ -816,8 +816,10 @@
         HZ_BOM_LINE_RECORD t
         where
         t.P_SORT_NUM = (
-          select MAX(P_SORT_NUM) from  HZ_BOM_LINE_RECORD where CAST(P_SORT_NUM as FLOAT)&lt; CAST(#{sortNum,jdbcType=VARCHAR} as FLOAT)
+          select MAX(P_SORT_NUM) from  HZ_BOM_LINE_RECORD where P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR} and CAST(P_SORT_NUM as FLOAT)&lt; CAST(#{sortNum,jdbcType=VARCHAR} as FLOAT)
         )
+        and
+        t.P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
     </select>
 
     <select id="HzEbomRecordDAOImpl_findNextLineIndex" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
@@ -832,8 +834,8 @@
             WHERE
               t.P_PARENT_UID = #{puid,jdbcType=VARCHAR}
             AND
-                TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1)))>11
-                ORDER BY
+                TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1)))&gt; TO_NUMBER (#{lineIndex,jdbcType=VARCHAR})
+            ORDER BY
                 TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1)))
         ) t
         where rownum =1
@@ -856,6 +858,17 @@
         where
         t.P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
         and
-        t.P_SORT_NUM = (select MIN(P_SORT_NUM) from HZ_BOM_LINE_RECORD where P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR} and CAST(P_SORT_NUM as FLOAT) &gt; CAST(#{sortNum,jdbcType=VARCHAR} as FLOAT))
+        t.P_SORT_NUM = (select MIN(CAST (P_SORT_NUM AS FLOAT)) from HZ_BOM_LINE_RECORD where P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR} and CAST(P_SORT_NUM as FLOAT) &gt; CAST(#{sortNum,jdbcType=VARCHAR} as FLOAT))
     </select>
+
+    <update id="HzEbomRecordDAOImpl_updateEPLList" parameterType="java.util.List">
+      <foreach collection="list" index="index" item="item" open="begin" separator=";" close=";end;">
+        update
+          HZ_BOM_LINE_RECORD
+        set
+          P_BOM_LINE_IS_HAS = #{item.isHas,jdbcType=INTEGER}
+        where
+          PUID  =#{item.puid,jdbcType=VARCHAR}
+      </foreach>
+    </update>
 </mapper>

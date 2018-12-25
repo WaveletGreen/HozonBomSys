@@ -42,8 +42,6 @@ public class HzEbomController extends BaseController {
     private HzEBOMWriteService hzEBOMWriteService;
 
     @Autowired
-    private HzEBOMWriteService hzEBOMWriteService;
-    @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
 
     @Autowired

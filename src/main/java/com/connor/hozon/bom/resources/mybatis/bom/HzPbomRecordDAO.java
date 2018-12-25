@@ -8,6 +8,7 @@ import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import lombok.Data;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -204,4 +205,16 @@ public interface HzPbomRecordDAO {
 
 
     List<HzPbomLineRecord> getPbomRecordsByOrderId(HzChangeDataDetailQuery query);
+
+    List<HzPbomLineRecord> findPbomsByEBom(List<HzEPLManageRecord> hzEPLManageRecordsFather);
+
+    HzPbomLineRecord findPbomByEBom(String puid, String projectId);
+
+    HzPbomLineRecord findEbomChildrenByLineIndex(String puid, String lineNo);
+
+    HzPbomLineRecord findNextLineIndex(String puid, String lineNo);
+
+    HzPbomLineRecord findPreviousPbom(HzPbomLineRecord hzPbomLineRecord);
+
+    HzPbomLineRecord findNextSortNum(HzPbomLineRecord hzPbomLineRecord);
 }

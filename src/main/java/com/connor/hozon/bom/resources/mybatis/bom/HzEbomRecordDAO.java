@@ -186,4 +186,5 @@ public interface HzEbomRecordDAO {
      */
     HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzEBOMQuery query);
 
+    int updateEPLList(List<HzEPLManageRecord> hzEPLManageRecordsFather);
 }

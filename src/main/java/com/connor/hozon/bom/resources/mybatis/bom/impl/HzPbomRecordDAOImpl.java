@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -456,5 +457,48 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         }
         return super.findForList("HzPbomRecordDAOImpl_getPbomRecordsByOrderId",map);
     }
+
+    @Override
+    public List<HzPbomLineRecord> findPbomsByEBom(List<HzEPLManageRecord> hzEPLManageRecords) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("hzEPLManageRecords",hzEPLManageRecords);
+        map.put("bomDigifaxId",hzEPLManageRecords.get(0).getBomDigifaxId());
+        return super.findForList("HzPbomRecordDAOImpl_findPbomsByEBom",map);
+    }
+
+    @Override
+    public HzPbomLineRecord findPbomByEBom(String puid, String projectId) {
+        Map<String,String> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_findPbomByEBom",map);
+    }
+
+    @Override
+    public HzPbomLineRecord findEbomChildrenByLineIndex(String puid, String lineNo) {
+        Map<String,String> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("lineNo",lineNo);
+        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_findEbomChildrenByLineIndex",map);
+    }
+
+    @Override
+    public HzPbomLineRecord findNextLineIndex(String puid, String lineNo) {
+        Map<String,String> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("lineNo",lineNo);
+        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_findNextLineIndex",map);
+    }
+
+    @Override
+    public HzPbomLineRecord findPreviousPbom(HzPbomLineRecord hzPbomLineRecord) {
+        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_findPreviousPbom",hzPbomLineRecord);
+    }
+
+    @Override
+    public HzPbomLineRecord findNextSortNum(HzPbomLineRecord hzPbomLineRecord) {
+        return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_findNextSortNum",hzPbomLineRecord);
+    }
+
 
 }

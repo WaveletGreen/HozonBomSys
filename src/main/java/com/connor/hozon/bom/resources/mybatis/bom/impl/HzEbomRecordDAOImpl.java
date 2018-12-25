@@ -457,6 +457,11 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public int updateEPLList(List<HzEPLManageRecord> hzEPLManageRecords) {
+        return super.update("HzEbomRecordDAOImpl_updateEPLList",hzEPLManageRecords);
+    }
+
+    @Override
     public Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
