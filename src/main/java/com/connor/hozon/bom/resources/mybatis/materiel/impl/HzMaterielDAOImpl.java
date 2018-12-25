@@ -271,7 +271,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
-            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+            map.put("revision",query.getRevision() ? query.getRevisionNo(): null);
         }else {
             map.put("revision",null);
         }

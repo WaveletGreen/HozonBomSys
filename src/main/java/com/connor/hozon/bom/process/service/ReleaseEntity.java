@@ -149,9 +149,9 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
 
     private String errMsg ="";
 
-    @Autowired
     private TransactionTemplate configTransactionTemplate;
 
+    @Autowired
     public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
         this.configTransactionTemplate = configTransactionTemplate;
     }
@@ -483,7 +483,6 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     e.printStackTrace();
                     throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
                 }
-
                 return null;
             };
         });

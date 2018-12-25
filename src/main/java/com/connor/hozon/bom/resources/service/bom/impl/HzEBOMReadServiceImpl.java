@@ -29,6 +29,7 @@ import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
@@ -2101,35 +2102,31 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
 
     /**
      * 检查是否关联特性
-     *
-     * @param puids
-     * @param projectUid
+     * @param puids BOM 端数据
+     * @param projectUid 项目id
      * @return
      */
-    private StringBuilder checkConnectWithFeature(String[] puids, String projectUid) {
+    @Override
+    public Result checkConnectWithFeature(List<String> puids, String projectUid) {
         HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectUid);
-        StringBuilder sb = null;
+        StringBuffer sb = new StringBuffer();
         if(hzFullCfgMain == null){
-            return sb;
+            return Result.build(true,null) ;
         }
         HzExFullCfgWithCfg cfg = null;
-        for (int i = 0; i < puids.length; i++) {
-            if (null != (cfg = hzFullCfgWithCfgDao.selectByBLOutWithCfgAndBL(hzFullCfgMain.getId(), puids[i]))) {
+        for (int i = 0; i < puids.size(); i++) {
+            if (null != (cfg = hzFullCfgWithCfgDao.selectByBLOutWithCfgAndBL(hzFullCfgMain.getId(), puids.get(i)))) {
                 if (cfg.getCfg() == null) {
                     continue;
                 }
-                if (sb == null) {
-                    sb = new StringBuilder();
-                }
-                HzEbomRespDTO dto = fingEbomById(puids[i], projectUid);
                 sb.append("2Y层:" + cfg.getBomLine().getLineID() + " 已关联特性值" + cfg.getCfg().getpCfg0ObjectId() + "，请在全配置BOM一级清单中将" + cfg.getBomLine().getLineID() + "去除绑定特性值<br>");
             }
         }
-        return sb;
-
+        String errMsg = sb.toString();
+        if(StringUtils.isBlank(errMsg)){
+            return  Result.build(true,null);
+        }
+        return Result.build(false,sb.toString());
     }
 
-    public void ss(){
-
-    }
 }

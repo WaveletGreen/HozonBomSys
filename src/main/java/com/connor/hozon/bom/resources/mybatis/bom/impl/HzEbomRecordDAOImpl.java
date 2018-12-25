@@ -100,9 +100,13 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
-    public int deleteList(String puids) {
+    public int deleteList(String puids,List<String> list) {
         Map<String,Object> map = new HashMap<>();
-        map.put("puids",Lists.newArrayList(puids.split(",")));
+        if(StringUtils.isNotBlank(puids)){
+            map.put("puids",Lists.newArrayList(puids.split(",")));
+        }else if(ListUtil.isNotEmpty(list)){
+            map.put("puids",list);
+        }
         return super.update("HzEbomRecordDAOImpl_deleteList",map);
     }
 
@@ -131,7 +135,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return 1;
+        return size;
     }
 
     @Override
@@ -346,8 +350,8 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("puids", query.getPuids());
         map.put("projectId",query.getProjectId());
-        if(null!=query.getRevision()){
-            map.put("revision",query.getRevision()?"":null);
+        if(null != query.getRevision()){
+            map.put("revision",query.getRevision() ? "": null);
         }else {
             map.put("revision",null);
         }
@@ -363,13 +367,13 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
-            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+            map.put("revision",query.getRevision() ? query.getRevisionNo(): null);
         }else {
             map.put("revision",null);
         }
         map.put("status",query.getStatus());
         map.put("tableName",query.getTableName());
-        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_getEBomRecordByPuidAndRevision",map);
+        return super.findForObject("HzEbomRecordDAOImpl_getEBomRecordByPuidAndRevision",map);
     }
 
     @Override
@@ -399,7 +403,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
      * @author haozt
      */
     public Double findMaxBomOrderNum(String projectId) {
-        String maxSortNum = (String)super.findForObject("HzEbomRecordDAOImpl_findMaxBomOrderNum", projectId);
+        String maxSortNum = super.findForObject("HzEbomRecordDAOImpl_findMaxBomOrderNum", projectId);
         if(maxSortNum == null){
             return null;
         }

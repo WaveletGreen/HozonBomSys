@@ -126,7 +126,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                         beforeUpdateQuery.setPuid(record.getPuid());
                         HzEPLManageRecord eplManageRecord = hzEbomRecordDAO.getEBomRecordByPuidAndRevision(beforeUpdateQuery);
 
-                        if(eplManageRecord!=null){
+                        if(eplManageRecord != null){
                             HzEbomRespDTO beforeRecord = HzEbomRecordFactory.eplRecordToEbomRespDTO(eplManageRecord);
                             beforeRecord.setChangeType(ChangeTypeEnum.BU.getChangeType());
                             respDTOs.add(beforeRecord);

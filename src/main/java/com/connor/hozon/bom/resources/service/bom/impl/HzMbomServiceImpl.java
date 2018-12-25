@@ -8,6 +8,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.interaction.iservice.IHzConfigBomColorService;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.model.HzMaterielFactory;
 import com.connor.hozon.bom.resources.domain.model.HzMbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
@@ -1364,14 +1365,8 @@ public class HzMbomServiceImpl implements HzMbomService{
     private List<HzMbomLineRecord> refreshResult(List<HzMbomLineRecord> a,List<HzMbomLineRecord> b,List<HzMbomLineRecord> u,int type){
         List<HzMbomLineRecord> d = new ArrayList<>();
         if(ListUtil.isNotEmpty(b)){
-            Collection m = new ArrayList(a);//要新增
-            Collection n = new ArrayList(b);//数据库原有的
-            n.removeAll(m);
-            if(n instanceof List){
-                d = (List)n;
-            }else {
-                d = new ArrayList<>(n);
-            }
+            b.removeAll(a);
+            d = b;
             List<HzMbomLineRecord> lineRecords = new ArrayList<>();
             for(HzMbomLineRecord record :a){
                 HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByEbomIdAndLineIndex(record.geteBomPuid(),record.getLineIndex(),MbomTableNameEnum.tableName(type));

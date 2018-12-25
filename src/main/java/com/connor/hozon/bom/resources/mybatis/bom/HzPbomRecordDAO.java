@@ -157,7 +157,7 @@ public interface HzPbomRecordDAO {
     List<HzPbomLineRecord> getPbomRecordsByPuids(HzChangeDataDetailQuery query);
 
     /**
-     * 根据ebomPuid 进行逻辑删除
+     * 根据Puid 进行逻辑删除
      * @param puids
      * @return
      */

@@ -9,18 +9,18 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
-import com.connor.hozon.bom.resources.domain.query.HzBOMQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
-import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
+import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.sys.exception.HzBomException;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,27 +44,59 @@ import java.util.*;
 @Service("hzEBOMWriteService")
 public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 
-    @Autowired
     private HzEPLDAO hzEPLDAO;
 
-    @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
 
-    @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
 
-    @Autowired
     private HzBomMainRecordDao hzBomMainRecordDao;
 
-    @Autowired
     private HzMbomService hzMbomService;
 
-    @Autowired
     private TransactionTemplate configTransactionTemplate;
 
+    private HzEBOMReadService hzEBOMReadService;
+
+
+    /**关于bean依赖注入 这里推荐使用set方法注入或者使用构造器注入 避免使用变量的方式直接注入*/
+    @Autowired
     public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
         this.configTransactionTemplate = configTransactionTemplate;
     }
+
+    @Autowired
+    public void setHzEPLDAO(HzEPLDAO hzEPLDAO) {
+        this.hzEPLDAO = hzEPLDAO;
+    }
+
+    @Autowired
+    public void setHzPbomRecordDAO(HzPbomRecordDAO hzPbomRecordDAO) {
+        this.hzPbomRecordDAO = hzPbomRecordDAO;
+    }
+
+    @Autowired
+    public void setHzEbomRecordDAO(HzEbomRecordDAO hzEbomRecordDAO) {
+        this.hzEbomRecordDAO = hzEbomRecordDAO;
+    }
+
+    @Autowired
+    public void setHzBomMainRecordDao(HzBomMainRecordDao hzBomMainRecordDao) {
+        this.hzBomMainRecordDao = hzBomMainRecordDao;
+    }
+
+    @Autowired
+    public void setHzMbomService(HzMbomService hzMbomService) {
+        this.hzMbomService = hzMbomService;
+    }
+
+    @Autowired
+    public void setHzEBOMReadService(HzEBOMReadService hzEBOMReadService) {
+        this.hzEBOMReadService = hzEBOMReadService;
+    }
+
+
+
 
     @Override
     public WriteResultRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
@@ -127,16 +159,169 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 
     @Override
     public WriteResultRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO) {
-        return null;
+        //删除时 带子层进行删除 存在生效记录（版本号） 标记删除状态 否则直接删除 同步PBOM进行删除 逻辑类似
+        //注：配置端如果关联 2Y层 则不允许进行删除
+        if(StringUtils.isBlank(reqDTO.getPuids()) || StringUtils.isBlank(reqDTO.getProjectId())){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+        String puids = reqDTO.getPuids();
+        String projectId = reqDTO.getProjectId();
+        List<String> puidList = Lists.newArrayList(puids.split(","));
+
+        try {
+            //检查是否已关联特性
+            Result result = hzEBOMReadService.checkConnectWithFeature(puidList,reqDTO.getProjectId());
+            if(!result.isSuccess()){
+                return WriteResultRespDTO.failResultRespDTO(result.getErrMsg());
+            }
+
+            List<String> effectList = new ArrayList<>();//改为删除状态
+            List<String> deleteList = new ArrayList<>();//直接进行删除操作
+
+            List<String> ebomHasChildrenPuids = new ArrayList<>();
+            List<String> pbomHasChildrenPuids = new ArrayList<>();
+            StringBuffer pbomDeleteBuffer = new StringBuffer();
+            StringBuffer pbomUpdateBuffer = new StringBuffer();
+            //找子 带子层删除 子层全部被删除后 更新父层的尾缀 如:3Y->2 其实就是更新isHas 字段
+            if(ListUtil.isNotEmpty(puidList)){
+                puidList.forEach(puid->{
+                    boolean deleteFlag = true;
+                    //EBOM 查找 将要删除记录
+                    HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid,projectId);
+                    if(record != null){
+                        if(StringUtils.isNotBlank(record.getRevision())){
+                            deleteFlag = false;
+                        }
+                        if(Integer.valueOf(1).equals(record.getIsHas())){
+                            ebomHasChildrenPuids.add(record.getParentUid());
+                            HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
+                            hzEbomTreeQuery.setPuid(puid);
+                            hzEbomTreeQuery.setProjectId(projectId);
+                            List<HzEPLManageRecord> list = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
+                            if(ListUtil.isNotEmpty(list)){
+                                if(deleteFlag){
+                                    list.forEach(l->{
+                                        deleteList.add(l.getPuid());
+                                    });
+                                }else {
+                                    list.forEach(l->{
+                                        effectList.add(l.getPuid());
+                                    });
+                                }
+
+                            }
+                        }
+
+                        //PBOM 查找
+                        HzPbomLineRecord pbomRecord = hzPbomRecordDAO.getHzPbomByEbomPuid(puid,projectId);
+                        if(pbomRecord != null){
+                            if(StringUtils.isNotBlank(pbomRecord.getRevision())){
+                                deleteFlag = false;
+                            }
+                            if(Integer.valueOf(1).equals(pbomRecord.getIsHas())){
+                                pbomHasChildrenPuids.add(pbomRecord.getParentUid());
+                                HzPbomTreeQuery hzPbomTreeQuery = new HzPbomTreeQuery();
+                                hzPbomTreeQuery.setPuid(puid);
+                                hzPbomTreeQuery.setProjectId(projectId);
+                                List<HzPbomLineRecord> list = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
+                                if(ListUtil.isNotEmpty(list)){
+                                    if(deleteFlag){
+                                        list.forEach(l->{
+                                            pbomDeleteBuffer.append(l.getPuid()+",");
+                                        });
+                                    }else {
+                                        list.forEach(l->{
+                                            pbomUpdateBuffer.append(l.getPuid()+",");
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+            }
+
+            //求差集 删除的记录 去除更新的记录
+            deleteList.removeAll(effectList);
+
+            configTransactionTemplate.execute(new TransactionCallback<Void>() {
+                @Override
+                public Void doInTransaction(TransactionStatus status) {
+                    if(ListUtil.isNotEmpty(deleteList)){
+                        hzEbomRecordDAO.deleteByPuids(deleteList,ChangeTableNameEnum.HZ_EBOM.getTableName());
+                    }
+                    if(ListUtil.isNotEmpty(effectList)){
+                        hzEbomRecordDAO.deleteList(null,effectList);
+                    }
+                    if(StringUtils.isNotBlank(pbomDeleteBuffer.toString())){
+                        hzPbomRecordDAO.deleteListByPuids(pbomDeleteBuffer.toString(),ChangeTableNameEnum.HZ_PBOM.getTableName());
+                    }
+                    if(StringUtils.isNotBlank(pbomUpdateBuffer.toString())){
+                        hzPbomRecordDAO.deleteByPuids(pbomUpdateBuffer.toString());
+                    }
+
+                    // 如果删除后 元素的父没有子 需要更改isHas 属性为0 2Y 层除外
+                    List<HzEPLManageRecord> ebomUpdateRecords = new ArrayList<>();
+                    List<HzPbomLineRecord> pbomUpdateRecords = new ArrayList<>();
+                    if(ListUtil.isNotEmpty(ebomHasChildrenPuids)){
+                        ebomHasChildrenPuids.forEach(puid->{
+                            HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
+                            hzEbomTreeQuery.setPuid(puid);
+                            hzEbomTreeQuery.setProjectId(projectId);
+                            List<HzEPLManageRecord> list = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
+                            if(ListUtil.isNotEmpty(list) && list.size() ==1){
+                                HzEPLManageRecord record = new HzEPLManageRecord();
+                                record.setPuid(list.get(0).getPuid());
+                                record.setIs2Y(list.get(0).getIs2Y());
+                                if(!Integer.valueOf(1).equals(record.getIs2Y())){
+                                    record.setIsHas(0);
+                                    ebomUpdateRecords.add(record);
+                                }
+                            }
+                        });
+                    }
+                    if(ListUtil.isNotEmpty(pbomHasChildrenPuids)){
+                        pbomHasChildrenPuids.forEach(puid->{
+                            HzPbomTreeQuery hzPbomTreeQuery = new HzPbomTreeQuery();
+                            hzPbomTreeQuery.setProjectId(projectId);
+                            hzPbomTreeQuery.setPuid(puid);
+                            List<HzPbomLineRecord> list = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
+                            if(ListUtil.isNotEmpty(list) && list.size() ==1){
+                                HzPbomLineRecord record = new HzPbomLineRecord();
+                                record.setPuid(list.get(0).getPuid());
+                                record.setIs2Y(list.get(0).getIs2Y());
+                                if(!Integer.valueOf(1).equals(record.getIs2Y())){
+                                    record.setIsHas(0);
+                                    pbomUpdateRecords.add(record);
+                                }
+                            }
+                        });
+                    }
+
+                    if(ListUtil.isNotEmpty(ebomUpdateRecords)){
+                        hzEbomRecordDAO.updateListByPuids(ebomUpdateRecords);
+                    }
+                    if(ListUtil.isNotEmpty(pbomUpdateRecords)){
+                        hzPbomRecordDAO.updateListByPuids(pbomUpdateRecords);
+                    }
+                    return null;
+                }
+            });
+            return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
     }
 
 
     /**
      * 搭建BOM结构 2Y层结构
-     * @param lineNo
-     * @param projectId
-     * @param reqDTO
-     * @param hzEPLRecord
+     * @param lineNo 查找编号
+     * @param projectId 项目id
+     * @param reqDTO 请求入参
+     * @param hzEPLRecord 对应EPL中记录
      * @return
      */
     private WriteResultRespDTO insert2YBOMStructure(String lineNo,String projectId,AddHzEbomReqDTO reqDTO,HzEPLRecord hzEPLRecord){

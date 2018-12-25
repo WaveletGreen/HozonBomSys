@@ -657,7 +657,7 @@
         <where>
             t2.puid = #{projectId,jdbcType=VARCHAR}))
             and t.puid =#{puid}
-            <if test="revision!= null">
+            <if test="revision!= null and revision !=''">
                 and t.P_REVISION =#{revision,jdbcType=VARCHAR}
             </if>
             <if test="status != null">

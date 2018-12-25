@@ -40,9 +40,10 @@ public interface HzEbomRecordDAO {
     /**
      * 批量删除
      * @param puids 主键ids 中间全部用英文逗号隔开
+     * @param list 删除参数 两种参数 只传一种就行
      * @return
      */
-    int deleteList(String puids);
+    int deleteList(String puids,List<String> list);
 
     int delete(String puid);
 

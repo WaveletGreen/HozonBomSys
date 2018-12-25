@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 
+import com.connor.hozon.bom.resources.util.ListUtil;
 import org.apache.commons.lang.StringUtils;
 
 import java.sql.SQLOutput;

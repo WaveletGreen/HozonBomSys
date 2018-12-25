@@ -47,7 +47,7 @@ public class HzEbomController extends BaseController {
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;
 
-    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
 
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
@@ -350,15 +350,10 @@ public class HzEbomController extends BaseController {
     /**
      * 删除ebom信息
      * @param reqDTO
-     * @param
      * @param response
      */
     @RequestMapping(value = "delete/ebom",method = RequestMethod.POST)
     public void deleteEbomToDB(@RequestBody DeleteHzEbomReqDTO reqDTO, HttpServletResponse response){
-        if(reqDTO.getProjectId()==null){
-            toJSONResponse(Result.build(false,"非法参数！"), response);
-            return;
-        }
         WriteResultRespDTO respDTO = hzEBOMWriteService.deleteHzEbomRecordById(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
