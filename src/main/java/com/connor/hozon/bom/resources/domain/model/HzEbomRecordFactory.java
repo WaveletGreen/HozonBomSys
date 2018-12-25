@@ -282,6 +282,7 @@ public class HzEbomRecordFactory {
         String lineIndex = record.getLineIndex();
         String[] strings = HzBomSysFactory.getLevelAndRank(lineIndex, is2Y, hasChildren);
         respDTO.setLevel(strings[0]);
+        respDTO.setLineNo(strings[2]);
         respDTO.setPuid(record.getPuid());
         respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
         respDTO.setLineId(record.getLineID());

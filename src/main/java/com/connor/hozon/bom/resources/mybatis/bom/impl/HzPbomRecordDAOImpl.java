@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
@@ -499,6 +500,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public HzPbomLineRecord findNextSortNum(HzPbomLineRecord hzPbomLineRecord) {
         return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_findNextSortNum",hzPbomLineRecord);
     }
+
 
 
 }

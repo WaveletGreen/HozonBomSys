@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
 import lombok.Data;
@@ -187,4 +188,8 @@ public interface HzEbomRecordDAO {
     HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzEBOMQuery query);
 
     int updateEPLList(List<HzEPLManageRecord> hzEPLManageRecordsFather);
+
+    int updateByDto(UpdateHzEbomReqDTO reqDTO);
+
+    HzEPLManageRecord findEbom2Y(Map<String,Object> map);
 }

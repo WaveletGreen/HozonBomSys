@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
@@ -217,4 +218,5 @@ public interface HzPbomRecordDAO {
     HzPbomLineRecord findPreviousPbom(HzPbomLineRecord hzPbomLineRecord);
 
     HzPbomLineRecord findNextSortNum(HzPbomLineRecord hzPbomLineRecord);
+
 }

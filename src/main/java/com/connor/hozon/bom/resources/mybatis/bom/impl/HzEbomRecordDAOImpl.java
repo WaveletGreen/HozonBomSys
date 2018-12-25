@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
@@ -459,6 +460,16 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     @Override
     public int updateEPLList(List<HzEPLManageRecord> hzEPLManageRecords) {
         return super.update("HzEbomRecordDAOImpl_updateEPLList",hzEPLManageRecords);
+    }
+
+    @Override
+    public int updateByDto(UpdateHzEbomReqDTO reqDTO) {
+        return super.update("HzEbomRecordDAOImpl_updateByDto",reqDTO);
+    }
+
+    @Override
+    public HzEPLManageRecord findEbom2Y(Map<String, Object> map) {
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findEbom2Y",map);
     }
 
     @Override

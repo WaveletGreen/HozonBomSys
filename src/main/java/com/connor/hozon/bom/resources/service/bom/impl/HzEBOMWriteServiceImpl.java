@@ -31,8 +31,7 @@ import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.epl.HzEPLRecord;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import java.util.List;
 
@@ -177,7 +176,66 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 
     @Override
     public WriteResultRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO) {
-        return null;
+        if(hzEbomRecordDAO.updateByDto(reqDTO)<=0?true:false){
+            return WriteResultRespDTO.failResultRespDTO("同步修改失败");
+        }
+        //如何是2Y层，还需调整查询编号
+        if(reqDTO.getLineNo()!=null){
+            List<HzEPLManageRecord> hzEPLManageRecordUpdate = new ArrayList<>();
+
+            HzEPLManageRecord hzEPLManageRecord = hzEbomRecordDAO.findEbomById(reqDTO.getPuid(), reqDTO.getProjectId());
+            //如果查询编号没变则不修改
+            if(hzEPLManageRecord.getLineIndex().equals(reqDTO.getLineNo())){
+                return WriteResultRespDTO.getSuccessResult();
+            }
+
+            HzEbomTreeQuery query = new HzEbomTreeQuery();
+            query.setPuid(reqDTO.getPuid());
+            query.setProjectId(reqDTO.getProjectId());
+            List<HzEPLManageRecord> hzEPLManageRecordsChildren = hzEbomRecordDAO.getHzBomLineChildren(query);
+
+            Map<String,Object> map = new HashMap<>();
+            map.put("projectId",reqDTO.getProjectId());
+            map.put("lineNo",reqDTO.getLineNo());
+            map.put("flag","previous");
+            //查找上一个2Y
+            HzEPLManageRecord  hzEPLManagePrevious = hzEbomRecordDAO.findEbom2Y(map);
+            //查找下一个2Y
+            map.put("flag","next");
+            HzEPLManageRecord  hzEPLManageNext = hzEbomRecordDAO.findEbom2Y(map);
+            Double increment = 0.0;
+            Double previous = 0.0;
+            if(hzEPLManagePrevious!=null){
+                previous = Double.valueOf(hzEPLManagePrevious.getSortNum());
+            }
+
+            if(hzEPLManageNext==null){
+                increment = 100.0;
+            }else {
+                Double next = Double.valueOf(hzEPLManageNext.getSortNum());
+                increment = (next-previous)/(hzEPLManageRecordsChildren.size()+2);
+            }
+            Double sortNum = previous+increment;
+            String indexOld = hzEPLManageRecordsChildren.get(0).getLineIndex();
+            hzEPLManageRecordsChildren.get(0).setSortNum(String.valueOf(sortNum));
+            hzEPLManageRecordsChildren.get(0).setLineIndex(reqDTO.getLineNo().replaceFirst("0*","")+"."+reqDTO.getLineNo().replaceFirst("0*",""));
+            hzEPLManageRecordUpdate.add(hzEPLManageRecordsChildren.get(0));
+            for(int i=1;i<hzEPLManageRecordsChildren.size();i++){
+                sortNum += increment;
+                HzEPLManageRecord hzEPLManageRecordChildren = hzEPLManageRecordsChildren.get(i);
+                hzEPLManageRecordChildren.setSortNum(String.valueOf(sortNum));
+                String indexChildrenOld = hzEPLManageRecordChildren.getLineIndex();
+                hzEPLManageRecordChildren.setLineIndex(hzEPLManageRecordsChildren.get(0).getLineIndex()+indexChildrenOld.substring(hzEPLManageRecordsChildren.get(0).getLineIndex().length()));
+                hzEPLManageRecordUpdate.add(hzEPLManageRecordChildren);
+            }
+            try {
+                hzEbomRecordDAO.updateEPLList(hzEPLManageRecordUpdate);
+            }catch (Exception e){
+                return WriteResultRespDTO.failResultRespDTO("修改查询编号失败");
+            }
+        }
+
+        return WriteResultRespDTO.getSuccessResult();
     }
 
     @Override
@@ -372,7 +430,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 for(HzPbomLineRecord hzPbomLineRecord : hzPbomLineRecordsFather){
                     hzPbomLineRecord.setIsHas(1);
                 }
-                hzEbomRecordDAO.updateEPLList(hzEPLManageRecordsFather);
+                hzPbomRecordDAO.updateList(hzPbomLineRecordsFather);
             }
         }catch (Exception e){
             WriteResultRespDTO.failResultRespDTO("引用层级失败");
