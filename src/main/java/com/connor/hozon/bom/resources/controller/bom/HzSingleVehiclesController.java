@@ -183,13 +183,6 @@ public class HzSingleVehiclesController extends BaseController {
         if(null == query.getSingleVehiclesId()){
             return new HashMap<>();
         }
-        HzSingleVehiclesBomByPageQuery pageQuery = query;
-        pageQuery.setPageSize(0);
-        try{
-            pageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        }catch (Exception e){
-
-        }
         Page<HzSingleVehiclesBomRespDTO> page = hzSingleVehiclesBomServices.getHzSingleVehiclesBomByPage(query);
         if (page == null) {
             return new HashMap<>();

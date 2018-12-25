@@ -28,6 +28,7 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
  * Created by haozt on 2018/06/05
  */
 @Service("hzEPLManageRecordService")
+@Deprecated
 public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 
     @Autowired

@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
@@ -196,6 +197,12 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     @Override
     public Page<HzPbomLineRecord> getHzPbomRecordByPage(HzPbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
+        request.setPageNumber(query.getPage());
+        if(BOMTransConstants.ALL.equals(query.getLimit())){
+            request.setAllNumber(true);
+        }else {
+            request.setPageSize(Integer.valueOf(query.getLimit()));
+        }
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
@@ -205,9 +212,6 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         map.put("pBomLinePartClass",query.getpBomLinePartClass());
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
         map.put("pIsNewPart",query.getpIsNewPart());
-        request.setPageNumber(query.getPage());
-
-        request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findForPage("HzPbomRecordDAOImpl_getPbomRecord","HzPbomRecordDAOImpl_getTotalCount",request);
 
@@ -255,10 +259,14 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     @Override
     public Page<HzPbomLineRecord> getHzPbomRecycleRecord(HzBomRecycleByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
+        request.setPageNumber(query.getPage());
+        if(BOMTransConstants.ALL.equals(query.getLimit())){
+            request.setAllNumber(true);
+        }else {
+            request.setPageSize(Integer.valueOf(query.getLimit()));
+        }
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
-        request.setPageNumber(query.getPage());
-        request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findPage("HzPbomRecordDAOImpl_getHzPbomRecycleRecord","HzPbomRecordDAOImpl_getRecycleTotalCount",request);
     }
@@ -337,11 +345,15 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     @Override
     public Page<HzPbomLineRecord> getPbomTreeByPage(HzPbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
+        request.setPageNumber(query.getPage());
+        if(BOMTransConstants.ALL.equals(query.getLimit())){
+            request.setAllNumber(true);
+        }else {
+            request.setPageSize(Integer.valueOf(query.getLimit()));
+        }
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("eBomPuids",Lists.newArrayList(query.geteBomPuids().split(",")));
-        request.setPageNumber(query.getPage());
-        request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findPage("HzPbomRecordDAOImpl_getHzPbomTreeByPage","HzPbomRecordDAOImpl_getHzPbomTreeTotalCount",request);
     }
@@ -481,7 +493,5 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public HzPbomLineRecord findNextSortNum(HzPbomLineRecord hzPbomLineRecord) {
         return (HzPbomLineRecord)super.findForObject("HzPbomRecordDAOImpl_findNextSortNum",hzPbomLineRecord);
     }
-
-
 
 }

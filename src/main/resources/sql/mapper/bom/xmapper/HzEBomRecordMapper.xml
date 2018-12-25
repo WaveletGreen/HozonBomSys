@@ -709,6 +709,10 @@
         )t1
         where rownum =1
         )
+        and t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3
+        where t3.p_cfg0_of_which_project_puid= #{projectId,jdbcType=VARCHAR}
+        )
     </select>
 
     <!--查询orderNum的最大值信息-->

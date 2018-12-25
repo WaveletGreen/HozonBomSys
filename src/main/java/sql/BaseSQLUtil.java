@@ -365,7 +365,7 @@ public class BaseSQLUtil extends SqlSessionDaoSupport implements IBaseSQLUtil {
         if (totalCount != null && totalCount.intValue() <= (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize()) {
             return new Page(pageRequestParam.getPageNumber(), pageRequestParam.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        if (pageRequestParam.getPageSize() == 0) {
+        if (pageRequestParam.getPageSize() == 0 || pageRequestParam.isAllNumber()) {
             pageRequestParam.setPageSize((int) totalCount);
         }
         Page page = new Page(pageRequestParam, totalCount.intValue());

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzSingleVehiclesBomDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -85,6 +86,12 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
     @Override
     public Page<HzSingleVehiclesBomRecord> getHzSingleVehiclesBomByPage(HzSingleVehiclesBomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
+        request.setPageNumber(query.getPage());
+        if(BOMTransConstants.ALL.equals(query.getLimit())){
+            request.setAllNumber(true);
+        }else {
+            request.setPageSize(Integer.valueOf(query.getLimit()));
+        }
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
@@ -94,8 +101,6 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
         map.put("pBomLinePartClass",query.getPBomLinePartClass());
         map.put("pBomLinePartResource",query.getPBomLinePartResource());
         map.put("singleVehiclesId",query.getSingleVehiclesId());
-        request.setPageNumber(query.getPage());
-        request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findPage("HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomByPage","HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomTotalCount",request);
     }
@@ -103,12 +108,16 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
     @Override
     public Page<HzSingleVehiclesBomRecord> getHzSingleVehiclesBomTreeByPage(HzSingleVehiclesBomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
+        request.setPageNumber(query.getPage());
+        if(BOMTransConstants.ALL.equals(query.getLimit())){
+            request.setAllNumber(true);
+        }else {
+            request.setPageSize(Integer.valueOf(query.getLimit()));
+        }
         Map map = new HashMap();
         map.put("projectId",query.getProjectId());
         map.put("eBomPuids", Lists.newArrayList(query.getEBomPuids().split(",")));
         map.put("singleVehiclesId",query.getSingleVehiclesId());
-        request.setPageNumber(query.getPage());
-        request.setPageSize(query.getPageSize());
         request.setFilters(map);
         return super.findPage("HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomTreeByPage","HzSingleVehiclesBomDAOImpl_getHzSingleVehiclesBomTreeTotalCount",request);
 

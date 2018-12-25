@@ -39,48 +39,11 @@ public interface HzEBOMReadService {
     int findIsHasByPuid(String puid, String projectId);
 
     /**
-     * 新增EBOM
-     * @param reqDTO
-     * @return
-     */
-    WriteResultRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO);
-
-    /**
-     * 更新EBOM
-     * @param reqDTO
-     * @return
-     */
-    WriteResultRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO);
-
-    /**
-     * EBOM引用层级
-     * @param reqDTO
-     * @return
-     */
-    WriteResultRespDTO testbomLevelChange(UpdateHzEbomLeveReqDTO reqDTO);
-
-    /**
-     * 删除EBOM
-     * @param reqDTO
-     * @return
-     */
-    WriteResultRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO);
-
-    /**
      * 找出当前bom的全部子bom  递归查找 bom结构树
      * @param
      * @return
      */
     List<HzEPLManageRecord> findCurrentBomChildren(HzEbomTreeQuery query);
-
-//    Page<HzEbomRespDTO> getHzEbomRecycleByPage(HzBomRecycleByPageQuery query);
-//
-//    /**
-//     * 删除记录恢复
-//     * @return
-//     */
-//    WriteResultRespDTO recoverDeleteEbomRecord(String projectId, String puid);
-
 
     /**
      * 向上查询找到2y层BOM
@@ -91,31 +54,11 @@ public interface HzEBOMReadService {
     HzBomLineRecord findParentFor2Y(String projectId,String puid);
 
     /**
-     * 设置当前BOM为LOU
-     * @param reqDTO
-     * @return
-     */
-    WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);
-
-
-    /**
      * 获取LOA信息
      * @param query
      * @return
      */
     HzLouRespDTO getHzLouInfoById(HzLouaQuery query);
-    /**
-     * EBOM数据  到变更表单
-     * @param reqDTO
-     * @return
-     */
-    WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
-    /**
-     * BOM数据撤销
-     * @param reqDTO
-     * @return
-     */
-    WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO);
 
     /**
      * 检查是否关联特性

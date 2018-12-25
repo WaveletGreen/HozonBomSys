@@ -10,6 +10,7 @@ import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
 import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
@@ -106,20 +107,9 @@ public class HzPbomServiceImpl implements HzPbomService {
             hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
             String buyUnit = recordReqDTO.getBuyUnit();//采购单元
             String type = recordReqDTO.getType();//焊接/装配
-            if (buyUnit.equals("Y")) {
-                hzPbomRecord.setBuyUnit(1);
-            } else if (buyUnit.equals("N")) {
-                hzPbomRecord.setBuyUnit(0);
-            } else {
-                hzPbomRecord.setBuyUnit(null);
-            }
-            if (type.equals("Y")) {
-                hzPbomRecord.setType(1);
-            } else if (type.equals("N")) {
-                hzPbomRecord.setType(0);
-            } else {
-                hzPbomRecord.setType(null);
-            }
+            hzPbomRecord.setBuyUnit(BOMTransConstants.constantStringToInteger(buyUnit));
+            hzPbomRecord.setType(BOMTransConstants.constantStringToInteger(type));
+
             hzPbomRecord.setMouldType(recordReqDTO.getMouldType());
             hzPbomRecord.setOuterPart(recordReqDTO.getOuterPart());
             hzPbomRecord.setProductLine(recordReqDTO.getProductLine());
@@ -253,19 +243,19 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("level", strings[0]);
             jsonObject.put("rank", strings[1]);
             jsonObject.put("pBomOfWhichDept", record.getpBomOfWhichDept() == null ? "" : record.getpBomOfWhichDept());
-            String groupNum = "";
-            //这里在做一个递归查询
-            if (groupNum.contains("-")) {
-                try {
-                    groupNum = groupNum.split("-")[1].substring(0, 4);
-                } catch (Exception e) {
-                    groupNum = "-";
-                }
-            } else {
-                String parentId = record.getParentUid();
-                groupNum = hzEPLManageRecordService.getGroupNum(reqDTO.getProjectId(), parentId);
-            }
-            jsonObject.put("groupNum", groupNum);
+//            String groupNum = "";
+//            //这里在做一个递归查询
+//            if (groupNum.contains("-")) {
+//                try {
+//                    groupNum = groupNum.split("-")[1].substring(0, 4);
+//                } catch (Exception e) {
+//                    groupNum = "-";
+//                }
+//            } else {
+//                String parentId = record.getParentUid();
+//                groupNum = hzEPLManageRecordService.getGroupNum(reqDTO.getProjectId(), parentId);
+//            }
+//            jsonObject.put("groupNum", groupNum);
             jsonObject.put("eBomPuid", record.geteBomPuid());
             jsonObject.put("lineId", record.getLineId());
 
@@ -288,20 +278,8 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
             Integer type = record.getType();
             Integer buyUnit = record.getBuyUnit();
-            if (Integer.valueOf(0).equals(type)) {
-                jsonObject.put("type", "N");
-            } else if (Integer.valueOf(1).equals(type)) {
-                jsonObject.put("type", "Y");
-            } else {
-                jsonObject.put("type", "");
-            }
-            if (Integer.valueOf(0).equals(buyUnit)) {
-                jsonObject.put("buyUnit", "N");
-            } else if (Integer.valueOf(1).equals(buyUnit)) {
-                jsonObject.put("buyUnit", "Y");
-            } else {
-                jsonObject.put("buyUnit", "");
-            }
+            jsonObject.put("type", BOMTransConstants.integerToYNString(type));
+            jsonObject.put("buyUnit",BOMTransConstants.integerToYNString(buyUnit));
             jsonArray.add(jsonObject);
             return jsonArray;
         } catch (Exception e) {
@@ -326,61 +304,6 @@ public class HzPbomServiceImpl implements HzPbomService {
                 query.setLineIndex(String.valueOf(length));
             }
         }
-        //数据同步  临时
-//        int count = hzPbomRecordDAO.getHzBomLineCount(query.getProjectId());
-//        if (count <= 0) {
-//            List<HzBomLineRecord> lineRecords = hzBomLineRecordDao.getLoadingCarPartBom(query.getProjectId());
-//            if (ListUtil.isNotEmpty(lineRecords)) {
-//                int size = lineRecords.size();
-//                //分批插入数据 一次1000条
-//                int i = 0;
-//                int cou = 0;
-//                if (size > 1000) {
-//                    for (i = 0; i < size / 1000; i++) {
-//                        List<HzPbomLineRecord> list = new ArrayList<>();
-//                        for (int j = 0; j < 1000; j++) {
-//                            HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.bomLineAllToPbomRecord(lineRecords.get(cou));
-//                            if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
-//                                boolean findChildren = false;
-//                                for(HzBomLineRecord r :lineRecords){
-//                                    if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
-//                                        findChildren = true;
-//                                        break;
-//                                    }
-//                                }
-//                                if(!findChildren){
-//                                    hzPbomLineRecord.setIsHas(0);
-//                                }
-//                            }
-//                            list.add(hzPbomLineRecord);
-//                            cou++;
-//                        }
-//                        hzPbomRecordDAO.insertList(list);
-//                    }
-//                }
-//                if (i * 1000 < size) {
-//                    List<HzPbomLineRecord> list = new ArrayList<>();
-//                    for (int j = 0; j < size - i * 1000; j++) {
-//                        HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.bomLineAllToPbomRecord(lineRecords.get(cou));
-//                        if(Integer.valueOf(1).equals(hzPbomLineRecord.getIsHas())){
-//                            boolean findChildren = false;
-//                            for(HzBomLineRecord r :lineRecords){
-//                                if(hzPbomLineRecord.geteBomPuid().equals(r.getParentUid())){
-//                                    findChildren = true;
-//                                    break;
-//                                }
-//                            }
-//                            if(!findChildren){
-//                                hzPbomLineRecord.setIsHas(0);
-//                            }
-//                        }
-//                        list.add(hzPbomLineRecord);
-//                        cou++;
-//                    }
-//                    hzPbomRecordDAO.insertList(list);
-//                }
-//            }
-//        }
         try {
             Page<HzPbomLineRecord> recordPage;
             if(Integer.valueOf(1).equals(query.getShowBomStructure())){
@@ -433,6 +356,7 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
+    @Deprecated
     public WriteResultRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO) {
         WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
         try {
@@ -737,76 +661,12 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
     }
 
-//    @Override
-//    public WriteResultRespDTO recoverDeletePbomRecord(String projectId, String puid) {
-//        WriteResultRespDTO respDTO = new WriteResultRespDTO();
-//        try {
-//            if (StringUtil.isEmpty(projectId) || StringUtil.isEmpty(puid)) {
-//                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-//                respDTO.setErrMsg("非法参数");
-//                return respDTO;
-//            }
-//            Map<String, Object> map = new HashMap<>();
-//            map.put("projectId", projectId);
-//            map.put("pPuid", puid);
-//            List<HzPbomLineRecord> recordList = hzPbomRecordDAO.getPbomById(map);
-//            if (ListUtil.isNotEmpty(recordList)) {
-//                respDTO.setErrMsg("当前要恢复对象已存在bom系统中！");
-//                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-//                return respDTO;
-//            }
-//            map.put("status", 0);//已删除的bom
-//            recordList = hzPbomRecordDAO.getPbomById(map);
-//            if (ListUtil.isNotEmpty(recordList)) {
-//                HzPbomLineRecord record = recordList.get(0);
-//                if (record.getLineIndex().split("\\.").length == 2) {
-//                    respDTO.setErrMsg("2Y层结构无法恢复！");
-//                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-//                    return respDTO;
-//                }
-//                Map<String, Object> map1 = new HashMap<>();
-//                map1.put("projectId", projectId);
-//                map1.put("pPuid", record.getParentUid());
-//                recordList = hzPbomRecordDAO.getPbomById(map1);
-//                if (ListUtil.isEmpty(recordList)) {
-//                    respDTO.setErrMsg("当前要恢复对象的父结构不存在，无法恢复！");
-//                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-//                    return respDTO;
-//                } else {
-//                    if (recordList.get(0).getIsHas().equals(0)) {
-//                        HzPbomLineRecord lineRecord = recordList.get(0);
-//                        lineRecord.setIsHas(1);
-//                        lineRecord.setIsPart(0);
-//                        if (lineRecord.getLineIndex().split("\\.").length == 2 && lineRecord.getIs2Y().equals(0)) {
-//                            lineRecord.setIs2Y(1);
-//                        }
-//                        int i = hzPbomRecordDAO.update(lineRecord);
-//                        if (i <= 0) {
-//                            return WriteResultRespDTO.getFailResult();
-//                        }
-//                    }
-//                    int i = hzPbomRecordDAO.recoverBomById(record.geteBomPuid());
-//                    if (i > 0) {
-//                        return WriteResultRespDTO.getSuccessResult();
-//                    }
-//                }
-//            }
-//            return WriteResultRespDTO.getFailResult();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return WriteResultRespDTO.getFailResult();
-//        }
-//    }
 
     @Override
     public WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO) {
         try {
             if (reqDTO.getLineIds() == null || reqDTO.getProjectId() == null) {
                 return WriteResultRespDTO.IllgalArgument();
-            }
-            boolean b = PrivilegeUtil.writePrivilege();
-            if (!b) {
-                return WriteResultRespDTO.getFailPrivilege();
             }
             String[] lineIds = reqDTO.getLineIds().split(",");
             for (String lineId : lineIds) {
@@ -898,19 +758,19 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setLineId(record.getLineId());
                 respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
                 //获取分组号
-                String groupNum = "";
+//                String groupNum = "";
                 //这里在做一个递归查询
-                if (groupNum.contains("-")) {
-                    try {
-                        groupNum = groupNum.split("-")[1].substring(0, 4);
-                    } catch (Exception e) {
-                        groupNum = "-";
-                    }
-                } else {
-                    String parentId = record.getParentUid();
-                    groupNum = hzEPLManageRecordService.getGroupNum(projectId, parentId);
-                }
-                respDTO.setGroupNum(groupNum);
+//                if (groupNum.contains("-")) {
+//                    try {
+//                        groupNum = groupNum.split("-")[1].substring(0, 4);
+//                    } catch (Exception e) {
+//                        groupNum = "-";
+//                    }
+//                } else {
+//                    String parentId = record.getParentUid();
+//                    groupNum = hzEPLManageRecordService.getGroupNum(projectId, parentId);
+//                }
+//                respDTO.setGroupNum(groupNum);
 
                 respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
                 respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
@@ -918,20 +778,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setResource(record.getResource());
                 Integer type = record.getType();
                 Integer buyUnit = record.getBuyUnit();
-                if (Integer.valueOf(0).equals(type)) {
-                    respDTO.setType("N");
-                } else if (Integer.valueOf(1).equals(type)) {
-                    respDTO.setType("Y");
-                } else {
-                    respDTO.setType("");
-                }
-                if (Integer.valueOf(0).equals(buyUnit)) {
-                    respDTO.setBuyUnit("N");
-                } else if (Integer.valueOf(1).equals(buyUnit)) {
-                    respDTO.setBuyUnit("Y");
-                } else {
-                    respDTO.setBuyUnit("");
-                }
+                respDTO.setType(BOMTransConstants.integerToYNString(type));
+                respDTO.setBuyUnit(BOMTransConstants.integerToYNString(buyUnit));
                 respDTO.seteBomPuid(record.geteBomPuid());
                 respDTO.setPuid(record.getPuid());
                 respDTO.setProductLine(record.getProductLine());
@@ -948,11 +796,11 @@ public class HzPbomServiceImpl implements HzPbomService {
                     respDTO.setpLouaFlag("LOU");
                 }
                 respDTO.setStatus(record.getStatus());
-                if(null != record.getSingleVehDosage()){
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject = hzSingleVehiclesServices.singleVehDosage(record.getSingleVehDosage(),list,jsonObject);
-                    respDTO.setObject(jsonObject);
-                }
+//                if(null != record.getSingleVehDosage()){
+//                    JSONObject jsonObject = new JSONObject();
+//                    jsonObject = hzSingleVehiclesServices.singleVehDosage(record.getSingleVehDosage(),list,jsonObject);
+//                    respDTO.setObject(jsonObject);
+//                }
                 respDTOS.add(respDTO);
             }
             return respDTOS;
@@ -1408,7 +1256,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 hzPbomRecordDAO.update(hzPbomLineRecord);
             }
         }
-        if (hzPbomLineRecordsAddSons.size() > 0 && hzPbomLineRecordsAddSons != null) {
+        if (ListUtil.isNotEmpty(hzPbomLineRecordsAddSons) ) {
             int insertFlag = hzPbomRecordDAO.insertList(hzPbomLineRecordsAddSons);
             if (insertFlag == 1) {
                 result.put("success", true);
@@ -1425,7 +1273,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzEPLRecord.setPartId(hzAccessoriesLibs.getpMaterielCode());
         hzEPLRecord.setPartName(hzAccessoriesLibs.getpMaterielName());
 
-        if(hzEPLDAO.insert(hzEPLRecord)<=0?true:false){
+        if(hzEPLDAO.insert(hzEPLRecord)<=0){
             result.put("success",false);
             result.put("errMsg", "添加失败");
         }
