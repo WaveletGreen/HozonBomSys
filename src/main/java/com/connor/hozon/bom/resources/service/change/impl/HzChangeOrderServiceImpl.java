@@ -150,9 +150,9 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
                     respDTO.setCreateName(record.getCreateNameTC());
                     respDTOS.add(respDTO);
                 }else {
-                    respDTOS.add(getHzChangeOrderRecordById(record.getId()));
+//                    respDTOS.add(getHzChangeOrderRecordById(record.getId()));
+                    respDTOS.add(HzChangeOrderFactory.changeOrderRecordToRespDTO(record));
                 }
-//                respDTOS.add(HzChangeOrderFactory.changeOrderRecordToRespDTO(record));
             }
             return new Page<>(page.getPageNumber(), page.getPageSize(), page.getTotalCount(), respDTOS);
         } catch (Exception e) {

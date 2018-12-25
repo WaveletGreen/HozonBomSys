@@ -785,7 +785,7 @@
         INSTR (t.P_LINE_INDEX, '.', - 1) + 1
         )
         )
-        ) &lt;#{lineNo,jdbcType=INTEGER}
+        ) &lt;TO_NUMBER (#{lineNo,jdbcType=INTEGER})
         ORDER BY
         TO_NUMBER (
         (
@@ -821,4 +821,129 @@
         ORDER BY  CAST(t.P_SORT_NUM as FLOAT)
     </select>
 
+
+
+    <select id="HzEbomRecordDAOImpl_findEbomChildrenByLineIndex" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+      select
+        <include refid="BASE_BOM_COLUMN"/>
+      from
+        (select <include refid="BASE_BOM_COLUMN"/> from HZ_BOM_LINE_RECORD t where P_PARENT_UID = #{puid,jdbcType=VARCHAR}) t
+      where
+        TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1))) = TO_NUMBER (#{lineIndex,jdbcType=VARCHAR})
+    </select>
+
+    <select id="HzEbomRecordDAOImpl_findPreviousEbom" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+        select
+        <include refid="BASE_BOM_COLUMN"/>
+        from
+        HZ_BOM_LINE_RECORD t
+        where
+        t.P_SORT_NUM = (
+          select MAX(P_SORT_NUM) from  HZ_BOM_LINE_RECORD where P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR} and CAST(P_SORT_NUM as FLOAT)&lt; CAST(#{sortNum,jdbcType=VARCHAR} as FLOAT)
+        )
+        and
+        t.P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="HzEbomRecordDAOImpl_findNextLineIndex" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+        select
+        <include refid="BASE_BOM_COLUMN"/>
+        from
+        (
+            SELECT
+              <include refid="BASE_BOM_COLUMN"/>
+            FROM
+            HZ_BOM_LINE_RECORD T
+            WHERE
+              t.P_PARENT_UID = #{puid,jdbcType=VARCHAR}
+            AND
+                TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1)))&gt; TO_NUMBER (#{lineIndex,jdbcType=VARCHAR})
+            ORDER BY
+                TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1)))
+        ) t
+        where rownum =1
+    </select>
+
+    <select id="HzEbomRecordDAOImpl_findBaseEbomById" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT <include refid="BASE_BOM_COLUMN"/>
+        from
+        HZ_BOM_LINE_RECORD t
+        where
+          t.p_bom_digifax_id=(select puid from Hz_Bom_Main_Record  where p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+        and
+          t.P_EPL_ID = (select ID from HZ_EPL_RECORD where PART_ID = #{lineId,jdbcType=VARCHAR} and PROJECT_ID =#{projectId,jdbcType=VARCHAR})
+    </select>
+
+    <select id="HzEbomRecordDAOImpl_findNextSortNum" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+        SELECT <include refid="BASE_BOM_COLUMN"/>
+        from
+        HZ_BOM_LINE_RECORD t
+        where
+        t.P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
+        and
+        t.P_SORT_NUM = (select MIN(CAST (P_SORT_NUM AS FLOAT)) from HZ_BOM_LINE_RECORD where P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR} and CAST(P_SORT_NUM as FLOAT) &gt; CAST(#{sortNum,jdbcType=VARCHAR} as FLOAT))
+    </select>
+
+    <update id="HzEbomRecordDAOImpl_updateEPLList" parameterType="java.util.List">
+      <foreach collection="list" index="index" item="item" open="begin" separator=";" close=";end;">
+        update
+          HZ_BOM_LINE_RECORD
+         <set>
+             <if test="item.isHas!=null">
+                 P_BOM_LINE_IS_HAS = #{item.isHas,jdbcType=INTEGER},
+             </if>
+             <if test="item.sortNum!=null">
+                 P_SORT_NUM = #{item.sortNum,jdbcType=INTEGER},
+             </if>
+             <if test="item.lineIndex!=null">
+                 P_LINE_INDEX = #{item.lineIndex,jdbcType=INTEGER}
+             </if>
+         </set>
+        where
+          PUID  =#{item.puid,jdbcType=VARCHAR}
+      </foreach>
+    </update>
+
+    <update id="HzEbomRecordDAOImpl_updateByDto" parameterType="com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO">
+        update
+          HZ_BOM_LINE_RECORD
+        set
+          P_UPC = #{pUpc,jdbcType=VARCHAR},
+          P_FNA_INFO = #{fna,jdbcType=VARCHAR},
+          P_FNA_DESC = #{pFnaDesc,jdbcType=VARCHAR},
+          P_NUMBER = #{number,jdbcType=VARCHAR},
+          P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
+        where
+          P_BOM_DIGIFAX_ID = (select puid from Hz_Bom_Main_Record  where p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+        and
+          P_EPL_ID = (select P_EPL_ID from HZ_BOM_LINE_RECORD where PUID = #{puid,jdbcType=VARCHAR})
+    </update>
+
+    <select id="HzEbomRecordDAOImpl_findEbom2Y" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+          <include refid="BASE_BOM_COLUMN"/>
+        from(
+            SELECT
+              <include refid="BASE_BOM_COLUMN"/>
+            from
+              HZ_BOM_LINE_RECORD t
+            where
+              P_BOM_LINE_IS_2Y  = 1
+            and
+              P_BOM_DIGIFAX_ID = (select puid from Hz_Bom_Main_Record where p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+            <if test="flag=='previous'">
+                and
+                  TO_NUMBER ((SUBSTR (t.P_LINE_INDEX,INSTR (t.P_LINE_INDEX, '.', - 1) + 1)))&lt;TO_NUMBER(#{lineNo,jdbcType=VARCHAR})
+                order by
+                  TO_NUMBER ((SUBSTR (t.P_LINE_INDEX,INSTR (t.P_LINE_INDEX, '.', - 1) + 1)))desc
+            </if>
+            <if test="flag=='next'">
+                and
+                  TO_NUMBER ((SUBSTR (t.P_LINE_INDEX,INSTR (t.P_LINE_INDEX, '.', - 1) + 1)))&gt;TO_NUMBER(#{lineNo,jdbcType=VARCHAR})
+                order by
+                  TO_NUMBER ((SUBSTR (t.P_LINE_INDEX,INSTR (t.P_LINE_INDEX, '.', - 1) + 1))) asc
+            </if>
+        )t
+        where rownum = 1
+    </select>
 </mapper>

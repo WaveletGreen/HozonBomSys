@@ -79,6 +79,8 @@ public class HzChangeOrderFactory {
             respDTO.setAuditId(Long.parseLong(record.getAuditId()));
         if(record.getChangeAccepter()!=null)
             respDTO.setChangeAccepter(record.getChangeAccepter());
+
+        respDTO.setAuditor(record.getAuditor());
         return respDTO;
     }
 

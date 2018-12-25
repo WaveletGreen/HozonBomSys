@@ -38,9 +38,9 @@ public class HzEbomController extends BaseController {
 
     @Autowired
     private HzEBOMReadService hzEBOMReadService;
-
     @Autowired
     private HzEBOMWriteService hzEBOMWriteService;
+
     @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
 
@@ -203,7 +203,7 @@ public class HzEbomController extends BaseController {
 
         //WriteResultRespDTO respDTO= hzEBOMReadService.updateHzEbomLevelRecord(reqDTO);
         //测试
-        WriteResultRespDTO respDTO= hzEBOMReadService.testbomLevelChange(reqDTO);
+        WriteResultRespDTO respDTO= hzEBOMWriteService.extendsBomStructureInNewParent(reqDTO);
 
         toJSONResponse(Result.build(
                 WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);

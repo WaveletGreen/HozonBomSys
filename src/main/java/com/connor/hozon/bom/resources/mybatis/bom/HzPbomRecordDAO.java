@@ -2,9 +2,15 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import lombok.Data;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -193,4 +199,17 @@ public interface HzPbomRecordDAO {
      * @return
      */
     List<HzPbomLineRecord> findPbomByLineId(HzBOMQuery hzBOMQuery);
+
+    List<HzPbomLineRecord> findPbomsByEBom(List<HzEPLManageRecord> hzEPLManageRecordsFather);
+
+    HzPbomLineRecord findPbomByEBom(String puid, String projectId);
+
+    HzPbomLineRecord findEbomChildrenByLineIndex(String puid, String lineNo);
+
+    HzPbomLineRecord findNextLineIndex(String puid, String lineNo);
+
+    HzPbomLineRecord findPreviousPbom(HzPbomLineRecord hzPbomLineRecord);
+
+    HzPbomLineRecord findNextSortNum(HzPbomLineRecord hzPbomLineRecord);
+
 }

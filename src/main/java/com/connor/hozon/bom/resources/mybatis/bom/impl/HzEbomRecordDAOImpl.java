@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
@@ -410,6 +411,46 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return Double.parseDouble(maxSortNum);
     }
 
+    /**
+     * 找出子中对应排序号的数据
+     * @param lineId
+     * @param lineNo
+     * @return
+     */
+    @Override
+    public HzEPLManageRecord findEbomChildrenByLineIndex(String lineId, String lineNo) {
+        HzEPLManageRecord hzEPLManageRecord = new HzEPLManageRecord();
+        hzEPLManageRecord.setPuid(lineId);
+        hzEPLManageRecord.setLineIndex(lineNo);
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findEbomChildrenByLineIndex",hzEPLManageRecord);
+    }
+
+    @Override
+    public HzEPLManageRecord findPreviousEbom(HzEPLManageRecord hzEPLManageRecord) {
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findPreviousEbom",hzEPLManageRecord);
+    }
+
+    @Override
+    public HzEPLManageRecord findNextLineIndex(String lineId, String lineNo) {
+        HzEPLManageRecord hzEPLManageRecord = new HzEPLManageRecord();
+        hzEPLManageRecord.setPuid(lineId);
+        hzEPLManageRecord.setLineIndex(lineNo);
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findNextLineIndex",hzEPLManageRecord);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> findBaseEbomById(String lineId, String projectId) {
+        Map<String,String> map = new HashMap<>();
+        map.put("lineId",lineId);
+        map.put("projectId",projectId);
+        return super.findForList("HzEbomRecordDAOImpl_findBaseEbomById",map);
+    }
+
+    @Override
+    public HzEPLManageRecord findNextSortNum(HzEPLManageRecord hzEPLManageRecordPrevious) {
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findNextSortNum",hzEPLManageRecordPrevious);
+    }
+
     @Override
     public HzEPLManageRecord findMinEBOMRecordWhichLineNoGreaterCurrentLineNo(HzBOMQuery query) {
         Map<String,Object> map = new HashMap<>();
@@ -444,6 +485,21 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("projectId",query.getProjectId());
         map.put("parentId",query.getParentId());
         return super.findForList("HzEbomRecordDAOImpl_findNextLevelRecordByParentId",map);
+    }
+
+    @Override
+    public int updateEPLList(List<HzEPLManageRecord> hzEPLManageRecords) {
+        return super.update("HzEbomRecordDAOImpl_updateEPLList",hzEPLManageRecords);
+    }
+
+    @Override
+    public int updateByDto(UpdateHzEbomReqDTO reqDTO) {
+        return super.update("HzEbomRecordDAOImpl_updateByDto",reqDTO);
+    }
+
+    @Override
+    public HzEPLManageRecord findEbom2Y(Map<String, Object> map) {
+        return (HzEPLManageRecord)super.findForObject("HzEbomRecordDAOImpl_findEbom2Y",map);
     }
 
     @Override

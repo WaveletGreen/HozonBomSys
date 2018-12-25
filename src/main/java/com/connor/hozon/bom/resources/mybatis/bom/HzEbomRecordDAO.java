@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzBomLineRecord;
@@ -162,6 +163,16 @@ public interface HzEbomRecordDAO {
      */
     Double findMaxBomOrderNum(String projectId);
 
+    HzEPLManageRecord findEbomChildrenByLineIndex(String lineId, String lineNo);
+
+    HzEPLManageRecord findPreviousEbom(HzEPLManageRecord hzEPLManageRecord);
+
+    HzEPLManageRecord findNextLineIndex(String lineId, String lineNo);
+
+    List<HzEPLManageRecord> findBaseEbomById(String lineId, String projectId);
+
+    HzEPLManageRecord findNextSortNum(HzEPLManageRecord hzEPLManageRecordPrevious);
+
     /**
      * 找出大于当前查找编号的最小记录 只找出当前父层的子一层 或者只找出2Y层
      * @param query lineNo 查找编号
@@ -176,6 +187,11 @@ public interface HzEbomRecordDAO {
      */
     HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzBOMQuery query);
 
+    int updateEPLList(List<HzEPLManageRecord> hzEPLManageRecordsFather);
+
+    int updateByDto(UpdateHzEbomReqDTO reqDTO);
+
+    HzEPLManageRecord findEbom2Y(Map<String,Object> map);
     /**
      * 根据EPLId 查询EBOM记录
      * @param query

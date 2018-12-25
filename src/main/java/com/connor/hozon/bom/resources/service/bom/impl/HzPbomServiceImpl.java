@@ -26,6 +26,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
@@ -48,6 +49,7 @@ import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.change.HzApplicantChangeRecord;
 import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeDataRecord;
+import sql.pojo.epl.HzEPLRecord;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -91,6 +93,8 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
     private HzChangeDataRecordDAO hzChangeDataRecordDAO;
 
+    @Autowired
+    private HzEPLDAO hzEPLDAO;
     @Override
     public WriteResultRespDTO updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO) {
         try {
@@ -1414,6 +1418,15 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
         } else {
             result.put("success", false);
+            result.put("errMsg", "添加失败");
+        }
+
+        HzEPLRecord hzEPLRecord = new HzEPLRecord();
+        hzEPLRecord.setPartId(hzAccessoriesLibs.getpMaterielCode());
+        hzEPLRecord.setPartName(hzAccessoriesLibs.getpMaterielName());
+
+        if(hzEPLDAO.insert(hzEPLRecord)<=0?true:false){
+            result.put("success",false);
             result.put("errMsg", "添加失败");
         }
 

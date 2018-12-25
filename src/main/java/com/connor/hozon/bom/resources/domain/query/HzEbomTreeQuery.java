@@ -23,6 +23,7 @@ public class HzEbomTreeQuery extends DefaultQuery{
     /**
      * 是否装车件
      */
+    @Deprecated
     private Integer isCarPart;
 
     public Integer getIsCarPart() {
