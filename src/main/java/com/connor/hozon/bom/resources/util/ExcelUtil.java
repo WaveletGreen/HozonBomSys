@@ -524,7 +524,7 @@ public class ExcelUtil {
                 for(int rowNum = firstRowNum+1;rowNum <= lastRowNum;rowNum++){
                     //获得当前行
                     Row row = sheet.getRow(rowNum);
-                    if(row == null){
+                    if(row == null||row.getPhysicalNumberOfCells()==0){
                         continue;
                     }
                     //获得当前行的开始列
