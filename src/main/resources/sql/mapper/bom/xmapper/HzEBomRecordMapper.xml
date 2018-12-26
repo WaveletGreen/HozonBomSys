@@ -471,7 +471,6 @@
                 </if>
             </set>
             where puid = #{item.puid,jdbcType=VARCHAR}
-            and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
             and P_EBOM_STATUS <![CDATA[ <> ]]>0
         </foreach>
     </update>
@@ -616,6 +615,28 @@
         </foreach>
     </insert>
 
+
+
+    <!--批量删除 逻辑删 EBOM-->
+    <update id="HzEbomRecordDAOImpl_deleteList" parameterType="java.util.HashMap">
+        <foreach collection="puids" item="item" index="index" open="begin" close=";end;" separator=";">
+            update HZ_BOM_LINE_RECORD
+            <set>
+                P_UPDATE_TIME =sysdate,
+                P_EBOM_STATUS = 4
+            </set>
+            where PUID = #{puids[${index}]}
+        </foreach>
+    </update>
+
+
+    <!--批量删除 物理删 EBOM-->
+    <delete id="HzEbomRecordDAOImpl_deleteByPuids" parameterType="java.util.HashMap">
+        delete ${tableName} where puid in
+        <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
+            #{puids[${index}]}
+        </foreach>
+    </delete>
 
 
     <!--批量查询数据-->
@@ -806,12 +827,19 @@
 
     <!--根据eplId 查询相同零件号的BOM-->
     <select id="HzEbomRecordDAOImpl_findEBOMRecordsByEPLId" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-        select <include refid="BASE_BOM_COLUMN"/> from HZ_BOM_LINE_RECORD t
-        where t.p_bom_digifax_id=(
-        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-          #{projectId,jdbcType=VARCHAR})
-        )
-        and t.P_EPL_ID = #{eplId,jdbcType=DOUBLE}
+        select <include refid="BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
+        from HZ_BOM_LINE_RECORD t
+        left join HZ_EPL_RECORD t10 on t.P_EPL_ID = t10.ID
+        where  1=1
+        <if test="projectId!= null and projectId != ''">
+            and t.p_bom_digifax_id=(
+            select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+            #{projectId,jdbcType=VARCHAR})
+            )
+        </if>
+        <if test="eplId != null">
+            and t.P_EPL_ID = #{eplId,jdbcType=DOUBLE}
+        </if>
     </select>
 
     <!--查询当前父层的子一层记录-->

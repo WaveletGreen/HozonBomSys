@@ -31,10 +31,6 @@ public class HzMWOServiceImpl implements HzMWOService {
     @Override
     public WriteResultRespDTO initiatingProcessForMwoChange(InitiatingProcessReqDTO reqDTO) {
         try{
-            boolean b = PrivilegeUtil.writePrivilege();//判断权限
-            if(!b){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
             String puids = reqDTO.getPuids();
             User user = UserInfo.getUser();
             String createYM = DateUtil.getTodayTextY();

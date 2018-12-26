@@ -183,10 +183,16 @@
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
 
-    <!--删除一条记录-->
-    <update id="HzMaterialDAOImpl_delete" parameterType="java.lang.String">
-        delete HZ_MATERIEL_RECORD
-        where PUID = #{puid,jdbcType=VARCHAR}
+    <!--删除记录 改为删除状态-->
+    <update id="HzMaterialDAOImpl_deleteList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update HZ_MATERIEL_RECORD
+            <set>
+                P_UPDATE_TIME = sysdate,
+                P_VALID_FLAG = 4
+            </set>
+            where PUID = #{list[${index}]}
+        </foreach>
     </update>
 
     <!--查询一条记录-->

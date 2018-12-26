@@ -479,8 +479,8 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                         if(StringUtils.isNotBlank(record.getRevision())){
                             deleteFlag = false;
                         }
+                        ebomHasChildrenPuids.add(record.getParentUid());
                         if(Integer.valueOf(1).equals(record.getIsHas())){
-                            ebomHasChildrenPuids.add(record.getParentUid());
                             HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
                             hzEbomTreeQuery.setPuid(puid);
                             hzEbomTreeQuery.setProjectId(projectId);
@@ -497,6 +497,8 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                                 }
 
                             }
+                        }else {
+                            deleteList.add(puid);
                         }
 
                         //PBOM 查找
@@ -505,8 +507,8 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                             if(StringUtils.isNotBlank(pbomRecord.getRevision())){
                                 deleteFlag = false;
                             }
+                            pbomHasChildrenPuids.add(pbomRecord.getParentUid());
                             if(Integer.valueOf(1).equals(pbomRecord.getIsHas())){
-                                pbomHasChildrenPuids.add(pbomRecord.getParentUid());
                                 HzPbomTreeQuery hzPbomTreeQuery = new HzPbomTreeQuery();
                                 hzPbomTreeQuery.setPuid(puid);
                                 hzPbomTreeQuery.setProjectId(projectId);
@@ -522,6 +524,8 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                                         });
                                     }
                                 }
+                            }else {
+                                pbomDeleteBuffer.append(pbomRecord.getPuid()+",");
                             }
                         }
                     }

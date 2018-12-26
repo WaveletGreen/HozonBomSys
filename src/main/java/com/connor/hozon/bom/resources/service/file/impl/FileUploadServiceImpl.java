@@ -571,7 +571,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             int preLevelNum = Integer.valueOf(preLevel.replace("Y",""));
             int currentLevelNum = Integer.valueOf(level.replace("Y",""));
 
-            if(currentLevelNum>=preLevelNum){
+            if(currentLevelNum >= preLevelNum){
                 for(String key:lineIndexMap.keySet()){
                     if(key.equals(preKey)){
                         String value = lineIndexMap.get(preKey);
@@ -797,7 +797,7 @@ public class FileUploadServiceImpl implements FileUploadService {
      */
     private String singleVehiclesDosageExcelErrorMsg(List<HzCfg0ModelRecord> hzCfg0ModelRecords,Sheet sheet,String projectId){
         StringBuffer stringBuffer = new StringBuffer("文件解析失败!</br>");
-        Integer num = hzBomLineRecordDao.getBomLineRecordNumber(projectId);
+        Integer num = hzEbomRecordDAO.findEBomTotalCount(projectId);
         if(num == null || num<=0){
             stringBuffer.append("未找到相关BOM信息，导入单车用量信息前，应先存在相关BOM记录!</br>");
             this.errorCount++;

@@ -21,72 +21,14 @@ import java.util.UUID;
 public class HzEbomRecordFactory {
     public static HzBomLineRecord addEbomDTOBomLineRecord(AddHzEbomReqDTO reqDTO){
         HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
-//        hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
         hzBomLineRecord.setLinePuid(UUID.randomUUID().toString());
         hzBomLineRecord.setLineID(reqDTO.getLineId());
-//        hzBomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-//        hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-//        if("Y".equals(reqDTO.getP3cpartFlag())){
-//            hzBomLineRecord.setP3cpartFlag(1);
-//        }else if("N".equals(reqDTO.getP3cpartFlag())){
-//            hzBomLineRecord.setP3cpartFlag(0);
-//        }else {
-//            hzBomLineRecord.setP3cpartFlag(null);
-//        }
-//        hzBomLineRecord.setpBuyEngineer(reqDTO.getpBuyEngineer());
-//        hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
-//        hzBomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-//        hzBomLineRecord.setpBwgBoxPart(reqDTO.getpBwgBoxPart());
-//        hzBomLineRecord.setpDataVersion(reqDTO.getpDataVersion());
-//        hzBomLineRecord.setpDensity(reqDTO.getpDensity());
         hzBomLineRecord.setpCreateName(UserInfo.getUser().getUserName());
         hzBomLineRecord.setpUpdateName(UserInfo.getUser().getUserName());
-//        hzBomLineRecord.setpDevelopType(reqDTO.getpDevelopType());
-//        hzBomLineRecord.setpDutyEngineer(reqDTO.getpDutyEngineer());
-//        hzBomLineRecord.setpFastener(reqDTO.getpFastener());
-//        hzBomLineRecord.setpFastenerLevel(reqDTO.getpFastenerLevel());
-//        hzBomLineRecord.setpFastenerStandard(reqDTO.getpFastenerStandard());
-//        hzBomLineRecord.setpFeatureWeight(reqDTO.getpFeatureWeight());
         hzBomLineRecord.setpFnaDesc(reqDTO.getpFnaDesc());
         hzBomLineRecord.setpFnaInfo(reqDTO.getFna());
-//        if("内饰件".equals(reqDTO.getpInOutSideFlag())){
-//            hzBomLineRecord.setpInOutSideFlag(1);
-//        }else if("外饰件".equals(reqDTO.getpInOutSideFlag())){
-//            hzBomLineRecord.setpInOutSideFlag(0);
-//        }else {
-//            hzBomLineRecord.setpInOutSideFlag(null);
-//        }
-
-//        hzBomLineRecord.setpImportance(reqDTO.getpImportance());
-//        hzBomLineRecord.setpManuProcess(reqDTO.getpManuProcess());
-//        hzBomLineRecord.setpMaterial1(reqDTO.getpMaterial1());
-//        hzBomLineRecord.setpMaterial2(reqDTO.getpMaterial2());
-//        hzBomLineRecord.setpMaterial3(reqDTO.getpMaterial3());
-//        hzBomLineRecord.setpMaterialHigh(reqDTO.getpMaterialHigh());
-//        hzBomLineRecord.setpMaterialStandard(reqDTO.getpMaterialStandard());
-//        hzBomLineRecord.setpPictureNo(reqDTO.getpPictureNo());
-//        hzBomLineRecord.setpPictureSheet(reqDTO.getpPictureSheet());
-//        hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
         hzBomLineRecord.setpUpc(reqDTO.getpUpc());
-//        hzBomLineRecord.setpUnit(reqDTO.getpUnit());
-//        hzBomLineRecord.setpRemark(reqDTO.getpRemark());
-//        hzBomLineRecord.setpSymmetry(reqDTO.getpSymmetry());
-//        hzBomLineRecord.setpTextureColorNum(reqDTO.getpTextureColorNum());
-//        hzBomLineRecord.setpSurfaceTreat(reqDTO.getpSurfaceTreat());
-//        hzBomLineRecord.setpTargetWeight(reqDTO.getpTargetWeight());
-//        hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
-//        hzBomLineRecord.setpSupply(reqDTO.getpSupply());
-//        hzBomLineRecord.setpTorque(reqDTO.getpTorque());
-//        hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
         hzBomLineRecord.setNumber(reqDTO.getNumber());
-//        if("Y".equals(reqDTO.getpRegulationFlag())){
-//            hzBomLineRecord.setpRegulationFlag(1);
-//        }else if("N".equals(reqDTO.getpRegulationFlag())){
-//            hzBomLineRecord.setpRegulationFlag(0);
-//        }else {
-//            hzBomLineRecord.setpRegulationFlag(null);
-//        }
-
         hzBomLineRecord.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
         return hzBomLineRecord;
     }
@@ -115,72 +57,12 @@ public class HzEbomRecordFactory {
     public static HzBomLineRecord updateHzEbomDTOLineRecord(UpdateHzEbomReqDTO reqDTO){
         HzBomLineRecord hzBomLineRecord = new HzBomLineRecord();
         hzBomLineRecord.setLineID(reqDTO.getLineId());
-//        hzBomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-//        hzBomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-//        hzBomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-//        hzBomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-//        hzBomLineRecord.setpActualWeight(reqDTO.getpActualWeight());
-//        hzBomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-//        hzBomLineRecord.setpBwgBoxPart(reqDTO.getpBwgBoxPart());
-//        hzBomLineRecord.setpDataVersion(reqDTO.getpDataVersion());
-//        hzBomLineRecord.setpDensity(reqDTO.getpDensity());
         hzBomLineRecord.setpUpdateName(UserInfo.getUser().getUserName());
-//        hzBomLineRecord.setpDevelopType(reqDTO.getpDevelopType());
-//        hzBomLineRecord.setpDutyEngineer(reqDTO.getpDutyEngineer());
-//        hzBomLineRecord.setpFastener(reqDTO.getpFastener());
-//        hzBomLineRecord.setpFastenerLevel(reqDTO.getpFastenerLevel());
-//        hzBomLineRecord.setpFastenerStandard(reqDTO.getpFastenerStandard());
-//        hzBomLineRecord.setpFeatureWeight(reqDTO.getpFeatureWeight());
         hzBomLineRecord.setpFnaDesc(reqDTO.getpFnaDesc());
         hzBomLineRecord.setpFnaInfo(reqDTO.getFna());
-
-//        hzBomLineRecord.setpImportance(reqDTO.getpImportance());
-//        hzBomLineRecord.setpManuProcess(reqDTO.getpManuProcess());
-//        hzBomLineRecord.setpMaterial1(reqDTO.getpMaterial1());
-//        hzBomLineRecord.setpMaterial2(reqDTO.getpMaterial2());
-//        hzBomLineRecord.setpMaterial3(reqDTO.getpMaterial3());
-//        hzBomLineRecord.setpMaterialHigh(reqDTO.getpMaterialHigh());
-//        hzBomLineRecord.setpMaterialStandard(reqDTO.getpMaterialStandard());
-//        hzBomLineRecord.setpPictureNo(reqDTO.getpPictureNo());
-//        hzBomLineRecord.setpPictureSheet(reqDTO.getpPictureSheet());
-//        hzBomLineRecord.setpRegulationCode(reqDTO.getpRegulationCode());
         hzBomLineRecord.setpUpc(reqDTO.getpUpc());
-//        hzBomLineRecord.setpRemark(reqDTO.getpRemark());
-//        hzBomLineRecord.setpRemark(reqDTO.getpRemark());
-//        hzBomLineRecord.setpUnit(reqDTO.getpUnit());
-//        hzBomLineRecord.setpTorque(reqDTO.getpTorque());
-//        hzBomLineRecord.setpSymmetry(reqDTO.getpSymmetry());
-//        hzBomLineRecord.setpTextureColorNum(reqDTO.getpTextureColorNum());
-//        hzBomLineRecord.setpSurfaceTreat(reqDTO.getpSurfaceTreat());
-//        hzBomLineRecord.setpTargetWeight(reqDTO.getpTargetWeight());
-//        hzBomLineRecord.setpSupplyCode(reqDTO.getpSupplyCode());
-//        hzBomLineRecord.setpSupply(reqDTO.getpSupply());
         hzBomLineRecord.setNumber(reqDTO.getNumber());
-//        hzBomLineRecord.setpBuyEngineer(reqDTO.getpDutyEngineer());
-//        if("Y".equals(reqDTO.getpRegulationFlag())){
-//            hzBomLineRecord.setpRegulationFlag(1);
-//        }else if("N".equals(reqDTO.getpRegulationFlag())){
-//            hzBomLineRecord.setpRegulationFlag(0);
-//        }else {
-//            hzBomLineRecord.setpRegulationFlag(null);
-//        }
-
         hzBomLineRecord.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
-
-//        if("Y".equals(reqDTO.getP3cpartFlag())){
-//            hzBomLineRecord.setP3cpartFlag(1);
-//        }else if("N".equals(reqDTO.getP3cpartFlag())){
-//            hzBomLineRecord.setP3cpartFlag(0);
-//        }else {
-//            hzBomLineRecord.setP3cpartFlag(null);
-//        }
-//        if("内饰件".equals(reqDTO.getpInOutSideFlag())){
-//            hzBomLineRecord.setpInOutSideFlag(1);
-//        }else if("外饰件".equals(reqDTO.getpInOutSideFlag())){
-//            hzBomLineRecord.setpInOutSideFlag(0);
-//        }else {
-//            hzBomLineRecord.setpInOutSideFlag(null);
-//        }
         return hzBomLineRecord;
     }
 

@@ -6,19 +6,32 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzEplRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.model.HzEPLFactory;
+import com.connor.hozon.bom.resources.domain.query.HzBOMQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
+import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.Result;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.epl.HzEPLRecord;
 
 import java.io.InputStream;
@@ -31,17 +44,47 @@ import java.util.*;
  */
 @Service("hzEPLService")
 public class HzEPLServiceImpl implements HzEPLService {
-    @Autowired
+
     private HzEPLDAO hzEPLDAO;
 
+    private HzEbomRecordDAO hzEbomRecordDAO;
+
+    private HzPbomRecordDAO hzPbomRecordDAO;
+
+    private HzMbomService hzMbomService;
+
+    private TransactionTemplate configTransactionTemplate;
+
+    @Autowired
+    public void setHzEPLDAO(HzEPLDAO hzEPLDAO) {
+        this.hzEPLDAO = hzEPLDAO;
+    }
+    @Autowired
+    public void setHzEbomRecordDAO(HzEbomRecordDAO hzEbomRecordDAO) {
+        this.hzEbomRecordDAO = hzEbomRecordDAO;
+    }
+    @Autowired
+    public void setHzPbomRecordDAO(HzPbomRecordDAO hzPbomRecordDAO) {
+        this.hzPbomRecordDAO = hzPbomRecordDAO;
+    }
+
+    @Autowired
+    public void setHzMbomService(HzMbomService hzMbomService) {
+        this.hzMbomService = hzMbomService;
+    }
+
+    @Autowired
+    public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
+        this.configTransactionTemplate = configTransactionTemplate;
+    }
     @Override
     public WriteResultRespDTO addPartToEPL(EditHzEPLReqDTO reqDTO) {
         try {
             HzEPLQuery query = new HzEPLQuery();
             query.setPartId(reqDTO.getPartId());
             query.setProjectId(reqDTO.getProjectId());
-            boolean repeat = hzEPLDAO.partIdRepeat(query);
-            if(repeat){
+            Result repeat = hzEPLDAO.partIdRepeat(query);
+            if(repeat.isSuccess()){
                 return WriteResultRespDTO.failResultRespDTO("当前添加的零件号已存在！");
             }
             int i = hzEPLDAO.insert(HzEPLFactory.eplReqDTOToRecord(reqDTO));
@@ -61,16 +104,49 @@ public class HzEPLServiceImpl implements HzEPLService {
             //判断一下重复 前端也会判断
             HzEPLQuery query = new HzEPLQuery();
             query.setId(reqDTO.getId());
-            query.setPartId(reqDTO.getPartId());
             query.setProjectId(reqDTO.getProjectId());
-            boolean repeat = hzEPLDAO.partIdRepeat(query);
-            if(repeat){
+            Result repeat = hzEPLDAO.partIdRepeat(query);
+            if(repeat.isSuccess()){
                 return WriteResultRespDTO.failResultRespDTO("零件号已存在！");
             }
-            int i = hzEPLDAO.update(HzEPLFactory.eplReqDTOToRecord(reqDTO));
-            if(i<=0){
-                return WriteResultRespDTO.getFailResult();
-            }
+            //需同步修改数据到PBOM
+            HzEPLRecord record = (HzEPLRecord) repeat.getData();
+            Map<String,Object> map = new HashMap<>();
+            map.put("lineId",record.getPartId());
+            map.put("projectId",record.getProjectId());
+            List<HzPbomLineRecord> pbomLineRecords = hzPbomRecordDAO.getPbomById(map);
+            configTransactionTemplate.execute(new TransactionCallback<Void>() {
+                @Override
+                public Void doInTransaction(TransactionStatus status) {
+                    if(ListUtil.isNotEmpty(pbomLineRecords)){
+                        String partResource = record.getPartResource();
+                        List<String> carParts = hzMbomService.loadingCarPartType();
+                        if(carParts.contains(partResource)){
+                            List<HzPbomLineRecord> recordList = new ArrayList<>();
+                            pbomLineRecords.forEach(record -> {
+                                HzPbomLineRecord pbomLineRecord = new HzPbomLineRecord();
+                                pbomLineRecord.setLineId(reqDTO.getPartId());
+                                pbomLineRecord.setpBomLinePartName(reqDTO.getPartName());
+                                pbomLineRecord.setpBomOfWhichDept(reqDTO.getPartOfWhichDept());
+                                pbomLineRecord.setpBomLinePartResource(reqDTO.getPartResource());
+                                pbomLineRecord.setpBomLinePartClass(reqDTO.getPartClass());
+                                pbomLineRecord.setBomDigifaxId(pbomLineRecords.get(0).getBomDigifaxId());
+                                pbomLineRecord.setPuid(record.getPuid());
+                                recordList.add(pbomLineRecord);
+                            });
+                            hzPbomRecordDAO.updateListByPuids(recordList);
+                        }else {//标记为删除状态,走流程后就直接删除
+                            StringBuffer stringBuffer = new StringBuffer();
+                            pbomLineRecords.forEach(pbomLineRecord -> {
+                                stringBuffer.append(pbomLineRecord.getPuid()+",");
+                            });
+                            hzPbomRecordDAO.deleteByPuids(stringBuffer.toString());
+                        }
+                    }
+                    hzEPLDAO.update(HzEPLFactory.eplReqDTOToRecord(reqDTO));
+                    return null;
+                }
+            });
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
@@ -81,10 +157,61 @@ public class HzEPLServiceImpl implements HzEPLService {
     @Override
     public WriteResultRespDTO deletePartFromEPLByIds(String ids) {
         try {
-            int i = hzEPLDAO.delete(ids);
-            if(i<=0){
-                return WriteResultRespDTO.getSuccessResult();
+            //删除时需要进行判断 如果数据被引用 不允许删除
+            //存在历史生效数据记录的 改为删除状态 否则直接删除
+
+            //进行引用判断
+            List<String> list = Lists.newArrayList(ids.split(","));
+            StringBuffer stringBuffer = new StringBuffer();
+            //EBOM 中检查
+            for(String id : list){
+                HzBOMQuery hzBOMQuery = new HzBOMQuery();
+                hzBOMQuery.setEplId(Long.valueOf(id));
+                List<HzEPLManageRecord> records = hzEbomRecordDAO.findEBOMRecordsByEPLId(hzBOMQuery);
+                if(ListUtil.isNotEmpty(records)){
+                    stringBuffer.append("零件号"+records.get(0).getLineID()+"已存在引用关系,不允许删除!");
+                    return WriteResultRespDTO.failResultRespDTO(stringBuffer.toString());
+                }
             }
+
+            List<Long> updateList = new ArrayList<>();
+            List<Long> deleteList = new ArrayList<>();
+            //PBOM检查
+            for(String id : list){
+                HzEPLQuery query = new HzEPLQuery();
+                Long eplId = Long.valueOf(id);
+                query.setId(eplId);
+                HzEPLRecord  record = hzEPLDAO.getEPLRecordById(query);
+                if(record != null){
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("lineId",record.getPartId());
+                    map.put("projectId",record.getProjectId());
+                    if(ListUtil.isNotEmpty(hzPbomRecordDAO.getPbomById(map))){
+                        stringBuffer.append("零件号"+record.getPartId()+"已存在引用关系,不允许删除!");
+                        return WriteResultRespDTO.failResultRespDTO(stringBuffer.toString());
+                    }
+
+                    if(StringUtils.isNotBlank(record.getRevision())){
+                        updateList.add(eplId);
+                    }else {
+                        deleteList.add(eplId);
+                    }
+                }
+            }
+
+
+            configTransactionTemplate.execute(new TransactionCallback<Void>() {
+                @Override
+                public Void doInTransaction(TransactionStatus status) {
+                    if(ListUtil.isNotEmpty(deleteList)){
+                        hzEPLDAO.delete(null,deleteList);
+                    }
+                    if(ListUtil.isNotEmpty(updateList)){
+                        hzEPLDAO.deleteByIds(updateList);
+                    }
+                    return null;
+                }
+            });
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
@@ -132,11 +259,12 @@ public class HzEPLServiceImpl implements HzEPLService {
     }
 
     @Override
-    public boolean partIdIsRepeat(String partId,String projectId) {
+    public boolean partIdIsRepeat(Long id,String partId,String projectId) {
         HzEPLQuery query = new HzEPLQuery();
         query.setPartId(partId);
         query.setProjectId(projectId);
-        return hzEPLDAO.partIdRepeat(query);
+        query.setId(id);
+        return hzEPLDAO.partIdRepeat(query).isSuccess();
     }
 
     @Override

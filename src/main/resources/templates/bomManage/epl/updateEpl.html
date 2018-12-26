@@ -281,6 +281,7 @@
                             url: "epl/exist",//验证地址
                             data: function (validator) {// 获取需要传送到后台的验证的数据
                                 return {
+                                    id:$('#id').val(),
                                     partId: $('#partId').val(),
                                     projectId:$("#project", window.top.document).val()
                                 }

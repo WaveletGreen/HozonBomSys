@@ -55,7 +55,6 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("puid",puid);
         map.put("projectId",projectId);
-
         return (HzEPLManageRecord) super.findForObject("HzEbomRecordDAOImpl_findEbomById",map);
     }
 
@@ -73,6 +72,13 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("puid",puid);
         map.put("projectId",projectId);
         return (int) super.findForObject("HzEbomRecordDAOImpl_findIsHasByPuid",map);
+    }
+
+    @Override
+    public Integer findEBomTotalCount(String projectId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        return super.findForObject("HzEbomRecordDAOImpl_findTotalCount",map);
     }
 
     @Override
@@ -114,11 +120,6 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
             map.put("puids",list);
         }
         return super.update("HzEbomRecordDAOImpl_deleteList",map);
-    }
-
-    @Override
-    public int delete(String puid) {
-        return super.delete("HzEbomRecordDAOImpl_delete",puid);
     }
 
     @Override

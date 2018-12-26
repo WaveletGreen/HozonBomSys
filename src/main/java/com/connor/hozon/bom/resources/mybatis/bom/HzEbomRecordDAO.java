@@ -46,8 +46,6 @@ public interface HzEbomRecordDAO {
      */
     int deleteList(String puids,List<String> list);
 
-    int delete(String puid);
-
     /**
      * 删除 直接delete
      * @param puids
@@ -69,6 +67,13 @@ public interface HzEbomRecordDAO {
     int updateListByPuids(List<HzEPLManageRecord> records);
 
     int findIsHasByPuid(String puid, String projectId);
+
+    /**
+     * 查询当前项目下的EBOM 数量
+     * @param projectId 项目id
+     * @return BOM 数目
+     */
+    Integer findEBomTotalCount(String projectId);
 
     Page<HzEPLManageRecord> getHzEbomPage(HzEbomByPageQuery query);
     /**

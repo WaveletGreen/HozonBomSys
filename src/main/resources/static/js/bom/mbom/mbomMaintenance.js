@@ -254,7 +254,7 @@ function initTable1(mBomUrl) {
                             var rows = $mBomTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].eBomPuid + ",";
+                                puids += rows[i].puid + ",";
                             }
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
@@ -909,7 +909,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             var rows = $mBomTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].eBomPuid + ",";
+                                puids += rows[i].puid + ",";
                             }
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
@@ -1563,7 +1563,7 @@ function initTable2(productionUrl) {
                             var rows = $productionTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].eBomPuid + ",";
+                                puids += rows[i].puid + ",";
                             }
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
@@ -2007,7 +2007,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             var rows = $productionTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].eBomPuid + ",";
+                                puids += rows[i].puid + ",";
                             }
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
@@ -2460,7 +2460,7 @@ function initTable3(financialUrl) {
                             var rows = $financialTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].eBomPuid + ",";
+                                puids += rows[i].puid + ",";
                             }
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),
@@ -2909,7 +2909,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             var rows = $financialTable.bootstrapTable('getSelections');
                             var puids = "";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].eBomPuid + ",";
+                                puids += rows[i].puid + ",";
                             }
                             var myData = JSON.stringify({
                                 "projectId": $("#project", window.top.document).val(),

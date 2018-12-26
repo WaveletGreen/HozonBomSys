@@ -6,11 +6,15 @@ import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
+import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.resources.util.Result;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.epl.HzEPLRecord;
+import sql.redis.HzDBException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,13 +38,24 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
     }
 
     @Override
-    public int delete(String ids) {
-        List<String> list = Lists.newArrayList(ids.split(","));
-        return super.delete("HzEPLDAOImpl_delete",list);
+    public int delete(String ids,List<Long> list) {
+        if(StringUtils.isNotBlank(ids)){
+            List<String> l = Lists.newArrayList(ids.split(","));
+            return super.delete("HzEPLDAOImpl_delete",l);
+        }else if(ListUtil.isNotEmpty(list)){
+            return super.delete("HzEPLDAOImpl_delete",list);
+        }else {
+            return 0;
+        }
     }
 
     @Override
-    public boolean partIdRepeat(HzEPLQuery query) {
+    public int deleteByIds(List<Long> list) {
+        return super.update("HzEPLDAOImpl_deleteByIds",list);
+    }
+
+    @Override
+    public Result partIdRepeat(HzEPLQuery query) {
         try {
             Long id = query.getId();
             if(id != null){
@@ -48,15 +63,15 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
             }
             HzEPLRecord record  = getEPLRecordById(query);
             if(record == null){
-                return false;
+                return Result.build(false,record);
             }
             if(record.getId().equals(id)){
-                return false;
+                return Result.build(false,record);
             }
-            return true;
+            return Result.build(true,record);
         }catch (Exception e){
             e.printStackTrace();
-            return true;
+            throw new HzDBException("数据查询异常!",e);
         }
     }
 

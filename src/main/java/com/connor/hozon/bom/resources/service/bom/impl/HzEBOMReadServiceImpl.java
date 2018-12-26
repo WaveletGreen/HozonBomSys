@@ -256,14 +256,14 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
         Map<String, Object> map = new HashMap<>();
         map.put("projectId", projectId);
         map.put("puid", puid);
-        List<HzBomLineRecord> records = hzBomLineRecordDao.findBomListForChange(map);
-        if (ListUtil.isNotEmpty(records)) {
-            if (records.get(0).getIs2Y().equals(1)) {
-                return records.get(0);
-            } else if (records.get(0).getParentUid() == null) {
-                return records.get(0);
+        HzBomLineRecord record = hzBomLineRecordDao.findBomLine(map);
+        if (record != null) {
+            if (record.getIs2Y().equals(1)) {
+                return record;
+            } else if (record.getParentUid() == null) {
+                return record;
             } else {
-                return findParentFor2Y(projectId, records.get(0).getParentUid());
+                return findParentFor2Y(projectId, record.getParentUid());
             }
         } else {
             return null;

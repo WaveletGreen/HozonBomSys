@@ -389,7 +389,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     public WriteResultRespDTO deleteHzWorkProcesses(Map<String, List<String>> datas){
         List<String> materielIds = datas.get("materielIds");
         List<String> procedureDesc = datas.get("procedureDesc");
-        if(procedureDesc.size()==0||procedureDesc==null){
+        if(ListUtil.isEmpty(procedureDesc)){
             return WriteResultRespDTO.cantDelete();
         }
         for(String pd : procedureDesc){
@@ -406,7 +406,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
         try{
             int delNum = -1;
-            if(hzWorkProceduresDel.size()>0&&hzWorkProceduresDel!=null){
+            if(ListUtil.isNotEmpty(hzWorkProceduresDel)){
                 delNum = hzWorkProcedureDAO.deleteHzWorkProcesses(hzWorkProceduresDel);
             }
             if(delNum==hzWorkProceduresDel.size()){

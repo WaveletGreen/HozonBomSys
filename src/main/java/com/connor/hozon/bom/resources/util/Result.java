@@ -30,11 +30,10 @@ public class Result {
         this.data = data;
     }
 
-    public Result(Object data, Object obj) {
+    public Result(boolean success, Object data) {
+        this.success = success;
         this.data = data;
-        this.obj = obj;
     }
-
 
     public static Result build(){
         return new Result();
@@ -48,12 +47,13 @@ public class Result {
         return new Result(success,errMsg);
     }
 
-    public static Result build(Object data, Object obj){
-        return new Result(data,obj);
-    }
 
     public static Result build(boolean success, String errMsg,Object obj){
         return new Result(success,errMsg,obj);
+    }
+
+    public static Result build(boolean success,Object obj){
+        return new Result(success,obj);
     }
 
     public Object getObj() {

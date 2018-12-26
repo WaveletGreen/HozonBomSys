@@ -20,10 +20,7 @@ public class ListUtil {
     }
 
     public static<V>  boolean isNotEmpty(List<V> list){
-        if(null !=list){
-            return !list.isEmpty();
-        }
-        return false;
+        return !isEmpty(list);
     }
 
     public static<V>  boolean isEmpty(Set<V> list){
@@ -34,10 +31,7 @@ public class ListUtil {
     }
 
     public static<V>  boolean isNotEmpty(Set<V> list){
-        if(null !=list){
-            return !list.isEmpty();
-        }
-        return false;
+        return !isEmpty(list);
     }
 
 

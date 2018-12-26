@@ -221,12 +221,12 @@ public class HzEPLController extends BaseController {
 
     @RequestMapping("exist")
     @ResponseBody
-    public Map<String, Object> deptExist(String partId,String projectId) {
+    public Map<String, Object> deptExist(Long id,String partId,String projectId) {
         if(StringUtils.isNotBlank(partId)){
             partId = partId.trim();
         }
         Map<String, Object> result = new HashMap<>();
-        result.put("valid",!hzEPLService.partIdIsRepeat(partId,projectId));
+        result.put("valid",!hzEPLService.partIdIsRepeat(id,partId,projectId));
         return result;
     }
 

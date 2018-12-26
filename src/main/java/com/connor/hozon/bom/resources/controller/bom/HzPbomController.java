@@ -238,7 +238,6 @@ public class HzPbomController extends BaseController {
 
     /**
      * 获取合成新件界面
-     *
      * @param model
      * @return
      */
@@ -249,29 +248,6 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
-     *
-     * @param
-     * @param response
-     */
-    @RequestMapping(value = "/add/processCompose", method = RequestMethod.POST)
-    public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO, HttpServletResponse response) {
-        WriteResultRespDTO writeResultRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
-        JSONArray jsonArray = new JSONArray();
-        if (WriteResultRespDTO.isSuccess(writeResultRespDTO)) {
-            HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
-            if (recordReqDTO.getLineId() != null) {
-                reqDTO.setLineId(recordReqDTO.getLineId());
-            }
-            reqDTO.setProjectId(recordReqDTO.getProjectId());
-            jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
-        }
-        toJSONResponse(Result.build(
-                WriteResultRespDTO.isSuccess(writeResultRespDTO), writeResultRespDTO.getErrMsg(), jsonArray), response);
-    }
-
-    /**
-     * 合成工艺合件
-     *
      * @param
      * @param param
      * @Autor Fancyears·Malos

@@ -251,4 +251,5 @@ public interface HzMbomRecordDAO {
      * @return
      */
     boolean checkPaintMaterielRepeat(HzMbomPaintMaterielRepeatQuery query);
+
 }

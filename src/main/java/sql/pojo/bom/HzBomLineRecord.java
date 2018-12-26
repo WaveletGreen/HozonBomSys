@@ -40,10 +40,7 @@ public class HzBomLineRecord extends BaseChangeDO {
      * 是否有子层
      */
     private Integer isHas;
-    /**
-     * 属性集合，是一个LinkedHashMap，需要转换
-     */
-    private byte[] bomLineBlock;
+
     /**
      * 是否2Y层
      */
@@ -684,14 +681,6 @@ public class HzBomLineRecord extends BaseChangeDO {
 
     public void setBomDigifaxId(String bomDigifaxId) {
         this.bomDigifaxId = bomDigifaxId == null ? null : bomDigifaxId.trim();
-    }
-
-    public byte[] getBomLineBlock() {
-        return bomLineBlock;
-    }
-
-    public void setBomLineBlock(byte[] bomLineBlock) {
-        this.bomLineBlock = bomLineBlock;
     }
 
     public String getIndex() {
