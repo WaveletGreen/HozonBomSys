@@ -30,7 +30,7 @@ function loadData(projectUid) {
 
 
     // $("#getExcel").attr("href","/hozon/bomAllCfg/getExcel?projectUid="+projectUid);
-    $("#getExcel").attr("href","/hozon/bomAllCfg/getExcel?projectUid=1c128c60-84a2-4076-9b1c-f7093e56e4df");
+    $("#getExcel").attr("href","/hozon/bomAllCfg/getExcel?projectUid="+projectUid);
     $.ajax({
         url: 'bomAllCfg/loadCfg0BomLineOfModel',
         type: 'GET',

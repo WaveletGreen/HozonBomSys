@@ -164,4 +164,15 @@
             #{hzCfg0ModelRecord.pModelPuid}
         </foreach>
     </select>
+
+    <select id="selectByMainRecordId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CFG0_MODEL_DETAIL
+        where
+          P_MODEL_PUID in (
+            select PUID from HZ_CFG0_MODEL_RECORD where P_CFG0_MODEL_OF_MAIN_RECORD = #{mainRecordId,jdbcType=VARCHAR}
+          )
+    </select>
 </mapper>

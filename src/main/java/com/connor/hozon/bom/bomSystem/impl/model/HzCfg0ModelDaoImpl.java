@@ -60,5 +60,10 @@ public class HzCfg0ModelDaoImpl extends BasicDaoImpl<HzCfg0ModelDetail> implemen
                 clzName + ".selectByModelIds");
     }
 
+    @Override
+    public List<HzCfg0ModelDetail> selectByMainRecordId(String mainRecordId) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0ModelDetail(),mainRecordId,clzName+".selectByMainRecordId");
+    }
+
 
 }

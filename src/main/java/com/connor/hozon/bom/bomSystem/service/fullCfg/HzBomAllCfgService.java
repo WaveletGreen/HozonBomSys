@@ -900,6 +900,25 @@ public class HzBomAllCfgService {
             if ((mainRecord = hzCfg0MainService.doGetByPrimaryKey(params.get("pCfg0ModelOfMainRecord"))) == null) {
                 return result;
             }
+            String projectUid = params.get("projectUid");
+            HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectUid);
+            //判断版本为1时，版型是否重复
+            String version = hzFullCfgMain.getVersion();
+            int endIndex = version.indexOf(".");
+            if("1".equals(version.substring(0,endIndex))){
+                List<HzCfg0ModelDetail> hzCfg0ModelDetails = hzCfg0ModelDetailDao.selectByMainRecordId(mainRecord.getPuid());
+                for(HzCfg0ModelDetail hzCfg0ModelDetail : hzCfg0ModelDetails){
+                    if(hzCfg0ModelDetail.getpModelVersion().equals(params.get("pModelVersion"))){
+                        result.put("msg", "当前全配置大版本为1.0，车型版型不能重复");
+                        result.put("status", false);
+                        return result;
+                    }
+                }
+            }
+
+
+
+
             projectHelper.doGetProjectTreeByProjectId(mainRecord.getpCfg0OfWhichProjectPuid());
             HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
             HzCfg0ModelDetail modelDetail = new HzCfg0ModelDetail();
@@ -953,8 +972,7 @@ public class HzBomAllCfgService {
                 result.put("msg", "添加列信息失败，请联系系统管理员查看日志");
             }
 
-            String projectUid = params.get("projectUid");
-            HzFullCfgMain hzFullCfgMain = hzFullCfgMainDao.selectByProjectId(projectUid);
+
             hzFullCfgMain.setStatus(0);
             if(hzFullCfgMainDao.updateStatusById(hzFullCfgMain)<=0?true:false){
                 result.put("status", false);
@@ -987,10 +1005,12 @@ public class HzBomAllCfgService {
                 }
                 hzFullCfgModels.add(hzFullCfgModel);
             }
-            if(hzFullCfgModelDao.insertListAll(hzFullCfgModels)<=0?true:false){
-                result.put("status", false);
-                result.put("msg", "添加打点图信息失败");
-                return result;
+            if(hzFullCfgModels!=null&&hzFullCfgModels.size()>0){
+                if(hzFullCfgModelDao.insertListAll(hzFullCfgModels)<=0?true:false){
+                    result.put("status", false);
+                    result.put("msg", "添加打点图信息失败");
+                    return result;
+                }
             }
         }
         return result;
@@ -1306,7 +1326,7 @@ public class HzBomAllCfgService {
 
         row0.createCell(0).setCellValue("阶段："+hzFullCfgMain.getStage());
         row1.createCell(0).setCellValue("版本："+hzFullCfgMain.getVersion());
-        row2.createCell(0).setCellValue("生效日期："+sdf.format(hzFullCfgMain.getEffectiveDate()));
+        row2.createCell(0).setCellValue("生效日期："+(hzFullCfgMain.getEffectiveDate()==null?"":sdf.format(hzFullCfgMain.getEffectiveDate())));
         Integer status = hzFullCfgMain.getStatus();
         row3.createCell(0).setCellValue("状态："+(status==null?"编辑":status==0?"编辑":status==1?"已生效":status==10?"审核中":""));
 
