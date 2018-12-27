@@ -860,7 +860,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                   }
                   if (ListUtil.isNotEmpty(updateList)) {
                       try {
-                          String[] strings = materielIds.toArray(new String[addSapSet.size()]);
+                          String[] strings = addSapSet.toArray(new String[addSapSet.size()]);
                           synProcessRouteService.addRouting(strings,projectId);
                       }catch (Exception e){
                           // todo  接口有问题 暂时不负责

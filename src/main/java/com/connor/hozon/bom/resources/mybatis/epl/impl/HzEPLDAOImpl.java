@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.epl.impl;
 
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
@@ -81,7 +82,7 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
         map.put("id",query.getId());
         map.put("partId",query.getPartId());
         map.put("projectId",query.getProjectId());
-        return (HzEPLRecord)super.findForObject("HzEPLDAOImpl_getEPLRecordById",query);
+        return (HzEPLRecord)super.findForObject("HzEPLDAOImpl_getEPLRecordById",map);
     }
 
     @Override
@@ -122,6 +123,20 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
 
     @Override
     public int insertList(List<HzEPLRecord> hzEPLRecords) {
-        return super.insert("HzEPLDAOImpl_insertList",hzEPLRecords);
+        if(ListUtil.isEmpty(hzEPLRecords)){
+            return 0;
+        }
+        int size = hzEPLRecords.size();
+        synchronized (this){
+            if(size > 1000){
+                Map<Integer,List<HzEPLRecord>> map = HzBomSysFactory.spiltList(hzEPLRecords);
+                for(List<HzEPLRecord> list : map.values()){
+                    super.insert("HzEPLDAOImpl_insertList",list);
+                }
+            }else {
+                super.insert("HzEPLDAOImpl_insertList",hzEPLRecords);
+            }
+        }
+        return size;
     }
 }

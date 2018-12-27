@@ -533,7 +533,7 @@
               select
               #{item.projectId,jdbcType=VARCHAR}, #{item.partId,jdbcType=VARCHAR},
               #{item.partOfWhichDept,jdbcType=VARCHAR}, #{item.partName,jdbcType=VARCHAR}, #{item.partClass,jdbcType=VARCHAR},
-              #{item.partEnName,jdbcType=VARCHAR}, #{item.partResource,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER},
+              #{item.partEnName,jdbcType=VARCHAR}, #{item.partResource,jdbcType=VARCHAR}, 1,
               #{item.createTime,jdbcType=DATE}, #{item.updateTime,jdbcType=DATE}, #{item.fastener,jdbcType=VARCHAR},
               #{item.is3cpart,jdbcType=INTEGER}, #{item.inOutSideFlag,jdbcType=INTEGER}, #{item.createId,jdbcType=DOUBLE},
               #{item.updateId,jdbcType=DOUBLE}, #{item.unit,jdbcType=VARCHAR}, #{item.pictureNo,jdbcType=VARCHAR},

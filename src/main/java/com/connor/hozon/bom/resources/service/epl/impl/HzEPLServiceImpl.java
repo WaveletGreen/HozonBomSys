@@ -4,17 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzEPLReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEplRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.model.HzEPLFactory;
 import com.connor.hozon.bom.resources.domain.query.HzBOMQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
-import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
+import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -53,6 +52,8 @@ public class HzEPLServiceImpl implements HzEPLService {
 
     private HzMbomService hzMbomService;
 
+    private HzPbomService hzPbomService;
+
     private TransactionTemplate configTransactionTemplate;
 
     @Autowired
@@ -71,6 +72,11 @@ public class HzEPLServiceImpl implements HzEPLService {
     @Autowired
     public void setHzMbomService(HzMbomService hzMbomService) {
         this.hzMbomService = hzMbomService;
+    }
+
+    @Autowired
+    public void setHzPbomService(HzPbomService hzPbomService) {
+        this.hzPbomService = hzPbomService;
     }
 
     @Autowired
@@ -101,16 +107,26 @@ public class HzEPLServiceImpl implements HzEPLService {
     @Override
     public WriteResultRespDTO updatePartFromEPLRecord(EditHzEPLReqDTO reqDTO) {
         try {
-            //判断一下重复 前端也会判断
+            if(reqDTO == null || reqDTO.getId() == null){
+                return WriteResultRespDTO.IllgalArgument();
+            }
+            //判断一下重复 前端也需要进行判断
             HzEPLQuery query = new HzEPLQuery();
             query.setId(reqDTO.getId());
             query.setProjectId(reqDTO.getProjectId());
+            query.setPartId(reqDTO.getPartId());
             Result repeat = hzEPLDAO.partIdRepeat(query);
             if(repeat.isSuccess()){
                 return WriteResultRespDTO.failResultRespDTO("零件号已存在！");
             }
             //需同步修改数据到PBOM
-            HzEPLRecord record = (HzEPLRecord) repeat.getData();
+            HzEPLQuery hzEPLQuery = new HzEPLQuery();
+            hzEPLQuery.setId(reqDTO.getId());
+            hzEPLQuery.setProjectId(reqDTO.getProjectId());
+            HzEPLRecord record =  hzEPLDAO.getEPLRecordById(hzEPLQuery);
+            if(record == null){
+                return WriteResultRespDTO.failResultRespDTO("当前要修改的零件号不存在！");
+            }
             Map<String,Object> map = new HashMap<>();
             map.put("lineId",record.getPartId());
             map.put("projectId",record.getProjectId());
@@ -119,29 +135,28 @@ public class HzEPLServiceImpl implements HzEPLService {
                 @Override
                 public Void doInTransaction(TransactionStatus status) {
                     if(ListUtil.isNotEmpty(pbomLineRecords)){
-                        String partResource = record.getPartResource();
-                        List<String> carParts = hzMbomService.loadingCarPartType();
-                        if(carParts.contains(partResource)){
-                            List<HzPbomLineRecord> recordList = new ArrayList<>();
-                            pbomLineRecords.forEach(record -> {
-                                HzPbomLineRecord pbomLineRecord = new HzPbomLineRecord();
-                                pbomLineRecord.setLineId(reqDTO.getPartId());
-                                pbomLineRecord.setpBomLinePartName(reqDTO.getPartName());
-                                pbomLineRecord.setpBomOfWhichDept(reqDTO.getPartOfWhichDept());
-                                pbomLineRecord.setpBomLinePartResource(reqDTO.getPartResource());
-                                pbomLineRecord.setpBomLinePartClass(reqDTO.getPartClass());
-                                pbomLineRecord.setBomDigifaxId(pbomLineRecords.get(0).getBomDigifaxId());
-                                pbomLineRecord.setPuid(record.getPuid());
-                                recordList.add(pbomLineRecord);
-                            });
-                            hzPbomRecordDAO.updateListByPuids(recordList);
-                        }else {//标记为删除状态,走流程后就直接删除
-                            StringBuffer stringBuffer = new StringBuffer();
-                            pbomLineRecords.forEach(pbomLineRecord -> {
-                                stringBuffer.append(pbomLineRecord.getPuid()+",");
-                            });
-                            hzPbomRecordDAO.deleteByPuids(stringBuffer.toString());
-                        }
+//                        String partResource = reqDTO.getPartResource();
+//                        List<String> carParts = hzMbomService.loadingCarPartType();
+                        List<HzPbomLineRecord> recordList = new ArrayList<>();
+                        pbomLineRecords.forEach(record -> {
+                            HzPbomLineRecord pbomLineRecord = new HzPbomLineRecord();
+                            pbomLineRecord.setLineId(reqDTO.getPartId());
+                            pbomLineRecord.setpBomLinePartName(reqDTO.getPartName());
+                            pbomLineRecord.setpBomOfWhichDept(reqDTO.getPartOfWhichDept());
+                            pbomLineRecord.setpBomLinePartResource(reqDTO.getPartResource());
+                            pbomLineRecord.setpBomLinePartClass(reqDTO.getPartClass());
+                            pbomLineRecord.setBomDigifaxId(pbomLineRecords.get(0).getBomDigifaxId());
+                            pbomLineRecord.setPuid(record.getPuid());
+                            recordList.add(pbomLineRecord);
+                        });
+                        hzPbomRecordDAO.updateListByPuids(recordList);
+//                        if(!carParts.contains(partResource)){//标记为删除状态,走流程后就直接删除
+//                            StringBuffer stringBuffer = new StringBuffer();
+//                            pbomLineRecords.forEach(pbomLineRecord -> {
+//                                stringBuffer.append(pbomLineRecord.getPuid()+",");
+//                            });
+//                            hzPbomRecordDAO.deleteByPuids(stringBuffer.toString());
+//                        }
                     }
                     hzEPLDAO.update(HzEPLFactory.eplReqDTOToRecord(reqDTO));
                     return null;
