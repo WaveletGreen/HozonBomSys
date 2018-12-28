@@ -64,6 +64,44 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
     }
 
 
+    /**
+     * EBOM 批量更新 根据零件号来更新
+     * @param records
+     * @return
+     */
+    public int updateList(List<HzBomLineRecord> records) {
+        try {
+            if (ListUtil.isNotEmpty(records)) {
+                int size = records.size();
+                //分批更新数据 一次1000条
+                int i = 0;
+                int cout = 0;
+                if (size > 1000) {
+                    for (i = 0; i < size / 1000; i++) {
+                        List<HzBomLineRecord> list = new ArrayList<>();
+                        for (int j = 0; j < 1000; j++) {
+                            list.add(records.get(cout));
+                            cout++;
+                        }
+                        super.update("HzEbomRecordDAOImpl_updateList",list);
+                    }
+                }
+                if (i * 1000 < size) {
+                    List<HzBomLineRecord> list = new ArrayList<>();
+                    for (int j = 0; j < size - i * 1000; j++) {
+                        list.add(records.get(cout));
+                        cout++;
+                    }
+                    super.update("HzEbomRecordDAOImpl_updateList",list);
+                }
+
+            }
+            return 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * 批量更新

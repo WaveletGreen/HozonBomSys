@@ -180,66 +180,79 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 
     @Override
     public WriteResultRespDTO updateHzEbomRecord(UpdateHzEbomReqDTO reqDTO) {
-
-        if(hzEbomRecordDAO.updateByDto(reqDTO)<=0?true:false){
-            return WriteResultRespDTO.failResultRespDTO("同步修改失败");
+        //参数校验
+        if(StringUtils.isBlank(reqDTO.getProjectId()) || StringUtils.isBlank(reqDTO.getPuid())){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+        HzEPLManageRecord record = HzEbomRecordFactory.updateEBOMReqTORecord(reqDTO);
+        if(hzEbomRecordDAO.update(record) <= 0){
+            return WriteResultRespDTO.getFailResult();
         }
         //如果是2Y层，还需调整查询编号
-        if(reqDTO.getLineNo()!=null){
-            List<HzEPLManageRecord> hzEPLManageRecordUpdate = new ArrayList<>();
-
-            HzEPLManageRecord hzEPLManageRecord = hzEbomRecordDAO.findEbomById(reqDTO.getPuid(), reqDTO.getProjectId());
-            //如果查询编号没变则不修改
-            if(hzEPLManageRecord.getLineIndex().equals(reqDTO.getLineNo())){
-                return WriteResultRespDTO.getSuccessResult();
-            }
-
-            HzEbomTreeQuery query = new HzEbomTreeQuery();
-            query.setPuid(reqDTO.getPuid());
-            query.setProjectId(reqDTO.getProjectId());
-            List<HzEPLManageRecord> hzEPLManageRecordsChildren = hzEbomRecordDAO.getHzBomLineChildren(query);
-
-            Map<String,Object> map = new HashMap<>();
-            map.put("projectId",reqDTO.getProjectId());
-            map.put("lineNo",reqDTO.getLineNo());
-            map.put("flag","previous");
-            //查找上一个2Y
-            HzEPLManageRecord  hzEPLManagePrevious = hzEbomRecordDAO.findEbom2Y(map);
-            //查找下一个2Y
-            map.put("flag","next");
-            HzEPLManageRecord  hzEPLManageNext = hzEbomRecordDAO.findEbom2Y(map);
-            Double increment = 0.0;
-            Double previous = 0.0;
-            if(hzEPLManagePrevious!=null){
-                previous = Double.valueOf(hzEPLManagePrevious.getSortNum());
-            }
-
-            if(hzEPLManageNext==null){
-                increment = 100.0;
-            }else {
-                Double next = Double.valueOf(hzEPLManageNext.getSortNum());
-                increment = (next-previous)/(hzEPLManageRecordsChildren.size()+2);
-            }
-            Double sortNum = previous+increment;
-            String indexOld = hzEPLManageRecordsChildren.get(0).getLineIndex();
-            hzEPLManageRecordsChildren.get(0).setSortNum(String.valueOf(sortNum));
-            hzEPLManageRecordsChildren.get(0).setLineIndex(reqDTO.getLineNo().replaceFirst("0*","")+"."+reqDTO.getLineNo().replaceFirst("0*",""));
-            hzEPLManageRecordUpdate.add(hzEPLManageRecordsChildren.get(0));
-            for(int i=1;i<hzEPLManageRecordsChildren.size();i++){
-                sortNum += increment;
-                HzEPLManageRecord hzEPLManageRecordChildren = hzEPLManageRecordsChildren.get(i);
-                hzEPLManageRecordChildren.setSortNum(String.valueOf(sortNum));
-                String indexChildrenOld = hzEPLManageRecordChildren.getLineIndex();
-                hzEPLManageRecordChildren.setLineIndex(hzEPLManageRecordsChildren.get(0).getLineIndex()+indexChildrenOld.substring(hzEPLManageRecordsChildren.get(0).getLineIndex().length()));
-                hzEPLManageRecordUpdate.add(hzEPLManageRecordChildren);
-            }
-            try {
-                hzEbomRecordDAO.updateEPLList(hzEPLManageRecordUpdate);
-            }catch (Exception e){
-                e.printStackTrace();
-                return WriteResultRespDTO.failResultRespDTO("修改查询编号失败");
-            }
-        }
+        // todo 下次在做 先不做了
+//        if(StringUtils.isNotBlank(reqDTO.getLineNo())){
+//            List<HzEPLManageRecord> hzEPLManageRecordUpdate = new ArrayList<>();
+//
+//            HzEPLManageRecord hzEPLManageRecord = hzEbomRecordDAO.findEbomById(reqDTO.getPuid(), reqDTO.getProjectId());
+//            if(hzEPLManageRecord == null){
+//                return WriteResultRespDTO.failResultRespDTO("当前要修改的BOM不存在！");
+//            }
+//
+//            String oldLineNo = HzBomSysFactory.getLevelAndRank(hzEPLManageRecord.getLineIndex(),hzEPLManageRecord.getIs2Y(),hzEPLManageRecord.getIsHas())[2];
+//            //如果查询编号没变则不修改
+//            if(oldLineNo.equals(reqDTO.getLineNo())){
+//                return WriteResultRespDTO.getSuccessResult();
+//            }
+//            String lineIndex = reqDTO.getLineNo()+"."+ reqDTO.getLineNo();
+//            if(hzEbomRecordDAO.lineIndexRepeat(reqDTO.getProjectId(),lineIndex)){
+//                return WriteResultRespDTO.failResultRespDTO("重复的查找编号输入");
+//            }
+//            HzEbomTreeQuery query = new HzEbomTreeQuery();
+//            query.setPuid(reqDTO.getPuid());
+//            query.setProjectId(reqDTO.getProjectId());
+//            List<HzEPLManageRecord> hzEPLManageRecordsChildren = hzEbomRecordDAO.getHzBomLineChildren(query);
+//
+//            Map<String,Object> map = new HashMap<>();
+//            map.put("projectId",reqDTO.getProjectId());
+//            map.put("lineNo",reqDTO.getLineNo());
+//            map.put("flag","previous");
+//            //查找上一个2Y
+//            HzEPLManageRecord  hzEPLManagePrevious = hzEbomRecordDAO.findEbom2Y(map);
+//            //查找下一个2Y
+//            map.put("flag","next");
+//            HzEPLManageRecord  hzEPLManageNext = hzEbomRecordDAO.findEbom2Y(map);
+//            Double increment = 0.0;
+//            Double previous = 0.0;
+//            if(hzEPLManagePrevious!=null){
+//                previous = Double.valueOf(hzEPLManagePrevious.getSortNum());
+//            }
+//
+//            if(hzEPLManageNext==null){
+//                increment = 100.0;
+//            }else {
+//                Double next = Double.valueOf(hzEPLManageNext.getSortNum());
+//                increment = (next-previous)/(hzEPLManageRecordsChildren.size()+2);
+//            }
+//            Double sortNum = previous+increment;
+//            String indexOld = hzEPLManageRecordsChildren.get(0).getLineIndex();
+//            hzEPLManageRecordsChildren.get(0).setSortNum(String.valueOf(sortNum));
+//            hzEPLManageRecordsChildren.get(0).setLineIndex(reqDTO.getLineNo().replaceFirst("0*","")+"."+reqDTO.getLineNo().replaceFirst("0*",""));
+//            hzEPLManageRecordUpdate.add(hzEPLManageRecordsChildren.get(0));
+//            for(int i=1;i<hzEPLManageRecordsChildren.size();i++){
+//                sortNum += increment;
+//                HzEPLManageRecord hzEPLManageRecordChildren = hzEPLManageRecordsChildren.get(i);
+//                hzEPLManageRecordChildren.setSortNum(String.valueOf(sortNum));
+//                String indexChildrenOld = hzEPLManageRecordChildren.getLineIndex();
+//                hzEPLManageRecordChildren.setLineIndex(hzEPLManageRecordsChildren.get(0).getLineIndex()+indexChildrenOld.substring(hzEPLManageRecordsChildren.get(0).getLineIndex().length()));
+//                hzEPLManageRecordUpdate.add(hzEPLManageRecordChildren);
+//            }
+//            try {
+//                hzEbomRecordDAO.updateEPLList(hzEPLManageRecordUpdate);
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                return WriteResultRespDTO.failResultRespDTO("修改查询编号失败");
+//            }
+//        }
         return WriteResultRespDTO.getSuccessResult();
     }
 
@@ -664,9 +677,9 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             map.put("ebomAfter",afterRecords);
 
             //修改发起流程后状态值
-            List<HzBomLineRecord> bomLineRecords = new ArrayList<>();
+            List<HzEPLManageRecord> bomLineRecords = new ArrayList<>();
             for(HzEPLManageRecord record:records){
-                HzBomLineRecord lineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(record);
+                HzEPLManageRecord lineRecord = HzEbomRecordFactory.ebomRecordToEBOMRecord(record);
                 lineRecord.setStatus(5);//审核状态
                 lineRecord.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
                 bomLineRecords.add(lineRecord);
@@ -691,7 +704,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                                     hzEbomRecordDAO.insertList((List<HzEPLManageRecord>) entry.getValue(),tableName);
                                     break;
                                 case "ebomBefore":
-                                    hzEbomRecordDAO.updateList((List<HzBomLineRecord>) entry.getValue());
+                                    hzEbomRecordDAO.updateListByEplId((List<HzEPLManageRecord>) entry.getValue());
                                     break;
                                 case "changeData":
                                     hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
@@ -704,6 +717,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 }
             }catch (Exception e){
                 e.printStackTrace();
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
                 return WriteResultRespDTO.getFailResult();
             }
 
@@ -726,7 +740,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             query.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
             List<String> deletePuids = new ArrayList<>();
             List<HzEPLManageRecord> updateRecords = new ArrayList<>();
-            List<HzBomLineRecord> updateList = new ArrayList<>();
+            List<HzEPLManageRecord> updateList = new ArrayList<>();
             Set<HzEPLManageRecord> set = new HashSet<>();
             List<HzEPLManageRecord> list = hzEbomRecordDAO.getEbomRecordsByPuids(query);
             //带子层撤销
@@ -765,14 +779,12 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                     dataDetailQuery.setPuid(record.getPuid());
                     HzEPLManageRecord manageRecord = hzEbomRecordDAO.getEBomRecordByPuidAndRevision(dataDetailQuery);
                     if(manageRecord!=null){
-                        HzBomLineRecord hzBomLineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(manageRecord);
-                        hzBomLineRecord.setStatus(manageRecord.getStatus());
-                        updateList.add(hzBomLineRecord);
+                        updateList.add(manageRecord);
                     }
                 });
             }
             if(ListUtil.isNotEmpty(updateList)){
-                hzEbomRecordDAO.updateList(updateList);
+                hzEbomRecordDAO.updateListByEplId(updateList);
             }
             if(ListUtil.isNotEmpty(deletePuids)){
                 hzEbomRecordDAO.deleteByPuids(deletePuids,ChangeTableNameEnum.HZ_EBOM.getTableName());

@@ -69,9 +69,9 @@ public class HzPbomController extends BaseController {
         tableTitle.put("mouldType", "模具类别");
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("station", "工位");
+        tableTitle.put("effectTime","生效时间");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
-        tableTitle.put("effectTime","生效时间");
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
@@ -161,7 +161,6 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "updatePbomManage", method = RequestMethod.GET)
     public String updatePbomManageRecordToPage(String projectId, String eBomPuid,String puid,Integer updateType, Model model) {
         HzPbomLineRespDTO respDTO = hzPbomService.getHzPbomByPuid(projectId, eBomPuid);
-        respDTO.setUpdateType(updateType);
         if (respDTO == null) {
             return "";
         }

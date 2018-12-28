@@ -137,7 +137,7 @@ public class HzChangeDataController extends BaseController {
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("station", "工位");
         //获取该项目下的所有车型模型
-        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
+//        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         toJSONResponse(Result.build(tableTitle), response);
     }
 
@@ -441,6 +441,7 @@ public class HzChangeDataController extends BaseController {
                 _res.put("pFnaDesc",dto.getpFnaDesc() );
                 _res.put("number",dto.getNumber() );
                 _res.put("colorPart",dto.getColorPart());
+                _res.putAll(dto.getMap());
                 _list.add(_res);
             });
             ret.put("result", _list);

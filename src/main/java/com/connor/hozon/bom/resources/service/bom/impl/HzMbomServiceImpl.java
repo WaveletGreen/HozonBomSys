@@ -2,6 +2,7 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureService;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -28,6 +29,7 @@ import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.RefreshMbomThread;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
@@ -50,6 +52,7 @@ import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.change.HzApplicantChangeRecord;
 import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeDataRecord;
@@ -113,6 +116,12 @@ public class HzMbomServiceImpl implements HzMbomService{
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;
 
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
+
+    @Autowired
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
+
     private TransactionTemplate configTransactionTemplate;
 
     @Autowired
@@ -123,18 +132,7 @@ public class HzMbomServiceImpl implements HzMbomService{
     @Override
     public Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query) {
         try {
-            String level = query.getLevel().trim();
-            if (level != null && level!="") {
-                if(level.toUpperCase().endsWith("Y")){
-                    int length = Integer.valueOf(level.replace("Y",""));
-                    query.setIsHas(1);
-                    query.setLineIndex(String.valueOf(length-1));
-                }else {
-                    query.setIsHas(0);
-                    int length = Integer.valueOf(level);
-                    query.setLineIndex(String.valueOf(length));
-                }
-            }
+            query = HzBomSysFactory.bomQueryLevelTrans(query);
             Page<HzMbomLineRecord> recordPage;
             if(Integer.valueOf(1).equals(query.getShowBomStructure())){
                 recordPage = hzMbomRecordDAO.getHzMbomTreeByPage(query);
@@ -142,11 +140,12 @@ public class HzMbomServiceImpl implements HzMbomService{
                 recordPage = hzMbomRecordDAO.findMbomForPage(query);
             }
             int num = (recordPage.getPageNumber() - 1) * recordPage.getPageSize();
-            if (recordPage == null || recordPage.getResult() == null) {
+            if (recordPage.getResult() == null) {
                 return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), 0);
             }
             List<HzMbomLineRecord> lineRecords = recordPage.getResult();
             List<HzMbomRecordRespDTO> respDTOList = new ArrayList<>();
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
             for (HzMbomLineRecord record : lineRecords) {
                 HzMbomRecordRespDTO respDTO = HzMbomRecordFactory.mbomRecordToRespDTO(record);
                 respDTO.setNo(++num);
@@ -155,6 +154,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                 }else if(Integer.valueOf(6).equals(query.getType())){
                     respDTO.setpBomType("财务");
                 }
+                respDTO.setVehNum(hzSingleVehiclesServices.singleVehNum(record.getVehNum(),hzCfg0ModelRecords));
                 respDTOList.add(respDTO);
             }
             return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), respDTOList);
@@ -803,15 +803,18 @@ public class HzMbomServiceImpl implements HzMbomService{
                     set1.addAll(updateMaterielRecords);
                     Set<HzMaterielRecord> set2 = new HashSet<>(materielRecordList);
 
-                    Collection m = new HashSet(set1);
-                    Collection n = new HashSet(set2);
+                    set2.removeAll(set1);
+                    deleteMaterielRecords = set2;
 
-                    n.removeAll(m);
-                    if(n instanceof Set){
-                        deleteMaterielRecords = (Set) n;
-                    }else {
-                        deleteMaterielRecords = new HashSet<>(n);
-                    }
+//                    Collection m = new HashSet(set1);
+//                    Collection n = new HashSet(set2);
+//
+//                    n.removeAll(m);
+//                    if(n instanceof Set){
+//                        deleteMaterielRecords = (Set) n;
+//                    }else {
+//                        deleteMaterielRecords = new HashSet<>(n);
+//                    }
                 }
 
                 //衍生物料

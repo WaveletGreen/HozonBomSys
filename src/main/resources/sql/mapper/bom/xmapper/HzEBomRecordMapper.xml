@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzEBOMRecordMapper">
-    <resultMap id="SingleVehDosageMap"
-               type="sql.pojo.bom.HzBomLineRecord">
-        <result column="P_SINGLE_VEH_DOSAGE" jdbcType="BLOB"
-                property="singleVehDosage"/>
-    </resultMap>
 
-  <resultMap extends="SingleVehDosageMap" id="BaseResultMap" type="sql.pojo.epl.HzEPLManageRecord">
+  <resultMap  id="BaseResultMap" type="sql.pojo.epl.HzEPLManageRecord">
       <!--BOM属性-->
       <id column="PUID" jdbcType="VARCHAR" property="puid" />
       <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
@@ -31,6 +26,8 @@
       <result column="P_NUMBER" jdbcType="VARCHAR" property="number" />
       <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
       <result column="P_COLOR_PART" jdbcType="INTEGER" property="colorPart" />
+      <result column="P_VEH_NUM" jdbcType="VARCHAR" property="vehNum" />
+
       <!--衍生 EBOM 2Y层最大排序号-->
       <result column="M" jdbcType="INTEGER" property="maxLineIndexFirstNum" />
 
@@ -95,7 +92,7 @@
     t.P_FNA_INFO, t.P_EBOM_STATUS, t.P_CREATE_TIME, t.P_UPDATE_TIME,
     t.P_UPC, t.P_FNA_DESC, t.P_CREATE_NAME,
     t.P_UPDATE_NAME,t.P_NUMBER, t.P_ORDER_ID, t.P_LOU_LOA_FLAG, t.P_SORT_NUM, t.P_COLOR_PART, t.P_REVISION,
-    t.P_EFFECT_TIME, t.P_EWO_NO, t.P_EPL_ID
+    t.P_EFFECT_TIME, t.P_EPL_ID,t.P_VEH_NUM
   </sql>
 
     <!--BOM的零部件属性 放到EPL中维护 但是需要在EBOM中显示出来-->
@@ -119,7 +116,7 @@
         P_UPC, P_FNA_DESC, P_CREATE_NAME,
         P_UPDATE_NAME,P_NUMBER, P_ORDER_ID,P_EBOM_STATUS,
         P_SORT_NUM, P_COLOR_PART, P_REVISION,
-        P_EFFECT_TIME, P_EPL_ID
+        P_EFFECT_TIME, P_EPL_ID,P_VEH_NUM
       </sql>
 
         <sql id="BASE_BOM_IMPORT">
@@ -146,7 +143,8 @@
         #{colorPart,jdbcType=INTEGER},
         #{revision,jdbcType=VARCHAR},
         #{effectTime,jdbcType=VARCHAR},
-        #{eplId,jdbcType=DOUBLE}
+        #{eplId,jdbcType=DOUBLE},
+        #{vehNum,jdbcType=VARCHAR}
   </sql>
 
 
@@ -164,7 +162,8 @@
         #{item.colorPart,jdbcType=INTEGER},
         #{item.revision,jdbcType=VARCHAR},
         #{item.effectTime,jdbcType=VARCHAR},
-        #{item.eplId,jdbcType=DOUBLE}
+        #{item.eplId,jdbcType=DOUBLE},
+        #{item.vehNum,jdbcType=VARCHAR}
   </sql>
 
     <sql id="BASE_BOM_IMPORT_VALUES_BATCH">
@@ -204,7 +203,7 @@
                 and t.P_BOM_LINE_IS_HAS = 1
             </if>
             <if test="lineId != null and lineId!=''" >
-                and t10.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+                and t10.PART_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
             </if>
             <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
                 and t10.PART_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
@@ -241,7 +240,7 @@
           and t.P_BOM_LINE_IS_HAS = 1
       </if>
       <if test="lineId != null and lineId!=''" >
-          and t10.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+          and t10.PART_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
       </if>
       <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' " >
           and t10.PART_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
@@ -292,20 +291,6 @@
           and t.P_EBOM_STATUS <![CDATA[ <> ]]>0
     </select>
 
-    <!--查询根据父层零件ID找父层puid-->
-    <select id="HzEbomRecordDAOImpl_findEbomByItemId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-        SELECT <include refid="BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
-        from HZ_BOM_LINE_RECORD t
-        left join HZ_EPL_RECORD t10 on t.P_EPL_ID = t10.ID
-        where t.p_bom_digifax_id=(
-        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-        select t2.puid from Hz_project_libs t2
-        <where>
-            t2.puid=#{projectId,jdbcType=VARCHAR}))
-            and t.P_BOM_LINE_ID = #{puid,jdbcType=VARCHAR}
-            and t.P_EBOM_STATUS <![CDATA[ <> ]]>0
-        </where>
-    </select>
 
     <!--查询零件是否存在子层信息-->
     <select id="HzEbomRecordDAOImpl_findIsHasByPuid" resultType="java.lang.Integer" parameterType="java.util.HashMap">
@@ -334,41 +319,29 @@
         order by CAST(t.P_SORT_NUM as FLOAT)
     </select>
 
-    <!-- 查找重名 -->
-    <select id="HzEbomRecordDAOImpl_checkItemIdIsRepeat" parameterType="map" resultType="int">
-        SELECT count(*)
+
+
+    <!--根据零件号查询bom-->
+    <select id="HzEbomRecordDAOImpl_findEbom" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT <include refid="BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
         from HZ_BOM_LINE_RECORD t
+        left join HZ_EPL_RECORD t10 on t.P_EPL_ID = t10.ID
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         select t2.puid from Hz_project_libs t2
         <where>
             t2.puid=#{projectId,jdbcType=VARCHAR}))
-            and
-            t.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
-            and t.P_EBOM_STATUS <![CDATA[ <> ]]>0
-        </where>
-    </select>
-
-
-    <!--根据零件号查询bom-->
-    <select id="HzEbomRecordDAOImpl_findEbom" resultMap="BaseResultMap" parameterType="java.util.HashMap">
-        SELECT t1.* from HZ_BOM_LINE_RECORD t1
-        where t1.p_bom_digifax_id=(
-        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-        select t2.puid from Hz_project_libs t2
-        <where>
-            t2.puid=#{projectId,jdbcType=VARCHAR}))
             <if test="puid != null and puid!=''">
-                and t1.puid = #{puid,jdbcType=VARCHAR}
+                and t.puid = #{puid,jdbcType=VARCHAR}
             </if>
             <if test="lineID != null and lineID!=''">
-                and t1.P_BOM_LINE_ID = #{lineID,jdbcType=VARCHAR}
+                and t10.PART_ID = #{lineID,jdbcType=VARCHAR}
             </if>
             <if test="parentId != null and parentId!=''">
-                and t1.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
+                and t.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
             </if>
-            and t1.P_EBOM_STATUS <![CDATA[ <> ]]>0
-            order by CAST(t1.P_SORT_NUM as FLOAT)
+            and t.P_EBOM_STATUS <![CDATA[ <> ]]>0
+            order by CAST(t.P_SORT_NUM as FLOAT)
         </where>
     </select>
 
@@ -401,6 +374,42 @@
 
     </insert>
 
+    <!--更新-->
+    <update id="HzEbomRecordDAOImpl_update" parameterType="sql.pojo.epl.HzEPLManageRecord">
+        update HZ_BOM_LINE_RECORD
+        <set>
+              P_UPDATE_TIME =sysdate,
+              P_EBOM_STATUS = 2,
+            <if test="fna != null">
+                P_FNA_INFO = #{fna,jdbcType=VARCHAR},
+            </if>
+            <if test="pInOutSideFlag != null">
+                P_IN_OUT_SIDE_FLAG = #{pInOutSideFlag,jdbcType=INTEGER},
+            </if>
+            <if test="pUpc != null">
+                P_UPC = #{pUpc,jdbcType=VARCHAR},
+            </if>
+            <if test="pFnaDesc != null">
+                P_FNA_DESC = #{pFnaDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="pUpdateName != null">
+                P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                P_NUMBER = #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="colorPart != null">
+                P_COLOR_PART = #{colorPart,jdbcType=INTEGER},
+            </if>
+            <if test="vehNum != null">
+                P_VEH_NUM = #{vehNum,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where
+        P_BOM_DIGIFAX_ID = (select puid from Hz_Bom_Main_Record  where p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+        and
+        P_EPL_ID = (select P_EPL_ID from HZ_BOM_LINE_RECORD where PUID = #{puid,jdbcType=VARCHAR})
+    </update>
 
     <!--导入excel文件到EBOM写的批量插入-->
     <insert id="HzEbomRecordDAOImpl_importList" parameterType="java.util.List">
@@ -418,14 +427,11 @@
             update Hz_Bom_Line_Record
             <set>
                 P_UPDATE_TIME =sysdate,
-                <if test="item.singleVehDosage != null">
-                    P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR},
-                </if>
                 <if test="item.status != null">
                     P_EBOM_STATUS = #{item.status,jdbcType=VARCHAR},
                 </if>
-                <if test="item.pFnaInfo != null">
-                    P_FNA_INFO = #{item.pFnaInfo,jdbcType=VARCHAR},
+                <if test="item.fna != null">
+                    P_FNA_INFO = #{item.fna,jdbcType=VARCHAR},
                 </if>
                 <if test="item.pInOutSideFlag != null">
                     P_IN_OUT_SIDE_FLAG = #{item.pInOutSideFlag,jdbcType=INTEGER},
@@ -469,11 +475,60 @@
                 <if test="item.isHas != null">
                     P_BOM_LINE_IS_HAS = #{item.isHas,jdbcType=INTEGER}
                 </if>
+                <if test="item.vehNum != null">
+                    P_VEH_NUM = #{item.vehNum,jdbcType=VARCHAR}
+                </if>
             </set>
             where puid = #{item.puid,jdbcType=VARCHAR}
             and P_EBOM_STATUS <![CDATA[ <> ]]>0
         </foreach>
     </update>
+
+
+
+    <!-- 更新EBOM信息-->
+    <update id="HzEbomRecordDAOImpl_updateListByEplId" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update Hz_Bom_Line_Record
+            <set>
+                P_UPDATE_TIME =sysdate,
+                <if test="item.status != null">
+                    P_EBOM_STATUS = #{item.status,jdbcType=VARCHAR},
+                </if>
+                <if test="item.fna != null">
+                    P_FNA_INFO = #{item.fna,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pUpc != null">
+                    P_UPC = #{item.pUpc,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pFnaDesc != null">
+                    P_FNA_DESC = #{item.pFnaDesc,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pUpdateName != null">
+                    P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.number != null">
+                    P_NUMBER = #{item.number,jdbcType=VARCHAR},
+                </if>
+                <if test="item.orderId != null">
+                    P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.effectTime != null">
+                    P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.revision != null">
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR},
+                </if>
+                <if test="item.vehNum != null">
+                    P_VEH_NUM = #{item.vehNum,jdbcType=VARCHAR}
+                </if>
+            </set>
+            where P_EPL_ID = #{item.eplId,jdbcType=VARCHAR}
+            and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
+            and P_EBOM_STATUS <![CDATA[ <> ]]>0
+        </foreach>
+    </update>
+
 
     <select id="HzEbomRecordDAOImpl_lineIndexRepeat" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         select count(*) from HZ_BOM_LINE_RECORD t1

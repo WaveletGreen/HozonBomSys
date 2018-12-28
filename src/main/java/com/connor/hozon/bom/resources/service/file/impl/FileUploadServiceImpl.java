@@ -659,7 +659,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         HzImportEbomRecord record = new HzImportEbomRecord();
         record.setNo(Integer.valueOf(no));
         record.setLineId(lineId);
-        if(number !=null && number !=""){
+        if(StringUtils.isNotBlank(number)){
             record.setNumber(number);
         }
 //        if("Y".equals(p3cpartFlag)){
@@ -984,7 +984,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                         if(level.endsWith("Y")){
                             stringBuffer.append("最后一行的层级不能带Y,因为找不到他的子层!</br>");
                             this.errorCount++;
-                            continue;
                         }
                     }
                 }
@@ -1024,7 +1023,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                 stringBuffer.append("第"+(rowNum)+"行的零件名称不能为<strong>空</strong></br>") ;
                 this.errorCount++;
             }
-            continue;
         }
 
 
@@ -1035,15 +1033,15 @@ public class FileUploadServiceImpl implements FileUploadService {
             short lastCellNum = title.getLastCellNum();
             List<String> titleName = new ArrayList<>();
             if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-                if(lastCellNum>50){
-                    for(int i =50;i<lastCellNum;i++){//第50列以后为要导入的版型信息
+                if(lastCellNum > 50){
+                    for(int i = 50;i<lastCellNum;i++){//第50列以后为要导入的版型信息
                         boolean find = false;
                         String s = ExcelUtil.getCell(title,i).getStringCellValue();
-                        if(s.contains("(单车用量)")){
-                            s=s.replace("(单车用量)","");
+                        if(s.contains(BOMTransConstants.VEH_DOSAGE_CN)){
+                            s=s.replace(BOMTransConstants.VEH_DOSAGE_CN,BOMTransConstants.EMPTY);
                         }
-                        if(s.contains("（单车用量）")){
-                            s=s.replace("（单车用量）","");
+                        if(s.contains(BOMTransConstants.VEH_DOSAGE_EN)){
+                            s=s.replace(BOMTransConstants.VEH_DOSAGE_EN,BOMTransConstants.EMPTY);
                         }
                         for(HzCfg0ModelRecord record :hzCfg0ModelRecords){
                             if(s.equals(record.getObjectName())){
@@ -1108,73 +1106,55 @@ public class FileUploadServiceImpl implements FileUploadService {
             WriteResultRespDTO respDTO = new WriteResultRespDTO();
 //            List<HzBomLineRecord> bomLineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(projectId);
             List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
-            String errorMsg = singleVehiclesDosageExcelErrorMsg(hzCfg0ModelRecords,sheet,projectId);
+            Set<HzCfg0ModelRecord> set = new HashSet<>(hzCfg0ModelRecords);
+            List<HzCfg0ModelRecord> records = new ArrayList<>(set);
+            String errorMsg = singleVehiclesDosageExcelErrorMsg(records,sheet,projectId);
             if(this.errorCount!=0){
                 return WriteResultRespDTO.failResultRespDTO(errorMsg);
             }
-           //存单车版型 名称和id信息
-            Map<String,String> objectMap = new HashMap<>();
-
-            for(HzCfg0ModelRecord record : hzCfg0ModelRecords){
-                objectMap.put(record.getObjectName(),record.getPuid());
-            }
-
             //存表头信息 和对应的列数字
             Map<Integer,String> titleMap = new HashMap<>();
             Row title = sheet.getRow(0);
             for(int i = 50;i<title.getLastCellNum();i++){
                 String s = title.getCell(i).getStringCellValue();
-                if(s.contains("(单车用量)")){
-                    s=s.replace("(单车用量)","");
+                if(s.contains(BOMTransConstants.VEH_DOSAGE_CN)){
+                    s=s.replace(BOMTransConstants.VEH_DOSAGE_CN,BOMTransConstants.EMPTY);
                 }
-                if(s.contains("（单车用量）")){
-                    s=s.replace("（单车用量）","");
+                if(s.contains(BOMTransConstants.VEH_DOSAGE_EN)){
+                    s=s.replace(BOMTransConstants.VEH_DOSAGE_EN,BOMTransConstants.EMPTY);
                 }
                 titleMap.put(i,s);
             }
 
-
-//            Map<String,Object> m = new HashMap<>();
-//            m.put("9B17175B781C4AF7ABBE7140E64F4A4D",19.2);
-//            m.put("CD3A3819E2CB427789E04F9AD61E4778",2);
-//            m.put("A3EA5F3BFA994CFB8283ADCE94780793",14);
-//            m.put("DFA3F4850D2A410599E364EF64F224EC",3);
-//            byte [] bytes = SerializeUtil.serialize(m);
-
-            List<HzBomLineRecord> singleVehDosageRecords = new ArrayList<>();
-
-
+            List<HzEPLManageRecord> singleVehDosageRecords = new ArrayList<>();
 
             for(int i =1;i<=sheet.getLastRowNum();i++){
-                Row sheetRow = sheet.getRow(i);
+                Row sheetRow = sheet.getRow(i);//行
                 if(sheetRow != null){
                     HzImportEbomRecord importEbomRecord = excelObjectToRecord(sheet,i,projectId);
-                    HzBomLineRecord record = HzEbomRecordFactory.importEbomRecordToBomLineRecord(importEbomRecord);
-                    Map<String,Object> map = new HashMap<>();
+                    HzEPLManageRecord record = HzEbomRecordFactory.importEbomRecordToBomLineRecord(importEbomRecord);
+                    StringBuilder builder = new StringBuilder();
                     for(int j =50;j<title.getLastCellNum();j++){
-                        String vehDosage = ExcelUtil.getCell(sheet.getRow(i),j).getStringCellValue();
-                        map.put(objectMap.get(titleMap.get(j)),vehDosage);
+                        String key = titleMap.get(j);
+                        if(StringUtils.isEmpty(key)){
+                            continue;
+                        }
+                        String vehDosage = ExcelUtil.getCell(sheetRow,j).getStringCellValue();
+                        if(StringUtils.isNotEmpty(vehDosage)){
+                            builder.append(key+"#"+vehDosage+",");
+                        }else {
+                            builder.append(key+"#-"+",");
+                        }
                     }
-                    byte [] bytes = SerializeUtil.serialize(map);
-                    record.setSingleVehDosage(bytes);
+                    record.setVehNum(builder.toString());
                     record.setBomDigifaxId(hzBomMainRecord.getPuid());
                     record.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
                     singleVehDosageRecords.add(record);
-
                 }
             }
 
-            //PBOM 同步 根据零件号来同步基本属性信息
-            List<HzPbomLineRecord> list = new ArrayList<>();
-            if(ListUtil.isNotEmpty(singleVehDosageRecords)){
-                for(HzBomLineRecord record :singleVehDosageRecords){
-                    HzPbomLineRecord pbomLineRecord = HzPbomRecordFactory.bomLineRecordToPbomRecord(record);
-                    list.add(pbomLineRecord);
-                }
-                hzEbomRecordDAO.updateList(singleVehDosageRecords);
-                hzPbomRecordDAO.updateList(list);
-                ExcelUtil.deleteFile();
-            }
+            hzEbomRecordDAO.updateListByEplId(singleVehDosageRecords);
+            ExcelUtil.deleteFile();
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();

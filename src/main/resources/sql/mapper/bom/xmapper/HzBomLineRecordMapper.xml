@@ -2,12 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao">
 
-    <resultMap id="SingleVehDosageMap" type="sql.pojo.bom.HzBomLineRecord">
-        <result column="P_SINGLE_VEH_DOSAGE" jdbcType="BLOB"
-                property="singleVehDosage"/>
-    </resultMap>
-
-    <resultMap extends="SingleVehDosageMap" id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
+    <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBomLineRecord">
         <!--BOM属性-->
         <id column="PUID" jdbcType="VARCHAR" property="puid" />
         <result column="ID" jdbcType="DOUBLE" property="id"/>
@@ -32,6 +27,7 @@
         <result column="P_NUMBER" jdbcType="VARCHAR" property="number" />
         <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
         <result column="P_COLOR_PART" jdbcType="INTEGER" property="colorPart" />
+        <result column="P_VEH_NUM" jdbcType="VARCHAR" property="vehNum" />
 
         <!--零部件属性 来自于EPL-->
         <result column="PART_ID" jdbcType="VARCHAR" property="lineID" />
@@ -88,7 +84,7 @@
     P_FNA_INFO, P_EBOM_STATUS, P_CREATE_TIME, P_UPDATE_TIME,
     P_UPC, P_FNA_DESC, P_CREATE_NAME,
     P_UPDATE_NAME,P_NUMBER, P_ORDER_ID, P_LOU_LOA_FLAG, P_SORT_NUM, P_COLOR_PART, P_REVISION,
-    P_EFFECT_TIME, P_EWO_NO, P_EPL_ID
+    P_EFFECT_TIME, P_EPL_ID
   </sql>
 
     <!--BOM的零部件属性 放到EPL中维护 但是需要在EBOM中显示出来-->
@@ -288,9 +284,6 @@
             update ${item.tableName}
             <set>
                 P_UPDATE_TIME =sysdate,
-                <if test="item.singleVehDosage != null">
-                    P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR},
-                </if>
                 <if test="item.status != null">
                     P_EBOM_STATUS = #{item.status,jdbcType=VARCHAR},
                 </if>
@@ -319,6 +312,9 @@
                 </if>
                 <if test="item.revision != null">
                     P_REVISION = #{item.revision,jdbcType=VARCHAR}
+                </if>
+                <if test="item.vehNum != null">
+                    P_VEH_NUM = #{item.vehNum,jdbcType=VARCHAR}
                 </if>
             </set>
             where PUID = #{item.puid,jdbcType=VARCHAR}
@@ -359,9 +355,6 @@
             update Hz_Bom_Line_Record
             <set>
                 P_UPDATE_TIME =sysdate,
-                <if test="item.singleVehDosage != null">
-                    P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR},
-                </if>
                 <if test="item.status != null">
                     P_EBOM_STATUS = #{item.status,jdbcType=VARCHAR},
                 </if>
@@ -389,7 +382,10 @@
                     P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
                 </if>
                 <if test="item.revision != null">
-                    P_REVISION = #{item.revision,jdbcType=VARCHAR}
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR},
+                </if>
+                <if test="item.vehNum != null">
+                    P_VEH_NUM = #{item.vehNum,jdbcType=VARCHAR}
                 </if>
             </set>
             where P_BOM_LINE_ID = #{item.lineID,jdbcType=VARCHAR}

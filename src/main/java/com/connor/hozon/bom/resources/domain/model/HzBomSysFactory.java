@@ -1,6 +1,14 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 
+import com.connor.hozon.bom.resources.controller.bom.HzSingleVehiclesController;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
+import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
+import com.connor.hozon.bom.resources.service.bom.impl.HzSingleVehiclesBomServicesImpl;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.apache.commons.lang.StringUtils;
 
@@ -39,11 +47,7 @@ public class HzBomSysFactory {
             } else if (hasChildren != null && hasChildren.equals(0)) {
                 line = String.valueOf((level-1));
                 rank = level - 1 ;
-            } else {
-                line = "";//错误数据
             }
-        } else {
-            line = "";
         }
         int length = lineIndex.split("\\.").length-1;
         int s1 = Integer.valueOf(lineIndex.split("\\.")[length]);
@@ -141,6 +145,53 @@ public class HzBomSysFactory {
         map.put(mapIndex,l);
         return map;
     }
+
+    /**
+     * BOM 数据查询 层级转换
+     * @param query
+     * @param <T>
+     * @return
+     */
+    public static <T> T bomQueryLevelTrans(T query){
+        String level = "";
+        Integer hasChildren = null;
+        String lineIndex = "";
+        if(query instanceof HzEbomByPageQuery){
+            level = ((HzEbomByPageQuery) query).getLevel().trim();
+        }else if(query instanceof HzPbomByPageQuery){
+            level = ((HzPbomByPageQuery) query).getLevel().trim();
+        }else if(query instanceof HzMbomByPageQuery){
+            level = ((HzMbomByPageQuery) query).getLevel().trim();
+        }else if(query instanceof HzSingleVehiclesBomByPageQuery){
+            level = ((HzSingleVehiclesBomByPageQuery) query).getLevel().trim();
+        }
+        if (StringUtils.isNotBlank(level)) {
+            if (level.toUpperCase().endsWith(BOMTransConstants.Y)) {
+                int length = Integer.valueOf(level.replace(BOMTransConstants.Y, ""));
+                hasChildren =1;
+                lineIndex = String.valueOf(length-1);
+            } else {
+                hasChildren = 0;
+                int length = Integer.valueOf(level);
+                lineIndex = String.valueOf(length);
+            }
+        }
+        if(query instanceof HzEbomByPageQuery){
+            ((HzEbomByPageQuery) query).setIsHas(hasChildren);
+            ((HzEbomByPageQuery) query).setLineIndex(lineIndex);
+        }else if(query instanceof HzPbomByPageQuery){
+            ((HzPbomByPageQuery) query).setLineIndex(lineIndex);
+            ((HzPbomByPageQuery) query).setIsHas(hasChildren);
+        }else if(query instanceof HzMbomByPageQuery){
+            ((HzMbomByPageQuery) query).setIsHas(hasChildren);
+            ((HzMbomByPageQuery) query).setLineIndex(lineIndex);
+        }else if(query instanceof HzSingleVehiclesBomByPageQuery){
+            ((HzSingleVehiclesBomByPageQuery) query).setIsHas(hasChildren);
+            ((HzSingleVehiclesBomByPageQuery) query).setLineIndex(lineIndex);
+        }
+        return query;
+    }
+
 
     /**
      * 产生以步进为基础的 介于两个数中间的某个数

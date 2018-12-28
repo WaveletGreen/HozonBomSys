@@ -103,9 +103,9 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
         tableTitle.put("colorPart","是否颜色件");
+        tableTitle.put("effectTime","生效时间");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
-        tableTitle.put("effectTime","生效时间");
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
@@ -113,44 +113,40 @@ public class HzEbomController extends BaseController {
 
     @RequestMapping(value = "getEBom/list", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getEbomList(HzEbomByPageQuery query) {
+    public JSONObject getEbomList(HzEbomByPageQuery query) {
         Page<HzEbomRespDTO> recordRespDTOPage = hzEBOMReadService.getHzEbomPage(query);
-        Map<String, Object> ret = new HashMap<>();
+        JSONObject object = new JSONObject();
         if(recordRespDTOPage == null){
-            return ret;
+            return object;
         }
         List<HzEbomRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
         if (ListUtil.isEmpty(recordRespDTOS)) {
-            return ret;
+            return object;
         }
-        List<Map<String,Object>> list = new ArrayList<>();
-        Map<String,Object> map = new HashMap<>();
+        List<JSONObject> list = new ArrayList<>();
         JSONArray array = recordRespDTOS.get(0).getJsonArray();
         for(int i =0;i<array.size();i++){
-            JSONObject object = array.getJSONObject(i);
-            map = object;
-            list.add(map);
+            JSONObject o = array.getJSONObject(i);
+            list.add(o);
         }
-        ret.put("totalCount", recordRespDTOPage.getTotalCount());
-        ret.put("result", list);
-        return ret;
+        object.put("totalCount", recordRespDTOPage.getTotalCount());
+        object.put("result", list);
+        return object;
     }
 
     @RequestMapping(value = "getEBom", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getEbomById(String puid,String projectId ) {
-        Map<String, Object> ret = new HashMap<>();
+    public JSONObject getEbomById(String puid,String projectId ) {
+        JSONObject object = new JSONObject();
         if(puid == null || projectId == null){
-            return ret;
+            return object;
         }
         HzEbomRespDTO recordRespDTO = hzEBOMReadService.fingEbomById(puid,projectId);
         if(recordRespDTO == null){
-            return ret;
+            return object;
         }
         JSONArray array = recordRespDTO.getJsonArray();
-        JSONObject object = array.getJSONObject(0);
-        ret = object;
-        return ret;
+        return array.getJSONObject(0);
     }
 
 

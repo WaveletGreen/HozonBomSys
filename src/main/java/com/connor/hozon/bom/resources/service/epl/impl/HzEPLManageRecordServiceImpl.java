@@ -436,15 +436,6 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 jsonObject.put("pRegulationCode", record.getpRegulationCode());
                 jsonObject.put("number",record.getNumber());
 
-                jsonObject.put("resource", record.getResource());
-                jsonObject.put("type", record.getType());
-                jsonObject.put("buyUnit", record.getBuyUnit());
-                jsonObject.put("workShop1", record.getWorkShop1());
-                jsonObject.put("workShop2", record.getWorkShop2());
-                jsonObject.put("productLine", record.getProductLine());
-                jsonObject.put("mouldType", record.getMouldType());
-                jsonObject.put("outerPart", record.getOuterPart());
-
                 if(Integer.valueOf(1).equals(record.getColorPart())){
                     jsonObject.put("colorPart", "Y");
                 }else if(Integer.valueOf(0).equals(record.getColorPart())){

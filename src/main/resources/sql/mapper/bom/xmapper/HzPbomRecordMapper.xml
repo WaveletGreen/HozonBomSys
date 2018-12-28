@@ -2,13 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzPbomRecordMapper">
 
-  <resultMap id="SingleVehDosageMap"
-             type="sql.pojo.bom.HzPbomLineRecord">
-    <result column="P_SINGLE_VEH_DOSAGE" jdbcType="BLOB"
-            property="singleVehDosage"/>
-  </resultMap>
 
-  <resultMap extends="SingleVehDosageMap" id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">
+  <resultMap  id="HzPbomLineRecord" type="sql.pojo.bom.HzPbomLineRecord">
     <id column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="P_RESOURCE" jdbcType="VARCHAR" property="resource" />
     <result column="P_TYPE" jdbcType="INTEGER" property="type" />
@@ -26,7 +21,7 @@
     <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="updateName" />
     <result column="P_PBOM_STATUS" jdbcType="INTEGER" property="status" />
     <result column="P_E_BOM_PUID" jdbcType="VARCHAR" property="eBomPuid" />
-
+    <result column="P_VEH_NUM" jdbcType="VARCHAR" property="vehNum" />
 
     <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid" />
     <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId" />
@@ -42,16 +37,12 @@
     <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass" />
     <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName" />
     <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource" />
-    <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum" />
     <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
     <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
     <result column="P_IS_NEW_PART" jdbcType="INTEGER" property="isNewPart" />
-    <result column="P_MWO_NO" jdbcType="VARCHAR" property="mwoNo"/>
     <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
     <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
     <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
-
-    <result column="UPDATE_TYPE" jdbcType="INTEGER" property="updateType" />
   </resultMap>
 
   <sql id="Pbom_List">
@@ -61,7 +52,7 @@
     t.P_LINE_INDEX, t.P_BOM_LINE_IS_HAS, t.P_BOM_LINE_PUID, t.P_BOM_LINE_ID, t.P_BOM_LINE_IS_2Y,
     t.P_BOM_LINE_IS_PART, t.P_BOM_LINE_IS_DEPT, t.P_BOM_OF_WHICH_DEPT, t.P_BOM_LINE_PART_NAME,
     t.P_BOM_LINE_PART_CLASS, t.P_BOM_LINE_PART_EN_NAME, t.P_BOM_LINE_PART_RESOURCE,t.P_BOM_ORDER_NUM,t.P_SORT_NUM,
-    t.P_IS_NEW_PART,t.P_MWO_NO,t.P_ORDER_ID,t.P_REVISION,t.P_EFFECT_TIME
+    t.P_IS_NEW_PART,t.P_ORDER_ID,t.P_REVISION,t.P_EFFECT_TIME
   </sql>
 
 
@@ -73,8 +64,9 @@
 
   <!--联表查询  PBOM信息-->
   <select id="HzPbomRecordDAOImpl_getPbomRecord" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
-    select  t.*
-    from HZ_PBOM_RECORD t
+    select  <include refid="Pbom_List"/>,t10.P_VEH_NUM
+    from HZ_PBOM_RECORD t left outer join HZ_BOM_LINE_RECORD t10
+    on t.P_E_BOM_PUID = t10.puid
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
@@ -104,7 +96,6 @@
       <if test="pIsNewPart != null and pIsNewPart!=''">
         and t.P_IS_NEW_PART = 2
       </if>
-
         and t.P_PBOM_STATUS<![CDATA[ <> ]]>0 order by CAST(t.P_SORT_NUM as FLOAT)
     </where>
   </select>
@@ -150,8 +141,8 @@
 
   <!--查询PBOM子层信息-->
   <select id="HzPbomRecordDAOImpl_getHzPbomById" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
-
-    select t.* from HZ_PBOM_RECORD t
+    select <include refid="Pbom_List"/>,t8.P_COLOR_PART from HZ_PBOM_RECORD t
+    left outer  join HZ_BOM_LINE_RECORD t8 on t.P_E_BOM_PUID = t8.puid
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
@@ -167,24 +158,13 @@
     </where>
   </select>
 
-  <!--查询根据父层零件ID找父层puid-->
-  <select id="HzPbomRecordDAOImpl_getPbomByItemId" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
-    select t6.* from  HZ_PBOM_RECORD t6
-    where t6.p_bom_digifax_id=(
-    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-    select t2.puid from Hz_project_libs t2
-    <where>
-      t2.puid=#{projectId,jdbcType=VARCHAR}))
-      and t6.P_BOM_LINE_ID = #{puid,jdbcType=VARCHAR}
-      and t6.P_PBOM_STATUS <![CDATA[ <> ]]>0
-    </where>
-  </select>
 
   <!--获取一条PBOM信息：HZ_PBOM_RECORD-->
   <select id="HzPbomRecordDAOImpl_getPbomById" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
 
-    select t6.* from  HZ_PBOM_RECORD t6
-    where t6.p_bom_digifax_id=(
+    select <include refid="Pbom_List"/>,t8.P_COLOR_PART from HZ_PBOM_RECORD t
+    left outer  join HZ_BOM_LINE_RECORD t8 on t.P_E_BOM_PUID = t8.puid
+    where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
@@ -193,16 +173,16 @@
         and t2.puid = #{projectId,jdbcType=VARCHAR}))
       </if>
       <if test="lineId != null and  lineId!='' " >
-        and t6.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+        and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
       </if>
       <if test="pPuid != null and  pPuid!='' " >
-        and t6.P_E_BOM_PUID = #{pPuid,jdbcType=VARCHAR}
+        and t.P_E_BOM_PUID = #{pPuid,jdbcType=VARCHAR}
       </if>
       <if test="status != null  " >
-        and t6.P_PBOM_STATUS= #{status,jdbcType=INTEGER}
+        and t.P_PBOM_STATUS= #{status,jdbcType=INTEGER}
       </if>
       <if test="status == null " >
-        and t6.P_PBOM_STATUS<![CDATA[ <> ]]>0
+        and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
       </if>
     </where>
   </select>
@@ -326,8 +306,9 @@
   <!--获取一条 PBOM记录-->
   <select id="HzPbomRecordDAOImpl_getHzPbomByEbomPuid" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
 
-    SELECT * FROM HZ_PBOM_RECORD
-    where  p_bom_digifax_id=(
+    select <include refid="Pbom_List"/>,t8.P_COLOR_PART from HZ_PBOM_RECORD t
+    left outer  join HZ_BOM_LINE_RECORD t8 on t.P_E_BOM_PUID = t8.puid
+    where  t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
@@ -336,9 +317,9 @@
       and t2.puid = #{projectId,jdbcType=VARCHAR}))
     </if>
     <if test="eBomPuid != null and  eBomPuid!='' " >
-      and P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
+      and t.P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
     </if>
-     and P_PBOM_STATUS<![CDATA[ <> ]]>0
+     and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
     </where>
   </select>
 
@@ -346,23 +327,24 @@
 
   <!--根据零件号查询pbom-->
   <select id="HzPbomRecordDAOImpl_findPbom" resultMap="HzPbomLineRecord" parameterType="java.util.HashMap">
-    SELECT t1.* from HZ_PBOM_RECORD t1
-    where t1.p_bom_digifax_id=(
+    select <include refid="Pbom_List"/>,t8.P_COLOR_PART from HZ_PBOM_RECORD t
+    left outer  join HZ_BOM_LINE_RECORD t8 on t.P_E_BOM_PUID = t8.puid
+    where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
       <if test="eBomPuid != null and  eBomPuid!='' " >
-        and t1.P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
+        and t.P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
       </if>
       <if test="lineId != null and lineId!=''">
-        and t1.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
+        and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
       </if>
       <if test="parentId != null and parentId!=''">
-        and t1.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
+        and t.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
       </if>
-      and t1.P_PBOM_STATUS <![CDATA[ <> ]]>0
-      order by CAST(t1.P_SORT_NUM as FLOAT)
+      and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
+      order by CAST(t.P_SORT_NUM as FLOAT)
     </where>
   </select>
 
@@ -370,31 +352,33 @@
 
   <!--查询油漆车身总成和白车身总成-->
   <select id="HzPbomRecordDAOImpl_getPaintAndWhiteBody" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
-    SELECT t1.* from HZ_PBOM_RECORD t1
-    where t1.p_bom_digifax_id=(
+    select <include refid="Pbom_List"/>,t8.P_COLOR_PART from HZ_PBOM_RECORD t
+    left outer  join HZ_BOM_LINE_RECORD t8 on t.P_E_BOM_PUID = t8.puid
+    where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
-      and (t1.P_BOM_LINE_PART_NAME like '白车身总成%'
-      or t1.P_BOM_LINE_PART_NAME like '油漆车身总成%')
+      and (t.P_BOM_LINE_PART_NAME like '白车身总成%'
+      or t.P_BOM_LINE_PART_NAME like '油漆车身总成%')
     </where>
-    start with t1.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
-    connect by prior t1.P_E_BOM_PUID = t1.p_parent_uid  and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
-    order by CAST(t1.P_SORT_NUM as FLOAT)
+    start with t.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
+    connect by prior t.P_E_BOM_PUID = t.p_parent_uid  and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
+    order by CAST(t.P_SORT_NUM as FLOAT)
   </select>
 
 
   <!--获取除变形外的相同的零件号-->
   <select id="HzPbomRecordDAOImpl_getSameNameLineId" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
-    select * from HZ_PBOM_RECORD t1
-    where t1.p_bom_digifax_id=(
+    select <include refid="Pbom_List"/>,t8.P_COLOR_PART from HZ_PBOM_RECORD t
+    left outer  join HZ_BOM_LINE_RECORD t8 on t.P_E_BOM_PUID = t8.puid
+    where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
       t2.puid=#{projectId,jdbcType=VARCHAR}))
       <if test="lineId != null and lineId!=''" >
-        and t1.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+        and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
       </if>
     </where>
   </select>
@@ -520,9 +504,6 @@
       <if test="pLouaFlag != null">
         P_LOU_LOA_FLAG = #{pLouaFlag,jdbcType=INTEGER},
       </if>
-      <if test="singleVehDosage != null">
-        P_SINGLE_VEH_DOSAGE = #{singleVehDosage,jdbcType=VARCHAR},
-      </if>
       P_PBOM_STATUS=2
     </set>
     where P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
@@ -583,9 +564,6 @@
         </if>
         <if test="item.pLouaFlag != null">
           P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=INTEGER},
-        </if>
-        <if test="item.singleVehDosage != null">
-          P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR},
         </if>
         <if test="item.status != null">
           P_PBOM_STATUS = #{item.status,jdbcType=VARCHAR},
@@ -670,9 +648,6 @@
         <if test="item.pLouaFlag != null">
           P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=INTEGER},
         </if>
-        <if test="item.singleVehDosage != null">
-          P_SINGLE_VEH_DOSAGE = #{item.singleVehDosage,jdbcType=VARCHAR},
-        </if>
         <if test="item.status != null">
           P_PBOM_STATUS = #{item.status,jdbcType=VARCHAR},
         </if>
@@ -711,7 +686,8 @@
 
     <!--获取PBOM结构树-->
 <select id="HzPbomRecordDAOImpl_getHzPbomTree" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
-    select * from HZ_PBOM_RECORD t
+    select <include refid="Pbom_List"/>,t8.P_COLOR_PART from HZ_PBOM_RECORD t
+    left outer  join HZ_BOM_LINE_RECORD t8 on t.P_E_BOM_PUID = t8.puid
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
@@ -720,11 +696,11 @@
     </where>
     start with t.P_E_BOM_PUID = #{puid,jdbcType=VARCHAR} and t.P_PBOM_STATUS <![CDATA[ <> ]]>0
     <if test="colorPart != null">
-      and t.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
+      and t8.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
     </if>
     connect by prior t.P_E_BOM_PUID = t.p_parent_uid and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
     <if test="colorPart != null">
-      and t.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
+      and t8.P_COLOR_PART = #{colorPart,jdbcType=INTEGER}
     </if>
     order by CAST(t.P_SORT_NUM as FLOAT)
 </select>
@@ -891,11 +867,9 @@
   <select id="HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum" parameterType="java.util.HashMap" resultType="java.lang.String">
     SELECT * FROM (
     SELECT P_SORT_NUM  FROM HZ_PBOM_RECORD
-    where p_bom_digifax_id=(
-    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-    select t2.puid from Hz_project_libs t2
-    <where>
-      t2.puid=#{projectId,jdbcType=VARCHAR}))
+    <where> p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=
+      t2.puid=#{projectId,jdbcType=VARCHAR})
     </where>
     and   P_PBOM_STATUS <![CDATA[ <> ]]>0
     and  CAST(P_SORT_NUM as FLOAT) &gt;#{sortNum,jdbcType=DOUBLE}
@@ -912,38 +886,30 @@
 
   <!--获取全部的2Y层-->
   <select id="HzPbomRecordDAOImpl_getAll2YBomRecord" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
-    select * from HZ_PBOM_RECORD t1
-    where t1.p_bom_digifax_id=(
-    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-    select t2.puid from Hz_project_libs t2
+    select t1.*,t8.P_COLOR_PART from HZ_PBOM_RECORD t1
+    left outer  join HZ_BOM_LINE_RECORD t8 on t1.P_E_BOM_PUID = t8.puid
     <where>
-      t2.puid=#{projectId,jdbcType=VARCHAR}))
+      t1.p_bom_digifax_id=(
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=
+      #{projectId,jdbcType=VARCHAR})
       and t1.P_BOM_LINE_IS_2Y=1
       and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
     </where>
-    ORDER BY  CAST(P_SORT_NUM as FLOAT)
+    ORDER BY  CAST(t1.P_SORT_NUM as FLOAT)
   </select>
 
-  <insert id="HzPbomRecordDAOImpl_insertAccessories" parameterType="java.util.Map">
-      insert into HZ_PBOM_RECORD
-      set (PUID, P_BOM_LINE_ID, P_BOM_LINE_PART_NAME)
-
-  </insert>
 
   <!--获取当前BOM的子一层结构-->
     <select id="HzPbomRecordDAOImpl_getFirstLevelBomByParentId" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
-        select * from HZ_PBOM_RECORD t1
-        where t1.p_bom_digifax_id=(
-        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-        select t2.puid from Hz_project_libs t2
-        <where>
-            t2.puid=#{projectId,jdbcType=VARCHAR}))
-            <if test="parentId != null">
-                and t1.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
-            </if>
-            and t1.P_PBOM_STATUS<![CDATA[ <> ]]>0
-        </where>
-      ORDER BY  CAST(t1.P_SORT_NUM as FLOAT)
+        select <include refid="Pbom_List"/>,t8.P_COLOR_PART from HZ_PBOM_RECORD t
+        left outer  join HZ_BOM_LINE_RECORD t8 on t.P_E_BOM_PUID = t8.puid
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+        <if test="parentId != null">
+            and t.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
+        </if>
+        and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
+      ORDER BY  CAST(t.P_SORT_NUM as FLOAT)
     </select>
 
   <!--<select id="HzPbomRecordDAOImpl_getFirstLevelBomByParentLineIndexLength" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">-->
@@ -977,12 +943,9 @@
 
   <!--批量查询数据-->
   <select id="HzPbomRecordDAOImpl_getPbomRecordsByPuids" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
-    select * from ${tableName} t
+    select <include refid="Pbom_List"/> from ${tableName} t
     where t.p_bom_digifax_id=(
-    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-    select t2.puid from Hz_project_libs t2
-    <where>
-      t2.puid = #{projectId,jdbcType=VARCHAR}))
+    select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
       <if test="puids != null and puids.size()>0">
         and t.puid in
         <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
@@ -990,44 +953,45 @@
         </foreach>
       </if>
       <if test="revision!= null">
-        and P_REVISION is not null
+        and t.P_REVISION is not null
       </if>
       <if test="status != null">
-        and P_PBOM_STATUS = #{status,jdbcType=INTEGER}
+        and t.P_PBOM_STATUS = #{status,jdbcType=INTEGER}
       </if>
       <if test="orderId != null">
-        and P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
+        and t.P_ORDER_ID = #{orderId,jdbcType=DOUBLE}
       </if>
-    </where>
   </select>
 
 
   <!--查询一条有变更记录数据-->
   <select id="HzPbomRecordDAOImpl_getEBomRecordByPuidAndRevision" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
-    select * from ${tableName} t
+    select <include refid="Pbom_List"/> from ${tableName} t
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
-    <where>
-      t2.puid = #{projectId,jdbcType=VARCHAR}))
+    where t2.puid = #{projectId,jdbcType=VARCHAR}
+      ))
       and t.puid =#{puid}
       <if test="revision!= null">
-        and P_REVISION =#{revision,jdbcType=VARCHAR}
+        and t.P_REVISION =#{revision,jdbcType=VARCHAR}
       </if>
       <if test="status != null">
-        and P_PBOM_STATUS = #{status,jdbcType=INTEGER}
+        and t.P_PBOM_STATUS = #{status,jdbcType=INTEGER}
       </if>
-    </where>
+
   </select>
 
 
   <select id="HzPbomRecordDAOImpl_getPbomRecordsByOrderId" parameterType="java.util.HashMap" resultMap="HzPbomLineRecord">
-    select * from ${tableName} t
+    select <include refid="Pbom_List"/> from ${tableName} t
     where t.p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
     select t2.puid from Hz_project_libs t2
     <where>
-      t2.puid = #{projectId,jdbcType=VARCHAR}))
+      t2.puid = #{projectId,jdbcType=VARCHAR}
+    </where>
+    ))
       <if test="orderId!= null">
         and t.P_ORDER_ID =#{orderId,jdbcType=VARCHAR}
       </if>
@@ -1040,7 +1004,7 @@
       <if test="revision == 0">
         and t.P_REVISION is null
       </if>
-    </where>
+
   </select>
 
   <!--找出大于当前查找编号的最小记录-->

@@ -17,6 +17,7 @@ public interface HzEbomRecordDAO {
 
     int insert(HzEPLManageRecord record);
 
+    int update(HzEPLManageRecord record);
     /**
      * 批量插入
      * @param records
@@ -29,14 +30,6 @@ public interface HzEbomRecordDAO {
 
 
     boolean lineIndexRepeat(String projectId,String lineIndex);
-
-    /**
-     * 查询零件号是否重复
-     * @param projectId
-     * @param lineId
-     * @return
-     */
-    boolean checkItemIdIsRepeat(String projectId,String lineId);
 
     /**
      * 批量删除
@@ -52,12 +45,6 @@ public interface HzEbomRecordDAO {
      * @return
      */
     int deleteByPuids(List<String> puids,String tableName);
-    /**
-     * EBOM 批量更新 根据零件号来更新
-     * @param records
-     * @return
-     */
-    int updateList(List<HzBomLineRecord> records);
 
     /**
      * 根据主键进行批量更新
@@ -65,6 +52,13 @@ public interface HzEbomRecordDAO {
      * @return
      */
     int updateListByPuids(List<HzEPLManageRecord> records);
+
+    /**
+     * 根据零件号（EPL ID）
+     * @param records
+     * @return
+     */
+    int updateListByEplId(List<HzEPLManageRecord>  records);
 
     int findIsHasByPuid(String puid, String projectId);
 
@@ -103,13 +97,6 @@ public interface HzEbomRecordDAO {
      * @return
      */
     HzEPLManageRecord findEbomById(String puid,String projectId);
-    /**
-     * 根据父层零件ID找父层puid
-     * @param itemId
-     * @param projectId
-     * @return
-     */
-    List<HzEPLManageRecord> findEbomByItemId(String itemId,String projectId);
     /**
      * 逆向找父层
      * @param projectId

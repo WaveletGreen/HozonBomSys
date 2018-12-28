@@ -95,6 +95,9 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Autowired
     private HzEPLDAO hzEPLDAO;
 
+    @Autowired
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
+
     private TransactionTemplate configTransactionTemplate;
     @Autowired
     public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
@@ -310,19 +313,7 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public Page<HzPbomLineRespDTO> getHzPbomRecordPage(HzPbomByPageQuery query) {
-
-        String level = query.getLevel();
-        if (StringUtils.isNotBlank(level)) {
-            if (level.trim().toUpperCase().endsWith("Y")) {
-                int length = Integer.valueOf(level.replace("Y", ""));
-                query.setIsHas(1);
-                query.setLineIndex(String.valueOf(length - 1));
-            } else {
-                query.setIsHas(0);
-                int length = Integer.valueOf(level.trim());
-                query.setLineIndex(String.valueOf(length));
-            }
-        }
+        query = HzBomSysFactory.bomQueryLevelTrans(query);
         try {
             Page<HzPbomLineRecord> recordPage;
             if(Integer.valueOf(1).equals(query.getShowBomStructure())){
@@ -339,7 +330,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             int num = (recordPage.getPageNumber() - 1) * recordPage.getPageSize();
             List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
 
-            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, query.getProjectId(),hzCfg0ModelRecords,num);
+            List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,hzCfg0ModelRecords,num);
             return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), respDTOS);
         } catch (Exception e) {
             e.printStackTrace();
@@ -358,7 +349,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 HzPbomLineRecord record = records.get(0);
                 records = new ArrayList<>();
                 records.add(record);
-                List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records, projectId,null, 0);
+                List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,null, 0);
                 return respDTOS.get(0);
             }
         } catch (Exception e) {
@@ -454,7 +445,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     }
 
 
-    private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records, String projectId,List<HzCfg0ModelRecord> list, int num) {
+    private List<HzPbomLineRespDTO> pbomLineRecordToRespDTOS(List<HzPbomLineRecord> records,List<HzCfg0ModelRecord> list, int num) {
         try {
             List<HzPbomLineRespDTO> respDTOS = new ArrayList<>();
             for (HzPbomLineRecord record : records) {
@@ -468,16 +459,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setLineNo(strings[2]);
                 respDTO.setLineId(record.getLineId());
                 respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
-                //获取分组号
-                String groupNum = "";
-                if(record.getLineId().contains("-")){
-                    try {
-                        groupNum = record.getLineId().split("-")[1].substring(0, 4);
-                    } catch (Exception e) {
-                        groupNum = "-";
-                    }
-                }
-                respDTO.setGroupNum(groupNum);
+                // todo 获取分组号
+                respDTO.setGroupNum("");
                 respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
                 respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
                 respDTO.setNo(++num);
@@ -494,13 +477,13 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setMouldType(record.getMouldType());
                 respDTO.setOuterPart(record.getOuterPart());
                 respDTO.setStation(record.getStation());
-                respDTO.setOrderNum(record.getOrderNum());
                 respDTO.setpBomLinePartName(record.getpBomLinePartName());
                 respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
                 respDTO.setEffectTime(DateUtil.formatDefaultDate(record.getEffectTime()));
                 if (Integer.valueOf(1).equals(record.getpLouaFlag())) {
                     respDTO.setpLouaFlag("LOU");
                 }
+                respDTO.setObject(hzSingleVehiclesServices.singleVehNum(record.getVehNum(),list));
                 respDTO.setStatus(record.getStatus());
                 respDTOS.add(respDTO);
             }

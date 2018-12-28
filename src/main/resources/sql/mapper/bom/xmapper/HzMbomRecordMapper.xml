@@ -43,7 +43,7 @@
         <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum" />
         <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
         <result column="P_COLOR_PUID" jdbcType="VARCHAR" property="colorId" />
-
+        <result column="P_VEH_NUM" jdbcType="VARCHAR" property="vehNum" />
 
         <result column="P_BOM_TYPE" jdbcType="INTEGER" property="pBomType" />
         <result column="P_STOCK_LOCATION" jdbcType="VARCHAR" property="pStockLocation" />
@@ -91,8 +91,10 @@
 
     <!--查询Mbom信息 分页-->
     <select id="HzMbomRecordDAOImpl_getMBomRecord" resultMap="MbomResultMap" parameterType="java.util.HashMap">
-        select <include refid="Base_Column_List"/>,tt.P_FACTORY_CODE from ${tableName} t
+        select <include refid="Base_Column_List"/>,tt.P_FACTORY_CODE,t10.P_VEH_NUM from ${tableName} t
         left join HZ_FACTORY tt on t.p_factory_id = tt.puid
+        left outer join HZ_BOM_LINE_RECORD t10
+        on t.P_BOM_PUID = t10.puid
         and tt.P_FACTORY_STATUS <![CDATA[ <> ]]>0
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(

@@ -90,18 +90,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
             HzEbomRespDTO recordRespDTO = new HzEbomRespDTO();
             JSONArray array = new JSONArray();
             List<HzEbomRespDTO> recordRespDTOList = new ArrayList<>();
-            String level = query.getLevel().trim();
-            if (StringUtils.isNotBlank(level)) {
-                if (level.toUpperCase().endsWith("Y")) {
-                    int length = Integer.valueOf(level.replace("Y", ""));
-                    query.setIsHas(1);
-                    query.setLineIndex(String.valueOf(length - 1));
-                } else {
-                    query.setIsHas(0);
-                    int length = Integer.valueOf(level);
-                    query.setLineIndex(String.valueOf(length));
-                }
-            }
+            query = HzBomSysFactory.bomQueryLevelTrans(query);
             Page<HzEPLManageRecord> recordPage;
             if(Integer.valueOf(1).equals(query.getShowBomStructure())){
                 //展示BOM结构树 当前查询树结构平铺
@@ -113,47 +102,25 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
             if (recordPage == null || recordPage.getResult() == null || recordPage.getResult().size() == 0) {
                 return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), 0);
             }
-
             List<HzEPLManageRecord> records = recordPage.getResult();
-//            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
             for (HzEPLManageRecord record : records) {
                 JSONObject jsonObject = HzEbomRecordFactory.bomLineRecordTORespDTO(record);
 //                //获取分组号
-//                String fastener = record.getpFastener();
-//                String groupNum = record.getLineID();
-//                try {
-//                    if (StringUtil.isEmpty(fastener)||fastener.equals("/")) {
-//                        if (groupNum.contains("-")) {
-//                            groupNum = groupNum.split("-")[1].substring(0, 4);
-//                        } else {
-//                            groupNum = "";
-//                        }
-//
-//                    } else {
-//                        String parentId = record.getParentUid();
-//                        groupNum = hzEPLManageRecordService.getGroupNum(query.getProjectId(), parentId);
-//                    }
-//                } catch (Exception e) {
-//                    groupNum = "";
-//                }
+                String groupNum = record.getLineID();
+                try {
+                    if (groupNum.contains("-")) {
+                        groupNum = groupNum.split("-")[1].substring(0, 4);
+                    } else {
+                        groupNum = "";
+                    }
+                } catch (Exception e) {
+                    groupNum = "";
+                }
                 jsonObject.put("No", ++num);
-//                jsonObject.put("groupNum",groupNum);
-                //单车用量 mmp 怎么设计感觉都不合理
-//                List<HzSingleVehicleDosage> singleVehicleDosages = hzSingleVehicleDosageDAO.findSingleVehicleByBomPuid(record.getPuid(),query.getProjectId());
-//                if(ListUtil.isNotEmpty(singleVehicleDosages) && ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-//                    for(int i = 0;i<hzCfg0ModelRecords.size();i++){
-//                       for(HzSingleVehicleDosage dosage :singleVehicleDosages){
-//                           if(hzCfg0ModelRecords.get(i).getPuid().equals(dosage.getCfg0ModelPuid())){
-//                               jsonObject.put("title"+i,dosage.getDosage());
-//                               break;
-//                           }
-//                       }
-//                    }
-//                }
-
-//                if(null != record.getSingleVehDosage() && ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-//                    jsonObject = hzSingleVehiclesServices.singleVehDosage(record.getSingleVehDosage(),hzCfg0ModelRecords,jsonObject);
-//                }
+                jsonObject.put("groupNum",groupNum);
+                //单车用量
+                jsonObject = hzSingleVehiclesServices.singleVehNum(record.getVehNum(),hzCfg0ModelRecords,jsonObject);
                 array.add(jsonObject);
             }
             recordRespDTO.setJsonArray(array);
@@ -171,46 +138,10 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
             HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid, projectId);
             HzEbomRespDTO respDTO = new HzEbomRespDTO();
             List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
-
             if (record != null) {
                 respDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
-                Map<String,Object> object = new HashMap<>();
-                if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-                    if(null != record.getSingleVehDosage()){
-                        byte[] singleVehDosage = record.getSingleVehDosage();
-                        Object obj = SerializeUtil.unserialize(singleVehDosage);
-                        if(obj instanceof Map){
-                            Map<String,Object> map = (Map)obj;
-                            if(map.size()>0){
-                                for(int i = 0;i<hzCfg0ModelRecords.size();i++){
-                                    boolean find = false;
-                                    for(Map.Entry<String,Object> entry:map.entrySet()){
-                                        if(hzCfg0ModelRecords.get(i).getPuid().equals(entry.getKey())){
-                                            find = true;
-                                            if(null !=entry.getValue() && ""!=entry.getValue()){
-                                                object.put(hzCfg0ModelRecords.get(i).getObjectName(),entry.getValue());
-                                                break;
-                                            }else {
-                                                object.put(hzCfg0ModelRecords.get(i).getObjectName(),"");
-                                                break;
-                                            }
-
-//                                        jsonArray.add(new JSONObject().put("title"+i,entry.getValue()));
-                                        }
-                                    }
-                                    if(!find){
-                                        object.put(hzCfg0ModelRecords.get(i).getObjectName(),"");
-                                    }
-                                }
-                            }
-                        }
-                    }else {
-                        for(HzCfg0ModelRecord cfg0ModelRecord :hzCfg0ModelRecords){
-                            object.put(cfg0ModelRecord.getObjectName(),"");
-                        }
-                    }
-                }
-                respDTO.setMap(object);
+                JSONObject object1 = hzSingleVehiclesServices.singleVehNum(record.getVehNum(),hzCfg0ModelRecords);
+                respDTO.setMap(object1);
             }
             return respDTO;
         } catch (Exception e) {

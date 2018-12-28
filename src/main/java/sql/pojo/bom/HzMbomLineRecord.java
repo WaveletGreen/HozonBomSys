@@ -229,23 +229,21 @@ public class HzMbomLineRecord extends BaseChangeDO {
      * mwo编号
      */
     private String mwoNo;
-    /**
-     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
-     */
-    private Integer updateType;
-
-    public Integer getUpdateType() {
-        return updateType;
-    }
-
-    public void setUpdateType(Integer updateType) {
-        this.updateType = updateType;
-    }
 
     /**
      * 采购类型 buy& make
      */
     private String buyType;
+
+    private String vehNum;
+
+    public String getVehNum() {
+        return vehNum;
+    }
+
+    public void setVehNum(String vehNum) {
+        this.vehNum = vehNum;
+    }
 
     public String getBuyType() {
         return buyType;

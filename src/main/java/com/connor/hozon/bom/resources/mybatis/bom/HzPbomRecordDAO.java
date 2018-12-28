@@ -27,8 +27,6 @@ public interface HzPbomRecordDAO {
      */
     List<HzPbomLineRecord> getPbomById(Map<String,Object> map);
 
-    @Deprecated
-    List<HzPbomLineRecord> findPbomByItemId(String itemId,String projectId);
 
     /**
      * 插入 PBOM管理信息
@@ -135,6 +133,7 @@ public interface HzPbomRecordDAO {
 
     List<HzPbomLineRecord> getSameNameLineId(String lineId,String projectId);
 
+    @Deprecated
     int insertAccessories(String puid, String materielCode);
 
 

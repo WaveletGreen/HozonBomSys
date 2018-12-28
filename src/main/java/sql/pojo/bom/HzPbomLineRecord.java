@@ -13,11 +13,7 @@ public class HzPbomLineRecord extends BaseChangeDO implements Cloneable{
     private Integer isDept;
     private String bomDigifaxId;
     private String linePuid;
-    @Deprecated
-    private byte[] bomLineBlock;
     private Integer isPart;
-    @Deprecated
-    private Integer orderNum;
     private String projectPuid;
     private String pBomLinePartName;
     private String pBomLinePartClass;
@@ -104,31 +100,14 @@ public class HzPbomLineRecord extends BaseChangeDO implements Cloneable{
 
     private Integer isNewPart;
 
-    /**
-     * mwo编号
-     */
-    @Deprecated
-    private String mwoNo;
+    private String vehNum;
 
-    /**
-     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
-     */
-    private Integer updateType;
-
-    public Integer getUpdateType() {
-        return updateType;
+    public String getVehNum() {
+        return vehNum;
     }
 
-    public void setUpdateType(Integer updateType) {
-        this.updateType = updateType;
-    }
-
-    public String getMwoNo() {
-        return mwoNo;
-    }
-
-    public void setMwoNo(String mwoNo) {
-        this.mwoNo = mwoNo;
+    public void setVehNum(String vehNum) {
+        this.vehNum = vehNum;
     }
 
     public Integer getIsNewPart() {
@@ -138,21 +117,6 @@ public class HzPbomLineRecord extends BaseChangeDO implements Cloneable{
     public void setIsNewPart(Integer isNewPart) {
         this.isNewPart = isNewPart;
     }
-
-    /**
-     * 单车用量
-     */
-    private byte[] singleVehDosage;
-
-    public byte[] getSingleVehDosage() {
-        return singleVehDosage;
-    }
-
-    public void setSingleVehDosage(byte[] singleVehDosage) {
-        this.singleVehDosage = singleVehDosage;
-    }
-
-
 
 
     @Override
@@ -363,29 +327,12 @@ public class HzPbomLineRecord extends BaseChangeDO implements Cloneable{
         this.linePuid = linePuid;
     }
 
-
-    public byte[] getBomLineBlock() {
-        return bomLineBlock;
-    }
-
-    public void setBomLineBlock(byte[] bomLineBlock) {
-        this.bomLineBlock = bomLineBlock;
-    }
-
     public Integer getIsPart() {
         return isPart;
     }
 
     public void setIsPart(Integer isPart) {
         this.isPart = isPart;
-    }
-
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
     }
 
     public String getProjectPuid() {

@@ -379,7 +379,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 dataDetailQuery.setProjectId(projectId);
                 List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);
                 //即将要更新的数据
-                List<HzBomLineRecord> updateList = new ArrayList<>();
+                List<HzEPLManageRecord> updateList = new ArrayList<>();
                 //即将要删除的数据
                 List<String> deletePuids = new ArrayList<>();
                 //要新增的数据
@@ -392,7 +392,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                             if (Integer.valueOf(4).equals(record.getStatus())) {
                                 deletePuids.add(record.getPuid());
                             } else {
-                                HzBomLineRecord bomLineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(record);
+                                HzEPLManageRecord bomLineRecord = HzEbomRecordFactory.ebomRecordToEBOMRecord(record);
                                 String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
                                 bomLineRecord.setStatus(1);
                                 bomLineRecord.setEffectTime(date);
@@ -413,7 +413,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         hzEbomRecordDAO.deleteByPuids(deletePuids,ChangeTableNameEnum.HZ_EBOM.getTableName());
                     }
                     if (ListUtil.isNotEmpty(updateList)) {
-                        hzEbomRecordDAO.updateList(updateList);
+                        hzEbomRecordDAO.updateListByEplId(updateList);
                     }
                     if (ListUtil.isNotEmpty(addList)) {
                         hzEbomRecordDAO.insertList(addList, ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());

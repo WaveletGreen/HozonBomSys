@@ -26,6 +26,11 @@ public class BOMTransConstants {
     public final static String D ="D";
 
     /**
+     * 单车用量
+     */
+    public final static String VEH_DOSAGE_EN ="(单车用量)".trim();//英文括号
+    public final static String VEH_DOSAGE_CN ="（单车用量）".trim();//中文括号
+    /**
      * String 转 Integer
      * Y->1  N->0
      * 内饰件->1

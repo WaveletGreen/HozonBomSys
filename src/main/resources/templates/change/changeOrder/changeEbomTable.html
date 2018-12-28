@@ -54,7 +54,7 @@
             }
         }),
         $.ajax({
-            url: "../../../change/data/ebom/title",
+            url: "../../../change/data/ebom/title?projectId="+projectPuid,
             type: "GET",
             success: function (result) {
                 var data = result.data;

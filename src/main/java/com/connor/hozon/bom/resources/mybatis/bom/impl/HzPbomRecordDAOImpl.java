@@ -40,14 +40,6 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
-    public List<HzPbomLineRecord> findPbomByItemId(String itemId,String projectId){
-        Map<String,Object> map = new HashMap<>();
-        map.put("puid",itemId);
-        map.put("projectId",projectId);
-        return super.findForList("HzPbomRecordDAOImpl_getPbomByItemId",map);
-    }
-
-    @Override
     public int insert(HzPbomLineRecord record) {
         return super.insert("HzPbomRecordDAOImpl_insert",record);
     }

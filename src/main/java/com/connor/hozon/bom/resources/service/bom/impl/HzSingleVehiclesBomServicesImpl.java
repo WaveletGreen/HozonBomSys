@@ -6,6 +6,7 @@ import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.model.HzSingleVehiclesFactory;
 import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
@@ -199,18 +200,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
     @Override
     public Page<HzSingleVehiclesBomRespDTO> getHzSingleVehiclesBomByPage(HzSingleVehiclesBomByPageQuery query) {
         try{
-            String level = query.getLevel();
-            if (level != null && level != "") {
-                if (level.trim().toUpperCase().endsWith("Y")) {
-                    int length = Integer.valueOf(level.replace("Y", ""));
-                    query.setIsHas(1);
-                    query.setLineIndex(String.valueOf(length - 1));
-                } else {
-                    query.setIsHas(0);
-                    int length = Integer.valueOf(level.trim());
-                    query.setLineIndex(String.valueOf(length));
-                }
-            }
+            query = HzBomSysFactory.bomQueryLevelTrans(query);
             Page<HzSingleVehiclesBomRecord> recordPage;
             if(Integer.valueOf(1).equals(query.getShowBomStructure())){
                 recordPage = hzSingleVehiclesBomDAO.getHzSingleVehiclesBomTreeByPage(query);

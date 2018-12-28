@@ -171,7 +171,6 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzPbomLineRecord.setColorPart(record.getColorPart());
-        hzPbomLineRecord.setSingleVehDosage(record.getSingleVehDosage());
         hzPbomLineRecord.setIsNewPart(0);
         return hzPbomLineRecord;
     }
