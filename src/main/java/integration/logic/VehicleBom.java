@@ -3,6 +3,7 @@ package integration.logic;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzMaterielCfgService;
 import integration.base.productAttributes.ZPPTCI007;
 import integration.option.ActionFlagOption;
+import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.derivative.HzMaterielCfgBean;
 
 import java.util.ArrayList;
@@ -67,6 +68,8 @@ public class VehicleBom {
     public VehicleBom() {
         zpptci007=new ZPPTCI007();
     }
+
+
 
     ///////////////setter////////////
     public void setPackNo(String packNo) {
@@ -186,6 +189,20 @@ public class VehicleBom {
         return vehicleBomList;
     }
 
+    public static List<VehicleBom> getVehicleBom(HzMaterielCfgBean record) {
+        List<VehicleBom> vehicleBomList = new ArrayList<VehicleBom>();
+        for(int i=0;i<code.length;i++){
+            VehicleBom vb = new VehicleBom();
+            vb.setPuid(record.getPuid());
+            vb.setFactory("1001");
+            vb.setVehicleEncoding(record.getObjectName());
+            vb.setPropertyEncoding(code[i]);
+            vb.setPropertyValue(reflectCode(record,vb.getPropertyEncoding()));
+            vb.setIsSent(record.getIsSent());
+            vehicleBomList.add(vb);
+        }
+        return vehicleBomList;
+    }
     /**
      * 根据属性代码返回对应的值
      * @param bean

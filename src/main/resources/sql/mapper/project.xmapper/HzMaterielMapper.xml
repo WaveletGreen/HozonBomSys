@@ -362,20 +362,23 @@
     <select id="HzMaterialDAOImpl_getHzMaterielRecord" parameterType="java.util.HashMap"
             resultMap="HzMaterielRecordMap">
         select
-        <include refid="HzMaterielRecordList"/>
-        from HZ_MATERIEL_RECORD
+        t.*,t1.P_FACTORY_CODE
+        from HZ_MATERIEL_RECORD t left join HZ_FACTORY t1
+        on t.P_FACTORY_PUID = t1.puid
+        and t.P_VALID_FLAG <![CDATA[ <> ]]>0
+        and t1.P_FACTORY_STATUS <![CDATA[ <> ]]>0
         <where>
             1=1
             <if test="puid != null and puid!=''">
-                and PUID = #{puid,jdbcType=VARCHAR}
+                and t.PUID = #{puid,jdbcType=VARCHAR}
             </if>
             <if test="projectId != null and projectId!=''">
-                and P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+                and t.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
             </if>
             <if test="pMaterielDataType != null">
-                and P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=VARCHAR}
+                and t.P_MATERIEL_DATA_TYPE = #{pMaterielDataType,jdbcType=VARCHAR}
             </if>
-            and P_VALID_FLAG<![CDATA[ <> ]]>0
+            and t.P_VALID_FLAG<![CDATA[ <> ]]>0
         </where>
     </select>
 

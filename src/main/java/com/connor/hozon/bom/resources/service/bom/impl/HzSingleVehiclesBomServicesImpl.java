@@ -236,4 +236,5 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
             return null;
         }
     }
+
 }

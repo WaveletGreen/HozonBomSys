@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielCfgService;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
@@ -15,6 +16,7 @@ import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
+import sql.pojo.cfg.derivative.HzMaterielCfgBean;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.interaction.HzSingleVehicles;
 import sql.redis.SerializeUtil;
@@ -38,6 +40,9 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
 
     @Autowired
     private HzCfg0ModelService hzCfg0ModelService;
+
+    @Autowired
+    private SynMaterielCfgService synMaterielCfgService;
 
     @Override
     public List<HzSingleVehiclesRespDTO> singleVehiclesList(String projectId) {
@@ -185,6 +190,57 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
             }
         }
         return object;
+    }
+
+    @Override
+    public JSONObject sendSap(List<HzSingleVehicles> hzSingleVehicles) {
+        List<HzSingleVehicles> hzSingleVehiclesSap = hzSingleVehiclesDao.selectByIds(hzSingleVehicles);
+        List<HzMaterielCfgBean> hzMaterielCfgBeans = new ArrayList<>();
+        for(HzSingleVehicles hzSingleVehicles1 : hzSingleVehiclesSap){
+            HzMaterielCfgBean hzMaterielCfgBean = new HzMaterielCfgBean();
+            hzMaterielCfgBean.setpBrandCode(hzSingleVehicles1.getBrandCode());
+            hzMaterielCfgBean.setpBrandName(hzSingleVehicles1.getBrandName());
+            hzMaterielCfgBean.setpPlatformCode(hzSingleVehicles1.getPlatformCode());
+            hzMaterielCfgBean.setpPlatformName(hzSingleVehicles1.getPlatformName());
+            hzMaterielCfgBean.setpVehicleCode(hzSingleVehicles1.getVehicleCode());
+            hzMaterielCfgBean.setpVehicleName(hzSingleVehicles1.getVehicleName());
+            hzMaterielCfgBean.setpInColorCode(hzSingleVehicles1.getSvlInnerColorCode());
+            hzMaterielCfgBean.setpInColorName(hzSingleVehicles1.getSvlInnerColorName());
+            hzMaterielCfgBean.setpColorCode(hzSingleVehicles1.getColorCode());
+            hzMaterielCfgBean.setpColorName(hzSingleVehicles1.getColorName());
+            hzMaterielCfgBean.setpBatteryModel(hzSingleVehicles1.getSvlBatteryCode());
+            hzMaterielCfgBean.setpMotorModel(hzSingleVehicles1.getSvlMotorCode());
+            hzMaterielCfgBean.setObjectName(hzSingleVehicles1.getSvlMaterialCode());
+            hzMaterielCfgBean.setIsSent(hzSingleVehicles1.getIsSend());
+            hzMaterielCfgBeans.add(hzMaterielCfgBean);
+        }
+        synMaterielCfgService.addMaterielCfg(hzMaterielCfgBeans);
+        return null;
+    }
+
+    @Override
+    public JSONObject deleteSap(List<HzSingleVehicles> hzSingleVehicles) {
+        List<HzSingleVehicles> hzSingleVehiclesSap = hzSingleVehiclesDao.selectByIds(hzSingleVehicles);
+        List<HzMaterielCfgBean> hzMaterielCfgBeans = new ArrayList<>();
+        for(HzSingleVehicles hzSingleVehicles1 : hzSingleVehiclesSap){
+            HzMaterielCfgBean hzMaterielCfgBean = new HzMaterielCfgBean();
+            hzMaterielCfgBean.setpBrandCode(hzSingleVehicles1.getBrandCode());
+            hzMaterielCfgBean.setpBrandName(hzSingleVehicles1.getBrandName());
+            hzMaterielCfgBean.setpPlatformCode(hzSingleVehicles1.getPlatformCode());
+            hzMaterielCfgBean.setpPlatformName(hzSingleVehicles1.getPlatformName());
+            hzMaterielCfgBean.setpVehicleCode(hzSingleVehicles1.getVehicleCode());
+            hzMaterielCfgBean.setpVehicleName(hzSingleVehicles1.getVehicleName());
+            hzMaterielCfgBean.setpInColorCode(hzSingleVehicles1.getSvlInnerColorCode());
+            hzMaterielCfgBean.setpInColorName(hzSingleVehicles1.getSvlInnerColorName());
+            hzMaterielCfgBean.setpColorCode(hzSingleVehicles1.getColorCode());
+            hzMaterielCfgBean.setpColorName(hzSingleVehicles1.getColorName());
+            hzMaterielCfgBean.setpBatteryModel(hzSingleVehicles1.getSvlBatteryCode());
+            hzMaterielCfgBean.setpMotorModel(hzSingleVehicles1.getSvlMotorCode());
+            hzMaterielCfgBean.setObjectName(hzSingleVehicles1.getSvlMaterialCode());
+            hzMaterielCfgBean.setIsSent(hzSingleVehicles1.getIsSend());
+            hzMaterielCfgBeans.add(hzMaterielCfgBean);
+        }
+        return synMaterielCfgService.deleteMaterielCfg(hzMaterielCfgBeans);
     }
 
 }

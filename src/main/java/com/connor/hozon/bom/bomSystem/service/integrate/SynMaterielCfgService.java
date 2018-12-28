@@ -6,14 +6,15 @@
 
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzMaterielCfgService;
+import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import integration.base.productAttributes.ZPPTCO007;
 import integration.logic.VehicleBom;
 import integration.option.ActionFlagOption;
 import integration.service.impl.produceAttr7.TransProductAttrService;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class SynMaterielCfgService {
     IHzMaterielCfgService hzMaterielCfgService;
     @Autowired
     TransProductAttrService transProductAttrService;
+
+    @Autowired
+    private HzSingleVehiclesDao hzSingleVehiclesDao;
     /**
      * 日志记录
      */
@@ -127,7 +131,8 @@ public class SynMaterielCfgService {
             }
             //收录包号对应的特性
             index = 1;
-            List<VehicleBom> vehicleBomList = VehicleBom.getVehicleBom(fpuid, hzMaterielCfgService);
+//            List<VehicleBom> vehicleBomList = VehicleBom.getVehicleBom(fpuid, hzMaterielCfgService);
+            List<VehicleBom> vehicleBomList = VehicleBom.getVehicleBom(record);
 
             for (VehicleBom vehicleBom : vehicleBomList) {
                 //有没有包号，没有则添加包号
@@ -169,6 +174,10 @@ public class SynMaterielCfgService {
         if (!SynMaterielService.debug) {
             if (transProductAttrService.getInput().getItem().size() > 0) {
                 transProductAttrService.execute();
+            }else {
+                result.put("status",false);
+                result.put("msg","没有需要传输SAP的数据,数据可能已传输过");
+                return result;
             }
         }
         List<ZPPTCO007> list = transProductAttrService.getOut().getItem();
@@ -203,7 +212,8 @@ public class SynMaterielCfgService {
                 }
                 _map.put("list", needToUpdateStatus);
                 if (needToUpdateStatus.size() > 0) {
-                    hzMaterielCfgService.doUpdateIsSent(_map);
+//                    hzMaterielCfgService.doUpdateIsSent(_map);
+                    hzSingleVehiclesDao.doUpdateIsSent(_map);
                 }
             }
         } catch (Exception e) {

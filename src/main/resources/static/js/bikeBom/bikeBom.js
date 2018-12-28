@@ -153,6 +153,88 @@ function initTable(url) {
                 }
             },
             {
+                text: '发送至SAP',
+                iconCls: 'glyphicon glyphicon-send',
+                handler: function () {
+                    var rows = $table.bootstrapTable('getSelections');
+                    // 只能选一条
+                    if (rows.length <= 0) {
+                        window.Ewin.alert({message: '请选择需要发送至SAP的数据!'});
+                        return false;
+                    }
+                    var url = "singleVehicles/sendSap";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                $.ajax({
+                                  url : "singleVehicles/sendSap",
+                                  type : "POST",
+                                  contentType : "application/json;charset=utf-8",
+                                  data:JSON.stringify(rows),
+                                  success:function (result) {
+                                      if(result.status){
+                                          layer.msg(result.msg, {icon: 1, time: 2000})
+                                      }else {
+                                          window.Ewin.alert({message: result.msg});
+                                      }
+                                  },
+                                  error : function () {
+
+                                  }
+                                })
+                            }
+                        }
+                    })
+                }
+            },
+            {
+                text: '从SAP删除',
+                iconCls: 'glyphicon glyphicon-send',
+                handler: function () {
+                    var rows = $table.bootstrapTable('getSelections');
+                    // 只能选一条
+                    if (rows.length <= 0) {
+                        window.Ewin.alert({message: '请选择需要从SAP删除的数据!'});
+                        return false;
+                    }
+                    var url = "singleVehicles/deleteSap";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                $.ajax({
+                                  url : "singleVehicles/deleteSap",
+                                  type : "POST",
+                                  contentType : "application/json;charset=utf-8",
+                                  data:JSON.stringify(rows),
+                                  success:function (result) {
+                                      if(result.status){
+                                          layer.msg(result.msg, {icon: 1, time: 2000})
+                                      }else {
+                                          window.Ewin.alert({message: result.msg});
+                                      }
+                                  },
+                                  error : function () {
+
+                                  }
+                                })
+                            }
+                        }
+                    })
+                }
+            },
+            {
                 text: '导出Excel',
                 iconCls: 'glyphicon glyphicon-export',
                 handler: function () {
