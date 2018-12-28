@@ -138,17 +138,22 @@ public class FileUploadServiceImpl implements FileUploadService {
                     return WriteResultRespDTO.fileFormatError();
                 }
 
+
             configTransactionTemplate.execute(new TransactionCallback<Void>() {
                 @Override
                 public Void doInTransaction(TransactionStatus status) {
+                    WriteResultRespDTO respDTO = null;
                     if( "是否颜色件".equals(row.getCell(row.getLastCellNum()-1).getStringCellValue())
                             || "生效时间".equals(row.getCell(row.getLastCellNum()-1).getStringCellValue())
                             ){
-                         importEbomExcelContentToDB(projectId,sheet);
+                         respDTO = importEbomExcelContentToDB(projectId,sheet);
                     }else {
-                         importBomSingleVehDosageToDB(sheet,projectId);
+                         respDTO = importBomSingleVehDosageToDB(sheet,projectId);
                     }
-                    return null;
+                    if(WriteResultRespDTO.isSuccess(respDTO)){
+                        return null;
+                    }
+                    throw new HzBomException("数据导入失败！");
                 }
             });
 
@@ -184,7 +189,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             }
 
             //todo 导入EBOM数据前 需要先把EPL的导入工作做好 去重
-            List<HzEPLRecord> eplRecords = new ArrayList<>();
+            Set<HzEPLRecord> eplRecords = new HashSet<>();
             for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
                 Row row = sheet.getRow(rowNum);
                 String lineId=ExcelUtil.getCell(row,1).getStringCellValue();
@@ -349,7 +354,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 eplRecords.add(record);
             }
             if(ListUtil.isNotEmpty(eplRecords)){
-                hzEPLDAO.insertList(eplRecords);
+                hzEPLDAO.insertList(new ArrayList<>(eplRecords));
             }
 
 
