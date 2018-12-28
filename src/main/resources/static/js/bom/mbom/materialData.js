@@ -274,76 +274,76 @@ function initTable(url) {
                                 })
                             }
                         },
-                        {
-                            text: '发送SAP',
-                            iconCls: 'glyphicon glyphicon-send',
-                            handler: function () {
-                                var rows = $table.bootstrapTable('getSelections');
-                                var confirm = undefined;
-                                var localUrl = "";
-                                var datas = null;
-                                if (rows.length == 0) {
-                                    window.Ewin.confirm({
-                                        title: '提示',
-                                        message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
-                                        '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?',
-                                        width: 600
-                                    }).on(function (e) {
-                                        //发送全部
-                                        if (e) {
-                                            localUrl = "synMateriel/synAllByProjectPuid?projectId=" + projectId;
-                                            datas = null;
-                                            $.ajax({
-                                                type: "POST",
-                                                //ajax需要添加打包名
-                                                url: localUrl,
-                                                data: datas,
-                                                contentType: "application/json",
-                                                success: function (result) {
-                                                    window.Ewin.alert({message: result, width: 800});
-                                                    $table.bootstrapTable("refresh");
-                                                },
-                                                error: function (info) {
-                                                    window.Ewin.alert({message: "操作删除:" + info.status});
-                                                }
-                                            })
-                                        }
-                                    });
-                                }
-                                else {
-                                    var _table = '<p>是否要重新发送您所选择的记录？</p>' +
-                                        '<div style="max-height: 500px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                                    for (var index in rows) {
-                                        _table += '<tr><td>' + rows[index].pMaterielCode + '</td></tr>';
-                                    }
-                                    _table += '</table></div>';
-                                    window.Ewin.confirm({
-                                        title: '提示',
-                                        message: _table,
-                                        width: 600
-                                    }).on(function (e) {
-                                        if (e) {
-                                            localUrl = "synMateriel/updateOrAddByUids";
-                                            datas = JSON.stringify(rows);
-                                            $.ajax({
-                                                type: "POST",
-                                                //ajax需要添加打包名
-                                                url: localUrl,
-                                                data: datas,
-                                                contentType: "application/json",
-                                                success: function (result) {
-                                                    window.Ewin.alert({message: result, width: 800});
-                                                    $table.bootstrapTable("refresh");
-                                                },
-                                                error: function (info) {
-                                                    window.Ewin.alert({message: "操作失败:" + info.status});
-                                                }
-                                            })
-                                        }
-                                    });
-                                }
-                            }
-                        },
+                        // {
+                        //     text: '发送SAP',
+                        //     iconCls: 'glyphicon glyphicon-send',
+                        //     handler: function () {
+                        //         var rows = $table.bootstrapTable('getSelections');
+                        //         var confirm = undefined;
+                        //         var localUrl = "";
+                        //         var datas = null;
+                        //         if (rows.length == 0) {
+                        //             window.Ewin.confirm({
+                        //                 title: '提示',
+                        //                 message: '<p ><strong style="color: red">注意：正在进行耗时操作</strong></p>' +
+                        //                 '您未选择任何一条数据，是否将当前项目' + currentProjectHead + '下的所有物料数据发送到ERP系统?',
+                        //                 width: 600
+                        //             }).on(function (e) {
+                        //                 //发送全部
+                        //                 if (e) {
+                        //                     localUrl = "synMateriel/synAllByProjectPuid?projectId=" + projectId;
+                        //                     datas = null;
+                        //                     $.ajax({
+                        //                         type: "POST",
+                        //                         //ajax需要添加打包名
+                        //                         url: localUrl,
+                        //                         data: datas,
+                        //                         contentType: "application/json",
+                        //                         success: function (result) {
+                        //                             window.Ewin.alert({message: result, width: 800});
+                        //                             $table.bootstrapTable("refresh");
+                        //                         },
+                        //                         error: function (info) {
+                        //                             window.Ewin.alert({message: "操作删除:" + info.status});
+                        //                         }
+                        //                     })
+                        //                 }
+                        //             });
+                        //         }
+                        //         else {
+                        //             var _table = '<p>是否要重新发送您所选择的记录？</p>' +
+                        //                 '<div style="max-height: 500px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                        //             for (var index in rows) {
+                        //                 _table += '<tr><td>' + rows[index].pMaterielCode + '</td></tr>';
+                        //             }
+                        //             _table += '</table></div>';
+                        //             window.Ewin.confirm({
+                        //                 title: '提示',
+                        //                 message: _table,
+                        //                 width: 600
+                        //             }).on(function (e) {
+                        //                 if (e) {
+                        //                     localUrl = "synMateriel/updateOrAddByUids";
+                        //                     datas = JSON.stringify(rows);
+                        //                     $.ajax({
+                        //                         type: "POST",
+                        //                         //ajax需要添加打包名
+                        //                         url: localUrl,
+                        //                         data: datas,
+                        //                         contentType: "application/json",
+                        //                         success: function (result) {
+                        //                             window.Ewin.alert({message: result, width: 800});
+                        //                             $table.bootstrapTable("refresh");
+                        //                         },
+                        //                         error: function (info) {
+                        //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                        //                         }
+                        //                     })
+                        //                 }
+                        //             });
+                        //         }
+                        //     }
+                        // },
                         {
                             text: '关联变更单号',
                             iconCls: 'glyphicon glyphicon-log-out',

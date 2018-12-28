@@ -2119,17 +2119,17 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         List<HzCfg0Record> hzFeatureChangeBeansAdd = new ArrayList<>();
         List<HzCfg0Record> hzFeatureChangeBeansDelete = new ArrayList<>();
         List<HzCfg0Record> hzFeatureChangeBeansUpdate = new ArrayList<>();
-
-        List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByChangeOrderId(vwoId);
-
-        for(HzCfg0Record hzCfg0Record : hzCfg0RecordList){
-            if(hzCfg0Record.getCfgStatus()==2){
-                hzFeatureChangeBeansDelete.add(hzCfg0Record);
-            }else {
-                hzFeatureChangeBeansAdd.add(hzCfg0Record);
-            }
-        }
         try {
+            List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByChangeOrderId(vwoId);
+
+            for(HzCfg0Record hzCfg0Record : hzCfg0RecordList){
+                if(hzCfg0Record.getCfgStatus()==2){
+                    hzFeatureChangeBeansDelete.add(hzCfg0Record);
+                }else {
+                    hzFeatureChangeBeansAdd.add(hzCfg0Record);
+                }
+            }
+
             List<IntegrateMsgDTO> addFail = null;
             List<IntegrateMsgDTO> deleteFail = null;
             if(hzFeatureChangeBeansAdd!=null&&hzFeatureChangeBeansAdd.size()>0) {
@@ -2255,6 +2255,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 hzRelevanceBasicsAdd = hzRelevanceBasicDao.selectByChange(hzRelevanceBasicChangesAdd);
                 for(HzRelevanceBasic hzRelevanceBasic : hzRelevanceBasicsAdd) {
                     List<HzRelevanceBasic> hzRelevanceBasics = new ArrayList<>();
+                    if(hzRelevanceBasic.getRbRelevanceDesc().length()>30){
+                        hzRelevanceBasic.setRbRelevanceDesc(hzRelevanceBasic.getRbRelevanceDesc().substring(0,30));
+                    }
                     hzRelevanceBasics.add(hzRelevanceBasic);
                     JSONObject resultAdd = synRelevanceService.addRelevance(hzRelevanceBasics);
                     if(((List<IntegrateMsgDTO>) resultAdd.get("fail")).size()>0){

@@ -168,4 +168,9 @@ public class HzSingleVehicles implements Serializable {
      * 更新时间
      */
     private Date svlUpdateDate;
+
+    /**
+     * 是否发送sap，0未发送，1已发送
+     */
+    private Integer isSend;
 }

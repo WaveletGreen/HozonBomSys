@@ -112,7 +112,7 @@ function initTable(eplUrl) {
                 toolbars: [
                     {
                         text: '添加',
-                        iconCls: 'glyphicon glyphicon-pencil',
+                        iconCls: 'glyphicon glyphicon-plus',
                         handler: function () {
                             var url = "epl/add/page";
                             $.ajax({
@@ -174,7 +174,7 @@ function initTable(eplUrl) {
                     },
                     {
                         text: '删除',
-                        iconCls: 'glyphicon glyphicon-pencil',
+                        iconCls: 'glyphicon glyphicon-remove',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
                             //只能选一条
@@ -220,49 +220,104 @@ function initTable(eplUrl) {
                             })
                         }
                     },
-                    {
-                        text: '关联变更单号',
-                        iconCls: 'glyphicon glyphicon-log-out',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
-                            for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
-                            }
-                            if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
-                                return false;
-                            }
-                            // else {
-                            //     for (var i = 0; i < rows.length; i++) {
-                            //         if (rows[i].status != 4 && rows[i].status != 2) {
-                            //             window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
-                            //             return false;
-                            //         }
-                            //     }
-                            // }
-                            var url = "epl/order/choose";
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "epl/order/choose?projectId=" + projectPuid + "&puids=" + puids,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    },
+                    // {
+                    //     text: '撤销',
+                    //     iconCls: 'glyphicon glyphicon-pencil',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         //只能选一条
+                    //         if (rows.length <=0) {
+                    //             window.Ewin.alert({message: '请选择一条需要撤销的数据!'});
+                    //             return false;
+                    //         }
+                    //         else if (rows[0].status == 5) {
+                    //             window.Ewin.alert({message: '对不起,审核中的数据不能撤销!'});
+                    //             return false;
+                    //         }
+                    //         var ids = "";
+                    //         for(let i in rows){
+                    //             ids += rows[i].id;
+                    //             if(i<rows.length-1){
+                    //                 ids+=",";
+                    //             }
+                    //         }
+                    //         var url = "epl/delete?ids="+ids;
+                    //         $.ajax({
+                    //             url: "privilege/write?url=" + url,
+                    //             type: "GET",
+                    //             success: function (result) {
+                    //                 if (!result.success) {
+                    //                     window.Ewin.alert({message: result.errMsg});
+                    //                     return false;
+                    //                 }else {
+                    //                     $.ajax({
+                    //                         url : url,
+                    //                         type : "DELETE",
+                    //                         success : function (result) {
+                    //                             if (!result.success) {
+                    //                                 window.Ewin.alert({message: result.errMsg});
+                    //                                 return false;
+                    //                             }else {
+                    //                                 layer.msg("撤销成功", {icon: 1, time: 2000})
+                    //                                 window.location.reload();
+                    //                             }
+                    //                         }
+                    //                     })
+                    //                 }
+                    //             }
+                    //         })
+                    //     }
+                    // },
+                    // {
+                    //     text: '关联变更单号',
+                    //     iconCls: 'glyphicon glyphicon-log-out',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         var puids = "";
+                    //         for (var i = 0; i < rows.length; i++) {
+                    //             if(rows[i].status = 1){
+                    //                 window.Ewin.alert({message: '已生效数据不能关联变更单!'});
+                    //                 return false;
+                    //             }else if(rows[i].status=10){
+                    //                 window.Ewin.alert({message: '已关联变更单,不可重复关联!'});
+                    //                 return false;
+                    //             }
+                    //             puids += rows[i].puid + ",";
+                    //         }
+                    //         if (rows.length == 0) {
+                    //             window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                    //             return false;
+                    //         }
+                    //         // else {
+                    //         //     for (var i = 0; i < rows.length; i++) {
+                    //         //         if (rows[i].status != 4 && rows[i].status != 2) {
+                    //         //             window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                    //         //             return false;
+                    //         //         }
+                    //         //     }
+                    //         // }
+                    //         var url = "epl/order/choose";
+                    //         $.ajax({
+                    //             url: "privilege/write?url=" + url,
+                    //             type: "GET",
+                    //             success: function (result) {
+                    //                 if (!result.success) {
+                    //                     window.Ewin.alert({message: result.errMsg});
+                    //                     return false;
+                    //                 }
+                    //                 else {
+                    //                     window.Ewin.dialog({
+                    //                         title: "选择变更表单",
+                    //                         url: "epl/order/choose?projectId=" + projectPuid + "&puids=" + puids,
+                    //                         gridId: "gridId",
+                    //                         width: 450,
+                    //                         height: 450
+                    //                     });
+                    //                 }
+                    //             }
+                    //         })
+                    //     }
+                    // },
                     {
                         text: 'Excel导入',
                         iconCls: 'glyphicon glyphicon-log-out',
