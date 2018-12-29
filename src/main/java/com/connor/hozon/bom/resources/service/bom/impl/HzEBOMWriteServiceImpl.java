@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
@@ -680,7 +681,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             List<HzEPLManageRecord> bomLineRecords = new ArrayList<>();
             for(HzEPLManageRecord record:records){
                 HzEPLManageRecord lineRecord = HzEbomRecordFactory.ebomRecordToEBOMRecord(record);
-                lineRecord.setStatus(5);//审核状态
+                lineRecord.setStatus(ChangeConstants.VERIFY_STATUS);//审核状态
                 lineRecord.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
                 bomLineRecords.add(lineRecord);
             }
@@ -773,7 +774,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 dataDetailQuery.setRevision(true);
                 dataDetailQuery.setProjectId(reqDTO.getProjectId());
                 dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());
-                dataDetailQuery.setStatus(1);
+                dataDetailQuery.setStatus(ChangeConstants.EFFECT_STATUS);
                 updateRecords.forEach(record -> {
                     dataDetailQuery.setRevisionNo(record.getRevision());
                     dataDetailQuery.setPuid(record.getPuid());

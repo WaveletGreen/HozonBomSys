@@ -36,6 +36,7 @@
     <result column="CHANGE_ACCEPTER" jdbcType="VARCHAR" property="changeAccepter" />
 
     <result column="USER_NAME" jdbcType="VARCHAR" property="auditor" />
+
   </resultMap>
 
   <sql id="Base_Column_List">
@@ -437,32 +438,90 @@
         )
     </select>
 
+    <!--分页查询变更表单全信息 懒人的sql-->
   <select id="HzChangeOrderDAOImpl_findHzChangeOrderRecordByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-    select * FROM
-    (SELECT u.*,rownum as rn from
-    (SELECT t1.*,t3.USER_NAME as USER_NAME,t4.NAME as DEPT_NAME,t5.USER_NAME as ORIGINATOR,t6.USER_NAME as CREATE_NAME
-    FROM
+      SELECT
+      *
+      FROM
+      (
+      SELECT
+      U .*, ROWNUM AS rn
+      FROM
+      (
+      SELECT
+      t1.*, t2.id AS AUDIT_RECORD_ID,
+      t3.USER_NAME AS USER_NAME,
+      t4. NAME AS DEPT_NAME,
+      t5.USER_NAME AS ORIGINATOR,
+      t6.USER_NAME AS CREATE_NAME
+      FROM
       HZ_CHANGE_ORDER_RECORD t1
-      LEFT JOIN HZ_APPLICANT_CHANGE_RECORD t2 on t1.id=t2.ORDER_ID
-      LEFT JOIN USERRECORD t3 ON t2.APPLICANT_ID = t3.ID
-      LEFT JOIN ORG_GROUP t4 on t1.DEPT_ID = t4.GROUP_ID
-      LEFT JOIN USERRECORD t5 ON t1.ORIGINATOR_ID = t5.ID
-      LEFT JOIN USERRECORD t6 ON t1.CREATE_ID = t6.ID
-      <where>
-      1=1
+      LEFT JOIN HZ_AUDITOR_CHANGE_RECORD t2 ON t1. ID = t2.ORDER_ID
+      LEFT JOIN USERRECORD t3 ON t2.AUDITOR_ID = t3. ID
+      LEFT JOIN ORG_GROUP t4 ON t1.DEPT_ID = t4. GROUP_ID
+      LEFT JOIN USERRECORD t5 ON t1.ORIGINATOR_ID = t5. ID
+      LEFT JOIN USERRECORD t6 ON t1.CREATE_ID = t6. ID
+      WHERE
+      1 = 1
       <if test="projectId != null">
-        and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+          and t1.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
       </if>
       <if test="changeNo != null and changeNo !=''">
-        and t1.CHANGE_NO=#{changeNo,jdbcType=VARCHAR}
+          and t1.CHANGE_NO=#{changeNo,jdbcType=VARCHAR}
       </if>
       <if test="state != null" >
-        and t1.STATE=#{state,jdbcType=INTEGER}
+          and t1.STATE=#{state,jdbcType=INTEGER}
       </if>
       order by t1.CREATE_TIME desc
-      )u
-    </where>
-    WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
+      ) U
+      WHERE
+      (
+      U .AUDIT_RECORD_ID IN (
+      SELECT
+      ID
+      FROM
+      (
+      SELECT DISTINCT
+      (order_ID),
+      MIN (ID) AS ID
+      FROM
+      HZ_AUDITOR_CHANGE_RECORD
+      WHERE
+      order_ID IN (
+      SELECT
+      M . ID
+      FROM
+      (
+      SELECT
+      T .id
+      FROM
+      HZ_CHANGE_ORDER_RECORD t
+      WHERE
+      1=1
+      <if test="projectId != null">
+          and t.PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
+      <if test="changeNo != null and changeNo !=''">
+          and t.CHANGE_NO=#{changeNo,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null" >
+          and t.STATE=#{state,jdbcType=INTEGER}
+      </if>
+      order by t.CREATE_TIME desc
+      ) M
+      WHERE
+      ROWNUM  &lt;=#{limit,jdbcType=INTEGER}
+      )
+      GROUP BY
+      ORDER_ID
+      )
+      )
+      OR U.AUDIT_RECORD_ID IS NULL
+      )
+      AND ROWNUM  &lt;=#{limit,jdbcType=INTEGER}
+      )
+      WHERE
+      rn &gt;#{offset,jdbcType=INTEGER}
   </select>
 
 

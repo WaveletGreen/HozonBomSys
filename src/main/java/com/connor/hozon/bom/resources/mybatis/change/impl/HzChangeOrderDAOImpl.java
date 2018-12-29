@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
@@ -148,7 +149,11 @@ public class HzChangeOrderDAOImpl extends BaseSQLUtil implements HzChangeOrderDA
         Map<String,Object> map = new HashMap<>();
         PageRequestParam pageRequestParam = new PageRequestParam();
         pageRequestParam.setPageNumber(query.getPage());
-        pageRequestParam.setPageSize(query.getPageSize());
+        if(BOMTransConstants.ALL.equals(query.getLimit())){
+            pageRequestParam.setAllNumber(true);
+        }else {
+            pageRequestParam.setPageSize(Integer.valueOf(query.getLimit()));
+        }
         map.put("changeNo",query.getChangeNo().trim());
         map.put("createName",query.getCreateName());
         map.put("originator",query.getOriginator());

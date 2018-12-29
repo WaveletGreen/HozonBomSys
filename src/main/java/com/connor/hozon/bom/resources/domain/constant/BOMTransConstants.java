@@ -13,8 +13,8 @@ public class BOMTransConstants {
      */
     public final static String Y = "Y";
     public final static String N = "N";
-    public final static String INNER_PART = "内饰件";
-    public final static String OUTER_PART = "外饰件";
+    private final static String INNER_PART = "内饰件";
+    private final static String OUTER_PART = "外饰件";
     public final static String EMPTY ="";
 
     public final static String ALL="ALL";

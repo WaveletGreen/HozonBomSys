@@ -25,6 +25,7 @@ public class WriteResultRespDTO extends BaseDTO {
     public static final String CHANGE_ORDER_NOT_EXIST="变更单不存在！";
     public static final Long SUCCESS_CODE = 1000L;
     public static final Long FAILED_CODE = 1001L;
+    private static final long serialVersionUID = -3485133935087293415L;
     /**
      * 错误信息
      */

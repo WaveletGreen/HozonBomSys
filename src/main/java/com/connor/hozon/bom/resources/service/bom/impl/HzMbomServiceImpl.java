@@ -7,6 +7,7 @@ import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.interaction.iservice.IHzConfigBomColorService;
+import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
@@ -1018,7 +1019,7 @@ public class HzMbomServiceImpl implements HzMbomService{
         //变更单号
         String changeNo = orderRecord.getChangeNo();
         //数据库表名
-        String tableName = ChangeTableNameEnum.getMbomTableName(type,"MA");
+        String tableName = ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_AFTER_CHANGE);
         //获取数据信息
         List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
 
@@ -1029,7 +1030,7 @@ public class HzMbomServiceImpl implements HzMbomService{
         HzChangeDataDetailQuery query  = new HzChangeDataDetailQuery();
         query.setProjectId(reqDTO.getProjectId());
         query.setPuids(puids);
-        query.setTableName(ChangeTableNameEnum.getMbomTableName(type,"M"));
+        query.setTableName(ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_CHANGE));
 
         try {
 
@@ -1042,7 +1043,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                 HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
                 dataDetailQuery.setProjectId(reqDTO.getProjectId());
                 dataDetailQuery.setOrderId(orderId);
-                dataDetailQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
+                dataDetailQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_AFTER_CHANGE));
                 List<HzMbomLineRecord> recordList = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
                 if(ListUtil.isEmpty(recordList)){
                     records.forEach(record -> {
@@ -1075,9 +1076,9 @@ public class HzMbomServiceImpl implements HzMbomService{
                     HzMbomLineRecord lineRecord = new HzMbomLineRecord();
                     lineRecord.setLineId(record.getLineId());
                     lineRecord.setBomDigifaxId(record.getBomDigifaxId());
-                    lineRecord.setStatus(5);
+                    lineRecord.setStatus(ChangeConstants.VERIFY_STATUS);
                     lineRecord.setChangeNum(changeNo);
-                    lineRecord.setTableName(ChangeTableNameEnum.getMbomTableName(type,"M"));
+                    lineRecord.setTableName(ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_CHANGE));
                     bomLineRecords.add(lineRecord);
                 }
 

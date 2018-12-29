@@ -48,7 +48,7 @@ public class HzEPLFactory {
         record.setRegulationCode(reqDTO.getRegulationCode());
         record.setRegulationFlag(reqDTO.getRegulationFlag());
         record.setRemark(reqDTO.getRemark());
-        record.setStatus(2);
+        record.setStatus(1);//先写出已生效
         record.setSupply(reqDTO.getSupply());
         record.setSupplyCode(reqDTO.getSupplyCode());
         record.setSurfaceTreat(reqDTO.getSurfaceTreat());

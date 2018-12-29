@@ -11,6 +11,7 @@ import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
 import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
+import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
@@ -689,7 +690,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 for(HzPbomLineRecord record:records){
                     HzPbomLineRecord lineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
                    //状态改为审核中
-                    lineRecord.setStatus(5);
+                    lineRecord.setStatus(ChangeConstants.VERIFY_STATUS);
 
 //                lineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
                     bomLineRecords.add(lineRecord);
