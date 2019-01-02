@@ -45,8 +45,6 @@ function initTable(eBomUrl) {
             var column = [];
             column.push({field: 'ck', checkbox: true});
             var data = result.data;
-            var keys = [];
-            var values;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
                     if ('pLouaFlag' === key) {

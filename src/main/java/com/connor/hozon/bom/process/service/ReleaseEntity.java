@@ -32,6 +32,7 @@ import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.executors.ExecutorServices;
+import com.connor.hozon.bom.resources.mybatis.bom.HzBOMScheduleTaskDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
@@ -52,10 +53,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzMbomLineRecordVO;
-import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.bom.*;
 import sql.pojo.cfg.relevance.HzRelevanceBasic;
 import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
 import sql.pojo.change.HzChangeDataRecord;
@@ -150,6 +148,13 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     private String errMsg ="";
 
     private TransactionTemplate configTransactionTemplate;
+
+    private HzBOMScheduleTaskDAO hzBOMScheduleTaskDAO;
+
+    @Autowired
+    public void setHzBOMScheduleTaskDAO(HzBOMScheduleTaskDAO hzBOMScheduleTaskDAO) {
+        this.hzBOMScheduleTaskDAO = hzBOMScheduleTaskDAO;
+    }
 
     @Autowired
     public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
@@ -249,6 +254,19 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     if (hzDerivativeMaterielBasicDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
                         return false;
                     }
+
+                    // 2019.1.2 by haozt 配置物料特性表变更通过后 需要记录定时任务
+                    HzBOMScheduleTask task = new HzBOMScheduleTask();
+                    task.setProjectId(projectId);
+                    task.setOrderId(orderId);
+                    task.setHasSynchronized(0);
+                    task.setConfigFeatureChanged(1);
+                    try {
+                         hzBOMScheduleTaskDAO.insert(task);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                     //全配置变更批准
                 } else if (ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())) {
                     if (hzFullCfgMainDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
@@ -397,7 +415,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                 deletePuids.add(record.getPuid());
                             } else {
                                 HzEPLManageRecord bomLineRecord = HzEbomRecordFactory.ebomRecordToEBOMRecord(record);
-                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision()) + 1);
                                 bomLineRecord.setStatus(1);
                                 bomLineRecord.setEffectTime(date);
                                 bomLineRecord.setRevision(revision);
@@ -459,7 +477,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                 stringBuffer.append(record.geteBomPuid() + ",");
                             } else {
                                 HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
-                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision()) + 1);
                                 hzPbomLineRecord.setStatus(1);
                                 hzPbomLineRecord.setEffectTime(date);
                                 hzPbomLineRecord.setRevision(revision);
@@ -483,6 +501,18 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     if (ListUtil.isNotEmpty(addList)) {
                         hzPbomRecordDAO.insertListForChange(addList, ChangeTableNameEnum.HZ_PBOM_BEFORE.getTableName());
                     }
+                    //2019.1.2 记录PBOM变更后定时任务
+                    HzBOMScheduleTask task = new HzBOMScheduleTask();
+                    task.setOrderId(orderId);
+                    task.setProjectId(projectId);
+                    task.setPbomChanged(1);
+                    task.setHasSynchronized(0);
+                    try {
+                        hzBOMScheduleTaskDAO.insert(task);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 }catch (Exception e){
                     e.printStackTrace();
                     throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
@@ -523,7 +553,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                 deleteMbom.add(record);
                             } else {
                                 HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
-                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision())+1);
                                 bomLineRecord.setStatus(1);
                                 bomLineRecord.setEffectTime(date);
                                 bomLineRecord.setRevision(revision);
@@ -554,6 +584,19 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         vo.setRecordList(addList);
                         hzMbomRecordDAO.insertVO(vo);
                     }
+
+                    //2019.1.2 记录MBOM变更后定时任务
+                    HzBOMScheduleTask task = new HzBOMScheduleTask();
+                    task.setOrderId(orderId);
+                    task.setProjectId(projectId);
+                    task.setHasSynchronized(0);
+                    task.setMbomChanged(1);
+                    try {
+                        hzBOMScheduleTaskDAO.insert(task);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 }catch (Exception e){
                     e.printStackTrace();
                     throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
@@ -594,7 +637,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                 deleteMbom.add(record);
                             } else {
                                 HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
-                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision()) + 1);
                                 bomLineRecord.setStatus(1);
                                 bomLineRecord.setEffectTime(date);
                                 bomLineRecord.setRevision(revision);
@@ -665,7 +708,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                 deleteMbom.add(record);
                             } else {
                                 HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
-                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                                String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision()) + 1);
                                 bomLineRecord.setStatus(1);
                                 bomLineRecord.setEffectTime(date);
                                 bomLineRecord.setRevision(revision);
@@ -751,7 +794,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                       } else {
                           HzMaterielRecord hzPbomLineRecord = HzMaterielFactory.hzMaterielRecordToMaterielRecord(record);
                           EditHzMaterielReqDTO reqDTO = new EditHzMaterielReqDTO();
-                          String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                          String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision()) + 1);
                           hzPbomLineRecord.setpValidFlag(1);
                           hzPbomLineRecord.setEffectTime(date);
                           hzPbomLineRecord.setRevision(revision);
@@ -835,7 +878,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                               materielIds.add(record.getMaterielId());
                           } else {
                               HzWorkProcedure hzPbomLineRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
-                              String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision() + 1));
+                              String revision = record.getRevision() == null ? "00" : String.format("%02d", Integer.valueOf(record.getRevision()) + 1);
                               hzPbomLineRecord.setpStatus(1);
                               hzPbomLineRecord.setEffectTime(date);
                               hzPbomLineRecord.setRevision(revision);

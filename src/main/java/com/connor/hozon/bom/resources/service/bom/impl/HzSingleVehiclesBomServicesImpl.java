@@ -61,6 +61,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
     @Autowired
     @Qualifier("synBomService")
     private SynBomService synBomService;
+
     @Override
     public WriteResultRespDTO analysisSingleVehicles(String projectId) {
         /**

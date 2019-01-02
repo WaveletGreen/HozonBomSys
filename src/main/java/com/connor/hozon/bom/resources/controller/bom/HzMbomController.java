@@ -55,7 +55,8 @@ public class HzMbomController extends BaseController {
     HzPbomRecordDAO hzPbomRecordDAO;
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;
-    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
     /**
      * MBOM管理标题
      *

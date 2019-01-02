@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzBOMScheduleTaskMapper">
+  <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBOMScheduleTask">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
+    <result column="CONFIG_FEATURE_CHANGED" jdbcType="INTEGER" property="configFeatureChanged" />
+    <result column="PBOM_CHANGED" jdbcType="INTEGER" property="pbomChanged" />
+    <result column="MBOM_CHANGED" jdbcType="INTEGER" property="mbomChanged" />
+    <result column="AUDIT_PASSED_TIME" jdbcType="DATE" property="auditPassedTime" />
+    <result column="DATA_SYNCHRONIZED_TIME" jdbcType="DATE" property="dataSynchronizedTime" />
+    <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId" />
+    <result column="SYNCHRONIZED" jdbcType="INTEGER" property="hasSynchronized" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, PROJECT_ID, CONFIG_FEATURE_CHANGED, PBOM_CHANGED, MBOM_CHANGED, AUDIT_PASSED_TIME, 
+    DATA_SYNCHRONIZED_TIME, ORDER_ID, SYNCHRONIZED
+  </sql>
+
+
+  <select id="HzBOMScheduleTaskDAOImpl_getBOMScheduleTask" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_BOM_SCHEDULE_TASK
+    where ORDER_ID= #{orderId,jdbcType=DOUBLE}
+  </select>
+
+
+  <select id="HzBOMScheduleTaskDAOImpl_getNoSynchronizedBOMScheduleTask"  resultMap="BaseResultMap">
+    select
+    DISTINCT(ORDER_ID) as ORDER_ID
+    from HZ_BOM_SCHEDULE_TASK
+    where SYNCHRONIZED <![CDATA[ <> ]]> 1
+  </select>
+
+
+  <insert id="HzBOMScheduleTaskDAOImpl_insert" parameterType="sql.pojo.HzBOMScheduleTask">
+    insert into HZ_BOM_SCHEDULE_TASK (ID, PROJECT_ID, CONFIG_FEATURE_CHANGED, 
+      PBOM_CHANGED, MBOM_CHANGED, AUDIT_PASSED_TIME, 
+      ORDER_ID
+      )
+    values (SEQ_HZ_BOM_SCHEDULE_TASK.nextval, #{projectId,jdbcType=VARCHAR}, #{configFeatureChanged,jdbcType=INTEGER},
+      #{pbomChanged,jdbcType=INTEGER}, #{mbomChanged,jdbcType=INTEGER}, sysdate,
+      #{orderId,jdbcType=DOUBLE}
+      )
+  </insert>
+
+
+
+  <update id="HzBOMScheduleTaskDAOImpl_updateByOrderId" parameterType="sql.pojo.HzBOMScheduleTask">
+    update HZ_BOM_SCHEDULE_TASK
+    <set>
+        DATA_SYNCHRONIZED_TIME = sysdate,
+      <if test="hasSynchronized != null">
+        SYNCHRONIZED = #{hasSynchronized,jdbcType=INTEGER}
+      </if>
+    </set>
+    where ORDER_ID= #{orderId,jdbcType=DOUBLE}
+  </update>
+
+</mapper>

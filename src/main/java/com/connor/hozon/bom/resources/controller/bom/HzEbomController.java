@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
@@ -107,7 +108,7 @@ public class HzEbomController extends BaseController {
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
-        toJSONResponse(Result.build(tableTitle), response);
+        toJSONResponse(Result.build(true,tableTitle), response);
     }
     
 
