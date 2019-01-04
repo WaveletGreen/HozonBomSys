@@ -1,7 +1,5 @@
 package com.connor.hozon.bom.resources.domain.model;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -165,7 +163,7 @@ public class HzMbomRecordFactory {
                 recordList.add(lineRecord);
             }
         }else {
-            throw new HzBomException(500L,"数据操作异常!");
+            throw new HzBomException(1001L,"数据操作异常!");
         }
 
         return recordList;
@@ -259,7 +257,7 @@ public class HzMbomRecordFactory {
                 HzMbomLineRecord record = new HzMbomLineRecord();
                 record.setParentUid(pbomLineRecord.geteBomPuid());
                 record.setSortNum(String.valueOf(size*100+100*j));
-                //油漆物料lineindex这里没做计算 这里取了极限值50000
+                //油漆物料lineindex这里没做计算 这里取了极限值50000 不会超出int值的上限
                 record.setLineIndex(lineIndex+"."+Integer.valueOf(50000+j+i));
                 record.setLineId(libs.get(j).getpMaterielCode());
                 record.setpBomLinePartName(libs.get(j).getpMaterielName());

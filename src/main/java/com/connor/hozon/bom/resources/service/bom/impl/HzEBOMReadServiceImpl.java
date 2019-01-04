@@ -178,8 +178,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
 
     @Override
     public List<HzEPLManageRecord> findCurrentBomChildren(HzEbomTreeQuery query) {
-        List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(query);
-        return records;
+        return hzEbomRecordDAO.getHzBomLineChildren(query);
     }
 
     @Override

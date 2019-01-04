@@ -37,6 +37,8 @@ public class HzEbomRecordFactory {
         record.setIs2Y(is2Y);
         record.setBomDigifaxId(bomDigifaxId);
         record.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
+        record.setSparePartNum(reqDTO.getSparePartNum());
+        record.setSparePart(reqDTO.getSparePart());
         return record;
     }
 
@@ -64,6 +66,8 @@ public class HzEbomRecordFactory {
 
         }
         record.setVehNum(stringBuilder.toString());
+        record.setSparePart(reqDTO.getSparePart());
+        record.setSparePartNum(reqDTO.getSparePartNum());
         return record;
     }
 
@@ -126,6 +130,8 @@ public class HzEbomRecordFactory {
         jsonObject.put("pRegulationCode", record.getpRegulationCode());
         jsonObject.put("number",record.getNumber());
         jsonObject.put("pBuyEngineer",record.getpBuyEngineer());
+        jsonObject.put("sparePart",record.getSparePart());
+        jsonObject.put("sparePartNum",record.getSparePartNum());
         jsonObject.put("status",record.getStatus());
         jsonObject.put("colorPart", BOMTransConstants.integerToYNString(record.getColorPart()));
         jsonObject.put("effectTime",DateUtil.formatDefaultDate(record.getEffectTime()));
@@ -189,6 +195,8 @@ public class HzEbomRecordFactory {
         respDTO.setNumber(record.getNumber());
         respDTO.setpBuyEngineer(record.getpBuyEngineer());
         respDTO.setColorPart(BOMTransConstants.integerToYNString(record.getColorPart()));
+        respDTO.setSparePart(record.getSparePart());
+        respDTO.setSparePartNum(record.getSparePartNum());
         return respDTO;
     }
 
@@ -205,6 +213,8 @@ public class HzEbomRecordFactory {
         hzBomLineRecord.setColorPart(record.getColorPart());
         hzBomLineRecord.setEplId(record.getEplId());
         hzBomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+        hzBomLineRecord.setSparePart(record.getSparePart());
+        hzBomLineRecord.setSparePartNum(record.getSparePartNum());
         return hzBomLineRecord;
     }
 
@@ -270,6 +280,8 @@ public class HzEbomRecordFactory {
         hzBomLineRecord.setColorPart(record.getColorPart());
         hzBomLineRecord.setEplId(record.getEplId());
         hzBomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
+        hzBomLineRecord.setSparePart(record.getSparePart());
+        hzBomLineRecord.setSparePartNum(record.getSparePartNum());
         return hzBomLineRecord;
     }
 }

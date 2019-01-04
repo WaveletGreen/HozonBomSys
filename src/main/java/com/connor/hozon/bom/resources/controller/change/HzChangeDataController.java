@@ -106,6 +106,8 @@ public class HzChangeDataController extends BaseController {
         tableTitle.put("fna","FNA");
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
+        tableTitle.put("sparePart","备件");
+        tableTitle.put("sparePartNum","备件编号");
         tableTitle.put("colorPart","是否颜色件");
 
         //获取该项目下的所有车型模型
@@ -440,6 +442,8 @@ public class HzChangeDataController extends BaseController {
                 _res.put("fna",dto.getFna());
                 _res.put("pFnaDesc",dto.getpFnaDesc() );
                 _res.put("number",dto.getNumber() );
+                _res.put("sparePart",dto.getSparePart());
+                _res.put("sparePartNum",dto.getSparePartNum());
                 _res.put("colorPart",dto.getColorPart());
                 _res.putAll(dto.getMap());
                 _list.add(_res);

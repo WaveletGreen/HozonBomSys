@@ -345,7 +345,7 @@ function initTable(url) {
                         //     }
                         // },
                         {
-                            text: '关联变更单号',
+                            text: '关联变更单',
                             iconCls: 'glyphicon glyphicon-log-out',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');

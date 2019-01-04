@@ -18,7 +18,8 @@ public interface IHzConfigBomColorService {
      *
      * @param bomline    2Y主键
      * @param projectUid 项目主键
+     * @param paintFlag 是否为油漆车身
      * @return
      */
-    List<HzConfigBomColorBean> doSelectBy2YUidWithProject(String bomline, String projectUid);
+    List<HzConfigBomColorBean> doSelectBy2YUidWithProject(String bomline, String projectUid,boolean paintFlag);
 }

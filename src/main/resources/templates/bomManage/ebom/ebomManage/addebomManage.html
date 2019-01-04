@@ -282,6 +282,19 @@
             <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
         </select>
     </div>
+
+    <div class="form-group">
+        <label for="sparePart">备件</label>
+        <input class="form-control" id="sparePart" name="sparePart" type="text"
+               placeholder="请输入备件"/>
+    </div>
+
+
+    <div class="form-group">
+        <label for="sparePartNum">备件编号</label>
+        <input class="form-control" id="sparePartNum" name="sparePartNum" type="text"
+               placeholder="请输入备件编号"/>
+    </div>
     <!--<input id="puid" name="puid" type="hidden" th:value="${puid}"/>-->
     <!--&lt;!&ndash;循环放入数据&ndash;&gt;-->
     <!--<div class="form-group " th:each="_data,c:${data[0]}">-->
@@ -410,6 +423,8 @@
                     "pFnaDesc": $("#pFnaDesc").val(),
                     "number": $("#number").val(),
                     "colorPart": $("#colorPart").val(),
+                    "sparePart": $("#sparePart").val(),
+                    "sparePartNum": $("#sparePartNum").val(),
                     "projectId": $("#project", window.top.document).val(),
                 });
                 // if (puid = "") {

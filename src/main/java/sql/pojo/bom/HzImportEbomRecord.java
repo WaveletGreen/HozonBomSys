@@ -205,6 +205,31 @@ public class HzImportEbomRecord  implements Serializable {
 
     private Integer status;
 
+    /**
+     * 备件
+     */
+    private String sparePart;
+    /**
+     * 备件编号
+     */
+    private String sparePartNum;
+
+    public String getSparePart() {
+        return sparePart;
+    }
+
+    public void setSparePart(String sparePart) {
+        this.sparePart = sparePart;
+    }
+
+    public String getSparePartNum() {
+        return sparePartNum;
+    }
+
+    public void setSparePartNum(String sparePartNum) {
+        this.sparePartNum = sparePartNum;
+    }
+
     public Integer getStatus() {
         return status;
     }

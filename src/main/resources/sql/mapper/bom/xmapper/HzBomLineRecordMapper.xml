@@ -29,6 +29,14 @@
         <result column="P_COLOR_PART" jdbcType="INTEGER" property="colorPart" />
         <result column="P_VEH_NUM" jdbcType="VARCHAR" property="vehNum" />
 
+        <!--<result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>-->
+        <!--<result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass"/>-->
+        <!--<result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName" />-->
+        <!--<result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID" />-->
+        <!--<result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />-->
+        <!--<result column="P_DUTY_ENGINEER" jdbcType="VARCHAR" property="pDutyEngineer" />-->
+
+
         <!--零部件属性 来自于EPL-->
         <result column="PART_ID" jdbcType="VARCHAR" property="lineID" />
         <result column="PART_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
@@ -250,6 +258,8 @@
         order by CAST(P_SORT_NUM as FLOAT)
     </select>
 
+
+
     <!--获取车身下级2Y层的总成级，需要代码进行查重-->
     <select id="selectVehicleAssembly" parameterType="java.util.Map" resultMap="BaseResultMap">
         select <include refid="BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
@@ -338,14 +348,16 @@
     </update>
 
     <select id="HzBomLineRecordDaoImpl_selectByPuids" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
         select <include refid="BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
         from HZ_BOM_LINE_RECORD left join HZ_EPL_RECORD t10 on P_EPL_ID = t10.ID
         where
-        PUID in
-        <foreach collection="list" index="index" item="puid" separator="," open="(" close=")">
-            #{puid,jdbcType=VARCHAR}
-        </foreach>
+        1=1
+        <if test="list != null and list.size()>0">
+            and PUID in
+            <foreach collection="list" index="index" item="puid" separator="," open="(" close=")">
+                #{puid,jdbcType=VARCHAR}
+            </foreach>
+        </if>
     </select>
 
 

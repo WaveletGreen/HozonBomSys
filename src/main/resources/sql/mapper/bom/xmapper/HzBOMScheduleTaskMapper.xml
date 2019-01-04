@@ -19,7 +19,7 @@
   </sql>
 
 
-  <select id="HzBOMScheduleTaskDAOImpl_getBOMScheduleTask" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="HzBOMScheduleTaskDAOImpl_getBOMScheduleTask" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from HZ_BOM_SCHEDULE_TASK
@@ -35,20 +35,20 @@
   </select>
 
 
-  <insert id="HzBOMScheduleTaskDAOImpl_insert" parameterType="sql.pojo.HzBOMScheduleTask">
-    insert into HZ_BOM_SCHEDULE_TASK (ID, PROJECT_ID, CONFIG_FEATURE_CHANGED, 
+  <insert id="HzBOMScheduleTaskDAOImpl_insert" parameterType="sql.pojo.bom.HzBOMScheduleTask">
+    insert into HZ_BOM_SCHEDULE_TASK (ID, PROJECT_ID, CONFIG_FEATURE_CHANGED,
       PBOM_CHANGED, MBOM_CHANGED, AUDIT_PASSED_TIME, 
-      ORDER_ID
+      ORDER_ID,SYNCHRONIZED
       )
     values (SEQ_HZ_BOM_SCHEDULE_TASK.nextval, #{projectId,jdbcType=VARCHAR}, #{configFeatureChanged,jdbcType=INTEGER},
       #{pbomChanged,jdbcType=INTEGER}, #{mbomChanged,jdbcType=INTEGER}, sysdate,
-      #{orderId,jdbcType=DOUBLE}
+      #{orderId,jdbcType=DOUBLE},#{hasSynchronized,jdbcType=INTEGER}
       )
   </insert>
 
 
 
-  <update id="HzBOMScheduleTaskDAOImpl_updateByOrderId" parameterType="sql.pojo.HzBOMScheduleTask">
+  <update id="HzBOMScheduleTaskDAOImpl_updateByOrderId" parameterType="sql.pojo.bom.HzBOMScheduleTask">
     update HZ_BOM_SCHEDULE_TASK
     <set>
         DATA_SYNCHRONIZED_TIME = sysdate,

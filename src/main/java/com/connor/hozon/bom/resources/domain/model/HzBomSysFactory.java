@@ -205,7 +205,7 @@ public class HzBomSysFactory {
         while (true){
             Random random = new Random();
             Double d = random.nextDouble() + d1 + step;
-            if(d <d2 ){
+            if(d < d2 ){
                 result  = String.valueOf(d);
                 break;
             }

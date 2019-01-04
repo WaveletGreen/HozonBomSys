@@ -194,7 +194,6 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @return
      * @InChage zhudb
      */
-    @Transactional(rollbackFor = {HzBomException.class, Exception.class})
     @Override
     public boolean configuration(Long orderId, Object... params) {
         //根据表单id 获取全部的变更数据
@@ -209,90 +208,78 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
         //查询变更关系表数据
         List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(hzChangeDataQuery);
         if(list!=null&&list.size()>0){
-            for (HzChangeDataRecord hzChangeDataRecord : list) {
+            for(HzChangeDataRecord hzChangeDataRecord : list){
                 //特性变更批准
-                if (ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName().equals(hzChangeDataRecord.getTableName())) {
-                    //发送至sap
-                    if (!hzVWOManagerService.featureToSap(orderId)) {
-                        throw new HzBomException("特性发送SAP失败");
-//                            return false;
-                    }
+                if(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName().equals(hzChangeDataRecord.getTableName())){
                     //将变更数据的状态修改为以生效
-                    if (!iHzFeatureChangeService.updateStatusByOrderId(orderId, 1)) {
+                    if(!iHzFeatureChangeService.updateStatusByOrderId(orderId,1)){
                         return false;
                     }
-                    //删除状态为删除状态的源数据
-                    hzCfg0RecordDao.deleteByOrderId(orderId);
                     //将源数据修改为已生效
-                    if (hzCfg0RecordDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                    if(hzCfg0RecordDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
                     //配色方案变更批准
-                } else if (ChangeTableNameEnum.HZ_CMCR_AFTER_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())) {
-                    //修改配色方案变更状态为已生效
-                    if (hzCmcrChangeDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                }
+            }
+            for(HzChangeDataRecord hzChangeDataRecord : list){
+                if(ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    if(hzFullCfgMainDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
-                    //删除状态为删除状态的源数据
-                    hzCfg0ModelColorDao.deleteByOrderId(orderId);
-
-                    if (hzCfg0ModelColorDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                    if(hzFullCfgMainChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                        return false;
+                    }
+                }
+            }
+            for(HzChangeDataRecord hzChangeDataRecord : list){
+                if(ChangeTableNameEnum.HZ_CMCR_AFTER_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    //修改配色方案变更状态为已生效
+                    if(hzCmcrChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                        return false;
+                    }
+                    if(hzCfg0ModelColorDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
                     //衍生物料变更批准
-                } else if (ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())) {
-                    //发送至sap
-                    if (!hzVWOManagerService.derivativeMaterielToSap(orderId)) {
-                        throw new HzBomException("衍生物料发送至SAP失败");
-//                            return false;
-                    }
-                    if (hzDMBasicChangeDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                }
+            }
+            for(HzChangeDataRecord hzChangeDataRecord : list){
+                if(ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
+                    if(hzDMBasicChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
-                    //删除状态为删除状态的源数据
-                    hzDerivativeMaterielBasicDao.deleteByOrderId(orderId);
-                    if (hzDerivativeMaterielBasicDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
+                    if(hzDerivativeMaterielBasicDao.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
+                }
+            }
 
-                    // 2019.1.2 by haozt 配置物料特性表变更通过后 需要记录定时任务
-                    HzBOMScheduleTask task = new HzBOMScheduleTask();
-                    task.setProjectId(projectId);
-                    task.setOrderId(orderId);
-                    task.setHasSynchronized(0);
-                    task.setConfigFeatureChanged(1);
-                    try {
-                         hzBOMScheduleTaskDAO.insert(task);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+            // 2019.1.2 by haozt 配置物料特性表变更通过后 需要记录定时任务
+            HzBOMScheduleTask task = new HzBOMScheduleTask();
+            task.setProjectId(projectId);
+            task.setOrderId(orderId);
+            task.setHasSynchronized(0);
+            task.setConfigFeatureChanged(1);
+            try {
+                hzBOMScheduleTaskDAO.insert(task);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
-                    //全配置变更批准
-                } else if (ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())) {
-                    if (hzFullCfgMainDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
-                        return false;
-                    }
-                    if (hzFullCfgMainChangeDao.updateStatusByOrderId(orderId, 1) <= 0 ? true : false) {
-                        return false;
-                    }
-                } else if (ChangeTableNameEnum.HZ_RELEVANCE_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())) {
-                    //发送至SAP
-                    if (!hzVWOManagerService.relevanceToSap(orderId)) {
-                        throw new HzBomException("相关性发送至SAP失败");
-//                            return false;
-                    }
+
+            for(HzChangeDataRecord hzChangeDataRecord : list){
+                if(ChangeTableNameEnum.HZ_RELEVANCE_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
                     HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
                     hzRelevanceBasic.setRbVwoId(orderId);
                     hzRelevanceBasic.setRelevanceStatus(1);
                     HzRelevanceBasicChange hzRelevanceBasicChange = new HzRelevanceBasicChange();
                     hzRelevanceBasicChange.setChangeOrderId(orderId);
                     hzRelevanceBasicChange.setChangeStatus(1);
-                    if (hzRelevanceBasicChangeDao.updateStatusByIOrderId(hzRelevanceBasicChange) <= 0 ? true : false) {
+                    if(hzRelevanceBasicChangeDao.updateStatusByIOrderId(hzRelevanceBasicChange)<=0?true:false){
                         return false;
                     }
-                    //删除 状态为删除状态的源数据
-                    hzRelevanceBasicDao.deleteByOrderId(orderId);
-                    if (hzRelevanceBasicDao.updateStatusByOrderChangeId(hzRelevanceBasic) <= 0 ? true : false) {
+                    if(hzRelevanceBasicDao.updateStatusByOrderChangeId(hzRelevanceBasic)<=0?true:false){
                         return false;
                     }
                 }
@@ -310,7 +297,6 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
      * @return
      * @InChage haozt
      */
-
     //这里是流程审核完成后 要传输的全部数据
     //传输数据 包括 物料 MBOM 和工艺路线
     @Override
@@ -601,7 +587,6 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     e.printStackTrace();
                     throw new HzBomException(WriteResultRespDTO.FAILED_MSG,e);
                 }
-
                 return null;
             };
         });

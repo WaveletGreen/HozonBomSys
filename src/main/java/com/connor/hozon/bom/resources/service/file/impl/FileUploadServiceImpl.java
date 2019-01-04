@@ -134,7 +134,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     return WriteResultRespDTO.fileError();
                 }
                 Row row = sheet.getRow(0);
-                if(row.getLastCellNum()<50){
+                if(row.getLastCellNum()<52){
                     return WriteResultRespDTO.fileFormatError();
                 }
 
@@ -652,7 +652,10 @@ public class FileUploadServiceImpl implements FileUploadService {
             }
         }
 
-        String colorPart=ExcelUtil.getCell(row,49).getStringCellValue();
+
+        String sparePart=ExcelUtil.getCell(row,49).getStringCellValue();
+        String sparePartNum=ExcelUtil.getCell(row,50).getStringCellValue();
+        String colorPart=ExcelUtil.getCell(row,51).getStringCellValue();
 
 
 
@@ -721,6 +724,8 @@ public class FileUploadServiceImpl implements FileUploadService {
 //        record.setpUnit(pUnit);
         record.setpUpc(pUpc);
         record.setpUpdateName(UserInfo.getUser().getUserName());
+        record.setSparePart(sparePart);
+        record.setSparePartNum(sparePartNum);
         record.setColorPart(BOMTransConstants.constantStringToInteger(colorPart));
         record.setEplId(eplId);
         return record;
@@ -765,7 +770,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     lineIndexFirst +=10;
                     lineIndexLast +=10;
                 }else {
-                    int lineIndexFirstNum = record.getMaxLineIndexFirstNum();
+                    int lineIndexFirstNum = Integer.valueOf(record.getLineIndex().split("\\.")[0]);
                     int lineIndexLastNum = Integer.valueOf(record.getLineIndex().split("\\.")[1]);
                     lineIndexFirstNum = lineIndexFirstNum+lineIndexFirst;
                     lineIndexLastNum = lineIndexLastNum + lineIndexLast;

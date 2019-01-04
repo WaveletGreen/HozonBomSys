@@ -316,11 +316,11 @@
     <if test="projectId != null and  projectId!='' " >
       and t2.puid = #{projectId,jdbcType=VARCHAR}))
     </if>
+    </where>
     <if test="eBomPuid != null and  eBomPuid!='' " >
       and t.P_E_BOM_PUID = #{eBomPuid,jdbcType=VARCHAR}
     </if>
      and t.P_PBOM_STATUS<![CDATA[ <> ]]>0
-    </where>
   </select>
 
 
@@ -867,9 +867,10 @@
   <select id="HzPbomRecordDAOImpl_findMinOrderNumWhichGreaterThanThisOrderNum" parameterType="java.util.HashMap" resultType="java.lang.String">
     SELECT * FROM (
     SELECT P_SORT_NUM  FROM HZ_PBOM_RECORD
-    <where> p_bom_digifax_id=(
+    <where>
+      p_bom_digifax_id=(
     select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=
-      t2.puid=#{projectId,jdbcType=VARCHAR})
+      #{projectId,jdbcType=VARCHAR})
     </where>
     and   P_PBOM_STATUS <![CDATA[ <> ]]>0
     and  CAST(P_SORT_NUM as FLOAT) &gt;#{sortNum,jdbcType=DOUBLE}

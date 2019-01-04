@@ -108,8 +108,13 @@ public class HzMaterielFactory {
         hzMaterielRecord.setpMaterielCode(feature.getpFeatureSingleVehicleCode());
         hzMaterielRecord.setpMaterielDesc(feature.getMaterielDesc());
         hzMaterielRecord.setpMaterielDescEn(feature.getMaterielEnDesc());
-        hzMaterielRecord.setpCreateName(UserInfo.getUser().getUserName());
-        hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUserName());
+        if(null == UserInfo.getUser()){
+            hzMaterielRecord.setpCreateName("system");
+            hzMaterielRecord.setpUpdateName("system");
+        }else {
+            hzMaterielRecord.setpCreateName(UserInfo.getUser().getUserName());
+            hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUserName());
+        }
         hzMaterielRecord.setpMrpController("Z02");//整车的MRP控制者都是Z02
         hzMaterielRecord.setpVinPerNo(feature.getVinCode());
         hzMaterielRecord.setResource(feature.getPurchaseType());

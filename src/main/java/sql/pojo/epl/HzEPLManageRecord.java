@@ -15,6 +15,7 @@ import java.util.Objects;
  */
 public class HzEPLManageRecord extends BaseChangeDO {
 
+    private static final long serialVersionUID = 8252971773184175221L;
     /**
      * EPL 表主键
      */
@@ -188,6 +189,32 @@ public class HzEPLManageRecord extends BaseChangeDO {
      * 单车用量
      */
     private String vehNum;
+
+    /**
+     * 备件
+     */
+    private String sparePart;
+    /**
+     * 备件编号
+     */
+    private String sparePartNum;
+
+
+    public String getSparePart() {
+        return sparePart;
+    }
+
+    public void setSparePart(String sparePart) {
+        this.sparePart = sparePart;
+    }
+
+    public String getSparePartNum() {
+        return sparePartNum;
+    }
+
+    public void setSparePartNum(String sparePartNum) {
+        this.sparePartNum = sparePartNum;
+    }
 
     public String getVehNum() {
         return vehNum;

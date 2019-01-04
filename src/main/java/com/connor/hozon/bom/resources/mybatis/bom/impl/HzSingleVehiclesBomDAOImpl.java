@@ -1,12 +1,15 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
+import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzSingleVehiclesBomDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
+import com.connor.hozon.bom.sys.exception.HzBomException;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
@@ -18,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  * @Author: haozt
@@ -29,38 +34,27 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
     @Override
     public int insertList(List<HzSingleVehiclesBomRecord> records) {
         try {
-            if (ListUtil.isNotEmpty(records)) {
-                int size = records.size();
-                //分批插入数据 一次1000条
-                int i = 0;
-                int cout = 0;
-                synchronized (this){
-                    if (size > 1000) {
-                        for (i = 0; i < size / 1000; i++) {
-                            List<HzSingleVehiclesBomRecord> list = new ArrayList<>();
-                            for (int j = 0; j < 1000; j++) {
-                                list.add(records.get(cout));
-                                cout++;
-                            }
-                            super.insert("HzSingleVehiclesBomDAOImpl_insertList",list);
-
-                        }
-                    }
-                    if (i * 1000 < size) {
-                        List<HzSingleVehiclesBomRecord> list = new ArrayList<>();
-                        for (int j = 0; j < size - i * 1000; j++) {
-                            list.add(records.get(cout));
-                            cout++;
-                        }
-                        super.insert("HzSingleVehiclesBomDAOImpl_insertList",list);
-                    }
+            if(ListUtil.isEmpty(records)){
+                return 0;
+            }
+            synchronized (this){
+                Map<Integer,List<HzSingleVehiclesBomRecord>> map = HzBomSysFactory.spiltList(records);
+                ExecutorServices executorServices = new ExecutorServices(8);
+                ExecutorService service = executorServices.getPool();
+                for(List<HzSingleVehiclesBomRecord> value :map.values()){
+                    service.execute(() -> {
+                        super.insert("HzSingleVehiclesBomDAOImpl_insertList",value);
+                    });
                 }
-
+                if(service != null){
+                    service.shutdown();
+                }
             }
         }catch (Exception e){
-            return 0;
+            e.printStackTrace();
+            throw new HzBomException("单车BOM数据插入失败！",e);
         }
-        return 1;
+        return records.size();
     }
 
 

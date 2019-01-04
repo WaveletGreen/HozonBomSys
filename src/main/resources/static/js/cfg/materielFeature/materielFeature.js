@@ -54,7 +54,7 @@ var toolbar = [
         handler: deleteVehicleFake
     },
     {
-        text: '关联变更单号',
+        text: '关联变更单',
         iconCls: 'glyphicon glyphicon-log-out',
         handler: launchChangeForm
     },
@@ -350,7 +350,7 @@ function goBackData() {
 
     for (let i in rows) {
         if (10 == rows[i].status || "10" == rows[i].status) {
-            window.Ewin.alert({message: rows[i].modeBasicDetail + "已关联变更单号，不可撤销"});
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已关联变更单，不可撤销"});
             return false;
         } else if (1 == rows[i].status || "1" == rows[i].status) {
             window.Ewin.alert({message: rows[i].modeBasicDetail + "已生效，不可撤销"});
@@ -414,7 +414,7 @@ function deleteVehicleFake() {
             window.Ewin.alert({message: rows[i].modeBasicDetail + "已删除，不可重复删除"});
             return false;
         } else if (10 == rows[i].status || "10" == rows[i].status) {
-            window.Ewin.alert({message: rows[i].modeBasicDetail + "已关联变更单号，不可删除"});
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已关联变更单，不可删除"});
             return false;
         }
     }
@@ -503,15 +503,15 @@ function deleteVehicleFake() {
 function launchChangeForm() {
     var rows = $table.bootstrapTable('getSelections');
     if (rows.length == 0) {
-        window.Ewin.alert({message: '请选择一条需要关联变更单号的数据!'});
+        window.Ewin.alert({message: '请选择一条需要关联变更单的数据!'});
         return false;
     }
     for (let i in rows) {
         if (1 == rows[i].status || "1" == rows[i].status) {
-            window.Ewin.alert({message: rows[i].modeBasicDetail + "已生效，不可关联变更单号"});
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已生效，不可关联变更单"});
             return false;
         } else if (10 == rows[i].status || "10" == rows[i].status) {
-            window.Ewin.alert({message: rows[i].modeBasicDetail + "已在流程中，不可关联变更单号"});
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "已在流程中，不可关联变更单"});
             return false;
         }
     }
@@ -519,7 +519,7 @@ function launchChangeForm() {
     let msg = "<div style='max-height: 350px;overflow: -moz-scrollbars-vertical'>";
     for (let i in rows) {
         if (0 != rows[i].status && "0" != rows[i].status && null != rows[i].status && "null" != rows[i].status && 2 != rows[i].status && "2" != rows[i].status) {
-            window.Ewin.alert({message: rows[i].modeBasicDetail + "该衍生物料不是草稿状态，不能关联变更单号"});
+            window.Ewin.alert({message: rows[i].modeBasicDetail + "该衍生物料不是草稿状态，不能关联变更单"});
             return false;
         }
         msg += "<p>" + rows[i].pCfg0ObjectId + "-" + rows[i].pCfg0Desc + "</p>";
@@ -546,7 +546,7 @@ function launchChangeForm() {
             else {
                 window.Ewin.confirm({
                     title: '提示',
-                    message: '是否要关联变更单号？',
+                    message: '是否要关联变更单？',
                     width: 500
                 }).on(function (e) {
                     if (e) {

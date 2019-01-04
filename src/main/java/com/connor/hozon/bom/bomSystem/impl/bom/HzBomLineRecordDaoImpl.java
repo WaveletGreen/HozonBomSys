@@ -109,6 +109,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
      * @param records
      * @return
      */
+    @Deprecated
     public int updateBatch(List<HzBomLineRecord> records) {
         try {
             if (ListUtil.isNotEmpty(records)) {

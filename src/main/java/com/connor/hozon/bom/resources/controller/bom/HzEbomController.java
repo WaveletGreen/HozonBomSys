@@ -103,6 +103,8 @@ public class HzEbomController extends BaseController {
         tableTitle.put("fna","FNA");
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
+        tableTitle.put("sparePart","备件");
+        tableTitle.put("sparePartNum","备件编号");
         tableTitle.put("colorPart","是否颜色件");
         tableTitle.put("effectTime","生效时间");
         //获取该项目下的所有车型模型
@@ -268,11 +270,14 @@ public class HzEbomController extends BaseController {
                 cellArr[46] = hzEbomRespDTO.getFna();
                 cellArr[47] = hzEbomRespDTO.getpFnaDesc();
                 cellArr[48] = hzEbomRespDTO.getNumber();
-                cellArr[49] = hzEbomRespDTO.getColorPart();
+                cellArr[49] = hzEbomRespDTO.getSparePart();
+                cellArr[50] = hzEbomRespDTO.getSparePartNum();
+                cellArr[51] = hzEbomRespDTO.getColorPart();
+                cellArr[52] = hzEbomRespDTO.getEffectTime();
                 if(hzEbomRespDTO.getMap().size()>0){
                     //动态获取单车配置用量表头
                     for(int i = 0; i< hzEbomRespDTO.getMap().size(); i++){
-                        cellArr[50+i] = hzEbomRespDTO.getMap().values().toArray()[i].toString();
+                        cellArr[53+i] = hzEbomRespDTO.getMap().values().toArray()[i].toString();
                     }
                 }
                 dataList.add(cellArr);
@@ -303,7 +308,6 @@ public class HzEbomController extends BaseController {
             return "";
         }
         HzEbomRespDTO recordRespDTO = hzEBOMReadService.fingEbomById(puid,projectId);
-        recordRespDTO.setUpdateType(updateType);
         model.addAttribute("data",recordRespDTO);
 
         return "bomManage/ebom/ebomManage/updateEbomManage";

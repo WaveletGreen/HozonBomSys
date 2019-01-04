@@ -3,6 +3,7 @@ package sql.pojo.bom;
 import lombok.Data;
 import sql.pojo.BaseDO;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  * @Description:
  */
 @Data
-public class HzBOMScheduleTask extends BaseDO {
+public class HzBOMScheduleTask implements Serializable {
     private static final long serialVersionUID = 7230992893451814791L;
     /**
      * 主键
