@@ -396,6 +396,9 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 hzPbomTreeQuery.setPuid(hzPbomLineRecordFather.getPuid());
                 List<HzPbomLineRecord> hzPbomLineRecordsPrevious = hzPbomRecordDAO.getHzPbomTree(pBomQuery);
 
+                if(hzPbomLineRecordsPrevious==null||hzPbomLineRecordsPrevious.size()==0){
+                    return WriteResultRespDTO.getSuccessResult();
+                }
                 hzPbomLineRecordPrevious = hzPbomLineRecordsPrevious.get(hzPbomLineRecordsPrevious.size()-1);
 
                 hzPbomLineRecord1Next = hzPbomRecordDAO.findNextSortNum(hzPbomLineRecordPrevious);
