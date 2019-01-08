@@ -505,7 +505,6 @@
     </update>
 
 
-
     <!-- 更新EBOM信息-->
     <update id="HzEbomRecordDAOImpl_updateListByEplId" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
@@ -636,11 +635,7 @@
                 from HZ_BOM_LINE_RECORD t
                 left join HZ_EPL_RECORD t10 on t.P_EPL_ID = t10.ID
                 where t.p_bom_digifax_id=(
-                select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-                select t2.puid from Hz_project_libs t2
-                <where>
-                    t2.puid = #{projectId,jdbcType=VARCHAR}))
-                </where>
+                select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(#{projectId,jdbcType=VARCHAR}))
                 start with t.puid = #{puids[${index}]}
                 and t.P_EBOM_STATUS <![CDATA[ <> ]]>0
                 connect by nocycle prior t.puid = t.p_parent_uid
@@ -1058,5 +1053,12 @@
             </if>
         )t
         where rownum = 1
+    </select>
+
+    <select id="HzEbomRecordDAOImpl_findALLBOM" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select  PUID, P_PARENT_UID from EBOM_TEST t  where  t.P_BOM_DIGIFAX_ID =
+        (select puid from Hz_Bom_Main_Record
+         where p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+          order by CAST(t.P_SORT_NUM as FLOAT)
     </select>
 </mapper>

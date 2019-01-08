@@ -437,8 +437,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
             }
 
-
-
             List<HzPbomLineRecord> hzPbomLineRecords = new ArrayList<>();
             List<String> carParts = hzMbomService.loadingCarPartType();
             if(ListUtil.isNotEmpty(records)){
@@ -463,37 +461,23 @@ public class FileUploadServiceImpl implements FileUploadService {
                     }
                 });
 
-                List<Thread> threads = new ArrayList<>();
-                CountDownLatch countDownLatch = new CountDownLatch(2);
-                RefreshMbomThread eBomThread = new RefreshMbomThread(countDownLatch) {
-                    @Override
-                    public void refreshMbom() {
-                        hzEbomRecordDAO.importList(records);
-                    }
-                };
-                threads.add(new Thread(eBomThread));
 
-                RefreshMbomThread pBomThread = new RefreshMbomThread(countDownLatch) {
-                    @Override
-                    public void refreshMbom() {
-                        if(ListUtil.isNotEmpty(hzPbomLineRecords)){
-                            hzPbomRecordDAO.insertList(hzPbomLineRecords);
-                        }
-                    }
-                };
+                configTransactionTemplate.execute(new TransactionCallback<Void>() {
 
-                threads.add(new Thread(pBomThread));
-
-                for(Thread th:threads){
-                    th.start();
-                }
-                try {
-                    countDownLatch.await();
-                }catch (Exception e){
-                    e.printStackTrace();
-                    return WriteResultRespDTO.getFailResult();
-                }
-
+                      @Override
+                      public Void doInTransaction(TransactionStatus status) {
+                          try {
+                          hzEbomRecordDAO.importList(records);
+                          if(ListUtil.isNotEmpty(hzPbomLineRecords)){
+                              hzPbomRecordDAO.insertList(hzPbomLineRecords);
+                          }
+                          }catch (Exception e){
+                              e.printStackTrace();
+                              throw new HzBomException("BOM数据导入失败!",e);
+                          }
+                          return null;
+                      }
+                  });
             }
 
             ExcelUtil.deleteFile();

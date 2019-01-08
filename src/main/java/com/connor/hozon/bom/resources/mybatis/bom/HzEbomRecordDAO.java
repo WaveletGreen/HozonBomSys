@@ -18,6 +18,7 @@ public interface HzEbomRecordDAO {
     int insert(HzEPLManageRecord record);
 
     int update(HzEPLManageRecord record);
+
     /**
      * 批量插入
      * @param records
@@ -197,4 +198,12 @@ public interface HzEbomRecordDAO {
      * @return
      */
     List<HzEPLManageRecord> findNextLevelRecordByParentId(HzBOMQuery query);
+
+    /**
+     * 测试代码 为了同步正式机数据
+     * @param projectId
+     * @return
+     */
+    @Deprecated
+    List<HzEPLManageRecord> findALLBOM(String projectId);
 }

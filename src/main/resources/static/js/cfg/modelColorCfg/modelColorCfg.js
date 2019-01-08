@@ -108,7 +108,7 @@ var toolbar = [
                                 width: 500
                             }).on(function (e) {
                                 if (e) {
-                                    alert(JSON.stringify(rows));
+                                    // alert(JSON.stringify(rows));
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名

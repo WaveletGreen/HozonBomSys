@@ -44,6 +44,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
