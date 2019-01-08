@@ -40,10 +40,7 @@ public class HzBomLineRecord extends BaseChangeDO {
      * 是否有子层
      */
     private Integer isHas;
-    /**
-     * 属性集合，是一个LinkedHashMap，需要转换
-     */
-    private byte[] bomLineBlock;
+
     /**
      * 是否2Y层
      */
@@ -235,12 +232,17 @@ public class HzBomLineRecord extends BaseChangeDO {
      */
     private Integer colorPart;
 
-    /**
-     * 单车用量
-     */
-    private byte[] singleVehDosage;
-
     private Long eplId;
+
+    private String vehNum;
+
+    public String getVehNum() {
+        return vehNum;
+    }
+
+    public void setVehNum(String vehNum) {
+        this.vehNum = vehNum;
+    }
 
     public Long getEplId() {
         return eplId;
@@ -248,14 +250,6 @@ public class HzBomLineRecord extends BaseChangeDO {
 
     public void setEplId(Long eplId) {
         this.eplId = eplId;
-    }
-
-    public byte[] getSingleVehDosage() {
-        return singleVehDosage;
-    }
-
-    public void setSingleVehDosage(byte[] singleVehDosage) {
-        this.singleVehDosage = singleVehDosage;
     }
 
     public Integer getColorPart() {
@@ -684,14 +678,6 @@ public class HzBomLineRecord extends BaseChangeDO {
 
     public void setBomDigifaxId(String bomDigifaxId) {
         this.bomDigifaxId = bomDigifaxId == null ? null : bomDigifaxId.trim();
-    }
-
-    public byte[] getBomLineBlock() {
-        return bomLineBlock;
-    }
-
-    public void setBomLineBlock(byte[] bomLineBlock) {
-        this.bomLineBlock = bomLineBlock;
     }
 
     public String getIndex() {

@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
+import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
@@ -36,6 +37,9 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
 public class LouaContorller extends BaseController {
     @Autowired
     private HzEBOMReadService hzEBOMReadService;
+
+    @Autowired
+    private HzEBOMWriteService hzEBOMWriteService;
 
     @Autowired
     private HzPbomService hzPbomService;
@@ -207,7 +211,7 @@ public class LouaContorller extends BaseController {
 
     @RequestMapping(value = "setLou",method = RequestMethod.POST)
     public void setBomAsLou(@RequestBody SetLouReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO = hzEBOMReadService.setCurrentBomAsLou(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMWriteService.setCurrentBomAsLou(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO),response);
     }
 

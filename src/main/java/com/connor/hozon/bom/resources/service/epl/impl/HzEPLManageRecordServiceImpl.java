@@ -28,6 +28,7 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
  * Created by haozt on 2018/06/05
  */
 @Service("hzEPLManageRecordService")
+@Deprecated
 public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 
     @Autowired
@@ -434,15 +435,6 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 jsonObject.put("pRemark",record.getpRemark());
                 jsonObject.put("pRegulationCode", record.getpRegulationCode());
                 jsonObject.put("number",record.getNumber());
-
-                jsonObject.put("resource", record.getResource());
-                jsonObject.put("type", record.getType());
-                jsonObject.put("buyUnit", record.getBuyUnit());
-                jsonObject.put("workShop1", record.getWorkShop1());
-                jsonObject.put("workShop2", record.getWorkShop2());
-                jsonObject.put("productLine", record.getProductLine());
-                jsonObject.put("mouldType", record.getMouldType());
-                jsonObject.put("outerPart", record.getOuterPart());
 
                 if(Integer.valueOf(1).equals(record.getColorPart())){
                     jsonObject.put("colorPart", "Y");

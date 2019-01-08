@@ -223,7 +223,7 @@ function generateRelevance() {
     var rows = $table.bootstrapTable('getData');
     for(let i in rows){
         if(rows[i].status==10){
-            window.Ewin.alert({message: "相关性数据已关联变更单号" +
+            window.Ewin.alert({message: "相关性数据已关联变更单" +
                 "，不能生成相关性"});
             return false;
         }
@@ -268,7 +268,7 @@ function getChange() {
     var changeFlag = true;
     for(let i in rows){
         if(rows[i].status==10){
-            window.Ewin.alert({message: "相关性数据已关联变更单号，不能再次关联变更单号"});
+            window.Ewin.alert({message: "相关性数据已关联变更单，不能再次关联变更单"});
             return false;
         }
         if(rows[i].status==0||rows[i].status==2){
@@ -276,10 +276,10 @@ function getChange() {
         }
     }
     if(changeFlag){
-        window.Ewin.alert({message: "相关性数据不存在草稿状态或删除状态的数据，不能关联变更单号"});
+        window.Ewin.alert({message: "相关性数据不存在草稿状态或删除状态的数据，不能关联变更单"});
         return false;
     }
-    var msg = "您确定关联变更单号吗！";
+    var msg = "您确定关联变更单吗！";
     var projectPuid = $("#project", window.top.document).val();
     var url = "relevance/getChangePage";
     $.ajax({
@@ -329,7 +329,7 @@ function goBackData() {
     var backFlag = true;
     for(let i in rows){
         if(rows[i].status==10){
-            window.Ewin.alert({message: "相关性数据已关联变更单号，不能撤销"});
+            window.Ewin.alert({message: "相关性数据已关联变更单，不能撤销"});
             return false;
         }
         if(rows[i].status==0){

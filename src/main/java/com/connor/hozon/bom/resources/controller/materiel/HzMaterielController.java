@@ -16,10 +16,7 @@ import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletResponse;
@@ -191,12 +188,12 @@ public class HzMaterielController  extends BaseController {
 
     /**
      * 删除一条记录
-     * @param puid
+     * @param puids
      * @param response
      */
     @RequestMapping(value = "delete",method = RequestMethod.POST)
-    public void deleteMateriel(String puid,HttpServletResponse response){
-        WriteResultRespDTO respDTO =  hzMaterielService.deleteHzMateriel(puid);
+    public void deleteMateriel(@RequestBody String puids, HttpServletResponse response){
+        WriteResultRespDTO respDTO =  hzMaterielService.deleteHzMateriel(puids);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 

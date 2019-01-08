@@ -33,11 +33,11 @@ public interface HzMaterielDAO {
     int update(HzMaterielRecord hzMaterielRecord);
 
     /**
-     * 删除一条数据
-     * @param puid
+     * 删除数据 逻辑删除
+     * @param puids
      * @return
      */
-    int delete(String puid);
+    int deleteList(List<String> puids);
 
     /**
      * 批量插入 内部直接调用插入 对外增加 走单个插入

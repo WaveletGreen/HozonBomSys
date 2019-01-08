@@ -1,6 +1,17 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 
+import com.connor.hozon.bom.resources.controller.bom.HzSingleVehiclesController;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
+import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
+import com.connor.hozon.bom.resources.service.bom.impl.HzSingleVehiclesBomServicesImpl;
+import com.connor.hozon.bom.resources.util.ListUtil;
+import org.apache.commons.lang.StringUtils;
+
 import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -14,14 +25,6 @@ import java.util.regex.Pattern;
 public class HzBomSysFactory {
     /*最小步进，用于产生随机数**/
     private static final  int MIN_STEP = 2;
-    /*第一步进，用于产生随机数**/
-    private static final int FIRST_STEP = 10;
-    /*第二步进，用于产生随机数**/
-    private static final int SECOND_STEP = 50;
-    /*第三步进，用于产生随机数**/
-    private static final int THIRD_STEP = 100;
-    /*第四步进，用于产生随机数**/
-    private static final int FOURTH_STEP = 200;
 
     /**
      * 获取bom系统的层级和级别 和查找编号
@@ -44,11 +47,7 @@ public class HzBomSysFactory {
             } else if (hasChildren != null && hasChildren.equals(0)) {
                 line = String.valueOf((level-1));
                 rank = level - 1 ;
-            } else {
-                line = "";//错误数据
             }
-        } else {
-            line = "";
         }
         int length = lineIndex.split("\\.").length-1;
         int s1 = Integer.valueOf(lineIndex.split("\\.")[length]);
@@ -63,24 +62,29 @@ public class HzBomSysFactory {
      * @return
      */
     public static String generateBomSortNum(String s1,String s2){
-        Double d1 = Double.parseDouble(s1);
-        Double d2 = Double.parseDouble(s2);
-        if(d1 >= d2){
+        try {
+
+            if(StringUtils.isBlank(s1) || StringUtils.isBlank(s2)){
+                return null;
+            }
+
+            Double d1 = Double.parseDouble(s1);
+            Double d2 = Double.parseDouble(s2);
+
+            if(d1 >= d2){
+                return null;
+            }
+
+            double diff = d2 -d1;
+            int step = (int)diff;
+            if(diff<= MIN_STEP){
+                return resultNum(d1,d2,0);
+            } else {
+                return resultNum(d1,d2,step >> 1);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
             return null;
-        }
-        Double diff = d2 -d1;
-        if(diff<= MIN_STEP){
-            return resultNum(d1,d2,0);
-        }else if(diff<= FIRST_STEP){
-            return resultNum(d1,d2,FIRST_STEP >> 1);
-        }else if(diff <=SECOND_STEP){
-            return resultNum(d1,d2,SECOND_STEP >> 1);
-        }else if( diff <= THIRD_STEP){
-            return resultNum(d1,d2,THIRD_STEP >> 1);
-        }else if(diff <=FOURTH_STEP){
-            return resultNum(d1,d2,FOURTH_STEP  >> 1);
-        }else {
-           return resultNum(d1,d2,FOURTH_STEP);
         }
     }
 
@@ -120,7 +124,7 @@ public class HzBomSysFactory {
      * @param list
      * @return
      */
-    public static<T> Map<Integer,List<T>> spiltList(List<T> list){
+    public static <T>  Map<Integer,List<T>> spiltList(List<T> list){
         Map<Integer,List<T>> map = new HashMap<>();
         int size = list.size();
         int mapIndex =1;
@@ -143,6 +147,53 @@ public class HzBomSysFactory {
     }
 
     /**
+     * BOM 数据查询 层级转换
+     * @param query
+     * @param <T>
+     * @return
+     */
+    public static <T> T bomQueryLevelTrans(T query){
+        String level = "";
+        Integer hasChildren = null;
+        String lineIndex = "";
+        if(query instanceof HzEbomByPageQuery){
+            level = ((HzEbomByPageQuery) query).getLevel().trim();
+        }else if(query instanceof HzPbomByPageQuery){
+            level = ((HzPbomByPageQuery) query).getLevel().trim();
+        }else if(query instanceof HzMbomByPageQuery){
+            level = ((HzMbomByPageQuery) query).getLevel().trim();
+        }else if(query instanceof HzSingleVehiclesBomByPageQuery){
+            level = ((HzSingleVehiclesBomByPageQuery) query).getLevel().trim();
+        }
+        if (StringUtils.isNotBlank(level)) {
+            if (level.toUpperCase().endsWith(BOMTransConstants.Y)) {
+                int length = Integer.valueOf(level.replace(BOMTransConstants.Y, ""));
+                hasChildren =1;
+                lineIndex = String.valueOf(length-1);
+            } else {
+                hasChildren = 0;
+                int length = Integer.valueOf(level);
+                lineIndex = String.valueOf(length);
+            }
+        }
+        if(query instanceof HzEbomByPageQuery){
+            ((HzEbomByPageQuery) query).setIsHas(hasChildren);
+            ((HzEbomByPageQuery) query).setLineIndex(lineIndex);
+        }else if(query instanceof HzPbomByPageQuery){
+            ((HzPbomByPageQuery) query).setLineIndex(lineIndex);
+            ((HzPbomByPageQuery) query).setIsHas(hasChildren);
+        }else if(query instanceof HzMbomByPageQuery){
+            ((HzMbomByPageQuery) query).setIsHas(hasChildren);
+            ((HzMbomByPageQuery) query).setLineIndex(lineIndex);
+        }else if(query instanceof HzSingleVehiclesBomByPageQuery){
+            ((HzSingleVehiclesBomByPageQuery) query).setIsHas(hasChildren);
+            ((HzSingleVehiclesBomByPageQuery) query).setLineIndex(lineIndex);
+        }
+        return query;
+    }
+
+
+    /**
      * 产生以步进为基础的 介于两个数中间的某个数
      * @param d1 较小数
      * @param d2 较大数
@@ -153,8 +204,8 @@ public class HzBomSysFactory {
         String result ="";
         while (true){
             Random random = new Random();
-            Double d = random.nextDouble()+d1+step;
-            if(d <d2 ){
+            Double d = random.nextDouble() + d1 + step;
+            if(d < d2 ){
                 result  = String.valueOf(d);
                 break;
             }

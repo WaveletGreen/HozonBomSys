@@ -313,6 +313,22 @@
             <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
         </select>
     </div>
+
+    <div class="form-group">
+        <label for="sparePart">备件</label>
+        <input class="form-control" id="sparePart" name="sparePart" type="text"
+               th:value="${data.sparePart}"
+               placeholder="请输入备件"/>
+    </div>
+
+
+    <div class="form-group">
+        <label for="sparePartNum">备件编号</label>
+        <input class="form-control" id="sparePartNum" name="sparePartNum" type="text"
+               th:value="${data.sparePartNum}"
+               placeholder="请输入备件编号"/>
+    </div>
+
     <div class="form-group" th:each="_data,c:${data.getMap().keySet()}">
         <label class="control-label" th:text="${_data}+'(用量)'"></label>
         <input class="form-control" th:id="${_data}" th:name="${_data}" type="text"
@@ -331,15 +347,17 @@
                 }
             }
             var level = data.level;
+            // todo  下次取消注释 暂时来不及做了
             if (level == "2Y") {
                 $("#colorPart").attr({"disabled": "disabled"});
-                var temp = '<div class="form-group">\n' +
-                    '        <label for="lineNo">查询编号<span></span></label>\n' +
-                    '        <input class="form-control" id="lineNo" name="lineNo" type="text"\n' +
-                    '               value="'+data.lineNo+'"/>\n' +
-                    '    </div>';
-                $("#ebomMainForm").append(temp);
+                // var temp = '<div class="form-group">\n' +
+                //     '        <label for="lineNo">查询编号<span></span></label>\n' +
+                //     '        <input class="form-control" id="lineNo" name="lineNo" type="text"\n' +
+                //     '               value="'+data.lineNo+'"/>\n' +
+                //     '    </div>';
+                // $("#ebomMainForm").append(temp);
             }
+
             $('#ebomMainForm').bootstrapValidator({
                 message: 'This value is not valid',
                 feedbackIcons: {

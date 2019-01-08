@@ -1,5 +1,6 @@
 package sql.pojo.epl;
 
+import org.apache.commons.lang.StringUtils;
 import sql.pojo.BaseChangeDO;
 
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.Objects;
  */
 public class HzEPLManageRecord extends BaseChangeDO {
 
+    private static final long serialVersionUID = 8252971773184175221L;
     /**
      * EPL 表主键
      */
@@ -51,10 +53,6 @@ public class HzEPLManageRecord extends BaseChangeDO {
      */
     private Integer isHas;
     /**
-     * 属性集合，是一个LinkedHashMap，需要转换
-     */
-    private byte[] bomLineBlock;
-    /**
      * 是否2Y层
      */
     private Integer is2Y;
@@ -62,11 +60,6 @@ public class HzEPLManageRecord extends BaseChangeDO {
      * 是否零件
      */
     private Integer isPart;
-    /**
-     * 在Bom结构中的顺序号
-     */
-    @Deprecated
-    private Integer orderNum;
     /**
      * 2Y层归属哪个部门
      */
@@ -85,95 +78,12 @@ public class HzEPLManageRecord extends BaseChangeDO {
      */
     private Integer status;
 
-    /**
-     *零件来源（自制总成/采购拆分等）
-     */
-    private String itemResource;
-    /**
-     * 来源（自制/采购）
-     */
-    private String resource;
-    /**
-     * 类型 是否为焊接/装配（0是  1不是 2不明确）
-     */
-    private Integer type;
-    /**
-     * 是否采购单元 （0是  1不是 2不明确）
-     */
-    private Integer buyUnit;
-    /**
-     *车间1
-     */
-    private String workShop1;
-    /**
-     *车间2
-     */
-    private String workShop2;
-    /**
-     *生产线
-     */
-    private String productLine;
-    /**
-     * 模具类型
-     */
-    private String mouldType;
-    /**
-     * 外委件
-     */
-    private String outerPart;
+
     /**
      * 颜色件
      */
     private Integer colorPart;
 
-    /**
-     * 备件
-     */
-    private String sparePart;
-    /**
-     *备件编号
-     */
-    private String sparePartNum;
-    /**
-     * 工艺路线
-     */
-    private String processRoute;
-    /**
-     * 人工工时
-     */
-    private String laborHour;
-    /**
-     *节拍
-     */
-    private String rhythm;
-    /**
-     * 焊点
-     */
-    private String solderJoint;
-    /**
-     * 机物料
-     */
-    private String machineMaterial;
-    /**
-     * 标准件
-     */
-    private String standardPart;
-    /**
-     * 工具
-     */
-    private String tools;
-    /**
-     * 废品
-     */
-    private String wasterProduct;
-    /**
-     * 变更
-     */
-    private String change;
-    /**
-     * 变更编号
-     */
-    private String changeNum;
     /**
      * FNA信息
      */
@@ -182,18 +92,7 @@ public class HzEPLManageRecord extends BaseChangeDO {
     private String fna;
 
     private Integer maxLineIndexFirstNum;
-    /**
-     * 单车用量
-     */
-    private byte[] singleVehDosage;
 
-    public byte[] getSingleVehDosage() {
-        return singleVehDosage;
-    }
-
-    public void setSingleVehDosage(byte[] singleVehDosage) {
-        this.singleVehDosage = singleVehDosage;
-    }
     private String pBomLinePartEnName;
 
     private String pBomLinePartResource;
@@ -278,33 +177,71 @@ public class HzEPLManageRecord extends BaseChangeDO {
 
     private String pBuyEngineer;
 
-
     private Integer pLouaFlag;
 
     private String sortNum;
 
+    /**
+     * 项目
+     */
+    private String projectId;
+    /**
+     * 单车用量
+     */
+    private String vehNum;
 
+    /**
+     * 备件
+     */
+    private String sparePart;
+    /**
+     * 备件编号
+     */
+    private String sparePartNum;
+
+
+    public String getSparePart() {
+        return sparePart;
+    }
+
+    public void setSparePart(String sparePart) {
+        this.sparePart = sparePart;
+    }
+
+    public String getSparePartNum() {
+        return sparePartNum;
+    }
+
+    public void setSparePartNum(String sparePartNum) {
+        this.sparePartNum = sparePartNum;
+    }
+
+    public String getVehNum() {
+        return vehNum;
+    }
+
+    public void setVehNum(String vehNum) {
+        this.vehNum = vehNum;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        HzEPLManageRecord that = (HzEPLManageRecord) o;
-        return Objects.equals(puid, that.puid);
+        if(o instanceof HzEPLManageRecord){
+            final HzEPLManageRecord that = (HzEPLManageRecord) o;
+            if(StringUtils.isEmpty(this.puid)){
+                return this.puid.equals(that.getPuid());
+            }
+            return false;
+        }
+
+        return false;
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(puid);
-        return result;
-    }
-
-    public Integer getMaxLineIndexFirstNum() {
-        return maxLineIndexFirstNum;
-    }
-
-    public void setMaxLineIndexFirstNum(Integer maxLineIndexFirstNum) {
-        this.maxLineIndexFirstNum = maxLineIndexFirstNum;
+        return Objects.hash(puid);
     }
 
     public Long getEplId() {
@@ -313,56 +250,6 @@ public class HzEPLManageRecord extends BaseChangeDO {
 
     public void setEplId(Long eplId) {
         this.eplId = eplId;
-    }
-
-    public String getSortNum() {
-        return sortNum;
-    }
-
-    public void setSortNum(String sortNum) {
-        this.sortNum = sortNum;
-    }
-
-
-    public Integer getpLouaFlag() {
-        return pLouaFlag;
-    }
-
-    public void setpLouaFlag(Integer pLouaFlag) {
-        this.pLouaFlag = pLouaFlag;
-    }
-
-    public String getpBuyEngineer() {
-        return pBuyEngineer;
-    }
-
-    public void setpBuyEngineer(String pBuyEngineer) {
-        this.pBuyEngineer = pBuyEngineer;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-
-    public String getFna() {
-        return fna;
-    }
-
-    public void setFna(String fna) {
-        this.fna = fna;
-    }
-
-    public String getpFnaInfo() {
-        return pFnaInfo;
-    }
-
-    public void setpFnaInfo(String pFnaInfo) {
-        this.pFnaInfo = pFnaInfo;
     }
 
     public String getPuid() {
@@ -429,14 +316,6 @@ public class HzEPLManageRecord extends BaseChangeDO {
         this.isHas = isHas;
     }
 
-    public byte[] getBomLineBlock() {
-        return bomLineBlock;
-    }
-
-    public void setBomLineBlock(byte[] bomLineBlock) {
-        this.bomLineBlock = bomLineBlock;
-    }
-
     public Integer getIs2Y() {
         return is2Y;
     }
@@ -451,14 +330,6 @@ public class HzEPLManageRecord extends BaseChangeDO {
 
     public void setIsPart(Integer isPart) {
         this.isPart = isPart;
-    }
-
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
     }
 
     public String getpBomOfWhichDept() {
@@ -485,76 +356,12 @@ public class HzEPLManageRecord extends BaseChangeDO {
         this.pBomLinePartClass = pBomLinePartClass;
     }
 
-    public String getItemResource() {
-        return itemResource;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setItemResource(String itemResource) {
-        this.itemResource = itemResource;
-    }
-
-    public String getResource() {
-        return resource;
-    }
-
-    public void setResource(String resource) {
-        this.resource = resource;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public Integer getBuyUnit() {
-        return buyUnit;
-    }
-
-    public void setBuyUnit(Integer buyUnit) {
-        this.buyUnit = buyUnit;
-    }
-
-    public String getWorkShop1() {
-        return workShop1;
-    }
-
-    public void setWorkShop1(String workShop1) {
-        this.workShop1 = workShop1;
-    }
-
-    public String getWorkShop2() {
-        return workShop2;
-    }
-
-    public void setWorkShop2(String workShop2) {
-        this.workShop2 = workShop2;
-    }
-
-    public String getProductLine() {
-        return productLine;
-    }
-
-    public void setProductLine(String productLine) {
-        this.productLine = productLine;
-    }
-
-    public String getMouldType() {
-        return mouldType;
-    }
-
-    public void setMouldType(String mouldType) {
-        this.mouldType = mouldType;
-    }
-
-    public String getOuterPart() {
-        return outerPart;
-    }
-
-    public void setOuterPart(String outerPart) {
-        this.outerPart = outerPart;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getColorPart() {
@@ -565,108 +372,28 @@ public class HzEPLManageRecord extends BaseChangeDO {
         this.colorPart = colorPart;
     }
 
-    public String getSparePart() {
-        return sparePart;
+    public String getpFnaInfo() {
+        return pFnaInfo;
     }
 
-    public void setSparePart(String sparePart) {
-        this.sparePart = sparePart;
+    public void setpFnaInfo(String pFnaInfo) {
+        this.pFnaInfo = pFnaInfo;
     }
 
-    public String getSparePartNum() {
-        return sparePartNum;
+    public String getFna() {
+        return fna;
     }
 
-    public void setSparePartNum(String sparePartNum) {
-        this.sparePartNum = sparePartNum;
+    public void setFna(String fna) {
+        this.fna = fna;
     }
 
-    public String getProcessRoute() {
-        return processRoute;
+    public Integer getMaxLineIndexFirstNum() {
+        return maxLineIndexFirstNum;
     }
 
-    public void setProcessRoute(String processRoute) {
-        this.processRoute = processRoute;
-    }
-
-    public String getLaborHour() {
-        return laborHour;
-    }
-
-    public void setLaborHour(String laborHour) {
-        this.laborHour = laborHour;
-    }
-
-    public String getRhythm() {
-        return rhythm;
-    }
-
-    public void setRhythm(String rhythm) {
-        this.rhythm = rhythm;
-    }
-
-    public String getSolderJoint() {
-        return solderJoint;
-    }
-
-    public void setSolderJoint(String solderJoint) {
-        this.solderJoint = solderJoint;
-    }
-
-    public String getMachineMaterial() {
-        return machineMaterial;
-    }
-
-    public void setMachineMaterial(String machineMaterial) {
-        this.machineMaterial = machineMaterial;
-    }
-
-    public String getStandardPart() {
-        return standardPart;
-    }
-
-    public void setStandardPart(String standardPart) {
-        this.standardPart = standardPart;
-    }
-
-    public String getTools() {
-        return tools;
-    }
-
-    public void setTools(String tools) {
-        this.tools = tools;
-    }
-
-    public String getWasterProduct() {
-        return wasterProduct;
-    }
-
-    public void setWasterProduct(String wasterProduct) {
-        this.wasterProduct = wasterProduct;
-    }
-
-    public String getChange() {
-        return change;
-    }
-
-    public void setChange(String change) {
-        this.change = change;
-    }
-
-    public String getChangeNum() {
-        return changeNum;
-    }
-
-    public void setChangeNum(String changeNum) {
-        this.changeNum = changeNum;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setMaxLineIndexFirstNum(Integer maxLineIndexFirstNum) {
+        this.maxLineIndexFirstNum = maxLineIndexFirstNum;
     }
 
     public String getpBomLinePartEnName() {
@@ -989,4 +716,43 @@ public class HzEPLManageRecord extends BaseChangeDO {
         this.pRegulationCode = pRegulationCode;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getpBuyEngineer() {
+        return pBuyEngineer;
+    }
+
+    public void setpBuyEngineer(String pBuyEngineer) {
+        this.pBuyEngineer = pBuyEngineer;
+    }
+
+    public Integer getpLouaFlag() {
+        return pLouaFlag;
+    }
+
+    public void setpLouaFlag(Integer pLouaFlag) {
+        this.pLouaFlag = pLouaFlag;
+    }
+
+    public String getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(String sortNum) {
+        this.sortNum = sortNum;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
 }

@@ -91,6 +91,7 @@ public class HzSingleVehiclesFactory {
         vehiclesBomRecord.setWasterProduct(record.getWasterProduct());
         vehiclesBomRecord.setCreateTime(new Date());
         vehiclesBomRecord.setUpdateTime(new Date());
+        vehiclesBomRecord.setBomType(record.getpBomType());
         return vehiclesBomRecord;
     }
 

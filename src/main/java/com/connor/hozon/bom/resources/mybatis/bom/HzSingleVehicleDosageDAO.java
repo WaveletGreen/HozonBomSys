@@ -9,6 +9,7 @@ import java.util.List;
  * @Date: 2018/10/16
  * @Description:
  */
+@Deprecated
 public interface HzSingleVehicleDosageDAO {
 
     /**

@@ -59,6 +59,23 @@ public interface HzSingleVehiclesServices {
      */
     JSONObject singleVehDosage(byte[] bytes, List<HzCfg0ModelRecord> list,JSONObject object);
 
+    /**
+     * 单车用量
+     * @param vehNum
+     * @param list
+     * @param object
+     * @return
+     */
+    JSONObject singleVehNum(String vehNum,List<HzCfg0ModelRecord> list,JSONObject object);
+
+    /**
+     *单车用量
+     * @param vehNum
+     * @param list
+     * @return
+     */
+    JSONObject singleVehNum(String vehNum,List<HzCfg0ModelRecord> list);
+
     JSONObject sendSap(List<HzSingleVehicles> hzSingleVehicles);
 
     JSONObject deleteSap(List<HzSingleVehicles> hzSingleVehicles);

@@ -36,9 +36,13 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     }
 
     @Override
-    public int delete(String puid) {
-        return super.delete("HzMaterialDAOImpl_delete", puid);
+    public int deleteList(List<String> puids) {
+        if(ListUtil.isEmpty(puids)){
+            return 0;
+        }
+        return  super.update("HzMaterialDAOImpl_deleteList",puids);
     }
+
 
     @Override
     public int insertList(List<HzMaterielRecord> hzMaterielRecords,String tableName) {
@@ -271,7 +275,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
-            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+            map.put("revision",query.getRevision() ? query.getRevisionNo(): null);
         }else {
             map.put("revision",null);
         }

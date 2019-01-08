@@ -12,6 +12,7 @@ public class HzChangeOrderRespDTO extends BaseDTO {
     private static final String ORDER_FROM_TC="TC端";
 
     private static final String ORDER_FROM_BOM="BOM端";
+    private static final long serialVersionUID = 3453726195579320687L;
 
     /**
      * 主键id

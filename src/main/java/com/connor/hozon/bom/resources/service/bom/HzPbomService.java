@@ -72,29 +72,13 @@ public interface HzPbomService {
      */
     List<HzPbomLineRecord> getHzPbomLineTree(HzPbomTreeQuery query);
 
-    /**
-     * 创建工艺合件
-     *
-     * @param recordReqDTO
-     * @return
-     */
-    @Deprecated
-    WriteResultRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO);
 
-    /**
-     * 查询已删除记录
-     *
-     * @param query
-     * @return
-     */
-    Page<HzPbomLineRespDTO> getHzPbomRecycleByPage(HzBomRecycleByPageQuery query);
-
-    /**
-     * 删除记录恢复
-     *
-     * @return
-     */
-    WriteResultRespDTO recoverDeletePbomRecord(String projectId, String puid);
+//    /**
+//     * 删除记录恢复
+//     *
+//     * @return
+//     */
+//    WriteResultRespDTO recoverDeletePbomRecord(String projectId, String puid);
 
 
     WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);

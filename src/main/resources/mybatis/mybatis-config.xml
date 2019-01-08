@@ -13,7 +13,7 @@
     <settings>
         <!-- 打印查询语句 -->
         <setting name="logImpl" value="STDOUT_LOGGING"/> <!--最好是放在最上面即紧跟configuration节点,注意顺序-->
-        <setting name="cacheEnabled" value="false"></setting>
+        <setting name="cacheEnabled" value="false"/>
     </settings>
     <!--该文件请放到resource下，便于单独读到，不需要配置-->
     <typeAliases>
@@ -33,6 +33,8 @@
         <mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzMbomRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzEBomRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzBOMScheduleTaskMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzBOMScheduleResultMapper.xml"/>
         <!--<mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>-->
         <mapper resource="sql/mapper/bom/xmapper/HzMBomToERPMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzSingleVehiclesBomRecordMapper.xml"/>

@@ -146,6 +146,14 @@ function initTable(url) {
                             iconCls: 'glyphicon glyphicon-remove',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');
+                                var puids = "";
+                                for (var i = 0; i < rows.length; i++) {
+                                    puids += rows[i].puid + ",";
+                                }
+                                var myData = JSON.stringify({
+                                    "puids": puids,
+                                });
+
                                 if (rows.length == 0) {
                                     window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                     return false;
@@ -178,8 +186,8 @@ function initTable(url) {
                                                     $.ajax({
                                                         type: "POST",
                                                         //ajax需要添加打包名
-                                                        url: "materiel/delete?puid=" + rows[0].puid,
-                                                        //data: JSON.stringify(rows),
+                                                        url: "materiel/delete",
+                                                        data: myData,
                                                         contentType: "application/json",
                                                         success: function (result) {
                                                             if (result.success) {
@@ -337,7 +345,7 @@ function initTable(url) {
                         //     }
                         // },
                         {
-                            text: '关联变更单号',
+                            text: '关联变更单',
                             iconCls: 'glyphicon glyphicon-log-out',
                             handler: function () {
                                 var rows = $table.bootstrapTable('getSelections');

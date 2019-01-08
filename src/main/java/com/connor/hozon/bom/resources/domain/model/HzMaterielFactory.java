@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
@@ -74,46 +75,19 @@ public class HzMaterielFactory {
         // 2Y 层的 就是虚拟件  否则就不是
 //        Integer inventedFlag = record.getpInventedPart();
         Integer loosePartFlag = record.getpLoosePartFlag();
-        if (Integer.valueOf(0).equals(p3CPartFlag)) {
-            respDTO.setP3cPartFlag("N");
-        } else if (Integer.valueOf(1).equals(p3CPartFlag)) {
-            respDTO.setP3cPartFlag("Y");
-        } else {
-            respDTO.setP3cPartFlag("");
-        }
+        respDTO.setP3cPartFlag(BOMTransConstants.integerToYNString(p3CPartFlag));
 
         if(dataType != null){
             switch (dataType){
-                case 31:respDTO.setpInventedPart("Y");
+                case 31:respDTO.setpInventedPart(BOMTransConstants.Y);
                 break;
-                default:respDTO.setpInventedPart("N");
+                default:respDTO.setpInventedPart(BOMTransConstants.N);
                 break;
             }
         }
-
-        if (Integer.valueOf(0).equals(colorPart)) {
-            respDTO.setpColorPart("N");
-        } else if (Integer.valueOf(1).equals(colorPart)) {
-            respDTO.setpColorPart("Y");
-        } else {
-            respDTO.setpColorPart("");
-        }
-
-        if (Integer.valueOf(1).equals(inOutSideFlag)) {
-            respDTO.setpInOutSideFlag("内饰件");
-        } else if (Integer.valueOf(0).equals(inOutSideFlag)) {
-            respDTO.setpInOutSideFlag("外饰件");
-        } else {
-            respDTO.setpInOutSideFlag("");
-        }
-
-        if (Integer.valueOf(1).equals(loosePartFlag)) {
-            respDTO.setpLoosePartFlag("Y");
-        } else if (Integer.valueOf(0).equals(loosePartFlag)) {
-            respDTO.setpLoosePartFlag("N");
-        } else {
-            respDTO.setpLoosePartFlag("");
-        }
+        respDTO.setpColorPart(BOMTransConstants.integerToYNString(colorPart));
+        respDTO.setpInOutSideFlag(BOMTransConstants.integerToInOutSideString(inOutSideFlag));
+        respDTO.setpLoosePartFlag(BOMTransConstants.integerToYNString(loosePartFlag));
         respDTO.setpHeight(record.getpHeight());
         respDTO.setpPartImportantDegree(record.getpPartImportantDegree());
         respDTO.setpSpareMaterial(record.getpSpareMaterial());
@@ -134,8 +108,13 @@ public class HzMaterielFactory {
         hzMaterielRecord.setpMaterielCode(feature.getpFeatureSingleVehicleCode());
         hzMaterielRecord.setpMaterielDesc(feature.getMaterielDesc());
         hzMaterielRecord.setpMaterielDescEn(feature.getMaterielEnDesc());
-        hzMaterielRecord.setpCreateName(UserInfo.getUser().getUserName());
-        hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUserName());
+        if(null == UserInfo.getUser()){
+            hzMaterielRecord.setpCreateName("system");
+            hzMaterielRecord.setpUpdateName("system");
+        }else {
+            hzMaterielRecord.setpCreateName(UserInfo.getUser().getUserName());
+            hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUserName());
+        }
         hzMaterielRecord.setpMrpController("Z02");//整车的MRP控制者都是Z02
         hzMaterielRecord.setpVinPerNo(feature.getVinCode());
         hzMaterielRecord.setResource(feature.getPurchaseType());

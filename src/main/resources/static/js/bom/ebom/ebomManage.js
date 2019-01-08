@@ -1,4 +1,4 @@
-var eBomTitleSet = 52;//50个属性+勾选框列和序号列
+var eBomTitleSet = 55;//53个属性+勾选框列和序号列
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
@@ -45,8 +45,6 @@ function initTable(eBomUrl) {
             var column = [];
             column.push({field: 'ck', checkbox: true});
             var data = result.data;
-            var keys = [];
-            var values;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
                     if ('pLouaFlag' === key) {
@@ -194,7 +192,7 @@ function initTable(eBomUrl) {
                         }
                     },
                     {
-                        text: '同步修改',
+                        text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -218,7 +216,7 @@ function initTable(eBomUrl) {
                                     }
                                     else {
                                         window.Ewin.dialog({
-                                            title: "同步修改",
+                                            title: "修改",
                                             url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid+"&updateType="+2,
                                             gridId: "gridId",
                                             width: 500,
@@ -457,7 +455,7 @@ function initTable(eBomUrl) {
                         }
                     },
                     {
-                        text: '关联变更单号',
+                        text: '关联变更单',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -603,6 +601,7 @@ function initTable(eBomUrl) {
                                     rows[index].map = {};
                                 }
                                 length = getLengthOfJson(rows[0]);
+                                console.log(length)
                             }
                             //动态获取单车配置用量数据
                             for (let k in rows) {
@@ -627,7 +626,6 @@ function initTable(eBomUrl) {
                                         data: (JSON.stringify(rows)),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            console.log(result);
                                             if (result.status) {
                                                 layer.msg(result.msg, {icon: 1, time: 2000})
                                                 //下载EBOM导入模板
@@ -818,7 +816,7 @@ function initTable1(eBomUrl, puids) {
                         }
                     },
                     {
-                        text: '同步修改',
+                        text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -842,7 +840,7 @@ function initTable1(eBomUrl, puids) {
                                     }
                                     else {
                                         window.Ewin.dialog({
-                                            title: "同步修改",
+                                            title: "修改",
                                             url: "ebom/updateEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
                                             gridId: "gridId",
                                             width: 500,
@@ -1045,7 +1043,7 @@ function initTable1(eBomUrl, puids) {
                         }
                     },
                     {
-                        text: '关联变更单号',
+                        text: '关联变更单',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');

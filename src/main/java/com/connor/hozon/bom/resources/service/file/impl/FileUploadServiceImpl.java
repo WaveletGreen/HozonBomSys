@@ -21,12 +21,17 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
+import com.google.common.base.Strings;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
@@ -52,26 +57,50 @@ import java.util.concurrent.CountDownLatch;
 @Service("fileUploadService")
 public class FileUploadServiceImpl implements FileUploadService {
 
-    @Autowired
-    private HzBomLineRecordDaoImpl hzBomLineRecordDao;
-
-    @Autowired
     private HzBomMainRecordDao hzBomMainRecordDao;
 
-    @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
 
-    @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
 
-    @Autowired
     private HzMbomService hzMbomService;
 
-    @Autowired
     private HzCfg0ModelService hzCfg0ModelService;
 
-    @Autowired
     private HzEPLDAO hzEPLDAO;
+
+    private TransactionTemplate configTransactionTemplate;
+
+    @Autowired
+    public void setHzBomMainRecordDao(HzBomMainRecordDao hzBomMainRecordDao) {
+        this.hzBomMainRecordDao = hzBomMainRecordDao;
+    }
+    @Autowired
+    public void setHzEbomRecordDAO(HzEbomRecordDAO hzEbomRecordDAO) {
+        this.hzEbomRecordDAO = hzEbomRecordDAO;
+    }
+    @Autowired
+    public void setHzPbomRecordDAO(HzPbomRecordDAO hzPbomRecordDAO) {
+        this.hzPbomRecordDAO = hzPbomRecordDAO;
+    }
+    @Autowired
+    public void setHzMbomService(HzMbomService hzMbomService) {
+        this.hzMbomService = hzMbomService;
+    }
+    @Autowired
+    public void setHzCfg0ModelService(HzCfg0ModelService hzCfg0ModelService) {
+        this.hzCfg0ModelService = hzCfg0ModelService;
+    }
+    @Autowired
+    public void setHzEPLDAO(HzEPLDAO hzEPLDAO) {
+        this.hzEPLDAO = hzEPLDAO;
+    }
+
+    @Autowired
+    public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
+        this.configTransactionTemplate = configTransactionTemplate;
+    }
+
 
     private int errorCount = 0;
 
@@ -105,25 +134,34 @@ public class FileUploadServiceImpl implements FileUploadService {
                     return WriteResultRespDTO.fileError();
                 }
                 Row row = sheet.getRow(0);
-                if(row.getLastCellNum()<50){
+                if(row.getLastCellNum()<52){
                     return WriteResultRespDTO.fileFormatError();
                 }
-                if( "是否颜色件".equals(row.getCell(row.getLastCellNum()-1).getStringCellValue())
-                        || "生效时间".equals(row.getCell(row.getLastCellNum()-1).getStringCellValue())
-                        ){
-                    return importEbomExcelContentToDB(projectId,sheet);
-                }else {
-                    return importBomSingleVehDosageToDB(sheet,projectId);
+
+
+            configTransactionTemplate.execute(new TransactionCallback<Void>() {
+                @Override
+                public Void doInTransaction(TransactionStatus status) {
+                    WriteResultRespDTO respDTO = null;
+                    if( "是否颜色件".equals(row.getCell(row.getLastCellNum()-1).getStringCellValue())
+                            || "生效时间".equals(row.getCell(row.getLastCellNum()-1).getStringCellValue())
+                            ){
+                         respDTO = importEbomExcelContentToDB(projectId,sheet);
+                    }else {
+                         respDTO = importBomSingleVehDosageToDB(sheet,projectId);
+                    }
+                    if(WriteResultRespDTO.isSuccess(respDTO)){
+                        return null;
+                    }
+                    throw new HzBomException("数据导入失败！");
                 }
+            });
 
 //            }
-
-
-
+            return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
-
         }
     }
 
@@ -143,13 +181,185 @@ public class FileUploadServiceImpl implements FileUploadService {
      */
     private WriteResultRespDTO importEbomExcelContentToDB(String projectId,Sheet sheet){
         try {
+
             this.errorCount = 0;
-            this.lineIndexFirst = 10;
-            this.lineIndexLast = 10;
             String errorMsg = errorLogInfo(sheet,projectId);
             if(this.errorCount!=0){
                 return  WriteResultRespDTO.failResultRespDTO(errorMsg);
             }
+
+            //todo 导入EBOM数据前 需要先把EPL的导入工作做好 去重
+            Set<HzEPLRecord> eplRecords = new HashSet<>();
+            for(int rowNum = 1; rowNum <= sheet.getLastRowNum(); rowNum++){
+                Row row = sheet.getRow(rowNum);
+                String lineId=ExcelUtil.getCell(row,1).getStringCellValue();
+                HzEPLQuery query = new HzEPLQuery();
+                query.setPartId(lineId);
+                query.setProjectId(projectId);
+                HzEPLRecord eplRecord = hzEPLDAO.getEPLRecordById(query);
+                if(eplRecord != null){
+                    continue;
+                }
+                HzEPLRecord record = new HzEPLRecord();
+                String pBomLinePartName=ExcelUtil.getCell(row,2).getStringCellValue();
+                String pBomOfWhichDept=ExcelUtil.getCell(row,4).getStringCellValue();
+                String pBomLinePartEnName=ExcelUtil.getCell(row,8).getStringCellValue();
+
+                String pUnit=ExcelUtil.getCell(row,10).getStringCellValue();
+                String pPictureNo=ExcelUtil.getCell(row,11).getStringCellValue();
+                String pPictureSheet=ExcelUtil.getCell(row,12).getStringCellValue();
+                String pMaterialHigh=ExcelUtil.getCell(row,13).getStringCellValue();
+
+                String pMaterial1=ExcelUtil.getCell(row,14).getStringCellValue();
+                String pMaterial2=ExcelUtil.getCell(row,15).getStringCellValue();
+                String pMaterial3=ExcelUtil.getCell(row,16).getStringCellValue();
+                String pDensity=ExcelUtil.getCell(row,17).getStringCellValue();
+                String pMaterialStandard=ExcelUtil.getCell(row,18).getStringCellValue();
+
+                String pSurfaceTreat=ExcelUtil.getCell(row,19).getStringCellValue();
+                String pTextureColorNum=ExcelUtil.getCell(row,20).getStringCellValue();
+                String pManuProcess=ExcelUtil.getCell(row,21).getStringCellValue();
+                String pSymmetry=ExcelUtil.getCell(row,22).getStringCellValue();
+                String pImportance=ExcelUtil.getCell(row,23).getStringCellValue();
+
+                String pRegulationFlag=ExcelUtil.getCell(row,24).getStringCellValue();
+                String p3cpartFlag=ExcelUtil.getCell(row,25).getStringCellValue();
+                String pRegulationCode=ExcelUtil.getCell(row,26).getStringCellValue();
+                String pBwgBoxPart=ExcelUtil.getCell(row,27).getStringCellValue();
+                String pDevelopType=ExcelUtil.getCell(row,28).getStringCellValue();
+
+                String pDataVersion=ExcelUtil.getCell(row,29).getStringCellValue();
+
+                String pTargetWeight ="";
+                String pFeatureWeight ="";
+                String pActualWeight="";
+
+                try {
+                    pTargetWeight = ExcelUtil.getCell(row,30).getStringCellValue();
+                    if(StringUtils.isBlank(pTargetWeight)){
+                        pTargetWeight = "";
+                    }else {
+                        BigDecimal bigDecimal = new BigDecimal(pTargetWeight);
+                        pTargetWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+                    }
+                }catch (Exception e){
+                    try {
+                        BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,30).getNumericCellValue());
+                        pTargetWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+                    }catch (Exception e1){
+                        pTargetWeight ="";
+                    }
+
+                }
+
+                try {
+                    pFeatureWeight = ExcelUtil.getCell(row,31).getStringCellValue();
+                    if(StringUtils.isBlank(pFeatureWeight)){
+                        pFeatureWeight ="";
+                    }else {
+                        BigDecimal bigDecimal = new BigDecimal(pFeatureWeight);
+                        pFeatureWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+                    }
+                }catch (Exception e){
+                    try {
+                        BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,31).getNumericCellValue());
+                        pFeatureWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+                    }catch (Exception e1){
+                        pFeatureWeight="";
+                    }
+
+                }
+
+                try {
+                    pActualWeight = ExcelUtil.getCell(row,32).getStringCellValue();
+                    if(StringUtils.isBlank(pActualWeight)){
+                        pActualWeight = "";
+                    }else {
+                        BigDecimal bigDecimal = new BigDecimal(pActualWeight);
+                        pActualWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+                    }
+                }catch (Exception e){
+                    try {
+                        BigDecimal dec = new BigDecimal(ExcelUtil.getCell(row,32).getNumericCellValue());
+                        pActualWeight =String.valueOf(dec.setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue());
+                    }catch (Exception e1){
+                        pActualWeight="";
+                    }
+                }
+                String pFastener=ExcelUtil.getCell(row,33).getStringCellValue();
+
+                String pFastenerStandard=ExcelUtil.getCell(row,34).getStringCellValue();
+                String pFastenerLevel=ExcelUtil.getCell(row,35).getStringCellValue();
+                if(pFastenerLevel.contains(".") && pFastenerLevel.length()>4){
+                    pFastenerLevel = pFastenerLevel.substring(0,3);
+                }
+                String pTorque=ExcelUtil.getCell(row,36).getStringCellValue();
+                String pDutyEngineer=ExcelUtil.getCell(row,37).getStringCellValue();
+                String pSupply=ExcelUtil.getCell(row,38).getStringCellValue();
+
+                String pSupplyCode=ExcelUtil.getCell(row,39).getStringCellValue();
+                String pBuyEngineer=ExcelUtil.getCell(row,40).getStringCellValue();
+                String pRemark=ExcelUtil.getCell(row,41).getStringCellValue();
+                String pBomLinePartClass=ExcelUtil.getCell(row,42).getStringCellValue();
+
+                String pBomLinePartResource= ExcelUtil.getCell(row,43).getStringCellValue();
+                String pInOutSideFlag=ExcelUtil.getCell(row,44).getStringCellValue();
+
+
+                record.setIs3cpart(BOMTransConstants.constantStringToInteger(p3cpartFlag));
+                record.setActualWeight(pActualWeight);
+                record.setPartClass(pBomLinePartClass);
+                record.setPartEnName(pBomLinePartEnName);
+                record.setPartName(pBomLinePartName);
+                record.setPartResource(pBomLinePartResource);
+                record.setBuyEngineer(pBuyEngineer);
+                record.setPartOfWhichDept(pBomOfWhichDept);
+                record.setBwgBoxPart(pBwgBoxPart);
+                record.setCreateName(UserInfo.getUser().getUserName());
+                record.setDataVersion(pDataVersion);
+                record.setDensity(pDensity);
+                record.setDevelopType(pDevelopType);
+                record.setDutyEngineer(pDutyEngineer);
+                record.setFastener(pFastener);
+                record.setFastenerLevel(pFastenerLevel);
+                record.setFastenerStandard(pFastenerStandard);
+                record.setFeatureWeight(pFeatureWeight);
+
+                record.setImportance(pImportance);
+                record.setInOutSideFlag(BOMTransConstants.constantStringToInteger(pInOutSideFlag));
+
+                record.setManuProcess(pManuProcess);
+                record.setMaterial1(pMaterial1);
+                record.setMaterial2(pMaterial2);
+                record.setMaterial3(pMaterial3);
+                record.setMaterialHigh(pMaterialHigh);
+                record.setMaterialStandard(pMaterialStandard);
+                record.setPictureNo(pPictureNo);
+                record.setPictureSheet(pPictureSheet);
+                record.setRegulationCode(pRegulationCode);
+                record.setRegulationFlag(BOMTransConstants.constantStringToInteger(pRegulationFlag));
+
+                record.setRemark(pRemark);
+                record.setSupply(pSupply);
+                record.setSupplyCode(pSupplyCode);
+                record.setSurfaceTreat(pSurfaceTreat);
+                record.setSymmetry(pSymmetry);
+                record.setTargetWeight(pTargetWeight);
+                record.setTextureColorNum(pTextureColorNum);
+                record.setTorque(pTorque);
+                record.setUnit(pUnit);
+                record.setUpdateName(UserInfo.getUser().getUserName());
+                record.setProjectId(projectId);
+                record.setPartId(lineId);
+                eplRecords.add(record);
+            }
+            if(ListUtil.isNotEmpty(eplRecords)){
+                hzEPLDAO.insertList(new ArrayList<>(eplRecords));
+            }
+
+
+            this.lineIndexFirst = 10;
+            this.lineIndexLast = 10;
 
             List<List<HzImportEbomRecord>> list1 = new ArrayList<>();
 
@@ -293,6 +503,8 @@ public class FileUploadServiceImpl implements FileUploadService {
         }
         return WriteResultRespDTO.getSuccessResult();
     }
+
+
 
 
     /**
@@ -440,14 +652,17 @@ public class FileUploadServiceImpl implements FileUploadService {
             }
         }
 
-        String colorPart=ExcelUtil.getCell(row,49).getStringCellValue();
+
+        String sparePart=ExcelUtil.getCell(row,49).getStringCellValue();
+        String sparePartNum=ExcelUtil.getCell(row,50).getStringCellValue();
+        String colorPart=ExcelUtil.getCell(row,51).getStringCellValue();
 
 
 
         HzImportEbomRecord record = new HzImportEbomRecord();
         record.setNo(Integer.valueOf(no));
         record.setLineId(lineId);
-        if(number !=null && number !=""){
+        if(StringUtils.isNotBlank(number)){
             record.setNumber(number);
         }
 //        if("Y".equals(p3cpartFlag)){
@@ -509,6 +724,8 @@ public class FileUploadServiceImpl implements FileUploadService {
 //        record.setpUnit(pUnit);
         record.setpUpc(pUpc);
         record.setpUpdateName(UserInfo.getUser().getUserName());
+        record.setSparePart(sparePart);
+        record.setSparePartNum(sparePartNum);
         record.setColorPart(BOMTransConstants.constantStringToInteger(colorPart));
         record.setEplId(eplId);
         return record;
@@ -553,7 +770,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     lineIndexFirst +=10;
                     lineIndexLast +=10;
                 }else {
-                    int lineIndexFirstNum = record.getMaxLineIndexFirstNum();
+                    int lineIndexFirstNum = Integer.valueOf(record.getLineIndex().split("\\.")[0]);
                     int lineIndexLastNum = Integer.valueOf(record.getLineIndex().split("\\.")[1]);
                     lineIndexFirstNum = lineIndexFirstNum+lineIndexFirst;
                     lineIndexLastNum = lineIndexLastNum + lineIndexLast;
@@ -571,7 +788,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             int preLevelNum = Integer.valueOf(preLevel.replace("Y",""));
             int currentLevelNum = Integer.valueOf(level.replace("Y",""));
 
-            if(currentLevelNum>=preLevelNum){
+            if(currentLevelNum >= preLevelNum){
                 for(String key:lineIndexMap.keySet()){
                     if(key.equals(preKey)){
                         String value = lineIndexMap.get(preKey);
@@ -716,14 +933,14 @@ public class FileUploadServiceImpl implements FileUploadService {
                     stringBuffer.append("第"+(rowNum)+"行的零件号:"+lineId+"不能为<strong>空</strong></br>") ;
                     this.errorCount++;
                 }
-                HzEPLQuery query = new HzEPLQuery();
-                query.setProjectId(projectId);
-                query.setPartId(lineId);
-                HzEPLRecord record = hzEPLDAO.getEPLRecordById(query);
-                if(record == null || !Integer.valueOf(1).equals(record.getStatus())){
-                    stringBuffer.append("第"+(rowNum)+"行的零件号:"+"<strong style='color: red'>"+lineId+"</strong>在EPL中不存在<strong style='color: red'>已生效</strong>记录!</br>") ;
-                    this.errorCount++;
-                }
+//                HzEPLQuery query = new HzEPLQuery();
+//                query.setProjectId(projectId);
+//                query.setPartId(lineId);
+//                HzEPLRecord record = hzEPLDAO.getEPLRecordById(query);
+//                if(record == null || !Integer.valueOf(1).equals(record.getStatus())){
+//                    stringBuffer.append("第"+(rowNum)+"行的零件号:"+"<strong style='color: red'>"+lineId+"</strong>在EPL中不存在<strong style='color: red'>已生效</strong>记录!</br>") ;
+//                    this.errorCount++;
+//                }
                 if(StringUtil.isEmpty(level)){
                     stringBuffer.append("第"+(rowNum)+"行的层级不能为<strong>空</strong></br>") ;
                     this.errorCount++;
@@ -772,7 +989,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                         if(level.endsWith("Y")){
                             stringBuffer.append("最后一行的层级不能带Y,因为找不到他的子层!</br>");
                             this.errorCount++;
-                            continue;
                         }
                     }
                 }
@@ -797,7 +1013,7 @@ public class FileUploadServiceImpl implements FileUploadService {
      */
     private String singleVehiclesDosageExcelErrorMsg(List<HzCfg0ModelRecord> hzCfg0ModelRecords,Sheet sheet,String projectId){
         StringBuffer stringBuffer = new StringBuffer("文件解析失败!</br>");
-        Integer num = hzBomLineRecordDao.getBomLineRecordNumber(projectId);
+        Integer num = hzEbomRecordDAO.findEBomTotalCount(projectId);
         if(num == null || num<=0){
             stringBuffer.append("未找到相关BOM信息，导入单车用量信息前，应先存在相关BOM记录!</br>");
             this.errorCount++;
@@ -812,7 +1028,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                 stringBuffer.append("第"+(rowNum)+"行的零件名称不能为<strong>空</strong></br>") ;
                 this.errorCount++;
             }
-            continue;
         }
 
 
@@ -823,15 +1038,15 @@ public class FileUploadServiceImpl implements FileUploadService {
             short lastCellNum = title.getLastCellNum();
             List<String> titleName = new ArrayList<>();
             if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-                if(lastCellNum>50){
-                    for(int i =50;i<lastCellNum;i++){//第50列以后为要导入的版型信息
+                if(lastCellNum > 50){
+                    for(int i = 50;i<lastCellNum;i++){//第50列以后为要导入的版型信息
                         boolean find = false;
                         String s = ExcelUtil.getCell(title,i).getStringCellValue();
-                        if(s.contains("(单车用量)")){
-                            s=s.replace("(单车用量)","");
+                        if(s.contains(BOMTransConstants.VEH_DOSAGE_CN)){
+                            s=s.replace(BOMTransConstants.VEH_DOSAGE_CN,BOMTransConstants.EMPTY);
                         }
-                        if(s.contains("（单车用量）")){
-                            s=s.replace("（单车用量）","");
+                        if(s.contains(BOMTransConstants.VEH_DOSAGE_EN)){
+                            s=s.replace(BOMTransConstants.VEH_DOSAGE_EN,BOMTransConstants.EMPTY);
                         }
                         for(HzCfg0ModelRecord record :hzCfg0ModelRecords){
                             if(s.equals(record.getObjectName())){
@@ -896,79 +1111,55 @@ public class FileUploadServiceImpl implements FileUploadService {
             WriteResultRespDTO respDTO = new WriteResultRespDTO();
 //            List<HzBomLineRecord> bomLineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(projectId);
             List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
-            String errorMsg = singleVehiclesDosageExcelErrorMsg(hzCfg0ModelRecords,sheet,projectId);
+            Set<HzCfg0ModelRecord> set = new HashSet<>(hzCfg0ModelRecords);
+            List<HzCfg0ModelRecord> records = new ArrayList<>(set);
+            String errorMsg = singleVehiclesDosageExcelErrorMsg(records,sheet,projectId);
             if(this.errorCount!=0){
                 return WriteResultRespDTO.failResultRespDTO(errorMsg);
             }
-           //存单车版型 名称和id信息
-            Map<String,String> objectMap = new HashMap<>();
-
-            for(HzCfg0ModelRecord record : hzCfg0ModelRecords){
-                objectMap.put(record.getObjectName(),record.getPuid());
-            }
-
             //存表头信息 和对应的列数字
             Map<Integer,String> titleMap = new HashMap<>();
             Row title = sheet.getRow(0);
             for(int i = 50;i<title.getLastCellNum();i++){
                 String s = title.getCell(i).getStringCellValue();
-                if(s.contains("(单车用量)")){
-                    s=s.replace("(单车用量)","");
+                if(s.contains(BOMTransConstants.VEH_DOSAGE_CN)){
+                    s=s.replace(BOMTransConstants.VEH_DOSAGE_CN,BOMTransConstants.EMPTY);
                 }
-                if(s.contains("（单车用量）")){
-                    s=s.replace("（单车用量）","");
+                if(s.contains(BOMTransConstants.VEH_DOSAGE_EN)){
+                    s=s.replace(BOMTransConstants.VEH_DOSAGE_EN,BOMTransConstants.EMPTY);
                 }
                 titleMap.put(i,s);
             }
 
-
-//            Map<String,Object> m = new HashMap<>();
-//            m.put("9B17175B781C4AF7ABBE7140E64F4A4D",19.2);
-//            m.put("CD3A3819E2CB427789E04F9AD61E4778",2);
-//            m.put("A3EA5F3BFA994CFB8283ADCE94780793",14);
-//            m.put("DFA3F4850D2A410599E364EF64F224EC",3);
-//            byte [] bytes = SerializeUtil.serialize(m);
-
-            List<HzBomLineRecord> singleVehDosageRecords = new ArrayList<>();
-
-
+            List<HzEPLManageRecord> singleVehDosageRecords = new ArrayList<>();
 
             for(int i =1;i<=sheet.getLastRowNum();i++){
-                Row sheetRow = sheet.getRow(i);
+                Row sheetRow = sheet.getRow(i);//行
                 if(sheetRow != null){
                     HzImportEbomRecord importEbomRecord = excelObjectToRecord(sheet,i,projectId);
-                    HzBomLineRecord record = HzEbomRecordFactory.importEbomRecordToBomLineRecord(importEbomRecord);
-                    Map<String,Object> map = new HashMap<>();
+                    HzEPLManageRecord record = HzEbomRecordFactory.importEbomRecordToBomLineRecord(importEbomRecord);
+                    StringBuilder builder = new StringBuilder();
                     for(int j =50;j<title.getLastCellNum();j++){
-                        String vehDosage = ExcelUtil.getCell(sheet.getRow(i),j).getStringCellValue();
-                        map.put(objectMap.get(titleMap.get(j)),vehDosage);
+                        String key = titleMap.get(j);
+                        if(StringUtils.isEmpty(key)){
+                            continue;
+                        }
+                        String vehDosage = ExcelUtil.getCell(sheetRow,j).getStringCellValue();
+                        if(StringUtils.isNotEmpty(vehDosage)){
+                            builder.append(key+"#"+vehDosage+",");
+                        }else {
+                            builder.append(key+"#-"+",");
+                        }
                     }
-                    byte [] bytes = SerializeUtil.serialize(map);
-                    record.setSingleVehDosage(bytes);
+                    record.setVehNum(builder.toString());
                     record.setBomDigifaxId(hzBomMainRecord.getPuid());
                     record.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
                     singleVehDosageRecords.add(record);
-
                 }
             }
 
-            //PBOM 同步 根据零件号来同步基本属性信息
-            List<HzPbomLineRecord> list = new ArrayList<>();
-            if(ListUtil.isNotEmpty(singleVehDosageRecords)){
-                for(HzBomLineRecord record :singleVehDosageRecords){
-                    HzPbomLineRecord pbomLineRecord = HzPbomRecordFactory.bomLineRecordToPbomRecord(record);
-                    list.add(pbomLineRecord);
-                }
-                int i = hzEbomRecordDAO.updateList(singleVehDosageRecords);
-
-                   i+= hzPbomRecordDAO.updateList(list);
-                ExcelUtil.deleteFile();
-                if(i==2){
-                    return WriteResultRespDTO.getSuccessResult();
-                }else {
-                    return WriteResultRespDTO.getFailResult();
-                }
-            }
+            hzEbomRecordDAO.updateListByEplId(singleVehDosageRecords);
+            ExcelUtil.deleteFile();
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();

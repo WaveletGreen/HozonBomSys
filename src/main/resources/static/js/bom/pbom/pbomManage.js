@@ -27,7 +27,7 @@ function doQuery() {
         pBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
     }
     var pIsNewPart = $("#pIsNewPart").val();
-    if (pIsNewPart == "请选择工艺合件") {
+    if (pIsNewPart == "工艺合件") {
         pBomUrl += "&pIsNewPart=" + "";
     }
     else {
@@ -45,7 +45,7 @@ function initTable(pBomUrl) {
         return;
     }
     $.ajax({
-        url: "pbom/manage/title?project=" + projectPuid,
+        url: "pbom/manage/title?projectId=" + projectPuid,
         type: "GET",
         success: function (result) {
             var column = [];
@@ -154,7 +154,6 @@ function initTable(pBomUrl) {
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
-                striped: true, //是否显示行间隔色
                 showColumns: true, //是否显示所有的列
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
@@ -555,7 +554,7 @@ function initTable(pBomUrl) {
                         }
                     },
                     {
-                        text: '关联变更单号',
+                        text: '关联变更单',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -1079,7 +1078,7 @@ function initTable1(pBomUrl, lineIds) {
                         }
                     },
                     {
-                        text: '关联变更单号',
+                        text: '关联变更单',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');

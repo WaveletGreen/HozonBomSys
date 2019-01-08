@@ -23,11 +23,11 @@ public interface HzMaterielService {
     WriteResultRespDTO editHzMateriel(EditHzMaterielReqDTO editHzMaterielReqDTO);
 
     /**
-     * 删除一条记录
-     * @param puid
+     * 删除记录
+     * @param puids
      * @return
      */
-    WriteResultRespDTO deleteHzMateriel(String puid);
+    WriteResultRespDTO deleteHzMateriel(String puids);
 
     /**
      * 分页获取物料信息

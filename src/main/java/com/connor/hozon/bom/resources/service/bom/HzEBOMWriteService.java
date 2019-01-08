@@ -1,9 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom;
 
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzEbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomLeveReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 
 /**
@@ -38,5 +35,27 @@ public interface HzEBOMWriteService {
      * @param reqDTO
      * @return
      */
-    WriteResultRespDTO deleteHzEbomRecordById(DeleteHzEbomReqDTO reqDTO);
+    WriteResultRespDTO deleteHzEbomRecord(DeleteHzEbomReqDTO reqDTO);
+
+
+    /**
+     * EBOM数据  到变更表单
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
+    /**
+     * BOM数据撤销
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO);
+
+    /**
+     * 设置当前BOM为LOU
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);
+
 }

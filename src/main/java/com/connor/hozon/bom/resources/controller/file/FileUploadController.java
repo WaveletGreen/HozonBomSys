@@ -44,8 +44,10 @@ public class FileUploadController extends BaseController{
     public void filesUpload (@RequestParam("file") MultipartFile file,
 
                              @RequestParam("projectId") String projectId,HttpServletResponse response){
-        WriteResultRespDTO respDTO = fileUploadService.uploadEbomToDB(file,projectId);
-        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        synchronized (this){
+            WriteResultRespDTO respDTO = fileUploadService.uploadEbomToDB(file,projectId);
+            toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        }
     }
 
     @RequestMapping(value = "/uploadPbom", method = RequestMethod.POST)

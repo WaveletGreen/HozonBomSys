@@ -14,8 +14,6 @@ import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.option.SpecialSettingOptions;
-import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
-import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzColorModelService;
 import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;

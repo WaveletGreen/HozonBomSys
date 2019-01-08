@@ -69,9 +69,9 @@ public class HzPbomController extends BaseController {
         tableTitle.put("mouldType", "模具类别");
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("station", "工位");
+        tableTitle.put("effectTime","生效时间");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
-        tableTitle.put("effectTime","生效时间");
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
@@ -84,15 +84,7 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "getBomManage", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getPbomLineRecord(HzPbomByPageQuery query) {
-        HzPbomByPageQuery ebomByPageQuery = query;
-        ebomByPageQuery.setPageSize(0);
-        try {
-            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        } catch (Exception e) {
-
-        }
         Page<HzPbomLineRespDTO> respDTOPage = hzPbomService.getHzPbomRecordPage(query);
-
         List<HzPbomLineRespDTO> respDTOS = respDTOPage.getResult();
         if (respDTOS == null) {
             return new HashMap<>();
@@ -169,7 +161,6 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "updatePbomManage", method = RequestMethod.GET)
     public String updatePbomManageRecordToPage(String projectId, String eBomPuid,String puid,Integer updateType, Model model) {
         HzPbomLineRespDTO respDTO = hzPbomService.getHzPbomByPuid(projectId, eBomPuid);
-        respDTO.setUpdateType(updateType);
         if (respDTO == null) {
             return "";
         }
@@ -246,7 +237,6 @@ public class HzPbomController extends BaseController {
 
     /**
      * 获取合成新件界面
-     *
      * @param model
      * @return
      */
@@ -257,29 +247,6 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
-     *
-     * @param
-     * @param response
-     */
-    @RequestMapping(value = "/add/processCompose", method = RequestMethod.POST)
-    public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO, HttpServletResponse response) {
-        WriteResultRespDTO writeResultRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
-        JSONArray jsonArray = new JSONArray();
-        if (WriteResultRespDTO.isSuccess(writeResultRespDTO)) {
-            HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
-            if (recordReqDTO.getLineId() != null) {
-                reqDTO.setLineId(recordReqDTO.getLineId());
-            }
-            reqDTO.setProjectId(recordReqDTO.getProjectId());
-            jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
-        }
-        toJSONResponse(Result.build(
-                WriteResultRespDTO.isSuccess(writeResultRespDTO), writeResultRespDTO.getErrMsg(), jsonArray), response);
-    }
-
-    /**
-     * 合成工艺合件
-     *
      * @param
      * @param param
      * @Autor Fancyears·Malos

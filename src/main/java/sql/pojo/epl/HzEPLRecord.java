@@ -5,6 +5,7 @@ import sql.pojo.BaseChangeDO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Author: haozt
@@ -236,5 +237,34 @@ public class HzEPLRecord extends BaseChangeDO {
         }
 
         return hzEPLRecords;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
+        if(o instanceof HzEPLRecord){
+            final HzEPLRecord record = (HzEPLRecord) o;
+            if(this.id != null){
+                return this.id.equals(record.getId());
+            }
+            if(this.partId != null){
+                return this.partId.equals(record.getPartId());
+            }
+            return false;
+        }
+        return  false;
+    }
+
+    @Override
+    public int hashCode() {
+        if(id == null ){
+            return Objects.hash(partId);
+        }
+        return Objects.hash(id, partId);
     }
 }

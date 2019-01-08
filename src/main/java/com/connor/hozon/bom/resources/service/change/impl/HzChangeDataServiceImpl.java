@@ -1,5 +1,8 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.model.*;
@@ -15,16 +18,20 @@ import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -52,6 +59,13 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
     @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
+
+    @Autowired
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
+
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
+
 
     @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
@@ -110,36 +124,41 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
                 updateQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
-                updateQuery.setStatus(2);
+                updateQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
 //                updateQuery.setPuids(puids);
                 List<HzEPLManageRecord> afterRecords = hzEbomRecordDAO.getEbomRecordsByOrderId(updateQuery);
+                List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
                 if(ListUtil.isNotEmpty(afterRecords)){
                     for(HzEPLManageRecord record :afterRecords){
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
                         beforeUpdateQuery.setProjectId(query.getProjectId());
                         beforeUpdateQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());
-                        beforeUpdateQuery.setStatus(1);
+                        beforeUpdateQuery.setStatus(ChangeConstants.EFFECT_STATUS);
                         beforeUpdateQuery.setRevision(true);
                         beforeUpdateQuery.setRevisionNo(record.getRevision());
                         beforeUpdateQuery.setPuid(record.getPuid());
                         HzEPLManageRecord eplManageRecord = hzEbomRecordDAO.getEBomRecordByPuidAndRevision(beforeUpdateQuery);
 
-                        if(eplManageRecord!=null){
+                        if(eplManageRecord != null){
                             HzEbomRespDTO beforeRecord = HzEbomRecordFactory.eplRecordToEbomRespDTO(eplManageRecord);
                             beforeRecord.setChangeType(ChangeTypeEnum.BU.getChangeType());
+                            JSONObject jsonObject = hzSingleVehiclesServices.singleVehNum(eplManageRecord.getVehNum(),hzCfg0ModelRecords);
+                            beforeRecord.setMap(jsonObject);
                             respDTOs.add(beforeRecord);
                         }
                         HzEbomRespDTO afterRespDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
                         afterRespDTO.setChangeType(ChangeTypeEnum.AU.getChangeType());
+                        JSONObject jsonObject = hzSingleVehiclesServices.singleVehNum(record.getVehNum(),hzCfg0ModelRecords);
+                        afterRespDTO.setMap(jsonObject);
                         respDTOs.add(afterRespDTO);
                     }
                 }
                 //查新增的数据（无版本号 状态值为2）
                 HzChangeDataDetailQuery addQuery = new HzChangeDataDetailQuery();
                 addQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
-                addQuery.setStatus(2);
+                addQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
 //                addQuery.setPuids(puids);
@@ -149,6 +168,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                     for(HzEPLManageRecord record :addRecords){
                         HzEbomRespDTO addRespDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
                         addRespDTO.setChangeType(ChangeTypeEnum.A.getChangeType());
+                        JSONObject jsonObject = hzSingleVehiclesServices.singleVehNum(record.getVehNum(),hzCfg0ModelRecords);
+                        addRespDTO.setMap(jsonObject);
                         respDTOs.add(addRespDTO);
                     }
                 }
@@ -156,7 +177,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
-                deleteQuery.setStatus(4);
+                deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
@@ -164,9 +185,11 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 List<HzEPLManageRecord> deleteRecords = hzEbomRecordDAO.getEbomRecordsByOrderId(deleteQuery);
                 if(ListUtil.isNotEmpty(deleteRecords)){
                     for(HzEPLManageRecord record :deleteRecords){
-                        HzEbomRespDTO addRespDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
-                        addRespDTO.setChangeType(ChangeTypeEnum.D.getChangeType());
-                        respDTOs.add(addRespDTO);
+                        HzEbomRespDTO deleteRespDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
+                        deleteRespDTO.setChangeType(ChangeTypeEnum.D.getChangeType());
+                        JSONObject jsonObject = hzSingleVehiclesServices.singleVehNum(record.getVehNum(),hzCfg0ModelRecords);
+                        deleteRespDTO.setMap(jsonObject);
+                        respDTOs.add(deleteRespDTO);
                     }
                 }
                 return respDTOs;
@@ -199,7 +222,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
                 updateQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
-                updateQuery.setStatus(2);
+                updateQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
 //                updateQuery.setPuids(puids);
@@ -209,7 +232,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
                         beforeUpdateQuery.setProjectId(query.getProjectId());
                         beforeUpdateQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_BEFORE.getTableName());
-                        beforeUpdateQuery.setStatus(1);
+                        beforeUpdateQuery.setStatus(ChangeConstants.EFFECT_STATUS);
                         beforeUpdateQuery.setRevision(true);
                         beforeUpdateQuery.setRevisionNo(record.getRevision());
                         beforeUpdateQuery.setPuid(record.getPuid());
@@ -228,7 +251,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 //查新增的数据（无版本号 状态值为2）
                 HzChangeDataDetailQuery addQuery = new HzChangeDataDetailQuery();
                 addQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
-                addQuery.setStatus(2);
+                addQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
 //                addQuery.setPuids(puids);
@@ -245,7 +268,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
-                deleteQuery.setStatus(4);
+                deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
@@ -280,7 +303,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         }
         List<HzMbomRecordRespDTO> respDTOs = new ArrayList<>();
         Integer type = query.getType();
-        query.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
+        query.setTableName(ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_AFTER_CHANGE));
         try {
             Future future = pool.submit(()->{
                 //变更数据
@@ -288,8 +311,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 //查更新的数据 分变更前 变更后（有版本号 状态值为2）
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
-                updateQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
-                updateQuery.setStatus(2);
+                updateQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_AFTER_CHANGE));
+                updateQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
 //                updateQuery.setPuids(puids);
@@ -298,8 +321,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                     for(HzMbomLineRecord record :afterRecords){
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
                         beforeUpdateQuery.setProjectId(query.getProjectId());
-                        beforeUpdateQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MB"));
-                        beforeUpdateQuery.setStatus(1);
+                        beforeUpdateQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_BEFORE_CHANGE));
+                        beforeUpdateQuery.setStatus(ChangeConstants.EFFECT_STATUS);
                         beforeUpdateQuery.setRevision(true);
                         beforeUpdateQuery.setRevisionNo(record.getRevision());
                         beforeUpdateQuery.setPuid(record.getPuid());
@@ -317,8 +340,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 }
                 //查新增的数据（无版本号 状态值为2）
                 HzChangeDataDetailQuery addQuery = new HzChangeDataDetailQuery();
-                addQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
-                addQuery.setStatus(2);
+                addQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_AFTER_CHANGE));
+                addQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
 //                addQuery.setPuids(puids);
@@ -334,8 +357,8 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 //查删除的数据（状态值为4）
 
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
-                deleteQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,"MA"));
-                deleteQuery.setStatus(4);
+                deleteQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_AFTER_CHANGE));
+                deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
@@ -377,7 +400,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
                 updateQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
-                updateQuery.setStatus(2);
+                updateQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
 //                updateQuery.setPuids(puids);
@@ -387,7 +410,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
                         beforeUpdateQuery.setProjectId(query.getProjectId());
                         beforeUpdateQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_BEFORE.getTableName());
-                        beforeUpdateQuery.setStatus(1);
+                        beforeUpdateQuery.setStatus(ChangeConstants.EFFECT_STATUS);
                         beforeUpdateQuery.setRevision(true);
                         beforeUpdateQuery.setRevisionNo(record.getRevision());
                         beforeUpdateQuery.setPuid(record.getPuid());
@@ -406,7 +429,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 //查新增的数据（无版本号 状态值为2）
                 HzChangeDataDetailQuery addQuery = new HzChangeDataDetailQuery();
                 addQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
-                addQuery.setStatus(2);
+                addQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
 //                addQuery.setPuids(puids);
@@ -423,7 +446,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
-                deleteQuery.setStatus(4);
+                deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
@@ -465,7 +488,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery updateQuery = new HzChangeDataDetailQuery();
                 updateQuery.setProjectId(query.getProjectId());
                 updateQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
-                updateQuery.setStatus(2);
+                updateQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 updateQuery.setRevision(true);
                 updateQuery.setOrderId(query.getOrderId());
 //                updateQuery.setPuids(puids);
@@ -475,7 +498,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();
                         beforeUpdateQuery.setProjectId(query.getProjectId());
                         beforeUpdateQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_BEFORE.getTableName());
-                        beforeUpdateQuery.setStatus(1);
+                        beforeUpdateQuery.setStatus(ChangeConstants.EFFECT_STATUS);
                         beforeUpdateQuery.setRevision(true);
                         beforeUpdateQuery.setRevisionNo(record.getRevision());
                         beforeUpdateQuery.setPuid(record.getPuid());
@@ -494,7 +517,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 //查新增的数据（无版本号 状态值为2）
                 HzChangeDataDetailQuery addQuery = new HzChangeDataDetailQuery();
                 addQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
-                addQuery.setStatus(2);
+                addQuery.setStatus(ChangeConstants.DRAFT_STATUS);
                 addQuery.setRevision(false);
                 addQuery.setOrderId(query.getOrderId());
 //                addQuery.setPuids(puids);
@@ -511,7 +534,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
 
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
-                deleteQuery.setStatus(4);
+                deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
                 deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
@@ -535,6 +558,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public WriteResultRespDTO deleteEBOMChangeDataDetail(BomBackReqDTO reqDTO) {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
@@ -553,19 +577,19 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         dataDetailQuery.setOrderId(reqDTO.getOrderId());
         dataDetailQuery.setProjectId(reqDTO.getProjectId());
         dataDetailQuery.setPuids(list);
-        List<HzBomLineRecord> updateList = new ArrayList<>();
+        List<HzEPLManageRecord> updateList = new ArrayList<>();
         List<HzEPLManageRecord> recordList =  hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);//表中记录的
         List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByPuids(dataDetailQuery);//要删除的
         try {
             if(ListUtil.isNotEmpty(recordList) && ListUtil.isNotEmpty(records)){
                 records.forEach(record->{
-                    HzBomLineRecord lineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(record);
+                    HzEPLManageRecord lineRecord = HzEbomRecordFactory.ebomRecordToEBOMRecord(record);
                     lineRecord.setStatus(record.getStatus());//审核状态
                     lineRecord.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
                     updateList.add(lineRecord);
                 });
                 hzEbomRecordDAO.deleteByPuids(list,ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
-                hzEbomRecordDAO.updateList(updateList);
+                hzEbomRecordDAO.updateListByEplId(updateList);
                 if(recordList.size() == records.size()){
                     HzChangeDataRecord record = new HzChangeDataRecord();
                     record.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
@@ -576,11 +600,13 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return WriteResultRespDTO.getFailResult();
         }
     }
 
     @Override
+    @Transactional
     public WriteResultRespDTO deletePBOMChangeDataDetail(BomBackReqDTO reqDTO) {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
@@ -620,11 +646,13 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return WriteResultRespDTO.getFailResult();
         }
     }
 
     @Override
+    @Transactional
     public WriteResultRespDTO deleteMBOMChangeDataDetail(BomBackReqDTO reqDTO) {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
@@ -639,7 +667,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         //更新原来表中的状态 为发起流程前的状态
         //如果变更后表中的数据为空 则表示全部删除 这时需要清空中间表数据
         HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-        dataDetailQuery.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"MA"));
+        dataDetailQuery.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),ChangeConstants.MBOM_AFTER_CHANGE));
         dataDetailQuery.setOrderId(reqDTO.getOrderId());
         dataDetailQuery.setProjectId(reqDTO.getProjectId());
         dataDetailQuery.setPuids(list);
@@ -649,17 +677,17 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
         try {
             if(ListUtil.isNotEmpty(recordList) && ListUtil.isNotEmpty(records)){
                 records.forEach(record->{
-                    record.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"M"));
+                    record.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),ChangeConstants.MBOM_CHANGE));
                     updateList.add(record);
                 });
                 HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
-                vo.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"MA"));
+                vo.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),ChangeConstants.MBOM_AFTER_CHANGE));
                 vo.setRecordList(records);
                 hzMbomRecordDAO.deleteMbomList(vo);
                 hzMbomRecordDAO.updateList(updateList);
                 if(recordList.size() == records.size()){
                     HzChangeDataRecord record = new HzChangeDataRecord();
-                    record.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),"MA"));
+                    record.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),ChangeConstants.MBOM_AFTER_CHANGE));
                     record.setOrderId(reqDTO.getOrderId());
                     hzChangeDataRecordDAO.deleteByOrderIdAndTableName(record);
                 }
@@ -667,12 +695,14 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return WriteResultRespDTO.getFailResult();
         }
     }
 
 
     @Override
+    @Transactional
     public WriteResultRespDTO deleteMaterielChangeDataDetail(BomBackReqDTO reqDTO) {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
@@ -714,11 +744,13 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return WriteResultRespDTO.getFailResult();
         }
     }
 
     @Override
+    @Transactional
     public WriteResultRespDTO deleteWorkProcedureChangeDataDetail(BomBackReqDTO reqDTO) {
         if(StringUtils.isBlank(reqDTO.getPuids()) || reqDTO.getOrderId() == null){
             return WriteResultRespDTO.IllgalArgument();
@@ -758,6 +790,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return WriteResultRespDTO.getFailResult();
         }
     }

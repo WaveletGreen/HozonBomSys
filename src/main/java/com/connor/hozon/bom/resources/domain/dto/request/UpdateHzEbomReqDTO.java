@@ -12,6 +12,7 @@ import java.util.Map;
  */
 public class UpdateHzEbomReqDTO extends BaseDTO {
 
+    private static final long serialVersionUID = 8255335626223218095L;
     /**
      * 项目id
      */
@@ -22,127 +23,57 @@ public class UpdateHzEbomReqDTO extends BaseDTO {
      */
     private Map<String,Object> updateDosage;
 
-
     private String puid;
-
 
     private String lineNo;
     private String lineId;
 
-//    private String parentLineId;
-//    /**
-//     * 专业
-//     */
-//    private String pBomOfWhichDept;//1
-//
-//    /**
-//     * 零件分类
-//     */
-//    private String pBomLinePartClass;
-//
-//    /**
-//     * 零件来源
-//     */
-//    private String pBomLinePartResource;
-//
-//    /**
-//     * Bom行对应的零件名
-//     */
-//    private String pBomLinePartName;
-//    /**
-//     * 英文名称
-//     */
-//    private String pBomLinePartEnName;
-//
-//    private String fastener;
-
     private String fna;
-
-//    private String pFastener;
-//
-//    private String p3cpartFlag;
-//
-//    private String pInOutSideFlag;
 
     private String pUpc;
 
     private String pFnaDesc;
 
-//    private String pCreateName;
-//
-//    private String pUpdateName;
-//
-//    private String pUnit;
-//
-//    private String pPictureNo;
-//
-//    private String pPictureSheet;
-//
-//    private String pMaterialHigh;
-//
-//    private String pMaterial1;
-//
-//    private String pMaterial2;
-//
-//    private String pMaterial3;
-//
-//    private String pDensity;
-//
-//    private String pMaterialStandard;
-//
-//    private String pSurfaceTreat;
-//
-//    private String pTextureColorNum;
-//
-//    private String pManuProcess;
-//
-//    private String pSymmetry;
-//
-//    private String pImportance;
-//
-//    private String pRegulationFlag;
-//
-//    private String pBwgBoxPart;
-//
-//    private String pDevelopType;
-//
-//    private String pDataVersion;
-//
-//    private String pTargetWeight;
-//
-//    private String pFeatureWeight;
-//
-//    private String pActualWeight;
-//
-//    private String pFastenerStandard;
-//
-//    private String pFastenerLevel;
-//
-//    private String pTorque;
-//
-//    private String pDutyEngineer;
-//
-//    private String pSupply;
-//
-//    private String pSupplyCode;
-//
-//    private String pRemark;
-//
-//    private String pRegulationCode;
-
     private String number;
 
-    /**
-     * 1 已生效 0 已删除  2草稿状态  3废除状态 4删除状态
-     */
-//    private Integer status;
-
     private String colorPart;
-    /**
-     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
-     */
-//    private Integer updateType;
 
+    /**
+     * 单车用量
+     */
+    private String vehNum;
+    /**
+     * 备件
+     */
+    private String sparePart;
+    /**
+     * 备件编号
+     */
+    private String sparePartNum;
+
+    public String getSparePart() {
+        return sparePart;
+    }
+
+    public void setSparePart(String sparePart) {
+        this.sparePart = sparePart;
+    }
+
+    public String getSparePartNum() {
+        return sparePartNum;
+    }
+
+    public void setSparePartNum(String sparePartNum) {
+        this.sparePartNum = sparePartNum;
+    }
+
+    public String getVehNum() {
+        return vehNum;
+    }
+
+    public void setVehNum(String vehNum) {
+        this.vehNum = vehNum;
+    }
 
     public String getProjectId() {
         return projectId;

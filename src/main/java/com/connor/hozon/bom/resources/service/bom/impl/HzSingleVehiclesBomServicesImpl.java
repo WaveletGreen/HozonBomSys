@@ -6,6 +6,7 @@ import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.model.HzSingleVehiclesFactory;
 import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
@@ -60,6 +61,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
     @Autowired
     @Qualifier("synBomService")
     private SynBomService synBomService;
+
     @Override
     public WriteResultRespDTO analysisSingleVehicles(String projectId) {
         /**
@@ -87,7 +89,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
                         continue;
                     }
                     //单车所包含的所有2Y层 带颜色信息
-                    List<HzSingleVehicleBomLineBean> hzSingleVehicleBomLineBeans = hzSingleVehicleBomLineDao.selectByProjectUidWithSv(projectId,vehicles.getSvlDmbId());
+                    List<HzSingleVehicleBomLineBean> hzSingleVehicleBomLineBeans = hzSingleVehicleBomLineDao.selectFullConfigColorSet(projectId,vehicles.getSvlDmbId());
                     if(ListUtil.isNotEmpty(hzSingleVehicleBomLineBeans)){//不为空则添加，为空继续
                         for(HzSingleVehicleBomLineBean bean:hzSingleVehicleBomLineBeans){
                             //获取单车全部BOM信息
@@ -119,19 +121,19 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
                 List<String> puids = hzSingleVehiclesBomDAO.getAllPuidByProjectId(projectId);
                 if(ListUtil.isNotEmpty(puids)){
                     try {
-                        JSONObject object = synBomService.deleteByUids(projectId,puids);// 通知SAP进行删除
-                        Object fail = object.get("fail");
-                        if(fail instanceof List){
-                            List failList = (List)fail;
-                            if(ListUtil.isNotEmpty(failList)){
-                                stringBuffer.append("数据可能有未符合SAP系统的规范!<br>");
-                                for(int j=0;j<failList.size();j++ ){
-                                    String str = "零件号"+(String)((JSONObject) failList.get(j)).get("itemId");
-                                    str += (String)((JSONObject) failList.get(j)).get("msg");
-                                    stringBuffer.append(str+"<br>");
-                                }
-                            }
-                        }
+//                        JSONObject object = synBomService.deleteByUids(projectId,puids);// 通知SAP进行删除
+//                        Object fail = object.get("fail");
+//                        if(fail instanceof List){
+//                            List failList = (List)fail;
+//                            if(ListUtil.isNotEmpty(failList)){
+//                                stringBuffer.append("数据可能有未符合SAP系统的规范!<br>");
+//                                for(int j=0;j<failList.size();j++ ){
+//                                    String str = "零件号"+(String)((JSONObject) failList.get(j)).get("itemId");
+//                                    str += (String)((JSONObject) failList.get(j)).get("msg");
+//                                    stringBuffer.append(str+"<br>");
+//                                }
+//                            }
+//                        }
                         //删除成功后通知SAP进行新增操作
                     }catch (Exception e){
                         e.printStackTrace();
@@ -140,6 +142,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
                     }
 
                 }
+                sapInsert = false;
                 int i = hzSingleVehiclesBomDAO.deleteByProjectId(projectId);
                 if(i!=-1){
                     if(hzSingleVehiclesBomDAO.insertList(hzSingleVehiclesBomRecords)>0 && sapInsert){
@@ -199,18 +202,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
     @Override
     public Page<HzSingleVehiclesBomRespDTO> getHzSingleVehiclesBomByPage(HzSingleVehiclesBomByPageQuery query) {
         try{
-            String level = query.getLevel();
-            if (level != null && level != "") {
-                if (level.trim().toUpperCase().endsWith("Y")) {
-                    int length = Integer.valueOf(level.replace("Y", ""));
-                    query.setIsHas(1);
-                    query.setLineIndex(String.valueOf(length - 1));
-                } else {
-                    query.setIsHas(0);
-                    int length = Integer.valueOf(level.trim());
-                    query.setLineIndex(String.valueOf(length));
-                }
-            }
+            query = HzBomSysFactory.bomQueryLevelTrans(query);
             Page<HzSingleVehiclesBomRecord> recordPage;
             if(Integer.valueOf(1).equals(query.getShowBomStructure())){
                 recordPage = hzSingleVehiclesBomDAO.getHzSingleVehiclesBomTreeByPage(query);

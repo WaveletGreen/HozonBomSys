@@ -152,6 +152,52 @@ function initTable(url) {
                     });
                 }
             },
+            // {
+            //     text: '导出Excel',
+            //     iconCls: 'glyphicon glyphicon-export',
+            //     handler: function () {
+            //         //var headers = data;//表头
+            //         var rows = $table.bootstrapTable('getSelections');//选中行数据
+            //         if (rows.length == 0) {
+            //             window.Ewin.alert({message: '请选择一条需要导出的数据!'});
+            //             return false;
+            //         } else {
+            //             for (var index in rows) {
+            //                 if (rows[index].status == 5 || rows[index].status == 6) {
+            //                     window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
+            //                     return false;
+            //                 }
+            //             }
+            //         }
+            //         window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
+            //             if (e) {
+            //                 $.ajax({
+            //                     type: "POST",
+            //                     //ajax需要添加打包名
+            //                     url: "./singleVehicles/excelExport",//??????
+            //                     data: JSON.stringify(rows),
+            //                     contentType: "application/json",
+            //                     success: function (result) {
+            //                         console.log(result);
+            //                         if (result.status) {
+            //                             layer.msg(result.msg, {icon: 1, time: 2000})
+            //
+            //                             //下载EBOM导入模板
+            //                             window.location.href = result.path;//V1.1.0.log
+            //                         }
+            //                         else {
+            //                             window.Ewin.alert({message: "操作导出失败:" + result.msg});
+            //                         }
+            //                         $table.bootstrapTable("refresh");
+            //                     },
+            //                     error: function (info) {
+            //                         window.Ewin.alert({message: "操作导出:" + info.status});
+            //                     }
+            //                 })
+            //             }
+            //         });
+            //     }
+            // }
             {
                 text: '发送至SAP',
                 iconCls: 'glyphicon glyphicon-send',

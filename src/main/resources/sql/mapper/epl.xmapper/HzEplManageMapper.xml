@@ -241,6 +241,20 @@
         where ID = #{id,jdbcType=DOUBLE}
     </update>
 
+
+    <!--删除记录 改为删除状态-->
+    <update id="HzEPLDAOImpl_deleteByIds" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update HZ_EPL_RECORD
+            <set>
+                UPDATE_TIME = sysdate,
+                STATUS = 4
+            </set>
+            where ID = #{list[${index}]}
+        </foreach>
+    </update>
+
+
     <!--delete-->
     <delete id="HzEPLDAOImpl_delete" parameterType="java.util.List">
         <!--delete ${tableName}-->
@@ -251,6 +265,9 @@
             #{list[${index}]}
         </foreach>
     </delete>
+
+
+
 
     <!--select-->
     <select id="HzEPLDAOImpl_getEplRecordByPage" parameterType="java.util.HashMap" resultMap="BaseResultMap">
@@ -516,7 +533,7 @@
               select
               #{item.projectId,jdbcType=VARCHAR}, #{item.partId,jdbcType=VARCHAR},
               #{item.partOfWhichDept,jdbcType=VARCHAR}, #{item.partName,jdbcType=VARCHAR}, #{item.partClass,jdbcType=VARCHAR},
-              #{item.partEnName,jdbcType=VARCHAR}, #{item.partResource,jdbcType=VARCHAR}, #{item.status,jdbcType=INTEGER},
+              #{item.partEnName,jdbcType=VARCHAR}, #{item.partResource,jdbcType=VARCHAR}, 1,
               #{item.createTime,jdbcType=DATE}, #{item.updateTime,jdbcType=DATE}, #{item.fastener,jdbcType=VARCHAR},
               #{item.is3cpart,jdbcType=INTEGER}, #{item.inOutSideFlag,jdbcType=INTEGER}, #{item.createId,jdbcType=DOUBLE},
               #{item.updateId,jdbcType=DOUBLE}, #{item.unit,jdbcType=VARCHAR}, #{item.pictureNo,jdbcType=VARCHAR},

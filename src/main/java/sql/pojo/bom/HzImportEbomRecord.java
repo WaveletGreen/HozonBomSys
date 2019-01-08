@@ -1,5 +1,7 @@
 package sql.pojo.bom;
 
+import sql.pojo.epl.HzEPLRecord;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -8,7 +10,7 @@ import java.util.Objects;
  * @Date: 2018/8/23
  * @Description: excel导入EBOM专用
  */
-public class HzImportEbomRecord implements Serializable {
+public class HzImportEbomRecord  implements Serializable {
 
     private static final long serialVersionUID = -6559274579058619219L;
     private Integer No;
@@ -203,6 +205,31 @@ public class HzImportEbomRecord implements Serializable {
 
     private Integer status;
 
+    /**
+     * 备件
+     */
+    private String sparePart;
+    /**
+     * 备件编号
+     */
+    private String sparePartNum;
+
+    public String getSparePart() {
+        return sparePart;
+    }
+
+    public void setSparePart(String sparePart) {
+        this.sparePart = sparePart;
+    }
+
+    public String getSparePartNum() {
+        return sparePartNum;
+    }
+
+    public void setSparePartNum(String sparePartNum) {
+        this.sparePartNum = sparePartNum;
+    }
+
     public Integer getStatus() {
         return status;
     }
@@ -219,12 +246,20 @@ public class HzImportEbomRecord implements Serializable {
         this.colorPart = colorPart;
     }
 
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        HzImportEbomRecord record = (HzImportEbomRecord) o;
-        return Objects.equals(puid, record.puid) ;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
+        if(o instanceof HzImportEbomRecord){
+            HzImportEbomRecord record = (HzImportEbomRecord) o;
+            return this.getPuid().equals(record.getPuid());
+        }
+        return false;
     }
 
     @Override
