@@ -604,7 +604,9 @@ public class HzCfg0ModelColorController {
                 hzCfg0ModelColorIterator.remove();
             }
         }
-        int deleteNum = hzCfg0ModelColorDao.updateStatus(hzCfg0ModelColorsDelete);
+        if(hzCfg0ModelColorsDelete!=null&&hzCfg0ModelColorsDelete.size()>0){
+            int deleteNum = hzCfg0ModelColorDao.updateStatus(hzCfg0ModelColorsDelete);
+        }
         /*********查找出所有修改状态的配色方案并将其回退到修改前的数据*******************/
         if(hzCfg0ModelColors==null||hzCfg0ModelColors.size()==0){
             return result;

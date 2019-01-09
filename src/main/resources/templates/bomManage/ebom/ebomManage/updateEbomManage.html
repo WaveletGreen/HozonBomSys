@@ -412,7 +412,7 @@
                             function (result) {
                                 activeTabBodyRefresh();
                                 if (result.success) {
-                                    layer.msg('修改成功', {icon: 1, time: 2000})
+                                        layer.msg('修改成功', {icon: 1, time: 2000});
                                 }
                                 else if (!result.success) {
                                     window.Ewin.alert({message: result.errMsg})
@@ -432,6 +432,7 @@
             });
         }
     });
+
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>
