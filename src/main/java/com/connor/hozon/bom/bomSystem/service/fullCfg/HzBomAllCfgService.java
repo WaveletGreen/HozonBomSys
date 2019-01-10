@@ -1000,7 +1000,10 @@ public class HzBomAllCfgService {
                     Short point = 2;
                     hzFullCfgModel.setModPointType(point);
                 }else {
-                    Short point = 1;
+                    Short point = 0;
+                    if("1".equals(version.substring(0,endIndex))){
+                        point = 1;
+                    }
                     hzFullCfgModel.setModPointType(point);
                 }
                 hzFullCfgModels.add(hzFullCfgModel);
