@@ -140,7 +140,7 @@
         #{pUpc,jdbcType=VARCHAR}, #{pFnaDesc,jdbcType=VARCHAR}, #{pCreateName,jdbcType=VARCHAR},
         #{pUpdateName,jdbcType=VARCHAR},
         #{number,jdbcType=VARCHAR},
-        #{orderId,jdbcType=DOUBLE},2,
+        #{orderId,jdbcType=DOUBLE},#{status,jdbcType=INTEGER},
         #{sortNum,jdbcType=VARCHAR},
         #{colorPart,jdbcType=INTEGER},
         #{revision,jdbcType=VARCHAR},
@@ -161,7 +161,7 @@
         #{item.pUpc,jdbcType=VARCHAR}, #{item.pFnaDesc,jdbcType=VARCHAR}, #{item.pCreateName,jdbcType=VARCHAR},
         #{item.pUpdateName,jdbcType=VARCHAR},
         #{item.number,jdbcType=VARCHAR},
-        #{item.orderId,jdbcType=DOUBLE},2,
+        #{item.orderId,jdbcType=DOUBLE},#{item.status,jdbcType=INTEGER},
         #{item.sortNum,jdbcType=VARCHAR},
         #{item.colorPart,jdbcType=INTEGER},
         #{item.revision,jdbcType=VARCHAR},
@@ -449,6 +449,9 @@
                 </if>
                 <if test="item.pInOutSideFlag != null">
                     P_IN_OUT_SIDE_FLAG = #{item.pInOutSideFlag,jdbcType=INTEGER},
+                </if>
+                <if test="item.pLouaFlag != null">
+                    P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=INTEGER},
                 </if>
                 <if test="item.pUpc != null">
                     P_UPC = #{item.pUpc,jdbcType=VARCHAR},

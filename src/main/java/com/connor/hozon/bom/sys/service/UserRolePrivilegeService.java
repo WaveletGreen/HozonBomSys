@@ -45,6 +45,9 @@ public class UserRolePrivilegeService {
         WriteResultRespDTO respDTO = new WriteResultRespDTO();
         try {
             User user = UserInfo.getUser();//获取当前登录用户
+            if(user == null){
+                return WriteResultRespDTO.failResultRespDTO("登录已失效，请重新登录！");
+            }
             //session 中获取的用户信息 不是实时数据
             User u = userService.findByLogin(user.getLogin());//系统中存在的用户
             if(u == null){

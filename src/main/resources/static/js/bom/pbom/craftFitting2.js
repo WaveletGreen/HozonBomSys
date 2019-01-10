@@ -63,6 +63,7 @@ function doRegister(projectId) {
             treeObj.destroy("#Ztree1");
             // treeObj.destroy();
         }
+        console.log(zNodes)
         $.fn.zTree.init($("#Ztree1"), setting, zNodes);
     }
     if (!isRegisted) {
@@ -770,7 +771,7 @@ function queryAssignTree() {
                     window.Ewin.alert({message: data.errMsg});
                     return;
                 }
-                var zNodes = data.obj;
+                var zNodes = data.data;
                 $.fn.zTree.init($("#Ztree3"), setting3, zNodes);
                 $("#info_div2 span").text("第六步:选择挂载位置节点");
                 $("#info_div2").css("top", "20%");
@@ -1034,7 +1035,7 @@ function querySrc() {
                     window.Ewin.alert({message: data.errMsg});
                     return;
                 }
-                var zNodes = data.obj;
+                var zNodes = data.data;
                 initZtree(zNodes);
                 $("#info_div span").text("第二步:选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
                 $("#info_div").css("top", "20%");

@@ -169,7 +169,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                 if(null == record.getObjectName()){
                     continue;
                 }
-                map.put(record.getObjectName(),record.getObjectName()+"(单车用量)");
+                map.put(record.getObjectName()+"title"+i,record.getObjectName()+"(单车用量)");
             }
         }
         return map;
@@ -220,16 +220,16 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                     String vehName = veh.split("#")[0];
                     String vehNumber = veh.split("#")[1];
                     if(record.getObjectName().equals(vehName)){
-                        object.put(vehName,vehNumber);
+                        object.put(vehName +"title"+i,vehNumber);
                         find = true;
                         break;
                     }
                 }
                 if(!find){
-                    object.put(record.getObjectName(),"");
+                    object.put(record.getObjectName()+"title"+i,"");
                 }
             }else {
-                object.put(record.getObjectName(),"");
+                object.put(record.getObjectName()+"title"+i,"");
             }
         }
         return object;

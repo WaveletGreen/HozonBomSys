@@ -178,7 +178,6 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName());
                 deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
-                deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());
@@ -269,7 +268,6 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
                 deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
-                deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());
@@ -359,7 +357,6 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.getMbomTableName(type,ChangeConstants.MBOM_AFTER_CHANGE));
                 deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
-                deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());
@@ -447,7 +444,6 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
                 deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
-                deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());
@@ -535,7 +531,6 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 HzChangeDataDetailQuery deleteQuery = new HzChangeDataDetailQuery();
                 deleteQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
                 deleteQuery.setStatus(ChangeConstants.DELETE_STATUS);
-                deleteQuery.setRevision(false);
                 deleteQuery.setOrderId(query.getOrderId());
 //                deleteQuery.setPuids(puids);
                 deleteQuery.setProjectId(query.getProjectId());

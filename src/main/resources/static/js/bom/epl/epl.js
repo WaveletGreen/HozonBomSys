@@ -13,10 +13,10 @@ function doRefresh(projectId) {
 function doQuery() {
     var projectPuid = $("#project", window.top.document).val();
     var eplUrl = "epl/record?projectId=" + projectPuid;
-    var status = $("#status").val();
-    if (status != "请选择数据状态") {
-        eplUrl += "&status=" + status;
-    }
+    // var status = $("#status").val();
+    // if (status != "请选择数据状态") {
+    //     eplUrl += "&status=" + status;
+    // }
     var partResource = $("#partResource").val();
     if (partResource == "请选择零件来源") {
         eplUrl += "&partResource=" + "";
@@ -58,30 +58,30 @@ function initTable(eplUrl) {
                     column.push(json);
                 }
             }
-            column.push({
-                field: 'status',
-                title: '状态',
-                align: 'center',
-                valign: 'middle',
-
-                formatter: function (value, row, index) {
-                    if (value == 1 || "1" == value) {
-                        return "<span style='color: #00B83F'>已生效</span>";
-                    }
-                    if (value == 2 || "2" == value) {
-                        return "<span style='color: #ff7cf4'>草稿状态</span>";
-                    }
-                    if (3 == value || "3" == value) {
-                        return "<span style='color: #9492a9'>废除状态</span>";
-                    }
-                    if (4 == value || "4" == value) {
-                        return "<span style='color: #a90009'>删除状态</span>";
-                    }
-                    if (value == 5 || value == "5") {
-                        return "<span style='color: #e2ab2f'>审核中</span>"
-                    }
-                }
-            })
+            // column.push({
+            //     field: 'status',
+            //     title: '状态',
+            //     align: 'center',
+            //     valign: 'middle',
+            //
+            //     formatter: function (value, row, index) {
+            //         if (value == 1 || "1" == value) {
+            //             return "<span style='color: #00B83F'>已生效</span>";
+            //         }
+            //         if (value == 2 || "2" == value) {
+            //             return "<span style='color: #ff7cf4'>草稿状态</span>";
+            //         }
+            //         if (3 == value || "3" == value) {
+            //             return "<span style='color: #9492a9'>废除状态</span>";
+            //         }
+            //         if (4 == value || "4" == value) {
+            //             return "<span style='color: #a90009'>删除状态</span>";
+            //         }
+            //         if (value == 5 || value == "5") {
+            //             return "<span style='color: #e2ab2f'>审核中</span>"
+            //         }
+            //     }
+            // })
             $('#eplTable').bootstrapTable({
                 method: 'GET',
                 dataType: 'json',
@@ -210,8 +210,9 @@ function initTable(eplUrl) {
                                                     window.Ewin.alert({message: result.errMsg});
                                                     return false;
                                                 }else {
-                                                    layer.msg("删除成功", {icon: 1, time: 2000})
-                                                    window.location.reload();
+                                                    layer.msg("删除成功", {icon: 1, time: 2000});
+                                                    $table.bootstrapTable("refresh");
+                                                    // window.location.reload();
                                                 }
                                             }
                                         })

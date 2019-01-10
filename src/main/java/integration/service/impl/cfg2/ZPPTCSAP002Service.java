@@ -15,7 +15,6 @@ public class ZPPTCSAP002Service
         implements IExecutor {
     @Override
     public <T, E> void doExecute(Holder<T> input, Holder<E> output) throws Exception {
-        return;
 //        super.getSAPForTCProxyHttpSoap11Endpoint().zppTCSAP002((Holder<TABLEOFZPPTCI002>) input, (Holder<TABLEOFZPPTCO002>) output);
     }
 }

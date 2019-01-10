@@ -138,6 +138,14 @@ function initTable(url) {
                     //         });
                     //     }
                     // },
+
+                    {
+                        text: '返回上一步',
+                        iconCls: 'fa fa-arrow-left',
+                        handler: function () {
+                            window.location.href="javascript:history.go(-1);"
+                        }
+                    },
                     {
                         text: '显示子层',
                         iconCls: 'glyphicon glyphicon-eye-open',

@@ -5,12 +5,15 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
+import com.connor.hozon.bom.resources.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +42,9 @@ public class LouaContorller extends BaseController {
     private HzEBOMReadService hzEBOMReadService;
 
     @Autowired
+    private HzEbomRecordDAO hzEbomRecordDAO;
+
+    @Autowired
     private HzEBOMWriteService hzEBOMWriteService;
 
     @Autowired
@@ -50,53 +56,44 @@ public class LouaContorller extends BaseController {
     @RequestMapping(value = "ebom",method = RequestMethod.POST)
     @ResponseBody
     public void getHzEbomLoa(@RequestBody HzLouaQuery query, HttpServletResponse response){
-        if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
+        if(StringUtils.isBlank(query.getProjectId()) || StringUtils.isBlank(query.getPuid())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
          JSONObject jsonObject = new JSONObject();
-         HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
-         hzEbomTreeQuery.setPuid(query.getPuid());
-         hzEbomTreeQuery.setProjectId(query.getProjectId());
+         HzBOMQuery hzBOMQuery = new HzBOMQuery();
+         hzBOMQuery.setParentId(query.getPuid());
+         hzBOMQuery.setProjectId(query.getProjectId());
          List<HzLoaRespDTO> loaRespDTOS = new ArrayList<>();
-         List<HzEPLManageRecord> recordList = hzEBOMReadService.findCurrentBomChildren(hzEbomTreeQuery);//子
-        List<HzEPLManageRecord> hzEPLManageRecords = new ArrayList<>();
-        HzEbomRespDTO respDTO = new HzEbomRespDTO();
+         List<HzEPLManageRecord> recordList = hzEbomRecordDAO.findNextLevelRecordByParentId(hzBOMQuery);//只获取子一层记录
          if(ListUtil.isNotEmpty(recordList)){
-           HzEPLManageRecord record = recordList.get(0);
-           int  length = record.getLineIndex().split("\\.").length+1;
-           for(HzEPLManageRecord eplManageRecord:recordList){
-               if(eplManageRecord.getLineIndex().split("\\.").length == length){
-                   hzEPLManageRecords.add(eplManageRecord);
-               }
-           }
-           String parentId = record.getParentUid();
-           if(parentId != null)
-           respDTO = hzEBOMReadService.fingEbomById(parentId,query.getProjectId());//父
+             recordList.forEach(record -> {
+                 HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
+                 Integer is2Y = record.getIs2Y();
+                 Integer hasChildren = record.getIsHas();
+                 String index = record.getLineIndex();
+                 String[] strings = getLevelAndRank(index, is2Y, hasChildren);
+                 hzLoaRespDTO.setChildLevel(strings[0]);
+                 hzLoaRespDTO.setChildLineId(record.getLineID());
+                 hzLoaRespDTO.setChildName(record.getpBomLinePartName());
+                 loaRespDTOS.add(hzLoaRespDTO);
+             });
          }
-        hzEPLManageRecords.forEach(record -> {
-             HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
-             Integer is2Y = record.getIs2Y();
-             Integer hasChildren = record.getIsHas();
-             String index = record.getLineIndex();
-             String[] strings = getLevelAndRank(index, is2Y, hasChildren);
-             hzLoaRespDTO.setChildLevel(strings[0]);
-             hzLoaRespDTO.setChildLineId(record.getLineID());
-             hzLoaRespDTO.setChildName(record.getpBomLinePartName());
-             loaRespDTOS.add(hzLoaRespDTO);
-         });
-
-        if(respDTO .getJsonArray() !=null){
-            HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
-            JSONObject object = (JSONObject) respDTO.getJsonArray().get(0);
-            hzLoaRespDTO.setParentLevel(object.getString("level"));
-            hzLoaRespDTO.setParentLineId(object.getString("lineId"));
-            hzLoaRespDTO.setParentName(object.getString("pBomLinePartName"));
-
-            jsonObject.put("parent",hzLoaRespDTO);
-        }else {
-            jsonObject.put("parent",new HzLoaRespDTO());
-        }
+         HzEPLManageRecord eplManageRecord = hzEbomRecordDAO.findEbomById(query.getPuid(),query.getProjectId());
+         if(eplManageRecord != null){
+             HzEbomRespDTO  respDTO =  hzEBOMReadService.fingEbomById(eplManageRecord.getParentUid(),query.getProjectId());
+             if(respDTO != null){
+                 HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
+                 hzLoaRespDTO.setParentLevel(respDTO.getLevel());
+                 hzLoaRespDTO.setParentLineId(respDTO.getLineId());
+                 hzLoaRespDTO.setParentName(respDTO.getpBomLinePartName());
+                 jsonObject.put("parent",hzLoaRespDTO);
+             }else {
+                 jsonObject.put("parent",new HzLouRespDTO());
+             }
+         }else {
+             jsonObject.put("parent",new HzLoaRespDTO());
+         }
         jsonObject.put("child",loaRespDTOS);
         toJSONResponse(Result.build(jsonObject),response);
     }
@@ -104,7 +101,7 @@ public class LouaContorller extends BaseController {
 
     @RequestMapping(value = "pbom",method = RequestMethod.POST)
     public void getHzPbomLoa(@RequestBody HzLouaQuery query, HttpServletResponse response){
-        if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
+        if(StringUtils.isBlank(query.getProjectId()) || StringUtils.isBlank(query.getPuid())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
@@ -155,7 +152,7 @@ public class LouaContorller extends BaseController {
 
     @RequestMapping(value = "mbom",method = RequestMethod.POST)
     public void getHzMbomLoa(@RequestBody HzLouaQuery query, HttpServletResponse response){
-        if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
+        if(StringUtils.isBlank(query.getProjectId()) || StringUtils.isBlank(query.getPuid())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
@@ -217,7 +214,7 @@ public class LouaContorller extends BaseController {
 
     @RequestMapping(value = "getLou",method = RequestMethod.GET)
     public void getLou(HzLouaQuery query,HttpServletResponse response){
-        if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
+        if(StringUtils.isBlank(query.getProjectId()) || StringUtils.isBlank(query.getPuid())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
@@ -278,7 +275,7 @@ public class LouaContorller extends BaseController {
 
     @RequestMapping(value = "getLou/pBom",method = RequestMethod.GET)
     public void getPbomLou(HzLouaQuery query,HttpServletResponse response){
-        if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
+        if(StringUtils.isBlank(query.getProjectId()) || StringUtils.isBlank(query.getPuid())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }
@@ -337,7 +334,7 @@ public class LouaContorller extends BaseController {
 
     @RequestMapping(value = "getLou/mBom",method = RequestMethod.GET)
     public void getMbomLou(HzLouaQuery query,HttpServletResponse response){
-        if(query.getProjectId() == null || query.getPuid() == null || query.getPuid() == "" || query.getProjectId() == ""){
+        if(StringUtils.isBlank(query.getProjectId()) || StringUtils.isBlank(query.getPuid())){
             toJSONResponse(Result.build(false,"非法参数！"),response);
             return;
         }

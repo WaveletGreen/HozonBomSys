@@ -10,6 +10,7 @@ import lombok.Data;
  */
 @Data
 public class BomBackReqDTO extends BaseDTO {
+    private static final long serialVersionUID = 2159855122488633063L;
     /**
      * puids
      */

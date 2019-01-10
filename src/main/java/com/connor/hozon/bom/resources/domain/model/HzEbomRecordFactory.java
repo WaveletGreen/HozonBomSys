@@ -39,6 +39,7 @@ public class HzEbomRecordFactory {
         record.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
         record.setSparePartNum(reqDTO.getSparePartNum());
         record.setSparePart(reqDTO.getSparePart());
+        record.setStatus(2);
         return record;
     }
 
@@ -282,6 +283,7 @@ public class HzEbomRecordFactory {
         hzBomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
         hzBomLineRecord.setSparePart(record.getSparePart());
         hzBomLineRecord.setSparePartNum(record.getSparePartNum());
+        hzBomLineRecord.setStatus(record.getStatus());
         return hzBomLineRecord;
     }
 }

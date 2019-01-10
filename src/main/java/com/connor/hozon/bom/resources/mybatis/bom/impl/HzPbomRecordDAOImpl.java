@@ -187,6 +187,26 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
         return super.update("HzPbomRecordDAOImpl_deleteList",list);
     }
 
+    @Override
+    public int deleteListByPuids(List<String> puids, String tableName) {
+        try {
+            int size = puids.size();
+            Map<String,Object> m = new HashMap<>();
+            m.put("tableName",tableName);
+            synchronized (this){
+                Map<Integer,List<String>> map = HzBomSysFactory.spiltList(puids);
+                for(List<String> v:map.values()){
+                    m.put("puids",v);
+                    super.delete("HzPbomRecordDAOImpl_deleteListByPuids",m);
+                }
+            }
+            return size;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzBomException("删除数据失败!",e);
+        }
+    }
+
 
     @Override
     public Page<HzPbomLineRecord> getHzPbomRecordByPage(HzPbomByPageQuery query) {

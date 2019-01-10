@@ -181,7 +181,12 @@ public class HzPbomServiceImpl implements HzPbomService {
                             }
                         }
                     }else {
-                        deletePuids.append(pbomRecord.getPuid()+",");
+                        if(deleteFlag){
+                            deletePuids.append(pbomRecord.getPuid()+",");
+                        }else {
+                            updatePuids.append(pbomRecord.getPuid()+",");
+                        }
+
                     }
                 }
             }
@@ -367,40 +372,41 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO) {
-        try {
-            if (reqDTO.getLineIds() == null || reqDTO.getProjectId() == null) {
-                return WriteResultRespDTO.IllgalArgument();
-            }
-            String[] lineIds = reqDTO.getLineIds().split(",");
-            for (String lineId : lineIds) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("lineId", lineId);
-                map.put("projectId", reqDTO.getProjectId());
-                List<HzPbomLineRecord> pbomList = hzPbomRecordDAO.getPbomById(map);
-                List<HzMbomLineRecord> mbomList = hzMbomRecordDAO.findHzMbomByPuid(map);
-                if (ListUtil.isNotEmpty(pbomList)) {
-                    pbomList.forEach(hzPbomLineRecord -> {
-                        if (Integer.valueOf(1).equals(hzPbomLineRecord.getpLouaFlag())) {
-                            hzPbomLineRecord.setpLouaFlag(2);
-                        } else {
-                            hzPbomLineRecord.setpLouaFlag(1);
-                        }
-                        hzPbomRecordDAO.update(hzPbomLineRecord);
-                    });
-                }
-                if (ListUtil.isNotEmpty(mbomList)) {
-                    mbomList.forEach(hzMbomLineRecord -> {
-                        hzMbomLineRecord.setpLouaFlag(Integer.valueOf(1).equals(hzMbomLineRecord.getpLouaFlag()) ? 2 : 1);
-                        hzMbomRecordDAO.update(hzMbomLineRecord);
-                    });
-                }
-
-            }
-            return WriteResultRespDTO.getSuccessResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return WriteResultRespDTO.getFailResult();
-        }
+        return null;
+//        try {
+//            if (reqDTO.getLineIds() == null || reqDTO.getProjectId() == null) {
+//                return WriteResultRespDTO.IllgalArgument();
+//            }
+//            String[] lineIds = reqDTO.getLineIds().split(",");
+//            for (String lineId : lineIds) {
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("lineId", lineId);
+//                map.put("projectId", reqDTO.getProjectId());
+//                List<HzPbomLineRecord> pbomList = hzPbomRecordDAO.getPbomById(map);
+//                List<HzMbomLineRecord> mbomList = hzMbomRecordDAO.findHzMbomByPuid(map);
+//                if (ListUtil.isNotEmpty(pbomList)) {
+//                    pbomList.forEach(hzPbomLineRecord -> {
+//                        if (Integer.valueOf(1).equals(hzPbomLineRecord.getpLouaFlag())) {
+//                            hzPbomLineRecord.setpLouaFlag(2);
+//                        } else {
+//                            hzPbomLineRecord.setpLouaFlag(1);
+//                        }
+//                        hzPbomRecordDAO.update(hzPbomLineRecord);
+//                    });
+//                }
+//                if (ListUtil.isNotEmpty(mbomList)) {
+//                    mbomList.forEach(hzMbomLineRecord -> {
+//                        hzMbomLineRecord.setpLouaFlag(Integer.valueOf(1).equals(hzMbomLineRecord.getpLouaFlag()) ? 2 : 1);
+//                        hzMbomRecordDAO.update(hzMbomLineRecord);
+//                    });
+//                }
+//
+//            }
+//            return WriteResultRespDTO.getSuccessResult();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return WriteResultRespDTO.getFailResult();
+//        }
     }
 
     @Override
@@ -483,6 +489,8 @@ public class HzPbomServiceImpl implements HzPbomService {
                 respDTO.setEffectTime(DateUtil.formatDefaultDate(record.getEffectTime()));
                 if (Integer.valueOf(1).equals(record.getpLouaFlag())) {
                     respDTO.setpLouaFlag("LOU");
+                }else if(Integer.valueOf(0).equals(record.getpLouaFlag())){
+                    respDTO.setpLouaFlag("LOA");
                 }
                 respDTO.setObject(hzSingleVehiclesServices.singleVehNum(record.getVehNum(),list));
                 respDTO.setStatus(record.getStatus());

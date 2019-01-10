@@ -29,10 +29,7 @@ import sql.pojo.change.HzAttachmentRecord;
 import sql.pojo.change.HzChangeListRecord;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -329,16 +326,17 @@ public class HzChangeDataController extends BaseController {
         }
     }
 
-    //这个暂时先注释掉
+
 //    @RequestMapping(value = "download",method = RequestMethod.GET)
 //    public void export(Long filePath,HttpServletResponse response)  {
 //        HzAttachmentRecord hzAttachmentRecord = hzAttachmentRecordDao.selectByPrimaryKey(filePath);
-//        File file = new File("D:\\接口连接信息111-TC.xlsx");
+//        File file = new File(hzAttachmentRecord.getRealName());
 //        String fileName = "";
 //        try {
+//            //浏览器端默认编码为 ISO-8859-1 需要将编码转换为ISO-8859-1 否则出现乱码
 //            fileName = new String(file.getName().getBytes("UTF-8"),"ISO-8859-1");
 //        }catch (Exception e){
-//
+//            e.printStackTrace();
 //        }
 //        if(!file.exists()){
 //            toJSONResponse(Result.build(false,"文件不存在！"),response);

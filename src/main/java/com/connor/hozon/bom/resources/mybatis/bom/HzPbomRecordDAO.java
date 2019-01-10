@@ -88,6 +88,7 @@ public interface HzPbomRecordDAO {
      */
     int deleteList(List<DeleteHzPbomReqDTO> list);
 
+    int deleteListByPuids(List<String> puids,String tableName);
     /**
      * 分页获取pbom信息
      * @param query
