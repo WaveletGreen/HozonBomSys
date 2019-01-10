@@ -158,4 +158,13 @@
             #{hzDMDetailChangeBean.dmdCfg0FamilyUid,jdbcType=VARCHAR}
         </foreach>
     </select>
+
+    <delete id="deleteByFamilyName" parameterType="java.util.List">
+        delete HZ_CFG0_OPTIONFAMILY_RECORD t where t.P_OPTIONFAMILY_NAME in
+        <foreach collection="date" index="index" item="item" open="(" close=")" separator=",">
+            #{item.pCfg0FamilyName,jdbcType=VARCHAR}
+        </foreach>
+        and
+        t.P_OF_CFG0_MAIN = #{mainItemPuid,jdbcType=VARCHAR}
+    </delete>
 </mapper>

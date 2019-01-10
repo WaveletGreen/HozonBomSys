@@ -151,4 +151,6 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     List<HzCfg0Record> selectByChangeOrderId(Long vwoId);
 
     int deleteByOrderId(Long orderId);
+
+    List<HzCfg0Record> selectByFamilyName(HzCfg0Record hzCfg0Record);
 }

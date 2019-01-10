@@ -666,4 +666,16 @@
         select CFG_PUID from HZ_CFG0_AFTER_CHANGE_RECORD where CHANGE_ORDER_ID = #{orderId,jdbcType=DECIMAL} and CFG_STATUS=2
         )
     </delete>
+
+
+    <select id="selectByFamilyName" parameterType="sql.pojo.cfg.cfg0.HzCfg0Record" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CFG0_RECORD
+        where
+        P_CFG0_FAMILY_NAME = #{pCfg0FamilyName,jdbcType=VARCHAR}
+        and
+        P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR}
+    </select>
 </mapper>

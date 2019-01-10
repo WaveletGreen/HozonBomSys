@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
@@ -80,6 +81,9 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
     @Autowired
     HzFullCfgWithCfgDao hzFullCfgWithCfgDao;
+
+    @Autowired
+    HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
     /*** 日志记录*/
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0Controller.class);
 
@@ -304,6 +308,21 @@ public class HzCfg0Controller extends ExtraIntegrate {
             }
             if(hzCfg0RecordsDelete!=null&&hzCfg0RecordsDelete.size()>0){
                 int daleteNum = hzCfg0RecordDao.deleteCfgByList(hzCfg0RecordsDelete);
+                List<HzCfg0Record> familyNames = new ArrayList<>();
+                for(HzCfg0Record hzCfg0Record : hzCfg0RecordsDelete){
+                    String familyName = hzCfg0Record.getpCfg0FamilyName();
+                    List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByFamilyName(hzCfg0Record);
+                    if(hzCfg0RecordList==null||hzCfg0RecordList.size()<=0){
+                        familyNames.add(hzCfg0Record);
+                    }
+                }
+                if(familyNames!=null&&familyNames.size()>0){
+                    if(hzCfg0OptionFamilyDao.deleteByFamilyName(familyNames)<=0){
+                        result.put("status", false);
+                        result.put("msg", "删除失败");
+                        return result;
+                    }
+                }
                 if(daleteNum <=0){
                     result.put("status", false);
                     result.put("msg", "删除失败");
@@ -315,6 +334,21 @@ public class HzCfg0Controller extends ExtraIntegrate {
             }
         }else {
             int deleteNum = hzCfg0RecordDao.deleteCfgByList(records);
+            List<HzCfg0Record> familyNames = new ArrayList<>();
+            for(HzCfg0Record hzCfg0Record : records){
+                String familyName = hzCfg0Record.getpCfg0FamilyName();
+                List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByFamilyName(hzCfg0Record);
+                if(hzCfg0RecordList==null||hzCfg0RecordList.size()<=0){
+                    familyNames.add(hzCfg0Record);
+                }
+            }
+            if(familyNames!=null&&familyNames.size()>0){
+                if(hzCfg0OptionFamilyDao.deleteByFamilyName(familyNames)<=0){
+                    result.put("status", false);
+                    result.put("msg", "删除失败");
+                    return result;
+                }
+            }
             if(deleteNum<=0){
                 result.put("status", false);
                 result.put("msg", "删除失败");
