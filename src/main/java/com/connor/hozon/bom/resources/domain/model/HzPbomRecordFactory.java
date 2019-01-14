@@ -127,6 +127,7 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setSortNum(record.getSortNum());
         hzPbomLineRecord.setColorPart(record.getColorPart());
         hzPbomLineRecord.setIsNewPart(0);
+        hzPbomLineRecord.setStatus(2);
         return hzPbomLineRecord;
     }
 

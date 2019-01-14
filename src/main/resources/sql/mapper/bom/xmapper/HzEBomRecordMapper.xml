@@ -923,7 +923,9 @@
 
     <!--查询当前父层的子一层记录-->
     <select id="HzEbomRecordDAOImpl_findNextLevelRecordByParentId" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select <include refid="BASE_BOM_COLUMN"/> from HZ_BOM_LINE_RECORD t
+        select <include refid="BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
+        from HZ_BOM_LINE_RECORD t
+        left join HZ_EPL_RECORD t10 on t.P_EPL_ID = t10.ID
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         #{projectId,jdbcType=VARCHAR})

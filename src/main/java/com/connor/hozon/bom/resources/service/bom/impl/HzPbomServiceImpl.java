@@ -258,6 +258,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
             return jsonArray;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -372,41 +373,53 @@ public class HzPbomServiceImpl implements HzPbomService {
 
     @Override
     public WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO) {
-        return null;
-//        try {
-//            if (reqDTO.getLineIds() == null || reqDTO.getProjectId() == null) {
-//                return WriteResultRespDTO.IllgalArgument();
-//            }
-//            String[] lineIds = reqDTO.getLineIds().split(",");
-//            for (String lineId : lineIds) {
-//                Map<String, Object> map = new HashMap<>();
-//                map.put("lineId", lineId);
-//                map.put("projectId", reqDTO.getProjectId());
-//                List<HzPbomLineRecord> pbomList = hzPbomRecordDAO.getPbomById(map);
-//                List<HzMbomLineRecord> mbomList = hzMbomRecordDAO.findHzMbomByPuid(map);
-//                if (ListUtil.isNotEmpty(pbomList)) {
-//                    pbomList.forEach(hzPbomLineRecord -> {
-//                        if (Integer.valueOf(1).equals(hzPbomLineRecord.getpLouaFlag())) {
-//                            hzPbomLineRecord.setpLouaFlag(2);
-//                        } else {
-//                            hzPbomLineRecord.setpLouaFlag(1);
-//                        }
-//                        hzPbomRecordDAO.update(hzPbomLineRecord);
-//                    });
-//                }
-//                if (ListUtil.isNotEmpty(mbomList)) {
-//                    mbomList.forEach(hzMbomLineRecord -> {
-//                        hzMbomLineRecord.setpLouaFlag(Integer.valueOf(1).equals(hzMbomLineRecord.getpLouaFlag()) ? 2 : 1);
-//                        hzMbomRecordDAO.update(hzMbomLineRecord);
-//                    });
-//                }
-//
-//            }
-//            return WriteResultRespDTO.getSuccessResult();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return WriteResultRespDTO.getFailResult();
-//        }
+
+        if(StringUtils.isBlank(reqDTO.getPuid()) || StringUtils.isBlank(reqDTO.getProjectId())){
+            return WriteResultRespDTO.IllgalArgument();
+        }
+
+        String projectId = reqDTO.getProjectId();
+        String puid = reqDTO.getPuid();
+        //判断 如果已设置为LOU 则是取消设置 否则进行设置 父层为LOU 子层全部为LOA
+        HzPbomTreeQuery hzPbomTreeQuery  = new HzPbomTreeQuery();
+        hzPbomTreeQuery.setProjectId(projectId);
+        hzPbomTreeQuery.setPuid(puid);
+        List<HzPbomLineRecord> hzPbomLineRecords = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
+        List<HzPbomLineRecord> recordList = new ArrayList<>();
+        if(ListUtil.isNotEmpty(hzPbomLineRecords)){
+            HzPbomLineRecord record = hzPbomLineRecords.get(0);
+            if(Integer.valueOf(1).equals(record.getpLouaFlag())){//已设置为LOU 执行取消操作
+                hzPbomLineRecords.forEach(hzPbomLineRecord -> {
+                    HzPbomLineRecord updateLouRecord = new HzPbomLineRecord();
+                    updateLouRecord.setpLouaFlag(2);
+                    updateLouRecord.setPuid(hzPbomLineRecord.getPuid());
+                    recordList.add(updateLouRecord);
+                });
+            }else if(Integer.valueOf(0).equals(record.getpLouaFlag())){//为LOA 进行提示
+                return WriteResultRespDTO.failResultRespDTO("当前BOM结构中已存在LOU设置,取消后可以进行重新设置!");
+            }else {//设置为LOU
+                HzPbomLineRecord updateLouRecord  = new HzPbomLineRecord();
+                updateLouRecord.setpLouaFlag(1);
+                updateLouRecord.setPuid(record.getPuid());
+                recordList.add(updateLouRecord);
+                for(int i = 1;i < hzPbomLineRecords.size(); i++){
+                    HzPbomLineRecord updateLoaRecord = new HzPbomLineRecord();
+                    updateLoaRecord.setPuid(hzPbomLineRecords.get(i).getPuid());
+                    updateLoaRecord.setpLouaFlag(0);
+                    recordList.add(updateLoaRecord);
+                }
+            }
+        }
+
+        try {
+            if(ListUtil.isNotEmpty(recordList)){
+                hzPbomRecordDAO.updateListByPuids(recordList);
+            }
+            return WriteResultRespDTO.getSuccessResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return WriteResultRespDTO.getFailResult();
+        }
     }
 
     @Override

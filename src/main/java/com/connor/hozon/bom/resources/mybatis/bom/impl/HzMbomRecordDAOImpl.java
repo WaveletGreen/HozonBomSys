@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -554,5 +555,29 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("colorId",query.getColorId());
         map.put("lineId",query.getLineId());
         return (int)super.findForObject("HzMbomRecordDAOImpl_checkPaintMaterielRepeat",map)>0;
+    }
+
+    @Override
+    public List<HzMbomLineRecord> getNextBomStructure(String puid, String projectId,String colorId) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",puid);
+        map.put("projectId",projectId);
+        map.put("colorId",colorId);
+        return super.findForList("HzMbomRecordDAOImpl_getNextBomStructure",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> getHzMbomByBomQuery(HzBOMQuery hzBOMQuery) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",hzBOMQuery.getPuid());
+        if(StringUtils.isBlank(hzBOMQuery.getTableName())){
+            map.put("tableName",ChangeTableNameEnum.HZ_MBOM.getTableName());
+        }else {
+            map.put("tableName",hzBOMQuery.getTableName());
+        }
+        map.put("parentId",hzBOMQuery.getParentId());
+        map.put("colorId",hzBOMQuery.getColorId());
+        map.put("projectId",hzBOMQuery.getProjectId());
+        return super.findForList("HzMbomRecordDAOImpl_getHzMbomByBomQuery",map);
     }
 }

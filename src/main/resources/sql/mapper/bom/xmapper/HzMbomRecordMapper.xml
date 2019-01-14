@@ -74,7 +74,7 @@
         P_BOM_LINE_PUID, P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT,
         P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
         P_BOM_LINE_PART_RESOURCE, P_BOM_ORDER_NUM,P_BOM_TYPE, P_STOCK_LOCATION,P_FACTORY_ID,P_SORT_NUM,
-        P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME
+        P_LOU_LOA_FLAG, P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME
   </sql>
 
 
@@ -86,7 +86,7 @@
         t.P_BOM_LINE_PUID, t.P_BOM_LINE_ID, t.P_BOM_LINE_IS_2Y, t.P_BOM_LINE_IS_PART, t.P_BOM_LINE_IS_DEPT,
         t.P_BOM_OF_WHICH_DEPT, t.P_BOM_LINE_PART_NAME, t.P_BOM_LINE_PART_CLASS, t.P_BOM_LINE_PART_EN_NAME,
         t.P_BOM_LINE_PART_RESOURCE, t.P_BOM_ORDER_NUM,t.P_BOM_TYPE, t.P_STOCK_LOCATION,t.P_FACTORY_ID,t.P_SORT_NUM,
-        t.P_COLOR_PUID,t.P_ORDER_ID,t.P_REVISION,t.P_EFFECT_TIME
+        t.P_COLOR_PUID,t.P_ORDER_ID,t.P_REVISION,t.P_EFFECT_TIME,t.P_LOU_LOA_FLAG
   </sql>
 
     <!--查询Mbom信息 分页-->
@@ -1028,7 +1028,7 @@
         P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
         P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,
         P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_MBOM_STATUS,
-        P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,P_FACTORY_ID,
+        P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,P_FACTORY_ID,P_LOU_LOA_FLAG,
         P_SPARE_PART,P_SPARE_PART_NUM,P_PROCESS_ROUTE,P_LABOR_HOUR,P_RHYTHM,P_SOLDER_JOINT,
         P_MACHINE_MATERITAL,P_STANDARD_PART,P_TOOLS,P_WASTER_PRODUCT,P_CHANGE,P_CHANGE_NUM,
         P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME)
@@ -1043,7 +1043,7 @@
             #{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},
             #{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},
             #{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},
-            sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.pFactoryId},
+            sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.pFactoryId,jdbcType=VARCHAR},#{item.pLouaFlag,jdbcType=INTEGER},
             #{item.sparePart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR}, #{item.processRoute,jdbcType=VARCHAR},
             #{item.laborHour,jdbcType=VARCHAR}, #{item.rhythm,jdbcType=VARCHAR}, #{item.solderJoint,jdbcType=VARCHAR},
             #{item.machineMaterial,jdbcType=VARCHAR}, #{item.standardPart,jdbcType=VARCHAR}, #{item.tools,jdbcType=VARCHAR},
@@ -1144,7 +1144,10 @@
                     P_MBOM_STATUS = #{item.status,jdbcType=VARCHAR},
                 </if>
                 <if test="item.pFactoryId != null">
-                    P_FACTORY_ID = #{item.pFactoryId,jdbcType=VARCHAR}
+                    P_FACTORY_ID = #{item.pFactoryId,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pLouaFlag != null">
+                    P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=VARCHAR},
                 </if>
             </set>
             where PUID = #{item.puid,jdbcType=VARCHAR}
@@ -1335,6 +1338,40 @@
                 and t.P_BOM_LINE_ID = #{lineId,jdbcType=VARCHAR}
             </if>
         </where>
+    </select>
+
+
+    <!--获取当前BOM的子一层结构-->
+    <select id="HzMbomRecordDAOImpl_getNextBomStructure" parameterType="java.util.HashMap" resultMap="MbomResultMap">
+        select <include refid="Base_Column_List"/>
+        from HZ_MBOM_RECORD t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+        <if test="puid != null">
+            and t.P_PARENT_UID = #{puid,jdbcType=VARCHAR}
+        </if>
+        <if test="colorId != null and colorId != ''">
+            and t.P_COLOR_PUID = #{colorId,jdbcType=VARCHAR}
+        </if>
+        and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
+        ORDER BY  CAST(t.P_SORT_NUM as FLOAT)
+    </select>
+
+    <!--主键获取一条BOM信息-->
+    <select id="HzMbomRecordDAOImpl_getHzMbomByBomQuery" parameterType="java.util.HashMap" resultMap="MbomResultMap">
+        select <include refid="Base_Column_List"/>
+        from ${tableName} t
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+        <if test="puid != null">
+            and t.puid = #{puid,jdbcType=VARCHAR}
+        </if>
+        <if test="colorId != null and colorId != ''">
+            and t.P_COLOR_PUID = #{colorId,jdbcType=VARCHAR}
+        </if>
+        <if test="parentId != null">
+            and t.P_PARENT_UID = #{parentId,jdbcType=VARCHAR}
+        </if>
     </select>
 
 

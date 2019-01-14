@@ -29,7 +29,9 @@ import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.RefreshMbomThread;
+import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
+import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
@@ -88,9 +90,6 @@ public class HzMbomServiceImpl implements HzMbomService{
     private HzFactoryDAO hzFactoryDAO;
 
     @Autowired
-    private HzCfg0OfBomLineService hzCfg0OfBomLineService;
-
-    @Autowired
     private IHzConfigBomColorService iHzConfigBomColorService;
 
     @Autowired
@@ -104,9 +103,6 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Autowired
     private HzChangeDataRecordDAO hzChangeDataRecordDAO;
-
-    @Autowired
-    private HzApplicantChangeDAO hzApplicantChangeDAO;
 
     @Autowired
     private HzBomMainRecordDao hzBomMainRecordDao;
@@ -123,11 +119,18 @@ public class HzMbomServiceImpl implements HzMbomService{
     @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
 
+    private HzPbomService hzPbomService;
+
     private TransactionTemplate configTransactionTemplate;
 
     @Autowired
     public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
         this.configTransactionTemplate = configTransactionTemplate;
+    }
+
+    @Autowired
+    public void setHzPbomService(HzPbomService hzPbomService) {
+        this.hzPbomService = hzPbomService;
     }
 
     @Override
@@ -175,11 +178,10 @@ public class HzMbomServiceImpl implements HzMbomService{
             List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
             if (ListUtil.isNotEmpty(records)) {
                 HzMbomLineRecord record = records.get(0);
-                HzMbomRecordRespDTO respDTO = HzMbomRecordFactory.mbomRecordToRespDTO(record);
-                return respDTO;
+                return  HzMbomRecordFactory.mbomRecordToRespDTO(record);
             }
-
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         return null;
@@ -497,29 +499,6 @@ public class HzMbomServiceImpl implements HzMbomService{
     @Override
     public WriteResultRespDTO setCurrentBomToLou(SetLouReqDTO reqDTO) {
         return null;
-//        try {
-//            if(reqDTO.getLineIds()==null || reqDTO.getProjectId() == null){
-//                return WriteResultRespDTO.IllgalArgument();
-//            }
-//            String[] lineIds = reqDTO.getLineIds().split(",");
-//            for(String lineId:lineIds){
-//                Map<String,Object> map = new HashMap<>();
-//                map.put("lineId",lineId);
-//                map.put("projectId",reqDTO.getProjectId());
-//                List<HzMbomLineRecord> mbomList  =  hzMbomRecordDAO.findHzMbomByPuid(map);
-//                if(ListUtil.isNotEmpty(mbomList)){
-//                    mbomList.forEach(hzMbomLineRecord -> {
-//                        hzMbomLineRecord.setpLouaFlag(Integer.valueOf(1).equals(hzMbomLineRecord.getpLouaFlag())?2:1);
-//                        hzMbomRecordDAO.update(hzMbomLineRecord);
-//                    });
-//                }
-//
-//            }
-//            return WriteResultRespDTO.getSuccessResult();
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return WriteResultRespDTO.getFailResult();
-//        }
     }
 
     @Override
@@ -529,9 +508,9 @@ public class HzMbomServiceImpl implements HzMbomService{
         map.put("pPuid",puid);
         List<HzMbomLineRecord> records = hzMbomRecordDAO.findHzMbomByPuid(map);
         if(ListUtil.isNotEmpty(records)){
-            if(records.get(0).getIs2Y().equals(1)){
+            if(Integer.valueOf(1).equals(records.get(0).getIs2Y())){
                 return records.get(0);
-            }else if(records.get(0).getParentUid() == null){
+            }else if(StringUtils.isBlank(records.get(0).getParentUid())){
                 return records.get(0);
             }else {
                 return  findParentBomUtil2Y(projectId,records.get(0).getParentUid());
@@ -544,23 +523,18 @@ public class HzMbomServiceImpl implements HzMbomService{
 
     @Override
     public HzLouRespDTO getHzLouInfoById(HzLouaQuery query) {
-        try {
-            HzLouRespDTO respDTO = new HzLouRespDTO();
-            HzMbomLineRecord hzBomLineRecord = findParentBomUtil2Y(query.getProjectId(),query.getPuid());
-            if(hzBomLineRecord != null){
-                HzCfg0OfBomLineRecord record = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(query.getProjectId(),hzBomLineRecord.geteBomPuid());
-                if(record != null){
-                    respDTO.setCfg0Desc(record.getCfg0Desc());
-                    respDTO.setCfg0FamilyDesc(record.getCfg0FamilyDesc());
-                    respDTO.setpCfg0name(record.getpCfg0name());
-                    respDTO.setpCfg0familyname(record.getpCfg0familyname());
-                    return  respDTO;
-                }
-            }
-            return respDTO;
-        }catch (Exception e){
+        //查询自己
+        HzBOMQuery hzBOMQuery = new HzBOMQuery();
+        hzBOMQuery.setProjectId(query.getProjectId());
+        hzBOMQuery.setPuid(query.getPuid());
+        List<HzMbomLineRecord> hzMbomLineRecords = hzMbomRecordDAO.getHzMbomByBomQuery(hzBOMQuery);
+        if(ListUtil.isEmpty(hzMbomLineRecords)){
             return null;
         }
+        HzLouaQuery hzLouaQuery = new HzLouaQuery();
+        hzLouaQuery.setPuid(hzMbomLineRecords.get(0).geteBomPuid());
+        hzLouaQuery.setProjectId(query.getProjectId());
+        return hzPbomService.getHzLouInfoById(hzLouaQuery);
     }
 
 

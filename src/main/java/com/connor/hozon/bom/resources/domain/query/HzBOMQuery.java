@@ -9,6 +9,7 @@ import lombok.Data;
  */
 @Data
 public class HzBOMQuery extends DefaultQuery {
+    private static final long serialVersionUID = -8670366939760370970L;
     /**
      * 项目id
      */
@@ -36,4 +37,13 @@ public class HzBOMQuery extends DefaultQuery {
      * 零件号
      */
     private String partId;
+
+    /**
+     * 颜色件
+     */
+    private String colorId;
+
+    private String tableName;
+
+    private String puid;
 }

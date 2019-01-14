@@ -69,6 +69,7 @@ public class HzMbomRecordFactory {
         hzMbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzMbomLineRecord.setSortNum(record.getSortNum());
         hzMbomLineRecord.setIsColorPart(record.getColorPart());
+        hzMbomLineRecord.setpLouaFlag(record.getpLouaFlag());
         hzMbomLineRecord.setBuyType(record.getResource());
         return hzMbomLineRecord;
     }
@@ -104,6 +105,8 @@ public class HzMbomRecordFactory {
         respDTO.setChangeNum(record.getChangeNum());
         if (Integer.valueOf(1).equals(record.getpLouaFlag())) {
             respDTO.setpLouaFlag("LOU");
+        }else if(Integer.valueOf(0).equals(record.getpLouaFlag())){
+            respDTO.setpLouaFlag("LOA");
         }
         if (Integer.valueOf(1).equals(record.getpBomType())) {
             respDTO.setpBomType("生产");
@@ -134,7 +137,6 @@ public class HzMbomRecordFactory {
     public  List<HzMbomLineRecord> movePartBomStructureToThis(HzMbomLineRecord record,List<HzPbomLineRecord> records,int n){
         List<HzMbomLineRecord> recordList = new ArrayList<>();
         String lindIndex = record.getLineIndex();
-        Double sortNum = Double.parseDouble(record.getSortNum());
         if(ListUtil.isNotEmpty(records)){
             int length = records.get(0).getLineIndex().split("\\.").length;
             for(int i = 1;i<records.size();i++){
@@ -240,6 +242,7 @@ public class HzMbomRecordFactory {
         mbomLineRecord.setpFactoryId(record.getpFactoryId());
         mbomLineRecord.setCreateName(record.getCreateName());
         mbomLineRecord.setSortNum(record.getSortNum());
+        mbomLineRecord.setpLouaFlag(record.getpLouaFlag());
         return mbomLineRecord;
     }
 

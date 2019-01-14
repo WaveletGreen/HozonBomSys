@@ -252,4 +252,19 @@ public interface HzMbomRecordDAO {
      */
     boolean checkPaintMaterielRepeat(HzMbomPaintMaterielRepeatQuery query);
 
+    /**
+     * 查询当前BOM的子一层结构
+     * @param puid
+     * @param projectId
+     * @return
+     */
+    List<HzMbomLineRecord> getNextBomStructure(String puid,String projectId,String colorId);
+
+    /**
+     * 获取MBOM信息
+     * @param hzBOMQuery 参数信息
+     * @return
+     */
+    List<HzMbomLineRecord> getHzMbomByBomQuery(HzBOMQuery hzBOMQuery);
+
 }

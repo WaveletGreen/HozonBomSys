@@ -837,7 +837,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 return WriteResultRespDTO.failResultRespDTO("当前BOM结构中已存在LOU，不可重复设置!");
             }else if(Integer.valueOf(1).equals(record.getpLouaFlag())){//之前设置为LOU 现在改为取消设置
                 records.forEach(record1 -> {
-                    record.setpLouaFlag(2);
+                    record1.setpLouaFlag(2);
                 });
             }else {//现在需要设置为LOU
                 records.forEach(record1 -> {

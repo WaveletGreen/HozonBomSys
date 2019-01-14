@@ -185,9 +185,9 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
     public HzEPLManageRecord findParentFor2Y(String projectId, String puid) {
         HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid,projectId);
         if (record != null) {
-            if (record.getIs2Y().equals(1)) {
+            if (Integer.valueOf(1).equals(record.getIs2Y())) {
                 return record;
-            } else if (record.getParentUid() == null) {
+            } else if (StringUtils.isBlank(record.getParentUid())) {
                 return record;
             } else {
                 return findParentFor2Y(projectId, record.getParentUid());
