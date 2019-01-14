@@ -251,14 +251,12 @@ public class LouaContorller extends BaseController {
             loaRespDTOS.add(hzLoaRespDTO);
         });
 
-        if(respDTO .getJsonArray() !=null){
+        if(respDTO !=null){
             HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
-            JSONObject object = (JSONObject) respDTO.getJsonArray().get(0);
-            hzLoaRespDTO.setParentLevel(object.getString("level"));
-            hzLoaRespDTO.setParentLineId(object.getString("lineId"));
-            hzLoaRespDTO.setParentName(object.getString("pBomLinePartName"));
-
-            jsonObject.put("parent",hzLoaRespDTO);
+            hzLoaRespDTO.setParentLevel(respDTO.getLevel());
+            hzLoaRespDTO.setParentLineId(respDTO.getLineId());
+            hzLoaRespDTO.setParentName(respDTO.getpBomLinePartName());
+            jsonObject.put("parent",hzLoaRespDTO);;
         }else {
             jsonObject.put("parent",new HzLoaRespDTO());
         }
