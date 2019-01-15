@@ -957,6 +957,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         HzEPLRecord hzEPLRecord = new HzEPLRecord();
         hzEPLRecord.setPartId(hzAccessoriesLibs.getpMaterielCode());
         hzEPLRecord.setPartName(hzAccessoriesLibs.getpMaterielName());
+        hzEPLRecord.setProjectId(projectId);
 
         if(hzEPLDAO.insert(hzEPLRecord)<=0){
             result.put("success",false);

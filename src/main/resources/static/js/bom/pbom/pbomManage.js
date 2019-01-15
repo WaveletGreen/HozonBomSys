@@ -27,7 +27,7 @@ function doQuery() {
         pBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
     }
     var pIsNewPart = $("#pIsNewPart").val();
-    if (pIsNewPart == "工艺合件") {
+    if (pIsNewPart == "请选择工艺合件") {
         pBomUrl += "&pIsNewPart=" + "";
     }
     else {
