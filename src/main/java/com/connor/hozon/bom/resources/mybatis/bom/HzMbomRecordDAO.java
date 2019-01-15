@@ -254,11 +254,10 @@ public interface HzMbomRecordDAO {
 
     /**
      * 查询当前BOM的子一层结构
-     * @param puid
-     * @param projectId
+     * @param hzBOMQuery
      * @return
      */
-    List<HzMbomLineRecord> getNextBomStructure(String puid,String projectId,String colorId);
+    List<HzMbomLineRecord> getNextBomStructure(HzBOMQuery hzBOMQuery);
 
     /**
      * 获取MBOM信息

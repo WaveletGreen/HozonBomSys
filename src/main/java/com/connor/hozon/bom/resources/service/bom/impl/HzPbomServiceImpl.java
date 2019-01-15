@@ -979,6 +979,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzEPLRecord.setPartId(hzAccessoriesLibs.getpMaterielCode());
         hzEPLRecord.setPartName(hzAccessoriesLibs.getpMaterielName());
         hzEPLRecord.setProjectId(projectId);
+        hzEPLRecord.setStatus(1);
         if(hzEPLDAO.insert(hzEPLRecord)<=0){
             result.put("success",false);
             result.put("errMsg", "添加失败");

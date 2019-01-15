@@ -587,9 +587,9 @@ var setting3 = {
  */
 function doGetTableByNode(va) {
     let rel = "<table>" +
-        "<tr>" +
-        "<th>序号</th>" +
-        "<td></td>" +
+        // "<tr>" +
+        // "<th>序号</th>" +
+        // "<td></td>" +
         "</tr><tr>" +
         "<th>层级</th>" +
         "<td>" + va.level + "</td>" +
@@ -599,15 +599,15 @@ function doGetTableByNode(va) {
         "</tr><tr>" +
         "<th>级别</th>" +
         "<td>" + va.rank + "</td>" +
-        "</tr><tr>" +
-        "<th>分组号</th>" +
-        "<td>" + va.groupNum + "</td>" +
+        // "</tr><tr>" +
+        // "<th>分组号</th>" +
+        // "<td>" + va.groupNum + "</td>" +
         "</tr><tr>" +
         "<th>零件号</th>" +
         "<td>" + va.lineId + "</td>" +
         "</tr><tr>" +
         "<th>名称</th>" +
-        "<td>" + (va.pBomLinePartName == undefined ? "" : va.pBomLinePartEnName) + "</td>" +
+        "<td>" + (va.pBomLinePartName == undefined ? "" : va.pBomLinePartName) + "</td>" +
         "</tr><tr>" +
         "<th>英文名称</th>" +
         "<td>" + (va.pBomLinePartEnName == undefined ? "" : va.pBomLinePartEnName) + "</td>" +

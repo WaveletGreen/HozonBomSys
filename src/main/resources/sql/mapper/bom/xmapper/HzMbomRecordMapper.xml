@@ -1344,7 +1344,7 @@
     <!--获取当前BOM的子一层结构-->
     <select id="HzMbomRecordDAOImpl_getNextBomStructure" parameterType="java.util.HashMap" resultMap="MbomResultMap">
         select <include refid="Base_Column_List"/>
-        from HZ_MBOM_RECORD t
+        from ${tableName} t
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
         <if test="puid != null">

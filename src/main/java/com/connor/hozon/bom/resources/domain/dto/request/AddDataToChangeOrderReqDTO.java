@@ -10,6 +10,7 @@ import lombok.Data;
  */
 @Data
 public class AddDataToChangeOrderReqDTO extends BaseDTO {
+    private static final long serialVersionUID = -8754762380503005076L;
     /**
      * 数据ids  中间用英文逗号隔开
      */
@@ -34,4 +35,8 @@ public class AddDataToChangeOrderReqDTO extends BaseDTO {
      *  类型 1 生产 6 财务
      */
     private Integer type;
+
+    private String[] puidString;
+
+    private String url;
 }

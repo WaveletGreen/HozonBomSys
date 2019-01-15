@@ -527,6 +527,7 @@ public class HzMbomServiceImpl implements HzMbomService{
         HzBOMQuery hzBOMQuery = new HzBOMQuery();
         hzBOMQuery.setProjectId(query.getProjectId());
         hzBOMQuery.setPuid(query.getPuid());
+        hzBOMQuery.setTableName(MbomTableNameEnum.tableName(query.getType()));
         List<HzMbomLineRecord> hzMbomLineRecords = hzMbomRecordDAO.getHzMbomByBomQuery(hzBOMQuery);
         if(ListUtil.isEmpty(hzMbomLineRecords)){
             return null;

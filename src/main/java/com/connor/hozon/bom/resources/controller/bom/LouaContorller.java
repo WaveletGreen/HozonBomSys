@@ -253,7 +253,12 @@ public class LouaContorller extends BaseController {
             return jsonObject;
         }
         HzMbomLineRecord hzMbomLineRecord = hzMbomLineRecords.get(0);
-        List<HzMbomLineRecord> recordList =  hzMbomRecordDAO.getNextBomStructure(hzMbomLineRecord.geteBomPuid(),query.getProjectId(),hzMbomLineRecord.getColorId());//子一层
+        HzBOMQuery query1 = new HzBOMQuery();
+        query1.setTableName(MbomTableNameEnum.tableName(query.getType()));
+        query1.setProjectId(query.getProjectId());
+        query1.setPuid(hzMbomLineRecord.geteBomPuid());
+        query1.setColorId(hzMbomLineRecord.getColorId());
+        List<HzMbomLineRecord> recordList =  hzMbomRecordDAO.getNextBomStructure(query1);//子一层
         if(ListUtil.isNotEmpty(recordList)){
             recordList.forEach(record -> {
                 HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();

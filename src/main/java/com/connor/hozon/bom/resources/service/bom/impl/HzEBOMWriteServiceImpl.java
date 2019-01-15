@@ -650,15 +650,23 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
         //获取数据信息
         List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
 
+
         //统计操作数据
         Map<String,Object> map = new HashMap<>();
+        Map<Integer,List<String>> puidMap = HzBomSysFactory.spiltList(puids);//1000条约束
+        List<HzEPLManageRecord> records = new ArrayList<>();
+        for(List<String> v:puidMap.values()){
+            //查询EBOM表数据 保存历史记录
+            HzChangeDataDetailQuery query  = new HzChangeDataDetailQuery();
+            query.setProjectId(reqDTO.getProjectId());
+            query.setPuids(v);
+            query.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
+            List<HzEPLManageRecord> records1 = hzEbomRecordDAO.getEbomRecordsByPuids(query);
+            if(ListUtil.isNotEmpty(records1)){
+                records.addAll(records1);
+            }
+        }
 
-        //查询EBOM表数据 保存历史记录
-        HzChangeDataDetailQuery query  = new HzChangeDataDetailQuery();
-        query.setProjectId(reqDTO.getProjectId());
-        query.setPuids(puids);
-        query.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
-        List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByPuids(query);
         List<HzEPLManageRecord> afterRecords = new ArrayList<>();
         if(ListUtil.isNotEmpty(records)){
             //到 after表中查询看是否存在记录
@@ -747,15 +755,24 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
     public WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO) {
         try{
             List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
-            HzChangeDataDetailQuery query = new HzChangeDataDetailQuery();
-            query.setProjectId(reqDTO.getProjectId());
-            query.setPuids(puids);
-            query.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
+
             List<String> deletePuids = new ArrayList<>();
             List<HzEPLManageRecord> updateRecords = new ArrayList<>();
             List<HzEPLManageRecord> updateList = new ArrayList<>();
             Set<HzEPLManageRecord> set = new HashSet<>();
-            List<HzEPLManageRecord> list = hzEbomRecordDAO.getEbomRecordsByPuids(query);
+            Map<Integer,List<String>> puidMap = HzBomSysFactory.spiltList(puids);//1000条约束
+            List<HzEPLManageRecord> list = new ArrayList<>();
+            for(List<String> v:puidMap.values()){
+                HzChangeDataDetailQuery query = new HzChangeDataDetailQuery();
+                query.setProjectId(reqDTO.getProjectId());
+                query.setPuids(v);
+                query.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
+                List<HzEPLManageRecord> list1 = hzEbomRecordDAO.getEbomRecordsByPuids(query);
+                if(ListUtil.isNotEmpty(list1)){
+                    list.addAll(list1);
+                }
+            }
+
             //带子层撤销
             //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
             if(ListUtil.isNotEmpty(list)){
@@ -833,6 +850,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             if(ListUtil.isEmpty(records)){
                 return WriteResultRespDTO.failResultRespDTO("当前选中的BOM行不存在!");
             }
+            boolean setLou = false;
             if(Integer.valueOf(0).equals(record.getpLouaFlag())){//它的父层设置为LOU 当前给与提示
                 return WriteResultRespDTO.failResultRespDTO("当前BOM结构中已存在LOU，不可重复设置!");
             }else if(Integer.valueOf(1).equals(record.getpLouaFlag())){//之前设置为LOU 现在改为取消设置
@@ -840,6 +858,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                     record1.setpLouaFlag(2);
                 });
             }else {//现在需要设置为LOU
+                setLou = true;
                 records.forEach(record1 -> {
                     if(record1.equals(record)){
                         record1.setpLouaFlag(1);
@@ -863,15 +882,19 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                         if(Integer.valueOf(0).equals(pbomLineRecord.getpLouaFlag())){//它的父层设置为LOU 不进行任何操作
                             break;
                         }else if(Integer.valueOf(1).equals(pbomLineRecord.getpLouaFlag())){//之前设置为LOU 现在改为取消设置
-                            lineRecord.setpLouaFlag(2);
-                            setLouRecords.add(lineRecord);
-                        }else {//现在需要设置为LOU
-                            if (lineRecord.equals(pbomLineRecord)) {
-                                lineRecord.setpLouaFlag(1);
-                            } else {
-                                lineRecord.setpLouaFlag(0);
+                            if(!setLou){//EBOM 取消设置
+                                lineRecord.setpLouaFlag(2);
+                                setLouRecords.add(lineRecord);
                             }
-                           setLouRecords.add(lineRecord);
+                        }else {//现在需要设置为LOU
+                            if(setLou){//EBOM设置
+                                if (lineRecord.equals(pbomLineRecord)) {
+                                    lineRecord.setpLouaFlag(1);
+                                } else {
+                                    lineRecord.setpLouaFlag(0);
+                                }
+                                setLouRecords.add(lineRecord);
+                            }
                         }
                     }
 

@@ -407,7 +407,7 @@ function initTable(pBomUrl) {
                                                 if (result.success) {
                                                     layer.msg('设置成功', {icon: 1, time: 2000})
                                                 } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                    window.Ewin.alert({message: result.data.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },
@@ -942,7 +942,7 @@ function initTable1(pBomUrl, lineIds) {
                                                 if (result.success) {
                                                     layer.msg('设置成功', {icon: 1, time: 2000})
                                                 } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                    window.Ewin.alert({message: result.data.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },

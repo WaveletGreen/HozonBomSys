@@ -29,7 +29,6 @@
             var changeFromId = $("#stage option:selected").val();
             var projectId = $("#project", window.top.document).val();
             var puids = $("#puids").val();
-            var typeId = $("#typeId").val();
             var myData = JSON.stringify({
                 "puids": puids,
                 "orderId": changeFromId,
@@ -62,5 +61,6 @@
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>
+<script th:src="@{/js/bom/ebom/ebomManage.js}"></script>
 </body>
 </html>

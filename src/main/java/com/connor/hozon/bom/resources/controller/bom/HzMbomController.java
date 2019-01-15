@@ -186,7 +186,7 @@ public class HzMbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateMBom", method = RequestMethod.GET)
-    public String updateMbomToPage(String projectId,String eBomPuid,Integer updateType,Model model) {
+    public String updateMbomToPage(String projectId,String eBomPuid,Model model) {
         HzMbomByIdQuery query = new HzMbomByIdQuery();
         query.setProjectId(projectId);
         query.setPuid(eBomPuid);

@@ -1,4 +1,5 @@
 var eBomTitleSet = 55;//53个属性+勾选框列和序号列
+
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectPuid;
@@ -438,7 +439,7 @@ function initTable(eBomUrl) {
                                                 if (result.success) {
                                                     layer.msg('设置成功', {icon: 1, time: 2000})
                                                 } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                    window.Ewin.alert({message: result.data.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },
@@ -456,9 +457,9 @@ function initTable(eBomUrl) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
@@ -482,13 +483,27 @@ function initTable(eBomUrl) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "ebom/order/choose?projectId=" + projectPuid + "&puids=" + puids,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectPuid
                                         });
+                                        $.ajax({
+                                            url:  "ebom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
@@ -1024,7 +1039,7 @@ function initTable1(eBomUrl, puids) {
                                                 if (result.success) {
                                                     layer.msg('设置成功', {icon: 1, time: 2000})
                                                 } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                    window.Ewin.alert({message: result.data.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },
@@ -1042,9 +1057,9 @@ function initTable1(eBomUrl, puids) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
@@ -1068,13 +1083,27 @@ function initTable1(eBomUrl, puids) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "ebom/order/choose?projectId=" + projectPuid + "&puids=" + puids,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectPuid
                                         });
+                                        $.ajax({
+                                            url:  "ebom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })

@@ -558,11 +558,16 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public List<HzMbomLineRecord> getNextBomStructure(String puid, String projectId,String colorId) {
+    public List<HzMbomLineRecord> getNextBomStructure(HzBOMQuery query) {
         Map<String,Object> map = new HashMap<>();
-        map.put("puid",puid);
-        map.put("projectId",projectId);
-        map.put("colorId",colorId);
+        map.put("puid",query.getPuid());
+        map.put("projectId",query.getProjectId());
+        map.put("colorId",query.getColorId());
+        if(StringUtils.isBlank(query.getTableName())){
+            map.put("tableName",ChangeTableNameEnum.HZ_MBOM.getTableName());
+        }else {
+            map.put("tableName",query.getTableName());
+        }
         return super.findForList("HzMbomRecordDAOImpl_getNextBomStructure",map);
     }
 

@@ -214,6 +214,7 @@ public class HzCraftService implements IHzCraftService {
                     hzEPLRecord.setPartName(pbom.getpBomLinePartName());
                     hzEPLRecord.setPartResource(pbom.getpBomLinePartResource());
                     hzEPLRecord.setProjectId(projectUid);
+                    hzEPLRecord.setStatus(1);
                     hzEPLDAO.insert(hzEPLRecord);
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -78,7 +78,7 @@ function initTable1(mBomUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+0+' )">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
@@ -104,12 +104,12 @@ function initTable1(mBomUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -200,7 +200,7 @@ function initTable1(mBomUrl) {
                                     else {
                                         window.Ewin.dialog({
                                             title: "同步修改",
-                                            url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid+"&puid="+rows[0].puid+"&updateType="+2,
+                                            url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
                                             gridId: "gridId",
                                             width: 500,
                                             height: 500
@@ -768,12 +768,12 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -1421,12 +1421,12 @@ function initTable2(productionUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -1447,12 +1447,12 @@ function initTable2(productionUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -1865,12 +1865,12 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -1891,12 +1891,12 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -2318,12 +2318,12 @@ function initTable3(financialUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -2344,12 +2344,12 @@ function initTable3(financialUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -2762,12 +2762,12 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -2788,12 +2788,12 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
