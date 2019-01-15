@@ -109,7 +109,7 @@
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             var zTree = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.zTree;
                             var selectNode = $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.selectNode;
-                            activeTabBodyRefresh();
+                            activeTabBodyReset();
                             if (result.status == 1) {
                                 var entity = result.entity;
                                 zTree.addNodes(selectNode, {
