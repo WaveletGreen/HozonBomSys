@@ -772,6 +772,39 @@
         </foreach>
     </update>
 
+
+
+    <!--批量更新 根据零件号来更新-->
+    <update id="HzMbomRecordDAOImpl_updateMBOMList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update ${item.tableName}
+            <set>
+                P_UPDATE_TIME =sysdate,
+                    P_UPDATE_NAME = #{item.updateName,jdbcType=VARCHAR},
+                    P_BOM_TYPE = #{item.pBomType,jdbcType=INTEGER},
+                    P_STOCK_LOCATION = #{item.pStockLocation,jdbcType=VARCHAR},
+                    P_FACTORY_ID = #{item.pFactoryId,jdbcType=VARCHAR},
+                    P_COLOR_PUID = #{item.colorId,jdbcType=VARCHAR},
+                <if test="item.orderId != null">
+                    P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.revision != null">
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR},
+                </if>
+                <if test="item.effectTime != null">
+                    P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.status != null">
+                    P_MBOM_STATUS = #{item.status,jdbcType=INTEGER},
+                </if>
+                    P_CHANGE_NUM = #{item.changeNum,jdbcType=VARCHAR}
+            </set>
+            where P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR}
+            and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
+            and P_MBOM_STATUS <![CDATA[ <> ]]>0
+        </foreach>
+    </update>
+
     <!--恢复数据-->
     <update id="HzMbomRecordDAOImpl_recoverBomById" parameterType="java.lang.String">
     update HZ_MBOM_RECORD

@@ -777,6 +777,48 @@
   </update>
 
 
+  <update id="HzWorkProcedureDAOImpl_updateWorkProcedureList" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+      update HZ_WORK_PROCEDURE
+      <set>
+          P_WORK_PUID = #{item.pWorkPuid,jdbcType=VARCHAR},
+          P_DIRECT_LABOR = #{item.pDirectLabor,jdbcType=VARCHAR},
+          P_INDIRECT_LABOR = #{item.pIndirectLabor,jdbcType=VARCHAR},
+          P_MACHINE_LABOR = #{item.pMachineLabor,jdbcType=VARCHAR},
+          P_BURN = #{item.pBurn,jdbcType=VARCHAR},
+          P_MACHINE_MATERIAL_LABOR = #{item.pMachineMaterialLabor,jdbcType=VARCHAR},
+          P_OTHER_COST = #{item.pOtherCost,jdbcType=VARCHAR},
+          P_COUNT = #{item.pCount,jdbcType=INTEGER},
+          P_UPDATE_TIME = sysdate,
+          P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
+        <if test="item.pStatus != null">
+          P_STATUS = #{item.pStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.projectId != null">
+          P_PROJECT_PUID = #{item.projectId,jdbcType=VARCHAR},
+        </if>
+          P_MATERIEL_PUID = #{item.materielId,jdbcType=VARCHAR},
+          P_PURPOSE = #{item.purpose,jdbcType=VARCHAR},
+          P_STATE = #{item.state,jdbcType=VARCHAR},
+          P_CONTROL_CODE = #{item.controlCode,jdbcType=VARCHAR},
+          P_MATERIEL_CODE = #{item.pMaterielCode,jdbcType=VARCHAR},
+          P_MATERIEL_DESC = #{item.pMaterielDesc,jdbcType=VARCHAR},
+          P_FACTORYID = #{item.pFactoryId,jdbcType=VARCHAR},
+        <if test="item.effectTime != null">
+          P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.revision != null">
+          P_REVISION = #{item.revision,jdbcType=VARCHAR},
+        </if>
+        <if test="item.orderId != null">
+          P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE}
+        </if>
+      </set>
+      where PUID = #{item.puid}
+    </foreach>
+  </update>
+
+
   <select id="HzWorkProcedureDAOImpl_getHzWorkProcedureByPuids" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t1.P_MATERIEL_DATA_TYPE,t2.*,
     t3.P_WORK_CODE,t3.P_WORK_DESC,

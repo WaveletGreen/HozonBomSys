@@ -59,6 +59,10 @@ public class HzEbomRecordFactory {
         StringBuilder stringBuilder = new StringBuilder();
         for(String key : map.keySet()){
             String value = (String)map.get(key);
+            if(key.contains("title")){
+                int charAt = key.indexOf("title");
+                key = key.substring(0,charAt);
+            }
             if(StringUtils.isNotBlank(value) ){
                 stringBuilder.append(key+"#"+value+",");
             }else {

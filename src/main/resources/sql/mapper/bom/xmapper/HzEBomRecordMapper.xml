@@ -558,6 +558,43 @@
     </update>
 
 
+
+
+
+    <!-- 更新EBOM信息-->
+    <update id="HzEbomRecordDAOImpl_updateEBOMListByEplId" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update Hz_Bom_Line_Record
+            <set>
+                P_UPDATE_TIME =sysdate,
+                <if test="item.status != null">
+                    P_EBOM_STATUS = #{item.status,jdbcType=VARCHAR},
+                </if>
+                    P_FNA_INFO = #{item.fna,jdbcType=VARCHAR},
+                    P_UPC = #{item.pUpc,jdbcType=VARCHAR},
+                    P_FNA_DESC = #{item.pFnaDesc,jdbcType=VARCHAR},
+                    P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
+                    P_NUMBER = #{item.number,jdbcType=VARCHAR},
+                <if test="item.orderId != null">
+                    P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.effectTime != null">
+                    P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.revision != null">
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR},
+                </if>
+                    P_VEH_NUM = #{item.vehNum,jdbcType=VARCHAR},
+                    P_SPARE_PART = #{item.sparePart,jdbcType=VARCHAR},
+                    P_SPARE_PART_NUM = #{item.sparePartNum,jdbcType=VARCHAR}
+            </set>
+            where P_EPL_ID = #{item.eplId,jdbcType=VARCHAR}
+            and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
+            and P_EBOM_STATUS <![CDATA[ <> ]]>0
+        </foreach>
+    </update>
+
+
     <select id="HzEbomRecordDAOImpl_lineIndexRepeat" parameterType="java.util.HashMap" resultType="java.lang.Integer">
         select count(*) from HZ_BOM_LINE_RECORD t1
         where t1.p_bom_digifax_id=(

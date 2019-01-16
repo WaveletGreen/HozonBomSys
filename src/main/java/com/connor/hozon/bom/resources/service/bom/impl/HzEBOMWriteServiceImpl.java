@@ -814,7 +814,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 });
             }
             if(ListUtil.isNotEmpty(updateList)){
-                hzEbomRecordDAO.updateListByEplId(updateList);
+                hzEbomRecordDAO.updateEBOMListByEplId(updateList);
             }
             if(ListUtil.isNotEmpty(deletePuids)){
                 hzEbomRecordDAO.deleteByPuids(deletePuids,ChangeTableNameEnum.HZ_EBOM.getTableName());

@@ -28,6 +28,8 @@ public interface HzMbomRecordDAO {
      * @return
      */
     int updateList(List<HzMbomLineRecord> records);
+
+    int updateMBOMList(List<HzMbomLineRecord> records);
     /**
      * 插入单条记录
      * @param record

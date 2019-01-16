@@ -1,4 +1,4 @@
-var eBomTitleSet = 55;//53个属性+勾选框列和序号列
+var eBomTitleSet = 56;//53个属性+勾选框列和序号列
 
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();

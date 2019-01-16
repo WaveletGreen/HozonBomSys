@@ -238,6 +238,9 @@ public class HzPbomRecordFactory {
         r.setUpdateName(record.getUpdateName());
         r.setCreateName(record.getCreateName());
         r.setIsNewPart(record.getIsNewPart());
+        r.setEffectTime(record.getEffectTime());
+        r.setRevision(record.getRevision());
+        r.setOrderId(record.getOrderId());
         return  r;
     }
 }

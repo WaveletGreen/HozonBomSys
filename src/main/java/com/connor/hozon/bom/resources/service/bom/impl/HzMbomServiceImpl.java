@@ -1188,12 +1188,14 @@ public class HzMbomServiceImpl implements HzMbomService{
                     dataDetailQuery.setPuid(record.getPuid());
                     HzMbomLineRecord manageRecord = hzMbomRecordDAO.getMBomRecordByPuidAndRevision(dataDetailQuery);
                     if(manageRecord!=null){
-                        updateList.add(HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(manageRecord));
+                        HzMbomLineRecord r = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(manageRecord);
+                        r.setTableName(ChangeTableNameEnum.getMbomTableName(reqDTO.getType(),ChangeConstants.MBOM_CHANGE));
+                        updateList.add(r);
                     }
                 });
             }
             if(ListUtil.isNotEmpty(updateList)){
-                hzMbomRecordDAO.updateList(updateList);
+                hzMbomRecordDAO.updateMBOMList(updateList);
             }
             if(ListUtil.isNotEmpty(deleteRecords)){
                 HzMbomLineRecordVO vo = new HzMbomLineRecordVO();

@@ -61,6 +61,8 @@ public interface HzEbomRecordDAO {
      */
     int updateListByEplId(List<HzEPLManageRecord>  records);
 
+    int updateEBOMListByEplId(List<HzEPLManageRecord>  records);
+
     int findIsHasByPuid(String puid, String projectId);
 
     /**

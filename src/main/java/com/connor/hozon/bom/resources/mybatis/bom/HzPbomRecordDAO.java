@@ -68,6 +68,7 @@ public interface HzPbomRecordDAO {
      */
     int updateList(List<HzPbomLineRecord> records);
 
+    int updatePBOMList(List<HzPbomLineRecord> records);
     /**
      * 批量更新 根据 puid进行更新
      * @param records

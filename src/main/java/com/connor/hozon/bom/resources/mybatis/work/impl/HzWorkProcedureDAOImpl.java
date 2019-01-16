@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.work.HzWorkProcedure;
 import sql.pojo.work.HzWorkProcess;
+import sql.redis.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -202,6 +203,31 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int updateWorkProcedureList(List<HzWorkProcedure> records) {
+        if(ListUtil.isEmpty(records)){
+            return 0;
+        }
+        int size = records.size();
+        //分批更新数据 一次1000条
+        try {
+            synchronized (this){
+                if(size > 1000){
+                    Map<Integer,List<HzWorkProcedure>> map = HzBomSysFactory.spiltList(records);
+                    for(List<HzWorkProcedure> value :map.values()){
+                        super.update("HzWorkProcedureDAOImpl_updateWorkProcedureList",value);
+                    }
+                }else {
+                    super.update("HzWorkProcedureDAOImpl_updateWorkProcedureList",records);
+                }
+            }
+            return size;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzDBException("工艺路线更新失败!",e);
         }
     }
 

@@ -864,7 +864,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             }
 
             if(ListUtil.isNotEmpty(updateList)){
-                hzWorkProcedureDAO.updateList(updateList);
+                hzWorkProcedureDAO.updateWorkProcedureList(updateList);
             }
             if(ListUtil.isNotEmpty(deleteRecords)){
                 hzWorkProcedureDAO.deleteByPuids(deleteRecords,ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());

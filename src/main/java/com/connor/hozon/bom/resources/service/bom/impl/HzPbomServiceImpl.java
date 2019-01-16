@@ -829,7 +829,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                     });
                 }
                 if(ListUtil.isNotEmpty(updateList)){
-                    hzPbomRecordDAO.updateList(updateList);
+                    hzPbomRecordDAO.updatePBOMList(updateList);
                 }
                 if(StringUtils.isNotBlank(deletePuids.toString())){
                     hzPbomRecordDAO.deleteListByPuids(deletePuids.toString(),ChangeTableNameEnum.HZ_PBOM.getTableName());

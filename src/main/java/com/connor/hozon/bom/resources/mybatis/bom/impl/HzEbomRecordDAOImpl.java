@@ -180,6 +180,30 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public int updateEBOMListByEplId(List<HzEPLManageRecord> records) {
+        if(ListUtil.isEmpty(records)){
+            return 0;
+        }
+        try {
+            synchronized (this){
+                int size = records.size();
+                if(size > 1000){
+                    Map<Integer,List<HzEPLManageRecord>> map = HzBomSysFactory.spiltList(records);
+                    for(List<HzEPLManageRecord> value :map.values()){
+                        super.update("HzEbomRecordDAOImpl_updateEBOMListByEplId",value);
+                    }
+                }else {
+                    super.update("HzEbomRecordDAOImpl_updateEBOMListByEplId",records);
+                }
+                return size;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzDBException("数据更新失败！",e);
+        }
+    }
+
+    @Override
     public Page<HzEPLManageRecord> getHzRecycleRecord(HzBomRecycleByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();

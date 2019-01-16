@@ -243,6 +243,9 @@ public class HzMbomRecordFactory {
         mbomLineRecord.setCreateName(record.getCreateName());
         mbomLineRecord.setSortNum(record.getSortNum());
         mbomLineRecord.setpLouaFlag(record.getpLouaFlag());
+        mbomLineRecord.setEffectTime(record.getEffectTime());
+        mbomLineRecord.setOrderId(record.getOrderId());
+        mbomLineRecord.setRevision(record.getRevision());
         return mbomLineRecord;
     }
 

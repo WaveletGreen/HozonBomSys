@@ -552,6 +552,45 @@
     </update>
 
 
+    <!--批量更新物料数据-->
+    <update id="HzMaterialDAOImpl_updateMaterielList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update HZ_MATERIEL_RECORD
+            <set>
+                    P_MATERIEL_TYPE = #{item.pMaterielType,jdbcType=VARCHAR},
+                    P_SPARE_MATERIAL = #{item.pSpareMaterial,jdbcType=VARCHAR},
+                    P_VIN_PER_NO = #{item.pVinPerNo,jdbcType=VARCHAR},
+                    P_MRP_CONTROLLER = #{item.pMrpController,jdbcType=VARCHAR},
+                    P_LOOSE_PART_FLAG = #{item.pLoosePartFlag,jdbcType=INTEGER},
+                    P_UPDATE_TIME = sysdate,
+                    P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
+                    P_BASIC_UNIT_MEASURE = #{item.pBasicUnitMeasure,jdbcType=VARCHAR},
+                    P_INVENTED_PART = #{item.pInventedPart,jdbcType=INTEGER},
+                    P_COLOR_PART = #{item.pColorPart,jdbcType=INTEGER},
+                    P_HEIGHT = #{item.pHeight,jdbcType=VARCHAR},
+                    P_IN_OUT_SIDE_FLAG = #{item.pInOutSideFlag,jdbcType=INTEGER},
+                    P_3C_PART_FLAG = #{item.p3cPartFlag,jdbcType=INTEGER},
+                    P_PART_IMPORTANT_DEGREE = #{item.pPartImportantDegree,jdbcType=VARCHAR},
+                    P_RESOURCE = #{item.resource,jdbcType=VARCHAR},
+                    P_FACTORY_PUID = #{item.pFactoryPuid,jdbcType=VARCHAR},
+                <if test="item.pValidFlag != null">
+                    P_VALID_FLAG = #{item.pValidFlag,jdbcType=INTEGER},
+                </if>
+                <if test="item.orderId != null">
+                    P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.effectTime != null">
+                    P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.revision != null and item.revision!=''">
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR}
+                </if>
+            </set>
+            where PUID = #{item.puid}
+        </foreach>
+    </update>
+
+
 
 
     <select id="HzMaterialDAOImpl_findHzMaterielForProcess" parameterType="java.lang.String" resultMap="HzMaterielRecordMap">
