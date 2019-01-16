@@ -230,7 +230,8 @@
             update
             HZ_CFG0_MODEL_COLOR_RECORD
             set
-            P_DESC_OF_COLORFUL_MODEL = #{hzCfg0ModelColors.cmcrSrcDescOfColorMod,jdbcType=VARCHAR}
+            P_DESC_OF_COLORFUL_MODEL = #{hzCfg0ModelColors.pDescOfColorfulModel,jdbcType=VARCHAR},
+            CMCR_STATUS = #{hzCfg0ModelColors.cmcrStatus,jdbcType=VARCHAR}
             where
             PUID = #{hzCfg0ModelColors.puid,jdbcType=VARCHAR}
         </foreach>

@@ -474,6 +474,12 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
                 _result.put("msg", "更新衍生物料基本数据失败");
             }
 
+            HzDerivativeMaterielBasic hzDerivativeMaterielBasic = new HzDerivativeMaterielBasic();
+            hzDerivativeMaterielBasic.setDmbModelFeatureUid(modelFeature.getPuid());
+            if(hzDerivativeMaterielBasicDao.updateStatusUpdate(hzDerivativeMaterielBasic)<=0){
+                _result.put("status", true);
+                _result.put("msg", "更新衍生物料状态失败");
+            }
             /**
              * 更新超级物料
              */
