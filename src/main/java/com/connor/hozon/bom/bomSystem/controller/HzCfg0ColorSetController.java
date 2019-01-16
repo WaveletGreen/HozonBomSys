@@ -100,8 +100,8 @@ public class HzCfg0ColorSetController {
             entity.setStrColorEffectedDate(DateStringHelper.dateToString2(entity.getpColorEffectedDate()));*/
             model.addAttribute("entity", entity);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            model.addAttribute("pColorEffectedDate",sdf.format(entity.getpColorEffectedDate()));
-            model.addAttribute("pColorAbolishDate",sdf.format(entity.getpColorAbolishDate()));
+            model.addAttribute("pColorEffectedDate",entity.getpColorEffectedDate()==null?"":sdf.format(entity.getpColorEffectedDate()));
+            model.addAttribute("pColorAbolishDate",entity.getpColorAbolishDate()==null?"":sdf.format(entity.getpColorAbolishDate()));
             return "cfg/color/colorUpdate";
         } else {
             model.addAttribute("msg", "查找不到颜色信息:" + entity.getpColorName());
@@ -261,7 +261,7 @@ public class HzCfg0ColorSetController {
         //  set.setpColorCreateDate(now);
         set.setpColorModifier(user.getUserName());
         set.setpColorStatus(0);
-
+        set.setpColorEffectedDate(new Date());
         while (true) {
             if (colorSerService.getById(set) == null) {
                 resultFromDB = colorSerService.doAddOne(set);

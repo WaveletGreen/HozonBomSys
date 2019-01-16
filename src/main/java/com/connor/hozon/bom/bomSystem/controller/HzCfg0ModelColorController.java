@@ -628,6 +628,7 @@ public class HzCfg0ModelColorController {
             HzCfg0ModelColor hzCfg0ModelColor = new HzCfg0ModelColor();
             hzCfg0ModelColor.setPuid(hzCmcrChange1.getCmcrSrcPuid());
             hzCfg0ModelColor.setpDescOfColorfulModel(hzCmcrChange1.getCmcrSrcDescOfColorMod());
+            hzCfg0ModelColor.setCmcrStatus("1");
             hzCfg0ModelColorsUpdate.add(hzCfg0ModelColor);
         }
         for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChanges){
@@ -640,27 +641,30 @@ public class HzCfg0ModelColorController {
         }
 
         if(hzCfg0ModelColorsUpdate!=null&&hzCfg0ModelColorsUpdate.size()!=0){
-            int updateMainNum = hzCfg0ModelColorDao.updateListAll(hzCfg0ModelColorsUpdate);
-            if(updateMainNum<=0){
+            try {
+                hzCfg0ModelColorDao.updateListAll(hzCfg0ModelColorsUpdate);
+            }catch (Exception e){
                 result.put("status",false);
                 result.put("msg","撤销修改主数据失败");
                 return result;
             }
         }
         if(hzCfg0ModelColorDetailsUpdate!=null&&hzCfg0ModelColorDetailsUpdate.size()!=0){
-            int updateDetailNum = hzColorModelDao.updateListAll(hzCfg0ModelColorDetailsUpdate);
-            if(updateDetailNum<=0){
+            try {
+                hzColorModelDao.updateListAll(hzCfg0ModelColorDetailsUpdate);
+            }catch (Exception e){
                 result.put("status",false);
                 result.put("msg","撤销修改从数据失败");
                 return result;
             }
         }
         //从配色方案数据集中删除修改的数据，只留下新增的数据
-        while (hzCfg0ModelColorIterator.hasNext()) {
-            HzCfg0ModelColor hzCfg0ModelColor = hzCfg0ModelColorIterator.next();
+        Iterator<HzCfg0ModelColor> hzCfg0ModelColorIteratorUpdate = hzCfg0ModelColors.iterator();
+        while (hzCfg0ModelColorIteratorUpdate.hasNext()) {
+            HzCfg0ModelColor hzCfg0ModelColor = hzCfg0ModelColorIteratorUpdate.next();
             for(HzCmcrChange hzCmcrChange1 : hzCmcrChange){
                 if(hzCfg0ModelColor.getPuid().equals(hzCmcrChange1.getCmcrSrcPuid())){
-                    hzCfg0ModelColorIterator.remove();
+                    hzCfg0ModelColorIteratorUpdate.remove();
                     break;
                 }
             }
