@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.controller.change;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
@@ -305,82 +307,85 @@ public class HzChangeDataController extends BaseController {
         return result;
     }
 
-    @RequestMapping(value = "download")
-    public ResponseEntity<byte[]> export(Long filePath)  {
-
-        HzAttachmentRecord hzAttachmentRecord = hzAttachmentRecordDao.selectByPrimaryKey(filePath);
-
-
-        HttpHeaders headers = new HttpHeaders();
-        File file = new File(hzAttachmentRecord.getAttachmentUrl()+"\\"+hzAttachmentRecord.getRealName());
-        try {
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", new String(hzAttachmentRecord.getShowName().getBytes("utf-8"), "ISO-8859-1"));
-            if(!file.exists()){
-                return new ResponseEntity(null,headers,HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
-                    headers, HttpStatus.CREATED);
-        }catch (Exception e){
-            return new ResponseEntity(null,headers,HttpStatus.NOT_FOUND);
-        }
-    }
-
-
-//    @RequestMapping(value = "download",method = RequestMethod.GET)
-//    public void export(Long filePath,HttpServletResponse response)  {
+//    @RequestMapping(value = "download")
+//    public ResponseEntity<byte[]> export(Long filePath)  {
+//
 //        HzAttachmentRecord hzAttachmentRecord = hzAttachmentRecordDao.selectByPrimaryKey(filePath);
-//        File file = new File(hzAttachmentRecord.getRealName());
-//        String fileName = "";
+//
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        File file = new File(hzAttachmentRecord.getAttachmentUrl()+"\\"+hzAttachmentRecord.getRealName());
 //        try {
-//            //浏览器端默认编码为 ISO-8859-1 需要将编码转换为ISO-8859-1 否则出现乱码
-//            fileName = new String(file.getName().getBytes("UTF-8"),"ISO-8859-1");
+//            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//            headers.setContentDispositionFormData("attachment", new String(hzAttachmentRecord.getShowName().getBytes("utf-8"), "ISO-8859-1"));
+//            if(!file.exists()){
+//                return new ResponseEntity(null,headers,HttpStatus.NOT_FOUND);
+//            }
+//            return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),
+//                    headers, HttpStatus.CREATED);
 //        }catch (Exception e){
 //            e.printStackTrace();
-//        }
-//        if(!file.exists()){
-//            toJSONResponse(Result.build(false,"文件不存在！"),response);
-//            return;
-//        }
-//
-//        if(file.exists()){
-//            response.setContentType("application/force-download");// 设置强制下载不打开
-//            response.addHeader("Content-Disposition",
-//                    "attachment;fileName=" + fileName);
-//
-//            byte[] buffer = new byte[1024];
-//            FileInputStream fis = null;
-//            BufferedInputStream bis = null;
-//            try {
-//                fis = new FileInputStream(file);
-//                bis = new BufferedInputStream(fis);
-//                OutputStream os = response.getOutputStream();
-//                int i = bis.read(buffer);
-//                while (i != -1) {
-//                    os.write(buffer, 0, i);
-//                    i = bis.read(buffer);
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            } finally {
-//                if (bis != null) {
-//                    try {
-//                        bis.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                if (fis != null) {
-//                    try {
-//                        fis.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//
-//                    }
-//                }
-//            }
+//            return new ResponseEntity(null,headers,HttpStatus.NOT_FOUND);
 //        }
 //    }
+
+
+    @RequestMapping(value = "download",method = RequestMethod.GET)
+    public Object export(Long filePath,HttpServletResponse response)  {
+        HzAttachmentRecord hzAttachmentRecord = hzAttachmentRecordDao.selectByPrimaryKey(filePath);
+        if(hzAttachmentRecord == null){
+            return "error";
+        }
+        File file = new File(hzAttachmentRecord.getAttachmentUrl()+"\\"+hzAttachmentRecord.getRealName());
+        String fileName = "";
+        try {
+            //浏览器端默认编码为 ISO-8859-1 需要将编码转换为ISO-8859-1 否则出现乱码
+            fileName = new String(hzAttachmentRecord.getShowName().getBytes("UTF-8"),"ISO-8859-1");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(!file.exists()){
+            return "error";
+        }
+        if(file.exists()){
+            response.setContentType("application/force-download");// 设置强制下载不打开
+            response.addHeader("Content-Disposition",
+                    "attachment;fileName=" + fileName);
+
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1) {
+                    os.write(buffer, 0, i);
+                    i = bis.read(buffer);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (bis != null) {
+                    try {
+                        bis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (fis != null) {
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     @RequestMapping(value = "ebom/data",method = RequestMethod.GET)
     @ResponseBody

@@ -138,7 +138,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                     return WriteResultRespDTO.fileFormatError();
                 }
 
-
             configTransactionTemplate.execute(new TransactionCallback<Void>() {
                 @Override
                 public Void doInTransaction(TransactionStatus status) {
@@ -153,7 +152,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     if(WriteResultRespDTO.isSuccess(respDTO)){
                         return null;
                     }
-                    throw new HzBomException("数据导入失败！");
+                    throw new HzBomException(respDTO.getErrMsg());
                 }
             });
 
@@ -161,7 +160,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
-            return WriteResultRespDTO.getFailResult();
+            return WriteResultRespDTO.failResultRespDTO(e.getMessage());
         }
     }
 
@@ -1022,8 +1021,8 @@ public class FileUploadServiceImpl implements FileUploadService {
             short lastCellNum = title.getLastCellNum();
             List<String> titleName = new ArrayList<>();
             if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-                if(lastCellNum > 50){
-                    for(int i = 50;i<lastCellNum;i++){//第50列以后为要导入的版型信息
+                if(lastCellNum > 52){
+                    for(int i = 53;i<lastCellNum;i++){//第50列以后为要导入的版型信息
                         boolean find = false;
                         String s = ExcelUtil.getCell(title,i).getStringCellValue();
                         if(s.contains(BOMTransConstants.VEH_DOSAGE_CN)){
