@@ -10,6 +10,7 @@
         <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"
 
                placeholder="请输入物料号"/>
+        <div id="materielFlag" style="color:#a94442;display: none">物料号无效</div>
     </div>
     <div class="form-group">
         <label for="pMaterielName">物料名称</label>
@@ -56,14 +57,19 @@
             $.ajax({
                 url: "pbom/query/accessories?materielCode=" + pMaterielCode,
                 success: function (result) {
-                    $("#puid").val(result.puid);
-                    $("#pMaterielCode").val(result.pMaterielCode);
-                    $("#pMaterielName").val(result.pMaterielName);
-                    $("#pTechnicalConditions").val(result.pTechnicalConditions);
-                    $("#pMeasuringUnit").val(result.pMeasuringUnit);
-                    $("#pMaterielPurpose").val(result.pMaterielPurpose);
-                    $("#pDosageBicycle").val(result.pDosageBicycle);
-                    $("#pNote").val(result.pNote);
+                    if(result.puid==null){
+                        $("#materielFlag").show();
+                    }else {
+                        $("#materielFlag").hide();
+                        $("#puid").val(result.puid);
+                        $("#pMaterielCode").val(result.pMaterielCode);
+                        $("#pMaterielName").val(result.pMaterielName);
+                        $("#pTechnicalConditions").val(result.pTechnicalConditions);
+                        $("#pMeasuringUnit").val(result.pMeasuringUnit);
+                        $("#pMaterielPurpose").val(result.pMaterielPurpose);
+                        $("#pDosageBicycle").val(result.pDosageBicycle);
+                        $("#pNote").val(result.pNote);
+                    }
                 }
             });
         });
