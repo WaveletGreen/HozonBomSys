@@ -693,9 +693,9 @@ function initTable1(mBomUrl) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $mBomTable.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
@@ -719,13 +719,28 @@ function initTable1(mBomUrl) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "mbom/order/choose?projectId=" + projectPuid + "&puids=" + puids + "&type=" + 0,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectPuid,
+                                            "type":0
                                         });
+                                        $.ajax({
+                                            url:  "mbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
@@ -1329,9 +1344,9 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $mBomTable.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
@@ -1355,13 +1370,28 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "mbom/order/choose?projectId=" + projectPuid + "&puids=" + puids + "&type=" + 0,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectPuid,
+                                            "type":0
                                         });
+                                        $.ajax({
+                                            url:  "mbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
@@ -1793,9 +1823,9 @@ function initTable2(productionUrl) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $productionTable.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
@@ -1819,13 +1849,28 @@ function initTable2(productionUrl) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "mbom/order/choose?projectId=" + projectId + "&puids=" + puids + "&type=" + 1,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectId,
+                                            "type":1
                                         });
+                                        $.ajax({
+                                            url:  "mbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
@@ -2226,9 +2271,9 @@ function initTable22(productionUrl, lineIds, colorIds) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $productionTable.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
@@ -2252,13 +2297,28 @@ function initTable22(productionUrl, lineIds, colorIds) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "mbom/order/choose?projectId=" + projectId + "&puids=" + puids + "&type=" + 1,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectId,
+                                            "type":1
                                         });
+                                        $.ajax({
+                                            url:  "mbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
@@ -2690,9 +2750,9 @@ function initTable3(financialUrl) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $financialTable.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
@@ -2716,13 +2776,28 @@ function initTable3(financialUrl) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "mbom/order/choose?projectId=" + projectId + "&puids=" + puids + "&type=" + 6,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectId,
+                                            "type":6
                                         });
+                                        $.ajax({
+                                            url:  "mbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
@@ -3128,9 +3203,9 @@ function initTable33(financialUrl, lineIds, colorIds) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $financialTable.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择需要变更的数据!'});
@@ -3154,13 +3229,28 @@ function initTable33(financialUrl, lineIds, colorIds) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "mbom/order/choose?projectId=" + projectId + "&puids=" + puids + "&type=" + 6,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectId,
+                                            "type":6
                                         });
+                                        $.ajax({
+                                            url:  "mbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })

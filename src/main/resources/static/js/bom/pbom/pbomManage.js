@@ -560,18 +560,18 @@ function initTable(pBomUrl) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
                                 for (var i = 0; i < rows.length; i++) {
                                     if (rows[i].status != 4 && rows[i].status != 2) {
-                                        window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
                                         return false;
                                     }
                                 }
@@ -586,13 +586,27 @@ function initTable(pBomUrl) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "pbom/order/choose?projectId=" + projectPuid + "&puids=" + puids,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectPuid
                                         });
+                                        $.ajax({
+                                            url:  "pbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
@@ -1085,18 +1099,18 @@ function initTable1(pBomUrl, lineIds) {
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
                                 for (var i = 0; i < rows.length; i++) {
                                     if (rows[i].status != 4 && rows[i].status != 2) {
-                                        window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
                                         return false;
                                     }
                                 }
@@ -1111,13 +1125,27 @@ function initTable1(pBomUrl, lineIds) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "pbom/order/choose?projectId=" + projectPuid + "&puids=" + puids,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectPuid
                                         });
+                                        $.ajax({
+                                            url:  "pbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
