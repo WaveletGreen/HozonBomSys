@@ -432,4 +432,12 @@
           select DMB_SRC_ID from  where FORMID = #{orderId,jdbcType=DECIMAL} and DMB_SRC_STATUS = 2
         )
     </delete>
+    <update id="updateStatusUpdate" parameterType="java.util.List">
+            update
+              HZ_DERIVATIVE_MATERIEL_BASIC
+            set
+              DMB_STATUS = 0
+            where
+              DMB_MODEL_FEATURE_UID = #{dmbModelFeatureUid,jdbcType=VARCHAR}
+    </update>
 </mapper>

@@ -28,6 +28,8 @@ public interface HzMbomRecordDAO {
      * @return
      */
     int updateList(List<HzMbomLineRecord> records);
+
+    int updateMBOMList(List<HzMbomLineRecord> records);
     /**
      * 插入单条记录
      * @param record
@@ -251,5 +253,19 @@ public interface HzMbomRecordDAO {
      * @return
      */
     boolean checkPaintMaterielRepeat(HzMbomPaintMaterielRepeatQuery query);
+
+    /**
+     * 查询当前BOM的子一层结构
+     * @param hzBOMQuery
+     * @return
+     */
+    List<HzMbomLineRecord> getNextBomStructure(HzBOMQuery hzBOMQuery);
+
+    /**
+     * 获取MBOM信息
+     * @param hzBOMQuery 参数信息
+     * @return
+     */
+    List<HzMbomLineRecord> getHzMbomByBomQuery(HzBOMQuery hzBOMQuery);
 
 }

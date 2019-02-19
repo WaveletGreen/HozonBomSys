@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 </head>
 <body>
-<h1 >哎呀，出错啦。</h1>
+<div class="form-group">
+    <button type="button" class="btn btn-primary" onclick="doReturn();" style="float: left">返回上一步</button>
+    <br>
+</div>
+<h2 >哎呀，出错啦。</h2>
+<script>
+     function doReturn() {
+        window.location.href="javascript:history.go(-1);"
+    }
+</script>
 </body>
 </html>

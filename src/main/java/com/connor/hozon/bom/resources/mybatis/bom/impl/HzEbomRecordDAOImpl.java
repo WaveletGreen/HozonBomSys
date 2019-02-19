@@ -9,6 +9,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.sys.exception.HzBomException;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -179,6 +180,30 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     }
 
     @Override
+    public int updateEBOMListByEplId(List<HzEPLManageRecord> records) {
+        if(ListUtil.isEmpty(records)){
+            return 0;
+        }
+        try {
+            synchronized (this){
+                int size = records.size();
+                if(size > 1000){
+                    Map<Integer,List<HzEPLManageRecord>> map = HzBomSysFactory.spiltList(records);
+                    for(List<HzEPLManageRecord> value :map.values()){
+                        super.update("HzEbomRecordDAOImpl_updateEBOMListByEplId",value);
+                    }
+                }else {
+                    super.update("HzEbomRecordDAOImpl_updateEBOMListByEplId",records);
+                }
+                return size;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzDBException("数据更新失败！",e);
+        }
+    }
+
+    @Override
     public Page<HzEPLManageRecord> getHzRecycleRecord(HzBomRecycleByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
         Map map = new HashMap();
@@ -224,7 +249,6 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
     public int update(HzEPLManageRecord record) {
         return super.update("HzEbomRecordDAOImpl_update",record);
     }
-
     @Override
     public int insertList(List<HzEPLManageRecord> records,String tableName){
         Map<String,Object> map = new HashMap<>();
@@ -291,10 +315,10 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
                     super.insert("HzEbomRecordDAOImpl_importList",list);
                 }
             }
-            return 1;
+            return size;
         }catch (Exception e){
             e.printStackTrace();
-            return 0;
+            throw new HzBomException("数据插入失败！",e);
         }
 
     }
@@ -470,6 +494,11 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         map.put("projectId",query.getProjectId());
         map.put("parentId",query.getParentId());
         return super.findForList("HzEbomRecordDAOImpl_findNextLevelRecordByParentId",map);
+    }
+
+    @Override
+    public List<HzEPLManageRecord> findALLBOM(String projectId) {
+        return super.findForList("HzEbomRecordDAOImpl_findALLBOM",projectId);
     }
 
     @Override

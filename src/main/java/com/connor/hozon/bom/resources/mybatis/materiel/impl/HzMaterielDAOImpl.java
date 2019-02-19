@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.materiel.impl;
 
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.project.HzMaterielRecord;
+import sql.redis.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -240,6 +242,31 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         }catch (Exception e){
             e.printStackTrace();
             return 0;
+        }
+    }
+
+    @Override
+    public int updateMaterielList(List<HzMaterielRecord> records) {
+        if(ListUtil.isEmpty(records)){
+            return 0;
+        }
+        int size = records.size();
+        //分批更新数据 一次1000条
+        try {
+            synchronized (this){
+                if(size > 1000){
+                    Map<Integer,List<HzMaterielRecord>> map = HzBomSysFactory.spiltList(records);
+                    for(List<HzMaterielRecord> value :map.values()){
+                        super.update("HzMaterialDAOImpl_updateMaterielList",value);
+                    }
+                }else {
+                    super.update("HzMaterialDAOImpl_updateMaterielList",records);
+                }
+            }
+            return size;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzDBException("物料数据更新失败！",e);
         }
     }
 

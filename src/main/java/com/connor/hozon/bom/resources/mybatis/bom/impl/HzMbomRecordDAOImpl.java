@@ -2,7 +2,9 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
@@ -17,6 +19,7 @@ import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.redis.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +69,31 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int updateMBOMList(List<HzMbomLineRecord> records) {
+        if(ListUtil.isEmpty(records)){
+            return 0;
+        }
+        int size = records.size();
+        //分批更新数据 一次1000条
+        try {
+            synchronized (this){
+                if(size > 1000){
+                    Map<Integer,List<HzMbomLineRecord>> map = HzBomSysFactory.spiltList(records);
+                    for(List<HzMbomLineRecord> value :map.values()){
+                        super.update("HzMbomRecordDAOImpl_updateMBOMList",value);
+                    }
+                }else {
+                    super.update("HzMbomRecordDAOImpl_updateMBOMList",records);
+                }
+            }
+            return size;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzDBException("数据更新失败！",e);
         }
     }
 
@@ -554,5 +582,34 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("colorId",query.getColorId());
         map.put("lineId",query.getLineId());
         return (int)super.findForObject("HzMbomRecordDAOImpl_checkPaintMaterielRepeat",map)>0;
+    }
+
+    @Override
+    public List<HzMbomLineRecord> getNextBomStructure(HzBOMQuery query) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",query.getPuid());
+        map.put("projectId",query.getProjectId());
+        map.put("colorId",query.getColorId());
+        if(StringUtils.isBlank(query.getTableName())){
+            map.put("tableName",ChangeTableNameEnum.HZ_MBOM.getTableName());
+        }else {
+            map.put("tableName",query.getTableName());
+        }
+        return super.findForList("HzMbomRecordDAOImpl_getNextBomStructure",map);
+    }
+
+    @Override
+    public List<HzMbomLineRecord> getHzMbomByBomQuery(HzBOMQuery hzBOMQuery) {
+        Map<String,Object> map = new HashMap<>();
+        map.put("puid",hzBOMQuery.getPuid());
+        if(StringUtils.isBlank(hzBOMQuery.getTableName())){
+            map.put("tableName",ChangeTableNameEnum.HZ_MBOM.getTableName());
+        }else {
+            map.put("tableName",hzBOMQuery.getTableName());
+        }
+        map.put("parentId",hzBOMQuery.getParentId());
+        map.put("colorId",hzBOMQuery.getColorId());
+        map.put("projectId",hzBOMQuery.getProjectId());
+        return super.findForList("HzMbomRecordDAOImpl_getHzMbomByBomQuery",map);
     }
 }

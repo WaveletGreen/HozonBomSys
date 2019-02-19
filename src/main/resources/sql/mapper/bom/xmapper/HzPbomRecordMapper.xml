@@ -51,6 +51,7 @@
     t.P_UPDATE_TIME, t.P_CREATE_NAME, t.P_UPDATE_NAME, t.P_STATION, t.P_PARENT_UID, t.P_BOM_DIGIFAX_ID,
     t.P_LINE_INDEX, t.P_BOM_LINE_IS_HAS, t.P_BOM_LINE_PUID, t.P_BOM_LINE_ID, t.P_BOM_LINE_IS_2Y,
     t.P_BOM_LINE_IS_PART, t.P_BOM_LINE_IS_DEPT, t.P_BOM_OF_WHICH_DEPT, t.P_BOM_LINE_PART_NAME,
+    t.P_LOU_LOA_FLAG,
     t.P_BOM_LINE_PART_CLASS, t.P_BOM_LINE_PART_EN_NAME, t.P_BOM_LINE_PART_RESOURCE,t.P_BOM_ORDER_NUM,t.P_SORT_NUM,
     t.P_IS_NEW_PART,t.P_ORDER_ID,t.P_REVISION,t.P_EFFECT_TIME
   </sql>
@@ -585,6 +586,44 @@
         <!--and PUID = #{item.puid,jdbcType=VARCHAR}-->
       <!--</if>-->
 
+    </foreach>
+  </update>
+
+
+  <!--批量更新-->
+  <update id="HzPbomRecordDAOImpl_updatePBOMList" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+      update HZ_PBOM_RECORD
+      <set>
+          P_RESOURCE = #{item.resource,jdbcType=VARCHAR},
+          P_COLOR_PART = #{item.colorPart,jdbcType=INTEGER},
+          P_TYPE = #{item.type,jdbcType=INTEGER},
+          P_BUY_UNIT = #{item.buyUnit,jdbcType=INTEGER},
+          P_WORK_SHOP1 = #{item.workShop1,jdbcType=VARCHAR},
+          P_WORK_SHOP2 = #{item.workShop2,jdbcType=VARCHAR},
+          P_PRODUCT_LINE = #{item.productLine,jdbcType=VARCHAR},
+          P_MOULD_TYPE = #{item.mouldType,jdbcType=VARCHAR},
+          P_OUTER_PART = #{item.outerPart,jdbcType=VARCHAR},
+          P_UPDATE_TIME =sysdate,
+          P_UPDATE_NAME = #{item.updateName,jdbcType=VARCHAR},
+          P_STATION = #{item.station,jdbcType=VARCHAR},
+          P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=INTEGER},
+        <if test="item.status != null">
+          P_PBOM_STATUS = #{item.status,jdbcType=VARCHAR},
+        </if>
+        <if test="item.orderId != null">
+          P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+        </if>
+        <if test="item.effectTime != null">
+          P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.revision != null">
+          P_REVISION = #{item.revision,jdbcType=VARCHAR}
+        </if>
+      </set>
+      where P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR}
+      and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
+      and P_PBOM_STATUS <![CDATA[ <> ]]>0
     </foreach>
   </update>
 

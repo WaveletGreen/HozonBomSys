@@ -91,51 +91,59 @@ function initTable(url) {
                 search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
                 showColumns: false,                 //是否显示所有的列
                 toolbars: [
+                    // {
+                    //     text: '数据同步',
+                    //     iconCls: 'glyphicon glyphicon-repeat',
+                    //     handler: function () {
+                    //         var url = "";
+                    //         window.Ewin.confirm({
+                    //             title: '提示',
+                    //             message: '确定要同步数据到单车清单吗?',
+                    //             width: 500
+                    //         }).on(function (e) {
+                    //             if (e) {
+                    //                 var _table = "<p><strong style='font-size: 20px'>数据正在同步中,请耐心等待...</strong></p>"
+                    //                 _table += "<p><strong style='color: red'>警告:请勿进行其他的操作!</strong></p>"
+                    //                 _table += "<div style='margin-top: 50px;text-align: center;z-index: 100;'><img src='/hozon/img/img.gif'/></div>"
+                    //                 window.Ewin.confirm({
+                    //                     title: '提示',
+                    //                     message: _table,
+                    //                     width: 500
+                    //                 })
+                    //                 url = "bom/refresh?projectId=" + $("#project", window.top.document).val();
+                    //                 setTimeout(function () {
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: url,
+                    //                         // data: myData,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             $('.modal-dialog', window.top.document).parent('div').remove()
+                    //                             $('body', window.top.document).find('.modal-backdrop').remove();
+                    //                             if (result.success) {
+                    //                                 layer.msg('同步成功', {icon: 1, time: 2000})
+                    //                             } else if (!result.success) {
+                    //                                 var msg = "<div style='height: 30%;overflow: auto'>" + result.errMsg+ "</div>"
+                    //                                 window.Ewin.confirm({message: msg});
+                    //                             }
+                    //                             $table.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }, 500)
+                    //             }
+                    //         });
+                    //     }
+                    // },
+
                     {
-                        text: '数据同步',
-                        iconCls: 'glyphicon glyphicon-repeat',
+                        text: '返回上一步',
+                        iconCls: 'fa fa-arrow-left',
                         handler: function () {
-                            var url = "";
-                            window.Ewin.confirm({
-                                title: '提示',
-                                message: '确定要同步数据到单车清单吗?',
-                                width: 500
-                            }).on(function (e) {
-                                if (e) {
-                                    var _table = "<p><strong style='font-size: 20px'>数据正在同步中,请耐心等待...</strong></p>"
-                                    _table += "<p><strong style='color: red'>警告:请勿进行其他的操作!</strong></p>"
-                                    _table += "<div style='margin-top: 50px;text-align: center;z-index: 100;'><img src='/hozon/img/img.gif'/></div>"
-                                    window.Ewin.confirm({
-                                        title: '提示',
-                                        message: _table,
-                                        width: 500
-                                    })
-                                    url = "bom/refresh?projectId=" + $("#project", window.top.document).val();
-                                    setTimeout(function () {
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: url,
-                                            // data: myData,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                $('.modal-dialog', window.top.document).parent('div').remove()
-                                                $('body', window.top.document).find('.modal-backdrop').remove();
-                                                if (result.success) {
-                                                    layer.msg('同步成功', {icon: 1, time: 2000})
-                                                } else if (!result.success) {
-                                                    var msg = "<div style='height: 30%;overflow: auto'>" + result.errMsg+ "</div>"
-                                                    window.Ewin.confirm({message: msg});
-                                                }
-                                                $table.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }, 500)
-                                }
-                            });
+                            window.location.href="javascript:history.go(-1);"
                         }
                     },
                     {

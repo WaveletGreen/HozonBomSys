@@ -49,20 +49,20 @@
             </option>
         </select>
     </div>
-    <!--<div class="form-group">
+    <div class="form-group">
         <label for="strColorEffectedDate">生效日期</label>
         <input class="form-control" id="strColorEffectedDate" name="strColorEffectedDate"
-               th:value="${entity.strColorEffectedDate}"
+               th:value="${pColorEffectedDate}"
                placeholder="请选择生效日期"
         />
     </div>
     <div class="form-group">
         <label for="strColorAbolishDate">废止日期</label>
         <input class="form-control" id="strColorAbolishDate" name="strColorAbolishDate"
-               th:value="${entity.strColorAbolishDate}"
+               th:value="${pColorAbolishDate}"
                placeholder="请选择废止日期"
         />
-    </div>-->
+    </div>
     <div class="form-group">
         <label for="pColorComment">备注</label>
         <input class="form-control" id="pColorComment" name="pColorComment" type="text"
@@ -252,5 +252,6 @@
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>
+<script th:src="@{/helper/dateFormater.js}"></script>
 </body>
 </html>

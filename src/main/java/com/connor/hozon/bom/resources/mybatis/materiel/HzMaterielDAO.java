@@ -114,6 +114,7 @@ public interface HzMaterielDAO {
 
     int updateList(List<HzMaterielRecord> list);
 
+    int updateMaterielList(List<HzMaterielRecord> list);
     /**
      * 工艺路线初始化掉用
      * @param projectId

@@ -1000,7 +1000,10 @@ public class HzBomAllCfgService {
                     Short point = 2;
                     hzFullCfgModel.setModPointType(point);
                 }else {
-                    Short point = 1;
+                    Short point = 0;
+                    if("1".equals(version.substring(0,endIndex))){
+                        point = 1;
+                    }
                     hzFullCfgModel.setModPointType(point);
                 }
                 hzFullCfgModels.add(hzFullCfgModel);
@@ -1115,13 +1118,15 @@ public class HzBomAllCfgService {
             hzFullCfgModelChange.setChangeOrderId(changeFromId);
             hzFullCfgModelChange.setMainID(hzFullCfgMainChange.getId());
 
-            hzFullCfgModelChange.setModelVersion(hzCfg0ModelDetail.getpModelVersion());
-            hzFullCfgModelChange.setModelShape(hzCfg0ModelDetail.getpModelShape());
-            hzFullCfgModelChange.setModelAnnouncement(hzCfg0ModelDetail.getpModelAnnouncement());
-            hzFullCfgModelChange.setModelCfgDesc(hzCfg0ModelDetail.getpModelCfgDesc());
-            hzFullCfgModelChange.setModelCfgMng(hzCfg0ModelDetail.getpModelCfgMng());
-            hzFullCfgModelChange.setModelTrailNum(hzCfg0ModelDetail.getpModelTrailNum());
-            hzFullCfgModelChange.setModelGoodsNum(hzCfg0ModelDetail.getpModelGoodsNum());
+            if(hzCfg0ModelDetail!=null){
+                hzFullCfgModelChange.setModelVersion(hzCfg0ModelDetail.getpModelVersion());
+                hzFullCfgModelChange.setModelShape(hzCfg0ModelDetail.getpModelShape());
+                hzFullCfgModelChange.setModelAnnouncement(hzCfg0ModelDetail.getpModelAnnouncement());
+                hzFullCfgModelChange.setModelCfgDesc(hzCfg0ModelDetail.getpModelCfgDesc());
+                hzFullCfgModelChange.setModelCfgMng(hzCfg0ModelDetail.getpModelCfgMng());
+                hzFullCfgModelChange.setModelTrailNum(hzCfg0ModelDetail.getpModelTrailNum());
+                hzFullCfgModelChange.setModelGoodsNum(hzCfg0ModelDetail.getpModelGoodsNum());
+            }
             hzFullCfgModelChanges.add(hzFullCfgModelChange );
         }
         //变更2Y层数据
@@ -1133,15 +1138,19 @@ public class HzBomAllCfgService {
             hzFullCfgWithCfgChange.setMainID(hzFullCfgMainChange.getId());
             //查询特性
             HzCfg0Record hzCfg0Record  = hzCfg0RecordDao.selectByPrimaryKey(hzFullCfgWithCfg.getCfgCfg0Uid());
-            hzFullCfgWithCfgChange.setCfgDesc(hzCfg0Record.getpCfg0Desc());
-            hzFullCfgWithCfgChange.setCfgCode(hzCfg0Record.getpCfg0ObjectId());
+            if(hzCfg0Record!=null){
+                hzFullCfgWithCfgChange.setCfgDesc(hzCfg0Record.getpCfg0Desc());
+                hzFullCfgWithCfgChange.setCfgCode(hzCfg0Record.getpCfg0ObjectId());
+            }
             //查询是否颜色件
             Map queryMap = new HashMap();
             queryMap.put("puid",hzFullCfgWithCfg.getCfgBomlineUid());
             queryMap.put("projectId",projectId);
             HzBomLineRecord hzBomLineRecord  = hzBomLineRecordDao.findBomLineByPuid(queryMap);
-            hzFullCfgWithCfgChange.setIsColor(hzBomLineRecord.getColorPart()==1?"Y":"N");
-            hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChange);
+            if(hzBomLineRecord!=null){
+                hzFullCfgWithCfgChange.setIsColor(hzBomLineRecord.getColorPart()==1?"Y":"N");
+                hzFullCfgWithCfgChanges.add(hzFullCfgWithCfgChange);
+            }
         }
 
         //跟新变更主数据

@@ -68,6 +68,7 @@ public interface HzPbomRecordDAO {
      */
     int updateList(List<HzPbomLineRecord> records);
 
+    int updatePBOMList(List<HzPbomLineRecord> records);
     /**
      * 批量更新 根据 puid进行更新
      * @param records
@@ -88,6 +89,7 @@ public interface HzPbomRecordDAO {
      */
     int deleteList(List<DeleteHzPbomReqDTO> list);
 
+    int deleteListByPuids(List<String> puids,String tableName);
     /**
      * 分页获取pbom信息
      * @param query

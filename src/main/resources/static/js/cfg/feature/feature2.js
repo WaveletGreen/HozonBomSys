@@ -157,6 +157,10 @@ var toolbar = [
                     window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已关联变更单，不允许撤销"});
                     return false;
                 }
+                if(1 == rows[i].cfgStatus || "1" == rows[i].cfgStatus ){
+                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已生效，不允许撤销"});
+                    return false;
+                }
             }
             var url = "vwoProcess/goBackData";
             $.ajax({

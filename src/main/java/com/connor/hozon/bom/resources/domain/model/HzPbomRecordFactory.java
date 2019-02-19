@@ -127,6 +127,7 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setSortNum(record.getSortNum());
         hzPbomLineRecord.setColorPart(record.getColorPart());
         hzPbomLineRecord.setIsNewPart(0);
+        hzPbomLineRecord.setStatus(2);
         return hzPbomLineRecord;
     }
 
@@ -237,6 +238,9 @@ public class HzPbomRecordFactory {
         r.setUpdateName(record.getUpdateName());
         r.setCreateName(record.getCreateName());
         r.setIsNewPart(record.getIsNewPart());
+        r.setEffectTime(record.getEffectTime());
+        r.setRevision(record.getRevision());
+        r.setOrderId(record.getOrderId());
         return  r;
     }
 }

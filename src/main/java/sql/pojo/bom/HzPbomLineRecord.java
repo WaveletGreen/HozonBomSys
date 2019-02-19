@@ -121,18 +121,24 @@ public class HzPbomLineRecord extends BaseChangeDO implements Cloneable{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         HzPbomLineRecord that = (HzPbomLineRecord) o;
-        return Objects.equals(eBomPuid, that.eBomPuid);
+        if(puid.equals(that.getPuid())){
+            return true;
+        }
+        return eBomPuid.equals(that.getPuid());
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(eBomPuid);
-        return result;
-    }
 
+        return Objects.hash(eBomPuid, puid);
+    }
 
     public String getSortNum() {
         return sortNum;

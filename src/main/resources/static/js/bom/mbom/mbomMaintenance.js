@@ -78,12 +78,12 @@ function initTable1(mBomUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\',+'+ 0 +')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -104,12 +104,12 @@ function initTable1(mBomUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -164,12 +164,11 @@ function initTable1(mBomUrl) {
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
-                showExport: true,
+                // showExport: true,
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
-                striped: true, //是否显示行间隔色
                 showColumns: true, //是否显示所有的列
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
@@ -201,7 +200,7 @@ function initTable1(mBomUrl) {
                                     else {
                                         window.Ewin.dialog({
                                             title: "同步修改",
-                                            url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid+"&puid="+rows[0].puid+"&updateType="+2,
+                                            url: "mbom/updateMBom?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
                                             gridId: "gridId",
                                             width: 500,
                                             height: 500
@@ -381,56 +380,56 @@ function initTable1(mBomUrl) {
                             })
                         }
                     },
-                    {
-                        text: '数据同步',
-                        iconCls: 'glyphicon glyphicon-repeat',
-                        handler: function () {
-                            var url = "";
-                            // var myData = JSON.parse({
-                            //     "projectId": $("#project", window.top.document).val(),
-                            // });
-
-                            window.Ewin.confirm({
-                                title: '提示',
-                                message: '确定要同步数据到MBOM吗?',
-                                width: 500
-                            }).on(function (e) {
-                                if (e) {
-                                    var _table = "<p><strong style='font-size: 20px'>数据正在同步中,请耐心等待...</strong></p>"
-                                    _table += "<p><strong style='color: red'>警告:请勿进行其他的操作!</strong></p>"
-                                    _table += "<div style='margin-top: 50px;text-align: center;z-index: 100;'><img src='/hozon/img/img.gif'/></div>"
-                                    window.Ewin.confirm({
-                                        title: '提示',
-                                        message: _table,
-                                        width: 500
-                                    })
-                                    url = "mbom/refresh?projectId=" + $("#project", window.top.document).val();
-                                    setTimeout(function () {
-                                        $.ajax({
-                                            type: "POST",
-                                            //ajax需要添加打包名
-                                            url: url,
-                                            // data: myData,
-                                            contentType: "application/json",
-                                            success: function (result) {
-                                                $('.modal-dialog', window.top.document).parent('div').remove()
-                                                $('body', window.top.document).find('.modal-backdrop').remove();
-                                                if (result.success) {
-                                                    layer.msg('同步成功', {icon: 1, time: 2000})
-                                                } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
-                                                }
-                                                $mBomTable.bootstrapTable("refresh");
-                                            },
-                                            error: function (info) {
-                                                window.Ewin.alert({message: "操作失败:" + info.status});
-                                            }
-                                        })
-                                    }, 500)
-                                }
-                            });
-                        }
-                    },
+                    // {
+                    //     text: '数据同步',
+                    //     iconCls: 'glyphicon glyphicon-repeat',
+                    //     handler: function () {
+                    //         var url = "";
+                    //         // var myData = JSON.parse({
+                    //         //     "projectId": $("#project", window.top.document).val(),
+                    //         // });
+                    //
+                    //         window.Ewin.confirm({
+                    //             title: '提示',
+                    //             message: '确定要同步数据到MBOM吗?',
+                    //             width: 500
+                    //         }).on(function (e) {
+                    //             if (e) {
+                    //                 var _table = "<p><strong style='font-size: 20px'>数据正在同步中,请耐心等待...</strong></p>"
+                    //                 _table += "<p><strong style='color: red'>警告:请勿进行其他的操作!</strong></p>"
+                    //                 _table += "<div style='margin-top: 50px;text-align: center;z-index: 100;'><img src='/hozon/img/img.gif'/></div>"
+                    //                 window.Ewin.confirm({
+                    //                     title: '提示',
+                    //                     message: _table,
+                    //                     width: 500
+                    //                 })
+                    //                 url = "mbom/refresh?projectId=" + $("#project", window.top.document).val();
+                    //                 setTimeout(function () {
+                    //                     $.ajax({
+                    //                         type: "POST",
+                    //                         //ajax需要添加打包名
+                    //                         url: url,
+                    //                         // data: myData,
+                    //                         contentType: "application/json",
+                    //                         success: function (result) {
+                    //                             $('.modal-dialog', window.top.document).parent('div').remove()
+                    //                             $('body', window.top.document).find('.modal-backdrop').remove();
+                    //                             if (result.success) {
+                    //                                 layer.msg('同步成功', {icon: 1, time: 2000})
+                    //                             } else if (!result.success) {
+                    //                                 window.Ewin.alert({message: result.errMsg});
+                    //                             }
+                    //                             $mBomTable.bootstrapTable("refresh");
+                    //                         },
+                    //                         error: function (info) {
+                    //                             window.Ewin.alert({message: "操作失败:" + info.status});
+                    //                         }
+                    //                     })
+                    //                 }, 500)
+                    //             }
+                    //         });
+                    //     }
+                    // },
 
 
                     //todo 下面的代码注释掉 不用 这么传输数据了
@@ -769,12 +768,12 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -845,7 +844,6 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
-                striped: true,                              //是否显示行间隔色
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 200,
                 width: $(window).width(),
@@ -855,7 +853,7 @@ function initTable11(mBomUrl, lineIds, colorIds) {
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
-                showExport: true,
+                // showExport: true,
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
@@ -1423,12 +1421,12 @@ function initTable2(productionUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -1449,12 +1447,12 @@ function initTable2(productionUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -1509,7 +1507,7 @@ function initTable2(productionUrl) {
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
-                showExport: true,
+                // showExport: true,
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
@@ -1867,12 +1865,12 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -1893,12 +1891,12 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 1 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -1953,7 +1951,7 @@ function initTable22(productionUrl, lineIds, colorIds) {
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
-                showExport: true,
+                // showExport: true,
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
@@ -2320,12 +2318,12 @@ function initTable3(financialUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -2346,12 +2344,12 @@ function initTable3(financialUrl) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -2406,7 +2404,7 @@ function initTable3(financialUrl) {
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
-                showExport: true,
+                // showExport: true,
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
@@ -2764,12 +2762,12 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -2790,12 +2788,12 @@ function initTable33(financialUrl, lineIds, colorIds) {
                             formatter: function (value, row, index) {
                                 if (value == "LOA") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else if (value == "LOU") {
                                     return [
-                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 6 + ')">' + value + '</a>'
                                     ].join("");
                                 }
                                 else {
@@ -2850,7 +2848,7 @@ function initTable33(financialUrl, lineIds, colorIds) {
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
-                showExport: true,
+                // showExport: true,
                 //exportDataType: 'all',
                 columns: column,
                 sortable: true,                     //是否启用排序
@@ -3200,10 +3198,11 @@ function doFinancial() {
     }))
 }
 
-function queryLoa(row) {
+function queryLoa(row,type) {
     var myData = JSON.stringify({
         "projectId": $("#project", window.top.document).val(),
-        "puid": row
+        "puid": row,
+        "type":type
     });
     $.ajax({
         type: "POST",
@@ -3233,7 +3232,7 @@ function queryLoa(row) {
     })
 }
 
-function queryLou(row) {
+function queryLou(row,type) {
     // var myData = JSON.stringify({
     //     "projectId": $("#project", window.top.document).val(),
     //     "puid": row
@@ -3242,7 +3241,7 @@ function queryLou(row) {
     $.ajax({
         type: "GET",
         //ajax需要添加打包名
-        url: "loa/getLou/mBom?projectId=" + projectId + "&puid=" + row,
+        url: "loa/getLou/mBom?projectId=" + projectId + "&puid=" + row+"&type="+type,
         // data: myData,
         // contentType: "application/json",
         undefinedText: "",

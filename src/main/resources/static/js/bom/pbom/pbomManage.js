@@ -27,7 +27,7 @@ function doQuery() {
         pBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
     }
     var pIsNewPart = $("#pIsNewPart").val();
-    if (pIsNewPart == "工艺合件") {
+    if (pIsNewPart == "请选择工艺合件") {
         pBomUrl += "&pIsNewPart=" + "";
     }
     else {
@@ -368,23 +368,25 @@ function initTable(pBomUrl) {
                         text: '设置为LOU/取消',
                         iconCls: 'glyphicon glyphicon-cog',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            var lineIds = "";
-                            for (var i = 0; i < rows.length; i++) {
-                                lineIds += rows[i].lineId + ",";
-                            }
-                            var myData = JSON.stringify({
-                                "projectId": $("#project", window.top.document).val(),
-                                "lineIds": lineIds,
-                            });
+                            let rows = $table.bootstrapTable('getSelections');
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择至少一条需要设置为LOU的数据!'});
+                                window.Ewin.alert({message: '请选择一条需要设置为LOU的数据!'});
+                                return false;
+                            }
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要设置为LOU的数据!'});
                                 return false;
                             }
                             else if (rows[0].status == 5 || rows[0].status == 6) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能设置为LOU!'});
                                 return false;
                             }
+                            let puid = rows[0].eBomPuid;
+                            let myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puid": puid,
+                            });
+
                             var url = "loa/setLou/pBom";
                             $.ajax({
                                 url: "privilege/write?url=" + url,
@@ -405,7 +407,7 @@ function initTable(pBomUrl) {
                                                 if (result.success) {
                                                     layer.msg('设置成功', {icon: 1, time: 2000})
                                                 } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                    window.Ewin.alert({message: result.data.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },
@@ -903,22 +905,23 @@ function initTable1(pBomUrl, lineIds) {
                         iconCls: 'glyphicon glyphicon-cog',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            var lineIds = "";
-                            for (var i = 0; i < rows.length; i++) {
-                                lineIds += rows[i].lineId + ",";
-                            }
-                            var myData = JSON.stringify({
-                                "projectId": $("#project", window.top.document).val(),
-                                "lineIds": lineIds,
-                            });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择至少一条需要设置为LOU的数据!'});
+                                window.Ewin.alert({message: '请选择一条需要设置为LOU的数据!'});
+                                return false;
+                            }
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要设置为LOU的数据!'});
                                 return false;
                             }
                             else if (rows[0].status == 5 || rows[0].status == 6) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能设置为LOU!'});
                                 return false;
                             }
+                            let puid = rows[0].eBomPuid;
+                            let myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puid": puid,
+                            });
                             var url = "loa/setLou/pBom";
                             $.ajax({
                                 url: "privilege/write?url=" + url,
@@ -939,7 +942,7 @@ function initTable1(pBomUrl, lineIds) {
                                                 if (result.success) {
                                                     layer.msg('设置成功', {icon: 1, time: 2000})
                                                 } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                    window.Ewin.alert({message: result.data.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },

@@ -22,9 +22,6 @@ public abstract class BaseController {
      */
     protected void toJSONResponse(Object obj,HttpServletResponse response){
         response.setContentType("application/json;charset=UTF-8");
-        if(response == null){
-            return;
-        }
         PrintWriter writer = null;
         try {
             writer = response.getWriter();
@@ -34,27 +31,6 @@ public abstract class BaseController {
         }
         try {
             writer.write(JSON.toJSONString(obj, SerializerFeature.DisableCircularReferenceDetect));
-        } finally {
-            writer.flush();
-            writer.close();
-        }
-    }
-
-
-    protected void toJSONWithDatePatternResponse(Object obj,String datePattern,HttpServletResponse response){
-        response.setContentType("application/json;charset=UTF-8");
-        if(response == null){
-            return;
-        }
-        PrintWriter writer = null;
-        try {
-            writer = response.getWriter();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-        try {
-            writer.write(JSON.toJSONStringWithDateFormat(obj,datePattern, SerializerFeature.DisableCircularReferenceDetect));
         } finally {
             writer.flush();
             writer.close();
