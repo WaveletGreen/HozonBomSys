@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
  * @Date: 2018/9/27
  * @Description:
  */
-public class HzSingleVehiclesBomRespDTO {
+public class HzSingleVehiclesBomRespDTO extends BaseDTO {
     /**
      * 主键id
      */

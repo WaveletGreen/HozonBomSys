@@ -12,27 +12,41 @@
             <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
                   id="queryEplManage">
                 <div class="form-group">
-                    <label for="pBomOfWhichDept">专业:</label>
-                    <input type="text" class="form-control" name="pBomOfWhichDept" id="pBomOfWhichDept"
+                    <label for="partOfWhichDept">专业:</label>
+                    <input type="text" class="form-control" style="width: 140px" name="partOfWhichDept" id="partOfWhichDept"
                            placeholder="请输入专业"/>
                 </div>
                 <div class="form-group">
-                    <label for="lineId">零件号:</label>
-                    <input type="text" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
+                    <label for="partId">零件号:</label>
+                    <input type="text" class="form-control" style="width: 140px" name="partId" id="partId" placeholder="请输入零件号"/>
                 </div>
                 <div class="form-group">
-                    <label for="pFastener">紧固件:</label>
-                    <select class="form-control" style="min-width: 180px" name="pFastener" id="pFastener" placeholder="请选择紧固件">
-                        <option>请选择是否紧固件</option>
-                        <option value="1">紧固件</option>
-                        <option value="2">零部件</option>
+                    <label for="partResource">零件来源:</label>
+                    <select class="form-control"style="width: 140px;" name="partResource" id="partResource">
+                        <option>请选择零件来源</option>
+                        <option>采购件</option>
+                        <option>采购拆分单件</option>
+                        <option>采购拆分总成件</option>
+                        <option>采购拆分标准件</option>
+                        <option>采购拆分非标件</option>
+                        <option>自制总成</option>
+                        <option>自制单件</option>
+                        <option>自用标准件</option>
+                        <option>自用非标件</option>
+                        <option>虚拟总成</option>
                     </select>
                 </div>
-                <!--<div class="form-group">-->
-                    <!--<label for="status">状态:</label>-->
-                    <!--<input type="text" class="form-control" name="status" id="status"-->
-                           <!--placeholder="请输入状态值"/>-->
-                <!--</div>-->
+
+                <div class="form-group">
+                    <label for="status">状态:</label>
+                    <select class="form-control" style="min-width: 140px" name="status" id="status" placeholder="请选择状态">
+                        <option>请选择数据状态</option>
+                        <option value = 1>已生效</option>
+                        <option value = 2>草稿状态</option>
+                        <option value = 4>删除状态</option>
+                        <option value = 5>审核中</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
                 </div>
@@ -41,6 +55,8 @@
     <!--</div>-->
 <!--</div>-->
 <table class="table table-striped tableNormalStyle" id="eplTable"></table>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script th:src="@{/js/helper/fileOptionHelper.js}"></script>
 <script th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/bom/epl/epl.js}"></script>
 <script type="text/javascript">

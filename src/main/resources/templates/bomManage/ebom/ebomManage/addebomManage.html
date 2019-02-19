@@ -5,11 +5,11 @@
 <body>
 <form id="ebomMainForm" role="form" method="post" action="ebom/add/ebom">
     <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/><!--th:value="${entity.eBomPuid}"-->
-    <!--<div class="form-group">-->
-        <!--<label for="lineId">零件号<span>*</span></label>-->
-        <!--<input class="form-control" id="lineId" name="lineId" type="text"-->
-               <!--placeholder="请输入零件号"/>-->
-    <!--</div>-->
+    <div class="form-group">
+        <label for="lineId">零件号<span>*</span></label>
+        <input class="form-control" id="lineId" name="lineId" type="text"
+               placeholder="请输入零件号"/>
+    </div>
     <!--<div class="form-group">-->
         <!--<label for="pBomLinePartName">名称<span>*</span></label>-->
         <!--<input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"-->
@@ -249,14 +249,14 @@
             <!--<option>虚拟总成</option>-->
         <!--</select>-->
     <!--</div>-->
-    <div class="form-group">
-        <label for="pInOutSideFlag">内外饰标识</label>
-        <select class="form-control" name="pInOutSideFlag" id="pInOutSideFlag" placeholder="请选择内外饰标识">
-            <option></option>
-            <option>内饰件</option>
-            <option>外饰件</option>
-        </select>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="pInOutSideFlag">内外饰标识</label>-->
+        <!--<select class="form-control" name="pInOutSideFlag" id="pInOutSideFlag" placeholder="请选择内外饰标识">-->
+            <!--<option></option>-->
+            <!--<option>内饰件</option>-->
+            <!--<option>外饰件</option>-->
+        <!--</select>-->
+    <!--</div>-->
     <div class="form-group">
         <label for="pUpc">UPC</label>
         <input class="form-control" id="pUpc" name="pUpc" type="text" placeholder="请输入UPC"/>
@@ -282,6 +282,19 @@
             <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
         </select>
     </div>
+
+    <div class="form-group">
+        <label for="sparePart">备件</label>
+        <input class="form-control" id="sparePart" name="sparePart" type="text"
+               placeholder="请输入备件"/>
+    </div>
+
+
+    <div class="form-group">
+        <label for="sparePartNum">备件编号</label>
+        <input class="form-control" id="sparePartNum" name="sparePartNum" type="text"
+               placeholder="请输入备件编号"/>
+    </div>
     <!--<input id="puid" name="puid" type="hidden" th:value="${puid}"/>-->
     <!--&lt;!&ndash;循环放入数据&ndash;&gt;-->
     <!--<div class="form-group " th:each="_data,c:${data[0]}">-->
@@ -293,16 +306,14 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        /*var puid = $("#puid").val();
-        if (puid==""){
-            $("#lineNo").attr({"disabled": "disabled"});
-        } else {
-            $("#lineNo").removeAttr("disabled");
-        }*/
-        var oTxt = document.getElementById("puid");
-        var oDiv = document.getElementById("lineNuber");
+        var puid = $("#puid").val();
+        if (puid == ""){
+            $("#colorPart").attr({"disabled": "disabled"});
+        } 
+        // var oTxt = document.getElementById("puid");
+        // var oDiv = document.getElementById("lineNumber");
         // oTxt.onblur = function(){
-        oTxt.value == "" ? oDiv.style.display = "none" : oDiv.style.display = "block";
+        // oTxt.value == "" ? oDiv.style.display = "none" : oDiv.style.display = "block";
         // };
         $('#ebomMainForm').bootstrapValidator({
             message: 'This value is not valid',
@@ -312,14 +323,14 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                // lineId: {
-                //     message: '零件号验证失败',
-                //     validators: {
-                //         notEmpty: {
-                //             message: '零件号不能为空'
-                //         }
-                //     }
-                // },
+                lineId: {
+                    message: '零件号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '零件号不能为空'
+                        }
+                    }
+                },
                 // pBomLinePartName: {
                 //     message: '名称验证失败',
                 //     validators: {
@@ -356,7 +367,6 @@
             if (bootstrapValidator.isValid()) {
                 var projectPuid = $("#project", window.top.document).val();
                 var url = $("#ebomMainForm", window.top.document).attr('action');
-                var puid = $("#puid").val;
                 // var data = {};
                 // var _d = $("#ebomMainForm").serializeArray();
                 // for (var p in _d) {
@@ -364,7 +374,7 @@
                 // }
                 var myData = JSON.stringify({
                     "puid": $("#puid").val(),
-                    // "lineId": $("#lineId").val(),
+                    "lineId": $("#lineId").val(),
                     // "pBomLinePartName": $("#pBomLinePartName").val(),
                     // // "level": $("#level").val(),
                     // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
@@ -407,15 +417,17 @@
                     // "pRemark": $("#pRemark").val(),
                     // "pBomLinePartClass": $("#pBomLinePartClass").val(),
                     // "pBomLinePartResource": $("#pBomLinePartResource").val(),
-                    "pInOutSideFlag": $("#pInOutSideFlag").val(),
+                    // "pInOutSideFlag": $("#pInOutSideFlag").val(),
                     "pUpc": $("#pUpc").val(),
                     "fna": $("#fna").val(),
                     "pFnaDesc": $("#pFnaDesc").val(),
                     "number": $("#number").val(),
                     "colorPart": $("#colorPart").val(),
+                    "sparePart": $("#sparePart").val(),
+                    "sparePartNum": $("#sparePartNum").val(),
                     "projectId": $("#project", window.top.document).val(),
                 });
-                if (puid = "") {
+                // if (puid = "") {
                     $.ajax({
                         contentType:
                             "application/json",
@@ -425,44 +437,46 @@
                         data: myData,
                         success:
                             function (result) {
-                                // $('.modal-dialog', window.top.document).parent('div').remove()
-                                // $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                activeTabBodyRefresh();
-                                window.Ewin.alert({message: result.msg + ':添加数据成功！'});
+                                if(result.success){
+                                    activeTabBodyRefresh();
+                                    layer.msg(result.errMsg, {icon: 1, time: 2000});
+                                }else {
+                                    window.Ewin.alert({message: result.errMsg });
+                                }
+
                             },
                         error: function (status) {
                             window.Ewin.alert({message: status.status + ':添加数据失败!'});
                         }
                     });
-                } else {
-                    $.ajax({
-                        contentType:
-                            "application/json",
-                        type:
-                            'POST',
-                        // url: url + "?projectId=" + projectPuid + "&puid=" + puid,
-                        url: url,
-                        data: myData,
-                        success:
-                            function (result) {
-                                $('.modal-dialog', window.top.document).parent('div').remove()
-                                $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                if (result.success) {
-                                    layer.msg('添加成功', {icon: 1, time: 2000})
-                                }
-                                else if (!result.success) {
-                                    window.Ewin.alert({message: result.errMsg})
-                                }
-                            },
-                        error: function (status) {
-                            window.Ewin.alert({message: status.status + ':添加数据失败!'});
-                        }
-                    });
-                }
+                // }
+                // else {
+                //     $.ajax({
+                //         contentType:
+                //             "application/json",
+                //         type:
+                //             'POST',
+                //         // url: url + "?projectId=" + projectPuid + "&puid=" + puid,
+                //         url: url,
+                //         data: myData,
+                //         success:
+                //             function (result) {
+                //                 $('.modal-dialog', window.top.document).parent('div').remove()
+                //                 $('body', window.top.document).find('.modal-backdrop').remove();
+                //                 // jquery 调用刷新当前操作的table页面的refresh方法
+                //                 $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                //                 if (result.success) {
+                //                     layer.msg('添加成功', {icon: 1, time: 2000})
+                //                 }
+                //                 else if (!result.success) {
+                //                     window.Ewin.alert({message: result.errMsg})
+                //                 }
+                //             },
+                //         error: function (status) {
+                //             window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                //         }
+                //     });
+                // }
             }
         });
     })

@@ -1,7 +1,5 @@
 package sql.pojo;
 
-import lombok.Data;
-
 import java.util.Date;
 
 /**
@@ -9,7 +7,7 @@ import java.util.Date;
  * @Date: 2018/11/16
  * @Description: 变更需要的字段
  */
-public abstract class BaseChangePOJO extends BasePOJO{
+public abstract class BaseChangeDO extends BaseDO {
     /**
      * 变更表单id
      */

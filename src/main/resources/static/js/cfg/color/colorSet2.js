@@ -185,26 +185,26 @@ var column = [
             return changeDateFormat(value)
         }
     },
-    {
-        field: 'pColorStatus',
-        title: '状态',
-        align: 'center',
-        valign: 'middle',
-        formatter: function (value, row, index) {
-            if (value == 1 || "1" == value) {
-                return "<span style='color: #00B83F'>已生效</span>";
-            }
-            if (value == 0 || "0" == value) {
-                return "<span style='color: #a97f89'>草稿状态</span>";
-            }
-            if (-1 == value || "-1" == value) {
-                return "<span style='color: #9492a9'>已废止</span>";
-            }
-            else {
-                return "<span style='color: #a90009'>未知状态</span>";
-            }
-        }
-    },
+    // {
+    //     field: 'pColorStatus',
+    //     title: '状态',
+    //     align: 'center',
+    //     valign: 'middle',
+    //     formatter: function (value, row, index) {
+    //         if (value == 1 || "1" == value) {
+    //             return "<span style='color: #00B83F'>已生效</span>";
+    //         }
+    //         if (value == 0 || "0" == value) {
+    //             return "<span style='color: #a97f89'>草稿状态</span>";
+    //         }
+    //         if (-1 == value || "-1" == value) {
+    //             return "<span style='color: #9492a9'>已废止</span>";
+    //         }
+    //         else {
+    //             return "<span style='color: #a90009'>未知状态</span>";
+    //         }
+    //     }
+    // },
     {
         field: 'csPaintMaterielCodes',
         title: '油漆物料号集合',

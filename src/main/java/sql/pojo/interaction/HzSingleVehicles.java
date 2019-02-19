@@ -2,13 +2,15 @@ package sql.pojo.interaction;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 单车BOM单车主数据
  */
 @Data
-public class HzSingleVehicles {
+public class HzSingleVehicles implements Serializable {
+    private static final long serialVersionUID = 7784570537799137968L;
     /**
      * 主键
      */
@@ -166,4 +168,9 @@ public class HzSingleVehicles {
      * 更新时间
      */
     private Date svlUpdateDate;
+
+    /**
+     * 是否发送sap，0未发送，1已发送
+     */
+    private Integer isSend;
 }

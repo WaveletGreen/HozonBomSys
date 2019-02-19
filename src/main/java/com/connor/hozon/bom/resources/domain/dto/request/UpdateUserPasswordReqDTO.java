@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/7/23
  * @Description:
  */
-public class UpdateUserPasswordReqDTO {
+public class UpdateUserPasswordReqDTO extends BaseDTO {
     private String oldPassWord;
 
     private String newPassWord;

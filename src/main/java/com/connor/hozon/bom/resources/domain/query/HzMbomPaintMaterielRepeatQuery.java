@@ -8,7 +8,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class HzMbomPaintMaterielRepeatQuery {
+public class HzMbomPaintMaterielRepeatQuery extends DefaultQuery{
     private String projectId;
 
     private String colorId;

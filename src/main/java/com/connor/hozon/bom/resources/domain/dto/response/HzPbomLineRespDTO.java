@@ -117,28 +117,6 @@ public class HzPbomLineRespDTO extends BaseChangeRespDTO {
     private Integer status;
     /**单车用量**/
     private JSONObject object;
-    /**
-     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
-     */
-    private Integer updateType;
-
-    public Integer getUpdateType() {
-        return updateType;
-    }
-
-    public void setUpdateType(Integer updateType) {
-        this.updateType = updateType;
-    }
-
-    private String effectTime;
-
-    public String getEffectTime() {
-        return effectTime;
-    }
-
-    public void setEffectTime(String effectTime) {
-        this.effectTime = effectTime;
-    }
 
     public JSONObject getObject() {
         return object;

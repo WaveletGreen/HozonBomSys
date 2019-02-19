@@ -1,5 +1,6 @@
 package sql.pojo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,7 +8,10 @@ import java.util.Date;
  * @Date: 2018/10/19
  * @Description: 基本属性 数据库建表有该字段时 可直接继承
  */
-public abstract class BasePOJO {
+public abstract class BaseDO implements Serializable,Cloneable {
+
+
+    private static final long serialVersionUID = -5896598481134328123L;
     /**
      * 创建时间
      */
@@ -36,6 +40,8 @@ public abstract class BasePOJO {
      * 更新人ID
      */
     private  Long updateId;
+
+
 
     public Date getCreateTime() {
         return createTime;
@@ -84,4 +90,15 @@ public abstract class BasePOJO {
     public void setUpdateId(Long updateId) {
         this.updateId = updateId;
     }
+
+    @Override
+    public Object  clone() {
+        try {
+            return super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

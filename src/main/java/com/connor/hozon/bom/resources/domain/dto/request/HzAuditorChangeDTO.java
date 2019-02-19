@@ -1,9 +1,10 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import lombok.Data;
 
 @Data
-public class HzAuditorChangeDTO {
+public class HzAuditorChangeDTO extends BaseDTO {
     /**
      * 主键id
      */

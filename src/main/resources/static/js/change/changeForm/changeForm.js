@@ -75,6 +75,7 @@ function initTable(url) {
     column.push({field: 'deptName', title: '部门', align: 'center', valign: 'middle'});
     column.push({field: 'originator', title: '发起人', align: 'center', valign: 'middle'});
     column.push({field: 'createName', title: '表单创建者', align: 'center', valign: 'middle'});
+    column.push({field: 'auditor', title: '审核人', align: 'center', valign: 'middle'});
     column.push({field: 'tel', title: '联系电话', align: 'center', valign: 'middle'});
     column.push({field: 'state', title: '变更单状态', align: 'center', valign: 'middle'});
     column.push({field: 'changeType', title: '变更类型', align: 'center', valign: 'middle'});
@@ -214,7 +215,7 @@ function initTable(url) {
                 handler: function () {
                     var rows = $table.bootstrapTable('getSelections');
                     if (rows.length == 0 || rows.length != 1) {
-                        window.Ewin.alert({message: '请选择<span style="color: red">一条</span>需要发起流程的数据!'});
+                        window.Ewin.alert({message: '请选择<span style="color: red">一条</span>变更表单发起流程!'});
                         return false;
                     }
                     for (let i in rows) {
@@ -227,9 +228,11 @@ function initTable(url) {
                             return;
                         }
                     }
+                    // 判断表单是否有关联数据 无关联数据不允许发起流程
+                    var relatedOrderUrl = "change/related/data?orderId="+rows[0].id;
                     var url = "process/getAuditorPage";
                     $.ajax({
-                        url: "privilege/write?url=" + url,
+                        url:  relatedOrderUrl,
                         type: "GET",
                         success: function (result) {
                             if (!result.success) {
@@ -237,16 +240,49 @@ function initTable(url) {
                                 return false;
                             }
                             else {
-                                window.Ewin.dialog({
-                                    title: "选择审核人",
-                                    url: "process/getAuditorPage?orderId="+rows[0].id,
-                                    gridId: "getAuditorPage",
-                                    width: 500,
-                                    height: 500
+                                $.ajax({
+                                    url: "privilege/write?url=" + url,
+                                    type: "GET",
+                                    success: function (result) {
+                                        if (!result.success) {
+                                            window.Ewin.alert({message: result.errMsg});
+                                            return false;
+                                        }
+                                        else {
+                                            window.Ewin.dialog({
+                                                title: "选择审核人",
+                                                url: "process/getAuditorPage?orderId="+rows[0].id,
+                                                gridId: "getAuditorPage",
+                                                width: 500,
+                                                height: 500
+                                            });
+                                        }
+                                    }
                                 });
                             }
                         }
                     })
+
+                    // var url = "process/getAuditorPage";
+                    // $.ajax({
+                    //     url: "privilege/write?url=" + url,
+                    //     type: "GET",
+                    //     success: function (result) {
+                    //         if (!result.success) {
+                    //             window.Ewin.alert({message: result.errMsg});
+                    //             return false;
+                    //         }
+                    //         else {
+                    //             window.Ewin.dialog({
+                    //                 title: "选择审核人",
+                    //                 url: "process/getAuditorPage?orderId="+rows[0].id,
+                    //                 gridId: "getAuditorPage",
+                    //                 width: 500,
+                    //                 height: 500
+                    //             });
+                    //         }
+                    //     }
+                    // })
                 }
             },
         ],

@@ -1,11 +1,13 @@
 package sql.pojo.integration;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 断点信息
  */
-public class HzBreakPoint {
+public class HzBreakPoint implements Serializable {
+    private static final long serialVersionUID = 7391744885544086127L;
     /**
      * 主键
      */

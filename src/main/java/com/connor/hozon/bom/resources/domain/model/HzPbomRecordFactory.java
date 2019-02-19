@@ -2,13 +2,18 @@ package com.connor.hozon.bom.resources.domain.model;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
+import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.epl.HzEPLManageRecord;
+import sql.pojo.epl.HzEPLRecord;
 
 import javax.xml.ws.soap.Addressing;
 import java.util.ArrayList;
@@ -25,45 +30,81 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
 public class HzPbomRecordFactory {
     /**
      * ebom新增数据 同步至pbom
-     * @param reqDTO
-     * @return
+     * @param record EPL 信息
+     * @param bomRecord  EBOM 信息  业务变更较大 代码兼容，类名未改
+     *                    {@link HzEPLManageRecord} 现阶段的EBOM字段 多余的字段废弃
+     * @return HzPbomLineRecord
      */
-    public static HzPbomLineRecord addHzEbomReqDTOPbomRecord(AddHzEbomReqDTO reqDTO){
+    public static HzPbomLineRecord editEbomToPbomRecord(HzEPLRecord record, HzEPLManageRecord bomRecord){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
-        hzPbomLineRecord.setLinePuid(UUID.randomUUID().toString());
-        hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
-        hzPbomLineRecord.setCreateName(UserInfo.getUser().getUserName());
-        hzPbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-        hzPbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-        hzPbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-        hzPbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-        hzPbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-        hzPbomLineRecord.setLineId(reqDTO.getLineId());
+        User user = UserInfo.getUser();
+        hzPbomLineRecord.setUpdateName(user.getUserName());
+        hzPbomLineRecord.setCreateName(user.getUserName());
+        hzPbomLineRecord.setpBomLinePartEnName(record.getPartEnName());
+        hzPbomLineRecord.setpBomOfWhichDept(record.getPartOfWhichDept());
+        hzPbomLineRecord.setpBomLinePartResource(record.getPartResource());
+        hzPbomLineRecord.setpBomLinePartName(record.getPartName());
+        hzPbomLineRecord.setpBomLinePartClass(record.getPartClass());
+        hzPbomLineRecord.setLineId(record.getPartId());
         hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
         hzPbomLineRecord.setIsNewPart(0);
+        hzPbomLineRecord.seteBomPuid(bomRecord.getPuid());
+        hzPbomLineRecord.setIs2Y(bomRecord.getIs2Y());
+        hzPbomLineRecord.setIsHas(bomRecord.getIsHas());
+        hzPbomLineRecord.setBomDigifaxId(bomRecord.getBomDigifaxId());
+        hzPbomLineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+        hzPbomLineRecord.setColorPart(bomRecord.getColorPart());
+        hzPbomLineRecord.setLineIndex(bomRecord.getLineIndex());
+        hzPbomLineRecord.setSortNum(bomRecord.getSortNum());
+        hzPbomLineRecord.setStatus(2);
         return hzPbomLineRecord;
     }
 
-    public static HzPbomLineRecord updateHzEbomReqDTOPbomRecord(UpdateHzEbomReqDTO reqDTO){
+
+
+    /**
+     * ebom新增数据 同步至pbom
+     * @param record EPL 信息
+     * @param reqDTO  前端传入EBOM 信息
+     * @return HzPbomLineRecord
+     */
+    public static HzPbomLineRecord editEbomToPbomRecord(HzEPLRecord record, AddHzEbomReqDTO reqDTO){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
-        hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
-        hzPbomLineRecord.setpBomLinePartEnName(reqDTO.getpBomLinePartEnName());
-        hzPbomLineRecord.setpBomOfWhichDept(reqDTO.getpBomOfWhichDept());
-        hzPbomLineRecord.setpBomLinePartResource(reqDTO.getpBomLinePartResource());
-        hzPbomLineRecord.setpBomLinePartName(reqDTO.getpBomLinePartName());
-        hzPbomLineRecord.setpBomLinePartClass(reqDTO.getpBomLinePartClass());
-        hzPbomLineRecord.setLinePuid(UUID.randomUUID().toString());
-        hzPbomLineRecord.setLineId(reqDTO.getLineId());
-        if("Y".equals(reqDTO.getColorPart())){
-            hzPbomLineRecord.setColorPart(1);
-        }else if("N".equals(reqDTO.getColorPart())){
-            hzPbomLineRecord.setColorPart(0);
-        }else {
-            hzPbomLineRecord.setColorPart(null);
-        }
+        User user = UserInfo.getUser();
+        hzPbomLineRecord.setUpdateName(user.getUserName());
+        hzPbomLineRecord.setCreateName(user.getUserName());
+        hzPbomLineRecord.setpBomLinePartEnName(record.getPartEnName());
+        hzPbomLineRecord.setpBomOfWhichDept(record.getPartOfWhichDept());
+        hzPbomLineRecord.setpBomLinePartResource(record.getPartResource());
+        hzPbomLineRecord.setpBomLinePartName(record.getPartName());
+        hzPbomLineRecord.setpBomLinePartClass(record.getPartClass());
+        hzPbomLineRecord.setLineId(record.getPartId());
+        hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
+        hzPbomLineRecord.setIsNewPart(0);
+        hzPbomLineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+        hzPbomLineRecord.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
+        hzPbomLineRecord.setStatus(2);
         return hzPbomLineRecord;
     }
 
+
+    /**
+     * ebom更新数据 同步至pbom
+     * @param reqDTO  前端传入EBOM 信息
+     * @return HzPbomLineRecord
+     */
+    public static HzPbomLineRecord editEbomToPbomRecord(UpdateHzEbomReqDTO reqDTO){
+        HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
+        User user = UserInfo.getUser();
+        hzPbomLineRecord.setCreateName(user.getUserName());
+        hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
+        hzPbomLineRecord.setIsNewPart(0);
+        hzPbomLineRecord.seteBomPuid(reqDTO.getPuid());
+        hzPbomLineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+        hzPbomLineRecord.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
+        hzPbomLineRecord.setStatus(2);
+        return hzPbomLineRecord;
+    }
 
     public static HzPbomLineRecord ImportEbomRecordToPbomRecord(HzImportEbomRecord record){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
@@ -74,10 +115,10 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
         hzPbomLineRecord.seteBomPuid(record.getPuid());
         hzPbomLineRecord.setLineId(record.getLineId());
-        hzPbomLineRecord.setIsPart(record.getIsPart());
+//        hzPbomLineRecord.setIsPart(record.getIsPart());
         hzPbomLineRecord.setIs2Y(record.getIs2Y());
         hzPbomLineRecord.setLineIndex(record.getLineIndex());
-        hzPbomLineRecord.setParentUid(record.getParentId());
+        hzPbomLineRecord.setParentUid(record.getParentUid());
         hzPbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());
         hzPbomLineRecord.setpBomLinePartName(record.getpBomLinePartName());
         hzPbomLineRecord.setpBomOfWhichDept(record.getpBomOfWhichDept());
@@ -130,7 +171,6 @@ public class HzPbomRecordFactory {
         hzPbomLineRecord.setpBomLinePartEnName(record.getpBomLinePartEnName());
         hzPbomLineRecord.setpBomLinePartResource(record.getpBomLinePartResource());
         hzPbomLineRecord.setColorPart(record.getColorPart());
-        hzPbomLineRecord.setSingleVehDosage(record.getSingleVehDosage());
         hzPbomLineRecord.setIsNewPart(0);
         return hzPbomLineRecord;
     }
@@ -151,20 +191,8 @@ public class HzPbomRecordFactory {
         respDTO.setResource(record.getResource());
         Integer type = record.getType();
         Integer buyUnit = record.getBuyUnit();
-        if (Integer.valueOf(0).equals(type)) {
-            respDTO.setType("N");
-        } else if (Integer.valueOf(1).equals(type)) {
-            respDTO.setType("Y");
-        } else {
-            respDTO.setType("");
-        }
-        if (Integer.valueOf(0).equals(buyUnit)) {
-            respDTO.setBuyUnit("N");
-        } else if (Integer.valueOf(1).equals(buyUnit)) {
-            respDTO.setBuyUnit("Y");
-        } else {
-            respDTO.setBuyUnit("");
-        }
+        respDTO.setType(BOMTransConstants.integerToYNString(type));
+        respDTO.setBuyUnit(BOMTransConstants.integerToYNString(buyUnit));
         respDTO.seteBomPuid(record.geteBomPuid());
         respDTO.setPuid(record.getPuid());
         respDTO.setProductLine(record.getProductLine());

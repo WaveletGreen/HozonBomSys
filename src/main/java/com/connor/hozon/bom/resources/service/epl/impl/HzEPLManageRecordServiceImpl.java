@@ -28,6 +28,7 @@ import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLev
  * Created by haozt on 2018/06/05
  */
 @Service("hzEPLManageRecordService")
+@Deprecated
 public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 
     @Autowired
@@ -361,21 +362,6 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
             HzEPLRecordRespDTO recordRespDTO = new HzEPLRecordRespDTO();
             JSONArray array = new JSONArray();
             List<HzEPLRecordRespDTO> recordRespDTOList = new ArrayList<>();
-            //需要加入搜索功能
-            String level = query.getLevel();
-            if (level != null && level!="") {
-                if(level.length()==1 && level.toUpperCase().endsWith("Y")){
-                    query.setIsHas(Integer.valueOf(1));
-                }else {
-                    int length = level.charAt(0) - 48;
-                    if (level.toUpperCase().endsWith("Y")) {
-                        query.setIsHas(Integer.valueOf(1));
-                    } else {
-                        query.setIsHas(Integer.valueOf(0));
-                    }
-                    query.setLineIndex(String.valueOf(length - 1));
-                }
-            }
             Page<HzEPLManageRecord> recordPage = hzEplMangeRecordDAO.getEPLListForPage2(query);
             int num = (recordPage.getPageNumber()-1)*recordPage.getPageSize();
             if(recordPage == null || recordPage.getResult() == null || recordPage.getResult().size()==0){
@@ -449,15 +435,6 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                 jsonObject.put("pRemark",record.getpRemark());
                 jsonObject.put("pRegulationCode", record.getpRegulationCode());
                 jsonObject.put("number",record.getNumber());
-
-                jsonObject.put("resource", record.getResource());
-                jsonObject.put("type", record.getType());
-                jsonObject.put("buyUnit", record.getBuyUnit());
-                jsonObject.put("workShop1", record.getWorkShop1());
-                jsonObject.put("workShop2", record.getWorkShop2());
-                jsonObject.put("productLine", record.getProductLine());
-                jsonObject.put("mouldType", record.getMouldType());
-                jsonObject.put("outerPart", record.getOuterPart());
 
                 if(Integer.valueOf(1).equals(record.getColorPart())){
                     jsonObject.put("colorPart", "Y");

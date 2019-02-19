@@ -55,14 +55,15 @@ public class HzMbomController extends BaseController {
     HzPbomRecordDAO hzPbomRecordDAO;
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;
-    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
     /**
      * MBOM管理标题
      *
      * @param response
      */
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
-    public void mbomTitle(HttpServletResponse response) {
+    public void mbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
@@ -90,6 +91,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("pStockLocation", "发货料库存地点");
         tableTitle.put("pBomType", "BOM类型");
         tableTitle.put("effectTime","生效时间");
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
@@ -104,13 +106,6 @@ public class HzMbomController extends BaseController {
     @RequestMapping(value = "record", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getMbomLineRecord(HzMbomByPageQuery query) {
-        HzMbomByPageQuery ebomByPageQuery = query;
-        ebomByPageQuery.setPageSize(0);
-        try{
-            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        }catch (Exception e){
-
-        }
         Page<HzMbomRecordRespDTO> page = hzMbomService.findHzMbomForPage(query);
         if (page == null) {
             return new HashMap<>();
@@ -150,6 +145,9 @@ public class HzMbomController extends BaseController {
             _res.put("pBomType", dto.getpBomType());
             _res.put("status",dto.getStatus());
             _res.put("effectTime",dto.getEffectTime());
+            if(null != dto.getVehNum()){
+                _res.putAll(dto.getVehNum());
+            }
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -193,7 +191,6 @@ public class HzMbomController extends BaseController {
         query.setProjectId(projectId);
         query.setPuid(eBomPuid);
         HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(query);
-        respDTO.setUpdateType(updateType);
         if(respDTO== null){
             return "";
         }
@@ -251,7 +248,6 @@ public class HzMbomController extends BaseController {
         query.setType(type);
         query.setPuid(eBomPuid);
         HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(query);
-        respDTO.setUpdateType(updateType);
         if(respDTO== null){
             return "";
         }
@@ -270,7 +266,6 @@ public class HzMbomController extends BaseController {
         query.setType(type);
         query.setPuid(eBomPuid);
         HzMbomRecordRespDTO respDTO =hzMbomService.findHzMbomByPuid(query);
-        respDTO.setUpdateType(updateType);
         if(respDTO== null){
             return "";
         }

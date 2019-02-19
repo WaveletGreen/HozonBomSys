@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * @Description: 设变模块 添加数据到变更表单
  */
 @Data
-public class AddDataToChangeOrderReqDTO {
+public class AddDataToChangeOrderReqDTO extends BaseDTO {
     /**
      * 数据ids  中间用英文逗号隔开
      */

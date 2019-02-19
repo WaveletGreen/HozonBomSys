@@ -39,6 +39,7 @@
         <result column="P_STOCK_LOCATION" jdbcType="VARCHAR" property="pStockLocation" />
         <result column="P_FACTORY_ID" jdbcType="VARCHAR" property="pFactoryId" />
         <result column="P_SINGLE_VEHICLES_ID" jdbcType="DOUBLE" property="singleVehiclesId" />
+        <result column="P_BOM_TYPE" jdbcType="INTEGER" property="bomType" />
     </resultMap>
     
 
@@ -158,7 +159,7 @@
         P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS,
         P_BOM_LINE_PART_EN_NAME, P_BOM_LINE_PART_RESOURCE,
         P_STOCK_LOCATION, P_FACTORY_ID,
-        P_SORT_NUM, P_SINGLE_VEHICLES_ID, P_EBOM_PUID
+        P_SORT_NUM, P_SINGLE_VEHICLES_ID, P_EBOM_PUID,P_BOM_TYPE
         )
         select SEQ_HZ_SINGLE_VEHICLES_BOM.nextval,t.* from
         (
@@ -180,7 +181,7 @@
             #{item.pBomLinePartEnName,jdbcType=VARCHAR}, #{item.pBomLinePartResource,jdbcType=VARCHAR},
             #{item.pStockLocation,jdbcType=VARCHAR}, #{item.pFactoryId,jdbcType=VARCHAR},
             #{item.sortNum,jdbcType=VARCHAR}, #{item.singleVehiclesId,jdbcType=DOUBLE},
-            #{item.eBomPuid,jdbcType=VARCHAR}
+            #{item.eBomPuid,jdbcType=VARCHAR},#{item.bomType,jdbcType=INTEGER}
             from DUAL
         </foreach>
         )t

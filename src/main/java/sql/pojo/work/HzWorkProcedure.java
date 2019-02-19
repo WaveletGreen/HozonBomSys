@@ -1,6 +1,6 @@
 package sql.pojo.work;
 
-import sql.pojo.BaseChangePOJO;
+import sql.pojo.BaseChangeDO;
 
 import java.util.Date;
 import java.util.Objects;
@@ -10,7 +10,7 @@ import java.util.Objects;
  * @Date: 2018/6/29
  * @Description: 工艺路线
  */
-public class HzWorkProcedure extends BaseChangePOJO {
+public class HzWorkProcedure extends BaseChangeDO {
     /**
      * 主键id
      */

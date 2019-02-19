@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
+/**
+ * 废除 已不再使用
+ */
 @Deprecated
 public class FactoryManager {
     static Reader reader = null;

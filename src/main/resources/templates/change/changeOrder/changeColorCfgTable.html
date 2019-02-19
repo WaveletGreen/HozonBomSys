@@ -141,7 +141,8 @@
                                                         contentType: "application/json",
                                                         success: function (result) {
                                                             if (result.status) {
-                                                                layer.msg('删除成功', {icon: 1, time: 2000})
+                                                                layer.msg('删除成功', {icon: 1, time: 2000});
+                                                                window.location.reload();
                                                             } else if (!result.status) {
                                                                 window.Ewin.alert({message: result.msg});
                                                             }

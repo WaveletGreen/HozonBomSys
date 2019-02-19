@@ -166,7 +166,7 @@ public class HzAccessoriesLibsController extends BaseController {
             _res.put("pNote",lib.getpNote() );
             _list.add(_res);
         }
-        ret.put("totalCount", libs.size());
+        ret.put("totalCount", page.getTotalCount());
         ret.put("result", _list);
         return ret;
     }

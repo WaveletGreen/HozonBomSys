@@ -1,9 +1,11 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * Created by haozt on 2018/5/29
  */
-public class AddHzPbomRecordReqDTO {
+public class AddHzPbomRecordReqDTO extends BaseDTO {
     /**
      * 合成零件的puid 中间用英文逗号隔开
      */

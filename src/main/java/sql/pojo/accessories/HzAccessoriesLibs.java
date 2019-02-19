@@ -1,8 +1,14 @@
 package sql.pojo.accessories;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class HzAccessoriesLibs {
+/**
+ * 工艺辅料库
+ */
+public class HzAccessoriesLibs implements Serializable {
+
+    private static final long serialVersionUID = 7421368056821901231L;
     private String puid;
 
     private String pMaterielCode;
@@ -29,12 +35,38 @@ public class HzAccessoriesLibs {
 
     private String pUpdateName;
 
+    @Override
+    public boolean equals(Object o) {
+        if(o == null){
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
+        if(o instanceof  HzAccessoriesLibs){
+            HzAccessoriesLibs that = (HzAccessoriesLibs) o;
+            if(this.getPuid().equals((that.getPuid()))){
+                return true;
+            }
+            if(this.getpMaterielCode().equals(that.getpMaterielCode())){
+                return  true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return this.getpMaterielCode().hashCode();
+    }
+
     public String getPuid() {
         return puid;
     }
 
     public void setPuid(String puid) {
-        this.puid = puid == null ? null : puid.trim();
+        this.puid = puid;
     }
 
     public String getpMaterielCode() {
@@ -42,7 +74,7 @@ public class HzAccessoriesLibs {
     }
 
     public void setpMaterielCode(String pMaterielCode) {
-        this.pMaterielCode = pMaterielCode == null ? null : pMaterielCode.trim();
+        this.pMaterielCode = pMaterielCode;
     }
 
     public String getpMaterielName() {
@@ -50,7 +82,7 @@ public class HzAccessoriesLibs {
     }
 
     public void setpMaterielName(String pMaterielName) {
-        this.pMaterielName = pMaterielName == null ? null : pMaterielName.trim();
+        this.pMaterielName = pMaterielName;
     }
 
     public String getpTechnicalConditions() {
@@ -58,7 +90,7 @@ public class HzAccessoriesLibs {
     }
 
     public void setpTechnicalConditions(String pTechnicalConditions) {
-        this.pTechnicalConditions = pTechnicalConditions == null ? null : pTechnicalConditions.trim();
+        this.pTechnicalConditions = pTechnicalConditions;
     }
 
     public String getpMeasuringUnit() {
@@ -66,7 +98,7 @@ public class HzAccessoriesLibs {
     }
 
     public void setpMeasuringUnit(String pMeasuringUnit) {
-        this.pMeasuringUnit = pMeasuringUnit == null ? null : pMeasuringUnit.trim();
+        this.pMeasuringUnit = pMeasuringUnit;
     }
 
     public String getpMaterielPurpose() {
@@ -74,7 +106,7 @@ public class HzAccessoriesLibs {
     }
 
     public void setpMaterielPurpose(String pMaterielPurpose) {
-        this.pMaterielPurpose = pMaterielPurpose == null ? null : pMaterielPurpose.trim();
+        this.pMaterielPurpose = pMaterielPurpose;
     }
 
     public String getpDosageBicycle() {
@@ -82,7 +114,7 @@ public class HzAccessoriesLibs {
     }
 
     public void setpDosageBicycle(String pDosageBicycle) {
-        this.pDosageBicycle = pDosageBicycle == null ? null : pDosageBicycle.trim();
+        this.pDosageBicycle = pDosageBicycle;
     }
 
     public String getpNote() {
@@ -90,7 +122,7 @@ public class HzAccessoriesLibs {
     }
 
     public void setpNote(String pNote) {
-        this.pNote = pNote == null ? null : pNote.trim();
+        this.pNote = pNote;
     }
 
     public Short getpStatus() {
@@ -122,7 +154,7 @@ public class HzAccessoriesLibs {
     }
 
     public void setpCreateName(String pCreateName) {
-        this.pCreateName = pCreateName == null ? null : pCreateName.trim();
+        this.pCreateName = pCreateName;
     }
 
     public String getpUpdateName() {
@@ -130,6 +162,6 @@ public class HzAccessoriesLibs {
     }
 
     public void setpUpdateName(String pUpdateName) {
-        this.pUpdateName = pUpdateName == null ? null : pUpdateName.trim();
+        this.pUpdateName = pUpdateName;
     }
 }

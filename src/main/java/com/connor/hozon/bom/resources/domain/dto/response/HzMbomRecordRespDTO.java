@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
-import sql.pojo.BaseChangePOJO;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * Created by haozt on 2018/5/24
  */
 public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
+    private static final long serialVersionUID = -8395418870732248205L;
     /**
      * id
      */
@@ -128,30 +130,18 @@ public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
      * 对应的颜色件id
      */
     private String colorId;
-    /**
-     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
-     */
-    private Integer updateType;
-
-    public Integer getUpdateType() {
-        return updateType;
-    }
-
-    public void setUpdateType(Integer updateType) {
-        this.updateType = updateType;
-    }
 
     /**
-     * 生效时间
+     * 单车用量
      */
-    private String effectTime;
+    private JSONObject vehNum;
 
-    public String getEffectTime() {
-        return effectTime;
+    public JSONObject getVehNum() {
+        return vehNum;
     }
 
-    public void setEffectTime(String effectTime) {
-        this.effectTime = effectTime;
+    public void setVehNum(JSONObject vehNum) {
+        this.vehNum = vehNum;
     }
 
     public String getColorId() {

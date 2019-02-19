@@ -1,8 +1,10 @@
 package sql.pojo.change;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class HzAttachmentRecord {
+public class HzAttachmentRecord implements Serializable {
+    private static final long serialVersionUID = 7168630468413840800L;
     private Long id;
 
     private String formId;

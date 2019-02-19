@@ -210,7 +210,7 @@ public class SynProcessRouteService {
 
                 coach.get(packNumOfFeature.get(fpuid)).put(processRoute.getLineNum(), respDTO);
                 transProcessRouteService.getInput().getItem().add(processRoute.getZpptci006());
-                supProcess(processRoute);
+//                supProcess(processRoute);
             }
 
         }

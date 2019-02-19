@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/8/20
  * @Description:
  */
-public class EditEWOImpactDeptReqDTO {
+public class EditEWOImpactDeptReqDTO extends BaseDTO {
     private String deptIds;
 
     private String ewoNo;

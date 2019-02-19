@@ -89,18 +89,18 @@ var toolbar = [
         }
     },
     {
-        text: '关联变更单号',
+        text: '关联变更单',
         iconCls: 'glyphicon glyphicon-log-out',
         handler: function () {
             var rows = $table.bootstrapTable('getSelections');
             if (rows.length == 0) {
-                window.Ewin.alert({message: '请至少选择一条需要关联变更单号的数据!'});
+                window.Ewin.alert({message: '请至少选择一条需要关联变更单的数据!'});
                 return false;
             }
             let msg = "<div style='max-height: 350px;overflow:scroll'>";
             for (let i in rows) {
                 if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
-                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已关联变更单号"});
+                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已关联变更单"});
                     return false;
                 }else if(1 == rows[i].cfgStatus || "1" == rows[i].cfgStatus){
                     window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已生效，不能关联变更单"});
@@ -119,7 +119,7 @@ var toolbar = [
                         return false;
                     }
                     else {
-                        window.Ewin.confirm({title: '请确认关联变更单号的特性值', message: msg, width: 500}).on(function (e) {
+                        window.Ewin.confirm({title: '请确认关联变更单的特性值', message: msg, width: 500}).on(function (e) {
                             if (e) {
                                 var puids = "";
                                 for (let i in rows) {
@@ -154,7 +154,7 @@ var toolbar = [
             }
             for (let i in rows) {
                 if (1 == rows[i].cfgIsInProcess || "1" == rows[i].cfgIsInProcess) {
-                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已关联变更单号，不允许撤销"});
+                    window.Ewin.alert({message: rows[i].pCfg0ObjectId + "已关联变更单，不允许撤销"});
                     return false;
                 }
             }

@@ -60,4 +60,69 @@
         t70.p_color_code
         )
     </select>
+
+
+    <!--查询油漆车身的颜色件信息-->
+    <select id="selectPaintList"  resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+            resultMap="BaseResultMap">
+            SELECT
+            t10.PUID  as colorUid,
+            t10.P_COLOR_CODE  as colorCode,
+            t10.P_COLOR_NAME  as colorName
+            FROM
+            HZ_DERIVATIVE_MATERIEL_BASIC T
+            JOIN HZ_CFG0_MODEL_COLOR_RECORD t2 ON T2.puid = T .DMB_COLOR_MODEL_UID
+            JOIN HZ_CFG0_COLORSET t10 ON t2.P_MODEL_SHELL = t10.P_COLOR_CODE
+            WHERE
+            T . ID = #{dmbId,jdbcType=DECIMAL}
+    </select>
+
+    <!--查询其他2Y层信息 不包含油漆车身  油漆车身存储信息比较特殊 需要单独查询 -->
+    <select id="selectOthersList"  resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+            resultMap="BaseResultMap">
+              SELECT
+            t4.PUID as colorUid,
+            t4.P_COLOR_NAME as colorName,
+            t4.P_COLOR_CODE as colorCode,
+            t7.CFG_BOMLINE_UID as bomLineUid
+        FROM
+            Hz_Derivative_Materiel_Basic T
+            join  HZ_CFG0_MODEL_COLOR_RECORD t2 on t2.PUID = t.DMB_COLOR_MODEL_UID
+            join 	HZ_CFG0_MODEL_COLOR_DETAIL t3 on t3.MODEL_UID = t2.PUID
+            join  HZ_CFG0_COLORSET t4 on t4.PUID = t3.P_COLOR_UID
+            join 	HZ_CFG0_OPTIONFAMILY_RECORD t5 on t5.puid = t3.P_CFG_UID
+            join 	HZ_CFG0_RECORD t6 on t6.P_CFG0_FAMILY_PUID = t5.puid
+            join  HZ_FULL_CFG_WITHCFG_RECORD t7 on t7.CFG_CFG0_UID = t6.PUID
+            join HZ_BOM_LINE_RECORD t8 on t7.CFG_BOMLINE_UID = t8.puid
+        where
+            t.id = #{dmbId,jdbcType=DECIMAL} and t8.puid in(
+            SELECT
+            t2.FL_MODEL_BOMLINE_UID
+        FROM
+            Hz_Derivative_Materiel_Basic T
+            join  HZ_FULL_CFG_MODEL_RECORD t2 on t2.MOD_MODEL_UID = t.DMB_MODEL_UID
+            join HZ_BOM_LINE_RECORD t3 on t2.FL_MODEL_BOMLINE_UID = t3.puid
+        where
+            t.id = #{dmbId,jdbcType=DECIMAL}
+        AND
+            T2.MOD_POINT_TYPE = 2
+        )
+    </select>
+
+
+    <!--查询全部的实心打点图-->
+    <select id="selectSolidPointGraphFromFullConfig" resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+            resultMap="BaseResultMap">
+        SELECT
+            t2.FL_MODEL_BOMLINE_UID as bomLineUid,
+            t2.MOD_CFG0_UID, t3.P_BOM_LINE_PART_NAME
+        FROM
+            Hz_Derivative_Materiel_Basic T
+            join  HZ_FULL_CFG_MODEL_RECORD t2 on t2.MOD_MODEL_UID = t.DMB_MODEL_UID
+            join HZ_BOM_LINE_RECORD t3 on t2.FL_MODEL_BOMLINE_UID = t3.puid
+        where
+            t.id =  #{dmbId,jdbcType=DECIMAL}
+        AND
+            T2.MOD_POINT_TYPE = 2
+    </select>
 </mapper>

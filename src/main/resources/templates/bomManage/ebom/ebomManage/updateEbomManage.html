@@ -5,19 +5,21 @@
 <body>
 <form id="ebomMainForm" role="form" method="post" action="ebom/update/ebom">
     <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/><!--th:value="${entity.eBomPuid}"-->
-    <input id="level" name="level" type="hidden" th:value="${data.level}"/>
-    <!--<div class="form-group">-->
-        <!--<label for="lineId">零件号<span>*</span></label>-->
-        <!--<input class="form-control" id="lineId" name="lineId" type="text"-->
-               <!--th:value="${data.lineId}"-->
-               <!--placeholder="请输入零件号"/>-->
-    <!--</div>-->
-    <!--<div class="form-group">-->
-        <!--<label for="pBomLinePartName">名称<span>*</span></label>-->
-        <!--<input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"-->
-               <!--th:value="${data.pBomLinePartName}"-->
-               <!--placeholder="请输入名称"/>-->
-    <!--</div>-->
+    <div class="form-group">
+        <label for="lineId">零件号<span>*</span></label>
+        <input class="form-control" id="lineId" name="lineId" type="text"
+               th:value="${data.lineId}" disabled/>
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartName">名称<span>*</span></label>
+        <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"
+               th:value="${data.pBomLinePartName}" disabled/>
+    </div>
+    <div class="form-group">
+        <label for="level">层级<span>*</span></label>
+        <input class="form-control" id="level" name="level" type="text"
+               th:value="${data.level}" disabled/>
+    </div>
     <!--<div class="form-group">-->
         <!--<label for="pBomOfWhichDept">专业</label>-->
         <!--<input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"-->
@@ -271,14 +273,14 @@
             <!--<option th:selected="${data.getpBomLinePartResource()=='虚拟总成'?true:false}">虚拟总成</option>-->
         <!--</select>-->
     <!--</div>-->
-    <div class="form-group">
-        <label for="pInOutSideFlag">内外饰标识</label>
-        <select class="form-control" name="pInOutSideFlag" id="pInOutSideFlag" placeholder="请选择内外饰标识">
-            <option></option>
-            <option th:selected="${data.getpInOutSideFlag()=='内饰件'?true:false}">内饰件</option>
-            <option th:selected="${data.getpInOutSideFlag()=='外饰件'?true:false}">外饰件</option>
-        </select>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="pInOutSideFlag">内外饰标识</label>-->
+        <!--<select class="form-control" name="pInOutSideFlag" id="pInOutSideFlag" placeholder="请选择内外饰标识">-->
+            <!--<option></option>-->
+            <!--<option th:selected="${data.getpInOutSideFlag()=='内饰件'?true:false}">内饰件</option>-->
+            <!--<option th:selected="${data.getpInOutSideFlag()=='外饰件'?true:false}">外饰件</option>-->
+        <!--</select>-->
+    <!--</div>-->
     <div class="form-group">
         <label for="pUpc">UPC</label>
         <input class="form-control" id="pUpc" name="pUpc" type="text"
@@ -311,6 +313,22 @@
             <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
         </select>
     </div>
+
+    <div class="form-group">
+        <label for="sparePart">备件</label>
+        <input class="form-control" id="sparePart" name="sparePart" type="text"
+               th:value="${data.sparePart}"
+               placeholder="请输入备件"/>
+    </div>
+
+
+    <div class="form-group">
+        <label for="sparePartNum">备件编号</label>
+        <input class="form-control" id="sparePartNum" name="sparePartNum" type="text"
+               th:value="${data.sparePartNum}"
+               placeholder="请输入备件编号"/>
+    </div>
+
     <div class="form-group" th:each="_data,c:${data.getMap().keySet()}">
         <label class="control-label" th:text="${_data}+'(用量)'"></label>
         <input class="form-control" th:id="${_data}" th:name="${_data}" type="text"
@@ -320,7 +338,7 @@
 <script th:inline="javascript">
     <![CDATA[
     var data = [[${data}]];
-    $(function () {
+        $(function () {
             var list = data.map;
             var keys = [];
             for (var key in list) {
@@ -329,9 +347,17 @@
                 }
             }
             var level = data.level;
+            // todo  下次取消注释 暂时来不及做了
             if (level == "2Y") {
                 $("#colorPart").attr({"disabled": "disabled"});
+                // var temp = '<div class="form-group">\n' +
+                //     '        <label for="lineNo">查询编号<span></span></label>\n' +
+                //     '        <input class="form-control" id="lineNo" name="lineNo" type="text"\n' +
+                //     '               value="'+data.lineNo+'"/>\n' +
+                //     '    </div>';
+                // $("#ebomMainForm").append(temp);
             }
+
             $('#ebomMainForm').bootstrapValidator({
                 message: 'This value is not valid',
                 feedbackIcons: {

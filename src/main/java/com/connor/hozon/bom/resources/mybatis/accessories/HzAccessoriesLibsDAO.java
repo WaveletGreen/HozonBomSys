@@ -4,7 +4,6 @@ import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesLibs
 import com.connor.hozon.bom.resources.domain.query.HzAccessoriesLibsPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.accessories.HzAccessoriesLibs;
-import sql.pojo.accessories.HzImportAccessoriesLibs;
 
 import java.util.List;
 
@@ -18,11 +17,18 @@ public interface HzAccessoriesLibsDAO {
 
     int insert(HzAccessoriesLibs accessoriesLibs);
 
-    int importList(List<HzImportAccessoriesLibs> records);
+    int importList(List<HzAccessoriesLibs> records);
 
     int update(HzAccessoriesLibs hzAccessoriesLibs);
 
     int deleteList(List<DeleteHzAccessoriesLibsDTO> libs);
+
+    /**
+     * 批量更新 根据物料号更新数据
+     * @param libs
+     * @return
+     */
+    int updateList(List<HzAccessoriesLibs> libs);
 
     List<HzAccessoriesLibs> getHzAccessoriesLibs(String puid);
 

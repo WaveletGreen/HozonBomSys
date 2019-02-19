@@ -13,13 +13,19 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.sys.entity.User;
+import com.connor.hozon.bom.sys.exception.HzBomException;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.epl.HzEPLRecord;
 
 import java.io.IOException;
 import java.util.*;
@@ -38,8 +44,12 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 @Configuration
 public class HzCraftService implements IHzCraftService {
 
-    @Autowired
     HzPbomRecordDAO hzPbomRecordDAO;
+
+    private HzEPLDAO hzEPLDAO;
+
+    private TransactionTemplate configTransactionTemplate;
+
     /**
      * 预设随机数产生的精度后移位
      */
@@ -130,9 +140,21 @@ public class HzCraftService implements IHzCraftService {
      */
     private final static int ACCURACY_LVL3 = 10000;
 
+    @Autowired
+    public void setHzPbomRecordDAO(HzPbomRecordDAO hzPbomRecordDAO) {
+        this.hzPbomRecordDAO = hzPbomRecordDAO;
+    }
+    @Autowired
+    public void setHzEPLDAO(HzEPLDAO hzEPLDAO) {
+        this.hzEPLDAO = hzEPLDAO;
+    }
+    @Autowired
+    public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
+        this.configTransactionTemplate = configTransactionTemplate;
+    }
+
     /**
      * 自动生成工艺合件，执行过程有可能产生异常
-     *
      * @param projectUid    项目UID
      * @param parentUids    合成源父层
      * @param childrenUids  合成源子层
@@ -149,38 +171,52 @@ public class HzCraftService implements IHzCraftService {
         this.targetPartCodes.clear();
         this.projectUid = projectUid;
         param.put("projectId", projectUid);
-        try {
-            //从配置文件中获取设置信息
-            preSetFromProperties();
-            //子层数据整理
-            craftChildren(childrenUids, pbom, myWavelet);
-            //父层数据整理
-            craftChildren(parentUids, pbom, myLovelyWavelet);
-            //获取所有的父层
-            craftParentTree(parentUids);
-            //挂载目标点的的查找编号和排序号的整理
-            craftTarget(targetUids);
-            //重新整理受影响的子层的查找编号
-            craftResetOrder();
-            //构建新的树形结构
-            craftBuildNewTree(theMaxInorder, pbom);
-            //设置合成源的父层是否isHas，是否为Y
-            craftSrcParent();
-            //插入新的合件树
-            craftInsert(targetTreeMap);
-            //整理受影响父的节点isHas
-            craftTargetsIsHas(targetUids);
-            //删除合成源点
-            craftDelete();
-            //对受影响的子层进行查找编号更新
-            craftUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            //清除缓存
-            clearCoach();
-        }
+
+        //事务保护
+        configTransactionTemplate.execute(new TransactionCallback<Void>() {
+            @Override
+            public Void doInTransaction(TransactionStatus status) {
+                try {
+                    //从配置文件中获取设置信息
+                    preSetFromProperties();
+                    //子层数据整理
+                    craftChildren(childrenUids, pbom, myWavelet);
+                    //父层数据整理
+                    craftChildren(parentUids, pbom, myLovelyWavelet);
+                    //获取所有的父层
+                    craftParentTree(parentUids);
+                    //挂载目标点的的查找编号和排序号的整理
+                    craftTarget(targetUids);
+                    //重新整理受影响的子层的查找编号
+                    craftResetOrder();
+                    //构建新的树形结构
+                    craftBuildNewTree(theMaxInorder, pbom);
+                    //设置合成源的父层是否isHas，是否为Y
+                    craftSrcParent();
+                    //插入新的合件树
+                    craftInsert(targetTreeMap);
+                    //整理受影响父的节点isHas
+                    craftTargetsIsHas(targetUids);
+                    //删除合成源点
+                    craftDelete();
+                    //对受影响的子层进行查找编号更新
+                    craftUpdate();
+                    //新生成的零件号添加到EPL 2018/12/26 by haozt
+                    HzEPLRecord hzEPLRecord = new HzEPLRecord();
+                    hzEPLRecord.setPartId(pbom.getLineId());
+                    hzEPLRecord.setPartName(pbom.getpBomLinePartName());
+                    hzEPLRecord.setPartResource(pbom.getpBomLinePartResource());
+                    hzEPLDAO.insert(hzEPLRecord);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new HzBomException("工艺合件合成失败！"+ e);
+                } finally {
+                    //清除缓存
+                    clearCoach();
+                }
+                return null;
+            }
+        });
         return true;
     }
 
@@ -218,7 +254,7 @@ public class HzCraftService implements IHzCraftService {
         record.setProductLine(data.get("productLine"));
         record.setMouldType(data.get("mouldType"));
         record.setOuterPart(data.get("outerPart"));
-        record.setColorPart(checkString(data.get("colorPart")) ? Integer.valueOf(data.get("colorPart")) : null);
+//        record.setColorPart(checkString(data.get("colorPart")) ? Integer.valueOf(data.get("colorPart")) : null);
         record.setStation(data.get("station"));
         /**自动数据**/
         record.setCreateName(user.getUsername());
@@ -234,8 +270,8 @@ public class HzCraftService implements IHzCraftService {
         record.setIsPart(0);
         //不是部门级
         record.setIsDept(0);
-        //可用状态
-        record.setStatus(1);
+        //可用状态 草稿状态
+        record.setStatus(2);
         //不是颜色件
         record.setColorPart(0);
         //设置为工艺合件

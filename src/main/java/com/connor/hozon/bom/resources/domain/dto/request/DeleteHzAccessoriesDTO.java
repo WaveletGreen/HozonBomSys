@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/7/16
  * @Description:
  */
-public class DeleteHzAccessoriesDTO {
+public class DeleteHzAccessoriesDTO extends BaseDTO {
     /**
      * 要删除的puid
      */

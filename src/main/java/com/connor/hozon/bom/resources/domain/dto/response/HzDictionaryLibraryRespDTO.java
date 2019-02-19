@@ -1,12 +1,14 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * Created with IntelliJ IDEA.
  * User: xlf
  * Date: 2018/8/31
  * Time: 8:56
  */
-public class HzDictionaryLibraryRespDTO {
+public class HzDictionaryLibraryRespDTO extends BaseDTO {
     private Integer No;
     /**
      * 主键puid

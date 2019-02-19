@@ -253,12 +253,17 @@ public class SynMaterielService implements ISynMaterielService {
 //        _mapCoach.forEach((k, v) ->
 //                System.out.println(v.getpMaterielCode())
 //        );
-        //执行
-        if (debug) {
-            return result;
-        } else if (_mapCoach.size() > 0) {
-            transMasterMaterialService.execute();
+        try{
+            //执行
+            if (debug) {
+                return result;
+            } else if (_mapCoach.size() > 0) {
+                transMasterMaterialService.execute();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
         List<ZPPTCO001> resultPool = transMasterMaterialService.getOut().getItem();
         if (resultPool != null)
             for (ZPPTCO001 zpptco001 : resultPool) {

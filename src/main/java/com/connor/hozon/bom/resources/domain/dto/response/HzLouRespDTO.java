@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/8/16
  * @Description:
  */
-public class HzLouRespDTO {
+public class HzLouRespDTO extends BaseDTO {
     /**
      * 配置名
      */

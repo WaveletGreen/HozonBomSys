@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.materiel.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
@@ -27,8 +28,11 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.change.HzApplicantChangeRecord;
 import sql.pojo.change.HzAuditorChangeRecord;
@@ -56,8 +60,13 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     @Autowired
     private HzChangeDataRecordDAO hzChangeDataRecordDAO;
 
+
+    private TransactionTemplate configTransactionTemplate;
     @Autowired
-    private HzApplicantChangeDAO hzApplicantChangeDAO;
+    public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
+        this.configTransactionTemplate = configTransactionTemplate;
+    }
+
 
     private int errorCount =0;
 
@@ -85,49 +94,19 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             record.setpVinPerNo(editHzMaterielReqDTO.getpVinPerNo());
             record.setpSpareMaterial(editHzMaterielReqDTO.getpSpareMaterial());
             String loosePartFlag = editHzMaterielReqDTO.getpLoosePartFlag();
-            if("N".equals(loosePartFlag.toUpperCase())){
-                record.setpLoosePartFlag(0);
-            }else if("Y".equals(loosePartFlag.toUpperCase())){
-                record.setpLoosePartFlag(1);
-            }else{
-                record.setpLoosePartFlag(null);
-            }
+            record.setpLoosePartFlag(BOMTransConstants.constantStringToInteger(loosePartFlag));
             record.setpMrpController(editHzMaterielReqDTO.getpMrpController());
             record.setpUpdateName(user.getUserName());
             record.setPuid(editHzMaterielReqDTO.getPuid());
             record.setpBasicUnitMeasure(editHzMaterielReqDTO.getpBasicUnitMeasure());
-            if("Y".equals(editHzMaterielReqDTO.getpInventedPart().toUpperCase())){
-                record.setpInventedPart(1);
-            }else if("N".equals(editHzMaterielReqDTO.getpInventedPart().toUpperCase())){
-                record.setpInventedPart(0);
-            }else {
-                record.setpInventedPart(null);
-            }
+            record.setpInventedPart(BOMTransConstants.constantStringToInteger(editHzMaterielReqDTO.getpInventedPart()));
             record.setResource(editHzMaterielReqDTO.getResource());
-            if("Y".equals(editHzMaterielReqDTO.getpColorPart().toUpperCase())){
-                record.setpColorPart(1);
-            }else if("N".equals(editHzMaterielReqDTO.getpColorPart().toUpperCase())){
-                record.setpColorPart(0);
-            }else {
-                record.setpColorPart(null);
-            }
+            record.setpColorPart(BOMTransConstants.constantStringToInteger(editHzMaterielReqDTO.getpColorPart()));
             record.setpHeight(editHzMaterielReqDTO.getpHeight());
 
-            if("内饰件".equals(editHzMaterielReqDTO.getpInOutSideFlag())){
-                record.setpInOutSideFlag(1);
-            }else if("外饰件".equals(editHzMaterielReqDTO.getpInOutSideFlag())){
-                record.setpInOutSideFlag(0);
-            }else {
-                record.setpInOutSideFlag(null);
-            }
+            record.setpInOutSideFlag(BOMTransConstants.constantStringToInteger(editHzMaterielReqDTO.getpInOutSideFlag()));
 
-            if("Y".equals(editHzMaterielReqDTO.getP3cPartFlag().toUpperCase())){
-                record.setP3cPartFlag(1);
-            }else if("N".equals(editHzMaterielReqDTO.getP3cPartFlag().toUpperCase())){
-                record.setP3cPartFlag(0);
-            }else {
-                record.setP3cPartFlag(null);
-            }
+            record.setP3cPartFlag(BOMTransConstants.constantStringToInteger(editHzMaterielReqDTO.getP3cPartFlag()));
 
             record.setpPartImportantDegree(editHzMaterielReqDTO.getpPartImportantDegree());
             record.setpMaterielDesc(editHzMaterielReqDTO.getpMaterielDesc());
@@ -143,22 +122,46 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     }
 
     @Override
-    public WriteResultRespDTO deleteHzMateriel(String puid) {
+    public WriteResultRespDTO deleteHzMateriel(String puids) {
         try{
-            WriteResultRespDTO respDTO = new WriteResultRespDTO();
-            if(StringUtil.isEmpty(puid)){
-                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-                respDTO.setErrMsg("请选择一条需要删除的数据！");
-                return respDTO;
+            if(StringUtils.isBlank(puids)){
+                return WriteResultRespDTO.IllgalArgument();
             }
-            int i = hzMaterielDAO.delete(puid);
-            if(i>0){
-                return WriteResultRespDTO.getSuccessResult();
-            }
+            List<String> list = Lists.newArrayList(puids.split(","));
+
+            List<String> updateList = new ArrayList<>();
+
+            List<HzMaterielRecord> deleteList = new ArrayList<>();
+
+            list.forEach(l->{
+                HzMaterielQuery hzMaterielQuery  = new HzMaterielQuery();
+                hzMaterielQuery.setPuid(l);
+                HzMaterielRecord hzMaterielRecord = hzMaterielDAO.getHzMaterielRecord(hzMaterielQuery);
+                if(hzMaterielRecord != null){
+                    if(StringUtils.isNotBlank(hzMaterielRecord.getRevision())){
+                        updateList.add(l);
+                    }else {
+                        deleteList.add(hzMaterielRecord);
+                    }
+                }
+            });
+
+            configTransactionTemplate.execute(new TransactionCallback<Void>() {
+                @Override
+                public Void doInTransaction(TransactionStatus status) {
+                    if(ListUtil.isNotEmpty(updateList)){
+                        hzMaterielDAO.deleteList(updateList);
+                    }
+                    if(ListUtil.isNotEmpty(deleteList)){
+                        hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
+                    }
+                    return null;
+                }
+            });
         }catch (Exception e){
             return WriteResultRespDTO.getFailResult();
         }
-        return WriteResultRespDTO.getFailResult();
+        return WriteResultRespDTO.getSuccessResult();
     }
 
     @Override

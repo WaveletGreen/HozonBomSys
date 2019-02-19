@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.domain.query;
 
-public class HzWorkListBasicInfoQuery {
+public class HzWorkListBasicInfoQuery extends DefaultQuery{
     private Long id;//根据ID查找一条记录
 
     private String changeNum;

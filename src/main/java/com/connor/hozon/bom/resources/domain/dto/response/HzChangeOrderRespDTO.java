@@ -1,15 +1,18 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/11/12
  * @Description:
  */
-public class HzChangeOrderRespDTO {
+public class HzChangeOrderRespDTO extends BaseDTO {
 
     private static final String ORDER_FROM_TC="TC端";
 
     private static final String ORDER_FROM_BOM="BOM端";
+    private static final long serialVersionUID = 3453726195579320687L;
 
     /**
      * 主键id
@@ -109,6 +112,11 @@ public class HzChangeOrderRespDTO {
      * !=1:任务结束
      */
     private String changeAccepter;
+
+    /**
+     * 审核人
+     */
+    private String auditor;
 
     public String getChangeAccepter() {
         return changeAccepter;
@@ -339,5 +347,13 @@ public class HzChangeOrderRespDTO {
 
     public void setStatus(Integer status) {
         Status = status;
+    }
+
+    public String getAuditor() {
+        return auditor;
+    }
+
+    public void setAuditor(String auditor) {
+        this.auditor = auditor;
     }
 }
