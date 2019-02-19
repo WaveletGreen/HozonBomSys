@@ -44,7 +44,7 @@ public class TransOptionsService extends Author implements ITransmitService {
     private Holder<TABLEOFZPPTCO004> outputContainer;
 
     public TransOptionsService() {
-        serviceExecutor = new ZPPTCSAP004Service();
+//        serviceExecutor = new ZPPTCSAP004Service();
         //输入参数
         inputContainer = new Holder<>();
         input = new TABLEOFZPPTCI004();

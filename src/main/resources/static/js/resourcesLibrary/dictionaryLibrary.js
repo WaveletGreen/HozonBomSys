@@ -4,7 +4,7 @@
  * Date: 2018/8/28
  * Time: 16:58
  */
-
+var indexCoach = {};
 $(document).ready((function () {
     var projectId = $("#project", window.top.document).val();
     var url = "dict/list";
@@ -24,7 +24,12 @@ function initTable(url) {
         type: "GET",
         success: function (result) {
             var column = [];
-            column.push({field: 'ck', checkbox: true, Width: 50});
+            column.push({
+                field: 'ck', checkbox: true, Width: 50,
+                formatter: function (value, row, index) {
+                    row.myIndex=index;
+                }
+            });
             var data = result.data;
             var keys = [];
             var values;
@@ -64,7 +69,7 @@ function initTable(url) {
                 showColumns: true,                         //是否显示所有的列
                 showToggle: false,                        //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                        //是否显示刷新按钮
-                columns:column,
+                columns: column,
                 toolbars: [
                     {
                         text: '添加',
@@ -145,7 +150,11 @@ function initTable(url) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.confirm({title: '提示', message: '是否要删除您选择的记录', width: 500}).on(function (e) {
+                                        window.Ewin.confirm({
+                                            title: '提示',
+                                            message: '是否要删除您选择的记录',
+                                            width: 500
+                                        }).on(function (e) {
                                             if (e) {
                                                 $.ajax({
                                                     type: "POST",
@@ -183,7 +192,11 @@ function initTable(url) {
                 ],
             })
         }
-    })
+    });
+    $('#dictionaryLibraryTable').on("click-row.bs.table", function (e, row, $element) {
+        var index = $element.data('index');
+
+    });
 }
 
 function toPage() {
@@ -193,10 +206,16 @@ function toPage() {
     }
 }
 
-$(document).keydown(function(event) {
+$(document).keydown(function (event) {
     if (event.keyCode == 13) {
-        $('form').each(function() {
+        $('form').each(function () {
             event.preventDefault();
         });
     }
 });
+
+function updateTableRow(opts){
+    return tableUpdateHelper.updateTableRow(opts);
+}
+
+

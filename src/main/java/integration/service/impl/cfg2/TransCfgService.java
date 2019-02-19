@@ -47,7 +47,7 @@ public class TransCfgService extends Author implements ITransmitService {
     private Holder<TABLEOFZPPTCO002> outputContainer;
 
     public TransCfgService() {
-        serviceExecutor = new ZPPTCSAP002Service();
+//        serviceExecutor = new ZPPTCSAP002Service();
         //输入参数
         inputContainer = new Holder<>();
         input = new TABLEOFZPPTCI002();

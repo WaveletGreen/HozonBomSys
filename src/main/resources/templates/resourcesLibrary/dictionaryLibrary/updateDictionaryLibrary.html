@@ -4,7 +4,7 @@
 <link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="dictionaryLibraryForm" role="form" method="post" action="dict/updateById">
-    <input id="puid"name="id" type="hidden" th:value="${data.puid}">
+    <input id="puid" name="id" type="hidden" th:value="${data.puid}">
     <div class="form-group">
         <label for="professionCh">专业部<span>*</span></label>
         <input class="form-control" id="professionCh" name="professionCh" type="text"
@@ -96,7 +96,8 @@
                th:value="${data.note}"    placeholder="请输入备注"/>
     </div>
 </form>
-<script th:inline="javascript">
+<script th:src="@{/layer/layer.js}"></script>
+<script>
     <![CDATA[
     $(function () {
         $('#dictionaryLibraryForm').bootstrapValidator({
@@ -195,9 +196,13 @@
                     data: myData,
                     success:
                         function (result) {
-                            activeTabBodyRefresh();
+                            // activeTabBodyRefresh();
                             if (result.success) {
-                                layer.msg('修改成功', {icon: 1, time: 2000})
+                                if(getActiveTab().updateTableRow({updateData:myData,tableId:"dictionaryLibraryTable",uncheck:true})){
+                                    layer.msg('修改成功', {icon: 1, time: 2000});
+                                    activeTabBodyReset();
+                                }
+                                // console.log($(document.querySelectorAll('iframe')[1].contentWindow.document.getElementById('dictionaryLibraryTable')));
                             }
                             else if(!result.success){
                                 window.Ewin.alert({message: result.errMsg})
@@ -219,6 +224,5 @@
     });
     ]]>
 </script>
-<script th:src="@{/layer/layer.js}"></script>
 </body>
 </html>
