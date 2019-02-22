@@ -239,7 +239,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                         pTargetWeight = "";
                     }else {
                         BigDecimal bigDecimal = new BigDecimal(pTargetWeight);
-                        pTargetWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+                        pTargetWeight =String.valueOf(bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
                     }
                 }catch (Exception e){
                     try {

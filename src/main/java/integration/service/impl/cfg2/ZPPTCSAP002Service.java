@@ -11,10 +11,10 @@ import javax.xml.ws.Holder;
  * 执行服务
  */
 public class ZPPTCSAP002Service
-//        extends SAPForTCProxy
+        extends SAPForTCProxy
         implements IExecutor {
     @Override
     public <T, E> void doExecute(Holder<T> input, Holder<E> output) throws Exception {
-//        super.getSAPForTCProxyHttpSoap11Endpoint().zppTCSAP002((Holder<TABLEOFZPPTCI002>) input, (Holder<TABLEOFZPPTCO002>) output);
+        super.getSAPForTCProxyHttpSoap11Endpoint().zppTCSAP002((Holder<TABLEOFZPPTCI002>) input, (Holder<TABLEOFZPPTCO002>) output);
     }
 }

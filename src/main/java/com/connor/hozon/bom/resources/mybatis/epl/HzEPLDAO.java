@@ -72,4 +72,27 @@ public interface HzEPLDAO {
     int updateList(List<HzEPLRecord> hzEPLRecordsUpdate);
 
     int insertList(List<HzEPLRecord> hzEPLRecords);
+
+    /**
+     * 查询以 WS GDT 结尾的数据 part_id
+     * @param projectId 项目id
+     * @return EPL ids 集合
+     */
+    List<Long> getEPLIdsWherePartIdEndWithWSAndGDT(String projectId);
+
+    /**
+     * 获取EPL 零件分类为虚拟总成件
+     * TC传输过来的部分数据有问题 需要进行转换
+     * Virtual Assembly 为虚拟总成件 BOM端进行中文显示而不是英文
+     * @param projectId 项目id
+     * @return 零件分类为虚拟总成件的 EPL ID
+     */
+    List<Long> getVirtualAssemblyEPLRecord(String projectId);
+
+    /**
+     * 将零件分类为英文虚拟总成件 改为中文
+     * @param longs 更改EPL ID集合
+     * @return
+     */
+    int updateVirtualAssemblyEnToZh(List<Long> longs);
 }

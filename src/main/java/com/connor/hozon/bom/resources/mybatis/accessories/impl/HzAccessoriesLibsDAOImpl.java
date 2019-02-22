@@ -141,4 +141,9 @@ public class HzAccessoriesLibsDAOImpl  extends BaseSQLUtil implements HzAccessor
         map.put("materielCodes",materielCodes);
         return super.findForList("HzAccessoriesLibsDAOImpl_queryAccessoriesByMaterielCodes",map);
     }
+
+    @Override
+    public List<HzAccessoriesLibs> queryAccessoriesByCode(String materielCode) {
+        return super.findForList("HzAccessoriesLibsDAOImpl_findByCode",materielCode);
+    }
 }

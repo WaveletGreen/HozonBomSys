@@ -649,8 +649,6 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
         String tableName = ChangeTableNameEnum.HZ_EBOM_AFTER.getTableName();
         //获取数据信息
         List<String> puids = Lists.newArrayList(reqDTO.getPuids().split(","));
-
-
         //统计操作数据
         Map<String,Object> map = new HashMap<>();
         Map<Integer,List<String>> puidMap = HzBomSysFactory.spiltList(puids);//1000条约束

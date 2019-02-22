@@ -53,6 +53,12 @@
         <result column="EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime" />
     </resultMap>
 
+    <!-- 返回EPL ID-->
+    <resultMap id="EplIdMap" type="java.lang.Long">
+        <id column="ID" jdbcType="DOUBLE" property="id" />
+    </resultMap>
+
+
     <sql id="Base_Column_List">
     ID, PROJECT_ID, PART_ID, PART_OF_WHICH_DEPT, PART_NAME, PART_CLASS, PART_EN_NAME,
     PART_RESOURCE, STATUS, CREATE_TIME, UPDATE_TIME, FASTENER, IS_3CPART, IN_OUT_SIDE_FLAG,
@@ -368,6 +374,54 @@
         where
         PROJECT_ID = #{projectPuid,jdbcType=VARCHAR}
     </select>
+
+
+    <!--查询以 GDT 和WS 结尾的数据id-->
+    <select id="HzEPLDAOImpl_getEPLIdsWherePartIdEndWithWSAndGDT" parameterType="java.lang.String" resultMap="EplIdMap">
+        SELECT
+            ID
+        FROM
+            HZ_EPL_RECORD
+        WHERE
+         PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+        and
+            (
+                PART_ID LIKE '%WS'
+                OR PART_ID LIKE '%ws'
+                OR PART_ID LIKE '%gdt'
+                OR PART_ID LIKE '%GDT'
+            )
+    </select>
+
+
+    <!--查询零件分类为虚拟总成（Virtual Assembly）的EPL清单
+      为TC端数据传输的失误买单-->
+    <select id="HzEPLDAOImpl_getVirtualAssemblyEPLRecord" parameterType="java.lang.String" resultMap="EplIdMap">
+       SELECT
+            ID
+        FROM
+            HZ_EPL_RECORD
+        WHERE
+         PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+        and
+         PART_CLASS = 'Virtual Assembly'
+    </select>
+
+
+    <!--将EPL清单零件分类的虚拟总成件 英文改成中文 为TC端数据传输的失误买单-->
+    <update id="HzEPLDAOImpl_updateVirtualAssemblyEnToZh" parameterType="java.util.List">
+       <foreach collection="list" index="index" item="item" open="begin" separator=";" close=";end;">
+            update HZ_EPL_RECORD
+            <set>
+                PART_CLASS = '虚拟总成'
+            </set>
+            where ID = #{list[${index}]}
+       </foreach>
+    </update>
+
+
+
+
 
     <update id="HzEPLDAOImpl_updateList" parameterType="java.util.List">
       <foreach collection="list" index="index" item="item" open="begin" separator=";" close=";end;">
