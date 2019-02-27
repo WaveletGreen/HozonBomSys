@@ -24,19 +24,19 @@ public class HzChosenSupplier  {
 
     private String chosenSupplier;
 
-    private String parts;
+    private Double parts;
 
-    private BigDecimal singleCarPrice;
+    private Double singleCarPrice;
 
-    private BigDecimal moldsCostNotRevenue;
+    private Double moldsCostNotRevenue;
 
-    private BigDecimal moldsCostHasRevenue;
+    private Double moldsCostHasRevenue;
 
     private String moldsCostDetails;
 
-    private BigDecimal gaugeCost;
+    private Double gaugeCost;
 
-    private BigDecimal exploitationCost;
+    private Double exploitationCost;
 
     private String aSamplePiece;
 
@@ -135,35 +135,35 @@ public class HzChosenSupplier  {
         this.chosenSupplier = chosenSupplier == null ? null : chosenSupplier.trim();
     }
 
-    public String getParts() {
+    public Double getParts() {
         return parts;
     }
 
-    public void setParts(String parts) {
-        this.parts = parts == null ? null : parts.trim();
+    public void setParts(Double parts) {
+        this.parts = parts == null ? null : parts;
     }
 
-    public BigDecimal getSingleCarPrice() {
+    public Double getSingleCarPrice() {
         return singleCarPrice;
     }
 
-    public void setSingleCarPrice(BigDecimal singleCarPrice) {
+    public void setSingleCarPrice(Double singleCarPrice) {
         this.singleCarPrice = singleCarPrice;
     }
 
-    public BigDecimal getMoldsCostNotRevenue() {
+    public Double getMoldsCostNotRevenue() {
         return moldsCostNotRevenue;
     }
 
-    public void setMoldsCostNotRevenue(BigDecimal moldsCostNotRevenue) {
+    public void setMoldsCostNotRevenue(Double moldsCostNotRevenue) {
         this.moldsCostNotRevenue = moldsCostNotRevenue;
     }
 
-    public BigDecimal getMoldsCostHasRevenue() {
+    public Double getMoldsCostHasRevenue() {
         return moldsCostHasRevenue;
     }
 
-    public void setMoldsCostHasRevenue(BigDecimal moldsCostHasRevenue) {
+    public void setMoldsCostHasRevenue(Double moldsCostHasRevenue) {
         this.moldsCostHasRevenue = moldsCostHasRevenue;
     }
 
@@ -175,19 +175,19 @@ public class HzChosenSupplier  {
         this.moldsCostDetails = moldsCostDetails == null ? null : moldsCostDetails.trim();
     }
 
-    public BigDecimal getGaugeCost() {
+    public Double getGaugeCost() {
         return gaugeCost;
     }
 
-    public void setGaugeCost(BigDecimal gaugeCost) {
+    public void setGaugeCost(Double gaugeCost) {
         this.gaugeCost = gaugeCost;
     }
 
-    public BigDecimal getExploitationCost() {
+    public Double getExploitationCost() {
         return exploitationCost;
     }
 
-    public void setExploitationCost(BigDecimal exploitationCost) {
+    public void setExploitationCost(Double exploitationCost) {
         this.exploitationCost = exploitationCost;
     }
 

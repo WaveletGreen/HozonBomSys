@@ -17,4 +17,8 @@ public interface HzChosenSupplierDAO {
     List<HzChosenSupplier> selectProjectId(String projectPuid);
 
     int update(HzChosenSupplier hzChosenSupplier);
+
+    int delete(String[] ids);
+
+    List<HzChosenSupplier> selectCreator(HzChosenSupplier hzChosenSupplierQuery);
 }
