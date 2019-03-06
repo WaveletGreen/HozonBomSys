@@ -11,7 +11,7 @@
     <result column="ITEM_NAME" jdbcType="VARCHAR" property="itemName" />
     <result column="EACH_CAR_QUANTITY" jdbcType="DECIMAL" property="eachCarQuantity" />
     <result column="CHOSEN_SUPPLIER" jdbcType="VARCHAR" property="chosenSupplier" />
-    <result column="PARTS" jdbcType="VARCHAR" property="parts" />
+    <result column="PARTS" jdbcType="DECIMAL" property="parts" />
     <result column="SINGLE_CAR_PRICE" jdbcType="DECIMAL" property="singleCarPrice" />
     <result column="MOLDS_COST_NOT_REVENUE" jdbcType="DECIMAL" property="moldsCostNotRevenue" />
     <result column="MOLDS_COST_HAS_REVENUE" jdbcType="DECIMAL" property="moldsCostHasRevenue" />
@@ -53,7 +53,7 @@
     values (#{id,jdbcType=DECIMAL}, #{csCreateDate,jdbcType=TIMESTAMP}, #{csCreator,jdbcType=VARCHAR}, 
       #{csUpdateDate,jdbcType=TIMESTAMP}, #{csUpdater,jdbcType=VARCHAR}, #{itemId,jdbcType=VARCHAR}, 
       #{itemName,jdbcType=VARCHAR}, #{eachCarQuantity,jdbcType=DECIMAL}, #{chosenSupplier,jdbcType=VARCHAR}, 
-      #{parts,jdbcType=VARCHAR}, #{singleCarPrice,jdbcType=DECIMAL}, #{moldsCostNotRevenue,jdbcType=DECIMAL}, 
+      #{parts,jdbcType=DECIMAL}, #{singleCarPrice,jdbcType=DECIMAL}, #{moldsCostNotRevenue,jdbcType=DECIMAL},
       #{moldsCostHasRevenue,jdbcType=DECIMAL}, #{moldsCostDetails,jdbcType=VARCHAR}, 
       #{gaugeCost,jdbcType=DECIMAL}, #{exploitationCost,jdbcType=DECIMAL}, #{aSamplePiece,jdbcType=VARCHAR}, 
       #{bSamplePiece,jdbcType=VARCHAR}, #{cSamplePiece,jdbcType=VARCHAR}, #{csLowerCostingoPlan,jdbcType=VARCHAR}, 
@@ -158,7 +158,7 @@
         #{chosenSupplier,jdbcType=VARCHAR},
       </if>
       <if test="parts != null">
-        #{parts,jdbcType=VARCHAR},
+        #{parts,jdbcType=DECIMAL},
       </if>
       <if test="singleCarPrice != null">
         #{singleCarPrice,jdbcType=DECIMAL},
@@ -207,6 +207,9 @@
       HZ_CHOSEN_SUPPLIER
       where
       PROJECTPUID = #{projectPuid,jdbcType=VARCHAR}
+      <if test="csCreator != null and csCreator !=''">
+        and CS_CREATOR = #{csCreator,jdbcType=VARCHAR}
+      </if>
       <if test="itemId != null and itemId !=''">
         and ITEM_ID like CONCAT(CONCAT('%',#{itemId,jdbcType=VARCHAR}),'%')
       </if>
@@ -266,7 +269,7 @@
       ITEM_NAME = #{itemName,jdbcType=VARCHAR},
       EACH_CAR_QUANTITY = #{eachCarQuantity,jdbcType=DECIMAL},
       CHOSEN_SUPPLIER = #{chosenSupplier,jdbcType=VARCHAR},
-      PARTS = #{parts,jdbcType=VARCHAR},
+      PARTS = #{parts,jdbcType=DECIMAL},
       SINGLE_CAR_PRICE = #{singleCarPrice,jdbcType=DECIMAL},
       MOLDS_COST_NOT_REVENUE = #{moldsCostNotRevenue,jdbcType=DECIMAL},
       MOLDS_COST_HAS_REVENUE = #{moldsCostHasRevenue,jdbcType=DECIMAL},
@@ -278,8 +281,29 @@
       C_SAMPLE_PIECE = #{cSamplePiece,jdbcType=VARCHAR},
       CS_LOWER_COSTINGO_PLAN = #{csLowerCostingoPlan,jdbcType=VARCHAR},
       REMARK = #{remark,jdbcType=VARCHAR},
-      SPECIALTYs = #{specialty,jdbcType=VARCHAR}
+      SPECIALTY = #{specialty,jdbcType=VARCHAR}
       where
       ID = #{id,jdbcType=DECIMAL}
   </update>
+
+  <delete id="delete" parameterType="java.util.List">
+    delete  from
+      HZ_CHOSEN_SUPPLIER
+    where
+      ID in
+      <foreach collection="list" index="index" item="item" open="(" close=")" separator=",">
+          #{item.id,jdbcType=DECIMAL}
+      </foreach>
+  </delete>
+
+  <select id="selectCreator" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      HZ_CHOSEN_SUPPLIER
+    where
+      PROJECTPUID = #{projectPuid,jdbcType=VARCHAR}
+    and
+      CS_CREATOR = #{csCreator,jdbcType=VARCHAR}
+  </select>
 </mapper>

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/chosenSupplier")
 public class HzChosenSupplierContorller {
@@ -20,7 +23,7 @@ public class HzChosenSupplierContorller {
 
     @RequestMapping("/loadChosenSupplier")
     @ResponseBody
-    public JSONObject load(HzChosenSupplier hzChosenSupplier){
+    public Map<String, Object> load(HzChosenSupplier hzChosenSupplier){
         return hzChosenSupplierService.load(hzChosenSupplier);
     }
 
@@ -48,7 +51,14 @@ public class HzChosenSupplierContorller {
 
     @RequestMapping("/update")
     @ResponseBody
-    public JSONObject update(@RequestBody HzChosenSupplier hzChosenSupplier){
+    public Map<String, Object> update(@RequestBody HzChosenSupplier hzChosenSupplier){
         return hzChosenSupplierService.update(hzChosenSupplier);
     }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public JSONObject delete(String ids){
+        return hzChosenSupplierService.delete(ids);
+    }
+
 }

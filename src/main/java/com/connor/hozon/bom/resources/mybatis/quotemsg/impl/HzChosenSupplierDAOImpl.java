@@ -4,9 +4,11 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.resources.domain.model.HzChosenSupplier;
 import com.connor.hozon.bom.resources.mybatis.quotemsg.HzChosenSupplierDAO;
 import org.springframework.context.annotation.Configuration;
-import sql.BaseSQLUtil;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Configuration
@@ -47,5 +49,22 @@ public class HzChosenSupplierDAOImpl extends BasicDaoImpl<HzChosenSupplier> impl
     @Override
     public int update(HzChosenSupplier hzChosenSupplier) {
         return baseSQLUtil.executeUpdate(hzChosenSupplier,clzName+"update");
+    }
+
+    @Override
+    public int delete(String[] ids) {
+        List<HzChosenSupplier> hzChosenSuppliers = new ArrayList<>();
+        for(String id : ids){
+            HzChosenSupplier hzChosenSupplier = new HzChosenSupplier();
+            hzChosenSupplier.setId(Long.valueOf(id));
+            hzChosenSuppliers.add(hzChosenSupplier);
+        }
+        return baseSQLUtil.executeDelete(hzChosenSuppliers,clzName+"delete");
+//        return baseSQLUtil.executeDelete(hzChosenSuppliers,clzName+"delete");
+    }
+
+    @Override
+    public List<HzChosenSupplier> selectCreator(HzChosenSupplier hzChosenSupplierQuery) {
+        return baseSQLUtil.executeQuery(hzChosenSupplierQuery,clzName+"selectCreator");
     }
 }
