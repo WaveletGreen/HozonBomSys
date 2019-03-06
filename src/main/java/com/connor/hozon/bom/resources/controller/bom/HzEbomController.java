@@ -54,7 +54,7 @@ public class HzEbomController extends BaseController {
 
     private LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
 
-    private Map<String,Object> orderDataObject = new HashMap();
+    private Map<String,Object> orderDataObject = new HashMap<>();
 
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {

@@ -554,7 +554,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                 }
                             }
                         });
-                        hzPbomRecordDAO.deleteListByPuids(deleteList,ChangeTableNameEnum.HZ_EBOM.getTableName());
+                        hzPbomRecordDAO.deleteListByPuids(deleteList,ChangeTableNameEnum.HZ_PBOM.getTableName());
 
                         List<HzPbomLineRecord> pbomUpdateRecords  = new ArrayList<>();
                         if(ListUtil.isNotEmpty(pbomHasChildrenPuids)){

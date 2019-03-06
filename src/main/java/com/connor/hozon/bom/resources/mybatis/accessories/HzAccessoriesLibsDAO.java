@@ -48,4 +48,6 @@ public interface HzAccessoriesLibsDAO {
      * @return
      */
     List<HzAccessoriesLibs> queryAccessoriesByMaterielCodes(List<String> materielCodes);
+
+    List<HzAccessoriesLibs> queryAccessoriesByCode(String materielCode);
 }

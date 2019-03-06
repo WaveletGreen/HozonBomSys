@@ -832,7 +832,7 @@
 
   <!--批量删除 真的删除-->
   <delete id="HzPbomRecordDAOImpl_deleteListByPuids"  parameterType="java.util.HashMap">
-    delete HZ_PBOM_RECORD where PUID in
+    delete ${tableName} where PUID in
     <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
     #{puids[${index}]}
     </foreach>

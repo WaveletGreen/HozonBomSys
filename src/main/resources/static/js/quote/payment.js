@@ -5,13 +5,6 @@
  * Time: 10:05
  */
 
-/**
- * Created with IntelliJ IDEA.
- * User: xlf
- * Date: 2018/12/6
- * Time: 10:21
- */
-
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var url = ""
