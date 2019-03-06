@@ -127,6 +127,9 @@ var toolbar = [
             var gaugeCost = 0.0;
             var exploitationCost = 0.0;
             for(i in rows ){
+                if(rows[i].itemId=="统计"){
+                    continue;
+                }
                 parts = addNum(parts,rows[i].parts);
                 singleCarPrice = addNum(singleCarPrice,rows[i].singleCarPrice);
                 moldsCostNotRevenue = addNum(moldsCostNotRevenue,rows[i].moldsCostNotRevenue);
@@ -139,10 +142,13 @@ var toolbar = [
                 "remark":"","specialty":""};
 
             if(countFlag){
-                $("#offerManageTable").bootstrapTable("insertRow",{index:0,row:data});
+                // $("#offerManageTable").bootstrapTable("insertRow",{index:0,row:data});
+                $("#offerManageTable").bootstrapTable("append",data);
                 countFlag = false;
             }else {
-                $('#offerManageTable').bootstrapTable('updateRow', {index: 0, row: data});
+                // $('#offerManageTable').bootstrapTable('updateRow', {index: 0, row: data});
+                var count = $('#offerManageTable').bootstrapTable('getData').length;
+                $('#offerManageTable').bootstrapTable('updateRow', {index: count-1, row: data});
             }
         }
     }
