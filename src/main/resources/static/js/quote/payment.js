@@ -122,7 +122,7 @@ function initTable(url) {
             //     {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
             //     {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
             // ],
-            [
+            /*[
                 {
                     field: '',
                     title: '序号',
@@ -360,8 +360,21 @@ function initTable(url) {
                     colspan: 4,
                     rowspan: 1
                 },
-            ],
+            ],*/
             [
+                {
+                    field: '',
+                    title: '序号',
+                    align: 'center',
+                    valign: 'middle',
+                    width: 50,
+                    colspan: 1,
+                    rowspan: 2,
+                    formatter: function (value, row, index) {
+                        var options = $table.bootstrapTable('getOptions');
+                        return options.pageSize * (options.pageNumber - 1) + index + 1;
+                    }
+                },
                 {
                     field: '',
                     title: '项目类别',
@@ -457,6 +470,22 @@ function initTable(url) {
                     valign: 'middle',
                     colspan: 7,
                     rowspan: 1
+                },
+                {
+                    field: '',
+                    title: '已付',
+                    align: 'center',
+                    valign: 'middle',
+                    colspan: 1,
+                    rowspan: 2
+                },
+                {
+                    field: '',
+                    title: '未付',
+                    align: 'center',
+                    valign: 'middle',
+                    colspan: 1,
+                    rowspan: 2
                 },
                 {
                     field: '',
