@@ -173,15 +173,19 @@ function doRefresh(projectPuid) {
 
 
 function initTable() {
-    column.push({
+    var columnTitle1 = [];
+    var columnTitle2 = [];
+    columnTitle1.push({
         field: 'ck',
+        colspan: 1, rowspan: 2,
         checkbox: true
     })
-    column.push({
+    columnTitle1.push({
         field: '',
         title: '序号',
         align: 'center',
         width: 50,
+        colspan: 1, rowspan: 2,
         formatter: function (value, row, index) {
             var options = $table.bootstrapTable('getOptions');
             if(options.pageSize="ALL"){
@@ -191,23 +195,29 @@ function initTable() {
 
         }
     })
-    column.push({field: 'itemId', title: '零件号', align: 'center', valign: 'middle',})
-    column.push({field: 'itemName', title: '零件名称', align: 'center', valign: 'middle',})
-    column.push({field: 'eachCarQuantity', title: '每车数量', align: 'center', valign: 'middle',})
-    column.push({field: 'chosenSupplier', title: '中选供应商', align: 'center', valign: 'middle',})
-    column.push({field: 'parts', title: '零部件(不含税)', align: 'center', valign: 'middle',})
-    column.push({field: 'singleCarPrice', title: '单车零部件价格(不含税)', align: 'center', valign: 'middle',})
-    column.push({field: 'moldsCostNotRevenue', title: '模具费(不含税)', align: 'center', valign: 'middle',})
-    column.push({field: 'moldsCostHasRevenue', title: '模具费(含税)', align: 'center', valign: 'middle',})
-    column.push({field: 'moldsCostDetails', title: '模具费付费情况', align: 'center', valign: 'middle',})
-    column.push({field: 'gaugeCost', title: '检具费(不含税)', align: 'center', valign: 'middle',})
-    column.push({field: 'exploitationCost', title: '开发费(不含税)', align: 'center', valign: 'middle',})
-    column.push({field: 'aSamplePiece', title: 'A样件', align: 'center', valign: 'middle',})
-    column.push({field: 'bSamplePiece', title: 'B样件', align: 'center', valign: 'middle',})
-    column.push({field: 'cSamplePiece', title: 'C样件', align: 'center', valign: 'middle',})
-    column.push({field: 'csLowerCostingoPlan', title: '供应商降本计划', align: 'center', valign: 'middle',})
-    column.push({field: 'remark', title: '备注', align: 'center', valign: 'middle',})
-    column.push({field: 'specialty', title: '专业', align: 'center', valign: 'middle',})
+    columnTitle1.push({field: 'itemId', title: '零件号', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'itemName', title: '零件名称', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'eachCarQuantity', title: '每车数量', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'chosenSupplier', title: '中选供应商', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'parts', title: '零部件(不含税)', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'singleCarPrice', title: '单车零部件价格(不含税)', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'moldsCostNotRevenue', title: '模具费(不含税)', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'moldsCostHasRevenue', title: '模具费(含税)', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'moldsCostDetails', title: '模具费付费情况', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'gaugeCost', title: '检具费(不含税)', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'exploitationCost', title: '开发费(不含税)', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'aSamplePiece', title: 'A样件', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'bSamplePiece', title: 'B样件', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'cSamplePiece', title: 'C样件', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'csLowerCostingoPlan', title: '供应商降本计划', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    columnTitle1.push({field: 'remark', title: '备注', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,})
+    // columnTitle1.push({field: 'specialty', title: '专业', align: 'center', valign: 'middle',colspan: 1, rowspan: 1,})
+    columnTitle1.push({field: 'specialty', title: '专业', align: 'center', valign: 'middle',colspan: 1, rowspan: 1,})
+
+    column.push(columnTitle1);
+
+    columnTitle2.push({field: 'specialty', title: '专业', align: 'center', valign: 'middle',});
+    column.push(columnTitle2);
     var projectPuid = $("#project", window.top.document).val();
     if (!checkIsSelectProject(projectPuid)) {
         return;

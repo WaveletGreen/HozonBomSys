@@ -177,18 +177,7 @@
         </selectKey>
         insert into HZ_FULL_CFG_MAIN_RECORD (ID, PROJECT_UID, STATUS, STAGE, VERSION, EFFECTIVE_DATE, CREATE_DATE, UPDATE_DATE,
         CREATOR, UPDATER,FM_IS_RELEASE )
-        values (
-        #{id,jdbcType=DECIMAL},
-        #{projectUid,jdbcType=VARCHAR},
-        #{status,jdbcType=DECIMAL},
-        #{stage,jdbcType=DECIMAL},
-        #{version,jdbcType=VARCHAR},
-        #{effectiveDate,jdbcType=TIMESTAMP},
-        #{createDate,jdbcType=TIMESTAMP},
-        #{updateDate,jdbcType=TIMESTAMP},
-        #{creator,jdbcType=VARCHAR},
-        #{updater,jdbcType=VARCHAR},
-        #{fmIsRelease,jdbcType=DECIMAL})
+        values x
     </insert>
 
     <update id="updateStatusByOrderId" parameterType="java.util.Map">

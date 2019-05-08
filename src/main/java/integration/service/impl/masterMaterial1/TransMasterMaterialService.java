@@ -52,7 +52,7 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
     private Holder<TABLEOFZPPTCO001> outputContainer;
 
     public TransMasterMaterialService() {
-        zpptcsap001Service = new ZPPTCSAP001Service();
+//        zpptcsap001Service = new ZPPTCSAP001Service();
         //输入参数
         inputContainer = new Holder<>();
         input = new TABLEOFZPPTCI001();

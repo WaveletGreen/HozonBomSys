@@ -44,7 +44,7 @@ public class TransProcessRouteService extends Author implements ITransmitService
     private Holder<TABLEOFZPPTCO006> outputContainer;
 
     public TransProcessRouteService() {
-        serviceExecutor = new ZPPTCSAP006Service();
+//        serviceExecutor = new ZPPTCSAP006Service();
         //输入参数
         inputContainer = new Holder<>();
         input = new TABLEOFZPPTCI006();
