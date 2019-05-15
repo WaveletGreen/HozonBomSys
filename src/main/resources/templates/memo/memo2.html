@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2019/2/28 Time: 13:04-->
+<head>
+    <meta charset="UTF-8">
+    <title>日历备忘录</title>
+    <link th:href="@{/css/memo2/normalize.css}" rel="stylesheet"/>
+    <link th:href="@{/css/memo2/default.css}" rel="stylesheet"/>
+    <link th:href="@{/css/memo2/jquery.e-calendar.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="htmleaf-container">
+    <div class="htmleaf-content bgcolor-8">
+        <div id="calendar"></div>
+    </div>
+</div>
+<script th:src="@{/js/memo2/jquery-1.11.0.min.js}"></script>
+<script th:src="@{/js/memo2/jquery.e-calendar.js}"></script>
+<script th:src="@{/js/memo2/index.js}"></script>
+</body>
+</html>

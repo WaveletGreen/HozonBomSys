@@ -48,7 +48,7 @@ public class HzAccessoriesLibsController extends BaseController {
         tableTitle.put("pDosageBicycle", "单车用量");
         tableTitle.put("pNote", "备注");
         toJSONResponse(Result.build(tableTitle), response);
-    }
+    }  
 
     /**
      * 插入一条记录

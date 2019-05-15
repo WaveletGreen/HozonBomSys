@@ -111,8 +111,12 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/VPPSLibrary").setViewName("/resourcesLibrary/VPPSLibrary/VPPSLibrary");
         //单车BOM
         registry.addViewController("/bikeBom").setViewName("/bikeBom/bikeBom");
-
-
+        //备忘录
+        registry.addViewController("/memo").setViewName("/memo/memo");
+        //备忘录2
+        registry.addViewController("/memo2").setViewName("/memo/memo2");
+        //备忘录3
+        registry.addViewController("/memo3").setViewName("/memo/memo3");
 
 
         //待办事项
