@@ -31,6 +31,7 @@ function doQuery() {
     $('#paymentTable').bootstrapTable('destroy');
 }
 
+
 function initTable(url) {
     var projectPuid = $("#project", window.top.document).val();
     if (!checkIsSelectProject(projectPuid)) {

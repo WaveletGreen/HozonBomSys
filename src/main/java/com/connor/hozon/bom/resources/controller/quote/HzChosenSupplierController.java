@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/chosenSupplier")
-public class HzChosenSupplierContorller {
+public class HzChosenSupplierController {
 
     @Autowired
     private HzChosenSupplierService hzChosenSupplierService;
