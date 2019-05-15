@@ -71,6 +71,12 @@ public interface HzWorkProcedureDAO {
     int updateList(List<HzWorkProcedure> list);
 
     /**
+     * 批量修改
+     * @param list
+     * @return
+     */
+    int updateWorkProcedureList(List<HzWorkProcedure> list);
+    /**
      * 批量新增
      * @param list
      * @param tableName

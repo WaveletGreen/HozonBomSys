@@ -234,6 +234,7 @@ public class UserController extends GenericController<User,QueryUser> {
         if(null != user){
             List<UserRole> userRoles = user.getRoles();//系统已存在的用户角色
             User loginUser = userService.findByLogin(UserInfo.getUser().getLogin());//当前登录用户
+
             if(!loginUser.getLogin().equals(user.getLogin())){
                 if(!PrivilegeUtil.hasAdministratorPrivilege(loginUser)){
                     Map<String, Object> map = new HashMap<>();
@@ -265,7 +266,7 @@ public class UserController extends GenericController<User,QueryUser> {
                 }
             }
 
-            if(SystemStaticConst.DCPROXY.equals(entity.getLogin())){
+            if(SystemStaticConst.DCPROXY.equals(entity.getLogin()) || SystemStaticConst.DCPROXY.equals(loginUser.getLogin())){
                 for(UserRole role :userRoles){
                     if(PrivilegeUtil.ROLE_ADMIN.equals(role.getName())){
                         if(StringUtil.isEmpty(entity.getRoleArray()) ||!entity.getRoleArray().contains(String.valueOf(role.getId()))){
@@ -280,11 +281,9 @@ public class UserController extends GenericController<User,QueryUser> {
             String ids = entity.getRoleArray();
             boolean write = true;
             if(!PrivilegeUtil.administrator()) {
-                if (StringUtil.isEmpty(ids) && ListUtil.isEmpty(userRoles)) {
-                    write = true;
-                } else if (StringUtil.isEmpty(ids) && ListUtil.isNotEmpty(userRoles)) {
+                 if (StringUtil.isEmpty(ids) && ListUtil.isNotEmpty(userRoles)) {
                     write = false;
-                }else if(!StringUtil.isEmpty(ids)&&ListUtil.isEmpty(userRoles)){
+                }else if(!StringUtil.isEmpty(ids) && ListUtil.isEmpty(userRoles)){
                     write = false;
                 }
                 else if (ListUtil.isNotEmpty(userRoles) && !StringUtil.isEmpty(ids)) {

@@ -11,9 +11,11 @@ import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
+import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import lombok.Data;
@@ -44,12 +46,13 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 @Configuration
 public class HzCraftService implements IHzCraftService {
 
-    HzPbomRecordDAO hzPbomRecordDAO;
+    private HzPbomRecordDAO hzPbomRecordDAO;
 
     private HzEPLDAO hzEPLDAO;
 
     private TransactionTemplate configTransactionTemplate;
 
+    private HzPbomService hzPbomService;
     /**
      * 预设随机数产生的精度后移位
      */
@@ -152,6 +155,10 @@ public class HzCraftService implements IHzCraftService {
     public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
         this.configTransactionTemplate = configTransactionTemplate;
     }
+    @Autowired
+    public void setHzPbomService(HzPbomService hzPbomService) {
+        this.hzPbomService = hzPbomService;
+    }
 
     /**
      * 自动生成工艺合件，执行过程有可能产生异常
@@ -206,6 +213,8 @@ public class HzCraftService implements IHzCraftService {
                     hzEPLRecord.setPartId(pbom.getLineId());
                     hzEPLRecord.setPartName(pbom.getpBomLinePartName());
                     hzEPLRecord.setPartResource(pbom.getpBomLinePartResource());
+                    hzEPLRecord.setProjectId(projectUid);
+                    hzEPLRecord.setStatus(1);
                     hzEPLDAO.insert(hzEPLRecord);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -528,19 +537,29 @@ public class HzCraftService implements IHzCraftService {
      */
     private void craftDelete() {
         List<DeleteHzPbomReqDTO> listOfDto = new ArrayList<>();
+        StringBuffer stringBuffer = new StringBuffer();
+        DeleteHzPbomReqDTO dto = new DeleteHzPbomReqDTO();
+        dto.setProjectId(projectUid);
         for (int i = 0; i < theChildrenNeedToDelete.size(); i++) {
             HzPbomLineRecord record = theChildrenNeedToDelete.get(i);
-            DeleteHzPbomReqDTO dto = new DeleteHzPbomReqDTO();
-            dto.seteBomPuid(record.geteBomPuid());
-            dto.setProjectId(projectUid);
-            dto.setPuids(record.getPuid());
-            listOfDto.add(dto);
+            stringBuffer.append(record.geteBomPuid()+",");
+//            dto.seteBomPuid(record.geteBomPuid());
+//            dto.setProjectId(projectUid);
+//            dto.setPuids(record.getPuid());
+//            listOfDto.add(dto);
         }
-        //执行插入
-        if (craftIsInfluenceToDB) {
-            if (hzPbomRecordDAO.deleteList(listOfDto) <= 0) {
-                logger.error("删除合成源数据失败");
+        dto.setPuids(stringBuffer.toString());
+        //执行删除
+        if (craftIsInfluenceToDB) {// 已生效的进行状态标记 未生效的直接删除
+            WriteResultRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(dto);
+            if(!WriteResultRespDTO.isSuccess(respDTO)){
+                logger.error(respDTO.getErrMsg()+"->删除合成源数据失败");
             }
+
+//            if (hzPbomRecordDAO.deleteList(listOfDto) <= 0) {
+//                logger.error("删除合成源数据失败");
+//            }
+
         }
     }
 

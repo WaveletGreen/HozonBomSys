@@ -30,6 +30,8 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.*;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzBOMScheduleTaskDAO;
@@ -42,8 +44,10 @@ import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
+import com.google.common.collect.Lists;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -417,9 +421,56 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         });
                     }
 
+
                     if (ListUtil.isNotEmpty(deletePuids)) {
-                        hzEbomRecordDAO.deleteByPuids(deletePuids,ChangeTableNameEnum.HZ_EBOM.getTableName());
+                        //父层删除 子层一起删除
+                        List<String> deleteList = new ArrayList<>();//直接进行删除操作
+                        List<String> ebomHasChildrenPuids = new ArrayList<>();
+                            deletePuids.forEach(puid-> {
+                                HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid, projectId);
+                                if (record != null) {
+                                    ebomHasChildrenPuids.add(record.getParentUid());
+                                    if (Integer.valueOf(1).equals(record.getIsHas())) {
+                                        HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
+                                        hzEbomTreeQuery.setPuid(puid);
+                                        hzEbomTreeQuery.setProjectId(projectId);
+                                        List<HzEPLManageRecord> list = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
+                                        if (ListUtil.isNotEmpty(list)) {
+                                            list.forEach(l -> {
+                                                deleteList.add(l.getPuid());
+                                            });
+                                        }
+
+                                    } else {
+                                        deleteList.add(puid);
+                                    }
+                                }
+                            });
+                        hzEbomRecordDAO.deleteByPuids(deleteList,ChangeTableNameEnum.HZ_EBOM.getTableName());
+
+                        List<HzEPLManageRecord> ebomUpdateRecords  = new ArrayList<>();
+                        if(ListUtil.isNotEmpty(ebomHasChildrenPuids)){
+                            ebomHasChildrenPuids.forEach(puid->{
+                                HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
+                                hzEbomTreeQuery.setPuid(puid);
+                                hzEbomTreeQuery.setProjectId(projectId);
+                                List<HzEPLManageRecord> list = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
+                                if(ListUtil.isNotEmpty(list) && list.size() ==1){
+                                    HzEPLManageRecord record = new HzEPLManageRecord();
+                                    record.setPuid(list.get(0).getPuid());
+                                    record.setIs2Y(list.get(0).getIs2Y());
+                                    if(!Integer.valueOf(1).equals(record.getIs2Y())){
+                                        record.setIsHas(0);
+                                        ebomUpdateRecords.add(record);
+                                    }
+                                }
+                            });
+                        }
+                        if(ListUtil.isNotEmpty(ebomUpdateRecords)){
+                            hzEbomRecordDAO.updateListByPuids(ebomUpdateRecords);
+                        }
                     }
+
                     if (ListUtil.isNotEmpty(updateList)) {
                         hzEbomRecordDAO.updateListByEplId(updateList);
                     }
@@ -452,6 +503,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 //即将要更新的数据
                 List<HzPbomLineRecord> updateList = new ArrayList<>();
                 //即将要删除的数据 线程安全
+                List<String> deletePuids = new ArrayList<>();
                 StringBuffer stringBuffer = new StringBuffer();
                 //要新增的数据
                 List<HzPbomLineRecord> addList = new ArrayList<>();
@@ -460,6 +512,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         Date date = new Date();
                         records.forEach(record -> {
                             if (Integer.valueOf(4).equals(record.getStatus())) {
+                                deletePuids.add(record.geteBomPuid());
                                 stringBuffer.append(record.geteBomPuid() + ",");
                             } else {
                                 HzPbomLineRecord hzPbomLineRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
@@ -479,7 +532,51 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     }
 
                     if (StringUtils.isNotBlank(stringBuffer.toString())) {
-                        hzPbomRecordDAO.deleteListByPuids(stringBuffer.toString(),ChangeTableNameEnum.HZ_PBOM.getTableName());
+                        //父层删除 子层一起删除
+                        List<String> deleteList = new ArrayList<>();//直接进行删除操作
+                        List<String> pbomHasChildrenPuids = new ArrayList<>();
+                        deletePuids.forEach(puid-> {
+                            HzPbomLineRecord record = hzPbomRecordDAO.getHzPbomByEbomPuid(puid, projectId);
+                            if (record != null) {
+                                pbomHasChildrenPuids.add(record.getParentUid());
+                                if (Integer.valueOf(1).equals(record.getIsHas())) {
+                                    HzPbomTreeQuery hzPbomTreeQuery = new HzPbomTreeQuery();
+                                    hzPbomTreeQuery.setPuid(puid);
+                                    hzPbomTreeQuery.setProjectId(projectId);
+                                    List<HzPbomLineRecord> list = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
+                                    if (ListUtil.isNotEmpty(list)) {
+                                        list.forEach(l -> {
+                                            deleteList.add(l.getPuid());
+                                        });
+                                    }
+                                } else {
+                                    deleteList.add(puid);
+                                }
+                            }
+                        });
+                        hzPbomRecordDAO.deleteListByPuids(deleteList,ChangeTableNameEnum.HZ_PBOM.getTableName());
+
+                        List<HzPbomLineRecord> pbomUpdateRecords  = new ArrayList<>();
+                        if(ListUtil.isNotEmpty(pbomHasChildrenPuids)){
+                            pbomHasChildrenPuids.forEach(puid->{
+                                HzPbomTreeQuery hzPbomTreeQuery = new HzPbomTreeQuery();
+                                hzPbomTreeQuery.setPuid(puid);
+                                hzPbomTreeQuery.setProjectId(projectId);
+                                List<HzPbomLineRecord> list = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
+                                if(ListUtil.isNotEmpty(list) && list.size() ==1){
+                                    HzPbomLineRecord record = new HzPbomLineRecord();
+                                    record.setPuid(list.get(0).getPuid());
+                                    record.setIs2Y(list.get(0).getIs2Y());
+                                    if(!Integer.valueOf(1).equals(record.getIs2Y())){
+                                        record.setIsHas(0);
+                                        pbomUpdateRecords.add(record);
+                                    }
+                                }
+                            });
+                        }
+                        if(ListUtil.isNotEmpty(pbomUpdateRecords)){
+                            hzPbomRecordDAO.updateListByPuids(pbomUpdateRecords);
+                        }
                     }
                     if (ListUtil.isNotEmpty(updateList)) {
                         hzPbomRecordDAO.updateList(updateList);

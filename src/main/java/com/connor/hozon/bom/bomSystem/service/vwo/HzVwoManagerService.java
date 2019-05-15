@@ -4079,7 +4079,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             String title = iterator.next();
             boolean beforTitleFlag = true;
             for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeans){
-                if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId()==hzDMBasicChangeBeans.getId()) {
+                if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId().equals(hzDMBasicChangeBeans.getId())) {
                     if("车身颜色<br/>HZCSYS".equals(title)){
                         basicMap.put("s0", hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
                         beforTitleFlag = false;
@@ -4098,6 +4098,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             }
             if(beforTitleFlag){
                 basicMap.put("s" + titleNum,"-");
+                titleNum++;
             }
         }
     }

@@ -138,7 +138,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                     return WriteResultRespDTO.fileFormatError();
                 }
 
-
             configTransactionTemplate.execute(new TransactionCallback<Void>() {
                 @Override
                 public Void doInTransaction(TransactionStatus status) {
@@ -153,7 +152,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                     if(WriteResultRespDTO.isSuccess(respDTO)){
                         return null;
                     }
-                    throw new HzBomException("数据导入失败！");
+                    throw new HzBomException(respDTO.getErrMsg());
                 }
             });
 
@@ -161,7 +160,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
-            return WriteResultRespDTO.getFailResult();
+            return WriteResultRespDTO.failResultRespDTO(e.getMessage());
         }
     }
 
@@ -240,7 +239,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                         pTargetWeight = "";
                     }else {
                         BigDecimal bigDecimal = new BigDecimal(pTargetWeight);
-                        pTargetWeight =String.valueOf( bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
+                        pTargetWeight =String.valueOf(bigDecimal.setScale(3, BigDecimal.ROUND_HALF_UP));
                     }
                 }catch (Exception e){
                     try {
@@ -437,8 +436,6 @@ public class FileUploadServiceImpl implements FileUploadService {
                 }
             }
 
-
-
             List<HzPbomLineRecord> hzPbomLineRecords = new ArrayList<>();
             List<String> carParts = hzMbomService.loadingCarPartType();
             if(ListUtil.isNotEmpty(records)){
@@ -463,37 +460,23 @@ public class FileUploadServiceImpl implements FileUploadService {
                     }
                 });
 
-                List<Thread> threads = new ArrayList<>();
-                CountDownLatch countDownLatch = new CountDownLatch(2);
-                RefreshMbomThread eBomThread = new RefreshMbomThread(countDownLatch) {
-                    @Override
-                    public void refreshMbom() {
-                        hzEbomRecordDAO.importList(records);
-                    }
-                };
-                threads.add(new Thread(eBomThread));
 
-                RefreshMbomThread pBomThread = new RefreshMbomThread(countDownLatch) {
-                    @Override
-                    public void refreshMbom() {
-                        if(ListUtil.isNotEmpty(hzPbomLineRecords)){
-                            hzPbomRecordDAO.insertList(hzPbomLineRecords);
-                        }
-                    }
-                };
+                configTransactionTemplate.execute(new TransactionCallback<Void>() {
 
-                threads.add(new Thread(pBomThread));
-
-                for(Thread th:threads){
-                    th.start();
-                }
-                try {
-                    countDownLatch.await();
-                }catch (Exception e){
-                    e.printStackTrace();
-                    return WriteResultRespDTO.getFailResult();
-                }
-
+                      @Override
+                      public Void doInTransaction(TransactionStatus status) {
+                          try {
+                          hzEbomRecordDAO.importList(records);
+                          if(ListUtil.isNotEmpty(hzPbomLineRecords)){
+                              hzPbomRecordDAO.insertList(hzPbomLineRecords);
+                          }
+                          }catch (Exception e){
+                              e.printStackTrace();
+                              throw new HzBomException("BOM数据导入失败!",e);
+                          }
+                          return null;
+                      }
+                  });
             }
 
             ExcelUtil.deleteFile();
@@ -1038,8 +1021,8 @@ public class FileUploadServiceImpl implements FileUploadService {
             short lastCellNum = title.getLastCellNum();
             List<String> titleName = new ArrayList<>();
             if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
-                if(lastCellNum > 50){
-                    for(int i = 50;i<lastCellNum;i++){//第50列以后为要导入的版型信息
+                if(lastCellNum > 52){
+                    for(int i = 53;i<lastCellNum;i++){//第50列以后为要导入的版型信息
                         boolean find = false;
                         String s = ExcelUtil.getCell(title,i).getStringCellValue();
                         if(s.contains(BOMTransConstants.VEH_DOSAGE_CN)){

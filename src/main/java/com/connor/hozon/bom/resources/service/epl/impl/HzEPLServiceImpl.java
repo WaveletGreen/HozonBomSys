@@ -50,10 +50,6 @@ public class HzEPLServiceImpl implements HzEPLService {
 
     private HzPbomRecordDAO hzPbomRecordDAO;
 
-    private HzMbomService hzMbomService;
-
-    private HzPbomService hzPbomService;
-
     private TransactionTemplate configTransactionTemplate;
 
     @Autowired
@@ -70,19 +66,10 @@ public class HzEPLServiceImpl implements HzEPLService {
     }
 
     @Autowired
-    public void setHzMbomService(HzMbomService hzMbomService) {
-        this.hzMbomService = hzMbomService;
-    }
-
-    @Autowired
-    public void setHzPbomService(HzPbomService hzPbomService) {
-        this.hzPbomService = hzPbomService;
-    }
-
-    @Autowired
     public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
         this.configTransactionTemplate = configTransactionTemplate;
     }
+
     @Override
     public WriteResultRespDTO addPartToEPL(EditHzEPLReqDTO reqDTO) {
         try {
@@ -92,6 +79,13 @@ public class HzEPLServiceImpl implements HzEPLService {
             Result repeat = hzEPLDAO.partIdRepeat(query);
             if(repeat.isSuccess()){
                 return WriteResultRespDTO.failResultRespDTO("当前添加的零件号已存在！");
+            }
+            String partId = reqDTO.getPartId();
+            if(StringUtils.isNotBlank(partId)){
+                partId = partId.toUpperCase();
+                if(partId .endsWith("WS") || partId.endsWith("GDT")){
+                    return WriteResultRespDTO.failResultRespDTO("零件号不能以WS或者GDT结尾!");
+                }
             }
             int i = hzEPLDAO.insert(HzEPLFactory.eplReqDTOToRecord(reqDTO));
             if(i<=0){
@@ -184,12 +178,12 @@ public class HzEPLServiceImpl implements HzEPLService {
                 hzBOMQuery.setEplId(Long.valueOf(id));
                 List<HzEPLManageRecord> records = hzEbomRecordDAO.findEBOMRecordsByEPLId(hzBOMQuery);
                 if(ListUtil.isNotEmpty(records)){
-                    stringBuffer.append("零件号"+records.get(0).getLineID()+"已存在引用关系,不允许删除!");
+                    stringBuffer.append("零件号"+records.get(0).getLineID()+"在EBOM中存在引用关系,不允许删除!");
                     return WriteResultRespDTO.failResultRespDTO(stringBuffer.toString());
                 }
             }
 
-            List<Long> updateList = new ArrayList<>();
+//            List<Long> updateList = new ArrayList<>();
             List<Long> deleteList = new ArrayList<>();
             //PBOM检查
             for(String id : list){
@@ -202,31 +196,35 @@ public class HzEPLServiceImpl implements HzEPLService {
                     map.put("lineId",record.getPartId());
                     map.put("projectId",record.getProjectId());
                     if(ListUtil.isNotEmpty(hzPbomRecordDAO.getPbomById(map))){
-                        stringBuffer.append("零件号"+record.getPartId()+"已存在引用关系,不允许删除!");
+                        stringBuffer.append("零件号"+record.getPartId()+"在PBOM中存在引用关系,不允许删除!");
                         return WriteResultRespDTO.failResultRespDTO(stringBuffer.toString());
                     }
 
-                    if(StringUtils.isNotBlank(record.getRevision())){
-                        updateList.add(eplId);
-                    }else {
-                        deleteList.add(eplId);
-                    }
+                    // 暂时删除不走流程 就直接删除 不进行版本判断
+//                    if(StringUtils.isNotBlank(record.getRevision())){
+//                        updateList.add(eplId);
+//                    }else {
+//                        deleteList.add(eplId);
+//                    }
+                    deleteList.add(eplId);
                 }
             }
+            if(ListUtil.isNotEmpty(deleteList)){
+                hzEPLDAO.delete(null,deleteList);
+            }
 
-
-            configTransactionTemplate.execute(new TransactionCallback<Void>() {
-                @Override
-                public Void doInTransaction(TransactionStatus status) {
-                    if(ListUtil.isNotEmpty(deleteList)){
-                        hzEPLDAO.delete(null,deleteList);
-                    }
-                    if(ListUtil.isNotEmpty(updateList)){
-                        hzEPLDAO.deleteByIds(updateList);
-                    }
-                    return null;
-                }
-            });
+//            configTransactionTemplate.execute(new TransactionCallback<Void>() {
+//                @Override
+//                public Void doInTransaction(TransactionStatus status) {
+//                    if(ListUtil.isNotEmpty(deleteList)){
+//                        hzEPLDAO.delete(null,deleteList);
+//                    }
+//                    if(ListUtil.isNotEmpty(updateList)){
+//                        hzEPLDAO.deleteByIds(updateList);
+//                    }
+//                    return null;
+//                }
+//            });
             return WriteResultRespDTO.getSuccessResult();
         }catch (Exception e){
             e.printStackTrace();
@@ -237,13 +235,23 @@ public class HzEPLServiceImpl implements HzEPLService {
     @Override
     public Page<HzEplRespDTO> getEPLRecordByPage(HzEPLByPageQuery query) {
         try {
+            //删除不用的数据 以WS和GDT结尾的数据 直接删除
+            List<Long> eplIds = hzEPLDAO.getEPLIdsWherePartIdEndWithWSAndGDT(query.getProjectId());
+            if(ListUtil.isNotEmpty(eplIds)){
+                hzEPLDAO.delete(null,eplIds);
+            }
+            //查询零件分类为Virtual Assembly 并将其转换为中文 虚拟总成
+            List<Long> virtualEplIds = hzEPLDAO.getVirtualAssemblyEPLRecord(query.getProjectId());
+            if(ListUtil.isNotEmpty(virtualEplIds)){
+                hzEPLDAO.updateVirtualAssemblyEnToZh(virtualEplIds);
+            }
             Page<HzEPLRecord> page  = hzEPLDAO.getEplRecordByPage(query);
             if (page == null || ListUtil.isEmpty(page.getResult())) {
                 return new Page<>(page.getPageNumber(), page.getPageSize(), 0);
             }
             int num = (query.getPage() - 1) * query.getPageSize()+1;
             List<HzEPLRecord> records = page.getResult();
-            List<HzEplRespDTO>  list =  new ArrayList();
+            List<HzEplRespDTO>  list =  new ArrayList<>();
             for(HzEPLRecord record : records){
                 HzEplRespDTO respDTO = HzEPLFactory.eplRecordToRespDTO(record);
                 respDTO.setNo(num++);
@@ -263,8 +271,7 @@ public class HzEPLServiceImpl implements HzEPLService {
         try {
             HzEPLRecord record = hzEPLDAO.getEPLRecordById(query);
             if(null != record){
-                HzEplRespDTO respDTO  = HzEPLFactory.eplRecordToRespDTO(record);
-                return respDTO;
+                return HzEPLFactory.eplRecordToRespDTO(record);
             }
         }catch (Exception e){
             e.printStackTrace();

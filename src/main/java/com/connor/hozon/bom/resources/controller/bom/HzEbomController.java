@@ -15,10 +15,13 @@ import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +53,8 @@ public class HzEbomController extends BaseController {
     private HzChangeOrderDAO hzChangeOrderDAO;
 
     private LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
+    private Map<String,Object> orderDataObject = new HashMap<>();
 
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
@@ -370,19 +375,28 @@ public class HzEbomController extends BaseController {
     }
 
     /**
+     * 获取变更表单
+     * @return
+     */
+    @RequestMapping(value = "find/choose",method = RequestMethod.POST)
+    public void getOrderChooseToPage(@RequestBody AddDataToChangeOrderReqDTO reqDTO,HttpServletResponse response){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(reqDTO.getProjectId());
+        this.orderDataObject = new HashMap<>();
+        this.orderDataObject.put("data",records);
+        this.orderDataObject.put("puids",reqDTO.getPuids());
+        toJSONResponse(Result.build(orderDataObject),response);
+    }
+
+    /**
      * 跳转到EBOM选择变更单
      * @return
      */
     @RequestMapping(value = "order/choose",method = RequestMethod.GET)
-    public String getOrderChooseToPage(String projectId,String puids,Model model){
-        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
-        if(ListUtil.isNotEmpty(records)){
-            model.addAttribute("data",records);
-            model.addAttribute("puids",puids);
-        }
+    public String getOrderChooseToPage(Model model){
+        model.addAttribute("data",this.orderDataObject.get("data"));
+        model.addAttribute("puids",this.orderDataObject.get("puids"));
         return "bomManage/ebom/ebomManage/ebomSetChangeForm";
     }
-
     /**
      * EBOM撤销
      * @param reqDTO

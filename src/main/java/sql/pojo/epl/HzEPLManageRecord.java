@@ -227,10 +227,12 @@ public class HzEPLManageRecord extends BaseChangeDO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
         if(o instanceof HzEPLManageRecord){
             final HzEPLManageRecord that = (HzEPLManageRecord) o;
-            if(StringUtils.isEmpty(this.puid)){
+            if(StringUtils.isNotEmpty(this.puid)){
                 return this.puid.equals(that.getPuid());
             }
             return false;

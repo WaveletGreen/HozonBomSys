@@ -169,7 +169,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                 if(null == record.getObjectName()){
                     continue;
                 }
-                map.put(record.getObjectName(),record.getObjectName()+"(单车用量)");
+                map.put(record.getObjectName()+"title"+i,record.getObjectName()+"(单车用量)");
             }
         }
         return map;
@@ -220,6 +220,43 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                     String vehName = veh.split("#")[0];
                     String vehNumber = veh.split("#")[1];
                     if(record.getObjectName().equals(vehName)){
+                        object.put(vehName +"title"+i,vehNumber);
+                        find = true;
+                        break;
+                    }
+                }
+                if(!find){
+                    object.put(record.getObjectName()+"title"+i,"");
+                }
+            }else {
+                object.put(record.getObjectName()+"title"+i,"");
+            }
+        }
+        return object;
+    }
+
+    @Override
+    public JSONObject singleVehNum(String vehNum, List<HzCfg0ModelRecord> list) {
+        JSONObject object = new JSONObject();
+        if(ListUtil.isEmpty(list)){
+            return object;
+        }
+        Set<HzCfg0ModelRecord> set = new HashSet<>(list);
+        Iterator<HzCfg0ModelRecord> iterator = set.iterator();
+
+        for(int i = 0;i < set.size();i++){
+            HzCfg0ModelRecord record = iterator.next();
+            if(null == record.getObjectName()){
+                continue;
+            }
+            if(StringUtils.isNotBlank(vehNum)){
+                //智时版#12,360e#14,380pro#16   key:名字  value:value
+                String[] strings = vehNum.split(",");
+                boolean find = false;
+                for(String veh : strings){
+                    String vehName = veh.split("#")[0];
+                    String vehNumber = veh.split("#")[1];
+                    if(record.getObjectName().equals(vehName)){
                         object.put(vehName,vehNumber);
                         find = true;
                         break;
@@ -233,12 +270,6 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
             }
         }
         return object;
-    }
-
-    @Override
-    public JSONObject singleVehNum(String vehNum, List<HzCfg0ModelRecord> list) {
-        JSONObject object = new JSONObject();
-        return singleVehNum(vehNum,list,object);
     }
     @Override
     public JSONObject sendSap(List<HzSingleVehicles> hzSingleVehicles) {

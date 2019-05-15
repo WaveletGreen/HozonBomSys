@@ -140,7 +140,7 @@
         #{pUpc,jdbcType=VARCHAR}, #{pFnaDesc,jdbcType=VARCHAR}, #{pCreateName,jdbcType=VARCHAR},
         #{pUpdateName,jdbcType=VARCHAR},
         #{number,jdbcType=VARCHAR},
-        #{orderId,jdbcType=DOUBLE},2,
+        #{orderId,jdbcType=DOUBLE},#{status,jdbcType=INTEGER},
         #{sortNum,jdbcType=VARCHAR},
         #{colorPart,jdbcType=INTEGER},
         #{revision,jdbcType=VARCHAR},
@@ -161,7 +161,7 @@
         #{item.pUpc,jdbcType=VARCHAR}, #{item.pFnaDesc,jdbcType=VARCHAR}, #{item.pCreateName,jdbcType=VARCHAR},
         #{item.pUpdateName,jdbcType=VARCHAR},
         #{item.number,jdbcType=VARCHAR},
-        #{item.orderId,jdbcType=DOUBLE},2,
+        #{item.orderId,jdbcType=DOUBLE},#{item.status,jdbcType=INTEGER},
         #{item.sortNum,jdbcType=VARCHAR},
         #{item.colorPart,jdbcType=INTEGER},
         #{item.revision,jdbcType=VARCHAR},
@@ -450,6 +450,9 @@
                 <if test="item.pInOutSideFlag != null">
                     P_IN_OUT_SIDE_FLAG = #{item.pInOutSideFlag,jdbcType=INTEGER},
                 </if>
+                <if test="item.pLouaFlag != null">
+                    P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=INTEGER},
+                </if>
                 <if test="item.pUpc != null">
                     P_UPC = #{item.pUpc,jdbcType=VARCHAR},
                 </if>
@@ -505,7 +508,6 @@
     </update>
 
 
-
     <!-- 更新EBOM信息-->
     <update id="HzEbomRecordDAOImpl_updateListByEplId" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
@@ -548,6 +550,43 @@
                 <if test="item.sparePartNum != null">
                     P_SPARE_PART_NUM = #{item.sparePartNum,jdbcType=VARCHAR}
                 </if>
+            </set>
+            where P_EPL_ID = #{item.eplId,jdbcType=VARCHAR}
+            and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
+            and P_EBOM_STATUS <![CDATA[ <> ]]>0
+        </foreach>
+    </update>
+
+
+
+
+
+    <!-- 更新EBOM信息-->
+    <update id="HzEbomRecordDAOImpl_updateEBOMListByEplId" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+            update Hz_Bom_Line_Record
+            <set>
+                P_UPDATE_TIME =sysdate,
+                <if test="item.status != null">
+                    P_EBOM_STATUS = #{item.status,jdbcType=VARCHAR},
+                </if>
+                    P_FNA_INFO = #{item.fna,jdbcType=VARCHAR},
+                    P_UPC = #{item.pUpc,jdbcType=VARCHAR},
+                    P_FNA_DESC = #{item.pFnaDesc,jdbcType=VARCHAR},
+                    P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
+                    P_NUMBER = #{item.number,jdbcType=VARCHAR},
+                <if test="item.orderId != null">
+                    P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
+                </if>
+                <if test="item.effectTime != null">
+                    P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.revision != null">
+                    P_REVISION = #{item.revision,jdbcType=VARCHAR},
+                </if>
+                    P_VEH_NUM = #{item.vehNum,jdbcType=VARCHAR},
+                    P_SPARE_PART = #{item.sparePart,jdbcType=VARCHAR},
+                    P_SPARE_PART_NUM = #{item.sparePartNum,jdbcType=VARCHAR}
             </set>
             where P_EPL_ID = #{item.eplId,jdbcType=VARCHAR}
             and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}
@@ -636,11 +675,7 @@
                 from HZ_BOM_LINE_RECORD t
                 left join HZ_EPL_RECORD t10 on t.P_EPL_ID = t10.ID
                 where t.p_bom_digifax_id=(
-                select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
-                select t2.puid from Hz_project_libs t2
-                <where>
-                    t2.puid = #{projectId,jdbcType=VARCHAR}))
-                </where>
+                select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(#{projectId,jdbcType=VARCHAR}))
                 start with t.puid = #{puids[${index}]}
                 and t.P_EBOM_STATUS <![CDATA[ <> ]]>0
                 connect by nocycle prior t.puid = t.p_parent_uid
@@ -925,7 +960,9 @@
 
     <!--查询当前父层的子一层记录-->
     <select id="HzEbomRecordDAOImpl_findNextLevelRecordByParentId" parameterType="java.util.Map" resultMap="BaseResultMap">
-        select <include refid="BASE_BOM_COLUMN"/> from HZ_BOM_LINE_RECORD t
+        select <include refid="BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
+        from HZ_BOM_LINE_RECORD t
+        left join HZ_EPL_RECORD t10 on t.P_EPL_ID = t10.ID
         where t.p_bom_digifax_id=(
         select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
         #{projectId,jdbcType=VARCHAR})
@@ -1058,5 +1095,12 @@
             </if>
         )t
         where rownum = 1
+    </select>
+
+    <select id="HzEbomRecordDAOImpl_findALLBOM" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select  PUID, P_PARENT_UID from EBOM_TEST t  where  t.P_BOM_DIGIFAX_ID =
+        (select puid from Hz_Bom_Main_Record
+         where p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+          order by CAST(t.P_SORT_NUM as FLOAT)
     </select>
 </mapper>

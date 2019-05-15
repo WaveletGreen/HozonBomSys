@@ -182,15 +182,12 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
     }
 
     @Override
-    public HzBomLineRecord findParentFor2Y(String projectId, String puid) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("projectId", projectId);
-        map.put("puid", puid);
-        HzBomLineRecord record = hzBomLineRecordDao.findBomLine(map);
+    public HzEPLManageRecord findParentFor2Y(String projectId, String puid) {
+        HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid,projectId);
         if (record != null) {
-            if (record.getIs2Y().equals(1)) {
+            if (Integer.valueOf(1).equals(record.getIs2Y())) {
                 return record;
-            } else if (record.getParentUid() == null) {
+            } else if (StringUtils.isBlank(record.getParentUid())) {
                 return record;
             } else {
                 return findParentFor2Y(projectId, record.getParentUid());
@@ -206,7 +203,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
     public HzLouRespDTO getHzLouInfoById(HzLouaQuery query) {
         try {
             HzLouRespDTO respDTO = new HzLouRespDTO();
-            HzBomLineRecord hzBomLineRecord = findParentFor2Y(query.getProjectId(), query.getPuid());
+            HzEPLManageRecord hzBomLineRecord = findParentFor2Y(query.getProjectId(), query.getPuid());
             if (hzBomLineRecord != null) {
                 HzCfg0OfBomLineRecord record = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(query.getProjectId(), hzBomLineRecord.getPuid());
                 if (record != null) {

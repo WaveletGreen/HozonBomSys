@@ -139,4 +139,19 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
         }
         return size;
     }
+
+    @Override
+    public List<Long> getEPLIdsWherePartIdEndWithWSAndGDT(String projectId) {
+        return super.findForList("HzEPLDAOImpl_getEPLIdsWherePartIdEndWithWSAndGDT",projectId);
+    }
+
+    @Override
+    public List<Long> getVirtualAssemblyEPLRecord(String projectId) {
+        return super.findForList("HzEPLDAOImpl_getVirtualAssemblyEPLRecord",projectId);
+    }
+
+    @Override
+    public int updateVirtualAssemblyEnToZh(List<Long> longs) {
+        return super.update("HzEPLDAOImpl_updateVirtualAssemblyEnToZh",longs);
+    }
 }

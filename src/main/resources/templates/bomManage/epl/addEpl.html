@@ -277,6 +277,10 @@
                         notEmpty: {
                             message: '零件号不能为空'
                         },
+                        // regexp:{
+                        //     regexp: /[^(WS)]|[^(GDT)]+$/,
+                        //     message:'零件号不能以WS或者GDT结尾'
+                        // },
                         remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
                             url: "epl/exist",//验证地址
                             data: function (validator) {// 获取需要传送到后台的验证的数据

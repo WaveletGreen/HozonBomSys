@@ -52,7 +52,7 @@ public interface HzEBOMReadService {
      * @param puid
      * @return
      */
-    HzBomLineRecord findParentFor2Y(String projectId,String puid);
+    HzEPLManageRecord findParentFor2Y(String projectId,String puid);
 
     /**
      * 获取LOA信息

@@ -11,6 +11,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import com.connor.hozon.bom.sys.exception.HzBomException;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
@@ -80,7 +81,8 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
             }
             return 1;
         }catch (Exception e){
-            return 0;
+            e.printStackTrace();
+            throw new HzBomException("PBOM数据插入失败！",e);
         }
     }
 
@@ -153,6 +155,31 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     }
 
     @Override
+    public int updatePBOMList(List<HzPbomLineRecord> records) {
+        if(ListUtil.isEmpty(records)){
+            return 0;
+        }
+        int size = records.size();
+        //分批更新数据 一次1000条
+        try {
+            synchronized (this){
+                if(size > 1000){
+                    Map<Integer,List<HzPbomLineRecord>> map = HzBomSysFactory.spiltList(records);
+                    for(List<HzPbomLineRecord> value :map.values()){
+                        super.update("HzPbomRecordDAOImpl_updatePBOMList",value);
+                    }
+                }else {
+                    super.update("HzPbomRecordDAOImpl_updatePBOMList",records);
+                }
+            }
+            return size;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzDBException("数据更新失败！",e);
+        }
+    }
+
+    @Override
     public int updateListByPuids(List<HzPbomLineRecord> records) {
         if(ListUtil.isEmpty(records)){
             return 0;
@@ -183,6 +210,26 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
     public int deleteList(List<DeleteHzPbomReqDTO> list) {
 
         return super.update("HzPbomRecordDAOImpl_deleteList",list);
+    }
+
+    @Override
+    public int deleteListByPuids(List<String> puids, String tableName) {
+        try {
+            int size = puids.size();
+            Map<String,Object> m = new HashMap<>();
+            m.put("tableName",tableName);
+            synchronized (this){
+                Map<Integer,List<String>> map = HzBomSysFactory.spiltList(puids);
+                for(List<String> v:map.values()){
+                    m.put("puids",v);
+                    super.delete("HzPbomRecordDAOImpl_deleteListByPuids",m);
+                }
+            }
+            return size;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzBomException("删除数据失败!",e);
+        }
     }
 
 

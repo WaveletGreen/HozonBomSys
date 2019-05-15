@@ -6,6 +6,7 @@ import com.connor.hozon.bom.resources.service.file.FileUploadAccessoriesService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sql.pojo.accessories.HzAccessoriesLibs;
 import sql.redis.HzDBException;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -73,10 +75,33 @@ public class FileUploadAccessoriesServiceImpl implements FileUploadAccessoriesSe
                     libs.setpTechnicalConditions(ExcelUtil.getCell(sheet.getRow(rowNum), 3).getStringCellValue());
                     libs.setpMeasuringUnit(ExcelUtil.getCell(sheet.getRow(rowNum), 4).getStringCellValue());
                     libs.setpMaterielPurpose(ExcelUtil.getCell(sheet.getRow(rowNum), 5).getStringCellValue());
-                    libs.setpDosageBicycle(ExcelUtil.getCell(sheet.getRow(rowNum), 6).getStringCellValue());
+
+                    String pDosageBicycle = "";
+                    //单车用量
+                    try {
+                        pDosageBicycle = ExcelUtil.getCell(sheet.getRow(rowNum), 6).getStringCellValue();
+                        if(8 < pDosageBicycle.length()){//四舍五入 保留小数点后6位
+                            BigDecimal bigDecimal = new BigDecimal(pDosageBicycle);
+                            pDosageBicycle =String.valueOf( bigDecimal.setScale(6, BigDecimal.ROUND_HALF_UP));
+                        }
+                    }catch (Exception e){
+                        try {
+                            BigDecimal dec = new BigDecimal(ExcelUtil.getCell(sheet.getRow(rowNum),6).getNumericCellValue());
+                            pDosageBicycle = String.valueOf(dec.doubleValue());
+                            if(8 < pDosageBicycle.length()){
+                                pDosageBicycle =String.valueOf(dec.setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue());
+                            }
+                        }catch (Exception e1){
+//                            pDosageBicycle="";
+                        }
+
+                    }
+
+                    libs.setpDosageBicycle(pDosageBicycle);
+
                     libs.setpNote(ExcelUtil.getCell(sheet.getRow(rowNum), 7).getStringCellValue());
-                    HzAccessoriesLibs hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByMaterielCode(materielId);
-                    if (hzAccessoriesLibs == null){
+                    List<HzAccessoriesLibs> hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByCode(materielId);
+                    if (ListUtil.isEmpty(hzAccessoriesLibs)){
                         insertAccessoriesLibs.add(libs);
                     }else {
                         updateAccessoriesLibs.add(libs);

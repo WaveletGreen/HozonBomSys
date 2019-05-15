@@ -10,6 +10,8 @@ public class HzLouaQuery  extends DefaultQuery{
 
     private String puid;
 
+    private Integer type;
+
     public String getProjectId() {
         return projectId;
     }
@@ -24,5 +26,13 @@ public class HzLouaQuery  extends DefaultQuery{
 
     public void setPuid(String puid) {
         this.puid = puid;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }
