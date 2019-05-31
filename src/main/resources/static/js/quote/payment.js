@@ -5,6 +5,13 @@
  * Time: 10:05
  */
 
+/**
+ * Created with IntelliJ IDEA.
+ * User: xlf
+ * Date: 2018/12/6
+ * Time: 10:21
+ */
+
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();
     var url = ""
@@ -23,6 +30,7 @@ function doQuery() {
     initTable(url);
     $('#paymentTable').bootstrapTable('destroy');
 }
+
 
 function initTable(url) {
     var projectPuid = $("#project", window.top.document).val();
@@ -49,319 +57,12 @@ function initTable(url) {
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
         columns:[
-            // [
-            //     {
-            //         field: '',
-            //         title: '序号',
-            //         align: 'center',
-            //         valign: 'middle',
-            //         width: 50,
-            //         colspan: 1,
-            //         rowspan: 2,
-            //         formatter: function (value, row, index) {
-            //             var options = $table.bootstrapTable('getOptions');
-            //             return options.pageSize * (options.pageNumber - 1) + index + 1;
-            //
-            //         }
-            //     },
-            //     {field: 'status', title: '合同完工状态', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
-            //     {field: 'status', title: '付款比例', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
-            //     {field: 'status', title: '一级模块', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
-            //     {field: 'status', title: '二级模块', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
-            //     {field: 'status', title: '需求部门', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
-            //     {field: 'status', title: '项目费用描述', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
-            //     {field: 'status', title: '合同信息', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
-            //     {field: 'status', title: '已付', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
-            //     {field: 'status', title: '未付', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
-            //     {field: 'status', title: '第一次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
-            //     {field: 'status', title: '第二次付款', align: 'center', valign: 'middle',colspan: 3, rowspan: 1,},
-            //     {field: 'status', title: '第三次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
-            //     {field: 'status', title: '第四次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
-            //     {field: 'status', title: '第五次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
-            //     {field: 'status', title: '第六次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
-            //     {field: 'status', title: '第七次付款', align: 'center', valign: 'middle',colspan: 5, rowspan: 1,},
-            //     {field: 'status', title: '备注', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
-            // ],
-            // [
-            //     {field: 'status', title: '供应商', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '合同签订时间', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '合同编号', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '合同金额', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款条款', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款金额', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否完工', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '是否付款', align: 'center', valign: 'middle',},
-            //     {field: 'status', title: '付款时间', align: 'center', valign: 'middle',},
-            // ],
-            /*[
-                {
-                    field: '',
-                    title: '序号',
-                    align: 'center',
-                    valign: 'middle',
-                    width: 50,
-                    colspan: 1,
-                    rowspan: 3,
-                    formatter: function (value, row, index) {
-                        var options = $table.bootstrapTable('getOptions');
-                        return options.pageSize * (options.pageNumber - 1) + index + 1;
-                    }
-                },
-                {
-                    field: '',
-                    title: '研发/项目管理部',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 10,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 10,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '已付',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 3
-                },
-                {
-                    field: '',
-                    title: '未付',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 3
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 2,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '使用部门',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务与投融资中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 2,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '使用部门',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务与投融资中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 2,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '使用部门',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务与投融资中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 2,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '使用部门',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务与投融资中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 2,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '使用部门',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务与投融资中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 2,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '使用部门',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '采购中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务与投融资中心',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 4,
-                    rowspan: 1
-                },
-            ],*/
             [
+                {
+                    field: 'ck',
+                    colspan: 1, rowspan: 2,
+                    checkbox: true
+                },
                 {
                     field: '',
                     title: '序号',
@@ -373,778 +74,154 @@ function initTable(url) {
                     formatter: function (value, row, index) {
                         var options = $table.bootstrapTable('getOptions');
                         return options.pageSize * (options.pageNumber - 1) + index + 1;
+
                     }
                 },
-                {
-                    field: '',
-                    title: '项目类别',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '合同完工状态',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '付款比例',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '一级模块',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '二级模块',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '费用名称',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '需求部门',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '预算金额(含税)',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '项目费用描述',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: 'WBS号',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '询议标',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 3,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '合同信息',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 7,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '已付',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '未付',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 2
-                },
-                {
-                    field: '',
-                    title: '第一次付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 11,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '第二次付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 11,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '第三次付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 11,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '第四次付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 11,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '第五次付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 11,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '第六次付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 11,
-                    rowspan: 1
-                },
+                {field: 'status', title: '项目类别', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '项目名称', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '项目阶段', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '一级科目', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '二级科目', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '三级科目', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '需求部门', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '项目费用描述', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: 'WBS号', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '预算金额', align: 'center', valign: 'middle',colspan: 1, rowspan: 1,},
+                {field: 'status', title: '2019年度(万元)', align: 'center', valign: 'middle',colspan: 16, rowspan: 1,},
+                {field: 'status', title: '历史年度累计', align: 'center', valign: 'middle',colspan: 1, rowspan: 1,},
+                {field: 'status', title: '本年度', align: 'center', valign: 'middle',colspan: 1, rowspan: 1,},
+                {field: 'status', title: 'N+1年度', align: 'center', valign: 'middle',colspan: 1, rowspan: 1,},
+                {field: 'status', title: 'N+2年度', align: 'center', valign: 'middle',colspan: 1, rowspan: 1,},
+                {field: 'status', title: 'N+3年度', align: 'center', valign: 'middle',colspan: 1, rowspan: 1,},
+                {field: 'status', title: '询议标（PR)', align: 'center', valign: 'middle',colspan: 3, rowspan: 1,},
+                {field: 'status', title: '预算总额', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '合同信息', align: 'center', valign: 'middle',colspan: 7, rowspan: 1,},
+                {field: 'status', title: '付款条款', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '已付', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '未付', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '应付未付', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '第一次付款', align: 'center', valign: 'middle',colspan: 12, rowspan: 1,},
+                {field: 'status', title: '第二次付款', align: 'center', valign: 'middle',colspan: 12, rowspan: 1,},
+                {field: 'status', title: '第三次付款', align: 'center', valign: 'middle',colspan: 12, rowspan: 1,},
+                {field: 'status', title: '第四次付款', align: 'center', valign: 'middle',colspan: 12, rowspan: 1,},
+                {field: 'status', title: '第五次付款', align: 'center', valign: 'middle',colspan: 12, rowspan: 1,},
+                {field: 'status', title: '第六次付款', align: 'center', valign: 'middle',colspan: 12, rowspan: 1,},
+                {field: 'status', title: '合同付款状态', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
+                {field: 'status', title: '备注', align: 'center', valign: 'middle',colspan: 1, rowspan: 2,},
             ],
             [
-                {
-                    field: '',
-                    title: '计划时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '签订时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '编号',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '供应商',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '合同计划时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '合同实际签订时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '合同编号',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '合同金额(含税)',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '税率(%)',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款条件',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款比例',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否完工',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '计划付款时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: 'OA申请流水号',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '申请支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务预计支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '支付金额差异',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款比例',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否完工',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '计划付款时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: 'OA申请流水号',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '申请支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务预计支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '支付金额差异',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款比例',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否完工',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '计划付款时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: 'OA申请流水号',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '申请支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务预计支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '支付金额差异',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款比例',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否完工',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '计划付款时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: 'OA申请流水号',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '申请支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务预计支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '支付金额差异',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款比例',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否完工',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '计划付款时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: 'OA申请流水号',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '申请支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务预计支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '支付金额差异',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款比例',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '付款金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否完工',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '是否付款',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '计划付款时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: 'OA申请流水号',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '申请支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '财务预计支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付时间',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '实际支付金额',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
-                {
-                    field: '',
-                    title: '支付金额差异',
-                    align: 'center',
-                    valign: 'middle',
-                    colspan: 1,
-                    rowspan: 1
-                },
+                {field: 'status', title: '(含税)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '1月', align: 'center', valign: 'middle',},
+                {field: 'status', title: '2月', align: 'center', valign: 'middle',},
+                {field: 'status', title: '3月', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'Q1(季度)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '4月', align: 'center', valign: 'middle',},
+                {field: 'status', title: '5月', align: 'center', valign: 'middle',},
+                {field: 'status', title: '6月', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'Q2(季度)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '7月', align: 'center', valign: 'middle',},
+                {field: 'status', title: '8月', align: 'center', valign: 'middle',},
+                {field: 'status', title: '9月', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'Q3(季度)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '10月', align: 'center', valign: 'middle',},
+                {field: 'status', title: '11月', align: 'center', valign: 'middle',},
+                {field: 'status', title: '12月', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'Q4(季度)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '(万元)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '(万元)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '(万元)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '(万元)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '(万元)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '签订时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '编号', align: 'center', valign: 'middle',},
+                {field: 'status', title: '供应商', align: 'center', valign: 'middle',},
+                {field: 'status', title: '合同编号', align: 'center', valign: 'middle',},
+                {field: 'status', title: '签订时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '合同金额(含税)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '差异数', align: 'center', valign: 'middle',},
+                {field: 'status', title: '税点%', align: 'center', valign: 'middle',},
+                {field: 'status', title: '合同发起人', align: 'center', valign: 'middle',},
+
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '验收完工判定(是/否)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票号(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票提交时间(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'OA付款申请流水号', align: 'center', valign: 'middle',},
+                {field: 'status', title: '申请支付金额(发票金额/必填项)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '财务预支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '支付金额差异', align: 'center', valign: 'middle',},
+
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '验收完工判定(是/否)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票号(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票提交时间(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'OA付款申请流水号', align: 'center', valign: 'middle',},
+                {field: 'status', title: '申请支付金额(发票金额/必填项)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '财务预支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '支付金额差异', align: 'center', valign: 'middle',},
+
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '验收完工判定(是/否)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票号(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票提交时间(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'OA付款申请流水号', align: 'center', valign: 'middle',},
+                {field: 'status', title: '申请支付金额(发票金额/必填项)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '财务预支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '支付金额差异', align: 'center', valign: 'middle',},
+
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '验收完工判定(是/否)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票号(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票提交时间(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'OA付款申请流水号', align: 'center', valign: 'middle',},
+                {field: 'status', title: '申请支付金额(发票金额/必填项)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '财务预支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '支付金额差异', align: 'center', valign: 'middle',},
+
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '验收完工判定(是/否)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票号(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票提交时间(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'OA付款申请流水号', align: 'center', valign: 'middle',},
+                {field: 'status', title: '申请支付金额(发票金额/必填项)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '财务预支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '支付金额差异', align: 'center', valign: 'middle',},
+
+                {field: 'status', title: '付款比例', align: 'center', valign: 'middle',},
+                {field: 'status', title: '验收完工判定(是/否)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '计划付款时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票号(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '发票提交时间(必填)', align: 'center', valign: 'middle',},
+                {field: 'status', title: 'OA付款申请流水号', align: 'center', valign: 'middle',},
+                {field: 'status', title: '申请支付金额(发票金额/必填项)', align: 'center', valign: 'middle',},
+                {field: 'status', title: '财务预支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付时间', align: 'center', valign: 'middle',},
+                {field: 'status', title: '实际支付金额', align: 'center', valign: 'middle',},
+                {field: 'status', title: '支付金额差异', align: 'center', valign: 'middle',},
+
+
             ],
         ],
         toolbars: [
@@ -1152,7 +229,7 @@ function initTable(url) {
                 text: '添加',
                 iconCls: 'glyphicon glyphicon-plus',
                 handler: function () {
-                    var url = "";
+                    var url = "chosenSupplier/addPage?projectPuid="+projectPuid;
                     $.ajax({
                         url: "privilege/write?url=" + url,
                         type: "GET",
@@ -1164,7 +241,7 @@ function initTable(url) {
                             else {
                                 window.Ewin.dialog({
                                     title: "添加",
-                                    url: "",
+                                    url: "chosenSupplier/addPage?projectPuid="+projectPuid,
                                     gridId: "gridId",
                                     width: 500,
                                     height: 500
