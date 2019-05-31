@@ -229,7 +229,7 @@ function initTable(url) {
                 text: '添加',
                 iconCls: 'glyphicon glyphicon-plus',
                 handler: function () {
-                    var url = "";
+                    var url = "chosenSupplier/addPage?projectPuid="+projectPuid;
                     $.ajax({
                         url: "privilege/write?url=" + url,
                         type: "GET",
@@ -241,7 +241,7 @@ function initTable(url) {
                             else {
                                 window.Ewin.dialog({
                                     title: "添加",
-                                    url: "",
+                                    url: "chosenSupplier/addPage?projectPuid="+projectPuid,
                                     gridId: "gridId",
                                     width: 500,
                                     height: 500
