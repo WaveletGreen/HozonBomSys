@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.mybatis.quotemsg.HzChosenSupplierDAO;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
-import netscape.security.Privilege;
+//import netscape.security.Privilege;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
