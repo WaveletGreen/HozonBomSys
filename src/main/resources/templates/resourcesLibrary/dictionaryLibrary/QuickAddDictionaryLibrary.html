@@ -1,98 +1,99 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-<!--User: xulf Date: 2018/8/28 Time: 20:39-->
+<!--User: xulf Date: 2019/6/18 Time: 12:59-->
 <link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="dictionaryLibraryForm" role="form" method="post" action="dict/add">
+    <!--<input id="puid" name="id" type="hidden" th:value="${data.puid}">-->
     <div class="form-group">
         <label for="professionCh">专业部<span>*</span></label>
         <input class="form-control" id="professionCh" name="professionCh" type="text"
-               placeholder="请输入专业部"/>
+               th:value="${data.professionCh}"      placeholder="请输入专业部"/>
     </div>
     <div class="form-group">
         <label for="professionEn">Profession</label>
         <input class="form-control" id="professionEn" name="professionEn" type="text"
-               placeholder="请输入Professsion"/>
+               th:value="${data.professionEn}"     placeholder="请输入Professsion"/>
     </div>
     <div class="form-group">
         <label for="classificationCh">分类<span>*</span></label>
         <input class="form-control" id="classificationCh" name="classificationCh" type="text"
-               placeholder="请输入分类"/>
+               th:value="${data.classificationCh}"    placeholder="请输入分类"/>
     </div>
     <div class="form-group">
         <label for="classificationEn">classification</label>
         <input class="form-control" id="classificationEn" name="classificationEn" type="text"
-               placeholder="请输入classification"/>
+               th:value="${data.classificationEn}"     placeholder="请输入classification"/>
     </div>
     <div class="form-group">
         <label for="groupCode">特性组代码</label>
         <input class="form-control" id="groupCode" name="groupCode" type="text"
-               placeholder="请输入特性组代码"/>
+               th:value="${data.groupCode}"     placeholder="请输入特性组代码"/>
     </div>
     <div class="form-group">
-        <label for="groupCh">特性组<span>*</span></label>
+        <label for="groupCh">特性组</label>
         <input class="form-control" id="groupCh" name="groupCh" type="text"
-               placeholder="请输入特性组"/>
+               th:value="${data.groupCh}"  placeholder="请输入特性组"/>
     </div>
     <div class="form-group">
         <label for="groupEn">group</label>
         <input class="form-control" id="groupEn" name="groupEn" type="text"
-               placeholder="请输入group"/>
+               th:value="${data.groupEn}"   placeholder="请输入group"/>
     </div>
     <div class="form-group">
-        <label for="famillyCode">特性族代码<span>*</span></label>
+        <label for="famillyCode">特性族代码</label>
         <input class="form-control" id="famillyCode" name="famillyCode" type="text"
-               placeholder="请输入特性族代码"/>
+               th:value="${data.famillyCode}"  placeholder="请输入特性族代码"/>
     </div>
     <div class="form-group">
-        <label for="famillyCh">特性族<span>*</span></label>
+        <label for="famillyCh">特性族</label>
         <input class="form-control" id="famillyCh" name="famillyCh" type="text"
-               placeholder="请输入特性族"/>
+               th:value="${data.famillyCh}"    placeholder="请输入特性族"/>
     </div>
     <div class="form-group">
         <label for="famillyEn">familly</label>
         <input class="form-control" id="famillyEn" name="famillyEn" type="text"
-               placeholder="请输入familly"/>
+               th:value="${data.famillyEn}"  placeholder="请输入familly"/>
     </div>
     <div class="form-group">
         <label for="eigenValue">特性值<span>*</span></label>
         <input class="form-control" id="eigenValue" name="eigenValue" type="text"
-               placeholder="请输入特性值"/>
+               th:value="${data.eigenValue}"    placeholder="请输入特性值"/>
     </div>
     <div class="form-group">
         <label for="valueDescCh">特性值描述<span>*</span></label>
         <input class="form-control" id="valueDescCh" name="valueDescCh" type="text"
-               placeholder="请输入特性值描述"/>
+               th:value="${data.valueDescCh}"  placeholder="请输入特性值描述"/>
     </div>
     <div class="form-group">
         <label for="valueDescEn">value description</label>
         <input class="form-control" id="valueDescEn" name="valueDescEn" type="text"
-               placeholder="请输入value description"/>
+               th:value="${data.valueDescEn}"  placeholder="请输入value description"/>
     </div>
     <div class="form-group">
         <label for="type">类型</label>
         <input class="form-control" id="type" name="type" type="text"
-               placeholder="请输入类型"/>
+               th:value="${data.type}"  placeholder="请输入类型"/>
     </div>
     <div class="form-group">
         <label for="valueSource">特性值来源</label>
         <input class="form-control" id="valueSource" name="valueSource" type="text"
-               placeholder="请输入特性值来源"/>
+               th:value="${data.valueSource}"  placeholder="请输入特性 值来源"/>
     </div>
     <div class="form-group">
         <label for="effectTime">生效时间</label>
-        <input class="form-control input-small" id="effectTime" name="effectTime" type="date"
-               placeholder="请输入生效时间"/>
+        <input class="form-control" id="effectTime" name="effectTime" type="date"
+               th:value="${data.effectTime}"    placeholder="请输入生效时间"/>
     </div>
     <div class="form-group">
         <label for="failureTime">失效时间</label>
-        <input class="form-control input-small" id="failureTime" name="failureTime" type="date"
-               placeholder="请输入失效时间"/>
+        <input class="form-control" id="failureTime" name="failureTime" type="date"
+               th:value="${data.failureTime}"    placeholder="请输入失效时间"/>
     </div>
     <div class="form-group">
         <label for="note">备注</label>
         <input class="form-control" id="note" name="note" type="text"
-               placeholder="请输入备注"/>
+               th:value="${data.note}"    placeholder="请输入备注"/>
     </div>
 </form>
 <script th:inline="javascript">
@@ -224,10 +225,6 @@
                     data: myData,
                     success:
                         function (result) {
-                            // $('.modal-dialog', window.top.document).parent('div').remove()
-                            // $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                             activeTabBodyRefresh();
                             if (result.success) {
                                 layer.msg('添加成功', {icon: 1, time: 2000})
@@ -242,54 +239,7 @@
                 });
             }
         });
-        // $('#effectTime').datetimepicker({
-        //     format: 'yyyy-mm-dd',//日期的格式
-        //     weekStart: 1,// 0（星期日）到6（星期六）
-        //     startDate: "2008-01-01",//选择器的开始日期
-        //     autoclose: true,//日期选择完成后是否关闭选择框
-        //     bootcssVer: 3,//显示向左向右的箭头
-        //     language: 'zh_CN',//语言
-        //     minView: 2,//表示日期选择的最小范围，默认是hour
-        //     todayBtn: true
-        // });
-        // $('#failureTime').datetimepicker({
-        //     format: 'yyyy-mm-dd',//日期的格式
-        //     weekStart: 1,// 0（星期日）到6（星期六）
-        //     startDate: "2008-01-01",//选择器的开始日期
-        //     autoclose: true,//日期选择完成后是否关闭选择框
-        //     bootcssVer: 3,//显示向左向右的箭头
-        //     language: 'zh_CN',//语言
-        //     minView: 2,//表示日期选择的最小范围，默认是hour
-        //     todayBtn: true
-        // });
     })
-    // function formatDate() {
-    //     var effectTime = stringToDateFormat($('#effectTime').val());
-    //     var failureTime = stringToDateFormat($('#failureTime').val());
-    //
-    //     $('#effectTime').val(vwoStartEffectiveTime);
-    //     $('#failureTime').val(vwoEndEffectiveTime);
-    //     $('#effectTime').datetimepicker({
-    //         format: 'yyyy-mm-dd',//日期的格式
-    //         weekStart: 1,// 0（星期日）到6（星期六）
-    //         startDate: "2008-01-01",//选择器的开始日期
-    //         autoclose: true,//日期选择完成后是否关闭选择框
-    //         bootcssVer: 3,//显示向左向右的箭头
-    //         language: 'zh_CN',//语言
-    //         minView: 2,//表示日期选择的最小范围，默认是hour
-    //         todayBtn: true
-    //     });
-    //     $('#failureTime').datetimepicker({
-    //         format: 'yyyy-mm-dd',//日期的格式
-    //         weekStart: 1,// 0（星期日）到6（星期六）
-    //         startDate: "2008-01-01",//选择器的开始日期
-    //         autoclose: true,//日期选择完成后是否关闭选择框
-    //         bootcssVer: 3,//显示向左向右的箭头
-    //         language: 'zh_CN',//语言
-    //         minView: 2,//表示日期选择的最小范围，默认是hour
-    //         todayBtn: true
-    //     });
-    // }
     $(document).keydown(function(event) {
         if (event.keyCode == 13) {
             $('form').each(function() {
@@ -300,6 +250,5 @@
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>
-<!--<script th:src="@{/js/autocomplete.js}"></script>-->
 </body>
 </html>
