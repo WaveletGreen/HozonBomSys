@@ -112,7 +112,21 @@ public class VPPSLibraryController extends BaseController {
         WriteResultRespDTO respDTO = hzVPPSLibraryService.insertHzVPPSLibrary(dto);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
-
+    /**
+     * 跳转到快速修改的页面
+     * @param puid
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "getQuickAdd",method = RequestMethod.GET)
+    public String getQuickAddVPPSLibraryToPage(String puid, Model model){
+        HzVPPSLibraryRespDTO respDTO = hzVPPSLibraryService.findHzVPPSLibraryById(puid);
+        if (respDTO == null){
+            return null;
+        }
+        model.addAttribute("data",respDTO);
+        return "resourcesLibrary/VPPSLibrary/QuickAddVPPSLibrary";
+    }
     /**
      * 跳转到修改页面
      * @param puid

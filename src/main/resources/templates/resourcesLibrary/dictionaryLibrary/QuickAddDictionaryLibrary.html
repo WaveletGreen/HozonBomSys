@@ -227,14 +227,14 @@
                         function (result) {
                             activeTabBodyRefresh();
                             if (result.success) {
-                                layer.msg('添加成功', {icon: 1, time: 2000})
+                                layer.msg('快速添加成功', {icon: 1, time: 2000})
                             }
                             else if (!result.success) {
                                 window.Ewin.alert({message: result.errMsg})
                             }
                         },
                     error: function (status) {
-                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                        window.Ewin.alert({message: status.status + ':快速添加数据失败!'});
                     }
                 });
             }
