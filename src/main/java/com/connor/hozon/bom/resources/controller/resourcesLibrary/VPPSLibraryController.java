@@ -113,7 +113,7 @@ public class VPPSLibraryController extends BaseController {
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
     /**
-     * 跳转到快速修改的页面
+     * 跳转到快速添加的页面
      * @param puid
      * @param model
      * @return
