@@ -2,13 +2,16 @@ package sql.pojo.change;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author: haozt
  * @Date: 2018/11/22
  * @Description: TC端同步过来的零件号 与版本号
  */
 @Data
-public class HzChangeListRecord {
+public class HzChangeListRecord implements Serializable {
+    private static final long serialVersionUID = -67143737061013090L;
     /**
      * 主键id
      */

@@ -13,12 +13,14 @@ import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
+import com.connor.hozon.bom.resources.util.ListUtil;
 import integration.base.masterMaterial.ZPPTCO001;
 import integration.logic.ReflectAddMasterMaterial;
 import integration.logic.ReflectMateriel;
 import integration.option.ActionFlagOption;
 import integration.service.impl.masterMaterial1.TransMasterMaterialService;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
@@ -59,7 +61,6 @@ public class SynMaterielService implements ISynMaterielService {
     @Autowired
     HzFactoryDAO hzFactoryDAO;
 
-
     /**
      * 更新操作
      *
@@ -70,6 +71,7 @@ public class SynMaterielService implements ISynMaterielService {
     public JSONObject updateOrAddByUids(List<EditHzMaterielReqDTO> dtos, String tableName, String field) {
         return updateOrDelete(dtos, ActionFlagOption.UPDATE, tableName, field);
     }
+
 
     /**
      * 删除操作
@@ -192,15 +194,15 @@ public class SynMaterielService implements ISynMaterielService {
 
         List<HzMaterielRecord> toUpdate = new ArrayList<>();
         List<String> puids = new ArrayList<>();
-        Set<String> materialCode = new HashSet<>();
+//        Set<String> materialCode = new HashSet<>();
         //没有过滤部门层
         for (HzMaterielRecord record : sorted) {
             //过滤重复的零件号
-            if (materialCode.contains(record.getpMaterielCode())) {
-                continue;
-            } else {
-                materialCode.add(record.getpMaterielCode());
-            }
+//            if (materialCode.contains(record.getpMaterielCode())) {
+//                continue;
+//            } else {
+//                materialCode.add(record.getpMaterielCode());
+//            }
             if (!validate(record)) {
                 totalOfUnknown++;
                 continue;
@@ -236,27 +238,32 @@ public class SynMaterielService implements ISynMaterielService {
                     continue;
                 }
             }
-            if (!_factoryCoach.containsKey(record.getpFactoryPuid())) {
-                HzFactory factory = hzFactoryDAO.findFactory(record.getpFactoryPuid(), null);
-                _factoryCoach.put(record.getpFactoryPuid(), factory.getpFactoryCode());
-            }
+//            if (!_factoryCoach.containsKey(record.getpFactoryPuid())) {
+//                HzFactory factory = hzFactoryDAO.findFactory(record.getpFactoryPuid(), null);
+//                _factoryCoach.put(record.getpFactoryPuid(), factory.getpFactoryCode());
+//            }
             //设置工厂
-            reflectMateriel.setFactory(_factoryCoach.get(record.getpFactoryPuid()));
+            reflectMateriel.setFactory(record.getFactoryCode());
             reflectMateriel.setMRPAndPurchase(record.getpMrpController(), record.getResource(), "默认公告");
             /////////////////////////////////////////////////////手动设置一些必填参数////////////////////////////////////////////////////
             transMasterMaterialService.getInput().getItem().add(reflectMateriel.getMm().getZpptci001());
             //加入缓存
             _mapCoach.put(packNo, record);
         }
-        _mapCoach.forEach((k, v) ->
-                System.out.println(v.getpMaterielCode())
-        );
-        //执行
-        if (debug) {
-            return result;
-        } else if (_mapCoach.size() > 0) {
-            transMasterMaterialService.execute();
+//        _mapCoach.forEach((k, v) ->
+//                System.out.println(v.getpMaterielCode())
+//        );
+        try{
+            //执行
+            if (debug) {
+                return result;
+            } else if (_mapCoach.size() > 0) {
+                transMasterMaterialService.execute();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
         List<ZPPTCO001> resultPool = transMasterMaterialService.getOut().getItem();
         if (resultPool != null)
             for (ZPPTCO001 zpptco001 : resultPool) {
@@ -284,7 +291,8 @@ public class SynMaterielService implements ISynMaterielService {
         /**
          * 更新信息,这里也是更新is_sent状态的
          */
-        if (puids != null && puids.size() > 0) {
+//        if (puids != null && puids.size() > 0) {//?
+        if (ListUtil.isNotEmpty(toUpdate)) {
             toUpdate.forEach(to -> puids.add(to.getpMaterielCode()));
             splitListThenUpdate(puids, tableName, field);
         }
@@ -344,10 +352,9 @@ public class SynMaterielService implements ISynMaterielService {
 
 
     private boolean validate(HzMaterielRecord record) {
-        if (null == record.getpMaterielDesc() || "".equalsIgnoreCase(record.getpMaterielDesc()) || null == record.getpFactoryPuid() || "".equals(record.getpFactoryPuid())) {
+        if (StringUtils.isBlank(record.getpMaterielDesc()) || StringUtils.isBlank(record.getpFactoryPuid())) {
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 }

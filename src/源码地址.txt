@@ -1,6 +1,0 @@
-一期java代码：https://gitee.com/fancyears/hzplm.git （最好朱安亮维护）
-项目管理java代码：https://gitee.com/fancyears/Hozon2.git（最好朱安亮维护）
-断点信息接口java代码：https://gitee.com/fancyears/breakpointService.git（最好郝志涛维护）
-BOM系统：https://gitee.com/fancyears/HozonBomSys.git 
-二期handler(C/C++)：https://gitee.com/fancyears/hz2_handler.git （最好朱东波维护）
-一期handler(C/C++)：https://gitee.com/fancyears/hz_itk.git 

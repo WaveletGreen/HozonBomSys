@@ -24,6 +24,11 @@ public class PageRequestParam {
 	 */
 	private int pageSize;
 
+	/**
+	 * 是否显示全部数据
+	 */
+	private boolean allNumber;
+
 	public PageRequestParam() {
 
 		this(0, 0, null);
@@ -71,4 +76,11 @@ public class PageRequestParam {
 		this.pageSize = pageSize;
 	}
 
+	public boolean isAllNumber() {
+		return allNumber;
+	}
+
+	public void setAllNumber(boolean allNumber) {
+		this.allNumber = allNumber;
+	}
 }

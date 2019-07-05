@@ -36,6 +36,7 @@
       P_CREATE_NAME,
       P_UPDATE_NAME
   </sql>
+
   <insert id="HzAccessoriesLibsDAOImpl_insert" parameterType="sql.pojo.accessories.HzAccessoriesLibs">
     insert into HZ_ACCESSORIES_LIBS
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -110,6 +111,40 @@
     </trim>
   </insert>
 
+  <insert id="HzAccessoriesLibsDAOImpl_importList" parameterType="java.util.List">
+    insert into HZ_ACCESSORIES_LIBS(
+      PUID,
+      P_MATERIEL_CODE,
+      P_MATERIEL_NAME,
+      P_TECHNICAL_CONDITIONS,
+      P_MEASURING_UNIT,
+      P_MATERIEL_PURPOSE,
+      P_DOSAGE_BICYCLE,
+      P_NOTE,
+      P_STATUS,
+      P_CREATE_TIME,
+      P_UPDATE_TIME,
+      P_CREATE_NAME,
+      P_UPDATE_NAME
+    )
+    <foreach collection="list" item="item" index="index" separator="UNION ALL">
+      select
+      #{item.puid,jdbcType=VARCHAR},
+      #{item.pMaterielCode,jdbcType=VARCHAR},
+      #{item.pMaterielName,jdbcType=VARCHAR},
+      #{item.pTechnicalConditions,jdbcType=VARCHAR},
+      #{item.pMeasuringUnit,jdbcType=VARCHAR},
+      #{item.pMaterielPurpose,jdbcType=VARCHAR},
+      #{item.pDosageBicycle,jdbcType=VARCHAR},
+      #{item.pNote,jdbcType=VARCHAR},
+      1,
+      sysdate,
+      sysdate,
+      #{item.pCreateName,jdbcType=VARCHAR},
+      #{item.pUpdateName,jdbcType=VARCHAR}
+      from DUAL
+    </foreach>
+  </insert>
 
   <update id="HzAccessoriesLibsDAOImpl_update" parameterType="sql.pojo.accessories.HzAccessoriesLibs">
     update  HZ_ACCESSORIES_LIBS
@@ -147,6 +182,41 @@
       PUID = #{puid,jdbcType=VARCHAR}
     </where>
   </update>
+
+
+  <!--批量更新-->
+  <update id="HzAccessoriesLibsDAOImpl_updateList" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+      update HZ_ACCESSORIES_LIBS
+      <set>
+        P_UPDATE_TIME =sysdate,
+        <if test="item.pMaterielName != null">
+          P_MATERIEL_NAME= #{item.pMaterielName,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pTechnicalConditions != null">
+          P_TECHNICAL_CONDITIONS= #{item.pTechnicalConditions,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pMeasuringUnit != null">
+          P_MEASURING_UNIT= #{item.pMeasuringUnit,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pMaterielPurpose != null">
+          P_MATERIEL_PURPOSE= #{item.pMaterielPurpose,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pDosageBicycle != null">
+          P_DOSAGE_BICYCLE= #{item.pDosageBicycle,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pNote != null">
+          P_NOTE= #{item.pNote,jdbcType=VARCHAR},
+        </if>
+        <if test="item.pUpdateName != null">
+          P_UPDATE_NAME= #{item.pUpdateName,jdbcType=VARCHAR}
+        </if>
+      </set>
+      where P_MATERIEL_CODE= #{item.pMaterielCode,jdbcType=VARCHAR}
+      and P_STATUS <![CDATA[ <> ]]>0
+    </foreach>
+  </update>
+
 
   <select id="HzAccessoriesLibsDAOImpl_getHzAccessoriesLibs" parameterType="java.util.HashMap" resultMap="BaseResultMap">
     select  * from HZ_ACCESSORIES_LIBS

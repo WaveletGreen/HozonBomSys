@@ -3,6 +3,7 @@ package sql.pojo.interaction;
 import lombok.Data;
 import sql.pojo.accessories.HzAccessoriesLibs;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +15,8 @@ import java.util.Objects;
  */
 
 @Data
-public class HzConfigBomColorBean {
+public class HzConfigBomColorBean implements Serializable {
+    private static final long serialVersionUID = 4184226510690323042L;
     /**
      * 2Y层UID
      */

@@ -26,6 +26,13 @@ function doQuery() {
     else {
         pBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
     }
+    var pIsNewPart = $("#pIsNewPart").val();
+    if (pIsNewPart == "请选择工艺合件") {
+        pBomUrl += "&pIsNewPart=" + "";
+    }
+    else {
+        pBomUrl += "&pIsNewPart=" + pIsNewPart;
+    }
     initTable(pBomUrl);
     $('#pbomManageTable').bootstrapTable('destroy');
 }
@@ -38,7 +45,7 @@ function initTable(pBomUrl) {
         return;
     }
     $.ajax({
-        url: "pbom/manage/title?project=" + projectPuid,
+        url: "pbom/manage/title?projectId=" + projectPuid,
         type: "GET",
         success: function (result) {
             var column = [];
@@ -143,18 +150,16 @@ function initTable(pBomUrl) {
                 pageNumber: 1,                       //初始化加载第一页，默认第一页
                 pageSize: 20,                       //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
-                showExport: true,
                 columns: column,
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,// 单击某一行的时候选中某一条记录
-                striped: true, //是否显示行间隔色
                 showColumns: true, //是否显示所有的列
                 showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
                 toolbars: [
                     {
-                        text: '修改',
+                        text: '同步修改',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
@@ -178,8 +183,8 @@ function initTable(pBomUrl) {
                                     }
                                     else {
                                         window.Ewin.dialog({
-                                            title: "修改",
-                                            url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid,
+                                            title: "同步修改",
+                                            url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid+"&puid="+rows[0].puid+"&updateType="+2,
                                             gridId: "gridId",
                                             width: 500,
                                             height: 500
@@ -189,6 +194,42 @@ function initTable(pBomUrl) {
                             })
                         }
                     },
+                    // {
+                    //     text: '当前修改',
+                    //     iconCls: 'glyphicon glyphicon-pencil',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         //只能选一条
+                    //         if (rows.length != 1) {
+                    //             window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+                    //             return false;
+                    //         }
+                    //         else if (rows[0].status == 5 || rows[0].status == 6) {
+                    //             window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+                    //             return false;
+                    //         }
+                    //         var url = "pbom/updatePbomManage";
+                    //         $.ajax({
+                    //             url: "privilege/write?url=" + url,
+                    //             type: "GET",
+                    //             success: function (result) {
+                    //                 if (!result.success) {
+                    //                     window.Ewin.alert({message: result.errMsg});
+                    //                     return false;
+                    //                 }
+                    //                 else {
+                    //                     window.Ewin.dialog({
+                    //                         title: "当前修改",
+                    //                         url: "pbom/updatePbomManage?projectId=" + projectPuid + "&eBomPuid=" + rows[0].eBomPuid+"&puid="+rows[0].puid+"&updateType="+1,
+                    //                         gridId: "gridId",
+                    //                         width: 500,
+                    //                         height: 500
+                    //                     });
+                    //                 }
+                    //             }
+                    //         })
+                    //     }
+                    // },
                     {
                         text: '删除',
                         iconCls: 'glyphicon glyphicon-remove',
@@ -327,23 +368,25 @@ function initTable(pBomUrl) {
                         text: '设置为LOU/取消',
                         iconCls: 'glyphicon glyphicon-cog',
                         handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            var lineIds = "";
-                            for (var i = 0; i < rows.length; i++) {
-                                lineIds += rows[i].lineId + ",";
-                            }
-                            var myData = JSON.stringify({
-                                "projectId": $("#project", window.top.document).val(),
-                                "lineIds": lineIds,
-                            });
+                            let rows = $table.bootstrapTable('getSelections');
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择至少一条需要设置为LOU的数据!'});
+                                window.Ewin.alert({message: '请选择一条需要设置为LOU的数据!'});
+                                return false;
+                            }
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要设置为LOU的数据!'});
                                 return false;
                             }
                             else if (rows[0].status == 5 || rows[0].status == 6) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能设置为LOU!'});
                                 return false;
                             }
+                            let puid = rows[0].eBomPuid;
+                            let myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puid": puid,
+                            });
+
                             var url = "loa/setLou/pBom";
                             $.ajax({
                                 url: "privilege/write?url=" + url,
@@ -364,7 +407,7 @@ function initTable(pBomUrl) {
                                                 if (result.success) {
                                                     layer.msg('设置成功', {icon: 1, time: 2000})
                                                 } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                    window.Ewin.alert({message: result.data.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },
@@ -513,22 +556,22 @@ function initTable(pBomUrl) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
                                 for (var i = 0; i < rows.length; i++) {
                                     if (rows[i].status != 4 && rows[i].status != 2) {
-                                        window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
                                         return false;
                                     }
                                 }
@@ -543,13 +586,27 @@ function initTable(pBomUrl) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "pbom/order/choose?projectId=" + projectPuid + "&puids=" + puids,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectPuid
                                         });
+                                        $.ajax({
+                                            url:  "pbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
@@ -862,22 +919,23 @@ function initTable1(pBomUrl, lineIds) {
                         iconCls: 'glyphicon glyphicon-cog',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            var lineIds = "";
-                            for (var i = 0; i < rows.length; i++) {
-                                lineIds += rows[i].lineId + ",";
-                            }
-                            var myData = JSON.stringify({
-                                "projectId": $("#project", window.top.document).val(),
-                                "lineIds": lineIds,
-                            });
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择至少一条需要设置为LOU的数据!'});
+                                window.Ewin.alert({message: '请选择一条需要设置为LOU的数据!'});
+                                return false;
+                            }
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条需要设置为LOU的数据!'});
                                 return false;
                             }
                             else if (rows[0].status == 5 || rows[0].status == 6) {
                                 window.Ewin.alert({message: '对不起,审核中的数据不能设置为LOU!'});
                                 return false;
                             }
+                            let puid = rows[0].eBomPuid;
+                            let myData = JSON.stringify({
+                                "projectId": $("#project", window.top.document).val(),
+                                "puid": puid,
+                            });
                             var url = "loa/setLou/pBom";
                             $.ajax({
                                 url: "privilege/write?url=" + url,
@@ -898,7 +956,7 @@ function initTable1(pBomUrl, lineIds) {
                                                 if (result.success) {
                                                     layer.msg('设置成功', {icon: 1, time: 2000})
                                                 } else if (!result.success) {
-                                                    window.Ewin.alert({message: result.errMsg});
+                                                    window.Ewin.alert({message: result.data.errMsg});
                                                 }
                                                 $table.bootstrapTable("refresh");
                                             },
@@ -1037,22 +1095,22 @@ function initTable1(pBomUrl, lineIds) {
                         }
                     },
                     {
-                        text: '发起流程',
+                        text: '关联变更单',
                         iconCls: 'glyphicon glyphicon-log-out',
                         handler: function () {
                             var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
+                            var puidArray ="";
                             for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
+                                puidArray+=rows[i].puid+",";
                             }
                             if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要变更的数据!'});
+                                window.Ewin.alert({message: '请选择需要变更的数据!'});
                                 return false;
                             }
                             else {
                                 for (var i = 0; i < rows.length; i++) {
                                     if (rows[i].status != 4 && rows[i].status != 2) {
-                                        window.Ewin.alert({message: '请选择状态为草稿状态或删除状态的数据!'});
+                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
                                         return false;
                                     }
                                 }
@@ -1067,13 +1125,27 @@ function initTable1(pBomUrl, lineIds) {
                                         return false;
                                     }
                                     else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "pbom/order/choose?projectId=" + projectPuid + "&puids=" + puids,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
+                                        var myData = JSON.stringify({
+                                            "puids": puidArray,
+                                            "projectId": projectPuid
                                         });
+                                        $.ajax({
+                                            url:  "pbom/find/choose",
+                                            type: "POST",
+                                            gridId: "gridId",
+                                            contentType: "application/json",
+                                            data:myData,
+                                            success: function () {
+                                                window.Ewin.dialog({
+                                                    title: "选择变更表单",
+                                                    gridId: "gridId",
+                                                    url:url,
+                                                    width: 450,
+                                                    height: 450
+                                                });
+                                            }
+                                        });
+
                                     }
                                 }
                             })
@@ -1126,10 +1198,6 @@ function queryLoa(row) {
 }
 
 function queryLou(row) {
-    // var myData = JSON.stringify({
-    //     "projectId": $("#project", window.top.document).val(),
-    //     "puid": row
-    // });
     var projectId = $("#project", window.top.document).val();
     $.ajax({
         type: "GET",

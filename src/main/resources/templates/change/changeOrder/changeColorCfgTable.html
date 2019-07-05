@@ -45,9 +45,7 @@
             align: 'center',
             Width: 50,
             formatter: function (value, row, index) {
-                // var options = $table.bootstrapTable('getOptions');
-                // return options.pageSize * (options.pageNumber - 1) + index + 1;
-                return index+1;
+                return index + 1;
             }
         }),
         column.push({
@@ -141,7 +139,8 @@
                                                         contentType: "application/json",
                                                         success: function (result) {
                                                             if (result.status) {
-                                                                layer.msg('删除成功', {icon: 1, time: 2000})
+                                                                layer.msg('删除成功', {icon: 1, time: 2000});
+                                                                window.location.reload();
                                                             } else if (!result.status) {
                                                                 window.Ewin.alert({message: result.msg});
                                                             }

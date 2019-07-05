@@ -1,3 +1,4 @@
+//已废除 本js文件已作废
 // $(document).ready((function () {
 //         var $table = $("#eplTable");
 //         var column = [];

@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/7/5
  * @Description:
  */
-public class UpdateHzProcessReqDTO {
+public class UpdateHzProcessReqDTO extends BaseDTO {
     /**
      * 工厂代码
      */

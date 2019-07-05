@@ -1,0 +1,333 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/12/12 Time: 9:45-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="paymentForm" role="form" method="post" action="">
+    <div class="form-group">
+        <label for="lineId1">合同完工状态</label>
+        <input class="form-control" id="lineId1" name="lineId1" type="text"
+               placeholder="请输入合同完工状态"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId2">付款比例</label>
+        <input class="form-control" id="lineId2" name="lineId2" type="text"
+               placeholder="请输入付款比例"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId3">一级模块</label>
+        <input class="form-control" id="lineId3" name="lineId3" type="text"
+               placeholder="请输入一级模块"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId4">二级模块</label>
+        <input class="form-control" id="lineId4" name="lineId4" type="text"
+               placeholder="请输入二级模块"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId5">需求部门</label>
+        <input class="form-control" id="lineId5" name="lineId5" type="text"
+               placeholder="请输入需求部门"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId6">项目费用描述</label>
+        <input class="form-control" id="lineId6" name="lineId6" type="text"
+               placeholder="请输入项目费用描述"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId9">供应商</label>
+        <input class="form-control" id="lineId9" name="lineId9" type="text"
+               placeholder="请输入供应商"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId10">合同签订时间</label>
+        <input class="form-control" id="lineId10" name="lineId10" type="text"
+               placeholder="请输入合同签订时间"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId11">合同编号</label>
+        <input class="form-control1" id="lineId11" name="lineId11" type="text"
+               placeholder="请输入合同编号"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId12">合同金额</label>
+        <input class="form-control" id="lineId12" name="lineId12" type="text"
+               placeholder="请输入合同金额"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId13">付款条款</label>
+        <input class="form-control" id="lineId13" name="lineId13" type="text"
+               placeholder="请输入付款条款"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId7">已付</label>
+        <input class="form-control" id="lineId7" name="lineId7" type="text"
+               placeholder="请输入已付"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId8">未付</label>
+        <input class="form-control" id="lineId8" name="lineId8" type="text"
+               placeholder="请输入未付"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId14">付款比例(第一次付款)</label>
+        <input class="form-control" id="lineId14" name="lineId14" type="text"
+               placeholder="请输入付款比例"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId15">付款金额(第一次付款)</label>
+        <input class="form-control" id="lineId15" name="lineId15" type="text"
+               placeholder="请输入付款金额"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId16">是否完工(第一次付款)</label>
+        <select class="form-control" name="lineId16" id="lineId16" placeholder="请选择是否完工">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId17">是否付款(第一次付款)</label>
+        <select class="form-control" name="lineId17" id="lineId17" placeholder="请选择是否付款">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId18">付款时间(第一次付款)</label>
+        <input class="form-control" id="lineId18" name="lineId18" type="text"
+               placeholder="请输入付款时间"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId19">付款比例(第二次付款)</label>
+        <input class="form-control" id="lineId19" name="lineId19" type="text"
+               placeholder="请输入付款比例"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId20">付款金额(第二次付款)</label>
+        <input class="form-control" id="lineId20" name="lineId20" type="text"
+               placeholder="请输入付款金额"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId21">付款时间(第二次付款)</label>
+        <input class="form-control" id="lineId21" name="lineId21" type="text"
+               placeholder="请输入付款时间"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId22">付款比例(第三次付款)</label>
+        <input class="form-control" id="lineId22" name="lineId22" type="text"
+               placeholder="请输入付款比例"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId23">付款金额(第三次付款)</label>
+        <input class="form-control" id="lineId23" name="lineId23" type="text"
+               placeholder="请输入付款金额"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId24">是否完工(第三次付款)</label>
+        <select class="form-control" name="lineId24" id="lineId24" placeholder="请选择是否完工">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId25">是否付款(第三次付款)</label>
+        <select class="form-control" name="lineId25" id="lineId25" placeholder="请选择是否付款">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId26">付款时间(第三次付款)</label>
+        <input class="form-control" id="lineId26" name="lineId26" type="text"
+               placeholder="请输入付款时间"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId27">付款比例(第四次付款)</label>
+        <input class="form-control" id="lineId27" name="lineId27" type="text"
+               placeholder="请输入付款比例"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId28">付款金额(第四次付款)</label>
+        <input class="form-control" id="lineId28" name="lineId28" type="text"
+               placeholder="请输入零件号"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId29">是否完工(第四次付款)</label>
+        <select class="form-control" name="lineId29" id="lineId29" placeholder="请选择是否完工">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId30">是否付款(第四次付款)</label>
+        <select class="form-control" name="lineId30" id="lineId30" placeholder="请选择是否付款">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId31">付款时间(第四次付款)</label>
+        <input class="form-control" id="lineId31" name="lineId31" type="text"
+               placeholder="请输入付款时间"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId32">付款比例(第五次付款)</label>
+        <input class="form-control" id="lineId32" name="lineId32" type="text"
+               placeholder="请输入付款比例"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId33">付款金额(第五次付款)</label>
+        <input class="form-control" id="lineId33" name="lineId33" type="text"
+               placeholder="请输入付款金额"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId34">是否完工(第五次付款)</label>
+        <select class="form-control" name="lineId34" id="lineId34" placeholder="请选择是否完工">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId35">是否付款(第五次付款)</label>
+        <select class="form-control" name="lineId35" id="lineId35" placeholder="请选择是否付款">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId36">付款时间(第五次付款)</label>
+        <input class="form-control" id="lineId36" name="lineId36" type="text"
+               placeholder="请输入付款时间"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId37">付款比例(第六次付款)</label>
+        <input class="form-control" id="lineId37" name="lineId37" type="text"
+               placeholder="请输入付款比例"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId38">付款金额(第六次付款)</label>
+        <input class="form-control" id="lineId38" name="lineId38" type="text"
+               placeholder="请输入付款金额"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId39">是否完工(第六次付款)</label>
+        <select class="form-control" name="lineId39" id="lineId39" placeholder="请选择是否完工">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId40">是否付款(第六次付款)</label>
+        <select class="form-control" name="lineId40" id="lineId40" placeholder="请选择是否付款">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId41">付款时间(第六次付款)</label>
+        <input class="form-control" id="lineId41" name="lineId41" type="text"
+               placeholder="请输入付款时间"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId42">付款比例(第七次付款)</label>
+        <input class="form-control" id="lineId42" name="lineId42" type="text"
+               placeholder="请输入付款比例"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId43">付款金额(第七次付款)</label>
+        <input class="form-control" id="lineId43" name="lineId43" type="text"
+               placeholder="请输入付款金额"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId44">是否完工(第七次付款)</label>
+        <select class="form-control" name="lineId44" id="lineId44" placeholder="请选择是否完工">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId45">是否付款(第七次付款)</label>
+        <select class="form-control" name="lineId45" id="lineId45" placeholder="请选择是否付款">
+            <option>是</option>
+            <option>否</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="lineId46">付款时间(第七次付款)</label>
+        <input class="form-control" id="lineId46" name="lineId46" type="text"
+               placeholder="请输入付款时间"/>
+    </div>
+    <div class="form-group">
+        <label for="lineId47">备注</label>
+        <input class="form-control" id="lineId47" name="lineId47" type="text"
+               placeholder="请输入零件号"/>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#paymentForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pMaterielCode: {
+                    message: '物料代码验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '物料代码不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#paymentForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#paymentForm ", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "puid": $("#puid").val(),
+                    "projectId":$("#project", window.top.document).val()
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            activeTabBodyRefresh();
+                            if (result.success) {
+                                layer.msg('添加成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

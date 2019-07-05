@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -60,7 +61,7 @@ public class HzRelevanceController {
      */
     @RequestMapping(value = "/queryRelevance", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject queryRelevance(HzRelevanceQueryDTO dto) {
+    public Map<String, Object> queryRelevance(HzRelevanceQueryDTO dto) {
         return hzRelevanceService2.queryRelevance(dto);
     }
 

@@ -3,6 +3,7 @@ package com.connor.hozon.bom.common.config.security;
 import com.connor.hozon.bom.sys.dao.UserDao;
 
 import com.connor.hozon.bom.sys.entity.User;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +21,10 @@ public class CustomUserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        //不区分登录名大小写
+        if(StringUtils.isNotBlank(s)){
+            s = s.trim().toLowerCase();
+        }
         User user = userDao.findByLogin(s);
         if(user == null){
             throw new UsernameNotFoundException("用户名不存在");

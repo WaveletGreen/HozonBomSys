@@ -64,7 +64,7 @@ public class HzDictionaryLibraryFactory {
         library.setType(reqDTO.getType());
         library.setValueSource(reqDTO.getValueSource());
 
-        library.setEffectTime(DateUtil.parseDefaultDate(reqDTO.getEffectTime()));
+        library.setEffectTime("".equals(reqDTO.getEffectTime())?null:DateUtil.parseDefaultDate(reqDTO.getEffectTime()));
         library.setFailureTime(DateUtil.parseDefaultDate(reqDTO.getFailureTime()));
 
         library.setNote(reqDTO.getNote());

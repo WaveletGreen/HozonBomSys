@@ -144,11 +144,11 @@
                             // jquery 调用刷新当前操作的table页面的refresh方法
                             // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                             activeTabBodyRefresh();
-                            if (result) {
+                            if (result.status) {
                                 layer.msg('添加模型成功!', {icon: 1, time: 2000});
                             }
                             else {
-                                window.Ewin.alert({message: '添加模型失败!'});
+                                window.Ewin.alert({message: result.msg+',添加模型失败!'});
                             }
 
                         },

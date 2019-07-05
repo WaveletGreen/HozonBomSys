@@ -81,4 +81,6 @@ public interface HzCfg0ModelFeatureDao extends BasicDao<HzCfg0ModelFeature> {
      * @return
      */
     List<HzCfg0ModelFeature> selectAllByProjectUid(@Param("projectUid") String projectUid);
+
+    int updateIsSent(List<HzCfg0ModelFeature> hzCfg0ModelFeatureList);
 }

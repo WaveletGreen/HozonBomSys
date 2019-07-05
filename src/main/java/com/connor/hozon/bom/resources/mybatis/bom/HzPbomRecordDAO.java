@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
+import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
@@ -8,6 +10,7 @@ import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import lombok.Data;
 import sql.pojo.bom.HzPbomLineRecord;
+import sql.pojo.epl.HzEPLManageRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -24,8 +27,6 @@ public interface HzPbomRecordDAO {
      */
     List<HzPbomLineRecord> getPbomById(Map<String,Object> map);
 
-    @Deprecated
-    List<HzPbomLineRecord> findPbomByItemId(String itemId,String projectId);
 
     /**
      * 插入 PBOM管理信息
@@ -35,26 +36,13 @@ public interface HzPbomRecordDAO {
     int insert(HzPbomLineRecord record);
 
     /**
-     * 复制层级的单条插入PBOM
-     * @param record
-     * @return
-     */
-    int insert2(HzPbomLineRecord record);
-
-    /**
      * 获取pbom_before信息 根据项目id puid或者零件号
      */
     List<HzPbomLineRecord> getPbomById_before(Map<String,Object> map);
 
-    int insert_before(HzPbomLineRecord record);
-
-    int update_before(HzPbomLineRecord record);
 
     List<HzPbomLineRecord> getPbomById_after(Map<String,Object> map);
 
-    int insert_after(HzPbomLineRecord record);
-
-    int update_after(HzPbomLineRecord record);
 
     int insertList(List<HzPbomLineRecord> records);
 
@@ -80,25 +68,19 @@ public interface HzPbomRecordDAO {
      */
     int updateList(List<HzPbomLineRecord> records);
 
+    int updatePBOMList(List<HzPbomLineRecord> records);
+    /**
+     * 批量更新 根据 puid进行更新
+     * @param records
+     * @return
+     */
+    int updateListByPuids(List<HzPbomLineRecord> records);
 
     /**
      * 导入 PBOM管理信息-修改
      */
     int updateInput(HzPbomLineRecord record);
 
-    /**
-     * 删除PBOM管理 通过外键删除
-     * @param ePuid
-     * @return
-     */
-    int recoverBomById(String ePuid);
-
-    /**
-     * 批量删除 直接删除数据
-     * @param puids eBomPuid  中间全部用英文逗号 隔开
-     * @return
-     */
-//    int deleteList(String puids);
 
     /**
      * 批量删除
@@ -107,6 +89,7 @@ public interface HzPbomRecordDAO {
      */
     int deleteList(List<DeleteHzPbomReqDTO> list);
 
+    int deleteListByPuids(List<String> puids,String tableName);
     /**
      * 分页获取pbom信息
      * @param query
@@ -121,12 +104,6 @@ public interface HzPbomRecordDAO {
      */
     HzPbomLineRecord getHzPbomByEbomPuid(String eBomPuid,String projectId);
 
-    /**
-     * 获取Pbom 总数
-     * @param
-     * @return
-     */
-    int getHzBomLineCount(String projectId);
 
     Double getHzPbomMaxOrderNum(String projectId);
 
@@ -158,9 +135,9 @@ public interface HzPbomRecordDAO {
 
     List<HzPbomLineRecord> getSameNameLineId(String lineId,String projectId);
 
+    @Deprecated
     int insertAccessories(String puid, String materielCode);
 
-    List<HzPbomLineRecord> queryAllBomLineIdByPuid(String puid);
 
     /**
      * 获取当前BOM的子一层结构
@@ -187,7 +164,7 @@ public interface HzPbomRecordDAO {
     List<HzPbomLineRecord> getPbomRecordsByPuids(HzChangeDataDetailQuery query);
 
     /**
-     * 根据ebomPuid 进行逻辑删除
+     * 根据Puid 进行逻辑删除
      * @param puids
      * @return
      */
@@ -201,7 +178,39 @@ public interface HzPbomRecordDAO {
 
     HzPbomLineRecord getPBomRecordByPuidAndRevision(HzChangeDataDetailQuery query);
 
-
-
     List<HzPbomLineRecord> getPbomRecordsByOrderId(HzChangeDataDetailQuery query);
+
+    /**
+     * 找出大于当前查找编号的最小记录 只找出当前父层的子一层 或者只找出2Y层
+     * @param query lineNo 查找编号
+     * @return
+     */
+    HzPbomLineRecord findMinPBOMRecordWhichLineNoGreaterCurrentLineNo(HzBOMQuery query);
+
+    /**
+     * 找出小于当前查找编号的最大记录 只找出当前父层的子一层 或者只找出2Y层
+     * @param query
+     * @return
+     */
+    HzPbomLineRecord findMaxPBOMRecordWhichLineNoLessCurrentNo(HzBOMQuery query);
+
+    /**
+     * 查询PBOM 根据零件号
+     * @param hzBOMQuery
+     * @return
+     */
+    List<HzPbomLineRecord> findPbomByLineId(HzBOMQuery hzBOMQuery);
+
+    List<HzPbomLineRecord> findPbomsByEBom(List<HzEPLManageRecord> hzEPLManageRecordsFather);
+
+    HzPbomLineRecord findPbomByEBom(String puid, String projectId);
+
+    HzPbomLineRecord findEbomChildrenByLineIndex(String puid, String lineNo);
+
+    HzPbomLineRecord findNextLineIndex(String puid, String lineNo);
+
+    HzPbomLineRecord findPreviousPbom(HzPbomLineRecord hzPbomLineRecord);
+
+    HzPbomLineRecord findNextSortNum(HzPbomLineRecord hzPbomLineRecord);
+
 }

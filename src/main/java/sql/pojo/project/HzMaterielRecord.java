@@ -6,7 +6,7 @@
 
 package sql.pojo.project;
 
-import sql.pojo.BaseChangePOJO;
+import sql.pojo.BaseChangeDO;
 
 import java.util.Date;
 import java.util.Objects;
@@ -17,7 +17,7 @@ import java.util.Objects;
  * @Date: Created in 2018/10/10 13:29
  * @Modified By:
  */
-public class HzMaterielRecord extends BaseChangePOJO {
+public class HzMaterielRecord extends BaseChangeDO {
     /**
      * 主键id
      */

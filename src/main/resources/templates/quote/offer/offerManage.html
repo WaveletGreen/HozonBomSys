@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/12/6 Time: 9:55-->
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>报价管理</title>
+</head>
+<body class="content-body">
+<div class="panel-body" style="padding-bottom: 0;">
+    <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;"  id="queryOfferManage">
+        <div class="form-group">
+            <label for="itemId">零件号:</label>
+            <input type="text"style="width: 140px;" class="form-control" name="itemId" id="itemId" placeholder="请输入零件号"/>
+        </div>
+        <div class="form-group">
+            <label for="itemName">零件名称:</label>
+            <input type="text"style="width: 140px;" class="form-control" name="itemName" id="itemName" placeholder="请输入零件名称"/>
+        </div>
+        <div class="form-group">
+            <label for="chosenSupplier">中选供应商:</label>
+            <input type="text"style="width: 140px;" class="form-control" name="chosenSupplier" id="chosenSupplier" placeholder="请输入中选供应商"/>
+        </div>
+        <div class="form-group">
+            <label for="specialty">专业:</label>
+            <input type="text"style="width: 140px;" class="form-control" name="specialty" id="specialty" placeholder="请输入专业"/>
+        </div>
+        <div class="form-group">
+            <button type="button" id="queryBtn" class="btn btn-primary">查询</button>
+        </div>
+    </form>
+</div>
+<div class="content col-lg-12">
+    <table class="table table-striped tableNormalStyle" id="offerManageTable"></table>
+</div>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/jsonHelper.js}"></script>
+<script th:src="@{/js/quote/offerManage.js}"></script>
+</body>
+</html>

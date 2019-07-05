@@ -166,7 +166,7 @@ public class HzAccessoriesLibsController extends BaseController {
             _res.put("pNote",lib.getpNote() );
             _list.add(_res);
         }
-        ret.put("totalCount", libs.size());
+        ret.put("totalCount", page.getTotalCount());
         ret.put("result", _list);
         return ret;
     }
@@ -197,5 +197,14 @@ public class HzAccessoriesLibsController extends BaseController {
         }
         model.addAttribute("data", libs.get(0));
         return "resourcesLibrary/accessoriesLibrary/updateAccessoriesLibrary";
+    }
+
+    /**
+     * 跳转到工艺辅料库的导入页面
+     * @return
+     */
+    @RequestMapping(value = "importExcel",method = RequestMethod.GET)
+    public String getExcelImport() {
+        return "resourcesLibrary/accessoriesLibrary/importExcel";
     }
 }

@@ -100,13 +100,7 @@ public class HzChangeController extends BaseController {
         if(StringUtil.isEmpty(query.getProjectId())){
             return new JSONObject();
         }
-        HzChangeOrderByPageQuery pageQuery = query;
-        try {
-            pageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        }catch (Exception e){
-
-        }
-        Page<HzChangeOrderRespDTO> page = hzChangeOrderService.getHzChangeOrderPage(pageQuery);
+        Page<HzChangeOrderRespDTO> page = hzChangeOrderService.getHzChangeOrderPage(query);
         if(ListUtil.isEmpty(page.getResult())){
             return new JSONObject();
         }
@@ -121,6 +115,7 @@ public class HzChangeController extends BaseController {
             object.put("changeNo",hzChangeOrderRespDTO.getChangeNo());
             object.put("changeType",hzChangeOrderRespDTO.getChangeType());
             object.put("createName",hzChangeOrderRespDTO.getCreateName());
+            object.put("auditor",hzChangeOrderRespDTO.getAuditor());
             object.put("originator",hzChangeOrderRespDTO.getOriginator());
             object.put("id",hzChangeOrderRespDTO.getId());
             object.put("marketType",hzChangeOrderRespDTO.getMarketType());
@@ -139,10 +134,20 @@ public class HzChangeController extends BaseController {
         jsonObject.put("result",list);
         return jsonObject;
     }
-    /*@RequestMapping(value = "texing")
-    public String getToChangeTableToPage(){
 
-        return "change/changeOrder/changeFeatureTable";
-    }*/
+    /**
+     * 查询变更表单是否关联变更数据
+     * @param orderId
+     * @param response
+     */
+    @RequestMapping(value = "related/data",method = RequestMethod.GET)
+    public void changeOrderRelatedData(Long orderId,HttpServletResponse response){
+        boolean b = hzChangeOrderService.changeOrderRelatedChangeData(orderId);
+        if(b){
+            toJSONResponse(Result.build(true,"已关联变更数据"),response);
+            return;
+        }
+        toJSONResponse(Result.build(false,"空表单,当前变更表单未找到变更数据!"),response);
+    }
 
 }

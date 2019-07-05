@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import sql.pojo.interaction.HzSingleVehicles;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 单车清单，带颜色
@@ -66,4 +67,8 @@ public interface HzSingleVehiclesDao extends BasicDao<HzSingleVehicles> {
      * @return
      */
     HzSingleVehicles getSingleVehiclesById(String projectId,Long id);
+
+    List<HzSingleVehicles> selectByIds(List<HzSingleVehicles> hzSingleVehicles);
+
+    int doUpdateIsSent(Map<String,Object> map);
 }

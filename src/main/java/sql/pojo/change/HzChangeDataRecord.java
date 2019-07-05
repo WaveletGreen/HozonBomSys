@@ -2,6 +2,7 @@ package sql.pojo.change;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,8 @@ import java.util.Date;
  * @Description: 变更表单数据记录
  */
 @Data
-public class HzChangeDataRecord {
+public class HzChangeDataRecord implements Serializable {
+    private static final long serialVersionUID = -4106849599610139955L;
     /**
      * 主键id
      */

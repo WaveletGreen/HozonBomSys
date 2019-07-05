@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
@@ -8,6 +9,7 @@ import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.project.HzMaterielRecord;
 
 import java.util.UUID;
@@ -18,80 +20,13 @@ import java.util.UUID;
  * @Description:
  */
 public class HzMaterielFactory {
-    public static HzMaterielRecord addHzEbomReqDTOMaterielRecord(AddHzEbomReqDTO reqDTO){
-        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-        hzMaterielRecord.setpMaterielCode(reqDTO.getLineId());
-        hzMaterielRecord.setpMaterielType("A002");
-        hzMaterielRecord.setpMaterielDesc(reqDTO.getpBomLinePartName());
-        hzMaterielRecord.setpMaterielDescEn(reqDTO.getpBomLinePartEnName());
-        hzMaterielRecord.setpBasicUnitMeasure(reqDTO.getpUnit());
-        hzMaterielRecord.setpColorPart(1);
-        hzMaterielRecord.setpHeight(reqDTO.getpActualWeight());
-        if(reqDTO.getP3cpartFlag().equals("Y")){
-            hzMaterielRecord.setP3cPartFlag(1);
-        }else if(reqDTO.getP3cpartFlag().equals("N")){
-            hzMaterielRecord.setP3cPartFlag(0);
-        }else {
-            hzMaterielRecord.setP3cPartFlag(null);
-        }
-        if(reqDTO.getpInOutSideFlag().equals("内饰件")){
-            hzMaterielRecord.setpInOutSideFlag(1);
-        }else if(reqDTO.getpInOutSideFlag().equals("外饰件")){
-            hzMaterielRecord.setpInOutSideFlag(0);
-        }else {
-            hzMaterielRecord.setpInOutSideFlag(null);
-        }
-        hzMaterielRecord.setPuid(UUID.randomUUID().toString());
-        hzMaterielRecord.setpPartImportantDegree(reqDTO.getpImportance());
-        hzMaterielRecord.setpPertainToProjectPuid(reqDTO.getProjectId());
-        if("Y".equals(reqDTO.getColorPart())){
-            hzMaterielRecord.setpColorPart(1);
-        }else if("N".equals(reqDTO.getColorPart())){
-            hzMaterielRecord.setpColorPart(0);
-        }else {
-            hzMaterielRecord.setpColorPart(null);
-        }
-
-        return hzMaterielRecord;
-    }
-
-
-    public static HzMaterielRecord updateHzEbomReqDTOMaterielRecord(UpdateHzEbomReqDTO reqDTO){
-        HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
-        hzMaterielRecord.setpMaterielCode(reqDTO.getLineId());
-        hzMaterielRecord.setpMaterielType("A002");
-        hzMaterielRecord.setpMaterielDesc(reqDTO.getpBomLinePartName());
-        hzMaterielRecord.setpMaterielDescEn(reqDTO.getpBomLinePartEnName());
-        hzMaterielRecord.setpBasicUnitMeasure(reqDTO.getpUnit());
-        hzMaterielRecord.setpColorPart(1);
-        hzMaterielRecord.setpHeight(reqDTO.getpActualWeight());
-        if(reqDTO.getP3cpartFlag().equals("Y")){
-            hzMaterielRecord.setP3cPartFlag(1);
-        }else if(reqDTO.getP3cpartFlag().equals("N")){
-            hzMaterielRecord.setP3cPartFlag(0);
-        }else {
-            hzMaterielRecord.setP3cPartFlag(null);
-        }
-        if(reqDTO.getpInOutSideFlag().equals("内饰件")){
-            hzMaterielRecord.setpInOutSideFlag(1);
-        }else if(reqDTO.getpInOutSideFlag().equals("外饰件")){
-            hzMaterielRecord.setpInOutSideFlag(0);
-        }else {
-            hzMaterielRecord.setpInOutSideFlag(null);
-        }
-        hzMaterielRecord.setpPartImportantDegree(reqDTO.getpImportance());
-        if("Y".equals(reqDTO.getColorPart())){
-            hzMaterielRecord.setpColorPart(1);
-        }else if("N".equals(reqDTO.getColorPart())){
-            hzMaterielRecord.setpColorPart(0);
-        }else {
-            hzMaterielRecord.setpColorPart(null);
-        }
-        hzMaterielRecord.setpPertainToProjectPuid(reqDTO.getProjectId());
-        return hzMaterielRecord;
-    }
-
-    public static HzMaterielRecord mbomRecordToMaterielRecord(String projectId, HzMbomLineRecord record){
+    /**
+     * 将EBOM+MBOM的部分字段信息 带入到物料数据来
+     * @param
+     * @param record
+     * @return
+     */
+    public static HzMaterielRecord mbomRecordToMaterielRecord(String projectId, HzMbomLineRecord record,HzEPLManageRecord eplManageRecord){
         HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
         hzMaterielRecord.setpMaterielCode(record.getLineId());
         hzMaterielRecord.setpMaterielDesc(record.getpBomLinePartName());
@@ -102,10 +37,19 @@ public class HzMaterielFactory {
         hzMaterielRecord.setPuid(UUID.randomUUID().toString());
         hzMaterielRecord.setMaterielResourceId(record.geteBomPuid());
         hzMaterielRecord.setpColorPart(record.getIsColorPart());
+        hzMaterielRecord.setResource(record.getBuyType());//采购类型
         hzMaterielRecord.setpFactoryPuid(record.getpFactoryId());
         hzMaterielRecord.setpValidFlag(2);
+        if(eplManageRecord != null){
+            hzMaterielRecord.setpBasicUnitMeasure(eplManageRecord.getpUnit());
+            hzMaterielRecord.setpHeight(eplManageRecord.getpActualWeight());
+            hzMaterielRecord.setpInOutSideFlag(eplManageRecord.getpInOutSideFlag());
+            hzMaterielRecord.setP3cPartFlag(eplManageRecord.getP3cpartFlag());
+            hzMaterielRecord.setpPartImportantDegree(eplManageRecord.getpImportance());
+        }
         return hzMaterielRecord;
     }
+
 
 
 
@@ -127,47 +71,23 @@ public class HzMaterielFactory {
         Integer p3CPartFlag = record.getP3cPartFlag();
         Integer colorPart = record.getpColorPart();
         Integer inOutSideFlag = record.getpInOutSideFlag();
-        Integer inventedFlag = record.getpInventedPart();
+        Integer dataType = record.getpMaterielDataType();
+        // 2Y 层的 就是虚拟件  否则就不是
+//        Integer inventedFlag = record.getpInventedPart();
         Integer loosePartFlag = record.getpLoosePartFlag();
-        if (Integer.valueOf(0).equals(p3CPartFlag)) {
-            respDTO.setP3cPartFlag("N");
-        } else if (Integer.valueOf(1).equals(p3CPartFlag)) {
-            respDTO.setP3cPartFlag("Y");
-        } else {
-            respDTO.setP3cPartFlag("");
-        }
+        respDTO.setP3cPartFlag(BOMTransConstants.integerToYNString(p3CPartFlag));
 
-        if (Integer.valueOf(0).equals(inventedFlag)) {
-            respDTO.setpInventedPart("N");
-        } else if (Integer.valueOf(1).equals(inventedFlag)) {
-            respDTO.setpInventedPart("Y");
-        } else {
-            respDTO.setpInventedPart("");
+        if(dataType != null){
+            switch (dataType){
+                case 31:respDTO.setpInventedPart(BOMTransConstants.Y);
+                break;
+                default:respDTO.setpInventedPart(BOMTransConstants.N);
+                break;
+            }
         }
-
-        if (Integer.valueOf(0).equals(colorPart)) {
-            respDTO.setpColorPart("N");
-        } else if (Integer.valueOf(1).equals(colorPart)) {
-            respDTO.setpColorPart("Y");
-        } else {
-            respDTO.setpColorPart("");
-        }
-
-        if (Integer.valueOf(1).equals(inOutSideFlag)) {
-            respDTO.setpInOutSideFlag("内饰件");
-        } else if (Integer.valueOf(0).equals(inOutSideFlag)) {
-            respDTO.setpInOutSideFlag("外饰件");
-        } else {
-            respDTO.setpInOutSideFlag("");
-        }
-
-        if (Integer.valueOf(1).equals(loosePartFlag)) {
-            respDTO.setpLoosePartFlag("Y");
-        } else if (Integer.valueOf(0).equals(loosePartFlag)) {
-            respDTO.setpLoosePartFlag("N");
-        } else {
-            respDTO.setpLoosePartFlag("");
-        }
+        respDTO.setpColorPart(BOMTransConstants.integerToYNString(colorPart));
+        respDTO.setpInOutSideFlag(BOMTransConstants.integerToInOutSideString(inOutSideFlag));
+        respDTO.setpLoosePartFlag(BOMTransConstants.integerToYNString(loosePartFlag));
         respDTO.setpHeight(record.getpHeight());
         respDTO.setpPartImportantDegree(record.getpPartImportantDegree());
         respDTO.setpSpareMaterial(record.getpSpareMaterial());
@@ -179,6 +99,7 @@ public class HzMaterielFactory {
 
     public static HzMaterielRecord featureToMaterielRecord(HzCfg0ModelFeature feature,String projectId){
         HzMaterielRecord hzMaterielRecord = new HzMaterielRecord();
+        hzMaterielRecord.setpValidFlag(2);
         hzMaterielRecord.setpFactoryPuid(feature.getFactoryCode());
         hzMaterielRecord.setpColorPart(feature.getColor());
         hzMaterielRecord.setPuid(UUID.randomUUID().toString());
@@ -187,15 +108,20 @@ public class HzMaterielFactory {
         hzMaterielRecord.setpMaterielCode(feature.getpFeatureSingleVehicleCode());
         hzMaterielRecord.setpMaterielDesc(feature.getMaterielDesc());
         hzMaterielRecord.setpMaterielDescEn(feature.getMaterielEnDesc());
-        hzMaterielRecord.setpCreateName(UserInfo.getUser().getUserName());
-        hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUserName());
-        hzMaterielRecord.setpMrpController(feature.getMrpController());
+        if(null == UserInfo.getUser()){
+            hzMaterielRecord.setpCreateName("system");
+            hzMaterielRecord.setpUpdateName("system");
+        }else {
+            hzMaterielRecord.setpCreateName(UserInfo.getUser().getUserName());
+            hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUserName());
+        }
+        hzMaterielRecord.setpMrpController("Z02");//整车的MRP控制者都是Z02
         hzMaterielRecord.setpVinPerNo(feature.getVinCode());
         hzMaterielRecord.setResource(feature.getPurchaseType());
         hzMaterielRecord.setpInOutSideFlag(feature.getLabelFlag());
         hzMaterielRecord.setpBasicUnitMeasure(feature.getBasicCountUnit());
         hzMaterielRecord.setMaterielResourceId(feature.getPuid());
-        hzMaterielRecord.setpPartImportantDegree(String.valueOf(feature.getImportance()));
+        hzMaterielRecord.setpPartImportantDegree(feature.getImportance()==null?null:String.valueOf(feature.getImportance()));
         hzMaterielRecord.setP3cPartFlag(feature.getRulesFlag());
         hzMaterielRecord.setpInventedPart(feature.getVirtualFlag());
         hzMaterielRecord.setpMaterielType("A001");
@@ -235,6 +161,10 @@ public class HzMaterielFactory {
         respDTO.setpCreateName(record.getpCreateName());
         respDTO.setpPertainToProjectPuid(record.getpPertainToProjectPuid());
         respDTO.setType(record.getType());
+        respDTO.setSendSapFlag(record.getSendSapFlag());
         return respDTO;
     }
+
+
+
 }

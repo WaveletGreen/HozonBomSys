@@ -44,4 +44,9 @@ public interface HzCfg0ModelGroupDao extends BasicDao<HzCfg0ModelGroup> {
      * @return
      */
     String selectGroupNameByMainUid(String mainUid);
+
+    @Override
+    int insert(HzCfg0ModelGroup hzCfg0ModelGroup);
+
+    int updateByMainId(HzCfg0ModelGroup hzCfg0ModelGroup);
 }

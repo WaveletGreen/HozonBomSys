@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 import java.util.Date;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Date;
  * Date: 2018/8/30
  * Time: 15:16
  */
-public class AddHzDictionaryLibraryReqDTO {
+public class AddHzDictionaryLibraryReqDTO extends BaseDTO {
     /**
      * 主键puid
      */

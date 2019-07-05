@@ -5,6 +5,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesR
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import sql.pojo.interaction.HzSingleVehicles;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,4 +58,25 @@ public interface HzSingleVehiclesServices {
      * @return
      */
     JSONObject singleVehDosage(byte[] bytes, List<HzCfg0ModelRecord> list,JSONObject object);
+
+    /**
+     * 单车用量
+     * @param vehNum
+     * @param list
+     * @param object
+     * @return
+     */
+    JSONObject singleVehNum(String vehNum,List<HzCfg0ModelRecord> list,JSONObject object);
+
+    /**
+     *单车用量
+     * @param vehNum
+     * @param list
+     * @return
+     */
+    JSONObject singleVehNum(String vehNum,List<HzCfg0ModelRecord> list);
+
+    JSONObject sendSap(List<HzSingleVehicles> hzSingleVehicles);
+
+    JSONObject deleteSap(List<HzSingleVehicles> hzSingleVehicles);
 }

@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/9/27
  * @Description:解算单车BOM入参
  */
-public class AnalysisSingleVehicleBOMReqDTO {
+public class AnalysisSingleVehicleBOMReqDTO extends BaseDTO {
     /**
      * 项目id
      */

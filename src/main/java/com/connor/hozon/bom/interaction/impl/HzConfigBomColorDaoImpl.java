@@ -38,4 +38,14 @@ public class HzConfigBomColorDaoImpl extends BasicDaoImpl<HzConfigBomColorBean> 
         params.put("projectUid", projectUid);
         return baseSQLUtil.executeQueryByPass(BEAN, params, clz.getCanonicalName() + ".selectBy2YUidWithProject");
     }
+
+
+    public List<HzConfigBomColorBean> selectPaintColorSet(String projectId){
+        return baseSQLUtil.findForList(clz.getCanonicalName() + ".selectPaintColorSet",projectId);
+    }
+
+    @Override
+    public List<HzConfigBomColorBean> selectPaintBomLinePuidFormConfig(String projectId) {
+        return baseSQLUtil.findForList(clz.getCanonicalName() + ".selectPaintBomLinePuidFormConfig",projectId);
+    }
 }

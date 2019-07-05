@@ -8,6 +8,7 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         scanBasePackages = {"sql", "integration.service",
                 "com.connor.hozon"})
 @EnableTransactionManagement
+@EnableScheduling
 public class HzBomSysApplication extends SpringBootServletInitializer {
 
     @Override
@@ -36,7 +38,7 @@ public class HzBomSysApplication extends SpringBootServletInitializer {
         return new EmbeddedServletContainerCustomizer() {
             @Override
             public void customize(ConfigurableEmbeddedServletContainer container) {
-                container.setSessionTimeout(3600);// 单位为S
+                container.setSessionTimeout(7200);// 单位为S
             }
         };
     }

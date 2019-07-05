@@ -20,4 +20,18 @@ public interface HzConfigBomColorDao extends BasicDao<HzConfigBomColorBean> {
      * @return
      */
     List<HzConfigBomColorBean> selectBy2YUidWithProject(String bomline, String projectUid);
+
+    /**
+     * 查询油漆车身的颜色件信息
+     * @param projectId
+     * @return
+     */
+    List<HzConfigBomColorBean> selectPaintColorSet(String projectId);
+
+    /**
+     * 查询配置那边记录的油漆车身对应的BOM主键
+     * @param projectId
+     * @return
+     */
+    List<HzConfigBomColorBean> selectPaintBomLinePuidFormConfig(String projectId);
 }

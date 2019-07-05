@@ -6,6 +6,7 @@ import integration.option.MRPControlOption;
 import integration.option.MaterialOption;
 import integration.option.PurchaseOption;
 import integration.service.impl.masterMaterial1.TransMasterMaterialService;
+import org.apache.commons.lang.StringUtils;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.project.HzMaterielRecord;
 
@@ -68,8 +69,15 @@ public class ReflectMateriel {
         mm.setMaterialCode(hzMaterielRecord.getpMaterielCode());
         //物料中文描述
         mm.setMaterialName(hzMaterielRecord.getpMaterielDesc());
-        //物料描述 英文
-        mm.setMaterialEnglishName(hzMaterielRecord.getpMaterielDescEn() == null ? "" : hzMaterielRecord.getpMaterielDescEn());
+        //物料描述 英文 如果长度超出40位 这里只截取前40位长度即可
+        String materielEnName = "";
+        if(StringUtils.isNotBlank(hzMaterielRecord.getpMaterielDescEn())){
+            materielEnName = hzMaterielRecord.getpMaterielDescEn();
+            if(materielEnName.length()>40){
+                materielEnName = materielEnName.substring(0,40);
+            }
+        }
+        mm.setMaterialEnglishName(materielEnName);
         //基本计量单位
         mm.setUnit(hzMaterielRecord.getpBasicUnitMeasure() == null ? "EA" : hzMaterielRecord.getpBasicUnitMeasure());
         //虚拟件标识,是虚拟件则传X，不是则N
@@ -212,56 +220,56 @@ public class ReflectMateriel {
     }
 
 
-    public static void main(String[] args) {
-        HzMaterielRecord materiel = new HzMaterielRecord();
-        materiel.setPuid("2123132131");
-        materiel.setpFactoryPuid("22133");
-        //物料编号
-        materiel.setpMaterielCode("S00-5206010");
-        //中文描述
-        materiel.setpMaterielDesc("前风挡总成");
-        //英文描述
-        materiel.setpMaterielDescEn("QFDZC");
-        //基本计量单位
-        materiel.setpBasicUnitMeasure("EA");
-        //设置物料类型
-        materiel.setpMaterielType(MaterialOption.MATERIAL_ORG.GetDesc());
-        //设置采购类型
-        //设置VIN前置号
-        materiel.setpVinPerNo("11111111111");
-        //设置颜色标识
-//        materiel.setpColorPart(0);
-        //设置毛重
-        materiel.setpHeight("12.5");
-        //设置内外饰标识
-        materiel.setpInOutSideFlag(0);
-        //设置3C件标识
-        materiel.setP3cPartFlag(0);
-        //设置零件重要度
-        materiel.setpPartImportantDegree("1");
-        //设置散件标识
-        materiel.setpLoosePartFlag(0);
-        //设置虚拟件标识
-        materiel.setpInventedPart(0);
-
-        ReflectMateriel materiel1 = new ReflectMateriel(materiel);
-        //设置工厂
-        materiel1.setFactory("1001");
-        //设置动作描述代码
-        materiel1.setActionFlagOption(ActionFlagOption.ADD);
-        //设置MRP控制者，公告号和采购类型
-        materiel1.setMRPAndPurchase(MRPControlOption.MRP_FICTITIOUS.GetDesc(),
-                PurchaseOption.PURCHASE_MAKE.GetDesc(),
-                "公告号");
-        String uuid = UUIDHelper.generateUpperUid();
-        String lineNum = uuid.substring(0, 5);
-        materiel1.setPackNo(uuid);
-        materiel1.setLineNum(lineNum);
-
-        TransMasterMaterialService service = new TransMasterMaterialService();
-        service.getInput().getItem().add(materiel1.getMm().getZpptci001());
-        service.execute();
-        service.getOut();
-        System.out.println();
-    }
+//    public static void main(String[] args) {
+//        HzMaterielRecord materiel = new HzMaterielRecord();
+//        materiel.setPuid("2123132131");
+//        materiel.setpFactoryPuid("22133");
+//        //物料编号
+//        materiel.setpMaterielCode("S00-5206010");
+//        //中文描述
+//        materiel.setpMaterielDesc("前风挡总成");
+//        //英文描述
+//        materiel.setpMaterielDescEn("QFDZC");
+//        //基本计量单位
+//        materiel.setpBasicUnitMeasure("EA");
+//        //设置物料类型
+//        materiel.setpMaterielType(MaterialOption.MATERIAL_ORG.GetDesc());
+//        //设置采购类型
+//        //设置VIN前置号
+//        materiel.setpVinPerNo("11111111111");
+//        //设置颜色标识
+////        materiel.setpColorPart(0);
+//        //设置毛重
+//        materiel.setpHeight("12.5");
+//        //设置内外饰标识
+//        materiel.setpInOutSideFlag(0);
+//        //设置3C件标识
+//        materiel.setP3cPartFlag(0);
+//        //设置零件重要度
+//        materiel.setpPartImportantDegree("1");
+//        //设置散件标识
+//        materiel.setpLoosePartFlag(0);
+//        //设置虚拟件标识
+//        materiel.setpInventedPart(0);
+//
+//        ReflectMateriel materiel1 = new ReflectMateriel(materiel);
+//        //设置工厂
+//        materiel1.setFactory("1001");
+//        //设置动作描述代码
+//        materiel1.setActionFlagOption(ActionFlagOption.ADD);
+//        //设置MRP控制者，公告号和采购类型
+//        materiel1.setMRPAndPurchase(MRPControlOption.MRP_FICTITIOUS.GetDesc(),
+//                PurchaseOption.PURCHASE_MAKE.GetDesc(),
+//                "公告号");
+//        String uuid = UUIDHelper.generateUpperUid();
+//        String lineNum = uuid.substring(0, 5);
+//        materiel1.setPackNo(uuid);
+//        materiel1.setLineNum(lineNum);
+//
+//        TransMasterMaterialService service = new TransMasterMaterialService();
+//        service.getInput().getItem().add(materiel1.getMm().getZpptci001());
+//        service.execute();
+//        service.getOut();
+//        System.out.println();
+//    }
 }

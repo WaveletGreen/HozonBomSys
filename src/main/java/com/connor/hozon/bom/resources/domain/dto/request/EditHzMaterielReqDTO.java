@@ -1,12 +1,16 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
+import java.util.List;
+
 /**
  * @Author: haozt
  * @Date: 2018/7/3
  * @Description:
  */
-public class EditHzMaterielReqDTO {
+public class EditHzMaterielReqDTO extends BaseDTO {
 
     private String puid;
 
@@ -81,6 +85,17 @@ public class EditHzMaterielReqDTO {
      * 采购类型
      */
     private String resource;
+
+    private  String pMaterielDesc;
+
+
+    public String getpMaterielDesc() {
+        return pMaterielDesc;
+    }
+
+    public void setpMaterielDesc(String pMaterielDesc) {
+        this.pMaterielDesc = pMaterielDesc;
+    }
 
     public String getPuid() {
         return puid;

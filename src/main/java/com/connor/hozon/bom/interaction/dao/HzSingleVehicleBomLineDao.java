@@ -21,4 +21,13 @@ public interface HzSingleVehicleBomLineDao extends BasicDao<HzSingleVehicleBomLi
      * @return
      */
     List<HzSingleVehicleBomLineBean> selectByProjectUidWithSv(String projectUid, Long dmbId);
+
+    /**
+     * 2019.1.3
+     * 查询一个单车的所有2Y层颜色信息 全配置清单哪里的实心打点图
+     * @param projectId 项目id
+     * @param dmbId 单车信息
+     * @return 查询结果集
+     */
+    List<HzSingleVehicleBomLineBean> selectFullConfigColorSet(String projectId,Long dmbId);
 }

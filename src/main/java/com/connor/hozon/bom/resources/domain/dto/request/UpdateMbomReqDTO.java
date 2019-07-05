@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/6/27
  * @Description:
  */
-public class UpdateMbomReqDTO {
+public class UpdateMbomReqDTO extends BaseDTO {
 
     private String lineId;
 
@@ -71,6 +73,28 @@ public class UpdateMbomReqDTO {
     private Integer type;
 
     private String projectId;
+    /**
+     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
+     */
+    private Integer updateType;
+
+    private String puid;
+
+    public String getPuid() {
+        return puid;
+    }
+
+    public void setPuid(String puid) {
+        this.puid = puid;
+    }
+
+    public Integer getUpdateType() {
+        return updateType;
+    }
+
+    public void setUpdateType(Integer updateType) {
+        this.updateType = updateType;
+    }
 
     public String getLineId() {
         return lineId;

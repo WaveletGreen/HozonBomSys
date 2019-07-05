@@ -40,7 +40,7 @@
 .table-hover>tbody>tr:hover{background-color: #bce8f1}
 .tableNormalStyle tr {
 }
-.tableNormalStyle tr:nth-child(even){
+.table-striped>tbody>tr:nth-of-type(even){
     background-color: #ced4da;
 }
 .tableNormalStyle tr td {
@@ -55,7 +55,7 @@
     text-align: center;
 }
 .tableNormalStyle thead tr th .th-inner{
-padding: 2px !important;
+    padding: 2px !important;
 }
 .tableNormalStyle thead tr .bs-checkbox {
     text-align: center ;

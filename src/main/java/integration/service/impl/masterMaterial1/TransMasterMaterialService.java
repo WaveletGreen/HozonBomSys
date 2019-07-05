@@ -1,14 +1,18 @@
 package integration.service.impl.masterMaterial1;
 
+import com.connor.hozon.bom.resources.util.ListUtil;
 import integration.Author;
 import integration.base.masterMaterial.TABLEOFZPPTCI001;
 import integration.base.masterMaterial.TABLEOFZPPTCO001;
+import integration.base.masterMaterial.ZPPTCI001;
 import integration.base.masterMaterial.ZPPTCO001;
 import integration.logic.MasterMaterial;
 import integration.service.i.ITransmitService;
 import org.springframework.stereotype.Service;
+import sql.pojo.bom.HzMbomLineRecord;
 
 import javax.xml.ws.Holder;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +52,7 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
     private Holder<TABLEOFZPPTCO001> outputContainer;
 
     public TransMasterMaterialService() {
-        zpptcsap001Service = new ZPPTCSAP001Service();
+//        zpptcsap001Service = new ZPPTCSAP001Service();
         //输入参数
         inputContainer = new Holder<>();
         input = new TABLEOFZPPTCI001();
@@ -78,6 +82,50 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
             inputContainer.value = input;
             outputContainer.value = out;
             //执行服务
+
+//            if (ListUtil.isNotEmpty(input.getItem())) {
+//                List<ZPPTCI001> lineRecords = input.getItem();
+//                int size = lineRecords.size();
+//                // mlgb 的 老资 50条 50条的传输
+//                int i = 0;
+//                int cout = 0;
+//                synchronized (this){
+//                    if (size > 2) {
+//                        for (i = 0; i < size / 2; i++) {
+//                            List<ZPPTCI001> list = new ArrayList<>();
+//                            for (int j = 0; j < 2; j++) {
+//                                list.add(lineRecords.get(cout));
+//                                cout++;
+//                            }
+//                            input.setItem(list);
+//                            inputContainer.value = input;
+//                            try {
+//                                super.execute(zpptcsap001Service, inputContainer, outputContainer);
+//                                out = outputContainer.value;
+//                            }catch (Exception e){
+//                                continue;
+//                            }
+//
+//                        }
+//                    }
+//                    if (i * 2 < size) {
+//                        List<ZPPTCI001> list = new ArrayList<>();
+//                        for (int j = 0; j < size - i * 2; j++) {
+//                            list.add(lineRecords.get(cout));
+//                            cout++;
+//                        }
+//
+//                        try {
+//                            super.execute(zpptcsap001Service, inputContainer, outputContainer);
+//                            out = outputContainer.value;
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                        }
+//
+//                    }
+//                }
+//            }
+
             if (super.execute(zpptcsap001Service, inputContainer, outputContainer) != null)
                 out = outputContainer.value;
             else {

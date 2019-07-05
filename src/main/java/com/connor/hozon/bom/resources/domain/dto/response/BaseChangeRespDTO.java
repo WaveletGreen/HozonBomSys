@@ -1,6 +1,9 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @Author: haozt
@@ -9,13 +12,14 @@ import lombok.Data;
  * 状态（A U D） 变更类型
  */
 @Data
-public abstract class BaseChangeRespDTO {
+public abstract class BaseChangeRespDTO extends BaseDTO implements Serializable {
+    private static final long serialVersionUID = -1940522775687050322L;
     /**
      * 变更类型（A D U）
      */
     private String changeType;
     /**
-     * 状态即将要执行的操作（A D U）  新增 删除 修改
+     * 生效时间
      */
-//    private String state;
+    private String effectTime;
 }

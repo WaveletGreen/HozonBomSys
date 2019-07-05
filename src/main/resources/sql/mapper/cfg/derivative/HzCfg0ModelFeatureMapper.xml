@@ -335,4 +335,13 @@
         </set>
         where P_PERTAIN_TO_MODEL = #{pPertainToModel,jdbcType=VARCHAR}
     </update>
+
+    <update id="updateIsSent" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" open="begin" separator=";" close=";end;">
+            update HZ_CFG0_MODEL_FEATURE
+            set IS_SENT = #{isSent,jdbcType=DECIMAL}
+            where
+            PUID = #{puid,jdbcType=VARCHAR}
+        </foreach>
+    </update>
 </mapper>

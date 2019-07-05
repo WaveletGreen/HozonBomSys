@@ -1,12 +1,14 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * \* User: xulf
  * \* Date: 2018/7/2
  * \* Time: 19:48
  * \
  */
-public class UpdateWorkCenterReqDTO {
+public class UpdateWorkCenterReqDTO extends BaseDTO {
 
     /**
      * id

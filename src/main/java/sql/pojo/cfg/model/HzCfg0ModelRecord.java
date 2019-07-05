@@ -6,7 +6,10 @@
 
 package sql.pojo.cfg.model;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -47,6 +50,27 @@ public class HzCfg0ModelRecord {
      * 创建时间
      */
     private Date modelUpdateDate;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if(o instanceof  HzCfg0ModelRecord){
+            final HzCfg0ModelRecord that = (HzCfg0ModelRecord) o;
+            if(StringUtils.isNotBlank(this.objectName)){
+                return this.objectName.equals(that.getObjectName());
+            }else if(StringUtils.isNotBlank(puid)){
+                return this.puid.equals(that.getPuid());
+            }
+            return false;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(objectName);
+    }
 
     public String getPuid() {
         return puid;

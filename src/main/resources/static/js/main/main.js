@@ -8,16 +8,16 @@ $(document).ready(
         var URL = document.URL.split("/");
         var contextPath = "/" + URL[3];
         // 页面加载完成以后开启websocket的连接
-        var options = new Array();
-        options.sockurl = contextPath + '/ricky-websocket';
-        options.stompClienturl = '/ricky/topic/greetings';
-        options.login =authName;
-        options.success = function (greeting) {
-            var r = eval("(" + JSON.parse(greeting.body).content + ")")
-            alert(r);
-            // $("#greetings").append("<tr><td>" + JSON.parse(greeting.body).content + "</td></tr>");
-        }
-        $.fn.socketConnect(options);
+        // var options = new Array();
+        // options.sockurl = contextPath + '/ricky-websocket';
+        // options.stompClienturl = '/ricky/topic/greetings';
+        // options.login =authName;
+        // options.success = function (greeting) {
+        //     var r = eval("(" + JSON.parse(greeting.body).content + ")")
+        //     alert(r);
+        //     // $("#greetings").append("<tr><td>" + JSON.parse(greeting.body).content + "</td></tr>");
+        // }
+        // $.fn.socketConnect(options);
         $("#tabContainer").tabs({
             data: [{
                 id: '99999999',

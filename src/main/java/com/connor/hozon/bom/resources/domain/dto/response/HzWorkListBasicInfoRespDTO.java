@@ -1,8 +1,10 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 import java.util.Date;
 
-public class HzWorkListBasicInfoRespDTO {
+public class HzWorkListBasicInfoRespDTO extends BaseDTO {
     /**
      * 主键
      */

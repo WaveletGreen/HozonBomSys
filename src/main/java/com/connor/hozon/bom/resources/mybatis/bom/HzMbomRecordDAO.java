@@ -3,10 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
-import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzMbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
@@ -31,6 +28,8 @@ public interface HzMbomRecordDAO {
      * @return
      */
     int updateList(List<HzMbomLineRecord> records);
+
+    int updateMBOMList(List<HzMbomLineRecord> records);
     /**
      * 插入单条记录
      * @param record
@@ -247,4 +246,26 @@ public interface HzMbomRecordDAO {
 
 
     List<HzMbomLineRecord> getMbomRecordsByOrderId(HzChangeDataDetailQuery query);
+
+    /**
+     * 检查油漆物料是否存在
+     * @param query
+     * @return
+     */
+    boolean checkPaintMaterielRepeat(HzMbomPaintMaterielRepeatQuery query);
+
+    /**
+     * 查询当前BOM的子一层结构
+     * @param hzBOMQuery
+     * @return
+     */
+    List<HzMbomLineRecord> getNextBomStructure(HzBOMQuery hzBOMQuery);
+
+    /**
+     * 获取MBOM信息
+     * @param hzBOMQuery 参数信息
+     * @return
+     */
+    List<HzMbomLineRecord> getHzMbomByBomQuery(HzBOMQuery hzBOMQuery);
+
 }

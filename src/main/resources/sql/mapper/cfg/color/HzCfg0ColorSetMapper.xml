@@ -162,7 +162,10 @@
       P_COLOR_MODIFY_DATE = #{pColorModifyDate,jdbcType=VARCHAR},
       P_COLOR_MODIFIER = #{pColorModifier,jdbcType=VARCHAR},
       CS_PAINT_MATERIEL_CODES = #{csPaintMaterielCodes,jdbcType=VARCHAR},
-      CS_PAINT_MATERIEL_UIDS = #{csPaintMaterielUids,jdbcType=VARCHAR}
+      CS_PAINT_MATERIEL_UIDS = #{csPaintMaterielUids,jdbcType=VARCHAR},
+
+      P_COLOR_EFFECTED_DATE = #{pColorEffectedDate,jdbcType=DATE},
+      P_COLOR_ABOLISH_DATE = #{pColorAbolishDate,jdbcType=DATE}
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
     <update id="updateStatusByPrimaryKey" parameterType="sql.pojo.cfg.color.HzCfg0ColorSet">

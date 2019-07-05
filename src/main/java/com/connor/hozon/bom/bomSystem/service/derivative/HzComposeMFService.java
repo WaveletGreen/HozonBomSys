@@ -50,6 +50,7 @@ import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
 import sql.pojo.project.HzMaterielRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -404,6 +405,7 @@ public class HzComposeMFService {
                 sm.setPuid(UUIDHelper.generateUpperUid());
                 sm.setpFactoryPuid(factory.getPuid());
                 sm.setpPertainToProjectPuid(hzComposeMFDTO.getProjectUid());
+                sm.setpMaterielDataType(11);
                 if (!hzSuperMaterielService.doInsertOne(sm)) {
                     logger.error("存储超级物料失败");
                 }
@@ -537,6 +539,7 @@ public class HzComposeMFService {
      */
     public Map<String, Object> loadComposes(String projectUid, QueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //        Object o = hzCfg0ModelFeatureService.doSelectAllByProjectUid(projectUid);
         HzDerivativeMaterielBasic basic = new HzDerivativeMaterielBasic();
         basic.setDmbProjectUid(projectUid);
@@ -616,6 +619,7 @@ public class HzComposeMFService {
 //            }
             _result.put("status",basics.get(i).getDmbStatus());
             _result.put("changeOrderNo",basics.get(i).getChangeOrderNo());
+            _result.put("effectedDate",basics.get(i).getEffectedDate()==null?"-":sdf.format(basics.get(i).getEffectedDate()));
             list.add(_result);
         }
         result.put("result", list);

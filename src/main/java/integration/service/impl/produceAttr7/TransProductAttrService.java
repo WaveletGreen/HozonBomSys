@@ -44,7 +44,7 @@ public class TransProductAttrService extends Author implements ITransmitService 
     private Holder<TABLEOFZPPTCO007> outputContainer;
 
     public TransProductAttrService() {
-        serviceExecutor = new ZPPTCSAP007Service();
+//        serviceExecutor = new ZPPTCSAP007Service();
         //输入参数
         inputContainer = new Holder<>();
         input = new TABLEOFZPPTCI007();

@@ -35,6 +35,5 @@ function warn(obj) {
  * @param obj
  */
 function error(obj) {
-    if (DEBUG_SETTING)
-        console.error(obj);
+    console.error(obj);
 }

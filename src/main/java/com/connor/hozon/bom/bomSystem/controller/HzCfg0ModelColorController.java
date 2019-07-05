@@ -14,8 +14,6 @@ import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.option.SpecialSettingOptions;
-import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
-import com.connor.hozon.bom.bomSystem.service.bom.HzBomLineRecordService;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzColorModelService;
 import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
@@ -276,7 +274,7 @@ public class HzCfg0ModelColorController {
             //没有更新过的值不需要进行更新
             for (Map.Entry<String, String> entry : color.getMapOfCfg0().entrySet()) {
                 if (mHistory.containsKey(entry.getKey())) {
-                    if (mHistory.get(entry.getKey()).equals(entry.getValue())) {
+                    if (entry.getValue().equals(mHistory.get(entry.getKey()))) {
                         continue;
                     }
                 }
@@ -606,7 +604,9 @@ public class HzCfg0ModelColorController {
                 hzCfg0ModelColorIterator.remove();
             }
         }
-        int deleteNum = hzCfg0ModelColorDao.updateStatus(hzCfg0ModelColorsDelete);
+        if(hzCfg0ModelColorsDelete!=null&&hzCfg0ModelColorsDelete.size()>0){
+            int deleteNum = hzCfg0ModelColorDao.updateStatus(hzCfg0ModelColorsDelete);
+        }
         /*********查找出所有修改状态的配色方案并将其回退到修改前的数据*******************/
         if(hzCfg0ModelColors==null||hzCfg0ModelColors.size()==0){
             return result;
@@ -628,6 +628,7 @@ public class HzCfg0ModelColorController {
             HzCfg0ModelColor hzCfg0ModelColor = new HzCfg0ModelColor();
             hzCfg0ModelColor.setPuid(hzCmcrChange1.getCmcrSrcPuid());
             hzCfg0ModelColor.setpDescOfColorfulModel(hzCmcrChange1.getCmcrSrcDescOfColorMod());
+            hzCfg0ModelColor.setCmcrStatus("1");
             hzCfg0ModelColorsUpdate.add(hzCfg0ModelColor);
         }
         for(HzCmcrDetailChange hzCmcrDetailChange : hzCmcrDetailChanges){
@@ -640,27 +641,30 @@ public class HzCfg0ModelColorController {
         }
 
         if(hzCfg0ModelColorsUpdate!=null&&hzCfg0ModelColorsUpdate.size()!=0){
-            int updateMainNum = hzCfg0ModelColorDao.updateListAll(hzCfg0ModelColorsUpdate);
-            if(updateMainNum<=0){
+            try {
+                hzCfg0ModelColorDao.updateListAll(hzCfg0ModelColorsUpdate);
+            }catch (Exception e){
                 result.put("status",false);
                 result.put("msg","撤销修改主数据失败");
                 return result;
             }
         }
         if(hzCfg0ModelColorDetailsUpdate!=null&&hzCfg0ModelColorDetailsUpdate.size()!=0){
-            int updateDetailNum = hzColorModelDao.updateListAll(hzCfg0ModelColorDetailsUpdate);
-            if(updateDetailNum<=0){
+            try {
+                hzColorModelDao.updateListAll(hzCfg0ModelColorDetailsUpdate);
+            }catch (Exception e){
                 result.put("status",false);
                 result.put("msg","撤销修改从数据失败");
                 return result;
             }
         }
         //从配色方案数据集中删除修改的数据，只留下新增的数据
-        while (hzCfg0ModelColorIterator.hasNext()) {
-            HzCfg0ModelColor hzCfg0ModelColor = hzCfg0ModelColorIterator.next();
+        Iterator<HzCfg0ModelColor> hzCfg0ModelColorIteratorUpdate = hzCfg0ModelColors.iterator();
+        while (hzCfg0ModelColorIteratorUpdate.hasNext()) {
+            HzCfg0ModelColor hzCfg0ModelColor = hzCfg0ModelColorIteratorUpdate.next();
             for(HzCmcrChange hzCmcrChange1 : hzCmcrChange){
                 if(hzCfg0ModelColor.getPuid().equals(hzCmcrChange1.getCmcrSrcPuid())){
-                    hzCfg0ModelColorIterator.remove();
+                    hzCfg0ModelColorIteratorUpdate.remove();
                     break;
                 }
             }

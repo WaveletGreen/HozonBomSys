@@ -37,12 +37,17 @@ public class FileUploadController extends BaseController{
     @Autowired
     private FileUploadUpdataMbom3Service fileUploadUpdataMbom3Service;
 
+    @Autowired
+    private FileUploadAccessoriesService fileUploadAccessoriesService;
+
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public void filesUpload (@RequestParam("file") MultipartFile file,
 
                              @RequestParam("projectId") String projectId,HttpServletResponse response){
-        WriteResultRespDTO respDTO = fileUploadService.uploadEbomToDB(file,projectId);
-        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        synchronized (this){
+            WriteResultRespDTO respDTO = fileUploadService.uploadEbomToDB(file,projectId);
+            toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        }
     }
 
     @RequestMapping(value = "/uploadPbom", method = RequestMethod.POST)
@@ -80,6 +85,12 @@ public class FileUploadController extends BaseController{
         WriteResultRespDTO respDTO = fileUploadUpdataMbom3Service.UploadMbomToDB(file,projectId);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
-
+    @RequestMapping(value = "/uploadAccessoories", method = RequestMethod.POST)
+    public void filesUpload (@RequestParam("file") MultipartFile file,
+                                 HttpServletResponse response){
+        //写服务
+        WriteResultRespDTO respDTO = fileUploadAccessoriesService.uploadAccessoriesToDB(file);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
 }
 

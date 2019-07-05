@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.materiel.impl;
 
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.project.HzMaterielRecord;
+import sql.redis.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,9 +38,13 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     }
 
     @Override
-    public int delete(String puid) {
-        return super.delete("HzMaterialDAOImpl_delete", puid);
+    public int deleteList(List<String> puids) {
+        if(ListUtil.isEmpty(puids)){
+            return 0;
+        }
+        return  super.update("HzMaterialDAOImpl_deleteList",puids);
     }
+
 
     @Override
     public int insertList(List<HzMaterielRecord> hzMaterielRecords,String tableName) {
@@ -240,6 +246,31 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     }
 
     @Override
+    public int updateMaterielList(List<HzMaterielRecord> records) {
+        if(ListUtil.isEmpty(records)){
+            return 0;
+        }
+        int size = records.size();
+        //分批更新数据 一次1000条
+        try {
+            synchronized (this){
+                if(size > 1000){
+                    Map<Integer,List<HzMaterielRecord>> map = HzBomSysFactory.spiltList(records);
+                    for(List<HzMaterielRecord> value :map.values()){
+                        super.update("HzMaterialDAOImpl_updateMaterielList",value);
+                    }
+                }else {
+                    super.update("HzMaterialDAOImpl_updateMaterielList",records);
+                }
+            }
+            return size;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzDBException("物料数据更新失败！",e);
+        }
+    }
+
+    @Override
     public List<HzMaterielRecord> findHzMaterielForProcess(String projectId) {
         return super.executeQueryByPass(new HzMaterielRecord(), projectId,"HzMaterialDAOImpl_findHzMaterielForProcess");
     }
@@ -271,7 +302,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
         map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
-            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+            map.put("revision",query.getRevision() ? query.getRevisionNo(): null);
         }else {
             map.put("revision",null);
         }

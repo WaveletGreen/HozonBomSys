@@ -124,6 +124,8 @@ var column = [
     {
         field: 'pColorOfSet',
         title: '色系',
+        align: 'center',
+        valign: 'middle',
         sortable: true,
         sortOrder: 'asc',
     },
@@ -183,26 +185,26 @@ var column = [
             return changeDateFormat(value)
         }
     },
-    {
-        field: 'pColorStatus',
-        title: '状态',
-        align: 'center',
-        valign: 'middle',
-        formatter: function (value, row, index) {
-            if (value == 1 || "1" == value) {
-                return "<span style='color: #00B83F'>已生效</span>";
-            }
-            if (value == 0 || "0" == value) {
-                return "<span style='color: #a97f89'>草稿状态</span>";
-            }
-            if (-1 == value || "-1" == value) {
-                return "<span style='color: #9492a9'>已废止</span>";
-            }
-            else {
-                return "<span style='color: #a90009'>未知状态</span>";
-            }
-        }
-    },
+    // {
+    //     field: 'pColorStatus',
+    //     title: '状态',
+    //     align: 'center',
+    //     valign: 'middle',
+    //     formatter: function (value, row, index) {
+    //         if (value == 1 || "1" == value) {
+    //             return "<span style='color: #00B83F'>已生效</span>";
+    //         }
+    //         if (value == 0 || "0" == value) {
+    //             return "<span style='color: #a97f89'>草稿状态</span>";
+    //         }
+    //         if (-1 == value || "-1" == value) {
+    //             return "<span style='color: #9492a9'>已废止</span>";
+    //         }
+    //         else {
+    //             return "<span style='color: #a90009'>未知状态</span>";
+    //         }
+    //     }
+    // },
     {
         field: 'csPaintMaterielCodes',
         title: '油漆物料号集合',
@@ -242,8 +244,8 @@ function loadData() {
         showRefresh: true,                  //是否显示刷新按钮
         pagination: true,                   //是否显示分页（*）
         pageNumber: 1,                       //初始化加载第一页，默认第一页
-        pageSize: 10,                       //每页的记录行数（*）
-        pageList: [10, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
+        pageSize: 20,                       //每页的记录行数（*）
+        pageList: [20, 30, 50, 100, 500, 1000],//可供选择的每页的行数（*）
         clickToSelect: true,                // 单击某一行的时候选中某一条记录
         smartDisplay: false,
         search: false,

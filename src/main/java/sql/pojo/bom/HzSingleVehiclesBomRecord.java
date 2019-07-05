@@ -2,6 +2,7 @@ package sql.pojo.bom;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,8 @@ import java.util.Date;
  * @Description:单车BOM
  */
 @Data
-public class HzSingleVehiclesBomRecord {
+public class HzSingleVehiclesBomRecord implements Serializable {
+    private static final long serialVersionUID = -5520720179112581817L;
     /**
      * 主键id
      */
@@ -172,4 +174,9 @@ public class HzSingleVehiclesBomRecord {
      * 对应于单车清单的主键
      */
     private Long singleVehiclesId;
+
+    /**
+     * BOM类型
+     */
+    private Integer bomType;
 }

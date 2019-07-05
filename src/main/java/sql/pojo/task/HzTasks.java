@@ -8,6 +8,7 @@ package sql.pojo.task;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -16,7 +17,8 @@ import java.util.Date;
  * @Modified By:
  */
 @Data
-public class HzTasks implements  Cloneable {
+public class HzTasks implements Serializable,Cloneable {
+    private static final long serialVersionUID = 3260508118372550917L;
     /**
      *主键
      */

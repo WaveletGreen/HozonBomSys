@@ -63,6 +63,7 @@ function doRegister(projectId) {
             treeObj.destroy("#Ztree1");
             // treeObj.destroy();
         }
+        console.log(zNodes)
         $.fn.zTree.init($("#Ztree1"), setting, zNodes);
     }
     if (!isRegisted) {
@@ -345,7 +346,7 @@ var setting = {
             }
             //动态提示
             if (size >= 2) {
-                $("#info_div span").text("第三步：点击“生成工艺合件”");
+                $("#info_div span").text("第三步:点击“生成工艺合件”");
                 $("#info_div").css("top", "8%");
                 $("#info_img_2").css("display", "inline");
                 $("#info_img_2").css("max-width", "36px");
@@ -353,7 +354,7 @@ var setting = {
                 $("#synthetic").removeAttr("disabled");
             }
             else {
-                $("#info_div span").text("第二步：选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
+                $("#info_div span").text("第二步:选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
                 $("#info_div").css("top", "20%");
                 $("#info_img_1").css("display", "inline");
                 $("#info_img_1").css("max-width", "36px");
@@ -586,9 +587,9 @@ var setting3 = {
  */
 function doGetTableByNode(va) {
     let rel = "<table>" +
-        "<tr>" +
-        "<th>序号</th>" +
-        "<td></td>" +
+        // "<tr>" +
+        // "<th>序号</th>" +
+        // "<td></td>" +
         "</tr><tr>" +
         "<th>层级</th>" +
         "<td>" + va.level + "</td>" +
@@ -598,15 +599,15 @@ function doGetTableByNode(va) {
         "</tr><tr>" +
         "<th>级别</th>" +
         "<td>" + va.rank + "</td>" +
-        "</tr><tr>" +
-        "<th>分组号</th>" +
-        "<td>" + va.groupNum + "</td>" +
+        // "</tr><tr>" +
+        // "<th>分组号</th>" +
+        // "<td>" + va.groupNum + "</td>" +
         "</tr><tr>" +
         "<th>零件号</th>" +
         "<td>" + va.lineId + "</td>" +
         "</tr><tr>" +
         "<th>名称</th>" +
-        "<td>" + (va.pBomLinePartName == undefined ? "" : va.pBomLinePartEnName) + "</td>" +
+        "<td>" + (va.pBomLinePartName == undefined ? "" : va.pBomLinePartName) + "</td>" +
         "</tr><tr>" +
         "<th>英文名称</th>" +
         "<td>" + (va.pBomLinePartEnName == undefined ? "" : va.pBomLinePartEnName) + "</td>" +
@@ -770,9 +771,9 @@ function queryAssignTree() {
                     window.Ewin.alert({message: data.errMsg});
                     return;
                 }
-                var zNodes = data.obj;
+                var zNodes = data.data;
                 $.fn.zTree.init($("#Ztree3"), setting3, zNodes);
-                $("#info_div2 span").text("第六步：选择挂载位置节点");
+                $("#info_div2 span").text("第六步:选择挂载位置节点");
                 $("#info_div2").css("top", "20%");
             },
         });
@@ -1034,9 +1035,9 @@ function querySrc() {
                     window.Ewin.alert({message: data.errMsg});
                     return;
                 }
-                var zNodes = data.obj;
+                var zNodes = data.data;
                 initZtree(zNodes);
-                $("#info_div span").text("第二步：选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
+                $("#info_div span").text("第二步:选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
                 $("#info_div").css("top", "20%");
             },
         });

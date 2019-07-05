@@ -43,7 +43,9 @@ public class HzPbomController extends BaseController {
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;
 
-    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
+    private Map<String,Object> orderDataObject = new HashMap<>();
 
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
     public void getPbomLineTitle(String projectId,HttpServletResponse response) {
@@ -69,6 +71,7 @@ public class HzPbomController extends BaseController {
         tableTitle.put("mouldType", "模具类别");
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("station", "工位");
+        tableTitle.put("effectTime","生效时间");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
@@ -83,15 +86,7 @@ public class HzPbomController extends BaseController {
     @RequestMapping(value = "getBomManage", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getPbomLineRecord(HzPbomByPageQuery query) {
-        HzPbomByPageQuery ebomByPageQuery = query;
-        ebomByPageQuery.setPageSize(0);
-        try {
-            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        } catch (Exception e) {
-
-        }
         Page<HzPbomLineRespDTO> respDTOPage = hzPbomService.getHzPbomRecordPage(query);
-
         List<HzPbomLineRespDTO> respDTOS = respDTOPage.getResult();
         if (respDTOS == null) {
             return new HashMap<>();
@@ -124,6 +119,7 @@ public class HzPbomController extends BaseController {
             _res.put("outerPart", dto.getOuterPart());
             _res.put("station", dto.getStation());
             _res.put("status", dto.getStatus());
+            _res.put("effectTime",dto.getEffectTime());
             if(null != dto.getObject()){
                 _res.putAll(dto.getObject());
             }
@@ -165,7 +161,7 @@ public class HzPbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updatePbomManage", method = RequestMethod.GET)
-    public String updatePbomManageRecordToPage(String projectId, String eBomPuid, Model model) {
+    public String updatePbomManageRecordToPage(String projectId, String eBomPuid,String puid,Integer updateType, Model model) {
         HzPbomLineRespDTO respDTO = hzPbomService.getHzPbomByPuid(projectId, eBomPuid);
         if (respDTO == null) {
             return "";
@@ -174,12 +170,6 @@ public class HzPbomController extends BaseController {
         return "bomManage/pbom/pbomManage/updatePbomManage";
     }
 
-
-    @RequestMapping(value = "insert", method = RequestMethod.POST)
-    public void addPbomToDB(@RequestBody AddHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
-        WriteResultRespDTO respDTO = hzPbomService.insertHzPbomRecord(reqDTO);
-        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
-    }
 
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public void updatePbomRecord(@RequestBody UpdateHzPbomRecordReqDTO reqDTO, HttpServletResponse response) {
@@ -249,7 +239,6 @@ public class HzPbomController extends BaseController {
 
     /**
      * 获取合成新件界面
-     *
      * @param model
      * @return
      */
@@ -260,29 +249,6 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
-     *
-     * @param
-     * @param response
-     */
-    @RequestMapping(value = "/add/processCompose", method = RequestMethod.POST)
-    public void addProcessCompose(@RequestBody AddHzPbomRecordReqDTO recordReqDTO, HttpServletResponse response) {
-        WriteResultRespDTO writeResultRespDTO = hzPbomService.andProcessCompose(recordReqDTO);
-        JSONArray jsonArray = new JSONArray();
-        if (WriteResultRespDTO.isSuccess(writeResultRespDTO)) {
-            HzPbomProcessComposeReqDTO reqDTO = new HzPbomProcessComposeReqDTO();
-            if (recordReqDTO.getLineId() != null) {
-                reqDTO.setLineId(recordReqDTO.getLineId());
-            }
-            reqDTO.setProjectId(recordReqDTO.getProjectId());
-            jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
-        }
-        toJSONResponse(Result.build(
-                WriteResultRespDTO.isSuccess(writeResultRespDTO), writeResultRespDTO.getErrMsg(), jsonArray), response);
-    }
-
-    /**
-     * 合成工艺合件
-     *
      * @param
      * @param param
      * @Autor Fancyears·Malos
@@ -404,6 +370,30 @@ public class HzPbomController extends BaseController {
         return hzPbomService.addAccessories(puid, materielCode, projectId);
     }
 
+    /**
+     * 获取变更表单
+     * @return
+     */
+    @RequestMapping(value = "find/choose",method = RequestMethod.POST)
+    public void getOrderChooseToPage(@RequestBody AddDataToChangeOrderReqDTO reqDTO,HttpServletResponse response){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(reqDTO.getProjectId());
+        this.orderDataObject = new HashMap<>();
+        this.orderDataObject.put("data",records);
+        this.orderDataObject.put("puids",reqDTO.getPuids());
+        toJSONResponse(Result.build(orderDataObject),response);
+        toJSONResponse(Result.build(orderDataObject),response);
+    }
+
+    /**
+     * 跳转到PBOM选择变更单
+     * @return
+     */
+    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
+    public String getOrderChooseToPage(Model model){
+        model.addAttribute("data",this.orderDataObject.get("data"));
+        model.addAttribute("puids",this.orderDataObject.get("puids"));
+        return "bomManage/pbom/pbomManage/pbomSetChangeForm";
+    }
 
     /**
      * PBOM发起变更数据到变更单
@@ -414,20 +404,6 @@ public class HzPbomController extends BaseController {
     public void pbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO respDTO = hzPbomService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
-    }
-
-    /**
-     * 跳转到PBOM选择变更单
-     * @return
-     */
-    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
-    public String getOrderChooseToPage(String projectId,String puids,Model model){
-        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
-        if(ListUtil.isNotEmpty(records)){
-            model.addAttribute("data",records);
-            model.addAttribute("puids",puids);
-        }
-        return "bomManage/pbom/pbomManage/pbomSetChangeForm";
     }
 
     /**

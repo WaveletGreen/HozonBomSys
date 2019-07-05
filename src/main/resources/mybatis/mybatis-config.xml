@@ -10,11 +10,11 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <settings>
-        <!-- 打印查询语句 -->
-        <setting name="logImpl" value="STDOUT_LOGGING"/> <!--最好是放在最上面即紧跟configuration节点,注意顺序-->
-        <setting name="cacheEnabled" value="false"></setting>
-    </settings>
+    <!--<settings>-->
+        <!--&lt;!&ndash; 打印查询语句 &ndash;&gt;-->
+        <!--<setting name="logImpl" value="STDOUT_LOGGING"/> &lt;!&ndash;最好是放在最上面即紧跟configuration节点,注意顺序&ndash;&gt;-->
+        <!--<setting name="cacheEnabled" value="false"/>-->
+    <!--</settings>-->
     <!--该文件请放到resource下，便于单独读到，不需要配置-->
     <typeAliases>
         <typeAlias type="java.lang.String" alias="String"/>
@@ -32,7 +32,10 @@
         <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzMbomRecordMapper.xml"/>
-        <mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzEBomRecordMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzBOMScheduleTaskMapper.xml"/>
+        <mapper resource="sql/mapper/bom/xmapper/HzBOMScheduleResultMapper.xml"/>
+        <!--<mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>-->
         <mapper resource="sql/mapper/bom/xmapper/HzMBomToERPMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzSingleVehiclesBomRecordMapper.xml"/>
         <!--<mapper resource="sql/mapper/bom/xmapper/HzSingleVehicleDosageMapper.xml"/>-->
@@ -123,6 +126,8 @@
         <mapper resource="sql/mapper/change.xmapper/HzAuditorChangeRecordMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzChangeDataRecordMapper.xml"/>
         <mapper resource="sql/mapper/change.xmapper/HzChangeListMapper.xml"/>
+        <!--tc的变更附件-->
+        <mapper resource="sql/mapper/change.xmapper/HzAttachmentRecordMapper.xml"/>
         <!--字典库-->
         <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
         <!--VPPS库-->
@@ -139,6 +144,10 @@
         <mapper resource="sql/mapper/cfg/derivative/HzMDDetailChangeBeanMapper.xml"/>
         <!--changeList-->
         <mapper resource="sql/mapper/change.xmapper/HzChangeListRecordMapper.xml"/>
+
+        <!--报价管理-->
+        <mapper resource="sql/mapper/quotemsg/HzChosenSupplierMapper.xml"/>
+
         <!--sys-->
         <mapper resource="sql/mapper/sys/mybatis_dict.xml"/>
         <mapper resource="sql/mapper/sys/mybatis_orgGroup.xml"/>
@@ -148,7 +157,6 @@
         <mapper resource="sql/mapper/sys/mybatis_user.xml"/>
         <mapper  resource="sql/mapper/sys/mybatis_userAssociateRole.xml"/>
         <mapper resource="sql/mapper/sys/mybatis_userRole.xml"/>
-
 
     </mappers>
 </configuration>

@@ -1,6 +1,6 @@
 package sql.pojo.change;
 
-import sql.pojo.BasePOJO;
+import sql.pojo.BaseDO;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  * @Date: 2018/11/12
  * @Description: 变更清单
  */
-public class HzChangeOrderRecord extends BasePOJO {
+public class HzChangeOrderRecord extends BaseDO {
     /**
      * 主键id
      */
@@ -119,6 +119,11 @@ public class HzChangeOrderRecord extends BasePOJO {
      * !=1:任务结束
      */
     private String changeAccepter;
+
+    /**
+     * 审核人
+     */
+    private String auditor;
 
     public String getChangeAccepter() {
         return changeAccepter;
@@ -326,5 +331,13 @@ public class HzChangeOrderRecord extends BasePOJO {
 
     public void setCreateNameTC(String createNameTC) {
         this.createNameTC = createNameTC;
+    }
+
+    public String getAuditor() {
+        return auditor;
+    }
+
+    public void setAuditor(String auditor) {
+        this.auditor = auditor;
     }
 }

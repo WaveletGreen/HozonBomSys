@@ -35,4 +35,6 @@ public interface HzCfg0ModelDetailDao  extends BasicDao<HzCfg0ModelDetail>{
     HzCfg0ModelDetail selectByModelId2(HzCfg0ModelDetail detail);
 
     List<HzCfg0ModelDetail> selectByModelIds(List<HzCfg0ModelDetail> hzCfg0ModelRecords);
+
+    List<HzCfg0ModelDetail> selectByMainRecordId(String mainRecordId);
 }

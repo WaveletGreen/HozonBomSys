@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/7/12
  * @Description:
  */
-public class HzEbomTreeQuery {
+public class HzEbomTreeQuery extends DefaultQuery{
     /**
      * 项目id
      */
@@ -23,6 +23,7 @@ public class HzEbomTreeQuery {
     /**
      * 是否装车件
      */
+    @Deprecated
     private Integer isCarPart;
 
     public Integer getIsCarPart() {

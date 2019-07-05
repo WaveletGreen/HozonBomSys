@@ -164,47 +164,7 @@ public class HzEWOServiceImpl implements HzEWOService {
 
     @Override
     public List<HzEbomRespDTO> getEWOChangeFormRecord(HzEWOChangeRecordQuery query) {
-        try {
-            List<HzEbomRespDTO> changeFormRespDTOList = new ArrayList<>();
-
-            Map<String,Object> map = new HashMap<>();
-            map.put("ewoNo",query.getEwoNo());
-            map.put("projectId",query.getProjectId());
-            List<HzBomLineRecord> changeRecords = hzBomLineRecordDao.findBomListForChange(map);
-            Set<HzBomLineRecord> set = new HashSet<>(changeRecords);
-            changeRecords = new ArrayList<>(set);
-            if(ListUtil.isNotEmpty(changeRecords)){
-                for(HzBomLineRecord hzBomLineRecord :changeRecords){
-                    Map<String,Object> beforeMap = new HashMap<>();
-                    beforeMap.put("projectId",query.getProjectId());
-                    beforeMap.put("puid",hzBomLineRecord.getPuid());
-                    beforeMap.put("tableName","HZ_EBOM_REOCRD_BEFORE_CHANGE");
-                    beforeMap.put("ewoNo",query.getEwoNo());
-
-                    Map<String,Object> afterMap = new HashMap<>();
-                    afterMap.put("projectId",query.getProjectId());
-                    afterMap.put("puid",hzBomLineRecord.getPuid());
-                    afterMap.put("tableName","HZ_EBOM_REOCRD_AFTER_CHANGE");
-                    afterMap.put("ewoNo",query.getEwoNo());
-                    HzBomLineRecord beforeRecord = hzBomLineRecordDao.findBomLineByPuid(beforeMap);
-                    HzBomLineRecord afterRecord = hzBomLineRecordDao.findBomLineByPuid(afterMap);
-                    if(beforeRecord !=null){
-                        HzEbomRespDTO respBeforeDTO = recordToRespDTO(beforeRecord);
-                        respBeforeDTO.setChangeFlag(0);
-                        changeFormRespDTOList.add(respBeforeDTO);
-                    }
-                    if(afterRecord != null){
-                        HzEbomRespDTO respAfterDTO = recordToRespDTO(afterRecord);
-                        respAfterDTO.setChangeFlag(1);
-                        changeFormRespDTOList.add(respAfterDTO);
-                    }
-                }
-            }
-            return changeFormRespDTOList;
-        }catch (Exception e){
-            return new ArrayList<>();
-        }
-
+        return null;
     }
 
 
@@ -248,79 +208,6 @@ public class HzEWOServiceImpl implements HzEWOService {
             lastFourIndex = String.valueOf(i);
         }
         return lastFourIndex;
-    }
-
-
-
-
-    private HzEbomRespDTO recordToRespDTO(HzBomLineRecord record){
-        HzEbomRespDTO respDTO = new HzEbomRespDTO();
-        Integer is2Y = record.getIs2Y();
-        Integer hasChildren = record.getIsHas();
-        String lineIndex = record.getLineIndex();
-        String[] strings = getLevelAndRank(lineIndex, is2Y, hasChildren);
-        respDTO.setLevel(strings[0]);
-        respDTO.setRank(strings[1]);
-        respDTO.setLineNo(strings[2]);
-        respDTO.setpBomOfWhichDept(record.getpBomOfWhichDept());
-        respDTO.setLineId(record.getLineID());
-        respDTO.setFna(record.getpFnaInfo());
-        respDTO.setpBomLinePartClass(record.getpBomLinePartClass());
-        respDTO.setpBomLinePartEnName(record.getpBomLinePartEnName());
-        respDTO.setpBomLinePartResource(record.getpBomLinePartResource());
-        respDTO.setpBomLinePartName(record.getpBomLinePartName());
-        respDTO.setpFastener(record.getpFastener());
-     
-        if(Integer.valueOf(1).equals(record.getP3cpartFlag())){
-            respDTO.setP3cpartFlag( "Y");
-        }else {
-            respDTO.setP3cpartFlag( "N");
-        }
-        if(Integer.valueOf(1).equals(record.getpInOutSideFlag())){
-            respDTO.setpInOutSideFlag( "内饰件");
-        }else {
-            respDTO.setpInOutSideFlag( "外饰件");
-        }
-        respDTO.setpUpc(record.getpUpc());
-        respDTO.setpFnaDesc( record.getpFnaDesc());
-        respDTO.setpUnit( record.getpUnit());
-        respDTO.setpPictureNo(record.getpPictureNo());
-        respDTO.setpPictureSheet( record.getpPictureSheet());
-        respDTO.setpMaterialHigh( record.getpMaterialHigh());
-        respDTO.setpMaterial1(record.getpMaterial1());
-        respDTO.setpMaterial2( record.getpMaterial2());
-        respDTO.setpMaterial3( record.getpMaterial3());
-        respDTO.setpDensity(record.getpDensity());
-        respDTO.setpMaterialStandard( record.getpMaterialStandard());
-        respDTO.setpSurfaceTreat( record.getpSurfaceTreat());
-        respDTO.setpTextureColorNum(record.getpTextureColorNum());
-        respDTO.setpManuProcess( record.getpManuProcess());
-        respDTO.setpSymmetry( record.getpSymmetry());
-        respDTO.setpImportance(record.getpImportance());
-        if(Integer.valueOf(1).equals(record.getpRegulationFlag())){
-            respDTO.setpRegulationFlag( "Y");
-        }else{
-            respDTO.setpRegulationFlag( "N");
-        }
-        respDTO.setpBwgBoxPart( record.getpBwgBoxPart());
-        respDTO.setpDevelopType(record.getpDevelopType());
-        respDTO.setpDataVersion( record.getpDataVersion());
-        respDTO.setpTargetWeight( record.getpTargetWeight());
-        respDTO.setpFeatureWeight(record.getpFeatureWeight());
-        respDTO.setpActualWeight( record.getpActualWeight());
-        respDTO.setpFastenerStandard( record.getpFastenerStandard());
-        respDTO.setpFastenerLevel(record.getpFastenerLevel());
-
-        respDTO.setpTorque( record.getpTorque());
-        respDTO.setpDutyEngineer(record.getpDutyEngineer());
-        respDTO.setpSupply( record.getpSupply());
-        respDTO.setpSupplyCode( record.getpSupplyCode());
-        respDTO.setpRemark(record.getpRemark());
-        respDTO.setpRegulationCode( record.getpRegulationCode());
-        respDTO.setNumber(record.getNumber());
-        respDTO.setpBuyEngineer(record.getpBuyEngineer());
-        respDTO.setStatus(record.getStatus());
-        return respDTO;
     }
 
 

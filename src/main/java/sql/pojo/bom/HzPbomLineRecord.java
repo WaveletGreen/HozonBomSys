@@ -1,25 +1,19 @@
 package sql.pojo.bom;
 
-import lombok.Data;
-import sql.pojo.BaseChangePOJO;
+import sql.pojo.BaseChangeDO;
 
-import java.util.Date;
 import java.util.Objects;
 
 /**
  * Created by haozt on 2018/5/25
  * EBOM 和PBOM 两张表信息  继承自EBOM  维护PBOM
  */
-public class HzPbomLineRecord extends BaseChangePOJO implements Cloneable{
+public class HzPbomLineRecord extends BaseChangeDO implements Cloneable{
     private String parentUid;
     private Integer isDept;
     private String bomDigifaxId;
     private String linePuid;
-    @Deprecated
-    private byte[] bomLineBlock;
     private Integer isPart;
-    @Deprecated
-    private Integer orderNum;
     private String projectPuid;
     private String pBomLinePartName;
     private String pBomLinePartClass;
@@ -106,18 +100,14 @@ public class HzPbomLineRecord extends BaseChangePOJO implements Cloneable{
 
     private Integer isNewPart;
 
-    /**
-     * mwo编号
-     */
-    @Deprecated
-    private String mwoNo;
+    private String vehNum;
 
-    public String getMwoNo() {
-        return mwoNo;
+    public String getVehNum() {
+        return vehNum;
     }
 
-    public void setMwoNo(String mwoNo) {
-        this.mwoNo = mwoNo;
+    public void setVehNum(String vehNum) {
+        this.vehNum = vehNum;
     }
 
     public Integer getIsNewPart() {
@@ -128,36 +118,27 @@ public class HzPbomLineRecord extends BaseChangePOJO implements Cloneable{
         this.isNewPart = isNewPart;
     }
 
-    /**
-     * 单车用量
-     */
-    private byte[] singleVehDosage;
-
-    public byte[] getSingleVehDosage() {
-        return singleVehDosage;
-    }
-
-    public void setSingleVehDosage(byte[] singleVehDosage) {
-        this.singleVehDosage = singleVehDosage;
-    }
-
-
-
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         HzPbomLineRecord that = (HzPbomLineRecord) o;
-        return Objects.equals(eBomPuid, that.eBomPuid);
+        if(puid.equals(that.getPuid())){
+            return true;
+        }
+        return eBomPuid.equals(that.getPuid());
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(eBomPuid);
-        return result;
-    }
 
+        return Objects.hash(eBomPuid, puid);
+    }
 
     public String getSortNum() {
         return sortNum;
@@ -352,29 +333,12 @@ public class HzPbomLineRecord extends BaseChangePOJO implements Cloneable{
         this.linePuid = linePuid;
     }
 
-
-    public byte[] getBomLineBlock() {
-        return bomLineBlock;
-    }
-
-    public void setBomLineBlock(byte[] bomLineBlock) {
-        this.bomLineBlock = bomLineBlock;
-    }
-
     public Integer getIsPart() {
         return isPart;
     }
 
     public void setIsPart(Integer isPart) {
         this.isPart = isPart;
-    }
-
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
     }
 
     public String getProjectPuid() {
@@ -418,7 +382,7 @@ public class HzPbomLineRecord extends BaseChangePOJO implements Cloneable{
     }
 
     @Override
-    public HzPbomLineRecord clone() throws CloneNotSupportedException {
+    public HzPbomLineRecord clone(){
         return (HzPbomLineRecord) super.clone();
     }
 }

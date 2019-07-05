@@ -9,6 +9,8 @@ package com.connor.hozon.bom.bomSystem.impl.bom;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
+import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMBomToERPBean;
 import sql.IBaseSQLUtil;
 
@@ -21,10 +23,8 @@ import java.util.Map;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
-public class HzMBomToERPDaoImpl implements HzMBomToERPDao {
-    @Autowired
-    IBaseSQLUtil baseSQLUtil;
+@Service("hzMBomToERPDao")
+public class HzMBomToERPDaoImpl extends BaseSQLUtil implements HzMBomToERPDao {
 
     /**
      * 根据项目UID和MBOM行的UID列表获取到一组记录
@@ -37,9 +37,9 @@ public class HzMBomToERPDaoImpl implements HzMBomToERPDao {
     public List<HzMBomToERPBean> selectByUidOfBatch(String projectUid, List<String> list) {
         Map<String, Object> _param = new HashMap<>();
         _param.put("projectUid", projectUid);
-        _param.put("flag", "T.PUID");
+        _param.put("flag", "T.P_MBOM_PUID");
         _param.put("list", list);
-        return baseSQLUtil.executeQueryByPass(new HzMBomToERPBean(), _param, "com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao.selectByBatch");
+        return super.findForList("HzMBomToERPDaoImpl_selectByUidOfBatch",_param);
 
     }
 
@@ -54,9 +54,9 @@ public class HzMBomToERPDaoImpl implements HzMBomToERPDao {
     public List<HzMBomToERPBean> selectbyParentUidOfBatch(String projectUid, List<String> list) {
         Map<String, Object> _param = new HashMap<>();
         _param.put("projectUid", projectUid);
-        _param.put("flag", "T.p_bom_PUID");
+        _param.put("flag", "T.p_Ebom_PUID");
         _param.put("list", list);
-        return baseSQLUtil.executeQueryByPass(new HzMBomToERPBean(), _param, "com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao.selectByBatch");
+        return super.findForList("HzMBomToERPDaoImpl_selectByUidOfBatch",_param);
 
     }
 
@@ -72,6 +72,6 @@ public class HzMBomToERPDaoImpl implements HzMBomToERPDao {
         Map<String, Object> _param = new HashMap<>();
         _param.put("projectUid", projectUid);
         _param.put("is2Y", is2Y);
-        return baseSQLUtil.executeQueryByPass(new HzMBomToERPBean(), _param, "com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao.selectByProjectUidWithCondition");
+        return super.findForList("HzMBomToERPDaoImpl_selectByProjectUidWithCondition",_param);
     }
 }

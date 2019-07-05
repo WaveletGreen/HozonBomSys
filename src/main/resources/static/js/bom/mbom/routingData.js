@@ -1,3 +1,4 @@
+// 已废除
 var type ;
 $(document).ready((function (){
     // $("#ms").multiselect();

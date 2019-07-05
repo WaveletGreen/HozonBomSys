@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 @Data
 public class HzMBomToERPBean {
+
+    private Long id;
+
     /**
      * 主键
      */
@@ -68,7 +71,7 @@ public class HzMBomToERPBean {
     /**
      * 大对象
      */
-    private byte[] bomLineBlock;
+//    private byte[] bomLineBlock;
     /**
      * 真实顺序序号
      */
@@ -85,6 +88,10 @@ public class HzMBomToERPBean {
 
     private String unit;
 
+    /**
+     * todo 这里先不记录是否有过传输
+     * 注:单车BOM传输中 只做增加和删除 无修改操作
+     */
     private Integer sent;
 
 

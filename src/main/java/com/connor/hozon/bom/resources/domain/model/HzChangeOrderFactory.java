@@ -37,12 +37,13 @@ public class HzChangeOrderFactory {
     }
 
 
+    // 不要用 1==record.getXXX() 可能会报NPE
     public static HzChangeOrderRespDTO changeOrderRecordToRespDTO(HzChangeOrderRecord record){
         HzChangeOrderRespDTO respDTO = new HzChangeOrderRespDTO();
         respDTO.setChangeNo(record.getChangeNo());
         respDTO.setChangeType(record.getChangeType());
-        respDTO.setCreateName(1==record.getFromTc()?record.getCreateNameTC():record.getCreateName());
-        respDTO.setDeptName(1==record.getFromTc()?record.getDeptNameTC():record.getDeptName());
+        respDTO.setCreateName(Integer.valueOf(1).equals(record.getFromTc())?record.getCreateNameTC():record.getCreateName());
+        respDTO.setDeptName(Integer.valueOf(1).equals(record.getFromTc())?record.getDeptNameTC():record.getDeptName());
         respDTO.setCreateNo(record.getCreateNo());
         respDTO.setCreateTime(DateUtil.formatTimestampDate(record.getCreateTime()));
         respDTO.setId(record.getId());
@@ -66,7 +67,7 @@ public class HzChangeOrderFactory {
         respDTO.setStatus(record.getState());
         respDTO.setTel(record.getTel());
         respDTO.setIsFromTc(record.getFromTc());
-        if(record.getFromTc()==0){
+        if(Integer.valueOf(0).equals(record.getFromTc())){
             respDTO.setSource("BOM");
         }else{
             respDTO.setSource("TC");
@@ -78,6 +79,8 @@ public class HzChangeOrderFactory {
             respDTO.setAuditId(Long.parseLong(record.getAuditId()));
         if(record.getChangeAccepter()!=null)
             respDTO.setChangeAccepter(record.getChangeAccepter());
+
+        respDTO.setAuditor(record.getAuditor());
         return respDTO;
     }
 

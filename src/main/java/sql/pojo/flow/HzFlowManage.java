@@ -7,6 +7,7 @@ import java.util.Date;
  * @Date: 2018/6/14
  * @Description:流程管理
  */
+@Deprecated
 public class HzFlowManage {
     private String puid;
 

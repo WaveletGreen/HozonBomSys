@@ -80,4 +80,21 @@ public class HzRelevanceBasicChangeDaoImpl extends BasicDaoImpl<HzRelevanceBasic
     public int updateStatusByIOrderId(HzRelevanceBasicChange hzRelevanceBasicChange) {
         return baseSQLUtil.executeUpdate(hzRelevanceBasicChange,clzName+"updateStatusByIOrderId");
     }
+
+    @Override
+    public HzRelevanceBasicChange selectByLasteBySrc(HzRelevanceBasic hzRelevanceBasic) {
+        HzRelevanceBasicChange hzRelevanceBasicChange = new HzRelevanceBasicChange();
+        hzRelevanceBasicChange.setSrcId(hzRelevanceBasic.getId());
+        return baseSQLUtil.executeQueryById(hzRelevanceBasicChange ,clzName+"selectByLasteBySrc");
+    }
+
+    @Override
+    public HzRelevanceBasicChange selectByVersion(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor) {
+        return baseSQLUtil.executeQueryById(hzRelevanceBasicChangeQueryBefor,clzName+"selectLastVersion");
+    }
+
+    @Override
+    public HzRelevanceBasicChange selectMaxVersion(HzRelevanceBasicChange hzRelevanceBasicChange) {
+        return baseSQLUtil.executeQueryById(hzRelevanceBasicChange,clzName+"selectMaxVersion");
+    }
 }

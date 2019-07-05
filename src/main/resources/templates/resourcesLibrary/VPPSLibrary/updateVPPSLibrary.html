@@ -115,10 +115,6 @@
                     data: myData,
                     success:
                         function (result) {
-                            // $('.modal-dialog', window.top.document).parent('div').remove()
-                            // $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                             activeTabBodyRefresh();
                             if (result.success) {
                                 layer.msg('修改成功', {icon: 1, time: 2000})

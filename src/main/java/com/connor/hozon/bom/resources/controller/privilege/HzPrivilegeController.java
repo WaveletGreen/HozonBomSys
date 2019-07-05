@@ -30,6 +30,9 @@ public class HzPrivilegeController extends BaseController {
     @RequestMapping(value = "write",method = RequestMethod.GET)
     public void openWritePrivilege(String url,HttpServletResponse response){
         String uri ="/hozon/"+url;
+        if(uri.contains("?")){
+            uri= uri.split("\\?")[0];
+        }
         List<String> urls = HzFilter.getUrlList();
         if(ListUtil.isNotEmpty(urls)){
             if(urls.contains(uri)){

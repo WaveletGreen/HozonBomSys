@@ -10,253 +10,253 @@
         <input class="form-control" id="lineId" name="lineId" type="text"
                placeholder="请输入零件号"/>
     </div>
-    <div class="form-group">
-        <label for="pBomLinePartName">名称<span>*</span></label>
-        <input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"
-               placeholder="请输入名称"/>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="pBomLinePartName">名称<span>*</span></label>-->
+        <!--<input class="form-control" id="pBomLinePartName" name="pBomLinePartName" type="text"-->
+               <!--placeholder="请输入名称"/>-->
+    <!--</div>-->
 
-    <div class="form-group">
-        <label for="pBomOfWhichDept">专业</label>
-        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"
-               placeholder="请输入专业"/>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="pBomOfWhichDept">专业</label>-->
+        <!--<input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text"-->
+               <!--placeholder="请输入专业"/>-->
+    <!--</div>-->
 
-    <div class="form-group">
-        <label for="pBomLinePartEnName">英文名称</label>
-        <input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text"
-               placeholder="请输入英文名称"/>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="pBomLinePartEnName">英文名称</label>-->
+        <!--<input class="form-control" id="pBomLinePartEnName" name="pBomLinePartEnName" type="text"-->
+               <!--placeholder="请输入英文名称"/>-->
+    <!--</div>-->
     <div class="form-group" id="lineNuber">
         <label for="lineNo">查找编号</label>
         <input class="form-control" id="lineNo" name="lineNo" type="text"
                placeholder="请输入查找编号"/>
     </div>
-    <div class="form-group">
-        <label for="pUnit">单位</label>
-        <select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">
-            <option></option>
-            <option>EA</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>Kg</option>
-            <option>L</option>
-            <option>mm</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="pPictureNo">图号</label>
-        <input class="form-control" id="pPictureNo" name="pPictureNo" type="text"
-               placeholder="请输入图号"/>
-    </div>
-    <div class="form-group">
-        <label for="pPictureSheet">图幅</label>
-        <select class="form-control" name="pPictureSheet" id="pPictureSheet" placeholder="请选择图幅">
-            <option></option>
-            <option>A0+</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>A0</option>
-            <option>A1</option>
-            <option>A2</option>
-            <option>A3</option>
-            <option>A4</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="pMaterialHigh">料厚</label>
-        <input class="form-control" id="pMaterialHigh" name="pMaterialHigh" type="text"
-               placeholder="请输入料厚"/>
-    </div>
-    <div class="form-group">
-        <label for="pMaterial1">材料1</label>
-        <input class="form-control" id="pMaterial1" name="pMaterial1" type="text"
-               placeholder="请输入材料1"/>
-    </div>
-    <div class="form-group">
-        <label for="pMaterial2">材料2</label>
-        <input class="form-control" id="pMaterial2" name="pMaterial2" type="text"
-               placeholder="请输入材料2"/>
-    </div>
-    <div class="form-group">
-        <label for="pMaterial3">材料3</label>
-        <input class="form-control" id="pMaterial3" name="pMaterial3" type="text"
-               placeholder="请输入材料3"/>
-    </div>
-    <div class="form-group">
-        <label for="pDensity">密度</label>
-        <input class="form-control" id="pDensity" name="pDensity" type="text"
-               placeholder="请输入密度"/>
-    </div>
-    <div class="form-group">
-        <label for="pMaterialStandard">材料标准</label>
-        <input class="form-control" id="pMaterialStandard" name="pMaterialStandard" type="text"
-               placeholder="请输入材料标准"/>
-    </div>
-    <div class="form-group">
-        <label for="pSurfaceTreat">表面处理</label>
-        <input class="form-control" id="pSurfaceTreat" name="pSurfaceTreat" type="text"
-               placeholder="请输入表面处理"/>
-    </div>
-    <div class="form-group">
-        <label for="pTextureColorNum">纹理编号彩编号</label>
-        <input class="form-control" id="pTextureColorNum" name="pTextureColorNum" type="text"
-               placeholder="请输入纹理编号彩编号"/>
-    </div>
-    <div class="form-group">
-        <label for="pManuProcess">制造工艺</label>
-        <input class="form-control" id="pManuProcess" name="pManuProcess" type="text"
-               placeholder="请输入制造工艺"/>
-    </div>
-    <div class="form-group">
-        <label for="pSymmetry">对称</label>
-        <select class="form-control" name="pSymmetry" id="pSymmetry" placeholder="请选择对称">
-            <option></option>
-            <option>左件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>右件</option>
-            <option>通用</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="pImportance">重要度</label>
-        <select class="form-control" name="pImportance" id="pImportance" placeholder="请选择重要度">
-            <option></option>
-            <option>D</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>P</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="pRegulationFlag">是否法规件</label>
-        <select class="form-control" name="pRegulationFlag" id="pRegulationFlag" placeholder="请选择是否法规件">
-            <option></option>
-            <option>Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>N</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="p3cpartFlag">是否3C件</label>
-        <select class="form-control" name="p3cpartFlag" id="p3cpartFlag" placeholder="请选择是否3C件">
-            <option></option>
-            <option>Y</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>N</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="pRegulationCode">法规件型号</label>
-        <input class="form-control" id="pRegulationCode" name="pRegulationCode" type="text"
-               placeholder="请输入法规件型号"/>
-    </div>
-    <div class="form-group">
-        <label for="pBwgBoxPart">黑白灰匣子件</label>
-        <select class="form-control" name="pBwgBoxPart" id="pBwgBoxPart" placeholder="请选择黑白灰匣子件">
-            <option></option>
-            <option>B</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>W</option>
-            <option>G</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="pDevelopType">开发类型</label>
-        <input class="form-control" id="pDevelopType" name="pDevelopType" type="text"
-               placeholder="请输入开发类型"/>
-    </div>
-    <div class="form-group">
-        <label for="pDataVersion">数据版本</label>
-        <input class="form-control" id="pDataVersion" name="pDataVersion" type="text"
-               placeholder="请输入数据版本"/>
-    </div>
-    <div class="form-group">
-        <label for="pTargetWeight">目标重量(kg)</label>
-        <input class="form-control" id="pTargetWeight" name="pTargetWeight" type="text"
-               placeholder="请输入目标重量(kg)"/>
-    </div>
-    <div class="form-group">
-        <label for="pFeatureWeight">预估重量(kg)</label>
-        <input class="form-control" id="pFeatureWeight" name="pFeatureWeight" type="text"
-               placeholder="请输入预估重量(kg)"/>
-    </div>
-    <div class="form-group">
-        <label for="pActualWeight">实际重量(kg)</label>
-        <input class="form-control" id="pActualWeight" name="pActualWeight" type="text"
-               placeholder="请输入实际重量(kg)"/>
-    </div>
-    <div class="form-group">
-        <label for="pFastener">紧固件</label>
-        <select class="form-control" name="pFastener" id="pFastener" placeholder="请选择紧固件">
-            <option></option>
-            <option>标准件</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>非标件</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="pFastenerStandard">紧固件规格</label>
-        <input class="form-control" id="pFastenerStandard" name="pFastenerStandard" type="text"
-               placeholder="请输入紧固件规格"/>
-    </div>
-    <div class="form-group">
-        <label for="pFastenerLevel">紧固件性能等级</label>
-        <input class="form-control" id="pFastenerLevel" name="pFastenerLevel" type="text"
-               placeholder="请输入紧固件性能等级"/>
-    </div>
-    <div class="form-group">
-        <label for="pTorque">扭矩</label>
-        <input class="form-control" id="pTorque" name="pTorque" type="text"
-               placeholder="请输入扭矩"/>
-    </div>
-    <div class="form-group">
-        <label for="pDutyEngineer">责任工程师</label>
-        <input class="form-control" id="pDutyEngineer" name="pDutyEngineer" type="text"
-               placeholder="请输入责任工程师"/>
-    </div>
-    <div class="form-group">
-        <label for="pSupply">供应商</label>
-        <input class="form-control" id="pSupply" name="pSupply" type="text"
-               placeholder="请输入供应商"/>
-    </div>
-    <div class="form-group">
-        <label for="pSupplyCode">供应商代码</label>
-        <input class="form-control" id="pSupplyCode" name="pSupplyCode" type="text"
-               placeholder="请输入供应商代码"/>
-    </div>
-    <div class="form-group">
-        <label for="pBuyEngineer">采购工程师</label>
-        <input class="form-control" id="pBuyEngineer" name="pBuyEngineer" type="text"
-               placeholder="请输入采购工程师"/>
-    </div>
-    <div class="form-group">
-        <label for="pRemark">备注</label>
-        <input class="form-control" id="pRemark" name="pRemark" type="text"
-               placeholder="请输入备注"/>
-    </div>
-    <div class="form-group">
-        <label for="pBomLinePartClass">零件分类</label>
-        <select class="form-control" name="pBomLinePartClass" id="pBomLinePartClass" placeholder="请选择零件分类">
-            <option></option>
-            <option>自制</option> <!--th:selected="${data.getResource()=='MAKE'?true:false}"-->
-            <option>外协</option>
-            <option>虚拟总成</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="pBomLinePartResource">零件来源</label>
-        <select class="form-control" name="pBomLinePartResource" id="pBomLinePartResource" placeholder="请选择零件来源">
-            <option></option>
-            <option>采购件</option>
-            <option>采购拆分单件</option>
-            <option>采购拆分总成件</option>
-            <option>采购拆分标准件</option>
-            <option>采购拆分非标件</option>
-            <option>自制总成</option>
-            <option>自制单件</option>
-            <option>自用标准件</option>
-            <option>自用非标件</option>
-            <option>虚拟总成</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="pInOutSideFlag">内外饰标识</label>
-        <select class="form-control" name="pInOutSideFlag" id="pInOutSideFlag" placeholder="请选择内外饰标识">
-            <option></option>
-            <option>内饰件</option>
-            <option>外饰件</option>
-        </select>
-    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="pUnit">单位</label>-->
+        <!--<select class="form-control" name="pUnit" id="pUnit" placeholder="请选择单位">-->
+            <!--<option></option>-->
+            <!--<option>EA</option> &lt;!&ndash;th:selected="${data.getResource()=='MAKE'?true:false}"&ndash;&gt;-->
+            <!--<option>Kg</option>-->
+            <!--<option>L</option>-->
+            <!--<option>mm</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pPictureNo">图号</label>-->
+        <!--<input class="form-control" id="pPictureNo" name="pPictureNo" type="text"-->
+               <!--placeholder="请输入图号"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pPictureSheet">图幅</label>-->
+        <!--<select class="form-control" name="pPictureSheet" id="pPictureSheet" placeholder="请选择图幅">-->
+            <!--<option></option>-->
+            <!--<option>A0+</option> &lt;!&ndash;th:selected="${data.getResource()=='MAKE'?true:false}"&ndash;&gt;-->
+            <!--<option>A0</option>-->
+            <!--<option>A1</option>-->
+            <!--<option>A2</option>-->
+            <!--<option>A3</option>-->
+            <!--<option>A4</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pMaterialHigh">料厚</label>-->
+        <!--<input class="form-control" id="pMaterialHigh" name="pMaterialHigh" type="text"-->
+               <!--placeholder="请输入料厚"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pMaterial1">材料1</label>-->
+        <!--<input class="form-control" id="pMaterial1" name="pMaterial1" type="text"-->
+               <!--placeholder="请输入材料1"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pMaterial2">材料2</label>-->
+        <!--<input class="form-control" id="pMaterial2" name="pMaterial2" type="text"-->
+               <!--placeholder="请输入材料2"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pMaterial3">材料3</label>-->
+        <!--<input class="form-control" id="pMaterial3" name="pMaterial3" type="text"-->
+               <!--placeholder="请输入材料3"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pDensity">密度</label>-->
+        <!--<input class="form-control" id="pDensity" name="pDensity" type="text"-->
+               <!--placeholder="请输入密度"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pMaterialStandard">材料标准</label>-->
+        <!--<input class="form-control" id="pMaterialStandard" name="pMaterialStandard" type="text"-->
+               <!--placeholder="请输入材料标准"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pSurfaceTreat">表面处理</label>-->
+        <!--<input class="form-control" id="pSurfaceTreat" name="pSurfaceTreat" type="text"-->
+               <!--placeholder="请输入表面处理"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pTextureColorNum">纹理编号彩编号</label>-->
+        <!--<input class="form-control" id="pTextureColorNum" name="pTextureColorNum" type="text"-->
+               <!--placeholder="请输入纹理编号彩编号"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pManuProcess">制造工艺</label>-->
+        <!--<input class="form-control" id="pManuProcess" name="pManuProcess" type="text"-->
+               <!--placeholder="请输入制造工艺"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pSymmetry">对称</label>-->
+        <!--<select class="form-control" name="pSymmetry" id="pSymmetry" placeholder="请选择对称">-->
+            <!--<option></option>-->
+            <!--<option>左件</option>-->
+            <!--<option>右件</option>-->
+            <!--<option>通用</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pImportance">重要度</label>-->
+        <!--<select class="form-control" name="pImportance" id="pImportance" placeholder="请选择重要度">-->
+            <!--<option></option>-->
+            <!--<option>D</option>-->
+            <!--<option>P</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pRegulationFlag">是否法规件</label>-->
+        <!--<select class="form-control" name="pRegulationFlag" id="pRegulationFlag" placeholder="请选择是否法规件">-->
+            <!--<option></option>-->
+            <!--<option>Y</option>-->
+            <!--<option>N</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="p3cpartFlag">是否3C件</label>-->
+        <!--<select class="form-control" name="p3cpartFlag" id="p3cpartFlag" placeholder="请选择是否3C件">-->
+            <!--<option></option>-->
+            <!--<option>Y</option>-->
+            <!--<option>N</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pRegulationCode">法规件型号</label>-->
+        <!--<input class="form-control" id="pRegulationCode" name="pRegulationCode" type="text"-->
+               <!--placeholder="请输入法规件型号"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pBwgBoxPart">黑白灰匣子件</label>-->
+        <!--<select class="form-control" name="pBwgBoxPart" id="pBwgBoxPart" placeholder="请选择黑白灰匣子件">-->
+            <!--<option></option>-->
+            <!--<option>B</option>-->
+            <!--<option>W</option>-->
+            <!--<option>G</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pDevelopType">开发类型</label>-->
+        <!--<input class="form-control" id="pDevelopType" name="pDevelopType" type="text"-->
+               <!--placeholder="请输入开发类型"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pDataVersion">数据版本</label>-->
+        <!--<input class="form-control" id="pDataVersion" name="pDataVersion" type="text"-->
+               <!--placeholder="请输入数据版本"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pTargetWeight">目标重量(kg)</label>-->
+        <!--<input class="form-control" id="pTargetWeight" name="pTargetWeight" type="text"-->
+               <!--placeholder="请输入目标重量(kg)"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pFeatureWeight">预估重量(kg)</label>-->
+        <!--<input class="form-control" id="pFeatureWeight" name="pFeatureWeight" type="text"-->
+               <!--placeholder="请输入预估重量(kg)"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pActualWeight">实际重量(kg)</label>-->
+        <!--<input class="form-control" id="pActualWeight" name="pActualWeight" type="text"-->
+               <!--placeholder="请输入实际重量(kg)"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pFastener">紧固件</label>-->
+        <!--<select class="form-control" name="pFastener" id="pFastener" placeholder="请选择紧固件">-->
+            <!--<option></option>-->
+            <!--<option>标准件</option>-->
+            <!--<option>非标件</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pFastenerStandard">紧固件规格</label>-->
+        <!--<input class="form-control" id="pFastenerStandard" name="pFastenerStandard" type="text"-->
+               <!--placeholder="请输入紧固件规格"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pFastenerLevel">紧固件性能等级</label>-->
+        <!--<input class="form-control" id="pFastenerLevel" name="pFastenerLevel" type="text"-->
+               <!--placeholder="请输入紧固件性能等级"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pTorque">扭矩</label>-->
+        <!--<input class="form-control" id="pTorque" name="pTorque" type="text"-->
+               <!--placeholder="请输入扭矩"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pDutyEngineer">责任工程师</label>-->
+        <!--<input class="form-control" id="pDutyEngineer" name="pDutyEngineer" type="text"-->
+               <!--placeholder="请输入责任工程师"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pSupply">供应商</label>-->
+        <!--<input class="form-control" id="pSupply" name="pSupply" type="text"-->
+               <!--placeholder="请输入供应商"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pSupplyCode">供应商代码</label>-->
+        <!--<input class="form-control" id="pSupplyCode" name="pSupplyCode" type="text"-->
+               <!--placeholder="请输入供应商代码"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pBuyEngineer">采购工程师</label>-->
+        <!--<input class="form-control" id="pBuyEngineer" name="pBuyEngineer" type="text"-->
+               <!--placeholder="请输入采购工程师"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pRemark">备注</label>-->
+        <!--<input class="form-control" id="pRemark" name="pRemark" type="text"-->
+               <!--placeholder="请输入备注"/>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pBomLinePartClass">零件分类</label>-->
+        <!--<select class="form-control" name="pBomLinePartClass" id="pBomLinePartClass" placeholder="请选择零件分类">-->
+            <!--<option></option>-->
+            <!--<option>自制</option>-->
+            <!--<option>外协</option>-->
+            <!--<option>虚拟总成</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pBomLinePartResource">零件来源</label>-->
+        <!--<select class="form-control" name="pBomLinePartResource" id="pBomLinePartResource" placeholder="请选择零件来源">-->
+            <!--<option></option>-->
+            <!--<option>采购件</option>-->
+            <!--<option>采购拆分单件</option>-->
+            <!--<option>采购拆分总成件</option>-->
+            <!--<option>采购拆分标准件</option>-->
+            <!--<option>采购拆分非标件</option>-->
+            <!--<option>自制总成</option>-->
+            <!--<option>自制单件</option>-->
+            <!--<option>自用标准件</option>-->
+            <!--<option>自用非标件</option>-->
+            <!--<option>虚拟总成</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label for="pInOutSideFlag">内外饰标识</label>-->
+        <!--<select class="form-control" name="pInOutSideFlag" id="pInOutSideFlag" placeholder="请选择内外饰标识">-->
+            <!--<option></option>-->
+            <!--<option>内饰件</option>-->
+            <!--<option>外饰件</option>-->
+        <!--</select>-->
+    <!--</div>-->
     <div class="form-group">
         <label for="pUpc">UPC</label>
         <input class="form-control" id="pUpc" name="pUpc" type="text" placeholder="请输入UPC"/>
@@ -282,6 +282,19 @@
             <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
         </select>
     </div>
+
+    <div class="form-group">
+        <label for="sparePart">备件</label>
+        <input class="form-control" id="sparePart" name="sparePart" type="text"
+               placeholder="请输入备件"/>
+    </div>
+
+
+    <div class="form-group">
+        <label for="sparePartNum">备件编号</label>
+        <input class="form-control" id="sparePartNum" name="sparePartNum" type="text"
+               placeholder="请输入备件编号"/>
+    </div>
     <!--<input id="puid" name="puid" type="hidden" th:value="${puid}"/>-->
     <!--&lt;!&ndash;循环放入数据&ndash;&gt;-->
     <!--<div class="form-group " th:each="_data,c:${data[0]}">-->
@@ -293,16 +306,14 @@
 <script th:inline="javascript">
     <![CDATA[
     $(function () {
-        /*var puid = $("#puid").val();
-        if (puid==""){
-            $("#lineNo").attr({"disabled": "disabled"});
-        } else {
-            $("#lineNo").removeAttr("disabled");
-        }*/
-        var oTxt = document.getElementById("puid");
-        var oDiv = document.getElementById("lineNuber");
+        var puid = $("#puid").val();
+        if (puid == ""){
+            $("#colorPart").attr({"disabled": "disabled"});
+        } 
+        // var oTxt = document.getElementById("puid");
+        // var oDiv = document.getElementById("lineNumber");
         // oTxt.onblur = function(){
-        oTxt.value == "" ? oDiv.style.display = "none" : oDiv.style.display = "block";
+        // oTxt.value == "" ? oDiv.style.display = "none" : oDiv.style.display = "block";
         // };
         $('#ebomMainForm').bootstrapValidator({
             message: 'This value is not valid',
@@ -320,14 +331,14 @@
                         }
                     }
                 },
-                pBomLinePartName: {
-                    message: '名称验证失败',
-                    validators: {
-                        notEmpty: {
-                            message: '名称不能为空'
-                        }
-                    }
-                },
+                // pBomLinePartName: {
+                //     message: '名称验证失败',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '名称不能为空'
+                //         }
+                //     }
+                // },
                 lineNo: {
                     message: '编号验证失败',
                     validators: {
@@ -356,7 +367,6 @@
             if (bootstrapValidator.isValid()) {
                 var projectPuid = $("#project", window.top.document).val();
                 var url = $("#ebomMainForm", window.top.document).attr('action');
-                var puid = $("#puid").val;
                 // var data = {};
                 // var _d = $("#ebomMainForm").serializeArray();
                 // for (var p in _d) {
@@ -365,57 +375,59 @@
                 var myData = JSON.stringify({
                     "puid": $("#puid").val(),
                     "lineId": $("#lineId").val(),
-                    "pBomLinePartName": $("#pBomLinePartName").val(),
-                    // "level": $("#level").val(),
-                    "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
-                    // "rank": $("#rank").val(),
-                    // "groupNum": $("#groupNum").val(),
-                    "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
+                    // "pBomLinePartName": $("#pBomLinePartName").val(),
+                    // // "level": $("#level").val(),
+                    // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                    // // "rank": $("#rank").val(),
+                    // // "groupNum": $("#groupNum").val(),
+                    // "pBomLinePartEnName": $("#pBomLinePartEnName").val(),
                     "lineNo": $("#lineNo").val(),
-                    "pLouaFlag": $("#pLouaFlag").val(),
-                    "pUnit": $("#pUnit").val(),
-                    "pPictureNo": $("#pPictureNo").val(),
-                    "pPictureSheet": $("#pPictureSheet").val(),
-                    "pMaterialHigh": $("#pMaterialHigh").val(),
-                    "pMaterial1": $("#pMaterial1").val(),
-                    "pMaterial2": $("#pMaterial2").val(),
-                    "pMaterial3": $("#pMaterial3").val(),
-                    "pDensity": $("#pDensity").val(),
-                    "pMaterialStandard": $("#pMaterialStandard").val(),
-                    "pSurfaceTreat": $("#pSurfaceTreat").val(),
-                    "pTextureColorNum": $("#pTextureColorNum").val(),
-                    "pManuProcess": $("#pManuProcess").val(),
-                    "pSymmetry": $("#pSymmetry").val(),
-                    "pImportance": $("#pImportance").val(),
-                    "pRegulationFlag": $("#pRegulationFlag").val(),
-                    "p3cpartFlag": $("#p3cpartFlag").val(),
-                    "pRegulationCode": $("#pRegulationCode").val(),
-                    "pBwgBoxPart": $("#pBwgBoxPart").val(),
-                    "pDevelopType": $("#pDevelopType").val(),
-                    "pDataVersion": $("#pDataVersion").val(),
-                    "pTargetWeight": $("#pTargetWeight").val(),
-                    "pFeatureWeight": $("#pFeatureWeight").val(),
-                    "pActualWeight": $("#pActualWeight").val(),
-                    "pFastener": $("#pFastener").val(),
-                    "pFastenerStandard": $("#pFastenerStandard").val(),
-                    "pFastenerLevel": $("#pFastenerLevel").val(),
-                    "pTorque": $("#pTorque").val(),
-                    "pDutyEngineer": $("#pDutyEngineer").val(),
-                    "pSupply": $("#pSupply").val(),
-                    "pSupplyCode": $("#pSupplyCode").val(),
-                    "pBuyEngineer": $("#pBuyEngineer").val(),
-                    "pRemark": $("#pRemark").val(),
-                    "pBomLinePartClass": $("#pBomLinePartClass").val(),
-                    "pBomLinePartResource": $("#pBomLinePartResource").val(),
-                    "pInOutSideFlag": $("#pInOutSideFlag").val(),
+                    // "pLouaFlag": $("#pLouaFlag").val(),
+                    // "pUnit": $("#pUnit").val(),
+                    // "pPictureNo": $("#pPictureNo").val(),
+                    // "pPictureSheet": $("#pPictureSheet").val(),
+                    // "pMaterialHigh": $("#pMaterialHigh").val(),
+                    // "pMaterial1": $("#pMaterial1").val(),
+                    // "pMaterial2": $("#pMaterial2").val(),
+                    // "pMaterial3": $("#pMaterial3").val(),
+                    // "pDensity": $("#pDensity").val(),
+                    // "pMaterialStandard": $("#pMaterialStandard").val(),
+                    // "pSurfaceTreat": $("#pSurfaceTreat").val(),
+                    // "pTextureColorNum": $("#pTextureColorNum").val(),
+                    // "pManuProcess": $("#pManuProcess").val(),
+                    // "pSymmetry": $("#pSymmetry").val(),
+                    // "pImportance": $("#pImportance").val(),
+                    // "pRegulationFlag": $("#pRegulationFlag").val(),
+                    // "p3cpartFlag": $("#p3cpartFlag").val(),
+                    // "pRegulationCode": $("#pRegulationCode").val(),
+                    // "pBwgBoxPart": $("#pBwgBoxPart").val(),
+                    // "pDevelopType": $("#pDevelopType").val(),
+                    // "pDataVersion": $("#pDataVersion").val(),
+                    // "pTargetWeight": $("#pTargetWeight").val(),
+                    // "pFeatureWeight": $("#pFeatureWeight").val(),
+                    // "pActualWeight": $("#pActualWeight").val(),
+                    // "pFastener": $("#pFastener").val(),
+                    // "pFastenerStandard": $("#pFastenerStandard").val(),
+                    // "pFastenerLevel": $("#pFastenerLevel").val(),
+                    // "pTorque": $("#pTorque").val(),
+                    // "pDutyEngineer": $("#pDutyEngineer").val(),
+                    // "pSupply": $("#pSupply").val(),
+                    // "pSupplyCode": $("#pSupplyCode").val(),
+                    // "pBuyEngineer": $("#pBuyEngineer").val(),
+                    // "pRemark": $("#pRemark").val(),
+                    // "pBomLinePartClass": $("#pBomLinePartClass").val(),
+                    // "pBomLinePartResource": $("#pBomLinePartResource").val(),
+                    // "pInOutSideFlag": $("#pInOutSideFlag").val(),
                     "pUpc": $("#pUpc").val(),
                     "fna": $("#fna").val(),
                     "pFnaDesc": $("#pFnaDesc").val(),
                     "number": $("#number").val(),
                     "colorPart": $("#colorPart").val(),
+                    "sparePart": $("#sparePart").val(),
+                    "sparePartNum": $("#sparePartNum").val(),
                     "projectId": $("#project", window.top.document).val(),
                 });
-                if (puid = "") {
+                // if (puid = "") {
                     $.ajax({
                         contentType:
                             "application/json",
@@ -425,44 +437,46 @@
                         data: myData,
                         success:
                             function (result) {
-                                // $('.modal-dialog', window.top.document).parent('div').remove()
-                                // $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                activeTabBodyRefresh();
-                                window.Ewin.alert({message: result.msg + ':添加数据成功！'});
+                                if(result.success){
+                                    activeTabBodyRefresh();
+                                    layer.msg(result.errMsg, {icon: 1, time: 2000});
+                                }else {
+                                    window.Ewin.alert({message: result.errMsg });
+                                }
+
                             },
                         error: function (status) {
                             window.Ewin.alert({message: status.status + ':添加数据失败!'});
                         }
                     });
-                } else {
-                    $.ajax({
-                        contentType:
-                            "application/json",
-                        type:
-                            'POST',
-                        // url: url + "?projectId=" + projectPuid + "&puid=" + puid,
-                        url: url,
-                        data: myData,
-                        success:
-                            function (result) {
-                                $('.modal-dialog', window.top.document).parent('div').remove()
-                                $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                if (result.success) {
-                                    layer.msg('添加成功', {icon: 1, time: 2000})
-                                }
-                                else if (!result.success) {
-                                    window.Ewin.alert({message: result.errMsg})
-                                }
-                            },
-                        error: function (status) {
-                            window.Ewin.alert({message: status.status + ':添加数据失败!'});
-                        }
-                    });
-                }
+                // }
+                // else {
+                //     $.ajax({
+                //         contentType:
+                //             "application/json",
+                //         type:
+                //             'POST',
+                //         // url: url + "?projectId=" + projectPuid + "&puid=" + puid,
+                //         url: url,
+                //         data: myData,
+                //         success:
+                //             function (result) {
+                //                 $('.modal-dialog', window.top.document).parent('div').remove()
+                //                 $('body', window.top.document).find('.modal-backdrop').remove();
+                //                 // jquery 调用刷新当前操作的table页面的refresh方法
+                //                 $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                //                 if (result.success) {
+                //                     layer.msg('添加成功', {icon: 1, time: 2000})
+                //                 }
+                //                 else if (!result.success) {
+                //                     window.Ewin.alert({message: result.errMsg})
+                //                 }
+                //             },
+                //         error: function (status) {
+                //             window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                //         }
+                //     });
+                // }
             }
         });
     })

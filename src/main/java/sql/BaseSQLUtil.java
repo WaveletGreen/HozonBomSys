@@ -291,8 +291,7 @@ public class BaseSQLUtil extends SqlSessionDaoSupport implements IBaseSQLUtil {
      */
     public int insert(final String sqlMapId, final Object object) {
         try {
-            int result = getSqlSession().insert(sqlMapId, object);
-            return result;
+             return getSqlSession().insert(sqlMapId, object);
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错" + sqlMapId, e);
@@ -306,7 +305,7 @@ public class BaseSQLUtil extends SqlSessionDaoSupport implements IBaseSQLUtil {
      * @param param    实体参数
      * @return
      */
-    public Object findForObject(final String sqlMapId, final Object param) {
+    public <T> T findForObject(final String sqlMapId, final Object param) {
         try {
             if (param != null) {
                 return getSqlSession().selectOne(sqlMapId, param);
@@ -328,19 +327,16 @@ public class BaseSQLUtil extends SqlSessionDaoSupport implements IBaseSQLUtil {
      */
     public int update(final String sqlMapId, final Object param) {
         try {
-            int result = getSqlSession().update(sqlMapId, param);
-            return result;
+           return getSqlSession().update(sqlMapId, param);
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错" + sqlMapId, e);
-        } finally {
         }
     }
 
     public int delete(final String sqlMapId, final Object param) {
         try {
-            int result = getSqlSession().delete(sqlMapId, param);
-            return result;
+            return getSqlSession().delete(sqlMapId, param);
         } catch (Exception e) {
             logger.error("SQL执行出错: " + sqlMapId, e);
             throw new HzDBException("SQL执行出错" + sqlMapId, e);
@@ -365,7 +361,7 @@ public class BaseSQLUtil extends SqlSessionDaoSupport implements IBaseSQLUtil {
         if (totalCount != null && totalCount.intValue() <= (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize()) {
             return new Page(pageRequestParam.getPageNumber(), pageRequestParam.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        if (pageRequestParam.getPageSize() == 0) {
+        if (pageRequestParam.getPageSize() == 0 || pageRequestParam.isAllNumber()) {
             pageRequestParam.setPageSize((int) totalCount);
         }
         Page page = new Page(pageRequestParam, totalCount.intValue());
@@ -394,7 +390,7 @@ public class BaseSQLUtil extends SqlSessionDaoSupport implements IBaseSQLUtil {
         if (totalCount != null && totalCount.intValue() <= (pageRequestParam.getPageNumber() - 1) * pageRequestParam.getPageSize()) {
             return new Page(pageRequestParam.getPageNumber(), pageRequestParam.getPageSize(), totalCount.intValue(), new ArrayList(0));
         }
-        if (pageRequestParam.getPageSize() == 0) {
+        if (pageRequestParam.getPageSize() == 0 || pageRequestParam.isAllNumber()) {
             pageRequestParam.setPageSize((int) totalCount);
         }
         Page page = new Page(pageRequestParam, totalCount.intValue());
@@ -434,9 +430,14 @@ public class BaseSQLUtil extends SqlSessionDaoSupport implements IBaseSQLUtil {
     @Override
     public SqlSession getSqlSession() {
         try {
-            return super.getSqlSession();
+            SqlSession sqlSession =  super.getSqlSession();
+            if(sqlSession != null){
+                return sqlSession;
+            }else {
+                throw new HzDBException("无法获取到数据库连接session,请检查网络!");
+            }
         }catch (Exception e){
-            throw new HzDBException("获取数据库连接session失败!",e);
+            throw new HzDBException("无法获取到数据库连接session,请检查网络!",e);
         }
         
     }

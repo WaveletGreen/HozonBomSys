@@ -22,24 +22,14 @@ import java.util.Map;
 public interface HzPbomService {
 
     /**
-     * 插入PBOM维护信息   获取当前登陆者的信息 需要进行权限判断
-     *
-     * @param recordReqDTO
-     * @return
-     */
-    WriteResultRespDTO insertHzPbomRecord(AddHzPbomRecordReqDTO recordReqDTO);
-
-    /**
-     * PBOM维护 编辑 获取当前登录这信息 进行权限判断
-     *
+     * PBOM 编辑
      * @param recordReqDTO
      * @return
      */
     WriteResultRespDTO updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO);
 
     /**
-     * PBOM维护 删除  获取当前登录者的信息 进行权限判断
-     *
+     * PBOM 删除  获取当前登录者的信息 进行权限判断
      * @param reqDTO
      * @return
      */
@@ -47,7 +37,6 @@ public interface HzPbomService {
 
     /**
      * 获取PBOM信息 工艺合件
-     *
      * @param reqDTO
      * @return
      */
@@ -55,16 +44,13 @@ public interface HzPbomService {
 
     /**
      * 获取一条PBOM详情 通过零件号或者puid
-     *
      * @param reqDTO
      * @return
      */
     JSONArray getPbomByLineId(HzPbomProcessComposeReqDTO reqDTO);
 
-
     /**
      * 分页获取pbom信息
-     *
      * @param query
      * @return
      */
@@ -86,28 +72,13 @@ public interface HzPbomService {
      */
     List<HzPbomLineRecord> getHzPbomLineTree(HzPbomTreeQuery query);
 
-    /**
-     * 创建工艺合件
-     *
-     * @param recordReqDTO
-     * @return
-     */
-    WriteResultRespDTO andProcessCompose(AddHzPbomRecordReqDTO recordReqDTO);
 
-    /**
-     * 查询已删除记录
-     *
-     * @param query
-     * @return
-     */
-    Page<HzPbomLineRespDTO> getHzPbomRecycleByPage(HzBomRecycleByPageQuery query);
-
-    /**
-     * 删除记录恢复
-     *
-     * @return
-     */
-    WriteResultRespDTO recoverDeletePbomRecord(String projectId, String puid);
+//    /**
+//     * 删除记录恢复
+//     *
+//     * @return
+//     */
+//    WriteResultRespDTO recoverDeletePbomRecord(String projectId, String puid);
 
 
     WriteResultRespDTO setCurrentBomAsLou(SetLouReqDTO reqDTO);
@@ -137,7 +108,6 @@ public interface HzPbomService {
      */
     JSONObject doGenerateProcessCompose(Map<String, Object> param);
 
-
     /**
      * PBOM数据  到变更表单
      * @param reqDTO
@@ -145,9 +115,8 @@ public interface HzPbomService {
      */
     WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO);
 
-
     /**
-     * BOM数据撤销
+     * PBOM数据撤销
      * @param reqDTO
      * @return
      */

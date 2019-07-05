@@ -118,5 +118,10 @@ public class HzCfg0ModelFeatureDaoImpl extends BasicDaoImpl<HzCfg0ModelFeature> 
         return baseSQLUtil.executeQueryByPass(MODEL_FEATURE, projectUid, clzName + ".selectAllByProjectUid");
     }
 
+    @Override
+    public int updateIsSent(List<HzCfg0ModelFeature> hzCfg0ModelFeatureList) {
+        return baseSQLUtil.executeUpdate(hzCfg0ModelFeatureList,clzName+".updateIsSent");
+    }
+
 
 }

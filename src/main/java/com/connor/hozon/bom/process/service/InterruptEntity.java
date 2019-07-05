@@ -192,24 +192,24 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
      * @param tableName
      */
     private void ebomChangeInterrupt(String tableName, Long orderId, String projectId) {
-        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
-        dataDetailQuery.setOrderId(orderId);
-        dataDetailQuery.setTableName(tableName);
-        dataDetailQuery.setProjectId(projectId);
-
-        List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);
-        List<HzBomLineRecord> bomLineRecords = new ArrayList<>();
-        if(ListUtil.isNotEmpty(records)){
-            records.forEach(record -> {
-                HzBomLineRecord bomLineRecord = HzEbomRecordFactory.eplRecordToBomLineRecord(record);
-                bomLineRecord.setStatus(record.getStatus());
-                bomLineRecord.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
-                bomLineRecords.add(bomLineRecord);
-            });
-        }
-        if(ListUtil.isNotEmpty(bomLineRecords)){
-            hzEbomRecordDAO.updateList(bomLineRecords);
-        }
+//        HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
+//        dataDetailQuery.setOrderId(orderId);
+//        dataDetailQuery.setTableName(tableName);
+//        dataDetailQuery.setProjectId(projectId);
+//
+//        List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);
+//        List<HzEPLManageRecord> bomLineRecords = new ArrayList<>();
+//        if(ListUtil.isNotEmpty(records)){
+//            records.forEach(record -> {
+//                HzEPLManageRecord bomLineRecord = HzEbomRecordFactory.ebomRecordToEBOMRecord(record);
+//                bomLineRecord.setStatus(record.getStatus());
+//                bomLineRecord.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
+//                bomLineRecords.add(bomLineRecord);
+//            });
+//        }
+//        if(ListUtil.isNotEmpty(bomLineRecords)){
+//            hzEbomRecordDAO.updateListByEplId(bomLineRecords);
+//        }
     }
 
     /**

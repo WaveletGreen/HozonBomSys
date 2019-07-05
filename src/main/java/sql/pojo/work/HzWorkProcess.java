@@ -1,6 +1,7 @@
 package sql.pojo.work;
 
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -8,8 +9,9 @@ import java.util.Date;
  * @Date: 2018/7/5
  * @Description: 工艺
  */
-public class HzWorkProcess {
+public class HzWorkProcess implements Serializable {
 
+    private static final long serialVersionUID = 6576353062862882209L;
     /**
      * 主键id
      */
@@ -122,6 +124,30 @@ public class HzWorkProcess {
     private Integer isSent;
 
     private Integer pStatus;
+
+    /**
+     * 参数类型 整车工艺路线 11 或者 21 其他 71
+     */
+    private Integer dataType;
+
+    private String projectId;
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
+
+    public Integer getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Integer dataType) {
+        this.dataType = dataType;
+    }
+
     public String getpCreateName() {
         return pCreateName;
     }

@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/8/13
  * @Description:
  */
-public class HzEWOChangeRecordQuery {
+public class HzEWOChangeRecordQuery extends DefaultQuery{
 
     private String projectId;
 

@@ -16,6 +16,7 @@ import java.util.Map;
  * @Date: 2018/10/16
  * @Description:
  */
+@Deprecated
 @Service("hzSingleVehicleDosageDAO")
 public class HzSingleVehicleDosageDAOImpl extends BaseSQLUtil implements HzSingleVehicleDosageDAO {
 

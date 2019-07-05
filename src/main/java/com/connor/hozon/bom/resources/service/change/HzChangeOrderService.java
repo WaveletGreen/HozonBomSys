@@ -55,4 +55,11 @@ public interface HzChangeOrderService {
     HzChangeOrderRespDTO getHzChangeOrderRecordById(Long id);
 
     HzChangeOrderRespDTO getHzChangeOrderRespDTOById(Long id, Long auditId);
+
+    /**
+     * 变更表单是否关联变更数据
+     * @param orderId
+     * @return
+     */
+    boolean changeOrderRelatedChangeData(Long orderId);
 }

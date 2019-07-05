@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <!--User: xulf Date: 2018/6/26 Time: 15:46-->
 <head th:include="include/headBom"></head>
-<link th:href="@{/css/bom/pbom/processOfFitting.css}" rel="stylesheet"/>
+<!--<link th:href="@{/css/bom/pbom/processOfFitting.css}" rel="stylesheet"/>-->
 <meta charset="UTF-8">
 <title>工艺合件</title>
 </head>
@@ -13,14 +13,14 @@
         <div id="info_div" style="max-width: 300px;position: absolute;left: 60%;top: 9%;">
             <!--float: right;margin-top: 4em-->
             <img id="info_img_1" style="width: 36px;display: inline" th:src="@{/img/my_left_arrow.png}">
-            <span>第一步：查询需要合成的零件</span>
+            <span>第一步:查询需要合成的零件</span>
             <img id="info_img_2" style="width: 36px;display: none" th:src="@{/img/my_right_arrow.png}">
         </div>
         <h3><p class="text-primary" id="demo1">请选择您要合成的零件</p></h3>
         <form class="form-inline" id="demo2">
             <div class="form-group">
                 <label for="queryLineId">零件号:</label>
-                <input type="text" class="form-control" style="width: 150px" name="queryLineId" id="queryLineId"
+                <input type="text" class="form-control" style="width: 100px" name="queryLineId" id="queryLineId"
                        placeholder="请输入查询的零件号" />
             </div>
             <div class="form-group">
@@ -35,16 +35,16 @@
     </div>
     <div class="content col-md-4 col-lg-4">
         <div class="form-group">
-            <button type="button" id="synthetic" class="btn btn-primary" style="width: 145px;margin-top: 57px"
-                    disabled="disabled">生成工艺合件
+            <button type="button" id="synthetic" class="btn btn-primary" style="margin-top: 57px"
+                    disabled="disabled">生成合件
             </button>
-            <button type="button" id="synthetic1" class="btn btn-primary" style="width: 145px;margin-top: 57px"
-                    disabled="disabled">指定合件位置
+            <button type="button" id="synthetic1" class="btn btn-primary" style="margin-top: 57px"
+                    disabled="disabled">确定合成
             </button>
             <div id="info_div3" style="max-width: 300px;position: absolute;left:60%;top: 9%;display: none">
                 <!--float: right;margin-top: 4em-->
                 <img id="info_img_3_1" style="width: 36px;display:inline" th:src="@{/img/my_left_arrow.png}">
-                <span>第七步：点击确定合成</span>
+                <span>第七步:点击确定合成</span>
                 <img id="info_img_3_2" style="width: 36px;display: none" th:src="@{/img/my_right_arrow.png}">
             </div>
         </div>
@@ -58,7 +58,7 @@
         <form class="form-inline">
             <div class="form-group">
                 <label for="queryLineId2">零件号:</label>
-                <input type="text" class="form-control" style="width: 150px" name="queryLineId2" id="queryLineId2"
+                <input type="text" class="form-control" style="width: 100px" name="queryLineId2" id="queryLineId2"
                        placeholder="请输入查询的零件号" />
             </div>
             <div class="form-group">
@@ -67,7 +67,7 @@
             <div id="info_div2" style="max-width: 300px;position: absolute;left:60%;top: 9%;display: none">
                 <!--float: right;margin-top: 4em-->
                 <img id="info_img_2_1" style="width: 36px;display:inline" th:src="@{/img/my_left_arrow.png}">
-                <span>第五步：查询工艺合件挂在对象</span>
+                <span>第五步:查询工艺合件挂在对象</span>
                 <img id="info_img_2_2" style="width: 36px;display: none" th:src="@{/img/my_right_arrow.png}">
             </div>
         </form>

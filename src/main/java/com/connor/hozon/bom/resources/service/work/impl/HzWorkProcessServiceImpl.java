@@ -26,6 +26,7 @@ import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import com.google.common.collect.Lists;
+import io.swagger.models.auth.In;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,14 +69,15 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Autowired
     private HzApplicantChangeDAO hzApplicantChangeDAO;
 
+    private int errorCount = 0;
     @Override
     public WriteResultRespDTO addHzWorkProcess(AddHzProcessReqDTO reqDTO) {
         try{
             WriteResultRespDTO respDTO = new WriteResultRespDTO();
             User user = UserInfo.getUser();
-            if(!PrivilegeUtil.writePrivilege()){
-               return WriteResultRespDTO.getFailPrivilege();
-            }
+//            if(!PrivilegeUtil.writePrivilege()){
+//               return WriteResultRespDTO.getFailPrivilege();
+//            }
 
             HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
             HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(reqDTO.getMaterielId());
@@ -157,9 +159,9 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Override
     public WriteResultRespDTO updateHzWorkProcess(UpdateHzProcessReqDTO reqDTO) {
         User user = UserInfo.getUser();
-        if(!PrivilegeUtil.writePrivilege()){
-            return WriteResultRespDTO.getFailPrivilege();
-        }
+//        if(!PrivilegeUtil.writePrivilege()){
+//            return WriteResultRespDTO.getFailPrivilege();
+//        }
         HzWorkProcedure workProcess = hzWorkProcedureDAO.getHzWorkProcessByMaterielId(reqDTO.getMaterielId());
         if(workProcess == null){
             HzWorkProcedure hzWorkProcedure = new HzWorkProcedure();
@@ -332,19 +334,23 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         hzWorkProcedure.setpUpdateName(user.getUserName());
         hzWorkProcedure.setPurpose(reqDTO.getPurpose());
         hzWorkProcedure.setState(reqDTO.getState());
+        hzWorkProcedure.setpStatus(2);
         List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
-        if(ListUtil.isNotEmpty(hzWorkCenterList)){
-            HzWorkCenter workCenter = hzWorkCenterList.get(0);
+        if(ListUtil.isNotEmpty(hzWorkCenterList))
+        {
+//            HzWorkCenter workCenter = hzWorkCenterList.get(0);
             hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
-            HzWorkCenter hzWorkCenter = new HzWorkCenter();
-            hzWorkCenter.setpWorkCode(reqDTO.getpWorkCode());
-            hzWorkCenter.setpWorkDesc(reqDTO.getpWorkDesc());
-            hzWorkCenter.setProjectId(reqDTO.getProjectId());
-            hzWorkCenter.setPuid(hzWorkCenterList.get(0).getPuid());
-            if(!workCenter.equals(hzWorkCenter)){
-                hzWorkCenterDAO.update(hzWorkCenter);
-            }
-        }else {
+//            HzWorkCenter hzWorkCenter = new HzWorkCenter();
+//            hzWorkCenter.setpWorkCode(reqDTO.getpWorkCode());
+//            hzWorkCenter.setpWorkDesc(reqDTO.getpWorkDesc());
+//            hzWorkCenter.setProjectId(reqDTO.getProjectId());
+//            hzWorkCenter.setPuid(hzWorkCenterList.get(0).getPuid());
+//            if(!workCenter.equals(hzWorkCenter)){
+//                hzWorkCenterDAO.update(hzWorkCenter);
+//            }
+        }
+        else
+            {
             String puid = UUID.randomUUID().toString();
             HzWorkCenter hzWorkCenter = new HzWorkCenter();
             hzWorkCenter.setPuid(puid);
@@ -387,7 +393,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     public WriteResultRespDTO deleteHzWorkProcesses(Map<String, List<String>> datas){
         List<String> materielIds = datas.get("materielIds");
         List<String> procedureDesc = datas.get("procedureDesc");
-        if(procedureDesc.size()==0||procedureDesc==null){
+        if(ListUtil.isEmpty(procedureDesc)){
             return WriteResultRespDTO.cantDelete();
         }
         for(String pd : procedureDesc){
@@ -404,7 +410,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
         try{
             int delNum = -1;
-            if(hzWorkProceduresDel.size()>0&&hzWorkProceduresDel!=null){
+            if(ListUtil.isNotEmpty(hzWorkProceduresDel)){
                 delNum = hzWorkProcedureDAO.deleteHzWorkProcesses(hzWorkProceduresDel);
             }
             if(delNum==hzWorkProceduresDel.size()){
@@ -495,40 +501,24 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             }
             return new Page<>(hzWorkProcessPage.getPageNumber(),hzWorkProcessPage.getPageSize(),hzWorkProcessPage.getTotalCount(),respDTOS);
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
     }
 
     @Override
-    public HzWorkProcessRespDTO findHzWorkProcess(String materielId,String projectId) {
+    public List<HzWorkProcessRespDTO> findHzWorkProcess(String materielId,String projectId) {
         try {
-            HzWorkProcess hzWorkProcess =hzWorkProcedureDAO.getHzWorkProcess(materielId,projectId);
-            if(hzWorkProcess != null){
-                HzWorkProcessRespDTO respDTO   = new HzWorkProcessRespDTO();
-                respDTO.setFactoryCode(hzWorkProcess.getFactoryCode());
-                respDTO.setMaterielId(hzWorkProcess.getPuid());
-                respDTO.setpBurn(hzWorkProcess.getpBurn());
-                respDTO.setpCount(hzWorkProcess.getpCount());
-                respDTO.setpDirectLabor(hzWorkProcess.getpDirectLabor());
-                respDTO.setpIndirectLabor(hzWorkProcess.getpIndirectLabor());
-                respDTO.setpMachineMaterialLabor(hzWorkProcess.getpMachineMaterialLabor());
-                respDTO.setpMachineLabor(hzWorkProcess.getpMachineLabor());
-                respDTO.setpOtherCost(hzWorkProcess.getpOtherCost());
-                respDTO.setpProcedureCode(hzWorkProcess.getpProcedureCode());
-                respDTO.setpProcedureDesc(hzWorkProcess.getpProcedureDesc());
-                respDTO.setpWorkCode(hzWorkProcess.getWorkCenterCode());
-                respDTO.setpWorkDesc(hzWorkProcess.getWorkCenterDesc());
-                respDTO.setPuid(hzWorkProcess.getPuid());
-                respDTO.setpMaterielCode(hzWorkProcess.getpMaterielCode());
-                respDTO.setpMaterielDesc(hzWorkProcess.getpMaterielDesc());
-                respDTO.setControlCode(hzWorkProcess.getControlCode());
-                respDTO.setPurpose(hzWorkProcess.getPurpose());
-                respDTO.setState(hzWorkProcess.getState());
-                respDTO.setpWorkPuid(hzWorkProcess.getpWorkPuid());
-                respDTO.setIsSent(hzWorkProcess.getIsSent());
-                return respDTO;
+            List<HzWorkProcessRespDTO> respDTOs = new ArrayList<>();
+            List<HzWorkProcess> hzWorkProcess =hzWorkProcedureDAO.getHzWorkProcess(materielId,projectId);
+            if(ListUtil.isNotEmpty(hzWorkProcess)){
+               for(HzWorkProcess workProcess:hzWorkProcess){
+                   respDTOs.add(HzWorkProcedureFactory.workProcessToRespDTO(workProcess));
+               }
+                return respDTOs;
             }
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
         return null;
@@ -564,6 +554,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 return respDTO;
             }
         }catch (Exception e){
+            e.printStackTrace();
             return null;
         }
         return null;
@@ -726,8 +717,6 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             //表单id
             Long orderId = reqDTO.getOrderId();
 
-            //获取审核人信息
-//            Long auditorId = reqDTO.getAuditorId();
             //数据库表名
             String tableName = ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName();
             //获取数据信息
@@ -746,6 +735,16 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             if(ListUtil.isNotEmpty(records)){//根据查询结果 记录数据
                 //到 after表中查询看是否存在记录
                 //存在记录则过滤 不存在记录则插入
+                this.errorCount=0;
+                //审核通过的数据需要传输给SAP系统 所以这里要进行严格参数校验
+                //不符合SAP系统规定的数据 全部打回 不允许发起流程
+                String str = checkWorkProcessDataValid(records);
+                if(this.errorCount!=0){
+                    WriteResultRespDTO respDTO = new WriteResultRespDTO();
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                    respDTO.setErrMsg(str);
+                    return respDTO;
+                }
                 HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
                 dataDetailQuery.setProjectId(reqDTO.getProjectId());
                 dataDetailQuery.setOrderId(orderId);
@@ -795,24 +794,8 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 record.setTableName(tableName);
 
                 map.put("changeData",record);
-                //申请人
-//                HzApplicantChangeRecord applicantChangeRecord = new HzApplicantChangeRecord();
-//                applicantChangeRecord.setApplicantId(applicantId);
-//                applicantChangeRecord.setOrderId(reqDTO.getOrderId());
-//                applicantChangeRecord.setTableName(tableName);
-//
-//                map.put("applicant",applicantChangeRecord);
-                //审核人
-//                HzAuditorChangeRecord auditorChangeRecord = new HzAuditorChangeRecord();
-//                auditorChangeRecord.setAuditorId(auditorId);
-//                auditorChangeRecord.setOrderId(reqDTO.getOrderId());
-//                auditorChangeRecord.setTableName(tableName);
-//
-//                map.put("auditor",auditorChangeRecord);
-
 
                 //启动线程进行插入操作
-                List<ExecutorServices> services = new ArrayList<>();
                 for(Map.Entry<String,Object> entry:map.entrySet()){
                      new ExecutorServices(1) {
                         @Override
@@ -827,12 +810,6 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                                 case "changeData":
                                     hzChangeDataRecordDAO.insert((HzChangeDataRecord) entry.getValue());
                                     break;
-//                                case "applicant":
-//                                    hzApplicantChangeDAO.insert((HzApplicantChangeRecord) entry.getValue());
-//                                    break;
-//                                case "auditor" :
-//                                    hzAuditorChangeDAO.insert((HzAuditorChangeRecord) entry.getValue());
-//                                    break;
                                 default:break;
                             }
                         }
@@ -887,7 +864,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             }
 
             if(ListUtil.isNotEmpty(updateList)){
-                hzWorkProcedureDAO.updateList(updateList);
+                hzWorkProcedureDAO.updateWorkProcedureList(updateList);
             }
             if(ListUtil.isNotEmpty(deleteRecords)){
                 hzWorkProcedureDAO.deleteByPuids(deleteRecords,ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
@@ -899,4 +876,101 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
 
     }
+
+
+
+    private String checkWorkProcessDataValid(List<HzWorkProcedure> hzWorkProcedures){
+        /**
+         * 流程审核通过后，需要将数据传输给SAP系统
+         * 这里进行参数合法性校验：
+         * 1.整车工艺路线 需要一次性传输6条数据
+         * 2.半成品工艺路线 需要一次性传输2条数据
+         *
+         * 必填的字段
+         * 工厂 物料编码 基本数量 有效日期(当前系统时间) 用途 状态 工序序号 工作中心 控制码 工序描述 作业数量1（直接人工）
+         *
+         * 对以上的参数进行合法性校验
+         */
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("<strong style='color: red'>数据信息不符合规定，不允许发起流程!<br></strong>" +
+                "必填参数有:<br><strong style='color: green'>工厂,物料编码,基本数量,用途,状态,工序序号," +
+                "工作中心,控制码,工序描述,直接人工<br></strong>" );
+        Set<HzWorkProcedure> set = new HashSet<>();
+        int count = 0;
+        for(int i=0;i<hzWorkProcedures.size();i++){
+            HzWorkProcedure workProcedure = hzWorkProcedures.get(i);
+            count++;
+            if(Integer.valueOf(11).equals(workProcedure.getDataType()) || Integer.valueOf(21).equals(workProcedure.getDataType())){//整车工艺路线
+                for(int j=0;j<hzWorkProcedures.size();j++){
+                    if(j == i){
+                        continue;
+                    }
+                    if(workProcedure.equals(hzWorkProcedures.get(j))){
+                        count++;
+                        if(count == 6){
+                            break;
+                        }
+                    }
+                }
+                if(count!=6){
+                    set.add(workProcedure);
+                    this.errorCount++;
+                }else {
+                    count =0;
+                }
+            }else {// 普通工艺路线
+                for(int j=0;j<hzWorkProcedures.size() ;j++){
+                    if(j == i){
+                        continue;
+                    }
+                    if(workProcedure.equals(hzWorkProcedures.get(j))){
+                        count++;
+                        break;
+                    }
+                }
+                if(count != 2){
+                    set.add(workProcedure);
+                    this.errorCount++;
+                }else {
+                    count=0;
+                }
+            }
+
+            String factoryId = workProcedure.getpFactoryId();
+            String materielCode  = workProcedure.getpMaterielCode();
+            Integer basicCount = workProcedure.getpCount();
+            String use  =workProcedure.getPurpose();
+            String state = workProcedure.getState();
+            String procedureCode = workProcedure.getpProcedureCode();
+            String workCenterCode =  workProcedure.getWorkCenterCode();
+            String controlCode = workProcedure.getControlCode();
+            String procedureDesc = workProcedure.getpProcedureDesc();
+            String directLabor = workProcedure.getpDirectLabor();
+
+            if(
+                    StringUtils.isBlank(factoryId)      ||
+                    StringUtils.isBlank(materielCode)   ||
+                    StringUtils.isBlank(use)            ||
+                    StringUtils.isBlank(state)          ||
+                    StringUtils.isBlank(procedureCode)  ||
+                    StringUtils.isBlank(workCenterCode) ||
+                    StringUtils.isBlank(controlCode)    ||
+                    StringUtils.isBlank(procedureDesc)  ||
+                    StringUtils.isBlank(directLabor)    ||
+                    null == basicCount
+                    ){
+                stringBuffer.append("<strong style='color:deeppink'>"+materielCode+"</strong>:必填参数填写不完整<br>");
+            }
+        }
+
+        for(HzWorkProcedure hzWorkProcedure:set){
+            if(Integer.valueOf(11).equals(hzWorkProcedure.getDataType()) || Integer.valueOf(21).equals(hzWorkProcedure.getDataType())){//整车工艺路线
+                stringBuffer.append("<strong style='color:deeppink'>"+hzWorkProcedure.getpMaterielCode()+"</strong>:每条整车工艺路线必须生成<strong style='color:blue'>3</strong>对不同四大工艺路线才允许发起流程<br>");
+            }else {
+                stringBuffer.append("<strong style='color:deeppink'>"+hzWorkProcedure.getpMaterielCode()+"</strong>:每条普通工艺路线必须生成<strong style='color:blue'>1</strong>对不同四大工艺路线才允许发起流程<br>");
+            }
+        }
+        return stringBuffer.toString();
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 import java.util.Date;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Date;
  * Date: 2018/9/5
  * Time: 9:06
  */
-public class HzVPPSLibraryRespDTO {
+public class HzVPPSLibraryRespDTO extends BaseDTO {
 
     /**
      * 序号

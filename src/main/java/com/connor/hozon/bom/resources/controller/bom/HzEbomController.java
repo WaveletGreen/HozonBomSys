@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
@@ -10,13 +11,17 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.service.bom.HzEbomService;
+import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
+import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.*;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.support.BindingAwareModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +41,10 @@ import static org.hibernate.jpa.internal.QueryImpl.LOG;
 public class HzEbomController extends BaseController {
 
     @Autowired
-    private HzEbomService hzEbomService;
+    private HzEBOMReadService hzEBOMReadService;
+
+    @Autowired
+    private HzEBOMWriteService hzEBOMWriteService;
 
     @Autowired
     private HzSingleVehiclesServices hzSingleVehiclesServices;
@@ -44,7 +52,9 @@ public class HzEbomController extends BaseController {
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;
 
-    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+    private LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
+    private Map<String,Object> orderDataObject = new HashMap<>();
 
     @RequestMapping(value = "title",method = RequestMethod.GET)
     public void getEbomTitle(String projectId,HttpServletResponse response) {
@@ -59,7 +69,6 @@ public class HzEbomController extends BaseController {
         tableTitle.put("lineNo","查找编号");
         tableTitle.put("pBomLinePartEnName","英文名称");
         tableTitle.put("pLouaFlag","LOU/LOA");
-
         tableTitle.put("pUnit","单位");
         tableTitle.put("pPictureNo","图号");
         tableTitle.put("pPictureSheet","图幅" );
@@ -76,7 +85,6 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pImportance","重要度");
         tableTitle.put("pRegulationFlag","是否法规件");
         tableTitle.put("p3cpartFlag","是否3C件" );
-
         tableTitle.put("pRegulationCode","法规件型号");
         tableTitle.put("pBwgBoxPart","黑白灰匣子件" );
         tableTitle.put("pDevelopType","开发类别");
@@ -91,7 +99,6 @@ public class HzEbomController extends BaseController {
         tableTitle.put("pDutyEngineer","责任工程师");
         tableTitle.put("pSupply","供应商");
         tableTitle.put("pSupplyCode","供应商代码" );
-
         tableTitle.put("pBuyEngineer","采购工程师");
         tableTitle.put("pRemark","备注");
         tableTitle.put("pBomLinePartClass","零件分类" );
@@ -101,61 +108,53 @@ public class HzEbomController extends BaseController {
         tableTitle.put("fna","FNA");
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
+        tableTitle.put("sparePart","备件");
+        tableTitle.put("sparePartNum","备件编号");
         tableTitle.put("colorPart","是否颜色件");
+        tableTitle.put("effectTime","生效时间");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
-        toJSONResponse(Result.build(tableTitle), response);
+        toJSONResponse(Result.build(true,tableTitle), response);
     }
     
 
     @RequestMapping(value = "getEBom/list", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getEbomList(HzEbomByPageQuery query) {
-        HzEbomByPageQuery ebomByPageQuery = query;
-        ebomByPageQuery.setPageSize(0);
-        try{
-            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        }catch (Exception e){
-
-        }
-        Page<HzEbomRespDTO> recordRespDTOPage = hzEbomService.getHzEbomPage(ebomByPageQuery);
-        Map<String, Object> ret = new HashMap<>();
+    public JSONObject getEbomList(HzEbomByPageQuery query) {
+        Page<HzEbomRespDTO> recordRespDTOPage = hzEBOMReadService.getHzEbomPage(query);
+        JSONObject object = new JSONObject();
         if(recordRespDTOPage == null){
-            return ret;
+            return object;
         }
         List<HzEbomRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
         if (ListUtil.isEmpty(recordRespDTOS)) {
-            return ret;
+            return object;
         }
-        List<Map<String,Object>> list = new ArrayList<>();
-        Map<String,Object> map = new HashMap<>();
+        List<JSONObject> list = new ArrayList<>();
         JSONArray array = recordRespDTOS.get(0).getJsonArray();
         for(int i =0;i<array.size();i++){
-            JSONObject object = array.getJSONObject(i);
-            map = object;
-            list.add(map);
+            JSONObject o = array.getJSONObject(i);
+            list.add(o);
         }
-        ret.put("totalCount", recordRespDTOPage.getTotalCount());
-        ret.put("result", list);
-        return ret;
+        object.put("totalCount", recordRespDTOPage.getTotalCount());
+        object.put("result", list);
+        return object;
     }
 
     @RequestMapping(value = "getEBom", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> getEbomById(String puid,String projectId ) {
-        Map<String, Object> ret = new HashMap<>();
+    public JSONObject getEbomById(String puid,String projectId ) {
+        JSONObject object = new JSONObject();
         if(puid == null || projectId == null){
-            return ret;
+            return object;
         }
-        HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
+        HzEbomRespDTO recordRespDTO = hzEBOMReadService.fingEbomById(puid,projectId);
         if(recordRespDTO == null){
-            return ret;
+            return object;
         }
         JSONArray array = recordRespDTO.getJsonArray();
-        JSONObject object = array.getJSONObject(0);
-        ret = object;
-        return ret;
+        return array.getJSONObject(0);
     }
 
 
@@ -181,10 +180,10 @@ public class HzEbomController extends BaseController {
             return "";
         }
         //判断勾选零件是否存在子层
-        int isHas = hzEbomService.findIsHasByPuid(puid,projectId);
+        int isHas = hzEBOMReadService.findIsHasByPuid(puid,projectId);
 
         //recordRespDTO传给updateEbomLevelManage界面的值，而非界面传回后台的值
-        HzEbomLevelRespDTO recordRespDTO = hzEbomService.fingEbomLevelById(puid,projectId);
+        HzEbomLevelRespDTO recordRespDTO = hzEBOMReadService.fingEbomLevelById(puid,projectId);
         recordRespDTO.setPuid(puid);//调整层级的当前零件puid
         recordRespDTO.setProjectId(projectId);//项目id
         //recordRespDTO.setLineId(object.getString("lineId"));//父层零件号
@@ -198,9 +197,7 @@ public class HzEbomController extends BaseController {
     @RequestMapping(value = "update/ebomLevel",method = RequestMethod.POST)
     public void updateEbomLevelToDB(@RequestBody UpdateHzEbomLeveReqDTO reqDTO, HttpServletResponse response){
 
-        //WriteResultRespDTO respDTO= hzEbomService.updateHzEbomLevelRecord(reqDTO);
-        //测试
-        WriteResultRespDTO respDTO= hzEbomService.testbomLevelChange(reqDTO);
+        WriteResultRespDTO respDTO= hzEBOMWriteService.extendsBomStructureInNewParent(reqDTO);
 
         toJSONResponse(Result.build(
                 WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
@@ -278,11 +275,14 @@ public class HzEbomController extends BaseController {
                 cellArr[46] = hzEbomRespDTO.getFna();
                 cellArr[47] = hzEbomRespDTO.getpFnaDesc();
                 cellArr[48] = hzEbomRespDTO.getNumber();
-                cellArr[49] = hzEbomRespDTO.getColorPart();
+                cellArr[49] = hzEbomRespDTO.getSparePart();
+                cellArr[50] = hzEbomRespDTO.getSparePartNum();
+                cellArr[51] = hzEbomRespDTO.getColorPart();
+                cellArr[52] = hzEbomRespDTO.getEffectTime();
                 if(hzEbomRespDTO.getMap().size()>0){
                     //动态获取单车配置用量表头
                     for(int i = 0; i< hzEbomRespDTO.getMap().size(); i++){
-                        cellArr[50+i] = hzEbomRespDTO.getMap().values().toArray()[i].toString();
+                        cellArr[53+i] = hzEbomRespDTO.getMap().values().toArray()[i].toString();
                     }
                 }
                 dataList.add(cellArr);
@@ -308,11 +308,11 @@ public class HzEbomController extends BaseController {
 
 
     @RequestMapping(value = "updateEbom",method = RequestMethod.GET)
-    public String updateEbom(String projectId,String puid,Model model) {
+    public String updateEbom(String projectId,String puid,Integer updateType,Model model) {
         if(StringUtil.isEmpty(projectId)){
             return "";
         }
-        HzEbomRespDTO recordRespDTO = hzEbomService.fingEbomById(puid,projectId);
+        HzEbomRespDTO recordRespDTO = hzEBOMReadService.fingEbomById(puid,projectId);
         model.addAttribute("data",recordRespDTO);
 
         return "bomManage/ebom/ebomManage/updateEbomManage";
@@ -325,11 +325,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "add/ebom",method = RequestMethod.POST)
     public void addEbomToDB(@RequestBody AddHzEbomReqDTO reqDTO, HttpServletResponse response){
-        if(reqDTO.getProjectId()==null){
-            toJSONResponse(Result.build(false,"非法参数！"), response);
-            return;
-        }
-        WriteResultRespDTO respDTO = hzEbomService.addHzEbomRecord(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMWriteService.addHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -342,7 +338,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "update/ebom",method = RequestMethod.POST)
     public void updateEbomToDB(@RequestBody UpdateHzEbomReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO= hzEbomService.updateHzEbomRecord(reqDTO);
+        WriteResultRespDTO respDTO= hzEBOMWriteService.updateHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -350,16 +346,11 @@ public class HzEbomController extends BaseController {
     /**
      * 删除ebom信息
      * @param reqDTO
-     * @param
      * @param response
      */
     @RequestMapping(value = "delete/ebom",method = RequestMethod.POST)
     public void deleteEbomToDB(@RequestBody DeleteHzEbomReqDTO reqDTO, HttpServletResponse response){
-        if(reqDTO.getProjectId()==null){
-            toJSONResponse(Result.build(false,"非法参数！"), response);
-            return;
-        }
-        WriteResultRespDTO respDTO = hzEbomService.deleteHzEbomRecordById(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMWriteService.deleteHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -370,7 +361,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "data/change",method = RequestMethod.POST)
     public void ebomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO = hzEbomService.dataToChangeOrder(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMWriteService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
@@ -384,19 +375,28 @@ public class HzEbomController extends BaseController {
     }
 
     /**
+     * 获取变更表单
+     * @return
+     */
+    @RequestMapping(value = "find/choose",method = RequestMethod.POST)
+    public void getOrderChooseToPage(@RequestBody AddDataToChangeOrderReqDTO reqDTO,HttpServletResponse response){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(reqDTO.getProjectId());
+        this.orderDataObject = new HashMap<>();
+        this.orderDataObject.put("data",records);
+        this.orderDataObject.put("puids",reqDTO.getPuids());
+        toJSONResponse(Result.build(orderDataObject),response);
+    }
+
+    /**
      * 跳转到EBOM选择变更单
      * @return
      */
     @RequestMapping(value = "order/choose",method = RequestMethod.GET)
-    public String getOrderChooseToPage(String projectId,String puids,Model model){
-        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
-        if(ListUtil.isNotEmpty(records)){
-            model.addAttribute("data",records);
-            model.addAttribute("puids",puids);
-        }
+    public String getOrderChooseToPage(Model model){
+        model.addAttribute("data",this.orderDataObject.get("data"));
+        model.addAttribute("puids",this.orderDataObject.get("puids"));
         return "bomManage/ebom/ebomManage/ebomSetChangeForm";
     }
-
     /**
      * EBOM撤销
      * @param reqDTO
@@ -404,7 +404,7 @@ public class HzEbomController extends BaseController {
      */
     @RequestMapping(value = "cancel",method = RequestMethod.POST)
     public void ebomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
-        WriteResultRespDTO respDTO = hzEbomService.backBomUtilLastValidState(reqDTO);
+        WriteResultRespDTO respDTO = hzEBOMWriteService.backBomUtilLastValidState(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 }

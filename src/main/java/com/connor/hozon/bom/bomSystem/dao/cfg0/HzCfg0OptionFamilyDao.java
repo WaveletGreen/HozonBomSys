@@ -9,6 +9,7 @@ package com.connor.hozon.bom.bomSystem.dao.cfg0;
 import com.connor.hozon.bom.bomSystem.dao.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
+import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
 
 import java.util.List;
@@ -73,4 +74,6 @@ public interface HzCfg0OptionFamilyDao extends BasicDao<HzCfg0OptionFamily>{
     List<HzCfg0OptionFamily> selectByCodeAndDescWithMain2(HzCfg0OptionFamily family);
 
     List<HzCfg0OptionFamily> selectByDM(List<HzDerivativeMaterielDetail> hzDMDetailChangeBeans);
+
+    int deleteByFamilyName(List<HzCfg0Record> familyNames);
 }

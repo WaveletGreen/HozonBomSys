@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import com.connor.hozon.bom.resources.enumtype.TableNameToHyperLinkNameEnum;
 import lombok.Data;
 
@@ -14,7 +15,7 @@ import java.util.Objects;
  * @Description:
  */
 @Data
-public class HzChangeDataRespDTO {
+public class HzChangeDataRespDTO extends BaseDTO {
     /**
      * 名称
      */
