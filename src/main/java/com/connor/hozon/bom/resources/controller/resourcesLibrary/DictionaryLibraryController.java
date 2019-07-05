@@ -53,7 +53,19 @@ public class DictionaryLibraryController extends BaseController {
         model.addAttribute("data",library);
         return "resourcesLibrary/dictionaryLibrary/updateDictionaryLibrary";
     }
-
+    /**
+     * 跳转到字典库的快速添加页面
+     * @return
+     */
+    @RequestMapping(value = "getQuickAdd",method = RequestMethod.GET)
+    public String getQuickAddDictionaryLibrary(String puid, Model model){
+        HzDictionaryLibraryRespDTO library = hzDictionaryLibraryService.findHzDictionaryLibraryByPuid(puid);
+        if (library==null){
+            return "";
+        }
+        model.addAttribute("data",library);
+        return "resourcesLibrary/dictionaryLibrary/QuickAddDictionaryLibrary";
+    }
     /**
      * 添加一条数据
      * @param dto

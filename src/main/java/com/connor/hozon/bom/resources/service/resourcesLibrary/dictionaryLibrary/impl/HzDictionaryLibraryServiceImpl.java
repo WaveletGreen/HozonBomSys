@@ -172,7 +172,7 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
     @Override
     public WriteResultRespDTO deleteHzDictionaryLibrary(String puid) {
         List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByDictionaryLibId(puid);
-        if(hzCfg0RecordList!=null&&hzCfg0RecordList.size()>=0){
+        if(hzCfg0RecordList!=null&&hzCfg0RecordList.size()>0){
             WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
             writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
             writeResultRespDTO.setErrMsg("该特性已被引用，不能被删除");

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2019/3/4 Time: 10:25-->
+<head>
+    <meta charset="UTF-8">
+    <title>日历备忘录</title>
+    <link th:href="@{/css/memo3/documentation.css}" rel="stylesheet"/>
+    <link th:href="@{/css/memo3/jalendar.css}" rel="stylesheet"/>
+</head>
+<body>
+<article>
+<div id="myId3" class="jalendar mid">
+    <div class="added-event" data-date="9/8/2013" data-time="Tüm Gün" data-title="WWDC 13 on San Francisco, LA"></div>
+    <div class="added-event" data-date="16/8/2013" data-time="20:45" data-title="Tarkan İstanbul Concert on Harbiye Açık Hava Tiyatrosu"></div>
+    <div class="added-event" data-date="17/8/2013" data-time="21:00" data-title="CodeCanyon İstanbul Meeting on Starbucks, Kadıköy"></div>
+    <div class="added-event" data-date="17/8/2013" data-time="22:00" data-title="Front-End Design and Javascript Conferance on Haliç Kongre Merkezi"></div>
+    <div class="added-event" data-date="17/12/2017" data-time="22:00" data-title="Lorem ipsum dolor sit amet"></div>
+</div>
+</article>
+<script th:src="@{/js/memo3/jquery-1.10.2.min.js}"></script>
+<script th:src="@{/js/memo3/jalendar.js}"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#myId').jalendar({
+            customDay: '2017/12/01',  // Format: Year/Month/Day
+            color: '#ed145a', // Unlimited Colors
+            lang: 'EN' // Format: English — 'EN', Türkçe — 'TR'
+        });
+        $('#myId2').jalendar({
+            customDay: '2016/02/29',
+            color: '#023447',
+            lang: 'ES'
+        });
+        $('#myId3').jalendar();
+    });
+</script>
+</body>
+</html>
