@@ -317,6 +317,26 @@ public class HzEbomController extends BaseController {
 
         return "bomManage/ebom/ebomManage/updateEbomManage";
     }
+
+    /**
+     * 跳转到快速添加的页面
+     * @param projectId
+     * @param puid
+     * @param updateType
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "QuickAddEbom",method = RequestMethod.GET)
+    public String QuickAddEbom(String projectId,String puid,Integer updateType,Model model) {
+        if(StringUtil.isEmpty(projectId)){
+            return "";
+        }
+        HzEbomRespDTO recordRespDTO = hzEBOMReadService.fingEbomById(puid,projectId);
+        model.addAttribute("data",recordRespDTO);
+
+        return "bomManage/ebom/ebomManage/quickAddEbomManage";
+
+    }
     /**
      * 添加ebom信息
      * @param reqDTO

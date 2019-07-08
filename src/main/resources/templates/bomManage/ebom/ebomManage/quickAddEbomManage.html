@@ -1,0 +1,166 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2019/7/8 Time: 15:10-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="ebomMainForm" role="form" method="post" action="ebom/add/ebom">
+    <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/><!--th:value="${entity.eBomPuid}"-->
+    <div class="form-group">
+        <label for="lineId">零件号<span>*</span></label>
+        <input class="form-control" id="lineId" name="lineId" type="text"
+               th:value="${data.lineId}" />
+    </div>
+    <div class="form-group" id="lineNuber">
+        <label for="lineNo">查找编号</label>
+        <input class="form-control" id="lineNo" name="lineNo" type="text"
+               placeholder="请输入查找编号" th:value="${data.lineNo}"/>
+    </div>
+    <div class="form-group">
+        <label for="pUpc">UPC</label>
+        <input class="form-control" id="pUpc" name="pUpc" type="text" placeholder="请输入UPC"th:value="${data.pUpc}"/>
+    </div>
+    <div class="form-group">
+        <label for="fna">FNA</label>
+        <input class="form-control" id="fna" name="fna" type="text" placeholder="请输入FNA"th:value="${data.fna}"/>
+    </div>
+    <div class="form-group">
+        <label for="pFnaDesc">FNA描述</label>
+        <input class="form-control" id="pFnaDesc" name="pFnaDesc" type="text" placeholder="请输入FNA描述"th:value="${data.pFnaDesc}"/>
+    </div>
+    <div class="form-group">
+        <label for="number">数量</label>
+        <input class="form-control" id="number" name="number" type="text"
+               placeholder="请输入数量"th:value="${data.number}"/>
+    </div>
+    <div class="form-group">
+        <label for="colorPart">颜色件</label>
+        <select class="form-control" name="colorPart" id="colorPart" placeholder="请选择是否为颜色件">
+            <option></option>
+            <option th:selected="${data.getColorPart()=='Y'?true:false}">Y</option>
+            <option th:selected="${data.getColorPart()=='N'?true:false}">N</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="sparePart">备件</label>
+        <input class="form-control" id="sparePart" name="sparePart" type="text"
+               placeholder="请输入备件"th:value="${data.sparePart}"/>
+    </div>
+
+
+    <div class="form-group">
+        <label for="sparePartNum">备件编号</label>
+        <input class="form-control" id="sparePartNum" name="sparePartNum" type="text"
+               placeholder="请输入备件编号"th:value="${data.sparePartNum}"/>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    var data = [[${data}]];
+    $(function () {
+        var puid = $("#puid").val();
+        if (puid == ""){
+            $("#colorPart").attr({"disabled": "disabled"});
+        }
+        $('#ebomMainForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                lineId: {
+                    message: '零件号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '零件号不能为空'
+                        }
+                    }
+                },
+                // pBomLinePartName: {
+                //     message: '名称验证失败',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '名称不能为空'
+                //         }
+                //     }
+                // },
+                lineNo: {
+                    message: '编号验证失败',
+                    validators: {
+                        stringLength: {/*长度提示*/
+                            min: 4,
+                            max: 4,
+                            message: '编号长度必须是4位数字'
+                        },
+                        //正则校验
+
+                        regexp: {
+
+                            regexp: /^[0-9]+$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+
+                            message: '编号只能为数字'
+
+                        },
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#ebomMainForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var projectPuid = $("#project", window.top.document).val();
+                var url = $("#ebomMainForm", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "puid": $("#puid").val(),
+                    "lineId": $("#lineId").val(),
+                    "lineNo": $("#lineNo").val(),
+                    "pUpc": $("#pUpc").val(),
+                    "fna": $("#fna").val(),
+                    "pFnaDesc": $("#pFnaDesc").val(),
+                    "number": $("#number").val(),
+                    "colorPart": $("#colorPart").val(),
+                    "sparePart": $("#sparePart").val(),
+                    "sparePartNum": $("#sparePartNum").val(),
+                    "projectId": $("#project", window.top.document).val(),
+                });
+                // if (puid = "") {
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url + "?projectId=" + projectPuid,
+                    data: myData,
+                    success:
+                        function (result) {
+                            activeTabBodyRefresh();
+                            if(result.success){
+                                layer.msg('快速添加成功', {icon: 1, time: 2000});
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':快速添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

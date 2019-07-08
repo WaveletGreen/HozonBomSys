@@ -193,6 +193,38 @@ function initTable(eBomUrl) {
                         }
                     },
                     {
+                        text: '快速添加',
+                        iconCls: 'glyphicon glyphicon-plus',
+                        handler: function () {
+                            var rows = $table.bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条数据再进行快速添加!'});
+                                return false;
+                            }
+                            var url = "ebom/QuickAddEbom";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "快速添加",
+                                            url: "ebom/QuickAddEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
+                                            gridId: "gridId",
+                                            width: 500,
+                                            height: 500
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                    },
+                    {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
                         handler: function () {
