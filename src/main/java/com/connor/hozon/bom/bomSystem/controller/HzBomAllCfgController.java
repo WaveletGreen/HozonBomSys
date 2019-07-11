@@ -30,6 +30,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -258,7 +260,11 @@ public class HzBomAllCfgController {
     @RequestMapping("getExcel")
     public ResponseEntity<byte[]> getExcel(String projectUid) throws IOException {
         HttpHeaders headers = new HttpHeaders();
-        String fileName = "全配置BOM一级清单.xlsx";
+        Date date = new Date();
+        String pattern = "yyyy-MM-dd HH：mm：ss";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        String dateStr = sdf.format(date);
+        String fileName = "全配置BOM一级清单"+dateStr+".xlsx";
 
         SXSSFWorkbook hssfWorkbook = hzBomAllCfgService.getWorkBook(projectUid);
 

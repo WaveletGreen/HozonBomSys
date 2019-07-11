@@ -28,7 +28,7 @@ function loadData(projectUid) {
         return;
     }
 
-
+    
     // $("#getExcel").attr("href","/hozon/bomAllCfg/getExcel?projectUid="+projectUid);
     $("#getExcel").attr("href","/hozon/bomAllCfg/getExcel?projectUid="+projectUid);
     $.ajax({
