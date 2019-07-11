@@ -93,7 +93,7 @@
         <include refid="Base_Column_List"/>
         from HZ_PROJECT_LIBS
         where P_PROJECT_CODE is not null
-        order by P_PROJECT_CREATE_DATE desc
+        order by P_PROJECT_NAME asc
     </select>
     <!--添加1条项目-->
     <select id="insert" parameterType="sql.pojo.project.HzProjectLibs" resultMap="BaseResultMap">
