@@ -27,6 +27,7 @@ h3 {
     border: 1px solid #005A5A;
     margin-top: 8%;
     margin-right: 10%;
+    border-radius: 15px;
     /*position: absolute;*/
     /*margin-left: 37%;*/
     background: rgba(192,192,192, 0.1);
