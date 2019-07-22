@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
-import sql.pojo.BaseChangePOJO;
+
+import com.alibaba.fastjson.JSONObject;
 
 /**
  * Created by haozt on 2018/5/24
  */
 public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
+    private static final long serialVersionUID = -8395418870732248205L;
     /**
      * id
      */
@@ -114,7 +116,6 @@ public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
      * 发货料库存地点
      */
     private String pStockLocation;
-
     /**
      * 工厂
      */
@@ -125,11 +126,23 @@ public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
      * 1 已生效 0 删除  2草稿状态  3废除状态 4删除状态
      */
     private Integer status;
-
     /**
      * 对应的颜色件id
      */
     private String colorId;
+
+    /**
+     * 单车用量
+     */
+    private JSONObject vehNum;
+
+    public JSONObject getVehNum() {
+        return vehNum;
+    }
+
+    public void setVehNum(JSONObject vehNum) {
+        this.vehNum = vehNum;
+    }
 
     public String getColorId() {
         return colorId;

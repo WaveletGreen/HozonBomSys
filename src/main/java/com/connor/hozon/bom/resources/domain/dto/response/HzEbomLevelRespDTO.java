@@ -1,8 +1,9 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
 import com.alibaba.fastjson.JSONArray;
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 
-public class HzEbomLevelRespDTO {
+public class HzEbomLevelRespDTO extends BaseDTO {
     private JSONArray jsonArray;
 
     public JSONArray getJsonArray() {

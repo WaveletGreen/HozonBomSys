@@ -1,11 +1,14 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/8/13
  * @Description: 发起流程 页面请求参数
  */
-public class InitiatingProcessReqDTO {
+@Deprecated
+public class InitiatingProcessReqDTO extends BaseDTO {
     /**
      * 项目id
      */

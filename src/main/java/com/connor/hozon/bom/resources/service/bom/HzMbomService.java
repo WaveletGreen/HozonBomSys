@@ -32,6 +32,7 @@ public interface HzMbomService {
      * @param reqDTO
      * @return
      */
+    @Deprecated
     WriteResultRespDTO insertMbomRecord(AddMbomReqDTO reqDTO);
 
     /**

@@ -4,6 +4,7 @@ import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkCenterDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.work.HzWorkCenter;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @Date: 2018/6/30
  * @Description:
  */
-@Service("HzWorkCenterDAO")
+@Service("hzWorkCenterDAO")
 public class HzWorkCenterDAOImpl extends BaseSQLUtil implements HzWorkCenterDAO {
     @Override
     public int insert(HzWorkCenter hzWorkCenter) {

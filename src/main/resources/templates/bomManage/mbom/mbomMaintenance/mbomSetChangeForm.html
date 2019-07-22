@@ -19,89 +19,11 @@
                     </select>
                 </div>
             </div>
-            <!--<div class="panel-body">-->
-                <!--<div class="col-lg-6">-->
-                    <!--<label>请展开部门选择人员</label>-->
-                    <!--<ul id="orgGroupTree" class="ztree" style="width:400px; overflow:auto;"></ul>-->
-                <!--</div>-->
-                <!--<div class="col-lg-6">-->
-                    <!--<input id="typeId" type="hidden">-->
-                    <!--<div class="form-group col-lg-12">-->
-                        <!--<label>指派人员审批:</label>-->
-                        <!--<input type="text" class="form-control" id="typeName" name="typeName"-->
-                               <!--placeholder="请指派人员审批"-->
-                        <!--/>-->
-                    <!--</div>-->
-                    <!--<div class="form-group col-lg-12">-->
-                        <!--<label>所属部门:</label>-->
-                        <!--<input type="text" class="form-control" id="dept"-->
-                               <!--disabled="disabled"-->
-                        <!--/>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
         </div>
     </form>
 </div>
 <script th:inline="javascript">
     <![CDATA[
-    // var setting = {
-    //     check: {
-    //         enable: false
-    //     },
-    //     view: {
-    //         dblClickExpand: false,
-    //         showLine: true,
-    //         selectedMulti: false
-    //     },
-    //     data: {
-    //         simpleData: {
-    //             enable: true,
-    //             idKey: "uid",
-    //             pIdKey: "pUid",
-    //             rootPId: "0"
-    //         }
-    //     },
-    //     callback: {
-    //         beforeClick: function (treeId, treeNode) {
-    //             var zTree = $.fn.zTree.getZTreeObj('orgGroupTree');
-    //             if (treeNode.isParent) {
-    //                 zTree.expandNode(treeNode);
-    //                 return false;
-    //             } else {
-    //                 return true;
-    //             }
-    //         },
-    //         onClick: function (event, treeId, treeNode) {
-    //             console.log(treeId);
-    //             console.log($("#selectOption").val());
-    //             let userId = treeNode.uid;
-    //             $.ajax({
-    //                 type: "GET",
-    //                 //ajax需要添加打包名
-    //                 url: "vwo/getUserDetail?uid=" + userId,
-    //                 success: function (result) {
-    //                     if (result.status) {
-    //                         $("#dept").val(result.groupName);
-    //                         // $("#selectedUserId").val(result.personId);
-    //                         // $("#" + $("#selectOption").val()).val(result.personName);
-    //                         $("#typeName").val(result.personName);
-    //                         $("#typeId").val(result.personId);
-    //                     }
-    //                 },
-    //                 error: function (e) {
-    //                     console.error("连接服务器异常:" + e.status);
-    //                 }
-    //             });
-    //         }
-    //     }
-    // };
-    // $(initZTree = function () {
-    //     $.post("vwo/getUserAndGroup", function (info) {
-    //         var t = $("#orgGroupTree");
-    //         t = $.fn.zTree.init(t, setting, info.data);
-    //     })
-    // });
     $(function () {
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
@@ -115,7 +37,6 @@
                 "orderId": changeFromId,
                 "projectId":projectId,
                 "type":type
-                // "auditorId":typeId
             });
             $.ajax({
                 type: "POST",
@@ -135,14 +56,9 @@
                     else if (type==6||type=="6"){
                         $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery2();
                     }
-                    // activeTabBodyRefresh();
-                    // if (result.status) {
                     if (result.success) {
                         layer.msg(result.errMsg, {icon: 1, time: 2000});
                     }
-                    // window.Ewin.alert({message: result, width: 800});
-                    //刷新，会重新申请数据库数据
-                    // }
                     else {
                         window.Ewin.alert({message: result.errMsg});
                     }

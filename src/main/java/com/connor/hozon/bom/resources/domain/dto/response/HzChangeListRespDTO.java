@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
-public class HzChangeListRespDTO {
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
+public class HzChangeListRespDTO extends BaseDTO {
     /**
      * 主键id
      */

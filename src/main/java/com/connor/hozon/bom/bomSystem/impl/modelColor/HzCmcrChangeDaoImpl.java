@@ -238,13 +238,23 @@ public class HzCmcrChangeDaoImpl extends BasicDaoImpl<HzCmcrChange> implements H
     }
 
     @Override
-    public int doDeleteIds(List<Long> changeColorModelIds) {
-        return baseSQLUtil.executeDelete(changeColorModelIds,clzName+".doDeleteIds");
+    public int doDeleteIds(List<HzCmcrChange> hzCmcrChanges) {
+        return baseSQLUtil.executeDelete(hzCmcrChanges,clzName+".doDeleteIds");
     }
 
     @Override
     public HzCmcrChange doQueryCmcrChangeBeforByAfter(HzCmcrChange hzCmcrChangeAfter) {
         return baseSQLUtil.executeQueryById(hzCmcrChangeAfter,clzName+".doQueryCmcrChangeBeforByAfter");
+    }
+
+    @Override
+    public List<HzCmcrChange> selectNotEffect(List<Long> changeColorModelIds) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrChange(),changeColorModelIds,clzName+".selectNotEffect");
+    }
+
+    @Override
+    public List<HzCmcrChange> doQueryCmcrChangByChangeId(Long orderId) {
+        return baseSQLUtil.executeQueryByPass(new HzCmcrChange(),orderId,clzName+".doQueryCmcrChangByChangeId");
     }
 
     @Override

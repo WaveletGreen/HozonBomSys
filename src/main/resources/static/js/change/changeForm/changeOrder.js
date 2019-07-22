@@ -8,13 +8,16 @@ $(document).ready(function () {
     var id = $("#id").val();
     var isFromTc = $("#isFromTc").val();
     var projectId = $("#project", window.top.document).val();
+    var FileForm = document.getElementById("FileForm");
     var TCForm = document.getElementById("TCForm");
     var BOMForm = document.getElementById("BOMForm");
     if (isFromTc == 0) {
         TCForm.style.display = "none";
+        FileForm.style.display = "none";
         BOMForm.style.display = "block";
     } else if (isFromTc == 1) {
         TCForm.style.display = "block";
+        FileForm.style.display = "block";
         BOMForm.style.display = "block";
     }
     $.ajax({
@@ -37,63 +40,40 @@ $(document).ready(function () {
             table += "<th><a id='routingId' href='../change/data/routing/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[6].name + "</a></th>";
             table += "</tr>"
             $("#changeOrderTable").html(table);
-            // var featureId = document.getElementById("featureId");
-            // var bomCfgId = document.getElementById("bomCfgId");
-            // var modelColorCfgId = document.getElementById("modelColorCfgId");
-            // var materielFeatureId = document.getElementById("materielFeatureId");
-            // var ebomId = document.getElementById("ebomId");
-            // var pbomId = document.getElementById("pbomId");
-            // var mbomId = document.getElementById("mbomId");
-            // var productionId = document.getElementById("productionId");
-            // var financialId = document.getElementById("financialId");
-            // var materialId = document.getElementById("materialId");
-            // var routingId = document.getElementById("routingId");
             if (data[7].status == 0) {
-                // featureId.style.display = "none";
                 $("#featureId").hide();
             }
             if (data[10].status == 0) {
-                // bomCfgId.style.display = "none";
                 $("#bomCfgId").hide();
             }
             if (data[8].status == 0) {
-                // modelColorCfgId.style.display = "none";
                 $("#modelColorCfgId").hide();
             }
             if (data[9].status == 0) {
-                // materielFeatureId.style.display = "none";
                 $("#materielFeatureId").hide();
             }
             if (data[11].status == 0) {
-                // materielFeatureId.style.display = "none";
                 $("#relevanceId").hide();
             }
             if (data[0].status == 0) {
-                // ebomId.style.display = "none";
                 $("#ebomId").hide();
             }
             if (data[1].status == 0) {
-                // pbomId.style.display = "none";
                 $("#pbomId").hide();
             }
             if (data[2].status == 0) {
-                // mbomId.style.display = "none";
                 $("#mbomId").hide();
             }
             if (data[3].status == 0) {
-                // productionId.style.display = "none";
                 $("#productionId").hide();
             }
             if (data[4].status == 0) {
-                // financialId.style.display = "none";
                 $("#financialId").hide();
             }
             if (data[5].status == 0) {
-                // materialId.style.display = "none";
                 $("#materialId").hide();
             }
             if (data[6].status == 0) {
-                // routingId.style.display = "none";
                 $("#routingId").hide();
             }
         }
@@ -106,6 +86,37 @@ function doReturn() {
 
 $(document).ready(function () {
     var changeNo = $("#changeNo").val();
+    // $.ajax({
+    //     url : "../change/date/changeFile?changeOrderId="+changeNo,
+    //     type : "GET",
+    //     success : function (result) {
+    //         var a = result.files;
+    //         alert(JSON.stringify(a));
+    //         // for(let i in files){
+    //         //     alert(files[i].showName);
+    //         // }
+    //     }
+    // });
+
+    $.ajax({
+        url: "../change/data/changeFile?changeNo=" + changeNo,
+        type: "GET",
+        success: function (result) {
+            var files = result.files;
+            if(files.length>0){
+                var temp = "";
+                for(let i in files) {
+                    temp += "<div class='col-lg-2 col-md-2'><input id='file"+i+"' name='filePath' type='radio' value='"+files[i].id+"'/><span style='text-align: center;color: red'>  "+files[i].showName+"</span></div>";
+                }
+                $("#fileFormDiv").html(temp);
+            }else {
+                $("#downloadButton").hide()
+            }
+        }
+    });
+
+
+
     $.ajax({
         url: "../change/data/tc?formId=" + changeNo,
         type: "GET",
@@ -119,5 +130,18 @@ $(document).ready(function () {
             temp = temp + "</table>"
             $("#changeTCTable").html(temp);
         }
-    })
+    });
+
+
 })
+
+
+
+function download() {
+    var form = $("#changeFileForm");
+    if($("#changeFileForm [type=radio]:checked").length!=1){
+        window.Ewin.alert({message: "<span style='color: red'>请选择一个需要下载的文件!</span>"});
+        return false;
+    }
+    form.submit();
+}

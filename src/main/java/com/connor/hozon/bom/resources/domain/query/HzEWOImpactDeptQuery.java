@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/8/20
  * @Description:
  */
-public class HzEWOImpactDeptQuery {
+public class HzEWOImpactDeptQuery extends DefaultQuery{
     private String ewoNo;
 
     private Long deptId;

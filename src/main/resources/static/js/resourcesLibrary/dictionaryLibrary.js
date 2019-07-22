@@ -46,7 +46,7 @@ function initTable(url) {
                 method: 'GET',
                 dataType: 'json',
                 cache: false,
-                striped: true,                                //是否显示行间隔色
+                // striped: true,                                //是否显示行间隔色
                 sidePagination: "server",                    //分页方式：client客户端分页，server服务端分页（*）
                 height: $(window.parent.document).find("#wrapper").height() - 150,
                 width: $(window).width(),
@@ -56,7 +56,7 @@ function initTable(url) {
                 pageNumber: 1,                                //初始化加载第一页，默认第一页
                 pageSize: 20,                                //每页的记录行数（*）
                 pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                           //每一行的唯一标识，一般为主键列
-                showExport: true,
+                // showExport: true,
                 sortable: true,                             //是否启用排序
                 sortOrder: "asc",                           //排序方式
                 clickToSelect: true,                       // 单击某一行的时候选中某一条记录
@@ -65,6 +65,18 @@ function initTable(url) {
                 showToggle: false,                        //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                        //是否显示刷新按钮
                 columns:column,
+                showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
+                exportDataType: "selected",              //basic', 'all', 'selected'.
+                exportTypes: ['xlsx'],	    //导出类型
+                //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
+                exportOptions: {
+                    //ignoreColumn: [0,0],            //忽略某一列的索引
+                    fileName: '配置字典导出',              //文件名称设置
+                    worksheetName: 'Sheet1',          //表格工作区名称
+                    tableName: '配置字典表',
+                    excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+                    //onMsoNumberFormat: DoOnMsoNumberFormat
+                },
                 toolbars: [
                     {
                         text: '添加',
@@ -89,6 +101,38 @@ function initTable(url) {
                                             width: 500,
                                             height: 500
                                         })
+                                    }
+                                }
+                            })
+                        }
+                    },
+                    {
+                        text: '快速添加',
+                        iconCls: 'glyphicon glyphicon-plus',
+                        handler: function () {
+                            var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
+                            //只能选一条
+                            if (rows.length != 1) {
+                                window.Ewin.alert({message: '请选择一条数据再进行快速添加!'});
+                                return false;
+                            }
+                            var url = "dict/getQuickAdd";
+                            $.ajax({
+                                url: "privilege/write?url=" + url,
+                                type: "GET",
+                                success: function (result) {
+                                    if (!result.success) {
+                                        window.Ewin.alert({message: result.errMsg});
+                                        return false;
+                                    }
+                                    else {
+                                        window.Ewin.dialog({
+                                            title: "快速添加",
+                                            url: "dict/getQuickAdd?puid=" + rows[0].puid,
+                                            gridId: "gridId",
+                                            width: 500,
+                                            height: 500
+                                        });
                                     }
                                 }
                             })

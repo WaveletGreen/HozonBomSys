@@ -5,10 +5,12 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/7/18
  * @Description:
  */
-public class HzLouaQuery {
+public class HzLouaQuery  extends DefaultQuery{
     private String projectId;
 
     private String puid;
+
+    private Integer type;
 
     public String getProjectId() {
         return projectId;
@@ -24,5 +26,13 @@ public class HzLouaQuery {
 
     public void setPuid(String puid) {
         this.puid = puid;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

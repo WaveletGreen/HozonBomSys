@@ -11,6 +11,7 @@ import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ public class SynBomController extends ExtraIntegrate {
      * 服务层
      */
     @Autowired
+    @Qualifier("synBomService")
     ISynBomService bomService;
 
     @Autowired

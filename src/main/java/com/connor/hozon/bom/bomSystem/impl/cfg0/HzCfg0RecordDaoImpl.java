@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -184,6 +185,7 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
         Map<String,Object> map = new HashMap<>();
         map.put("orderId",orderId);
         map.put("status",status);
+        map.put("effectedDate",new Date());
         return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
     }
 
@@ -195,6 +197,31 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     @Override
     public int updateStatusByChangeDate(List<HzFeatureChangeBean> hzFeatureChangeBeans) {
         return baseSQLUtil.executeUpdate(hzFeatureChangeBeans,clzName+".updateStatusByChangeDate");
+    }
+
+    @Override
+    public int updateDescByDictionaryLib(HzCfg0Record hzCfg0Record) {
+        return baseSQLUtil.executeUpdate(hzCfg0Record,clzName+".updateDescByDictionaryLib");
+    }
+
+    @Override
+    public List<HzCfg0Record> selectByDictionaryLibId(String puid) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(),puid,clzName+".selectByDictionaryLibId");
+    }
+
+    @Override
+    public List<HzCfg0Record> selectByChangeOrderId(Long vwoId) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(),vwoId,clzName+".selectByChangeOrderId");
+    }
+
+    @Override
+    public int deleteByOrderId(Long orderId) {
+        return baseSQLUtil.executeDelete(orderId,clzName+".deleteByOrderId");
+    }
+
+    @Override
+    public List<HzCfg0Record> selectByFamilyName(HzCfg0Record hzCfg0Record) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(),hzCfg0Record,clzName+".selectByFamilyName");
     }
 
 }

@@ -8,7 +8,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class HzChangeDataQuery {
+public class HzChangeDataQuery extends DefaultQuery{
     /**
      * 表单id
      */

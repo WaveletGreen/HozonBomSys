@@ -1,9 +1,7 @@
 package sql.pojo.bom;
 
-import com.connor.hozon.bom.resources.domain.dto.response.BaseChangeRespDTO;
-import sql.pojo.BaseChangePOJO;
+import sql.pojo.BaseChangeDO;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
@@ -11,7 +9,7 @@ import java.util.Objects;
  * Created by haozt on 2018/5/24
  * 多张表的数据 前端数据显示为一张表 这里做一个关联查询
  */
-public class HzMbomLineRecord extends BaseChangePOJO {
+public class HzMbomLineRecord extends BaseChangeDO {
     /**
      * 主键id
      */
@@ -227,11 +225,33 @@ public class HzMbomLineRecord extends BaseChangePOJO {
     private String colorId;
 
     private String factoryCode;
-
     /**
      * mwo编号
      */
     private String mwoNo;
+
+    /**
+     * 采购类型 buy& make
+     */
+    private String buyType;
+
+    private String vehNum;
+
+    public String getVehNum() {
+        return vehNum;
+    }
+
+    public void setVehNum(String vehNum) {
+        this.vehNum = vehNum;
+    }
+
+    public String getBuyType() {
+        return buyType;
+    }
+
+    public void setBuyType(String buyType) {
+        this.buyType = buyType;
+    }
 
     public String getMwoNo() {
         return mwoNo;

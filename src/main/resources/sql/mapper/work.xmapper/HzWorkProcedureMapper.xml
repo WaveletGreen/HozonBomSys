@@ -2,43 +2,48 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzWorkProcedureMapper">
   <resultMap id="BaseResultMap" type="sql.pojo.work.HzWorkProcedure">
-    <id column="PUID" jdbcType="VARCHAR" property="puid" />
-    <result column="P_WORK_PUID" jdbcType="VARCHAR" property="pWorkPuid" />
-    <result column="P_PROCEDURE_CODE" jdbcType="VARCHAR" property="pProcedureCode" />
-    <result column="P_PROCEDURE_DESC" jdbcType="VARCHAR" property="pProcedureDesc" />
-    <result column="P_DIRECT_LABOR" jdbcType="VARCHAR" property="pDirectLabor" />
-    <result column="P_INDIRECT_LABOR" jdbcType="VARCHAR" property="pIndirectLabor" />
-    <result column="P_MACHINE_LABOR" jdbcType="VARCHAR" property="pMachineLabor" />
-    <result column="P_BURN" jdbcType="VARCHAR" property="pBurn" />
-    <result column="P_MACHINE_MATERIAL_LABOR" jdbcType="VARCHAR" property="pMachineMaterialLabor" />
-    <result column="P_OTHER_COST" jdbcType="VARCHAR" property="pOtherCost" />
-    <result column="P_COUNT" jdbcType="INTEGER" property="pCount" />
-    <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime" />
-    <result column="P_UPDATE_TIME" jdbcType="DATE" property="pUpdateTime" />
-    <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
-    <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
-    <result column="P_STATUS" jdbcType="INTEGER" property="pStatus" />
-    <result column="P_PROJECT_PUID" jdbcType="VARCHAR" property="projectId" />
-    <result column="P_MATERIEL_PUID" jdbcType="VARCHAR" property="materielId" />
-    <result column="P_PURPOSE" jdbcType="VARCHAR" property="purpose" />
-    <result column="P_STATE" jdbcType="VARCHAR" property="state" />
-    <result column="P_CONTROL_CODE" jdbcType="VARCHAR" property="controlCode" />
-    <result column="P_MATERIEL_CODE" jdbcType="VARCHAR" property="pMaterielCode" />
-    <result column="P_MATERIEL_DESC" jdbcType="VARCHAR" property="pMaterielDesc" />
-    <result column="P_FACTORYID" jdbcType="VARCHAR" property="pFactoryId" />
-    <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
-    <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
-    <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
+      <id column="PUID" jdbcType="VARCHAR" property="puid" />
+      <result column="P_WORK_PUID" jdbcType="VARCHAR" property="pWorkPuid" />
+      <result column="P_PROCEDURE_CODE" jdbcType="VARCHAR" property="pProcedureCode" />
+      <result column="P_PROCEDURE_DESC" jdbcType="VARCHAR" property="pProcedureDesc" />
+      <result column="P_DIRECT_LABOR" jdbcType="VARCHAR" property="pDirectLabor" />
+      <result column="P_INDIRECT_LABOR" jdbcType="VARCHAR" property="pIndirectLabor" />
+      <result column="P_MACHINE_LABOR" jdbcType="VARCHAR" property="pMachineLabor" />
+      <result column="P_BURN" jdbcType="VARCHAR" property="pBurn" />
+      <result column="P_MACHINE_MATERIAL_LABOR" jdbcType="VARCHAR" property="pMachineMaterialLabor" />
+      <result column="P_OTHER_COST" jdbcType="VARCHAR" property="pOtherCost" />
+      <result column="P_COUNT" jdbcType="INTEGER" property="pCount" />
+      <result column="P_CREATE_TIME" jdbcType="DATE" property="pCreateTime" />
+      <result column="P_UPDATE_TIME" jdbcType="DATE" property="pUpdateTime" />
+      <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="pCreateName" />
+      <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="pUpdateName" />
+      <result column="P_STATUS" jdbcType="INTEGER" property="pStatus" />
+      <result column="P_PROJECT_PUID" jdbcType="VARCHAR" property="projectId" />
+      <result column="P_MATERIEL_PUID" jdbcType="VARCHAR" property="materielId" />
+      <result column="P_PURPOSE" jdbcType="VARCHAR" property="purpose" />
+      <result column="P_STATE" jdbcType="VARCHAR" property="state" />
+      <result column="P_CONTROL_CODE" jdbcType="VARCHAR" property="controlCode" />
+      <result column="P_MATERIEL_CODE" jdbcType="VARCHAR" property="pMaterielCode" />
+      <result column="P_MATERIEL_DESC" jdbcType="VARCHAR" property="pMaterielDesc" />
+      <result column="P_FACTORYID" jdbcType="VARCHAR" property="pFactoryId" />
+      <result column="P_MATERIEL_DATA_TYPE" jdbcType="INTEGER" property="dataType" />
+      <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
+      <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
+      <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
+      <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
+      <result column="P_WORK_CODE" jdbcType="VARCHAR" property="workCenterCode" />
+      <result column="P_WORK_DESC" jdbcType="VARCHAR" property="workCenterDesc" />
+      <result column="P_SEND_FLAG" jdbcType="VARCHAR" property="isSent" />
   </resultMap>
 
 
   <resultMap extends="BaseResultMap" id="HzWorkProcessMap" type="sql.pojo.work.HzWorkProcess">
     <!--<result column="P_MATERIEL_CODE" jdbcType="OTHER" property="pMaterielCode"/>-->
     <!--<result column="P_MATERIEL_DESC" jdbcType="OTHER" property="pMaterielDesc"/>-->
-    <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
-    <result column="P_WORK_CODE" jdbcType="VARCHAR" property="workCenterCode" />
-    <result column="P_WORK_DESC" jdbcType="VARCHAR" property="workCenterDesc" />
-    <result column="P_SEND_FLAG" jdbcType="VARCHAR" property="isSent" />
+    <!--<result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />-->
+    <!--<result column="P_WORK_CODE" jdbcType="VARCHAR" property="workCenterCode" />-->
+    <!--<result column="P_WORK_DESC" jdbcType="VARCHAR" property="workCenterDesc" />-->
+    <!--<result column="P_SEND_FLAG" jdbcType="VARCHAR" property="isSent" />-->
   </resultMap>
 
 
@@ -94,7 +99,7 @@
         and t1.P_MATERIEL_DESC like CONCAT(CONCAT('%',#{pMaterielDesc,jdbcType=VARCHAR}),'%')
       </if>
       and t1.P_VALID_FLAG <![CDATA[ <> ]]>0
-      and (t2.P_STATUS is null or t2.P_STATUS<![CDATA[ <> ]]>0)
+      and (t2.P_STATUS<![CDATA[ <> ]]>0)
    </where>
     )t
     WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -106,7 +111,7 @@
     (select t.*,ROWNUM as rn from
     (SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t2.PUID,t2.P_PROCEDURE_CODE,t2.P_PROCEDURE_DESC, t2.P_DIRECT_LABOR,
     t2.P_INDIRECT_LABOR,t2.P_MACHINE_LABOR, t2.P_BURN, t2.P_MACHINE_MATERIAL_LABOR, t2.P_OTHER_COST, t2.P_COUNT,t2.P_PURPOSE,
-    t2.P_STATE, t2.P_CONTROL_CODE,t2.P_STATUS,t3.P_WORK_CODE,t3.P_WORK_DESC,
+    t2.P_STATE, t2.P_CONTROL_CODE,t2.P_STATUS,t2.P_MATERIEL_PUID,t3.P_WORK_CODE,t3.P_WORK_DESC,
     t4.P_FACTORY_CODE FROM HZ_MATERIEL_RECORD t1
     RIGHT OUTER JOIN HZ_WORK_PROCEDURE t2 On T1.puid =
     T2.P_MATERIEL_PUID
@@ -114,11 +119,8 @@
     LEFT OUTER JOIN HZ_FACTORY t4 ON t1.P_Factory_PUID = t4.PUID
     <where>
       1=1
-      <if test="projectId != null and projectId != ''">
-        and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
-      </if>
       <if test="type == 1">
-        and t1.P_MATERIEL_DATA_TYPE = 11 or t1.P_MATERIEL_DATA_TYPE=21
+        and (t1.P_MATERIEL_DATA_TYPE = 11 or t1.P_MATERIEL_DATA_TYPE=21)
       </if>
       <if test="type == 2">
         and t1.P_MATERIEL_DATA_TYPE = 71
@@ -132,8 +134,11 @@
       <if test="pMaterielDesc != null and pMaterielDesc!='' ">
         and t1.P_MATERIEL_DESC like CONCAT(CONCAT('%',#{pMaterielDesc,jdbcType=VARCHAR}),'%')
       </if>
+      <if test="projectId != null and projectId != ''">
+        and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+      </if>
       and t1.P_VALID_FLAG <![CDATA[ <> ]]>0
-      and (t2.P_STATUS is null or t2.P_STATUS<![CDATA[ <> ]]>0)
+      and t2.P_STATUS<![CDATA[ <> ]]>0
    </where>
     order by t1.P_MATERIEL_CODE)t
     WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
@@ -176,11 +181,8 @@
     LEFT OUTER JOIN HZ_FACTORY t4 ON t1.P_Factory_PUID = t4.PUID
     <where>
       1=1
-      <if test="projectId != null and projectId != ''">
-        and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
-      </if>
       <if test="type == 1">
-        and t1.P_MATERIEL_DATA_TYPE = 11 or t1.P_MATERIEL_DATA_TYPE=21
+        and (t1.P_MATERIEL_DATA_TYPE = 11 or t1.P_MATERIEL_DATA_TYPE=21)
       </if>
       <if test="type == 2">
         and t1.P_MATERIEL_DATA_TYPE = 71
@@ -194,8 +196,11 @@
       <if test="pMaterielDesc != null and pMaterielDesc!='' ">
         and t1.P_MATERIEL_DESC like CONCAT(CONCAT('%',#{pMaterielDesc,jdbcType=VARCHAR}),'%')
       </if>
+        <if test="projectId != null and projectId != ''">
+            and t1.P_PERTAIN_TO_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+        </if>
       and t1.P_VALID_FLAG <![CDATA[ <> ]]>0
-      and (t2.P_STATUS is null or t2.P_STATUS<![CDATA[ <> ]]>0)
+      and t2.P_STATUS<![CDATA[ <> ]]>0
     </where>
   </select>
 
@@ -446,10 +451,6 @@
       <if test="pUpdateName != null and pUpdateName !=''">
         P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
       </if>
-      <if test="projectId != null and projectId !=''">
-        P_PROJECT_PUID = #{projectId,jdbcType=INTEGER},
-      </if>
-
       <if test="materielId != null and materielId !=''">
         P_MATERIEL_PUID = #{materielId,jdbcType=VARCHAR},
       </if>
@@ -468,6 +469,7 @@
       <if test="pMaterielDesc != null and pMaterielDesc !=''">
         P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=VARCHAR},
       </if>
+      P_STATUS = 2
     </set>
     where P_MATERIEL_PUID = #{materielId,jdbcType=VARCHAR}
       <if test="pProcedureDesc != null and pProcedureDesc !=''">
@@ -477,7 +479,7 @@
 
   <!--查询一条工艺主数据-->
   <select id="HzWorkProcedureDAOImpl_getHzWorkProcess" parameterType="java.util.HashMap" resultMap="HzWorkProcessMap">
-    SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t1.PUID,t2.P_PROCEDURE_CODE,t2.P_PROCEDURE_DESC, t2.P_DIRECT_LABOR,
+    SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t1.PUID,t1.P_MATERIEL_DATA_TYPE,t2.P_PROCEDURE_CODE,t2.P_PROCEDURE_DESC, t2.P_DIRECT_LABOR,
     t2.P_INDIRECT_LABOR,t2.P_MACHINE_LABOR, t2.P_BURN, t2.P_MACHINE_MATERIAL_LABOR, t2.P_OTHER_COST, t2.P_COUNT,t2.P_PURPOSE,
     t2.P_STATE, t2.P_CONTROL_CODE,t2.P_SEND_FLAG,
     t3.P_WORK_CODE,t3.P_WORK_DESC,
@@ -775,8 +777,50 @@
   </update>
 
 
+  <update id="HzWorkProcedureDAOImpl_updateWorkProcedureList" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+      update HZ_WORK_PROCEDURE
+      <set>
+          P_WORK_PUID = #{item.pWorkPuid,jdbcType=VARCHAR},
+          P_DIRECT_LABOR = #{item.pDirectLabor,jdbcType=VARCHAR},
+          P_INDIRECT_LABOR = #{item.pIndirectLabor,jdbcType=VARCHAR},
+          P_MACHINE_LABOR = #{item.pMachineLabor,jdbcType=VARCHAR},
+          P_BURN = #{item.pBurn,jdbcType=VARCHAR},
+          P_MACHINE_MATERIAL_LABOR = #{item.pMachineMaterialLabor,jdbcType=VARCHAR},
+          P_OTHER_COST = #{item.pOtherCost,jdbcType=VARCHAR},
+          P_COUNT = #{item.pCount,jdbcType=INTEGER},
+          P_UPDATE_TIME = sysdate,
+          P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
+        <if test="item.pStatus != null">
+          P_STATUS = #{item.pStatus,jdbcType=INTEGER},
+        </if>
+        <if test="item.projectId != null">
+          P_PROJECT_PUID = #{item.projectId,jdbcType=VARCHAR},
+        </if>
+          P_MATERIEL_PUID = #{item.materielId,jdbcType=VARCHAR},
+          P_PURPOSE = #{item.purpose,jdbcType=VARCHAR},
+          P_STATE = #{item.state,jdbcType=VARCHAR},
+          P_CONTROL_CODE = #{item.controlCode,jdbcType=VARCHAR},
+          P_MATERIEL_CODE = #{item.pMaterielCode,jdbcType=VARCHAR},
+          P_MATERIEL_DESC = #{item.pMaterielDesc,jdbcType=VARCHAR},
+          P_FACTORYID = #{item.pFactoryId,jdbcType=VARCHAR},
+        <if test="item.effectTime != null">
+          P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="item.revision != null">
+          P_REVISION = #{item.revision,jdbcType=VARCHAR},
+        </if>
+        <if test="item.orderId != null">
+          P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE}
+        </if>
+      </set>
+      where PUID = #{item.puid}
+    </foreach>
+  </update>
+
+
   <select id="HzWorkProcedureDAOImpl_getHzWorkProcedureByPuids" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-    SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t2.*,
+    SELECT t1.P_MATERIEL_CODE,t1.P_MATERIEL_DESC,t1.P_MATERIEL_DATA_TYPE,t2.*,
     t3.P_WORK_CODE,t3.P_WORK_DESC,
     t4.P_FACTORY_CODE  FROM HZ_MATERIEL_RECORD t1 LEFT OUTER JOIN ${tableName} t2 on T1.puid = T2.P_MATERIEL_PUID
     LEFT OUTER JOIN HZ_WORK_CENTER t3 ON t2.P_Work_PUID=t3.PUID

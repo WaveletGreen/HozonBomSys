@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * @Author: haozt
  * @Date: 2018/8/8
  * @Description:
  */
-public class HzEWOBasicInfoRespDTO {
+public class HzEWOBasicInfoRespDTO extends BaseDTO {
     /**
      * 主键
      */

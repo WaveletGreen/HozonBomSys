@@ -54,23 +54,23 @@ public class SynFeatureService implements ISynFeatureService {
     /**
      * 添加特性值
      *
-     * @param records
+     * @param features
      * @return
      */
     @Override
-    public JSONObject addFeature(List<HzCfg0Record> records) throws Exception {
-        return execute(records, ActionFlagOption.ADD);
+    public JSONObject addFeature(List<HzCfg0Record> features) throws Exception {
+        return execute(features, ActionFlagOption.ADD);
     }
 
     /**
      * 更新特性值
      *
-     * @param projectPuid
+     * @param features
      * @return
      */
     @Override
-    public JSONObject updateFeature(String projectPuid) {
-        return null;
+    public JSONObject updateFeature(List<HzCfg0Record> features) throws Exception {
+        return execute(features, ActionFlagOption.UPDATE);
     }
 
     /**

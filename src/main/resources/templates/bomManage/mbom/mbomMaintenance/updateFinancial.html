@@ -4,6 +4,7 @@
 <body>
 <form id="financialForm" role="form" method="post" action="mbom/update">
     <input id="eBomPuid" name="eBomPuid" type="hidden" th:value="${data.eBomPuid}"/><!--th:value="${entity.pBomPuid}"-->
+    <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/>
     <div class="form-group">
         <label for="lineId">零件号</label>
         <input class="form-control" id="lineId" name="lineId" type="text" disabled="disabled"
@@ -182,6 +183,8 @@
                     // "level": $("#level").val(),
                     // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
                     "lineId": $("#lineId").val(),
+                    "updateType": $("#updateType").val(),
+                    "puid": $("#puid").val(),
                     // "object_name": $("#object_name").val(),
                     "projectId" : $("#project", window.top.document).val(),
                     "sparePart": $("#sparePart").val(),

@@ -1,16 +1,16 @@
 package sql.pojo.work;
 
-import io.swagger.models.auth.In;
-import sql.pojo.BaseChangePOJO;
+import sql.pojo.BaseChangeDO;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @Author: haozt
  * @Date: 2018/6/29
  * @Description: 工艺路线
  */
-public class HzWorkProcedure extends BaseChangePOJO {
+public class HzWorkProcedure extends BaseChangeDO {
     /**
      * 主键id
      */
@@ -87,12 +87,12 @@ public class HzWorkProcedure extends BaseChangePOJO {
     /**
      * 物料代码
      */
-    private Object pMaterielCode;
+    private String pMaterielCode;
 
     /**
      * 物料中文描述
      */
-    private Object pMaterielDesc;
+    private String pMaterielDesc;
     /**
      * 状态
      */
@@ -131,6 +131,42 @@ public class HzWorkProcedure extends BaseChangePOJO {
      * 是否已发送过SAP
      */
     private Integer isSent;
+
+    private Integer dataType;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()){
+            return false;
+        }
+        if (this == obj) {
+            return true;
+        }
+        if(obj instanceof HzWorkProcedure){
+            HzWorkProcedure that = (HzWorkProcedure) obj;
+            if(this.pMaterielCode.equals(that.pMaterielCode)){
+                return true;
+            }
+            if(this.puid.equals(that.puid)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(pMaterielCode);
+    }
+
+    public Integer getDataType() {
+        return dataType;
+    }
+
+    public void setDataType(Integer dataType) {
+        this.dataType = dataType;
+    }
 
     public String getFactoryCode() {
         return factoryCode;
@@ -284,19 +320,19 @@ public class HzWorkProcedure extends BaseChangePOJO {
         this.pMachineMaterialLabor = pMachineMaterialLabor;
     }
 
-    public Object getpMaterielCode() {
+    public String getpMaterielCode() {
         return pMaterielCode;
     }
 
-    public void setpMaterielCode(Object pMaterielCode) {
+    public void setpMaterielCode(String pMaterielCode) {
         this.pMaterielCode = pMaterielCode;
     }
 
-    public Object getpMaterielDesc() {
+    public String getpMaterielDesc() {
         return pMaterielDesc;
     }
 
-    public void setpMaterielDesc(Object pMaterielDesc) {
+    public void setpMaterielDesc(String pMaterielDesc) {
         this.pMaterielDesc = pMaterielDesc;
     }
 

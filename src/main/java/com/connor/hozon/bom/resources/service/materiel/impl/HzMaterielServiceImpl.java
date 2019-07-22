@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.materiel.impl;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
@@ -27,8 +28,11 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.change.HzApplicantChangeRecord;
 import sql.pojo.change.HzAuditorChangeRecord;
@@ -56,8 +60,16 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     @Autowired
     private HzChangeDataRecordDAO hzChangeDataRecordDAO;
 
+
+    private TransactionTemplate configTransactionTemplate;
     @Autowired
-    private HzApplicantChangeDAO hzApplicantChangeDAO;
+    public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
+        this.configTransactionTemplate = configTransactionTemplate;
+    }
+
+
+    private int errorCount =0;
+
 
     @Override
     public WriteResultRespDTO editHzMateriel(EditHzMaterielReqDTO editHzMaterielReqDTO) {
@@ -70,20 +82,10 @@ public class HzMaterielServiceImpl implements HzMaterielService {
         try{
             HzMaterielRecord record = new HzMaterielRecord();
             User user = UserInfo.getUser();
-            if(!editHzMaterielReqDTO.getFactoryCode().equals("") && null != editHzMaterielReqDTO.getFactoryCode()){
+            if(StringUtils.isNotBlank(editHzMaterielReqDTO.getFactoryCode())){
                 HzFactory hzFactory = hzFactoryDAO.findFactory("", editHzMaterielReqDTO.getFactoryCode());
                 if(hzFactory == null){
-                    String puid = UUID.randomUUID().toString();
-                    hzFactory =  new HzFactory();
-                    hzFactory.setPuid(puid);
-                    hzFactory.setpFactoryCode(editHzMaterielReqDTO.getFactoryCode());
-                    hzFactory.setpUpdateName(user.getUserName());
-                    hzFactory.setpCreateName(user.getUserName());
-                    int i = hzFactoryDAO.insert(hzFactory);
-                    if(i<0){
-                        return WriteResultRespDTO.getFailResult();
-                    }
-                    record.setpFactoryPuid(puid);
+                    record.setpFactoryPuid(hzFactoryDAO.insert(editHzMaterielReqDTO.getFactoryCode()));
                 }else{
                     record.setpFactoryPuid(hzFactory.getPuid());
                 }
@@ -92,78 +94,74 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             record.setpVinPerNo(editHzMaterielReqDTO.getpVinPerNo());
             record.setpSpareMaterial(editHzMaterielReqDTO.getpSpareMaterial());
             String loosePartFlag = editHzMaterielReqDTO.getpLoosePartFlag();
-            if("N".equals(loosePartFlag.toUpperCase())){
-                record.setpLoosePartFlag(0);
-            }else if("Y".equals(loosePartFlag.toUpperCase())){
-                record.setpLoosePartFlag(1);
-            }else{
-                record.setpLoosePartFlag(null);
-            }
+            record.setpLoosePartFlag(BOMTransConstants.constantStringToInteger(loosePartFlag));
             record.setpMrpController(editHzMaterielReqDTO.getpMrpController());
             record.setpUpdateName(user.getUserName());
             record.setPuid(editHzMaterielReqDTO.getPuid());
             record.setpBasicUnitMeasure(editHzMaterielReqDTO.getpBasicUnitMeasure());
-            if("Y".equals(editHzMaterielReqDTO.getpInventedPart().toUpperCase())){
-                record.setpInventedPart(1);
-            }else if("N".equals(editHzMaterielReqDTO.getpInventedPart().toUpperCase())){
-                record.setpInventedPart(0);
-            }else {
-                record.setpInventedPart(null);
-            }
+            record.setpInventedPart(BOMTransConstants.constantStringToInteger(editHzMaterielReqDTO.getpInventedPart()));
             record.setResource(editHzMaterielReqDTO.getResource());
-            if("Y".equals(editHzMaterielReqDTO.getpColorPart().toUpperCase())){
-                record.setpColorPart(1);
-            }else if("N".equals(editHzMaterielReqDTO.getpColorPart().toUpperCase())){
-                record.setpColorPart(0);
-            }else {
-                record.setpColorPart(null);
-            }
+            record.setpColorPart(BOMTransConstants.constantStringToInteger(editHzMaterielReqDTO.getpColorPart()));
             record.setpHeight(editHzMaterielReqDTO.getpHeight());
 
-            if("内饰件".equals(editHzMaterielReqDTO.getpInOutSideFlag())){
-                record.setpInOutSideFlag(1);
-            }else if("外饰件".equals(editHzMaterielReqDTO.getpInOutSideFlag())){
-                record.setpInOutSideFlag(0);
-            }else {
-                record.setpInOutSideFlag(null);
-            }
+            record.setpInOutSideFlag(BOMTransConstants.constantStringToInteger(editHzMaterielReqDTO.getpInOutSideFlag()));
 
-            if("Y".equals(editHzMaterielReqDTO.getP3cPartFlag().toUpperCase())){
-                record.setP3cPartFlag(1);
-            }else if("N".equals(editHzMaterielReqDTO.getP3cPartFlag().toUpperCase())){
-                record.setP3cPartFlag(0);
-            }else {
-                record.setP3cPartFlag(null);
-            }
+            record.setP3cPartFlag(BOMTransConstants.constantStringToInteger(editHzMaterielReqDTO.getP3cPartFlag()));
+
             record.setpPartImportantDegree(editHzMaterielReqDTO.getpPartImportantDegree());
+            record.setpMaterielDesc(editHzMaterielReqDTO.getpMaterielDesc());
             int i = hzMaterielDAO.update(record);
             if(i>0){
                 return WriteResultRespDTO.getSuccessResult();
             }
         }catch (Exception e){
+            e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
-
         return WriteResultRespDTO.getFailResult();
     }
 
     @Override
-    public WriteResultRespDTO deleteHzMateriel(String puid) {
+    public WriteResultRespDTO deleteHzMateriel(String puids) {
         try{
-            WriteResultRespDTO respDTO = new WriteResultRespDTO();
-            if(StringUtil.isEmpty(puid)){
-                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
-                respDTO.setErrMsg("请选择一条需要删除的数据！");
-                return respDTO;
+            if(StringUtils.isBlank(puids)){
+                return WriteResultRespDTO.IllgalArgument();
             }
-            int i = hzMaterielDAO.delete(puid);
-            if(i>0){
-                return WriteResultRespDTO.getSuccessResult();
-            }
+            List<String> list = Lists.newArrayList(puids.split(","));
+
+            List<String> updateList = new ArrayList<>();
+
+            List<HzMaterielRecord> deleteList = new ArrayList<>();
+
+            list.forEach(l->{
+                HzMaterielQuery hzMaterielQuery  = new HzMaterielQuery();
+                hzMaterielQuery.setPuid(l);
+                HzMaterielRecord hzMaterielRecord = hzMaterielDAO.getHzMaterielRecord(hzMaterielQuery);
+                if(hzMaterielRecord != null){
+                    if(StringUtils.isNotBlank(hzMaterielRecord.getRevision())){
+                        updateList.add(l);
+                    }else {
+                        deleteList.add(hzMaterielRecord);
+                    }
+                }
+            });
+
+            configTransactionTemplate.execute(new TransactionCallback<Void>() {
+                @Override
+                public Void doInTransaction(TransactionStatus status) {
+                    if(ListUtil.isNotEmpty(updateList)){
+                        hzMaterielDAO.deleteList(updateList);
+                    }
+                    if(ListUtil.isNotEmpty(deleteList)){
+                        hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
+                    }
+                    return null;
+                }
+            });
         }catch (Exception e){
             return WriteResultRespDTO.getFailResult();
         }
-        return WriteResultRespDTO.getFailResult();
+        return WriteResultRespDTO.getSuccessResult();
     }
 
     @Override
@@ -214,7 +212,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
     }
 
     @Override
-    @Transactional(rollbackFor = IllegalArgumentException.class)
+    @Transactional(rollbackFor = Exception.class)
     public WriteResultRespDTO dataToChangeOrder(AddDataToChangeOrderReqDTO reqDTO) {
         if(StringUtil.isEmpty(reqDTO.getPuids()) || StringUtil.isEmpty(reqDTO.getProjectId())
                 || null == reqDTO.getOrderId()){
@@ -247,6 +245,15 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             List<HzMaterielRecord> records = hzMaterielDAO.getMaterialRecordsByPuids(query);
             List<HzMaterielRecord> afterRecords = new ArrayList<>();
             if(ListUtil.isNotEmpty(records)){
+                //核查参数信息
+                this.errorCount = 0;
+                String errMsg = checkMaterielParamResult(records);
+                if(this.errorCount>0){
+                    WriteResultRespDTO respDTO = new WriteResultRespDTO();
+                    respDTO.setErrMsg(errMsg);
+                    respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
+                    return respDTO;
+                }
                 //到 after表中查询看是否存在记录
                 //存在记录则过滤 不存在记录则插入
                 HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
@@ -388,7 +395,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 });
             }
             if(ListUtil.isNotEmpty(updateList)){
-                hzMaterielDAO.updateList(updateList);
+                hzMaterielDAO.updateMaterielList(updateList);
             }
             if(ListUtil.isNotEmpty(deleteRecords)){
                 hzMaterielDAO.deleteMaterielList(deleteRecords,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
@@ -399,4 +406,42 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             return WriteResultRespDTO.getFailResult();
         }
     }
+
+
+    /**
+     * 物料发起流程需要做参数合法性检验
+     * 需要和SAP进行参数传递，SAP规定的必填参数必须填写完整后才允许发起流程
+     */
+    private String checkMaterielParamResult(List<HzMaterielRecord> materielRecords){
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("<strong style='color: red'>参数信息填写不完整，不允许发起流程!<br>" +
+                "必填参数有:工厂,物料编码,物料中文描述,基本计量单位," +
+                "物料类型,采购类型,MRP控制者</strong><br>");
+        for(HzMaterielRecord record:materielRecords){
+            String materielCode = record.getpMaterielCode();
+            String factoryCode = record.getFactoryCode();
+            String materielDesc = record.getpMaterielDesc();
+            String basicUnit = record.getpBasicUnitMeasure();
+            String materielType = record.getpMaterielType();
+            String mrpController = record.getpMrpController();
+            String buyType = record.getResource();
+
+            if(
+                    StringUtils.isBlank(factoryCode)  ||
+                    StringUtils.isBlank(materielDesc) ||
+                    StringUtils.isBlank(basicUnit)    ||
+                    StringUtils.isBlank(materielType) ||
+                    StringUtils.isBlank(mrpController)||
+                    StringUtils.isBlank(buyType)
+                    ){
+
+                stringBuffer.append("<strong style='color:deeppink'>"+materielCode+"</strong>的必填参数填写不完整!<br>");
+                this.errorCount++;
+            }
+        }
+
+        return stringBuffer.toString();
+    }
+
+
 }

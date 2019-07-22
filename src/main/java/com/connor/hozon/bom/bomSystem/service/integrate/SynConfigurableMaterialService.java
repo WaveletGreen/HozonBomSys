@@ -6,8 +6,10 @@
 
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelFeatureDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
+import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielDetailDao;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
@@ -24,7 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
+import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
+import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.project.HzMaterielRecord;
 
@@ -50,6 +55,11 @@ public class SynConfigurableMaterialService {
     TransClassifyService transClassifyService;
     @Autowired
     HzCfg0ToModelRecordDao hzCfg0ToModelRecordDao;
+
+    @Autowired
+    HzDerivativeMaterielDetailDao hzDerivativeMaterielDetailDao;
+    @Autowired
+    HzCfg0ModelFeatureDao hzCfg0ModelFeatureDao;
     /**
      * 模型族dao层
      */
@@ -83,7 +93,7 @@ public class SynConfigurableMaterialService {
      * @return
      */
     public JSONObject deleteConfigurableMaterial(String[] puid, String[] cfg0MainPuids, String[] modeBasiceDetails, String projectPuid) {
-        return execute(puid, cfg0MainPuids, modeBasiceDetails, projectPuid, ActionFlagOption.UPDATE);
+        return execute(puid, cfg0MainPuids, modeBasiceDetails, projectPuid, ActionFlagOption.DELETE);
     }
 
     /**
@@ -242,6 +252,162 @@ public class SynConfigurableMaterialService {
                         hzCfg0ToModelRecordList.add(coach.get(key));
                     }
                     hzCfg0ToModelRecordDao.setIsSent(hzCfg0ToModelRecordList);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("发送特性到ERP失败", e);
+        }
+
+
+        result.put("success", success);
+        result.put("fail", fail);
+        result.put("total", total);
+        result.put("totalOfSuccess", totalOfSuccess);
+        result.put("totalOfFail", totalOfFail);
+        result.put("totalOfOutOfParent", totalOfOutOfParent);
+        result.put("totalOfUnknown", totalOfUnknown);
+        result.put("_forDelete", _forDelete);
+        return result;
+    }
+
+    public JSONObject add(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics) {
+        return execute2(hzDerivativeMaterielBasics, ActionFlagOption.ADD);
+    }
+
+    public JSONObject delete(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics) {
+        return execute2(hzDerivativeMaterielBasics, ActionFlagOption.DELETE);
+    }
+
+    private JSONObject execute2(List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics, ActionFlagOption option) {
+        transClassifyService.setClearInputEachTime(true);
+        transClassifyService.getInput().getItem().clear();
+
+        //需要更新的数据，更新特性属性
+        List<HzCfg0ModelFeature> needToUpdateStatus = new ArrayList<>();
+        JSONObject result = new JSONObject();
+        /**
+         * 成功项
+         */
+        List<IntegrateMsgDTO> success = new ArrayList<>();
+        /**
+         * 失败项
+         */
+        List<IntegrateMsgDTO> fail = new ArrayList<>();
+
+        List<String> _forDelete = new ArrayList<>();
+        /***
+         * 计数
+         */
+        int total = 0;
+        int totalOfSuccess = 0;
+        int totalOfFail = 0;
+        int totalOfOutOfParent = 0;
+        int totalOfUnknown = 0;
+
+        if (hzDerivativeMaterielBasics == null || hzDerivativeMaterielBasics.size() <= 0) {
+            result.put("status", false);
+            result.put("msg", "传输数据为空，请至少选择1行发送");
+            return result;
+        }
+        Map<String, HzCfg0ModelFeature> coach = new HashMap<String, HzCfg0ModelFeature>();
+        Map<String, String> packNumOfFeature = new HashMap<String, String>();
+
+        String packnum;
+
+        //获取项目主数据
+        HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(hzDerivativeMaterielBasics.get(0).getDmbProjectUid());
+        //获取族
+        String groupName = hzCfg0ModelGroupDao.selectGroupNameByMainUid(hzCfg0MainRecord.getPuid());
+        //超级物料编码
+        HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(hzCfg0MainRecord.getPuid());
+        HzMaterielRecord superMateriel = null;
+        if (mainRecord != null) {
+            superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
+        }
+
+        List<HzCfg0ModelFeature> hzCfg0ModelFeatures = new ArrayList<>();
+        for (int i = 0; i < hzDerivativeMaterielBasics.size(); i++) {
+            packnum = UUIDHelper.generateUpperUid();
+
+            List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasicsList = new ArrayList<>();
+            hzDerivativeMaterielBasicsList.add(hzDerivativeMaterielBasics.get(i));
+            List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetails = hzDerivativeMaterielDetailDao.selectByBasics(hzDerivativeMaterielBasicsList);
+
+            HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureDao.selectByPrimaryKey(hzDerivativeMaterielBasics.get(i).getDmbModelFeatureUid());
+            hzCfg0ModelFeatures.add(hzCfg0ModelFeature);
+            coach.put(packnum,hzCfg0ModelFeature);
+
+            for (HzDerivativeMaterielDetail hzDerivativeMaterielDetail : hzDerivativeMaterielDetails) {
+
+                    ConfigurableMaterialAllocation configurableMaterialAllocation = new ConfigurableMaterialAllocation();
+                    //特性编码
+                    configurableMaterialAllocation.setPeculiarityEncoding(hzDerivativeMaterielDetail.getCfg0Record().getpCfg0FamilyName());
+                    //特性值编码
+                    configurableMaterialAllocation.setPeculiarityValueEncoding(hzDerivativeMaterielDetail.getDmdFeatureValue());
+                    //超级物料编码
+                    configurableMaterialAllocation.setPitem(superMateriel.getpMaterielCode());
+                    //数据包号
+                    configurableMaterialAllocation.setPackNo(packnum);
+                    //配置物料编码
+                    configurableMaterialAllocation.setConfigurableMaterialEncoding(hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
+                    //添加族
+                    configurableMaterialAllocation.setModelClass(groupName);
+                    //动作描述
+                    if (option == ActionFlagOption.ADD) {
+                        if (hzCfg0ModelFeature.getIsSent() == null || hzCfg0ModelFeature.getIsSent() == 0) {
+                            configurableMaterialAllocation.setActionFlag(ActionFlagOption.ADD.GetDesc());
+                        } else if (hzCfg0ModelFeature.getIsSent() == 1) {
+                            configurableMaterialAllocation.setActionFlag(ActionFlagOption.UPDATE.GetDesc());
+                        }
+                    }
+                    //执行删除
+                    else {
+                        configurableMaterialAllocation.setActionFlag(option.GetDesc());
+                    }
+                    transClassifyService.getInput().getItem().add(configurableMaterialAllocation.getZpptci003());
+            }
+        }
+
+        if (!SynMaterielService.debug) {
+            transClassifyService.execute();
+        }
+
+        List<ZPPTCO003> list = transClassifyService.getOut().getItem();
+
+        try {
+            if (list != null && list.size() > 0) {
+                for (ZPPTCO003 _l : list) {
+                    total++;
+                    if (_l == null) {
+                        totalOfUnknown++;
+                        continue;
+                    }
+                    IntegrateMsgDTO dto = new IntegrateMsgDTO();
+                    HzCfg0ModelFeature record = coach.get(_l.getPPACKNO());
+                    dto.setPuid(record.getPuid());
+                    dto.setItemId(record.getpFeatureSingleVehicleCode());
+                    dto.setMsg(_l.getPMESSAGE());
+                    if ("S".equalsIgnoreCase(_l.getPTYPE())) {
+                        success.add(dto);
+                        totalOfSuccess++;
+                        needToUpdateStatus.add(record);
+                    } else {
+                        fail.add(dto);
+                        totalOfFail++;
+                    }
+                }
+                Map<String, Object> _map = new HashMap<>();
+                //设定需要更新特性值已发送,不用设定相关性值已发送
+                _map.put("isFeatureSent", 1);
+                _map.put("list", needToUpdateStatus);
+                if (needToUpdateStatus.size() > 0) {
+                    List<HzCfg0ModelFeature> hzCfg0ModelFeatureList = new ArrayList<HzCfg0ModelFeature>();
+                    Set<String> keySet = coach.keySet();
+                    for (String key : keySet) {
+                        coach.get(key).setIsSent(1);
+                        hzCfg0ModelFeatureList.add(coach.get(key));
+                    }
+                    hzCfg0ModelFeatureDao.updateIsSent(hzCfg0ModelFeatureList);
                 }
             }
         } catch (Exception e) {

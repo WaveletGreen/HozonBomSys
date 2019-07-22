@@ -107,6 +107,8 @@ public class HzComposeMFDTO {
 
     private String pCfg0ModelBasicDetail;
 
+    private String modelGroup;
+
     public String getpCfg0ModelBasicDetail() {
         return pCfg0ModelBasicDetail;
     }

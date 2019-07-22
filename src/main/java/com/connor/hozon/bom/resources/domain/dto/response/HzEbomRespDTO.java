@@ -9,6 +9,7 @@ import java.util.Map;
  */
 public class HzEbomRespDTO extends BaseChangeRespDTO {
 
+    private static final long serialVersionUID = 2587373388714777392L;
     private JSONArray jsonArray;
 
 
@@ -167,6 +168,16 @@ public class HzEbomRespDTO extends BaseChangeRespDTO {
     private Integer changeFlag;
 
     private String colorPart;
+
+    /**
+     * 备件
+     */
+    private String sparePart;
+    /**
+     * 备件编号
+     */
+    private String sparePartNum;
+
 
     public String getColorPart() {
         return colorPart;
@@ -614,5 +625,21 @@ public class HzEbomRespDTO extends BaseChangeRespDTO {
 
     public void setpBuyEngineer(String pBuyEngineer) {
         this.pBuyEngineer = pBuyEngineer;
+    }
+
+    public String getSparePart() {
+        return sparePart;
+    }
+
+    public void setSparePart(String sparePart) {
+        this.sparePart = sparePart;
+    }
+
+    public String getSparePartNum() {
+        return sparePartNum;
+    }
+
+    public void setSparePartNum(String sparePartNum) {
+        this.sparePartNum = sparePartNum;
     }
 }

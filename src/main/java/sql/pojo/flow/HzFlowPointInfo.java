@@ -7,6 +7,7 @@ import java.util.Date;
  * @Date: 2018/6/14
  * @Description: 流程节点信息
  */
+@Deprecated
 public class HzFlowPointInfo {
     private String puid;
     /**

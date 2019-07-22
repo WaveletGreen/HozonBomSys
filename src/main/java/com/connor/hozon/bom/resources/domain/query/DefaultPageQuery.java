@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/6/27
  * @Description:
  */
-public abstract class DefaultPageQuery {
+public abstract class DefaultPageQuery extends DefaultQuery{
     /**
      * 页码
      */

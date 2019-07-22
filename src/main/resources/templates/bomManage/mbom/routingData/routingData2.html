@@ -6,38 +6,30 @@
 <meta charset="UTF-8">
 <title>工艺路线数据</title>
 <body>
-<!--<div class="panel-body" style="padding-bottom:0px;">-->
-    <!--<div class="panel panel-default" style="margin-top: 10px;">-->
-        <div class="panel-body" style="padding-bottom: 0;">
-            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
-                  id="queryRoutingData">
-                <div class="form-group">
-                    <label for="pMaterielCode">物料:</label>
-                    <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text"placeholder="请输入物料"/>
-                </div>
-                <div class="form-group">
-                    <label for="pMaterielDesc">物料名称:</label>
-                    <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text"placeholder="请输入物料名称"/>
-                </div>
-                <div class="form-group">
-                    <label for="type">工艺路线:</label>
-                    <select class="form-control" style="min-width: 180px" name="type" id="type" placeholder="请选择工艺路线">
-                        <option>请选择工艺路线</option>
-                        <option value="1">整车工艺路线</option>
-                        <option value="2">半成品工艺路线</option>
-                        <!--<option value="3">总成分总成工艺路线</option>-->
-                    </select>
-                </div>
-                <div class="form-group">
-                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
-                </div>
-            </form>
+<div class="panel-body" style="padding-bottom: 0;">
+    <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+          id="queryRoutingData">
+        <div class="form-group">
+            <label for="pMaterielCode">物料:</label>
+            <input class="form-control" id="pMaterielCode" name="pMaterielCode" type="text" placeholder="请输入物料"/>
         </div>
-    <!--</div>-->
-<!--</div>-->
-<!--<div class="form-group">
-    <button type="button" id="jumpBtn" onclick="doJump();" class="btn btn-primary">跳转</button>
-</div>-->
+        <div class="form-group">
+            <label for="pMaterielDesc">物料名称:</label>
+            <input class="form-control" id="pMaterielDesc" name="pMaterielDesc" type="text" placeholder="请输入物料名称"/>
+        </div>
+        <div class="form-group">
+            <label for="type">工艺路线:</label>
+            <select class="form-control" style="min-width: 180px" name="type" id="type" placeholder="请选择工艺路线">
+                <option>请选择工艺路线</option>
+                <option value="1">整车工艺路线</option>
+                <option value="2">半成品工艺路线</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+        </div>
+    </form>
+</div>
 <div class="content col-lg-12">
     <table class="table table-striped tableNormalStyle" id="routingDataTable"></table>
 </div>

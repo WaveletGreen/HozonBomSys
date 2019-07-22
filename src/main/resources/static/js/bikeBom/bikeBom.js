@@ -8,14 +8,16 @@
 
 $(document).ready((function () {
     var projectId = $("#project", window.top.document).val();
-    var url ="singleVehicles/record?projectId="+projectId
+    var url = "singleVehicles/record?projectId=" + projectId
     initTable(url);
 }))
+
 function doRefresh(projectId) {
     $("#bikeBomTable").bootstrapTable('destroy');
-    var url ="singleVehicles/record?projectId="+projectId
+    var url = "singleVehicles/record?projectId=" + projectId
     initTable(url);
 }
+
 function doQuery() {
     $('#bikeBomTable').bootstrapTable('refresh');
 }
@@ -28,7 +30,7 @@ function initTable(url) {
     var $table = $("#bikeBomTable");
     var column = [];
     column.push({field: 'id', title: '主键'});
-    column.push({field: 'ck', checkbox: true,align: 'center',width: 50});
+    column.push({field: 'ck', checkbox: true, align: 'center', width: 50});
     column.push({
         field: 'svlMaterialCode',
         title: '物料编号',
@@ -36,7 +38,7 @@ function initTable(url) {
         valign: 'middle',
         formatter: function (value, row, index) {
             return [
-                '<a href="javascript:void(0)" onclick="queryLou(' +  row.id +  ')">' + value + '</a>'
+                '<a href="javascript:void(0)" onclick="queryLou(' + row.id + ')">' + value + '</a>'
             ].join("");
         }
     });
@@ -93,7 +95,7 @@ function initTable(url) {
                             else {
                                 window.Ewin.dialog({
                                     title: "修改",
-                                    url: "singleVehicles/update/page?projectId="+projectId+"&id="+rows[0].id,
+                                    url: "singleVehicles/update/page?projectId=" + projectId + "&id=" + rows[0].id,
                                     gridId: "gridId",
                                     width: 500,
                                     height: 500
@@ -103,52 +105,179 @@ function initTable(url) {
                     })
                 }
             },
+            // {
+            //     text: '数据同步',
+            //     iconCls: 'glyphicon glyphicon-repeat',
+            //     handler: function () {
+            //         var url = "";
+            //         window.Ewin.confirm({
+            //             title: '提示',
+            //             message: '确定要同步数据到单车清单吗?',
+            //             width: 500
+            //         }).on(function (e) {
+            //             if (e) {
+            //                 var _table = "<p><strong style='font-size: 20px'>数据正在同步中,请耐心等待...</strong></p>"
+            //                 _table += "<p><strong style='color: red'>警告:请勿进行其他的操作!</strong></p>"
+            //                 _table += "<div style='margin-top: 50px;text-align: center;z-index: 100;'><img src='/hozon/img/img.gif'/></div>"
+            //                 window.Ewin.confirm({
+            //                     title: '提示',
+            //                     message: _table,
+            //                     width: 500
+            //                 })
+            //                 url = "singleVehicles/refresh?projectId=" + $("#project", window.top.document).val();
+            //                 setTimeout(function () {
+            //                     $.ajax({
+            //                         type: "POST",
+            //                         //ajax需要添加打包名
+            //                         url: url,
+            //                         contentType: "application/json",
+            //                         success: function (result) {
+            //                             console.log($('.modal-dialog', window.top.document).parent('div'))
+            //                             $('.modal-dialog', window.top.document).parent('div').remove()
+            //                             $('body', window.top.document).find('.modal-backdrop').remove();
+            //                             console.log($('.modal-dialog', window.top.document).parent('div'))
+            //                             if (result.success) {
+            //                                 layer.msg('同步成功', {icon: 1, time: 2000})
+            //                             } else if (!result.success) {
+            //                                 window.Ewin.alert({message: result.errMsg});
+            //                             }
+            //                             $table.bootstrapTable("refresh");
+            //                         },
+            //                         error: function (info) {
+            //                             window.Ewin.alert({message: "操作失败:" + info.status});
+            //                         }
+            //                     })
+            //                 }, 500)
+            //             }
+            //         });
+            //     }
+            // },
+            // {
+            //     text: '导出Excel',
+            //     iconCls: 'glyphicon glyphicon-export',
+            //     handler: function () {
+            //         //var headers = data;//表头
+            //         var rows = $table.bootstrapTable('getSelections');//选中行数据
+            //         if (rows.length == 0) {
+            //             window.Ewin.alert({message: '请选择一条需要导出的数据!'});
+            //             return false;
+            //         } else {
+            //             for (var index in rows) {
+            //                 if (rows[index].status == 5 || rows[index].status == 6) {
+            //                     window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
+            //                     return false;
+            //                 }
+            //             }
+            //         }
+            //         window.Ewin.confirm({title: '提示', message: '是否要导出选中行？', width: 500}).on(function (e) {
+            //             if (e) {
+            //                 $.ajax({
+            //                     type: "POST",
+            //                     //ajax需要添加打包名
+            //                     url: "./singleVehicles/excelExport",//??????
+            //                     data: JSON.stringify(rows),
+            //                     contentType: "application/json",
+            //                     success: function (result) {
+            //                         console.log(result);
+            //                         if (result.status) {
+            //                             layer.msg(result.msg, {icon: 1, time: 2000})
+            //
+            //                             //下载EBOM导入模板
+            //                             window.location.href = result.path;//V1.1.0.log
+            //                         }
+            //                         else {
+            //                             window.Ewin.alert({message: "操作导出失败:" + result.msg});
+            //                         }
+            //                         $table.bootstrapTable("refresh");
+            //                     },
+            //                     error: function (info) {
+            //                         window.Ewin.alert({message: "操作导出:" + info.status});
+            //                     }
+            //                 })
+            //             }
+            //         });
+            //     }
+            // }
             {
-                text: '数据同步',
-                iconCls: 'glyphicon glyphicon-repeat',
+                text: '发送至SAP',
+                iconCls: 'glyphicon glyphicon-send',
                 handler: function () {
-                    var url = "";
-                    window.Ewin.confirm({
-                        title: '提示',
-                        message: '确定要同步数据到单车清单吗?',
-                        width: 500
-                    }).on(function (e) {
-                        if (e) {
-                            var _table ="<p><strong style='font-size: 20px'>数据正在同步中,请耐心等待...</strong></p>"
-                            _table+="<p><strong style='color: red'>警告:请勿进行其他的操作!</strong></p>"
-                            _table+="<div style='margin-top: 50px;text-align: center;z-index: 100;'><img src='/hozon/img/img.gif'/></div>"
-                            window.Ewin.confirm({
-                                title: '提示',
-                                message: _table,
-                                width: 500
-                            })
-                            url = "singleVehicles/refresh?projectId="+$("#project", window.top.document).val();
-                            setTimeout(function(){
+                    var rows = $table.bootstrapTable('getSelections');
+                    // 只能选一条
+                    if (rows.length <= 0) {
+                        window.Ewin.alert({message: '请选择需要发送至SAP的数据!'});
+                        return false;
+                    }
+                    var url = "singleVehicles/sendSap";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
                                 $.ajax({
-                                    type: "POST",
-                                    //ajax需要添加打包名
-                                    url: url,
-                                    // data: myData,
-                                    contentType: "application/json",
-                                    success: function (result) {
-                                        console.log($('.modal-dialog', window.top.document).parent('div'))
-                                        $('.modal-dialog', window.top.document).parent('div').remove()
-                                        $('body', window.top.document).find('.modal-backdrop').remove();
-                                        console.log($('.modal-dialog', window.top.document).parent('div'))
-                                        if (result.success) {
-                                            layer.msg('同步成功', {icon: 1, time: 2000})
-                                        } else if (!result.success) {
-                                            window.Ewin.alert({message: result.errMsg});
-                                        }
-                                        $table.bootstrapTable("refresh");
-                                    },
-                                    error: function (info) {
-                                        window.Ewin.alert({message: "操作失败:" + info.status});
-                                    }
+                                  url : "singleVehicles/sendSap",
+                                  type : "POST",
+                                  contentType : "application/json;charset=utf-8",
+                                  data:JSON.stringify(rows),
+                                  success:function (result) {
+                                      if(result.status){
+                                          layer.msg(result.msg, {icon: 1, time: 2000})
+                                      }else {
+                                          window.Ewin.alert({message: result.msg});
+                                      }
+                                  },
+                                  error : function () {
+
+                                  }
                                 })
-                            }, 500)
+                            }
                         }
-                    });
+                    })
+                }
+            },
+            {
+                text: '从SAP删除',
+                iconCls: 'glyphicon glyphicon-send',
+                handler: function () {
+                    var rows = $table.bootstrapTable('getSelections');
+                    // 只能选一条
+                    if (rows.length <= 0) {
+                        window.Ewin.alert({message: '请选择需要从SAP删除的数据!'});
+                        return false;
+                    }
+                    var url = "singleVehicles/deleteSap";
+                    $.ajax({
+                        url: "privilege/write?url=" + url,
+                        type: "GET",
+                        success: function (result) {
+                            if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg});
+                                return false;
+                            }
+                            else {
+                                $.ajax({
+                                  url : "singleVehicles/deleteSap",
+                                  type : "POST",
+                                  contentType : "application/json;charset=utf-8",
+                                  data:JSON.stringify(rows),
+                                  success:function (result) {
+                                      if(result.status){
+                                          layer.msg(result.msg, {icon: 1, time: 2000})
+                                      }else {
+                                          window.Ewin.alert({message: result.msg});
+                                      }
+                                  },
+                                  error : function () {
+
+                                  }
+                                })
+                            }
+                        }
+                    })
                 }
             },
             {
@@ -160,7 +289,7 @@ function initTable(url) {
                     if (rows.length == 0) {
                         window.Ewin.alert({message: '请选择一条需要导出的数据!'});
                         return false;
-                    }else{
+                    } else {
                         for (var index in rows) {
                             if (rows[index].status == 5 || rows[index].status == 6) {
                                 window.Ewin.alert({message: '勾选的数据有审核中状态，审核中的数据不给导出修改!'});
@@ -182,7 +311,7 @@ function initTable(url) {
                                         layer.msg(result.msg, {icon: 1, time: 2000})
 
                                         //下载EBOM导入模板
-                                        window.location.href =  result.path;//V1.1.0.log
+                                        window.location.href = result.path;//V1.1.0.log
                                     }
                                     else {
                                         window.Ewin.alert({message: "操作导出失败:" + result.msg});
@@ -203,5 +332,5 @@ function initTable(url) {
 }
 
 function queryLou(row) {
-    window.location.href="singleVehicles/getDetail?id="+row;
+    window.location.href = "singleVehicles/getDetail?id=" + row;
 }

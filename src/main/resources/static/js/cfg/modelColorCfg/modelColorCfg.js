@@ -47,7 +47,7 @@ var toolbar = [
                 }
                 for (let i in rows) {
                     if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
-                        window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许修改'});
+                        window.Ewin.alert({message: rows[i].codeOfColorModel + '已关联变更单，不允许修改'});
                         return false;
                     }
                 }
@@ -84,7 +84,7 @@ var toolbar = [
                 }
                 for (let i in rows) {
                     if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
-                        window.Ewin.alert({message: rows[i].codeOfColorModel + '已在VWO流程中，不允许删除'});
+                        window.Ewin.alert({message: rows[i].codeOfColorModel + '已关联变更单，不允许删除'});
                         return false;
                     } else if (2 == rows[i].cmcrStatus || "2" == rows[i].cmcrStatus) {
                         window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已是删除状态，不允许删除'});
@@ -108,6 +108,7 @@ var toolbar = [
                                 width: 500
                             }).on(function (e) {
                                 if (e) {
+                                    // alert(JSON.stringify(rows));
                                     $.ajax({
                                         type: "POST",
                                         //ajax需要添加打包名
@@ -184,21 +185,21 @@ var toolbar = [
         //     }
         // },
         {
-            text: '发起流程',
+            text: '关联变更单',
             iconCls: 'glyphicon glyphicon-log-out',
             handler: function () {
                 var rows = $table.bootstrapTable('getSelections');
                 if (rows.length == 0) {
-                    window.Ewin.alert({message: '请选择一条需要发起流程的数据!'});
+                    window.Ewin.alert({message: '请选择一条需要关联变更单的数据!'});
                     return false;
                 }
                 for (let i in rows) {
                     if (10 == rows[i].cmcrStatus || "10" == rows[i].cmcrStatus) {
-                        window.Ewin.alert({message: rows[i].codeOfColorModel + '已在流程中，不允许再次发起流程'});
+                        window.Ewin.alert({message: rows[i].codeOfColorModel + '已关联变更单，不允许再次关联变更单'});
                         return false;
                     }
                     if (1 == rows[i].cmcrStatus || "1" == rows[i].cmcrStatus) {
-                        window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已生效，不允许再次发起流程'});
+                        window.Ewin.alert({message: rows[i].codeOfColorModel + '数据已生效，不允许再次关联变更单'});
                         return false;
                     }
                 }
@@ -222,7 +223,7 @@ var toolbar = [
                         else {
                             window.Ewin.confirm({
                                 title: '提示',
-                                message: '是否要发起流程？',
+                                message: '是否要关联变更单？',
                                 width: 500
                             }).on(function (e) {
                                 if (e) {
@@ -454,15 +455,15 @@ function loadData(_projectPuid) {
                         return "<span style='color: #00B83F'>已生效</span>";
                     }
                     else if (value == 0 || "0" == value) {
-                        return "<span style='color: #a97f89'>草稿状态</span>";
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
                     }
                     else if (-1 == value || "-1" == value) {
                         return "<span style='color: #9492a9'>已废止</span>";
                     }
                     else if (10 == value || "10" == value) {
-                        return "<span style='color: #e69800'>变更审核中<br>(" + row.cmcrVwoNum + ")</span>";
+                        return "<span style='color: #e2ab2f'>审核中</span>";
                     } else if (2 == value || "2" == value) {
-                        return "<span style='color: #0c8fe2'>删除状态</span>";
+                        return "<span style='color: #a90009'>删除状态</span>";
                     }
                     else {
                         return "<span style='color: #a90009'>未知状态</span>";
@@ -470,6 +471,14 @@ function loadData(_projectPuid) {
                 }
             };
             column.push(status);
+            column.push({
+                field: "cmcrEffectedDate",
+                title: "生效时间",
+                align:
+                    'center',
+                valign:
+                    'middle'
+            });
             $table.bootstrapTable({
                 url: "modelColor/loadAll?projectPuid=" + projectPuid,
                 method: 'get',
@@ -477,7 +486,7 @@ function loadData(_projectPuid) {
                 width: $(window).width(),
                 showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                  //是否显示刷新按钮
-                pageSize: 10,
+                pageSize: 20,
                 pagination: true,                   //是否显示分页（*）
                 clickToSelect: true,                // 单击某一行的时候选中某一条记录
                 formId: "hide",

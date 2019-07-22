@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import sql.pojo.bom.HzBomLineRecord;
 
 /**
@@ -7,7 +8,7 @@ import sql.pojo.bom.HzBomLineRecord;
  * @Date: 2018/8/14
  * @Description:
  */
-public class HzEWOChangeFormRespDTO {
+public class HzEWOChangeFormRespDTO extends BaseDTO {
     /**
      * 主键
      */

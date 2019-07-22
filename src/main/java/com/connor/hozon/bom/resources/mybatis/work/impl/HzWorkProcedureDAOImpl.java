@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.work.HzWorkProcedure;
 import sql.pojo.work.HzWorkProcess;
+import sql.redis.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,11 +75,11 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     }
 
     @Override
-    public HzWorkProcess getHzWorkProcess(String materielId, String projectId) {
+    public List<HzWorkProcess> getHzWorkProcess(String materielId, String projectId) {
         Map<String,Object> map = new HashMap<>();
         map.put("materielId",materielId);
         map.put("projectId",projectId);
-        return (HzWorkProcess) super.findForObject("HzWorkProcedureDAOImpl_getHzWorkProcess",map);
+        return  super.findForList("HzWorkProcedureDAOImpl_getHzWorkProcess",map);
     }
 
     @Override
@@ -156,7 +157,7 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         map.put("puid", query.getPuid());
         map.put("projectId",query.getProjectId());
         if(null != query.getRevision()){
-            map.put("revision",query.getRevision()?null:query.getRevisionNo());
+            map.put("revision",query.getRevision() ? query.getRevisionNo(): null);
         }else {
             map.put("revision",null);
         }
@@ -202,6 +203,31 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int updateWorkProcedureList(List<HzWorkProcedure> records) {
+        if(ListUtil.isEmpty(records)){
+            return 0;
+        }
+        int size = records.size();
+        //分批更新数据 一次1000条
+        try {
+            synchronized (this){
+                if(size > 1000){
+                    Map<Integer,List<HzWorkProcedure>> map = HzBomSysFactory.spiltList(records);
+                    for(List<HzWorkProcedure> value :map.values()){
+                        super.update("HzWorkProcedureDAOImpl_updateWorkProcedureList",value);
+                    }
+                }else {
+                    super.update("HzWorkProcedureDAOImpl_updateWorkProcedureList",records);
+                }
+            }
+            return size;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new HzDBException("工艺路线更新失败!",e);
         }
     }
 
@@ -255,8 +281,7 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         m.put("tableName",tableName);
         try {
             if(size>1000){
-                HzBomSysFactory<String> factory = new HzBomSysFactory();
-                Map<Integer,List<String>> map = factory.spiltList(puids);
+                Map<Integer,List<String>> map = HzBomSysFactory.spiltList(puids);
                 for(List<String> v:map.values()){
                     m.put("puids",v);
                     super.delete("HzWorkProcedureDAOImpl_deleteByPuids",m);

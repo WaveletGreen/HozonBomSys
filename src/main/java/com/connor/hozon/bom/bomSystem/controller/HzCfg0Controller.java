@@ -7,7 +7,9 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
+import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
@@ -31,6 +33,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
@@ -75,6 +78,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
     HzDictionaryLibraryService hzDictionaryLibraryService;
     @Autowired
     HzCfg0RecordDao hzCfg0RecordDao;
+
+    @Autowired
+    HzFullCfgWithCfgDao hzFullCfgWithCfgDao;
+
+    @Autowired
+    HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
     /*** 日志记录*/
     private final static Logger logger = LoggerFactory.getLogger(HzCfg0Controller.class);
 
@@ -91,8 +100,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
         queryBase.setProjectUid(projectPuid);
-        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
         int totalCount = hzCfg0Service.tellMeHowManyOfThose(queryBase);
+        if("ALL".equals(queryBase.getLimit())){
+            queryBase.setLimit(String.valueOf(totalCount));
+        }
+        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
         result.put("totalCount", totalCount);
         result.put("result", records);
         hzCfg0Service.synDictionaryAfterOption(projectPuid);
@@ -237,6 +249,15 @@ public class HzCfg0Controller extends ExtraIntegrate {
             }
             //原始配置先不给删除，只能删除新加的配置项
             else {
+                //查看特性是否在全配置中已被引用
+                HzFullCfgWithCfg hzFullCfgWithCfg = hzFullCfgWithCfgDao.selectByFeatureId(record.getPuid());
+                if(hzFullCfgWithCfg!=null){
+                    result.put("status", false);
+                    result.put("msg", record.getpCfg0ObjectId()+"在全配置中BOM一级清单中已被引用，如需删除请在全配置中先解除引用");
+                    return result;
+                }
+
+
                 if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
                     //如果需要删除原数据
                     toDelete.add(record);
@@ -255,6 +276,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
             record.setCfgStatus(2);
         }
 
+        //判读变更中是否存在已生效数据，如没有则直接删除，有则改成删除状态
         List<HzFeatureChangeBean> hzFeatureChangeBeans = iHzFeatureChangeService.doSelectHasEffect(records);
         List<HzCfg0Record> hzCfg0RecordsDelete = new ArrayList<>();
         List<HzCfg0Record> hzCfg0RecordsUpdate = new ArrayList<>();
@@ -286,6 +308,21 @@ public class HzCfg0Controller extends ExtraIntegrate {
             }
             if(hzCfg0RecordsDelete!=null&&hzCfg0RecordsDelete.size()>0){
                 int daleteNum = hzCfg0RecordDao.deleteCfgByList(hzCfg0RecordsDelete);
+                List<HzCfg0Record> familyNames = new ArrayList<>();
+                for(HzCfg0Record hzCfg0Record : hzCfg0RecordsDelete){
+                    String familyName = hzCfg0Record.getpCfg0FamilyName();
+                    List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByFamilyName(hzCfg0Record);
+                    if(hzCfg0RecordList==null||hzCfg0RecordList.size()<=0){
+                        familyNames.add(hzCfg0Record);
+                    }
+                }
+                if(familyNames!=null&&familyNames.size()>0){
+                    if(hzCfg0OptionFamilyDao.deleteByFamilyName(familyNames)<=0){
+                        result.put("status", false);
+                        result.put("msg", "删除失败");
+                        return result;
+                    }
+                }
                 if(daleteNum <=0){
                     result.put("status", false);
                     result.put("msg", "删除失败");
@@ -297,6 +334,21 @@ public class HzCfg0Controller extends ExtraIntegrate {
             }
         }else {
             int deleteNum = hzCfg0RecordDao.deleteCfgByList(records);
+            List<HzCfg0Record> familyNames = new ArrayList<>();
+            for(HzCfg0Record hzCfg0Record : records){
+                String familyName = hzCfg0Record.getpCfg0FamilyName();
+                List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByFamilyName(hzCfg0Record);
+                if(hzCfg0RecordList==null||hzCfg0RecordList.size()<=0){
+                    familyNames.add(hzCfg0Record);
+                }
+            }
+            if(familyNames!=null&&familyNames.size()>0){
+                if(hzCfg0OptionFamilyDao.deleteByFamilyName(familyNames)<=0){
+                    result.put("status", false);
+                    result.put("msg", "删除失败");
+                    return result;
+                }
+            }
             if(deleteNum<=0){
                 result.put("status", false);
                 result.put("msg", "删除失败");
@@ -787,53 +839,53 @@ public class HzCfg0Controller extends ExtraIntegrate {
         return "cfg/relevance/mergeRelevance";
     }
 
-    /**
-     * 已废除
-     *
-     * @throws Exception
-     */
-    @Deprecated
-    @RequestMapping(value = "/sendRelToERP", method = RequestMethod.POST)
-    public String sendRelToERP(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
-        //清空上次传输的内容
-        JSONObject result;
-        List<String> puids = new ArrayList<>();
-        List<HzCfg0Record> records;
-        //只要求获取puid
-        beans.forEach(bean -> puids.add(bean.getPuid()));
-        //从根本根本上查找数据
-        records = hzCfg0Service.doLoadListByPuids(puids);
-        //整理数据
-        List<HzRelevanceBean> myBeans = new ArrayList<>();
-        iSynRelevanceService.sortData(records, myBeans);
-        result = iSynRelevanceService.addRelevance(myBeans);
-        addToModel(result, model);
-        return "stage/templateOfIntegrate";
-    }
+//    /**
+//     * 已废除
+//     *
+//     * @throws Exception
+//     */
+//    @Deprecated
+//    @RequestMapping(value = "/sendRelToERP", method = RequestMethod.POST)
+//    public String sendRelToERP(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
+//        //清空上次传输的内容
+//        JSONObject result;
+//        List<String> puids = new ArrayList<>();
+//        List<HzCfg0Record> records;
+//        //只要求获取puid
+//        beans.forEach(bean -> puids.add(bean.getPuid()));
+//        //从根本根本上查找数据
+//        records = hzCfg0Service.doLoadListByPuids(puids);
+//        //整理数据
+//        List<HzRelevanceBean> myBeans = new ArrayList<>();
+//        iSynRelevanceService.sortData(records, myBeans);
+//        result = iSynRelevanceService.addRelevance(myBeans);
+//        addToModel(result, model);
+//        return "stage/templateOfIntegrate";
+//    }
 
-    /**
-     * 已废除
-     *
-     * @throws Exception
-     */
-    @Deprecated
-    @RequestMapping(value = "/sendRelToERPDelete", method = RequestMethod.POST)
-    public String sendRelToERPDelete(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
-        //清空上次传输的内容
-        JSONObject result;
-        List<String> puids = new ArrayList<>();
-        List<HzCfg0Record> records;
-        //只要求获取puid
-        beans.forEach(bean -> puids.add(bean.getPuid()));
-        //从根本根本上查找数据
-        records = hzCfg0Service.doLoadListByPuids(puids);
-        //整理数据
-        List<HzRelevanceBean> myBeans = new ArrayList<>();
-        iSynRelevanceService.sortData(records, myBeans);
-        result = iSynRelevanceService.deleteRelevance(myBeans);
-        addToModel(result, model);
-        return "stage/templateOfIntegrate";
-    }
+//    /**
+//     * 已废除
+//     *
+//     * @throws Exception
+//     */
+//    @Deprecated
+//    @RequestMapping(value = "/sendRelToERPDelete", method = RequestMethod.POST)
+//    public String sendRelToERPDelete(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
+//        //清空上次传输的内容
+//        JSONObject result;
+//        List<String> puids = new ArrayList<>();
+//        List<HzCfg0Record> records;
+//        //只要求获取puid
+//        beans.forEach(bean -> puids.add(bean.getPuid()));
+//        //从根本根本上查找数据
+//        records = hzCfg0Service.doLoadListByPuids(puids);
+//        //整理数据
+//        List<HzRelevanceBean> myBeans = new ArrayList<>();
+//        iSynRelevanceService.sortData(records, myBeans);
+//        result = iSynRelevanceService.deleteRelevance(myBeans);
+//        addToModel(result, model);
+//        return "stage/templateOfIntegrate";
+//    }
     /**********************************************废除方法****************************************/
 
 }

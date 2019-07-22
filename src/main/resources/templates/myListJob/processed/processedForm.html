@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="form-group">
-    <button type="button"class="btn btn-primary"onclick="doReturn();" style="float: right">返回上一步</button>
+    <button type="button" class="btn btn-primary" onclick="doReturn();" style="float: right">返回上一步</button>
 </div>
 <div class="panel-body" style="padding-bottom: 0;">
 </div>
@@ -23,90 +23,68 @@
                         <div class="form-group after_the">
                             <label for="ewoNo1">变更单号</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo1"
-                                   th:value="${data.changeNo}" disabled="disabled"
-                                   />
+                                   th:value="${data.changeNo}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo2">创建时间</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo2"
-                                   th:value="${data.createTime}" disabled="disabled"
-                                   />
+                                   th:value="${data.createTime}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo3">部门</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo3"
-                                   th:value="${data.deptName}" disabled="disabled"
-                                   />
+                                   th:value="${data.deptName}" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
-                        <!--<div class="form-group after_the">-->
-                            <!--<label for="ewoNo4">发起人</label>-->
-                            <!--<input type="text" class="form-control" name="ewoNo" id="ewoNo4"-->
-                                   <!--th:value="${data.originator}" disabled="disabled"/>-->
-                        <!--</div>-->
                         <div class="form-group after_the">
                             <label for="BOM">发起人</label>
                             <input type="text" class="form-control" name="ewoNo" id="BOM"
-                                   th:value="${data.originator}"  disabled="disabled"/>
-                            <!--<input type="text" class="form-control" name="ewoNo" id="TC"-->
-                                   <!--th:value="${data.createName}" style="display: none" disabled="disabled"/>-->
+                                   th:value="${data.originator}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo5">联系电话</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo5"
-                                   th:value="${data.tel}" disabled="disabled" />
+                                   th:value="${data.tel}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo6">变更类型</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo6"
-                                   th:value="${data.changeType}" disabled="disabled" />
+                                   th:value="${data.changeType}" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="createName">表单创建者</label>
                             <input type="text" class="form-control" name="createName" id="createName"
-                                   th:value="${data.createName}" disabled="disabled"
-                            />
+                                   th:value="${data.createName}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="marketType">上市类型</label>
-
-                            <!--<select class="form-control" name="marketType" id="marketType"disabled="disabled" placeholder="请选择上市类型">-->
-                                <!--<option th:selected="${data.getMarketType()=='上市前'?true:false}">上市前</option>-->
-                                <!--<option th:selected="${data.getMarketType()=='上市后'?true:false}">上市后</option>-->
-                            <!--</select>-->
                             <input type="text" class="form-control" name="marketType" id="marketType"
-                                   th:value="${data.marketType}" disabled="disabled" />
+                                   th:value="${data.marketType}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo9">项目所属阶段</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo9"
-                                   th:value="${data.projectStage}" disabled="disabled" />
+                                   th:value="${data.projectStage}" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-3">
                         <div class="form-group after_the">
                             <label for="ewoNo10">备注</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo10"
-                                   th:value="${data.remark}" disabled="disabled" />
+                                   th:value="${data.remark}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="state">变更状态</label>
-
-                            <!--<select class="form-control" name="state" id="state" placeholder="请选择变更状态"disabled="disabled">-->
-                                <!--<option th:selected="${data.getState()=='进行中'?true:false}">进行中</option>-->
-                                <!--<option th:selected="${data.getState()=='完成'?true:false}">完成</option>-->
-                                <!--<option th:selected="${data.getState()=='取消 '?true:false}">取消</option>-->
-                            <!--</select>-->
                             <input type="text" class="form-control" name="state" id="state"
-                                   th:value="${data.state}" disabled="disabled" />
+                                   th:value="${data.state}" disabled="disabled"/>
                         </div>
                         <div class="form-group after_the">
                             <label for="ewoNo7">是否关联变更</label>
                             <input type="text" class="form-control" name="ewoNo" id="ewoNo7"
-                                   th:value="${data.hasRelatedChange}" disabled="disabled" />
+                                   th:value="${data.hasRelatedChange}" disabled="disabled"/>
                         </div>
                     </div>
                 </div>
@@ -115,30 +93,30 @@
     </form>
 </div>
 <div id="TCForm">
-<h4><i class="fa fa-minus-square" aria-hidden="true">变更清单</i></h4>
-<div class="panel-body" style="padding:0px;">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="content col-lg-12 col-md-12" style="padding:0px;">
-                <table class="table table-striped tableNormalStyle" id="processedTCTable">
-                </table>
+    <h4><i class="fa fa-minus-square" aria-hidden="true">变更清单</i></h4>
+    <div class="panel-body" style="padding:0px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="content col-lg-12 col-md-12" style="padding:0px;">
+                    <table class="table table-striped tableNormalStyle" id="processedTCTable">
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <div id="BOMForm">
-<h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
-<div class="panel-body" style="padding:0px;">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="content col-lg-12" style="padding:0px;">
-                <table class="table table-striped tableNormalStyle" id="processedFormTable">
-                </table>
+    <h4><i class="fa fa-minus-square" aria-hidden="true">变更数据</i></h4>
+    <div class="panel-body" style="padding:0px;">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="content col-lg-12" style="padding:0px;">
+                    <table class="table table-striped tableNormalStyle" id="processedFormTable">
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <h4><i class="fa fa-minus-square" aria-hidden="true">评估意见</i></h4>
 <div class="panel-body" style="padding-bottom:0;">
@@ -149,20 +127,19 @@
             <form class="form-horizontal" id="bomLeaderOpinion" role="form">
                 <div class="panel panel-default panel-body col-lg-12 col-md-12 col-sm-12">
                     <h4>评审:</h4>
-                    <!--<input type="hidden" id='BomUserId' th:value="${hzVwoOpiBom.getOpiBomMngUserId()}">-->
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiBomMngOpinion">意见</label>
-                        <textarea class="form-control" style="resize: none;width: 100%;" rows="2"disabled="disabled" cols="30"
-                                  th:placeholder="${result.auditSugg}" name="opiBomMngOpinion" id="opiBomMngOpinion"></textarea>
+                        <textarea class="form-control" style="resize: none;width: 100%;" rows="2" disabled="disabled"
+                                  cols="30"
+                                  th:placeholder="${result.auditSugg}" name="opiBomMngOpinion"
+                                  id="opiBomMngOpinion"></textarea>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <label for="opiBomMngAgreement">结论</label>
-                        <select class="form-control" name="opiBomMngAgreement" id="opiBomMngAgreement"disabled="disabled">
-                            <!--<option>不同意</option>-->
-                            <!--<option>同意</option>-->
+                        <select class="form-control" name="opiBomMngAgreement" id="opiBomMngAgreement"
+                                disabled="disabled">
                             <option th:selected="${result.auditResult==1?true:false}">同意</option>
                             <option th:selected="${result.auditResult==0?true:false}">不同意</option>
-
                         </select>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 10px">
@@ -188,11 +165,9 @@
         if (isFromTc == 0) {
             TCForm.style.display = "none";
             BOMForm.style.display = "block";
-            // $("#BOM").show();
         } else if (isFromTc == 1) {
             TCForm.style.display = "block";
             BOMForm.style.display = "block";
-            // $("#TC").show();
         }
 
         $.ajax({
@@ -201,84 +176,62 @@
             success: function (result) {
                 var data = result.data;
                 var table = "<tr>";
-                table += "<th><a id='featureId' href='../toMyListJob/feature/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[7].name+"</a></th>";
-                table += "<th><a id='bomCfgId' href='../toMyListJob/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[10].name+"</a></th>";
-                table += "<th><a id='modelColorCfgId' href='../toMyListJob/modelColorCfg/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[8].name+"</a></th>";
-                table += "<th><a id='materielFeatureId' href='../toMyListJob/materielFeature/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[9].name+"</a></th>";
-                table += "<th><a id='relevanceId' href='../toMyListJob/relevance/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[11].name+"</a></th>";
-                table += "<th><a id='ebomId' href='../toMyListJob/ebom/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[0].name+"</a></th>";
-                table += "<th><a id='pbomId' href='../toMyListJob/pbom/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[1].name+"</a></th>";
-                table += "<th><a id='mbomId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[2].name+"</a></th>";
-                table += "<th><a id='productionId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=1" + "'>"+data[3].name+"</a></th>";
-                table += "<th><a id='financialId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=6" + "'>"+data[4].name+"</a></th>";
-                table += "<th><a id='materialId' href='../toMyListJob/material/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[5].name+"</a></th>";
-                table += "<th><a id='routingId' href='../toMyListJob/routing/page?projectId=" + projectId + "&orderId=" + id + "'>"+data[6].name+"</a></th>";
+                table += "<th><a id='featureId' href='../toMyListJob/feature/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[7].name + "</a></th>";
+                table += "<th><a id='bomCfgId' href='../toMyListJob/bomCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[10].name + "</a></th>";
+                table += "<th><a id='modelColorCfgId' href='../toMyListJob/modelColorCfg/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[8].name + "</a></th>";
+                table += "<th><a id='materielFeatureId' href='../toMyListJob/materielFeature/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[9].name + "</a></th>";
+                table += "<th><a id='relevanceId' href='../toMyListJob/relevance/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[11].name + "</a></th>";
+                table += "<th><a id='ebomId' href='../toMyListJob/ebom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[0].name + "</a></th>";
+                table += "<th><a id='pbomId' href='../toMyListJob/pbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[1].name + "</a></th>";
+                table += "<th><a id='mbomId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[2].name + "</a></th>";
+                table += "<th><a id='productionId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=1" + "'>" + data[3].name + "</a></th>";
+                table += "<th><a id='financialId' href='../toMyListJob/mbom/page?projectId=" + projectId + "&orderId=" + id + "&type=6" + "'>" + data[4].name + "</a></th>";
+                table += "<th><a id='materialId' href='../toMyListJob/material/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[5].name + "</a></th>";
+                table += "<th><a id='routingId' href='../toMyListJob/routing/page?projectId=" + projectId + "&orderId=" + id + "'>" + data[6].name + "</a></th>";
                 table += "</tr>"
                 $("#processedFormTable").html(table);
-                // var featureId = document.getElementById("featureId");
-                // var bomCfgId = document.getElementById("bomCfgId");
-                // var modelColorCfgId = document.getElementById("modelColorCfgId");
-                // var materielFeatureId = document.getElementById("materielFeatureId");
-                // var ebomId = document.getElementById("ebomId");
-                // var pbomId = document.getElementById("pbomId");
-                // var mbomId = document.getElementById("mbomId");
-                // var productionId = document.getElementById("productionId");
-                // var financialId = document.getElementById("financialId");
-                // var materialId = document.getElementById("materialId");
-                // var routingId = document.getElementById("routingId");
                 if (data[7].status == 0) {
-                    // featureId.style.display = "none";
                     $("#featureId").hide();
                 }
                 if (data[10].status == 0) {
-                    // bomCfgId.style.display = "none";
                     $("#bomCfgId").hide();
                 }
                 if (data[8].status == 0) {
-                    // modelColorCfgId.style.display = "none";
                     $("#modelColorCfgId").hide();
                 }
                 if (data[9].status == 0) {
-                    // materielFeatureId.style.display = "none";
                     $("#materielFeatureId").hide();
                 }
                 if (data[11].status == 0) {
-                    // materielFeatureId.style.display = "none";
                     $("#relevanceId").hide();
                 }
                 if (data[0].status == 0) {
-                    // ebomId.style.display = "none";
                     $("#ebomId").hide();
                 }
                 if (data[1].status == 0) {
-                    // pbomId.style.display = "none";
                     $("#pbomId").hide();
                 }
                 if (data[2].status == 0) {
-                    // mbomId.style.display = "none";
                     $("#mbomId").hide();
                 }
                 if (data[3].status == 0) {
-                    // productionId.style.display = "none";
                     $("#productionId").hide();
                 }
                 if (data[4].status == 0) {
-                    // financialId.style.display = "none";
                     $("#financialId").hide();
                 }
                 if (data[5].status == 0) {
-                    // materialId.style.display = "none";
                     $("#materialId").hide();
                 }
                 if (data[6].status == 0) {
-                    // routingId.style.display = "none";
                     $("#routingId").hide();
                 }
             }
         })
     })
+
     function doReturn() {
-        window.location.href="javascript:history.go(-1);"
+        window.location.href = "javascript:history.go(-1);"
     }
 
     var changeList = [[${changeList}]];
@@ -286,48 +239,34 @@
         var $table = $("#processedTCTable");//变更清单
         var column = [];
         column.push({
-            field : "itemId",
-            title : "零件号",
-            align : "center",
-            valign : "middle"
+            field: "itemId",
+            title: "零件号",
+            align: "center",
+            valign: "middle"
         });
         column.push({
-            field : "itemRevision",
-            title : "版本",
-            align : "center",
-            valign : "middle"
+            field: "itemRevision",
+            title: "版本",
+            align: "center",
+            valign: "middle"
         });
 
         $table.bootstrapTable({
             method: 'GET',
-            data:changeList,
-            // dataType: 'json',
-            //cache: false,
-            // striped: true,                              //是否显示行间隔色
+            data: changeList,
             height: $(window.parent.document).find("#wrapper").height() - 250,
             width: $(window).width(),
             formId: 'processedTCTable',
             undefinedText: "",//当数据为 undefined 时显示的字符
             pagination: false,
-            //showExport: true,
-            //exportDataType: 'all',
             columns: column,
             toolbar: "#toolbar",
-            //sortName: 'id',
-            // sortable: true,                     //是否启用排序
             sortOrder: "asc",                   //排序方式
             clickToSelect: false,// 单击某一行的时候选中某一条记录
-            //search: true, //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
             showColumns: false, //是否显示所有的列
-            // resizable:true,
-            // fixedColumns: true,
-            // fixedNumber:3,
             showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
             showRefresh: false,                  //是否显示刷新按钮
-            //minimumCountColumns:4,
         });
-
-        //alert(JSON.stringify(changeList));
     })
 </script>
 <script th:src="@{/js/helper/dateFormater.js}"></script>

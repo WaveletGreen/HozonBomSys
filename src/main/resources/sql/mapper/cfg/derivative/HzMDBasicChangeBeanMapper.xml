@@ -170,16 +170,29 @@
         FORMID = #{orderId,jdbcType=DECIMAL}
     </update>
 
-    <delete id="updateByChangeIds" parameterType="java.util.List">
+    <delete id="deleteByChangeIds" parameterType="java.util.List">
         delete from HZ_DM_BASIC_CHANGE
         where
         ID in
         <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-            #{item,jdbcType=DECIMAL}
+            #{item.id,jdbcType=DECIMAL}
         </foreach>
-        and
-        DMB_CHANGE_STATUS = 0
     </delete>
 
+    <select id="selectNotEffect" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_DM_BASIC_CHANGE
+        where
+        DMB_SRC_ID in (
+        select DMB_SRC_ID from HZ_DM_BASIC_CHANGE where ID in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item,jdbcType=DECIMAL}
+        </foreach>
+        )
+        and
+        DMB_CHANGE_STATUS = 0
+    </select>
 
 </mapper>

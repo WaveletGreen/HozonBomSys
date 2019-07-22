@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * @Description: 单车清单
  */
 @Data
-public class HzSingleVehiclesRespDTO {
+public class HzSingleVehiclesRespDTO extends BaseDTO {
     /**
      * 主键
      */

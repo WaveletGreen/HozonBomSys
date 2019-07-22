@@ -158,8 +158,6 @@ public class ReflectBom {
         //数量，也默认1条条传
         setNumber(bomToERPBean.getNumber() == null ? "1" : bomToERPBean.getNumber().toString());
         //单位，如果没有则默认设为EA
-        //todo 大对象没有了，直接从？？？，单位呢?，单位在哪？单位直接在EBOM中存 单独的字段
-        //todo 级联查询一下
 //        Object obj = SerializeUtil.unserialize(bomToERPBean.getBomLineBlock());
         String unit =  bomToERPBean.getUnit();/*(String) ((LinkedHashMap) obj).get("h9_Gross_Unit");*/
         setUnit((unit == null || "".equals(unit) ? "EA" : unit));

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.enumtype;
 
+import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.access.method.P;
 
@@ -99,30 +100,30 @@ public enum  ChangeTableNameEnum {
     public static String getMbomTableName(Integer type,String str){
 
         if(null == type){
-            if("M".equals(str)){
+            if(ChangeConstants.MBOM_CHANGE.equals(str)){
                 return ChangeTableNameEnum.HZ_MBOM.tableName;
-            }else if("MA".equals(str)){
+            }else if(ChangeConstants.MBOM_AFTER_CHANGE.equals(str)){
                 return ChangeTableNameEnum.HZ_MBOM_AFTER.tableName;
-            }else if("MB".equals(str)){
+            }else if(ChangeConstants.MBOM_BEFORE_CHANGE.equals(str)){
                 return ChangeTableNameEnum.HZ_MBOM_BEFORE.tableName;
             }else {
                 return null;
             }
         }
 
-        if("M".equals(str)){
+        if(ChangeConstants.MBOM_CHANGE.equals(str)){
             switch (type){
                 case 1:return ChangeTableNameEnum.HZ_MBOM_PRODUCT.tableName;
                 case 6:return ChangeTableNameEnum.HZ_MBOM_FINANCE.tableName;
                 default:return ChangeTableNameEnum.HZ_MBOM.tableName;
             }
-        }else if("MA".equals(str)){
+        }else if(ChangeConstants.MBOM_AFTER_CHANGE.equals(str)){
             switch (type){
                 case 1:return ChangeTableNameEnum.HZ_MBOM_PRODUCT_AFTER.tableName;
                 case 6:return ChangeTableNameEnum.HZ_MBOM_FINANCE_AFTER.tableName;
                 default:return ChangeTableNameEnum.HZ_MBOM_AFTER.tableName;
             }
-        }else if("MB".equals(str)){
+        }else if(ChangeConstants.MBOM_BEFORE_CHANGE.equals(str)){
             switch (type){
                 case 1:return ChangeTableNameEnum.HZ_MBOM_PRODUCT_BEFORE.tableName;
                 case 6:return ChangeTableNameEnum.HZ_MBOM_FINANCE_BRFORE.tableName;
@@ -149,11 +150,11 @@ public enum  ChangeTableNameEnum {
         if(StringUtils.isBlank(type)){
           if(ChangeTableNameEnum.HZ_EBOM_AFTER.tableName.equals(tableName)){
               return ChangeTableNameEnum.HZ_EBOM.tableName;
-          }else if(ChangeTableNameEnum.HZ_PBOM_AFTER.equals(tableName)){
+          }else if(ChangeTableNameEnum.HZ_PBOM_AFTER.tableName.equals(tableName)){
               return ChangeTableNameEnum.HZ_PBOM.tableName;
           }else if(ChangeTableNameEnum.HZ_MBOM_AFTER.tableName.equals(tableName)){
               return ChangeTableNameEnum.HZ_MBOM.tableName;
-          }else if(ChangeTableNameEnum.HZ_MBOM_FINANCE_AFTER.equals(tableName)){
+          }else if(ChangeTableNameEnum.HZ_MBOM_FINANCE_AFTER.tableName.equals(tableName)){
               return ChangeTableNameEnum.HZ_MBOM_FINANCE.tableName;
           }else if(ChangeTableNameEnum.HZ_MBOM_PRODUCT_AFTER.tableName.equals(tableName)){
               return ChangeTableNameEnum.HZ_MBOM_PRODUCT.tableName;
@@ -165,11 +166,11 @@ public enum  ChangeTableNameEnum {
         }else {
             if(ChangeTableNameEnum.HZ_EBOM_AFTER.tableName.equals(tableName)){
                 return ChangeTableNameEnum.HZ_EBOM_BEFORE.tableName;
-            }else if(ChangeTableNameEnum.HZ_PBOM_AFTER.equals(tableName)){
+            }else if(ChangeTableNameEnum.HZ_PBOM_AFTER.tableName.equals(tableName)){
                 return ChangeTableNameEnum.HZ_PBOM_BEFORE.tableName;
             }else if(ChangeTableNameEnum.HZ_MBOM_AFTER.tableName.equals(tableName)){
                 return ChangeTableNameEnum.HZ_MBOM_BEFORE.tableName;
-            }else if(ChangeTableNameEnum.HZ_MBOM_FINANCE_AFTER.equals(tableName)){
+            }else if(ChangeTableNameEnum.HZ_MBOM_FINANCE_AFTER.tableName.equals(tableName)){
                 return ChangeTableNameEnum.HZ_MBOM_FINANCE_BRFORE.tableName;
             }else if(ChangeTableNameEnum.HZ_MBOM_PRODUCT_AFTER.tableName.equals(tableName)){
                 return ChangeTableNameEnum.HZ_MBOM_PRODUCT_BEFORE.tableName;

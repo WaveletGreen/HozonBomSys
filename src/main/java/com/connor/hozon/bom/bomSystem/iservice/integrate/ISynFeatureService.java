@@ -39,10 +39,10 @@ public interface ISynFeatureService {
     /**
      * 更新特性值
      *
-     * @param projectPuid
+     * @param features
      * @return
      */
-    JSONObject updateFeature(String projectPuid);
+    JSONObject updateFeature(List<HzCfg0Record> features) throws Exception;
 
     /**
      * 删除特性值

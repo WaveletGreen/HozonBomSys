@@ -4,6 +4,7 @@ import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import integration.base.relevance.ZPPTCI004;
 import integration.option.ActionFlagOption;
 import integration.option.CorrelateTypeOption;
+import sql.pojo.cfg.relevance.HzRelevanceBasic;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -80,22 +81,22 @@ public class Correlate {
     private String reservedField5;
 
 
-    public Correlate(HzRelevanceBean bean) {
+    public Correlate(HzRelevanceBasic bean) {
         zpptci004 = new ZPPTCI004();
         //一个包号+1个行号
         setLineNum("1");
         //相关性
-        setCorrelate(bean.getRelevance());
+        setCorrelate(bean.getRbRelevance());
         //相关性描述
-        setCorrelateDescript(bean.getRelevanceDesc());
+        setCorrelateDescript(bean.getRbRelevanceDesc());
         //相关性状态
         setCorrelateState("5");
         //创建日期
-        setCreateDate(bean.getCreateDate());
+        setCreateDate(bean.getRelevanceCreateDate());
         //修改时间
-        setModifyDate(bean.getModifyDate());
+        setModifyDate(bean.getRelevanceUpdateDate());
         //相关性代码
-        setCorrelateCode(bean.getRelevanceCode());
+        setCorrelateCode(bean.getRbRelevanceCode());
     }
 
     public ZPPTCI004 getZpptci004() {

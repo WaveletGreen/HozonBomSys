@@ -57,4 +57,6 @@ public interface HzFullCfgWithCfgDao extends BasicDao<HzFullCfgWithCfg> {
     int insertAll(List<HzFullCfgWithCfg> hzFullCfgWithCfgs);
 
     HzFullCfgWithCfg selectBy2Yid(HzFullCfgWithCfg hzFullCfgWithCfg);
+
+    HzFullCfgWithCfg selectByFeatureId(String featureId);
 }

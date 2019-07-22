@@ -1,9 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
-import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
@@ -19,6 +17,8 @@ public interface HzEbomRecordDAO {
 
     int insert(HzEPLManageRecord record);
 
+    int update(HzEPLManageRecord record);
+
     /**
      * 批量插入
      * @param records
@@ -26,35 +26,19 @@ public interface HzEbomRecordDAO {
      */
     int insertList(List<HzEPLManageRecord> records,String tableName);
 
-    /**
-     * 复制层级的单条插入EBOM
-     * @param record
-     * @return
-     */
-    int insert2(HzEPLManageRecord record);
 
     int importList(List<HzImportEbomRecord> records);
 
-    boolean sortNumRepeat(String projectId,String sortNum);
 
     boolean lineIndexRepeat(String projectId,String lineIndex);
 
     /**
-     * 查询零件号是否重复
-     * @param projectId
-     * @param lineId
-     * @return
-     */
-    boolean checkItemIdIsRepeat(String projectId,String lineId);
-
-    /**
      * 批量删除
      * @param puids 主键ids 中间全部用英文逗号隔开
+     * @param list 删除参数 两种参数 只传一种就行
      * @return
      */
-    int deleteList(String puids);
-
-    int delete(String puid);
+    int deleteList(String puids,List<String> list);
 
     /**
      * 删除 直接delete
@@ -62,14 +46,31 @@ public interface HzEbomRecordDAO {
      * @return
      */
     int deleteByPuids(List<String> puids,String tableName);
+
     /**
-     * EBOM 批量更新 根据零件号来更新
+     * 根据主键进行批量更新
      * @param records
      * @return
      */
-    int updateList(List<HzBomLineRecord> records);
+    int updateListByPuids(List<HzEPLManageRecord> records);
+
+    /**
+     * 根据零件号（EPL ID）
+     * @param records
+     * @return
+     */
+    int updateListByEplId(List<HzEPLManageRecord>  records);
+
+    int updateEBOMListByEplId(List<HzEPLManageRecord>  records);
 
     int findIsHasByPuid(String puid, String projectId);
+
+    /**
+     * 查询当前项目下的EBOM 数量
+     * @param projectId 项目id
+     * @return BOM 数目
+     */
+    Integer findEBomTotalCount(String projectId);
 
     Page<HzEPLManageRecord> getHzEbomPage(HzEbomByPageQuery query);
     /**
@@ -99,13 +100,6 @@ public interface HzEbomRecordDAO {
      * @return
      */
     HzEPLManageRecord findEbomById(String puid,String projectId);
-    /**
-     * 根据父层零件ID找父层puid
-     * @param itemId
-     * @param projectId
-     * @return
-     */
-    List<HzEPLManageRecord> findEbomByItemId(String itemId,String projectId);
     /**
      * 逆向找父层
      * @param projectId
@@ -150,4 +144,68 @@ public interface HzEbomRecordDAO {
      */
     List<HzEPLManageRecord> getEbomRecordsByOrderId(HzChangeDataDetailQuery query);
 
+    /**
+     * 找EBOM 2Y层lineIndex的第一位最大值
+     * @param projectId
+     * @return maxLineIndexFirstNum  lineIndex
+     */
+    HzEPLManageRecord getMaxLineIndexFirstNum(String projectId);
+
+    /**
+     * 找出最大排序号
+     * @param projectId
+     * @return
+     */
+    Double findMaxBomOrderNum(String projectId);
+
+    HzEPLManageRecord findEbomChildrenByLineIndex(String lineId, String lineNo);
+
+    HzEPLManageRecord findPreviousEbom(HzEPLManageRecord hzEPLManageRecord);
+
+    HzEPLManageRecord findNextLineIndex(String lineId, String lineNo);
+
+    List<HzEPLManageRecord> findBaseEbomById(String lineId, String projectId);
+
+    HzEPLManageRecord findNextSortNum(HzEPLManageRecord hzEPLManageRecordPrevious);
+
+    /**
+     * 找出大于当前查找编号的最小记录 只找出当前父层的子一层 或者只找出2Y层
+     * @param query lineNo 查找编号
+     * @return
+     */
+    HzEPLManageRecord findMinEBOMRecordWhichLineNoGreaterCurrentLineNo(HzBOMQuery query);
+
+    /**
+     * 找出小于当前查找编号的最大记录 只找出当前父层的子一层 或者只找出2Y层
+     * @param query
+     * @return
+     */
+    HzEPLManageRecord findMaxEBOMRecordWhichLineNoLessCurrentNo(HzBOMQuery query);
+
+    int updateEPLList(List<HzEPLManageRecord> hzEPLManageRecordsFather);
+
+    int updateByDto(UpdateHzEbomReqDTO reqDTO);
+
+    HzEPLManageRecord findEbom2Y(Map<String,Object> map);
+    /**
+     * 根据EPLId 查询EBOM记录
+     * @param query
+     * @return
+     */
+    List<HzEPLManageRecord> findEBOMRecordsByEPLId(HzBOMQuery query);
+
+    /**
+     * 获取子一层记录
+     * @param query
+     * @return
+     */
+    List<HzEPLManageRecord> findNextLevelRecordByParentId(HzBOMQuery query);
+
+    /**
+     * 测试代码 为了同步正式机数据
+     * @param projectId
+     * @return
+     */
+    @Deprecated
+    List<HzEPLManageRecord> findALLBOM(String projectId);
 }

@@ -11,8 +11,10 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
+import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,11 +93,27 @@ public class HzDerivativeMaterielBasicDaoImpl extends BasicDaoImpl<HzDerivativeM
         Map<String,Object> map = new HashMap<>();
         map.put("orderId",orderId);
         map.put("status",status);
+        map.put("effectedDate",new Date());
         return baseSQLUtil.executeUpdate(map,clz.getCanonicalName()+".updateStatusByOrderId");
     }
 
     @Override
-    public int updateByChangeIds(List<Long> changeMaterielFeatureIds) {
-        return baseSQLUtil.executeUpdate(changeMaterielFeatureIds,clz.getCanonicalName()+".updateByChangeIds");
+    public int updateByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans) {
+        return baseSQLUtil.executeUpdate(hzDMBasicChangeBeans,clz.getCanonicalName()+".updateByChangeIds");
+    }
+
+    @Override
+    public List<HzDerivativeMaterielBasic> selectByChangeOrderId(Long orderId) {
+        return baseSQLUtil.executeQueryByPass(new HzDerivativeMaterielBasic(),orderId, clz.getCanonicalName()+".selectByChangeOrderId");
+    }
+
+    @Override
+    public int deleteByOrderId(Long orderId) {
+        return baseSQLUtil.executeDelete(orderId,clz.getCanonicalName()+".deleteByOrderId");
+    }
+
+    @Override
+    public int updateStatusUpdate(HzDerivativeMaterielBasic hzDerivativeMaterielBasics) {
+        return baseSQLUtil.executeUpdate(hzDerivativeMaterielBasics,clz.getCanonicalName()+".updateStatusUpdate");
     }
 }

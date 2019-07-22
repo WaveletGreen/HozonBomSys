@@ -48,7 +48,7 @@ public class TransClassifyService extends Author implements ITransmitService {
     private Holder<TABLEOFZPPTCO003> outputContainer;
 
     public TransClassifyService() {
-        serviceExecutor = new ZPPTCSAP003Service();
+//        serviceExecutor = new ZPPTCSAP003Service();
         //输入参数
         inputContainer = new Holder<>();
         input = new TABLEOFZPPTCI003();

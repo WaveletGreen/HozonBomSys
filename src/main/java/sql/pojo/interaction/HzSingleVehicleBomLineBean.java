@@ -2,6 +2,8 @@ package sql.pojo.interaction;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description:
@@ -9,7 +11,8 @@ import lombok.Data;
  * @Modified By:单车解算用，特性+2++颜色
  */
 @Data
-public class HzSingleVehicleBomLineBean {
+public class HzSingleVehicleBomLineBean implements Serializable {
+    private static final long serialVersionUID = 5747010904946534565L;
     /**
      * 特性值UID
      */

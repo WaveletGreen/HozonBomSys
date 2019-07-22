@@ -55,14 +55,17 @@ public class HzMbomController extends BaseController {
     HzPbomRecordDAO hzPbomRecordDAO;
     @Autowired
     private HzChangeOrderDAO hzChangeOrderDAO;
-    LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
+    private LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
+
+    private Map<String,Object> orderDataObject = new HashMap<>();
     /**
      * MBOM管理标题
      *
      * @param response
      */
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
-    public void mbomTitle(HttpServletResponse response) {
+    public void mbomTitle(String projectId,HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
@@ -89,6 +92,8 @@ public class HzMbomController extends BaseController {
         tableTitle.put("pFactoryCode", "工厂代码");
         tableTitle.put("pStockLocation", "发货料库存地点");
         tableTitle.put("pBomType", "BOM类型");
+        tableTitle.put("effectTime","生效时间");
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
     }
@@ -103,13 +108,6 @@ public class HzMbomController extends BaseController {
     @RequestMapping(value = "record", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getMbomLineRecord(HzMbomByPageQuery query) {
-        HzMbomByPageQuery ebomByPageQuery = query;
-        ebomByPageQuery.setPageSize(0);
-        try{
-            ebomByPageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        }catch (Exception e){
-
-        }
         Page<HzMbomRecordRespDTO> page = hzMbomService.findHzMbomForPage(query);
         if (page == null) {
             return new HashMap<>();
@@ -148,6 +146,10 @@ public class HzMbomController extends BaseController {
             _res.put("pStockLocation",dto.getpStockLocation());
             _res.put("pBomType", dto.getpBomType());
             _res.put("status",dto.getStatus());
+            _res.put("effectTime",dto.getEffectTime());
+            if(null != dto.getVehNum()){
+                _res.putAll(dto.getVehNum());
+            }
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -230,6 +232,7 @@ public class HzMbomController extends BaseController {
        WriteResultRespDTO respDTO =  hzMbomService.deleteMbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
+
     @RequestMapping(value = "refresh",method = RequestMethod.POST)
     public void refreshMbom(String projectId,HttpServletResponse response){
         WriteResultRespDTO resultMessageRespDTO = hzMbomService.refreshHzMbom(projectId);
@@ -241,7 +244,7 @@ public class HzMbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateProduction", method = RequestMethod.GET)
-    public String updateWhiteBodyProduction(String projectId,String eBomPuid,Integer type,Model model) {
+    public String updateWhiteBodyProduction(String projectId,String eBomPuid,Integer type,Integer updateType,Model model) {
         HzMbomByIdQuery query = new HzMbomByIdQuery();
         query.setProjectId(projectId);
         query.setType(type);
@@ -259,7 +262,7 @@ public class HzMbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updateFinancial", method = RequestMethod.GET)
-    public String updateWhiteBodyFinancial(String projectId,String eBomPuid,Integer type,Model model) {
+    public String updateWhiteBodyFinancial(String projectId,String eBomPuid,Integer type,Integer updateType,Model model) {
         HzMbomByIdQuery query = new HzMbomByIdQuery();
         query.setProjectId(projectId);
         query.setType(type);
@@ -371,7 +374,31 @@ public class HzMbomController extends BaseController {
         return "bomManage/mbom/mbomMaintenance/excelImport3";
     }
 
+    /**
+     * 获取变更表单
+     * @return
+     */
+    @RequestMapping(value = "find/choose",method = RequestMethod.POST)
+    public void getOrderChooseToPage(@RequestBody AddDataToChangeOrderReqDTO reqDTO,HttpServletResponse response){
+        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(reqDTO.getProjectId());
+        this.orderDataObject = new HashMap<>();
+        this.orderDataObject.put("data",records);
+        this.orderDataObject.put("puids",reqDTO.getPuids());
+        this.orderDataObject.put("type",reqDTO.getType());
+        toJSONResponse(Result.build(orderDataObject),response);
+    }
 
+    /**
+     * 跳转到MBOM选择变更单
+     * @return
+     */
+    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
+    public String getOrderChooseToPage(Model model){
+        model.addAttribute("data",this.orderDataObject.get("data"));
+        model.addAttribute("puids",this.orderDataObject.get("puids"));
+        model.addAttribute("type",this.orderDataObject.get("type"));
+        return "bomManage/mbom/mbomMaintenance/mbomSetChangeForm";
+    }
 
     /**
      * MBOM发起变更数据到变更单
@@ -382,21 +409,6 @@ public class HzMbomController extends BaseController {
     public void mbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO respDTO = hzMbomService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
-    }
-
-    /**
-     * 跳转到MBOM选择变更单
-     * @return
-     */
-    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
-    public String getOrderChooseToPage(Integer type,String projectId,String puids,Model model){
-        List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
-        if(ListUtil.isNotEmpty(records)){
-            model.addAttribute("data",records);
-            model.addAttribute("puids",puids);
-            model.addAttribute("type",type);
-        }
-        return "bomManage/mbom/mbomMaintenance/mbomSetChangeForm";
     }
 
     /**

@@ -63,10 +63,22 @@ function initTable(url) {
                 sortable: true,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
                 clickToSelect: true,               //单击某一行的时候选中某一条记录
-                striped: true,                      //是否显示行间隔色
+                // striped: true,                      //是否显示行间隔色
                 showColumns: true,                 //是否显示所有的列
                 showToggle: false,                 //是否显示详细视图和列表视图的切换按钮
                 showRefresh: true,                 //是否显示刷新按钮
+                showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
+                exportDataType: "selected",              //basic', 'all', 'selected'.
+                exportTypes: ['xlsx'],	    //导出类型
+                //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
+                exportOptions: {
+                    //ignoreColumn: [0,0],            //忽略某一列的索引
+                    fileName: '工作中心数据导出',              //文件名称设置
+                    worksheetName: 'Sheet1',          //表格工作区名称
+                    tableName: '工作中心数据表',
+                    excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+                    //onMsoNumberFormat: DoOnMsoNumberFormat
+                },
                 toolbars: [
                     {
                         text: '添加',
@@ -205,16 +217,8 @@ function initTable(url) {
                                         type: "POST",
                                         //ajax需要添加打包名
                                         url: "work/process/submit?projectId=" + projectId + "&materielIds=" + materielIds,
-                                        //data: JSON.stringify(rows),
                                         contentType: "application/json",
                                         success: function (result) {
-                                            /*if (result.status) {
-                                                window.Ewin.alert({message: result.errMsg});
-                                                //刷新，会重新申请数据库数据
-                                            }
-                                            else {
-                                                window.Ewin.alert({message: ":" + result.errMsg});
-                                            }*/
                                             if (result.success) {
                                                 layer.msg('发送成功', {icon: 1, time: 2000})
                                             } else if (!result.success) {

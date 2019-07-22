@@ -49,20 +49,20 @@
             </option>
         </select>
     </div>
-    <!--<div class="form-group">
+    <div class="form-group">
         <label for="strColorEffectedDate">生效日期</label>
         <input class="form-control" id="strColorEffectedDate" name="strColorEffectedDate"
-               th:value="${entity.strColorEffectedDate}"
+               th:value="${pColorEffectedDate}"
                placeholder="请选择生效日期"
         />
     </div>
     <div class="form-group">
         <label for="strColorAbolishDate">废止日期</label>
         <input class="form-control" id="strColorAbolishDate" name="strColorAbolishDate"
-               th:value="${entity.strColorAbolishDate}"
+               th:value="${pColorAbolishDate}"
                placeholder="请选择废止日期"
         />
-    </div>-->
+    </div>
     <div class="form-group">
         <label for="pColorComment">备注</label>
         <input class="form-control" id="pColorComment" name="pColorComment" type="text"
@@ -167,61 +167,42 @@
                 }
                 var bootstrapValidator = $("#colorForm", window.top.document).data('bootstrapValidator');
                 bootstrapValidator.validate();
-                //重新验证字段
-               /* bootstrapValidator.revalidateField("strColorEffectedDate");
-                bootstrapValidator.revalidateField("strColorAbolishDate");*/
-                if (bootstrapValidator.isValid()) {
-                    // var url = $("#colorForm", window.top.document).attr('action');
-                    // var myData = JSON.stringify({
-                    //     "pColorCode": $("#pColorCode").val(),
-                    //     "pColorComment": $("#pColorComment").val(),
-                    //     "pColorName": $("#pColorName").val(),
-                    //     "pColorOfSet": $("#pColorOfSet").val(),
-                    //     "puid": $("#puid").val(),
-                    //     "pColorIsMultiply": $("#pColorIsMultiply").val(),
-                    //     "pColorPlate": $("#pColorPlate").val()
-                    //     /*,
-                    //     "strColorEffectedDate": $("#strColorEffectedDate").val(),
-                    //     "strColorAbolishDate": $("#strColorAbolishDate").val()*/
-                    //
-                    // });
-                    var url = $("#colorForm", window.top.document).attr('action');
-                    <!--其实不要puid，puid会在服务器上生成-->
-                    let data={};
-                    data[puid]=$("#puid").val();
-                    var _d = $("#colorForm").serializeArray();
-                    for (var p in _d) {
-                        data[_d[p].name] = _d[p].value;
-                    }
-                    $.ajax({
-                        contentType:
-                            "application/json",
-                        type:
-                            'POST',
-                        url: url,
-                        data: JSON.stringify(data),
-                        success:
-                            function (result) {
-                                // $('.modal-dialog', window.top.document).parent('div').remove()
-                                // $('body', window.top.document).find('.modal-backdrop').remove();
-                                // jquery 调用刷新当前操作的table页面的refresh方法
-                                // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
-                                activeTabBodyRefresh();
-                                if (result.status) {
-                                    layer.msg('修改数据成功!', {icon: 1, time: 2000})
-                                    // window.Ewin.alert({message: '修改数据成功!'});
-                                }
-                                else {
-                                    // layer.msg(result.msg, {icon: 1, time: 2000})
-                                    window.Ewin.alert({message: result.msg+'修改数据失败!'});
-                                }
-
-                            },
-                        error: function (status) {
-                            window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                setTimeout(function() {
+                    if (bootstrapValidator.isValid()) {
+                        var url = $("#colorForm", window.top.document).attr('action');
+                        <!--其实不要puid，puid会在服务器上生成-->
+                        let data = {};
+                        data[puid] = $("#puid").val();
+                        var _d = $("#colorForm").serializeArray();
+                        for (var p in _d) {
+                            data[_d[p].name] = _d[p].value;
                         }
-                    });
-                }
+                        $.ajax({
+                            contentType:
+                                "application/json",
+                            type:
+                                'POST',
+                            url: url,
+                            data: JSON.stringify(data),
+                            success:
+                                function (result) {
+                                    activeTabBodyRefresh();
+                                    if (result.status) {
+                                        layer.msg('修改数据成功!', {icon: 1, time: 2000})
+                                        // window.Ewin.alert({message: '修改数据成功!'});
+                                    }
+                                    else {
+                                        // layer.msg(result.msg, {icon: 1, time: 2000})
+                                        window.Ewin.alert({message: result.msg + '修改数据失败!'});
+                                    }
+
+                                },
+                            error: function (status) {
+                                window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                            }
+                        });
+                    }
+                },1000);
             });
         },
         $('#strColorEffectedDate').datetimepicker({
@@ -271,5 +252,6 @@
     ]]>
 </script>
 <script th:src="@{/layer/layer.js}"></script>
+<script th:src="@{/helper/dateFormater.js}"></script>
 </body>
 </html>

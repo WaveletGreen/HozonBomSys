@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sql.pojo.interaction.HzSingleVehicles;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -183,13 +184,6 @@ public class HzSingleVehiclesController extends BaseController {
         if(null == query.getSingleVehiclesId()){
             return new HashMap<>();
         }
-        HzSingleVehiclesBomByPageQuery pageQuery = query;
-        pageQuery.setPageSize(0);
-        try{
-            pageQuery.setPageSize(Integer.valueOf(query.getLimit()));
-        }catch (Exception e){
-
-        }
         Page<HzSingleVehiclesBomRespDTO> page = hzSingleVehiclesBomServices.getHzSingleVehiclesBomByPage(query);
         if (page == null) {
             return new HashMap<>();
@@ -232,8 +226,8 @@ public class HzSingleVehiclesController extends BaseController {
 
     @RequestMapping(value = "bom/refresh",method = RequestMethod.POST)
     public void refreshSingleVehiclesBOM(String projectId,HttpServletResponse response){
-        hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
-        toJSONResponse(Result.build(true),response);
+        WriteResultRespDTO respDTO = hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
     }
 
     /**
@@ -358,5 +352,19 @@ public class HzSingleVehiclesController extends BaseController {
         }
         return result;
     }
+
+
+    @RequestMapping("sendSap")
+    @ResponseBody
+    public JSONObject sendSap(@RequestBody List<HzSingleVehicles> hzSingleVehicles){
+        return hzSingleVehiclesServices.sendSap(hzSingleVehicles);
+    }
+
+    @RequestMapping("deleteSap")
+    @ResponseBody
+    public JSONObject deleteSap(@RequestBody List<HzSingleVehicles> hzSingleVehicles){
+        return hzSingleVehiclesServices.deleteSap(hzSingleVehicles);
+    }
+
 
 }

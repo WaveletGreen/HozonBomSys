@@ -103,22 +103,22 @@ public class HzBomDataService {
                 if (hbr.getIs2Y() == 0) {
                     object.put("pid", hbr.getParentUid());
                 }
-                byte[] xx = hbr.getBomLineBlock();
-                Object obj = SerializeUtil.unserialize(xx);
-                if (obj instanceof LinkedHashMap) {
-                    if (((LinkedHashMap) obj).size() > 0) {
-                        ((LinkedHashMap) obj).forEach((key, value) -> {
-                            object.put(key, value);
-                        });
-                    }
-                } else if (obj instanceof RedisBomBean) {
-                    List<String> pSets = ((RedisBomBean) obj).getpSets();
-                    List<String> pValues = ((RedisBomBean) obj).getpValues();
-                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
-                        for (int i = 0; i < pSets.size(); i++) {
-                            object.put(pSets.get(i), pValues.get(i));
-                        }
-                }
+//                byte[] xx = hbr.getBomLineBlock();
+//                Object obj = SerializeUtil.unserialize(xx);
+//                if (obj instanceof LinkedHashMap) {
+//                    if (((LinkedHashMap) obj).size() > 0) {
+//                        ((LinkedHashMap) obj).forEach((key, value) -> {
+//                            object.put(key, value);
+//                        });
+//                    }
+//                } else if (obj instanceof RedisBomBean) {
+//                    List<String> pSets = ((RedisBomBean) obj).getpSets();
+//                    List<String> pValues = ((RedisBomBean) obj).getpValues();
+//                    if (null != pSets && pSets.size() > 0 && null != pValues && pValues.size() > 0)
+//                        for (int i = 0; i < pSets.size(); i++) {
+//                            object.put(pSets.get(i), pValues.get(i));
+//                        }
+//                }
                 array.add(object);
             }
         }

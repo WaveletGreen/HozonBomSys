@@ -5,7 +5,7 @@ package com.connor.hozon.bom.resources.domain.query;
  * @Date: 2018/7/7
  * @Description: 查找Pbom树状结构
  */
-public class HzPbomTreeQuery {
+public class HzPbomTreeQuery extends DefaultQuery{
     /**
      * 项目id
      */

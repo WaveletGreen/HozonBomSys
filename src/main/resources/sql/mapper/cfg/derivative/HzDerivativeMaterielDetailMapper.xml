@@ -292,11 +292,13 @@
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 
-    <select id="selectByBasics" parameterType="java.util.List" resultMap="BaseResultMap">
+    <select id="selectByBasics" parameterType="java.util.List" resultMap="BaseResultWithCfg">
         select
-          <include refid="Base_Column_List"/>
+          <include refid="Base_Column_List"/>,
+          <include refid="cfg0Column"/>
         from
-          HZ_DERIVATIVE_MATERIEL_DETAIL
+          HZ_DERIVATIVE_MATERIEL_DETAIL t
+        LEFT OUTER JOIN HZ_CFG0_RECORD t2 on  t.DMD_CFG0_UID = t2.PUID
         where
         DMD_DMB_ID in
         <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="(" separator="," close=")">

@@ -1,3 +1,4 @@
+// 已废除
 var count = 1;
 $(document).ready((function () {
     var projectPuid = $("#project", window.top.document).val();

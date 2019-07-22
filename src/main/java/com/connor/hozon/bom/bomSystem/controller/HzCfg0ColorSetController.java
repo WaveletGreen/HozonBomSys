@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.accessories.HzAccessoriesLibs;
 import sql.pojo.cfg.color.HzCfg0ColorSet;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -97,6 +99,9 @@ public class HzCfg0ColorSetController {
            /* entity.setStrColorAbolishDate(DateStringHelper.dateToString2(entity.getpColorAbolishDate()));
             entity.setStrColorEffectedDate(DateStringHelper.dateToString2(entity.getpColorEffectedDate()));*/
             model.addAttribute("entity", entity);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            model.addAttribute("pColorEffectedDate",entity.getpColorEffectedDate()==null?"":sdf.format(entity.getpColorEffectedDate()));
+            model.addAttribute("pColorAbolishDate",entity.getpColorAbolishDate()==null?"":sdf.format(entity.getpColorAbolishDate()));
             return "cfg/color/colorUpdate";
         } else {
             model.addAttribute("msg", "查找不到颜色信息:" + entity.getpColorName());
@@ -123,7 +128,7 @@ public class HzCfg0ColorSetController {
      */
     @RequestMapping(value = "/updateWithEntity2", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject update2(@RequestBody Map<String, String> map) {
+    public JSONObject update2(@RequestBody Map<String, String> map) throws ParseException {
         JSONObject result = new JSONObject();
         Date now = new Date();
         User user = UserInfo.getUser();
@@ -149,7 +154,9 @@ public class HzCfg0ColorSetController {
         set.setpColorPlate(map.get("pColorPlate"));
         set.setpColorIsMultiply(map.get("pColorIsMultiply"));
         set.setpColorComment(map.get("pColorComment"));
-
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        set.setpColorEffectedDate(sdf.parse(map.get("strColorEffectedDate")));
+        set.setpColorAbolishDate(sdf.parse(map.get("strColorAbolishDate")));
         String csPaintMaterielCodes = "";
         List<String> materielCodeList = new ArrayList<String>();
         for (int i = 0; i < (map.size() - 7); i++) {
@@ -254,7 +261,7 @@ public class HzCfg0ColorSetController {
         //  set.setpColorCreateDate(now);
         set.setpColorModifier(user.getUserName());
         set.setpColorStatus(0);
-
+        set.setpColorEffectedDate(new Date());
         while (true) {
             if (colorSerService.getById(set) == null) {
                 resultFromDB = colorSerService.doAddOne(set);

@@ -8,8 +8,16 @@ package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
+import com.connor.hozon.bom.resources.util.FileUtils;
+import javassist.bytecode.ByteArray;
 import net.sf.json.JSONObject;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +26,12 @@ import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelDetail;
 import sql.pojo.change.HzChangeOrderRecord;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -241,5 +255,34 @@ public class HzBomAllCfgController {
     @ResponseBody
     public JSONObject goBackData(@RequestParam String projectUid){
         return hzBomAllCfgService.goBackData(projectUid);
+    }
+
+    @RequestMapping("getExcel")
+    public ResponseEntity<byte[]> getExcel(String projectUid) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        Date date = new Date();
+        String pattern = "yyyy-MM-dd HH：mm：ss";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        String dateStr = sdf.format(date);
+        String fileName = "全配置BOM一级清单"+dateStr+".xlsx";
+
+        SXSSFWorkbook hssfWorkbook = hzBomAllCfgService.getWorkBook(projectUid);
+
+        try {
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", new String(fileName.getBytes("utf-8"), "ISO-8859-1"));
+            if(hssfWorkbook==null){
+                return new ResponseEntity(null,headers,HttpStatus.NOT_FOUND);
+            }
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            hssfWorkbook.write(os);
+            byte[] bytes = os.toByteArray();
+            os.flush();
+            os.close();
+            return new ResponseEntity<byte[]>(bytes,
+                    headers, HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity(null,headers,HttpStatus.NOT_FOUND);
+        }
     }
 }

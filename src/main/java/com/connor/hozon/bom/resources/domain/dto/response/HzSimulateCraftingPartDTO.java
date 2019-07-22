@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import lombok.Data;
 
 /**
@@ -9,7 +10,7 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
-public class HzSimulateCraftingPartDTO {
+public class HzSimulateCraftingPartDTO extends BaseDTO {
     /**
      * 主键
      */

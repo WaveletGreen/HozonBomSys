@@ -1,20 +1,22 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 /**
  * Created by haozt on 2018/5/29
  */
-public class UpdateHzPbomRecordReqDTO {
+public class UpdateHzPbomRecordReqDTO extends BaseDTO {
 
     /**
      * 来源（自制/采购）
      */
     private String resource;
     /**
-     * 类型 是否为焊接/装配（0是  1不是 2不明确）
+     * 类型 是否为焊接/装配
      */
     private String type;
     /**
-     * 是否采购单元 （0是  1不是 2不明确）
+     * 是否采购单元
      */
     private String buyUnit;
     /**
@@ -51,6 +53,36 @@ public class UpdateHzPbomRecordReqDTO {
     private String projectId;
 
     private String lineId;
+
+    /**
+     * 修改类型：1修改当前勾选数据，2同步修改同零件数据
+     */
+    private Integer updateType;
+
+    /**
+     *PBOM主键id
+     */
+    private String puid;
+
+    public void setLineId(String lineId) {
+        this.lineId = lineId;
+    }
+
+    public String getPuid() {
+        return puid;
+    }
+
+    public void setPuid(String puid) {
+        this.puid = puid;
+    }
+
+    public Integer getUpdateType() {
+        return updateType;
+    }
+
+    public void setUpdateType(Integer updateType) {
+        this.updateType = updateType;
+    }
 
     public String getLineId() {
         return lineId;

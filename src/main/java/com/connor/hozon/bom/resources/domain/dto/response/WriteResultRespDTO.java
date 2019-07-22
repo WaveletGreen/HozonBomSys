@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  * @Date: 2018/6/25
  * @Description:
  */
-public class WriteResultRespDTO {
+public class WriteResultRespDTO extends BaseDTO {
 
     public static final String SUCCESS_MSG ="操作成功！";
     public static final String FAILED_MSG ="操作失败,请稍后重试！";
@@ -20,8 +22,10 @@ public class WriteResultRespDTO {
     public static final String FILE_FORMAT_ERROR="文件列信息不全,不进行导入操作！";
     public static final String FILE_ERROR = "文件格式错误！";
 
+    public static final String CHANGE_ORDER_NOT_EXIST="变更单不存在！";
     public static final Long SUCCESS_CODE = 1000L;
     public static final Long FAILED_CODE = 1001L;
+    private static final long serialVersionUID = -3485133935087293415L;
     /**
      * 错误信息
      */
@@ -116,6 +120,28 @@ public class WriteResultRespDTO {
         WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
         writeResultRespDTO.setErrMsg(FILE_ERROR);
         writeResultRespDTO.setErrCode(FAILED_CODE);
+        return writeResultRespDTO;
+    }
+
+    public static WriteResultRespDTO changeOrderNotExist(){
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+        writeResultRespDTO.setErrMsg(CHANGE_ORDER_NOT_EXIST);
+        writeResultRespDTO.setErrCode(FAILED_CODE);
+        return writeResultRespDTO;
+    }
+
+
+    public static WriteResultRespDTO failResultRespDTO(String errMsg){
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+        writeResultRespDTO.setErrMsg(errMsg);
+        writeResultRespDTO.setErrCode(FAILED_CODE);
+        return writeResultRespDTO;
+    }
+
+    public static WriteResultRespDTO resultRespDTO(Long errCode,String errMsg){
+        WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
+        writeResultRespDTO.setErrMsg(errMsg);
+        writeResultRespDTO.setErrCode(errCode);
         return writeResultRespDTO;
     }
 }

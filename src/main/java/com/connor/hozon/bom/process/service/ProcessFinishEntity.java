@@ -31,7 +31,7 @@ import java.util.List;
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 流程结束节点，修改任务状态和表单状态
  * @Date: Created in  2018/11/22 15:10
- * @Modified By:
+ * @Modified By:zal
  */
 @Service
 @EnableTransactionManagement(proxyTargetClass = true)
@@ -107,7 +107,7 @@ public class ProcessFinishEntity implements IProcessFinish {
                 }
                 //不同意时，TC同步过来的不修改状态
                 if (0 == (int) params[0]) {
-                    if(hzAuditorChangeRecord.get(i).getChangeAccepter()==0){//
+                    if(Integer.valueOf(0).equals(hzAuditorChangeRecord.get(i).getChangeAccepter())){//
                         //审核人意见
                         hzAuditorChangeRecord.get(i).setAuditSugg((String) params[1]);
                         hzAuditorChangeRecord.get(i).setAuditTime(new Date());

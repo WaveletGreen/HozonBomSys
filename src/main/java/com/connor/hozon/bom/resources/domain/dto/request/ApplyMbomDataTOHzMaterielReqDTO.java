@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 
 import java.util.List;
@@ -9,7 +10,8 @@ import java.util.List;
  * @Date: 2018/7/6
  * @Description:
  */
-public class ApplyMbomDataTOHzMaterielReqDTO {
+@Deprecated
+public class ApplyMbomDataTOHzMaterielReqDTO extends BaseDTO {
 
     List<HzMbomRecordRespDTO> mbomRecordRespDTOS;
     /**

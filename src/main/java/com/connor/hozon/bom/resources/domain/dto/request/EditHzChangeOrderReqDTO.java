@@ -1,5 +1,7 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
 import java.util.Date;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Date;
  * @Date: 2018/11/12
  * @Description:
  */
-public class EditHzChangeOrderReqDTO {
+public class EditHzChangeOrderReqDTO extends BaseDTO {
     /**
      * 主键id
      */

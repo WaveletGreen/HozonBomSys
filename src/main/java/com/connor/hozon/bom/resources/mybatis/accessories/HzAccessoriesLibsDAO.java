@@ -17,9 +17,18 @@ public interface HzAccessoriesLibsDAO {
 
     int insert(HzAccessoriesLibs accessoriesLibs);
 
+    int importList(List<HzAccessoriesLibs> records);
+
     int update(HzAccessoriesLibs hzAccessoriesLibs);
 
     int deleteList(List<DeleteHzAccessoriesLibsDTO> libs);
+
+    /**
+     * 批量更新 根据物料号更新数据
+     * @param libs
+     * @return
+     */
+    int updateList(List<HzAccessoriesLibs> libs);
 
     List<HzAccessoriesLibs> getHzAccessoriesLibs(String puid);
 
@@ -39,4 +48,6 @@ public interface HzAccessoriesLibsDAO {
      * @return
      */
     List<HzAccessoriesLibs> queryAccessoriesByMaterielCodes(List<String> materielCodes);
+
+    List<HzAccessoriesLibs> queryAccessoriesByCode(String materielCode);
 }

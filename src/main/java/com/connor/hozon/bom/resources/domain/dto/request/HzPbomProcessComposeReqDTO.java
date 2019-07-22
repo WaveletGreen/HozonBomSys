@@ -1,6 +1,8 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
-public class HzPbomProcessComposeReqDTO {
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
+public class HzPbomProcessComposeReqDTO extends BaseDTO {
 
     /**
      * 项目id

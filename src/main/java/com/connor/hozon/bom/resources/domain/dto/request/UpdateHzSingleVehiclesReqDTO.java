@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.domain.dto.request;
 
+import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import lombok.Data;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class UpdateHzSingleVehiclesReqDTO {
+public class UpdateHzSingleVehiclesReqDTO extends BaseDTO {
     /**
      * 主键
      */

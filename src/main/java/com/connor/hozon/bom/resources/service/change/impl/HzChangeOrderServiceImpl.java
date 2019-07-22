@@ -144,15 +144,15 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
             }
             List<HzChangeOrderRecord> records = page.getResult();
             for(HzChangeOrderRecord record :records){
-                if(1==record.getFromTc()){
+                if(Integer.valueOf(1).equals(record.getFromTc())){
                     HzChangeOrderRespDTO respDTO = HzChangeOrderFactory.changeOrderRecordToRespDTO(record);
                     respDTO.setDeptName(record.getDeptNameTC());
                     respDTO.setCreateName(record.getCreateNameTC());
                     respDTOS.add(respDTO);
                 }else {
-                    respDTOS.add(getHzChangeOrderRecordById(record.getId()));
+//                    respDTOS.add(getHzChangeOrderRecordById(record.getId()));
+                    respDTOS.add(HzChangeOrderFactory.changeOrderRecordToRespDTO(record));
                 }
-//                respDTOS.add(HzChangeOrderFactory.changeOrderRecordToRespDTO(record));
             }
             return new Page<>(page.getPageNumber(), page.getPageSize(), page.getTotalCount(), respDTOS);
         } catch (Exception e) {
@@ -187,5 +187,16 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
             return null;
         }
         return null;
+    }
+
+    @Override
+    public boolean changeOrderRelatedChangeData(Long orderId) {
+        HzChangeDataQuery query = new HzChangeDataQuery();
+        query.setOrderId(orderId);
+        List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(query);
+        if(ListUtil.isNotEmpty(list)){
+            return true;
+        }
+        return false;
     }
 }

@@ -65,7 +65,7 @@
         }
       },
       mso: {                            // MS Excel and MS Word related options
-        fileFormat:        'xlshtml',   // xlshtml = Excel 2000 html format
+        fileFormat:        'xlsx',   // xlshtml = Excel 2000 html format
                                         // xmlss = XML Spreadsheet 2003 file format (XMLSS)
                                         // xlsx = Excel 2007 Office Open XML format
         onMsoNumberFormat: null,        // Excel 2000 html format only. See readme.md for more information about msonumberformat

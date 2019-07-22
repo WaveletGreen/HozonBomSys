@@ -42,9 +42,6 @@ function initTable(url) {
         align: 'center',
         width: 50,
         formatter: function (value, row, index) {
-            //return index+1;
-            // var temp = $('#changeFormTable').bootstrapTable("getIndex");//返回（pageSize * (pageNumber-1) + 1）
-            // return temp + index;
             var options = $table.bootstrapTable('getOptions');
             return options.pageSize * (options.pageNumber - 1) + index + 1;
 
@@ -57,13 +54,10 @@ function initTable(url) {
             valign: 'middle',
             formatter: function (value, row, index) {
                 var id = row.id;
-                // return [
-                //     '<a href="javascript:void(0)" onclick="queryLou(' + id + ')">' + value + '</a>'
-                // ].join("");
                 var auditId = row.auditId;
                 //alert(auditId);
                 return [
-                    '<a href="javascript:void(0)" onclick="queryLou(\'' + id+ '\',+\'' + auditId+'\')">' + value + '</a>'
+                    '<a href="javascript:void(0)" onclick="queryLou(\'' + id + '\',+\'' + auditId + '\')">' + value + '</a>'
                 ].join("");
             }
         });
@@ -96,38 +90,11 @@ function initTable(url) {
         striped: true,                      //是否显示行间隔色
         search: false,                      //是否显示表格搜索，此搜索是客户端搜索，不会进服务端
         showColumns: false,                 //是否显示所有的列
-        // toolbars: [
-        //     {
-        //         text: '修改',
-        //         iconCls: 'glyphicon glyphicon-pencil',
-        //         handler: function () {
-        //             var rows = $table.bootstrapTable('getSelections');
-        //             //只能选一条
-        //             if (rows.length != 1) {
-        //                 window.Ewin.alert({message: '请选择一条需要修改的变更表单!'});
-        //                 return false;
-        //             }
-        //             if (rows[0].isFromTc == 0) {
-        //                 window.Ewin.alert({message: '只能选择来源是TC端的表单进行修改!'});
-        //                 return false;
-        //             }
-        //             var id = rows[0].id
-        //             window.Ewin.dialog({
-        //                 title: "修改",
-        //                 url: "untreated/TCUntreatedUpdate?id=" + id ,
-        //                 //url: "untreated/update",
-        //                 gridId: "gridId",
-        //                 width: 500,
-        //                 height: 500
-        //             });
-        //         }
-        //     },
-        // ],
     });
 }
 
-function queryLou(id,auditId) {
-    window.location.href = "untreated/ToUntreatedForm?id=" + id+"&auditId="+auditId;
+function queryLou(id, auditId) {
+    window.location.href = "untreated/ToUntreatedForm?id=" + id + "&auditId=" + auditId;
 }
 
 /**
@@ -177,7 +144,17 @@ function saveAgreement() {
                         }
                     },
                 error: function (status) {
-                    window.Ewin.alert({message: "提交失败:" + status.status});
+                    if(status.responseJSON.message != 'No message available'){
+                        console.log(status)
+                        var errMsg = status.responseJSON.message;
+                        if(errMsg.match("Exception:")){
+                            errMsg = errMsg.split("Exception:")[1];
+                        }
+                        var msg = "<div style='height: 30%;overflow: auto'>" + errMsg+ "</div>"
+                        window.Ewin.confirm({title: '提交失败', message: msg})
+                    }else {
+                        window.Ewin.alert({message: "提交失败:" + status.status});
+                    }
                 }
             })
         }
@@ -187,5 +164,5 @@ function saveAgreement() {
 //@Author: Fancyears·Maylos·Malvis  in 2018/11/22 13:06  重新加载任务，按钮禁用
 function reload() {
     window.top.loadTasks();
-    $('#saveBtn').attr('disabled',"true");
+    $('#saveBtn').attr('disabled', "true");
 }

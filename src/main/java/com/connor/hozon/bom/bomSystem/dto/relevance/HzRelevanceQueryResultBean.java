@@ -8,6 +8,8 @@ package com.connor.hozon.bom.bomSystem.dto.relevance;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 相关性查询助手
@@ -40,5 +42,9 @@ public class HzRelevanceQueryResultBean {
      * 相关性状态
      */
     private Integer status;
+    /**
+     *生效时间
+     */
+    private Date effectedDate;
 
 }

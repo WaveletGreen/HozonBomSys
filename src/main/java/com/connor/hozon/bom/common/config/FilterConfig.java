@@ -29,12 +29,11 @@ public class FilterConfig {
         m.put("targetBeanName","hzFilter");
         m.put("targetFilterLifecycle","true");
         registration.setInitParameters(m);
-        registration.addUrlPatterns("/*");
-        registration.setName("hzFilter");
-        registration.setOrder(1);
+        registration.addUrlPatterns("/*");//需要过滤的url路径
+        registration.setName("hzFilter");//过滤器名称
+        registration.setOrder(1);//设置优先级
         return registration;
     }
-
     /**
      * 创建一个bean
      * @return

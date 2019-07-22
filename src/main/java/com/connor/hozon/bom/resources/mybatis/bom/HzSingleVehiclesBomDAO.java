@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzSingleVehiclesBomRecord;
+import sql.pojo.interaction.HzSingleVehicles;
 
 import java.util.List;
 
@@ -27,6 +28,13 @@ public interface HzSingleVehiclesBomDAO {
      */
     int deleteByProjectId(String projectId);
 
+
+    /**
+     * 查询当前项目下单车BOM的全部的puid
+     * @param projectId
+     * @return
+     */
+    List<String> getAllPuidByProjectId(String projectId);
     /**
      * 分页查询单车BOM清单
      * @param query
@@ -40,4 +48,5 @@ public interface HzSingleVehiclesBomDAO {
      * @return
      */
     Page<HzSingleVehiclesBomRecord> getHzSingleVehiclesBomTreeByPage(HzSingleVehiclesBomByPageQuery query);
+
 }

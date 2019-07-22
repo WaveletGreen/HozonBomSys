@@ -115,4 +115,14 @@ public class HzSingleVehicleDaoImpl extends BasicDaoImpl<HzSingleVehicles> imple
         return (HzSingleVehicles)baseSQLUtil.findForObject(clzName+".getSingleVehiclesById",map);
     }
 
+    @Override
+    public List<HzSingleVehicles> selectByIds(List<HzSingleVehicles> hzSingleVehicles) {
+        return baseSQLUtil.executeQueryByPass(new HzSingleVehicles(),hzSingleVehicles,clzName+".selectByIds");
+    }
+
+    @Override
+    public int doUpdateIsSent(Map<String, Object> map) {
+        return baseSQLUtil.executeUpdate(map,clzName+".doUpdateIsSent");
+    }
+
 }

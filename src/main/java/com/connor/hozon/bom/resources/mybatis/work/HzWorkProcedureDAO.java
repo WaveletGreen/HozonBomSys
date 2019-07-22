@@ -27,7 +27,7 @@ public interface HzWorkProcedureDAO {
 
     Page<HzWorkProcess> findHzWorkProcessByPage2(HzWorkProcessByPageQuery query);
 
-    HzWorkProcess getHzWorkProcess(String materielId,String projectId);
+    List<HzWorkProcess> getHzWorkProcess(String materielId,String projectId);
 
     HzWorkProcess getHzWorkProcess2(String materielId,String projectId, String procedureDesc);
 
@@ -70,6 +70,12 @@ public interface HzWorkProcedureDAO {
      */
     int updateList(List<HzWorkProcedure> list);
 
+    /**
+     * 批量修改
+     * @param list
+     * @return
+     */
+    int updateWorkProcedureList(List<HzWorkProcedure> list);
     /**
      * 批量新增
      * @param list

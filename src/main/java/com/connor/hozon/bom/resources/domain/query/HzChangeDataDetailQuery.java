@@ -10,7 +10,7 @@ import java.util.List;
  * @Description:
  */
 @Data
-public class HzChangeDataDetailQuery {
+public class HzChangeDataDetailQuery extends DefaultQuery{
     /**
      * 变更数据
      */

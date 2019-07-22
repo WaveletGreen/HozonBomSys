@@ -71,4 +71,13 @@ public class HzCfg0ModelGroupDaoImpl extends BasicDaoImpl<HzCfg0ModelGroup> impl
         String groupName = new String();
         return baseSQLUtil.executeQueryByPass(groupName, mainUid, clzName+".selectGroupNameByMainUid", true);
     }
+
+    public int insert(HzCfg0ModelGroup hzCfg0ModelGroup){
+        return baseSQLUtil.executeInsert(hzCfg0ModelGroup,clzName+".insert");
+    }
+
+    @Override
+    public int updateByMainId(HzCfg0ModelGroup hzCfg0ModelGroup) {
+        return baseSQLUtil.executeUpdate(hzCfg0ModelGroup, clzName+".updateByMainId");
+    }
 }

@@ -44,7 +44,7 @@ public class TransBomService extends Author implements ITransmitService {
     private Holder<TABLEOFZPPTCO005> outputContainer;
 
     public TransBomService() {
-        serviceExecutor = new ZPPTCSAP005Service();
+//        serviceExecutor = new ZPPTCSAP005Service();
         //输入参数
         inputContainer = new Holder<>();
         input = new TABLEOFZPPTCI005();
