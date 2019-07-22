@@ -52,3 +52,8 @@
 10.
 @Service和@Repository放到实现类上面而不是接口类上面，接口只是一个规范，
 需要各种实现类去实现这个接口，我们要用的就是这些实用类的方法。
+
+11.ssl证书生成方法为
+C:\Java\JDK8\bin>keytool -genkey -alias tomcat -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+
+将在bin目录下生成keystore.p12的文件用于ssl，密码都是connor

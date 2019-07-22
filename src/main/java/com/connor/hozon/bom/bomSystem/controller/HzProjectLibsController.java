@@ -94,6 +94,7 @@ public class HzProjectLibsController {
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> loadAll(HttpServletRequest request) {
+        System.out.println("Session过期时间" + request.getSession().getMaxInactiveInterval());
         Map<String, Object> result = new HashMap<>();
         User user = UserInfo.getUser();
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
@@ -106,14 +107,14 @@ public class HzProjectLibsController {
         }
         result.put("data", hzProjectLibsService.doLoadAllProjectLibs());
         result.put("brand", hzBrandService.doGetAllBrand());
-        PropertiesHelper helper = new PropertiesHelper();
-        try {
-            Properties properties = helper.load();
-            TIME_OUT = Integer.parseInt(properties.getProperty("SESSION_OUT"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        request.getSession().setMaxInactiveInterval(TIME_OUT);
+        //        PropertiesHelper helper = new PropertiesHelper();
+        //        try {
+        //            Properties properties = helper.load();
+        //            TIME_OUT = Integer.parseInt(properties.getProperty("SESSION_OUT"));
+        //        } catch (IOException e) {
+        //            e.printStackTrace();
+        //        }
+        //        request.getSession().setMaxInactiveInterval(TIME_OUT);
         return result;
     }
 
