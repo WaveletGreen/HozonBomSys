@@ -224,6 +224,16 @@ public class HzWorkProcessController extends BaseController {
         model.addAttribute("data",respDTO);
         return  "bomManage/mbom/routingData/updateRoutingData2";
     }
+    /**
+     * 跳转到工艺路线快速添加页面
+     * @return
+     */
+//    @RequestMapping(value = "quickAddWorkProcess2",method = RequestMethod.GET)
+//    public String quickAddWorkProcessToPage(String materielId, String projectId,String procedureDesc, Model model){
+//         HzWorkProcessRespDTO respDTO = hzWorkProcessService.findHzWorkProcess2(materielId, projectId, procedureDesc);
+//        model.addAttribute("data",respDTO);
+//        return  "bomManage/mbom/routingData/quickAddRoutingData";
+//    }
 
     /**
      * 编辑一条记录

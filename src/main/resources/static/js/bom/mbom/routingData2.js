@@ -119,6 +119,39 @@ function initTable(url) {
                     //onMsoNumberFormat: DoOnMsoNumberFormat
                 },
                 toolbars: [
+                    // {
+                    //     text: '快速添加',
+                    //     iconCls: 'glyphicon glyphicon-plus',
+                    //     handler: function () {
+                    //         var rows = $table.bootstrapTable('getSelections');
+                    //         //只能选一条
+                    //         if (rows.length != 1) {
+                    //             window.Ewin.alert({message: '请先选择一条数据再进行快速添加!'});
+                    //             return false;
+                    //         }
+                    //
+                    //         var url = "work/process/quickAddWorkProcess2";
+                    //         $.ajax({
+                    //             url: "privilege/write?url=" + url,
+                    //             type: "GET",
+                    //             success: function (result) {
+                    //                 if (!result.success) {
+                    //                     window.Ewin.alert({message: result.errMsg});
+                    //                     return false;
+                    //                 }
+                    //                 else {
+                    //                     window.Ewin.dialog({
+                    //                         title: "快速添加",
+                    //                         url: "work/process/quickAddWorkProcess2?projectId=" + projectId + "&materielId=" + rows[0].materielId + "&procedureDesc=" + rows[0].pProcedureDesc,
+                    //                         gridId: "gridId",
+                    //                         width: 500,
+                    //                         height: 500
+                    //                     });
+                    //                 }
+                    //             }
+                    //         })
+                    //     }
+                    // },
                     {
                         text: '修改',
                         iconCls: 'glyphicon glyphicon-pencil',
