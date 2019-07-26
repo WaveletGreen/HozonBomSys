@@ -1036,6 +1036,7 @@ function querySrc() {
                     return;
                 }
                 var zNodes = data.data;
+                console.log(zNodes)
                 initZtree(zNodes);
                 $("#info_div span").text("第二步:选择需要合成的零件(至少2个,选父影响子，选子不影响父)");
                 $("#info_div").css("top", "20%");

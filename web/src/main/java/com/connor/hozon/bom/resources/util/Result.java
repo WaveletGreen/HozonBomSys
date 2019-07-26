@@ -1,8 +1,5 @@
 package com.connor.hozon.bom.resources.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
-
 /**
  * Created by haozt on 2018/5/22
  */
