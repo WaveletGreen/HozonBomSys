@@ -6,10 +6,22 @@
 
     <groupId>com.connor.hozon</groupId>
     <artifactId>hozon</artifactId>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
 
-    <name>hozon</name>
-    <description>Demo project for Spring Boot</description>
+    <modules>
+        <!--历史代码模块，这里的java类所在的包不要进行改动，该模块即为打包的war包模块，存放各种HTML、JS、css等各种静态资源模块-->
+        <module>web</module>
+        <!--dao层模块，只存放所有新增加的dao层interface，没有任何实现类，映射xml和POJO对象-->
+        <module>dao</module>
+        <!--service模块写具体的业务逻辑，包括调用dao层的增删改查等，如果update和insert方法发生异常会自动回滚-->
+        <module>services</module>
+        <!--controller模块只写controller，即暴露出来的REST URL，不允许有任何业务逻辑-->
+        <module>controller</module>
+        <!--自定义的通用工具类存放模块-->
+        <module>common</module>
+        <!--配置模块，暂时不需要增加配置-->
+        <module>config</module>
+    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -25,7 +37,38 @@
         <mysql.version>5.1.41</mysql.version>
         <guava.version>18.0</guava.version>
         <org.mapstruct.version>1.1.0.Final</org.mapstruct.version>
+        <!--pagehelper，分页查询助手-->
+        <pagehelper.version>5.1.8</pagehelper.version>
+        <!--druid-spring-boot-starter版本-->
+        <druid-spring-boot-starter.version>1.1.3</druid-spring-boot-starter.version>
+        <!--mybatis-spring-boot-starter版本-->
+        <mybatis-spring-boot-starter.version>1.3.1</mybatis-spring-boot-starter.version>
+        <!--javax.inject版本-->
+        <javax.inject.version>1</javax.inject.version>
+        <!--json-lib版本-->
+        <json-lib.version>2.4</json-lib.version>
+        <!--nekohtml版本-->
+        <nekohtml.version>1.9.22</nekohtml.version>
+        <!--spring-boot-starter-redis版本-->
+        <spring-boot-starter-redis.version>1.3.8.RELEASE</spring-boot-starter-redis.version>
+        <!--javax.servlet-api版本-->
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+
+        <!--fastjson版本-->
+        <fastjson.version>1.2.4</fastjson.version>
+
+        <!--spring-boot-starter-tomcat版本-->
+        <spring-boot-starter-tomcat.version>1.3.5.RELEASE</spring-boot-starter-tomcat.version>
+
+        <!--commons-csv版本-->
+        <commons-csv.version>1.3</commons-csv.version>
+
+        <!--poi-ooxml版本-->
+        <poi-ooxml.version>3.15-beta2</poi-ooxml.version>
+
+        <hutool-all.version>3.0.9</hutool-all.version>
     </properties>
+
 
     <dependencies>
 
@@ -33,14 +76,14 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.3</version>
+            <version>${druid-spring-boot-starter.version}</version>
         </dependency>
 
         <!-- 引入mybatis的支持 -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.3.1</version>
+            <version>${mybatis-spring-boot-starter.version}</version>
         </dependency>
 
         <!-- 引入mapstruct的支持 -->
@@ -60,14 +103,14 @@
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
-            <version>1</version>
+            <version>${javax.inject.version}</version>
         </dependency>
 
         <!-- 引入json的依赖 classifier必须要加这个是json的jdk的依赖 -->
         <dependency>
             <groupId>net.sf.json-lib</groupId>
             <artifactId>json-lib</artifactId>
-            <version>2.4</version>
+            <version>${json-lib.version}</version>
             <classifier>jdk15</classifier>
         </dependency>
 
@@ -93,14 +136,14 @@
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
-            <version>1.9.22</version>
+            <version>${nekohtml.version}</version>
         </dependency>
 
         <!-- 添加对spring-redis的支持 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-redis</artifactId>
-            <version>1.3.8.RELEASE</version>
+            <version>${spring-boot-starter-redis.version}</version>
         </dependency>
 
         <!-- 添加对spring-cache的支持 -->
@@ -127,11 +170,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>mysql</groupId>-->
+            <!--<artifactId>mysql-connector-java</artifactId>-->
+            <!--<version>${mysql.version}</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -153,7 +196,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <version>${javax.servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -171,12 +214,12 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.4</version>
+            <version>${fastjson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <version>1.3.5.RELEASE</version>
+            <version>${spring-boot-starter-tomcat.version}</version>
             <!--部署-->
             <!--<scope>provided</scope>-->
             <!--编译-->
@@ -194,13 +237,13 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.3</version>
+            <version>${commons-csv.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>3.15-beta2</version>
+            <version>${poi-ooxml.version}</version>
         </dependency>
         <!--<dependency>-->
         <!--<groupId>commons-fileupload</groupId>-->
@@ -222,7 +265,7 @@
         <dependency>
             <groupId>com.xiaoleilu</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>3.0.9</version>
+            <version>${hutool-all.version}</version>
         </dependency>
 
         <dependency>
@@ -245,7 +288,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <!--webservice支持-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -275,87 +317,15 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>com.oracle</groupId>-->
-        <!--<artifactId>ojdbc14</artifactId>-->
-        <!--<version>10.2.0.2.0</version>-->
-        <!--</dependency>-->
-        <!--webservice-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.cxf</groupId>-->
-        <!--<artifactId>cxf-rt-frontend-jaxws</artifactId>-->
-        <!--<version>3.1.6</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.cxf</groupId>-->
-        <!--<artifactId>cxf-rt-transports-http</artifactId>-->
-        <!--<version>3.1.6</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>wsdl4j</groupId>-->
-        <!--<artifactId>wsdl4j</artifactId>-->
-        <!--<version>1.6.3</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>${pagehelper.version}</version>
+        </dependency>
     </dependencies>
-
-    <build>
-        <!-- 产生的构件的文件名，默认值是${artifactId}-${version}。 -->
-        <finalName>hozon</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <!-- 增加mapstruct自动编译实现生成impkl文件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${org.mapstruct.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-
-            <!--<plugin>-->
-            <!--<groupId>org.mybatis.generator</groupId>-->
-            <!--<artifactId>mybatis-generator-maven-plugin</artifactId>-->
-            <!--<version>1.3.5</version>-->
-            <!--<configuration>-->
-            <!--&lt;!&ndash;配置文件的位置&ndash;&gt;-->
-            <!--<configurationFile>generatorConfig.xml</configurationFile>-->
-            <!--<verbose>true</verbose>-->
-            <!--<overwrite>true</overwrite>-->
-            <!--</configuration>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>Generate MyBatis Artifacts</id>-->
-            <!--<goals>-->
-            <!--<goal>generate</goal>-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--<dependencies>-->
-            <!--<dependency>-->
-            <!--<groupId>org.mybatis.generator</groupId>-->
-            <!--<artifactId>mybatis-generator-core</artifactId>-->
-            <!--<version>1.3.5</version>-->
-            <!--</dependency>-->
-            <!--</dependencies>-->
-            <!--</plugin>-->
-        </plugins>
-    </build>
-
-
 </project>

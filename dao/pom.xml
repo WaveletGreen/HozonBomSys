@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>hozon</artifactId>
+        <groupId>com.connor.hozon</groupId>
+        <version>1.5.9.RELEASE</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>dao</artifactId>
+    <version>1.0.0</version>
+    <!--打包类型为 jar -->
+    <packaging>jar</packaging>
+
+    <!--<build>-->
+        <!--&lt;!&ndash; 产生的构件的文件名，默认值是${artifactId}-${version}。 &ndash;&gt;-->
+        <!--<finalName>hozon</finalName>-->
+        <!--<plugins>-->
+            <!--&lt;!&ndash;<plugin>&ndash;&gt;-->
+                <!--&lt;!&ndash;<groupId>org.mybatis.generator</groupId>&ndash;&gt;-->
+                <!--&lt;!&ndash;<artifactId>mybatis-generator-maven-plugin</artifactId>&ndash;&gt;-->
+                <!--&lt;!&ndash;<version>1.3.5</version>&ndash;&gt;-->
+                <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;配置文件的位置&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;<configurationFile>generatorConfig.xml</configurationFile>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<verbose>true</verbose>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<overwrite>true</overwrite>&ndash;&gt;-->
+                <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
+                <!--&lt;!&ndash;<executions>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<execution>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<id>Generate MyBatis Artifacts</id>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<goals>&ndash;&gt;-->
+                            <!--&lt;!&ndash;<goal>generate</goal>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</goals>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</execution>&ndash;&gt;-->
+                <!--&lt;!&ndash;</executions>&ndash;&gt;-->
+                <!--&lt;!&ndash;<dependencies>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<dependency>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<groupId>org.mybatis.generator</groupId>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<artifactId>mybatis-generator-core</artifactId>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<version>1.3.5</version>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</dependency>&ndash;&gt;-->
+                <!--&lt;!&ndash;</dependencies>&ndash;&gt;-->
+            <!--&lt;!&ndash;</plugin>&ndash;&gt;-->
+        <!--</plugins>-->
+    <!--</build>-->
+
+</project>
