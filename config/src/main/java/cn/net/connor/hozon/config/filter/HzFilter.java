@@ -1,4 +1,11 @@
-package com.connor.hozon.bom.sys.filter;
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
+package cn.net.connor.hozon.config.filter;
 
 
 import javax.servlet.*;

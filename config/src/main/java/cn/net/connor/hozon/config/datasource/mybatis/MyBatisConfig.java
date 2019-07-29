@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.common.config.mybatis;
+package cn.net.connor.hozon.config.datasource.mybatis;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
