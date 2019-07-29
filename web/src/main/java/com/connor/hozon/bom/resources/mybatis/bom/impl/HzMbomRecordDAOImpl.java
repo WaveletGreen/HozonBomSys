@@ -12,13 +12,11 @@ import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzMbomRecord;
-import sql.pojo.bom.HzPbomLineRecord;
 import sql.redis.HzDBException;
 
 import java.util.ArrayList;
@@ -213,7 +211,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public List<HzMbomLineRecord> findMbomByItemId(String itemId,String projectId){
+    public List<HzMbomLineRecord> findMbomByItemId(String itemId, String projectId){
         Map<String,Object> map = new HashMap<>();
         map.put("lineId",itemId);
         map.put("projectId",projectId);
@@ -372,7 +370,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public List<HzMbomLineRecord> findHzMbomAll(String projectId,String tableName) {
+    public List<HzMbomLineRecord> findHzMbomAll(String projectId, String tableName) {
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",projectId);
         map.put("tableName",tableName);
@@ -472,12 +470,12 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public HzMbomLineRecord findHzMbomByEbomIdAndLineIndex(String ebomPuid, String lineIndex,String tableName) {
+    public List<HzMbomLineRecord> findHzMbomByEbomIdAndLineIndex(String ebomPuid, String lineIndex, String tableName) {
         Map<String,Object> map = new HashMap<>();
         map.put("puid",ebomPuid);
         map.put("lineIndex",lineIndex);
         map.put("tableName",tableName);
-        return (HzMbomLineRecord)super.findForObject("HzMbomRecordDAOImpl_findHzMbomByEbomIdAndLineIndex",map);
+        return (List<HzMbomLineRecord>)super.findForList("HzMbomRecordDAOImpl_findHzMbomByEbomIdAndLineIndex",map);
     }
 
     @Override

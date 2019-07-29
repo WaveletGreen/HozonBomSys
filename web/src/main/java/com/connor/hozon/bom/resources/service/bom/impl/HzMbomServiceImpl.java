@@ -3,17 +3,17 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.interaction.iservice.IHzConfigBomColorService;
 import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
-import com.connor.hozon.bom.resources.domain.dto.response.*;
+import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.model.HzMaterielFactory;
 import com.connor.hozon.bom.resources.domain.model.HzMbomRecordFactory;
-import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
@@ -21,15 +21,12 @@ import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.RefreshMbomThread;
-import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
@@ -54,10 +51,7 @@ import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
-import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
-import sql.pojo.change.HzApplicantChangeRecord;
-import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -67,9 +61,6 @@ import sql.pojo.project.HzMaterielRecord;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * @Author: haozt
@@ -77,7 +68,7 @@ import java.util.concurrent.Future;
  * @Description:
  */
 @Service("hzMbomService")
-public class HzMbomServiceImpl implements HzMbomService{
+public class HzMbomServiceImpl implements HzMbomService {
 
     @Autowired
     @Qualifier("synBomService")
@@ -925,6 +916,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                  //启用多线程进行数据操作
                 List<Thread> threads = new ArrayList<>();
                 CountDownLatch countDownLatch = new CountDownLatch(listMap.size()+materielMap.size());
+                //更新MBOM
                 for(Map.Entry<Integer,HzMbomLineRecordVO> entry: listMap.entrySet()){
                     RefreshMbomThread thread = new RefreshMbomThread(countDownLatch) {
                         @Override
@@ -947,7 +939,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     };
                     threads.add(new Thread(thread));
                 }
-
+            //物料更新
                 for(Map.Entry<Integer,List<HzMaterielRecord>> entry: materielMap.entrySet()){
                     RefreshMbomThread thread = new RefreshMbomThread(countDownLatch) {
                         @Override
@@ -1253,8 +1245,8 @@ public class HzMbomServiceImpl implements HzMbomService{
      * @param factory MBOM工厂
      * @return
      */
-    private boolean analysisMbom(HzPbomLineRecord record,int i,String projectId,Set<HzPbomLineRecord> bodyOfWhiteSet,
-                             HzConfigBomColorBean bean,List<HzMbomLineRecord> superMboms,HzMbomRecordFactory factory,String factoryId){
+    private boolean analysisMbom(HzPbomLineRecord record, int i, String projectId, Set<HzPbomLineRecord> bodyOfWhiteSet,
+                                 HzConfigBomColorBean bean, List<HzMbomLineRecord> superMboms, HzMbomRecordFactory factory, String factoryId){
         //解析产生油漆车身总成 在解析其他bom  油漆车身需要产生白车身
         if(record.getpBomLinePartName().contains("油漆车身总成") && Integer.valueOf(1).equals(record.getIs2Y())){
             //找出全部的子件 是颜色件的需要乘以颜色
@@ -1416,21 +1408,23 @@ public class HzMbomServiceImpl implements HzMbomService{
      * @param type 数据库表名 映射类型 1生产BOM  6财务BOM 其他值为超级MBOM
      */
 
-    private List<HzMbomLineRecord> refreshResult(List<HzMbomLineRecord> a,List<HzMbomLineRecord> b,List<HzMbomLineRecord> u,int type){
+    private List<HzMbomLineRecord> refreshResult(List<HzMbomLineRecord> a, List<HzMbomLineRecord> b, List<HzMbomLineRecord> u, int type){
         List<HzMbomLineRecord> d = new ArrayList<>();
         if(ListUtil.isNotEmpty(b)){
             b.removeAll(a);
             d = b;
             List<HzMbomLineRecord> lineRecords = new ArrayList<>();
             for(HzMbomLineRecord record :a){
-                HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByEbomIdAndLineIndex(record.geteBomPuid(),record.getLineIndex(),MbomTableNameEnum.tableName(type));
-                if(lineRecord != null){
+                List<HzMbomLineRecord> lineRecord = hzMbomRecordDAO.findHzMbomByEbomIdAndLineIndex(record.geteBomPuid(),record.getLineIndex(),MbomTableNameEnum.tableName(type));
+                if(lineRecord != null&&!lineRecord.isEmpty()&&lineRecord.size()>0){
                     lineRecords.add(record);
-                    lineRecord.setLineId(record.getLineId());
-                    lineRecord.setIsColorPart(record.getIsColorPart());
-                    lineRecord.setColorId(record.getColorId());
-                    lineRecord.setpFactoryId(record.getpFactoryId());
-                    u.add(lineRecord);
+                    HzMbomLineRecord record1 = lineRecord.get(0);//这里只获取到查询出来的一个MBOM，并不清楚后续的MBOM是否与第一个line保持一致
+                    record1.setLineId(record.getLineId());
+                    record1.setIsColorPart(record.getIsColorPart());
+                    record1.setColorId(record.getColorId());
+                    record1.setpFactoryId(record.getpFactoryId());
+                    record1.setpBomLinePartName(record.getpBomLinePartName());//TODO 直接从已经拼接的地方获取到新的零件号
+                    u.add(record1);
                 }
             }
             a.removeAll(lineRecords);

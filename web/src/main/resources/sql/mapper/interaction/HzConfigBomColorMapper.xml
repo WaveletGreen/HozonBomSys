@@ -6,6 +6,7 @@
         <result column="MODEL_UID" jdbcType="VARCHAR" property="colorModelUid"/>
         <result column="P_DESC_OF_COLORFUL_MODEL" jdbcType="VARCHAR" property="colorModelDesc"/>
         <result column="P_COLOR_CODE" jdbcType="VARCHAR" property="colorCode"/>
+        <result column="P_COLOR_NAME" jdbcType="VARCHAR" property="colorName"/>
         <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="featureValueCode"/>
         <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="featureCode"/>
         <result column="colorUid" jdbcType="VARCHAR" property="colorUid"/>
@@ -26,6 +27,7 @@
             t3.p_cfg0_family_name,
             t9.p_desc_of_colorful_model,
             t99.p_color_code,
+            t99.P_COLOR_NAME,
             t99.puid as colorUid,
             t99.CS_PAINT_MATERIEL_CODES as materielCodes
             from Hz_Full_Cfg_Withcfg_Record t
@@ -44,10 +46,10 @@
 
     <select id="selectPaintColorSet" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
-        T1.P_COLOR_CODE,T1.CS_PAINT_MATERIEL_CODES as materielCodes,T1.puid as colorUid
+        T1.P_COLOR_CODE,T1.CS_PAINT_MATERIEL_CODES as materielCodes,T1.puid as colorUid,T1.P_COLOR_NAME as P_COLOR_NAME
         FROM
         HZ_CFG0_MODEL_COLOR_RECORD T
-        join HZ_CFG0_COLORSET t1 on t.P_MODEL_SHELL = T1.P_COLOR_CODE
+        join HZ_CFG0_COLORSET T1 on t.P_MODEL_SHELL = T1.P_COLOR_CODE
         WHERE
         T .P_CFG0_MAIN_RECORD_OF_MC = (
         SELECT
@@ -62,7 +64,7 @@
 
     <select id="selectPaintBomLinePuidFormConfig" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
-        t1.CFG_BOMLINE_UID as CFG_BOMLINE_UID
+        t1.CFG_BOMLINE_UID as CFG_BOMLINE_UID,t2.P_COLOR_NAME as P_COLOR_NAME
         FROM
         HZ_FULL_CFG_WITHCFG_RECORD t1
         JOIN HZ_CFG0_RECORD t2 ON t1.CFG_CFG0_UID = T2.puid
