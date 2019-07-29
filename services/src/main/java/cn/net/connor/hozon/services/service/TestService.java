@@ -5,10 +5,13 @@
  *
  */
 
-package cn.net.connor.hozon.services;
+package cn.net.connor.hozon.services.service;
 
 import cn.net.connor.hozon.dao.dao.TestDao;
 import cn.net.connor.hozon.dao.pojo.Test;
+import cn.net.connor.hozon.services.DTOMapper.TestDTOMapper;
+import cn.net.connor.hozon.services.request.TestRequestDTO;
+import cn.net.connor.hozon.services.response.TestResponseDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ public class TestService {
 
     /**
      * 这个方法会自动回滚，应为advice已经有对应的insert* AOP设置
+     *
      * @param type
      * @param id
      * @param name
@@ -103,6 +107,20 @@ public class TestService {
                 throw new RuntimeException("手动跑出异常，请查看是否发生回滚");
             }
         }
+        return null;
+    }
+
+    /**
+     * 测试将DTO与实体类之间的字段对应
+     *
+     * @param testRequestDTO
+     * @return
+     */
+    public JSONObject reflect(TestRequestDTO testRequestDTO) {
+        Test test = TestDTOMapper.INSTANCE.map(testRequestDTO);
+        TestResponseDTO testResponseDTO = TestDTOMapper.INSTANCE.toResponse(test);
+        TestResponseDTO testResponseDTOSp = TestDTOMapper.INSTANCE.toResponseSp(test);
+        Test result = TestDTOMapper.INSTANCE.maps(testRequestDTO);
         return null;
     }
 }
