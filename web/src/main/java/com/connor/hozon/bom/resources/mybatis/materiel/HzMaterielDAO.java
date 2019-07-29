@@ -5,7 +5,7 @@ import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
-import sql.pojo.project.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.util.List;
 import java.util.Map;

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.depository.project.HzVehicleRecordDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_VEHICLE_NAME" jdbcType="VARCHAR" property="pVehicleName"/>
+        <result column="P_VEHICLE_PERTAIN_TO_PLATFORM" jdbcType="VARCHAR" property="pVehiclePertainToPlatform"/>
+        <result column="P_VEHICLE_CREATE_DATE" jdbcType="TIMESTAMP" property="pVehicleCreateDate"/>
+        <result column="P_VEHICLE_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pVehicleLastModDate"/>
+        <result column="P_VEHICLE_CODE" jdbcType="VARCHAR" property="pVehicleCode"/>
+        <result column="P_VEHICLE_LAST_MODIFIER" jdbcType="VARCHAR" property="pVehicleLastModifier"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        PUID,
+        P_VEHICLE_NAME,
+        P_VEHICLE_PERTAIN_TO_PLATFORM,
+        P_VEHICLE_CREATE_DATE,
+        P_VEHICLE_LAST_MOD_DATE,
+        P_VEHICLE_CODE,
+        P_VEHICLE_LAST_MODIFIER
+    </sql>
+    <!--根据主键查找车型信息-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VEHICLE_RECORD
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VEHICLE_RECORD
+        where P_VEHICLE_CODE = #{pVehicleCode,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_VEHICLE_RECORD
+    </select>
+    <!--根据主键删除车型信息-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_VEHICLE_RECORD
+    where PUID = #{puid,jdbcType=VARCHAR}
+    </delete>
+    <!--插入1个完整的车型信息-->
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord">
+    insert into HZ_VEHICLE_RECORD (
+        PUID,
+        P_VEHICLE_NAME,
+        P_VEHICLE_PERTAIN_TO_PLATFORM,
+        P_VEHICLE_CREATE_DATE,
+        P_VEHICLE_LAST_MOD_DATE,
+        P_VEHICLE_CODE,
+        P_VEHICLE_LAST_MODIFIER
+        )
+    values (
+        #{puid,jdbcType=VARCHAR},
+        #{pVehicleName,jdbcType=VARCHAR},
+        #{pVehiclePertainToPlatform,jdbcType=VARCHAR},
+        #{pVehicleCreateDate,jdbcType=TIMESTAMP},
+        #{pVehicleLastModDate,jdbcType=TIMESTAMP},
+        #{pVehicleCode,jdbcType=VARCHAR},
+        #{pVehicleLastModifier,jdbcType=VARCHAR}
+          )
+    </insert>
+    <!--根据主键更新车型信息，必要的信息不更新-->
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord">
+    update HZ_VEHICLE_RECORD
+    set P_VEHICLE_NAME = #{pVehicleName,jdbcType=VARCHAR},
+      P_VEHICLE_LAST_MOD_DATE = #{pVehicleLastModDate,jdbcType=TIMESTAMP},
+      P_VEHICLE_CODE = #{pVehicleCode,jdbcType=VARCHAR},
+      P_VEHICLE_LAST_MODIFIER = #{pVehicleLastModifier,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

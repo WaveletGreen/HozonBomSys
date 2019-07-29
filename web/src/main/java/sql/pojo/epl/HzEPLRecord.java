@@ -1,7 +1,7 @@
 package sql.pojo.epl;
 
 import lombok.Data;
-import sql.pojo.BaseChangeDO;
+import cn.net.connor.hozon.dao.pojo.BaseChangeDO;
 
 import java.util.ArrayList;
 import java.util.List;

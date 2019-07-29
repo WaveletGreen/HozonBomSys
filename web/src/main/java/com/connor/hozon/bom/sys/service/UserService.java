@@ -3,7 +3,7 @@ package com.connor.hozon.bom.sys.service;
 
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.dao.GenericDao;
-import com.connor.hozon.bom.common.base.entity.Page;
+import cn.net.connor.hozon.common.entity.Page;
 import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.dao.UserAssociateRoleDao;

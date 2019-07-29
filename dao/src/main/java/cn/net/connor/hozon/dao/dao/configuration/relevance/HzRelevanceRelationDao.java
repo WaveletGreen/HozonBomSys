@@ -8,6 +8,7 @@ package cn.net.connor.hozon.dao.dao.configuration.relevance;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public interface HzRelevanceRelationDao extends BasicDao<HzRelevanceRelation> {
      * @param rrRelevanceId
      * @return
      */
-    int deleteByBasicId(Long rrRelevanceId);
+    int deleteByBasicId(@Param("rrRelevanceId") Long rrRelevanceId);
 
     /**
      * 单条插入

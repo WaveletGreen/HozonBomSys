@@ -77,7 +77,7 @@
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <!--相关性主键删除-->
-    <delete id="deleteByBasicId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
+    <delete id="deleteByBasicId" parameterType="java.lang.Long">
         delete from HZ_RELEVANCE_RELATION
         where RR_RELEVANCE_ID = #{rrRelevanceId,jdbcType=DECIMAL}
     </delete>

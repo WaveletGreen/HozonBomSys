@@ -1,7 +1,5 @@
 package com.connor.hozon.bom.resources.domain.model;
 
-import com.connor.hozon.bom.common.base.entity.QueryBase;
-
 import java.math.BigDecimal;
 import java.util.Date;
 

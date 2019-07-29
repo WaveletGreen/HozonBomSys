@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.controller.change.codpwo;
 
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.resources.service.change.HzBreakPointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.sys.entity;
 
 
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.common.entity.QueryBase;
 
 /**
  *@author linzf

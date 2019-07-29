@@ -14,7 +14,7 @@ import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQuery;
 import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQueryResult;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
@@ -217,7 +217,8 @@ public class HzRelevanceService2 {
                         hzRelevanceBasicDao.updateByPrimaryKey(hzRelevanceBasic);
                     } else {
                         //向相关性主表增加数据
-                        relevanceUid = hzRelevanceBasicDao.insertBasic(hzRelevanceBasic);
+                         hzRelevanceBasicDao.insertBasic(hzRelevanceBasic);
+                        relevanceUid =hzRelevanceBasic.getId();
                         //添加相关性关联表
                         List<HzColorModel2> hzColorModel2List1 = colorMap.get(key);
                         for (HzColorModel2 hzColorModel2 : hzColorModel2List1) {

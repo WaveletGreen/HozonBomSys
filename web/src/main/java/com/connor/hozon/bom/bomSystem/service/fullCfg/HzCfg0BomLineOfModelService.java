@@ -6,14 +6,14 @@
 
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
+import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzProjectLibsServiceImpl;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0BomLineOfModelDao;
 import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzFcfgBomLvl1ListOperationService;
-import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
+import cn.net.connor.hozon.services.service.depository.project.HzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
-import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
-import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
-import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -25,10 +25,10 @@ import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.model.HzCfg0ModelDetail;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
-import sql.pojo.project.HzBrandRecord;
-import sql.pojo.project.HzPlatformRecord;
-import sql.pojo.project.HzProjectLibs;
-import sql.pojo.project.HzVehicleRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 
 import java.util.*;
 
@@ -55,19 +55,19 @@ public class HzCfg0BomLineOfModelService {
     /***
      * 项目服务层
      */
-    private final HzProjectLibsService hzProjectLibsService;
+    private final HzProjectLibsServiceImpl hzProjectLibsServiceImpl;
     /***
      * 车型服务层
      */
-    private final IHzVehicleService hzVehicleService;
+    private final HzVehicleService hzVehicleService;
     /***
      * 平台服务层
      */
-    private final HzPlatformService hzPlatformService;
+    private final HzPlatformServiceImpl hzPlatformServiceImpl;
     /**
      * 品牌服务层
      */
-    private final HzBrandService hzBrandService;
+    private final HzBrandServiceImpl hzBrandServiceImpl;
     private final Logger logger = LoggerFactory.getLogger(HzCfg0BomLineOfModelService.class);
     private final HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
 
@@ -80,17 +80,17 @@ public class HzCfg0BomLineOfModelService {
             HzCfg0BomLineOfModelDao hzCfg0BomLineOfModelDao,
             HzCfg0MainService hzCfg0MainService,
             IHzFcfgBomLvl1ListOperationService hzFcfgBomLvl1ListOperationService,
-            HzProjectLibsService hzProjectLibsService,
-            IHzVehicleService hzVehicleService,
-            HzPlatformService platformService,
-            HzBrandService hzBrandService, HzCfg0ModelDetailDao hzCfg0ModelDetailDao) {
+            HzProjectLibsServiceImpl hzProjectLibsServiceImpl,
+            HzVehicleService hzVehicleService,
+            HzPlatformServiceImpl platformService,
+            HzBrandServiceImpl hzBrandServiceImpl, HzCfg0ModelDetailDao hzCfg0ModelDetailDao) {
         this.hzCfg0BomLineOfModelDao = hzCfg0BomLineOfModelDao;
         this.hzCfg0MainService = hzCfg0MainService;
         this.hzFcfgBomLvl1ListOperationService = hzFcfgBomLvl1ListOperationService;
-        this.hzProjectLibsService = hzProjectLibsService;
+        this.hzProjectLibsServiceImpl = hzProjectLibsServiceImpl;
         this.hzVehicleService = hzVehicleService;
-        this.hzPlatformService = platformService;
-        this.hzBrandService = hzBrandService;
+        this.hzPlatformServiceImpl = platformService;
+        this.hzBrandServiceImpl = hzBrandServiceImpl;
         this.hzCfg0ModelDetailDao = hzCfg0ModelDetailDao;
     }
 
@@ -117,10 +117,10 @@ public class HzCfg0BomLineOfModelService {
             HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(bdf);
             List<HzCfg0BomLineOfModel> hzCfg0BomlineOfModels = doLoadByModelMainId(mainRecord.getPuid());
 
-            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(bdf);
+            HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(bdf);
             HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
-            HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
-            HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+            HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+            HzBrandRecord brand = hzBrandServiceImpl.doGetByPuid(platform.getpPertainToBrandPuid());
             List<HzCfg0ModelRecord> listOfModel = hzCfg0ModelService.doSelectByProjectPuid(bdf);
             if (hzCfg0BomlineOfModels == null || hzCfg0BomlineOfModels.size() <= 0)
                 return null;

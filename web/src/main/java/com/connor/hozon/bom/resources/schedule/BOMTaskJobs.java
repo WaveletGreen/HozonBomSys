@@ -1,13 +1,12 @@
 package com.connor.hozon.bom.resources.schedule;
 
-import com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao;
+import cn.net.connor.hozon.dao.dao.depository.project.HzProjectLibsDao;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzBOMScheduleResultDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzBOMScheduleTaskDAO;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
-import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import org.apache.commons.lang.StringUtils;
@@ -19,12 +18,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.BaseSQLUtil;
 import sql.pojo.bom.HzBOMScheduleResult;
 import sql.pojo.bom.HzBOMScheduleTask;
-import sql.pojo.project.HzProjectLibs;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
 
-import java.util.Date;
 import java.util.List;
 
 /**

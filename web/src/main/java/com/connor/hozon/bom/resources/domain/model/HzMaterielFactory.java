@@ -2,15 +2,13 @@ package com.connor.hozon.bom.resources.domain.model;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.epl.HzEPLManageRecord;
-import sql.pojo.project.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.util.UUID;
 

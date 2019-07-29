@@ -6,17 +6,16 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
+import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
-import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.iservice.project.IHzVehicleService;
-import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
-import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
-import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
+import cn.net.connor.hozon.services.service.depository.project.HzVehicleService;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzProjectLibsServiceImpl;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
@@ -32,13 +31,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.project.HzBrandRecord;
-import sql.pojo.project.HzPlatformRecord;
-import sql.pojo.project.HzProjectLibs;
-import sql.pojo.project.HzVehicleRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.*;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
@@ -58,16 +56,16 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 public class HzProjectLibsController {
     /***项目服务*/
     @Autowired
-    HzProjectLibsService hzProjectLibsService;
+    HzProjectLibsServiceImpl hzProjectLibsServiceImpl;
     /***品牌服务*/
     @Autowired
-    HzBrandService hzBrandService;
+    HzBrandServiceImpl hzBrandServiceImpl;
     /***平台服务*/
     @Autowired
-    HzPlatformService hzPlatformService;
+    HzPlatformServiceImpl hzPlatformServiceImpl;
     /***车型服务*/
     @Autowired
-    IHzVehicleService hzVehicleService;
+    HzVehicleService hzVehicleService;
     //    /***首选项dao层，目前首选项已经不再使用，只是保留了预研时的结构*/
     //    @Autowired
     //    HzPreferenceSettingDao hzPreferenceSettingDao;
@@ -105,8 +103,8 @@ public class HzProjectLibsController {
                 break;
             }
         }
-        result.put("data", hzProjectLibsService.doLoadAllProjectLibs());
-        result.put("brand", hzBrandService.doGetAllBrand());
+        result.put("data", hzProjectLibsServiceImpl.doLoadAllProjectLibs());
+        result.put("brand", hzBrandServiceImpl.doGetAllBrand());
         //        PropertiesHelper helper = new PropertiesHelper();
         //        try {
         //            Properties properties = helper.load();
@@ -129,10 +127,10 @@ public class HzProjectLibsController {
         Map<String, Object> result = new HashMap<>();
         List<HzProjectBean> beans = new ArrayList<>();
 
-        List<HzBrandRecord> brands = hzBrandService.doGetAllBrand();
-        List<HzPlatformRecord> platforms = hzPlatformService.doGetAllPlatform();
+        List<HzBrandRecord> brands = hzBrandServiceImpl.doGetAllBrand();
+        List<HzPlatformRecord> platforms = hzPlatformServiceImpl.doGetAllPlatform();
         List<HzVehicleRecord> vehicles = hzVehicleService.doGetAllVehicle();
-        List<HzProjectLibs> projects = hzProjectLibsService.doLoadAllProjectLibs();
+        List<HzProjectLibs> projects = hzProjectLibsServiceImpl.doLoadAllProjectLibs();
         //品牌
         brands.forEach(brand -> {
             HzProjectBean bean = new HzProjectBean();
@@ -213,14 +211,14 @@ public class HzProjectLibsController {
                     return "project/addBrand";
                 //跳转添加平台页面
                 case "platform":
-                    HzBrandRecord brand_p = hzBrandService.doGetByPuid(id);
+                    HzBrandRecord brand_p = hzBrandServiceImpl.doGetByPuid(id);
                     model.addAttribute("brand", brand_p);
                     model.addAttribute("action", "./project/addPlatform");
                     return "project/addPlatform";
                 //跳转添加车型页面
                 case "vehicle":
-                    HzPlatformRecord platform_v = hzPlatformService.doGetByPuid(id);
-                    HzBrandRecord brand_v = hzBrandService.doGetByPuid(platform_v.getpPertainToBrandPuid());
+                    HzPlatformRecord platform_v = hzPlatformServiceImpl.doGetByPuid(id);
+                    HzBrandRecord brand_v = hzBrandServiceImpl.doGetByPuid(platform_v.getpPertainToBrandPuid());
                     model.addAttribute("brand", brand_v);
                     model.addAttribute("platform", platform_v);
                     model.addAttribute("action", "./project/addVehicle");
@@ -228,8 +226,8 @@ public class HzProjectLibsController {
                 //跳转添加项目页面
                 case "project":
                     HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(id);
-                    HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
-                    HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+                    HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+                    HzBrandRecord brand = hzBrandServiceImpl.doGetByPuid(platform.getpPertainToBrandPuid());
                     model.addAttribute("brand", brand);
                     model.addAttribute("platform", platform);
                     model.addAttribute("vehicle", vehicle);
@@ -258,16 +256,16 @@ public class HzProjectLibsController {
     public JSONObject addBrand(@RequestBody HzBrandRecord brand) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
-        if (!hzBrandService.validate(brand)) {
+        if (!hzBrandServiceImpl.validate(brand)) {
             result.put("status", -1);
         }
-        if (null == hzBrandService.doGetByBrandCode(brand.getpBrandCode())) {
+        if (null == hzBrandServiceImpl.doGetByBrandCode(brand.getpBrandCode())) {
             Date date = new Date();
             brand.setPuid(UUID.randomUUID().toString());
             brand.setpBrandCreateDate(date);
             brand.setpBrandLastModDate(date);
             brand.setpBrandLastModifier(user.getUsername());
-            if (hzBrandService.doInsertOne(brand)) {
+            if (hzBrandServiceImpl.doInsertOne(brand)) {
                 result.put("status", 1);
                 result.put("entity", brand);
             } else {
@@ -290,16 +288,16 @@ public class HzProjectLibsController {
     public JSONObject addPlatform(@RequestBody HzPlatformRecord platform) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
-        if (!hzPlatformService.validate(platform)) {
+        if (!hzPlatformServiceImpl.validate(platform)) {
             result.put("status", -1);
         }
-        if (null == hzPlatformService.doGetByPlatformCode(platform.getpPlatformCode())) {
+        if (null == hzPlatformServiceImpl.doGetByPlatformCode(platform.getpPlatformCode())) {
             Date date = new Date();
             platform.setPuid(UUID.randomUUID().toString());
             platform.setpPlatformCreateDate(date);
             platform.setpPlatformLastModDate(date);
             platform.setpPlatformLastModifier(user.getUsername());
-            if (hzPlatformService.doInsertOne(platform)) {
+            if (hzPlatformServiceImpl.doInsertOne(platform)) {
                 result.put("status", 1);
                 result.put("entity", platform);
             } else {
@@ -359,10 +357,10 @@ public class HzProjectLibsController {
         Date now = new Date();
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
-        if (!hzProjectLibsService.validate(project) || user == null) {
+        if (!hzProjectLibsServiceImpl.validate(project) || user == null) {
             result.put("status", -1);
         }
-        if (null == hzProjectLibsService.doGetByProjectCode(project.getpProjectCode())) {
+        if (null == hzProjectLibsServiceImpl.doGetByProjectCode(project.getpProjectCode())) {
 
             project.setPuid(UUID.randomUUID().toString());
             project.setpProjectCreateDate(now);
@@ -372,7 +370,7 @@ public class HzProjectLibsController {
             project.setpProjectLastModifier(user.getUsername());
             //设置失效年份为9999年12月31日23时59分59秒
             project.setpProjectDiscontinuationDate(DateStringHelper.forever());
-            if (hzProjectLibsService.doInsertOne(project)) {
+            if (hzProjectLibsServiceImpl.doInsertOne(project)) {
 
                 int status1 = 0;
                 int status2 = 0;
@@ -479,7 +477,7 @@ public class HzProjectLibsController {
         switch (page) {
             //加入品牌
             case "brand":
-                HzBrandRecord brand_b = hzBrandService.doGetByPuid(id);
+                HzBrandRecord brand_b = hzBrandServiceImpl.doGetByPuid(id);
                 if (brand_b == null) {
                     model.addAttribute("msg", "找不到品牌数据，请联系管理员");
                     return "errorWithEntity";
@@ -490,16 +488,16 @@ public class HzProjectLibsController {
                 }
                 //加平台
             case "platform":
-                HzPlatformRecord platform_p = hzPlatformService.doGetByPuid(id);
-                HzBrandRecord brand_p = hzBrandService.doGetByPuid(platform_p.getpPertainToBrandPuid());
+                HzPlatformRecord platform_p = hzPlatformServiceImpl.doGetByPuid(id);
+                HzBrandRecord brand_p = hzBrandServiceImpl.doGetByPuid(platform_p.getpPertainToBrandPuid());
                 model.addAttribute("brand", brand_p);
                 model.addAttribute("platform", platform_p);
                 model.addAttribute("action", "./project/modifyPlatform");
                 return "project/modifyPlatform";
             case "vehicle":
                 HzVehicleRecord vehicle_v = hzVehicleService.doGetByPuid(id);
-                HzPlatformRecord platform_v = hzPlatformService.doGetByPuid(vehicle_v.getpVehiclePertainToPlatform());
-                HzBrandRecord brand_v = hzBrandService.doGetByPuid(platform_v.getpPertainToBrandPuid());
+                HzPlatformRecord platform_v = hzPlatformServiceImpl.doGetByPuid(vehicle_v.getpVehiclePertainToPlatform());
+                HzBrandRecord brand_v = hzBrandServiceImpl.doGetByPuid(platform_v.getpPertainToBrandPuid());
                 model.addAttribute("brand", brand_v);
                 model.addAttribute("platform", platform_v);
                 model.addAttribute("vehicle", vehicle_v);
@@ -508,14 +506,14 @@ public class HzProjectLibsController {
 
             //加入项目
             case "project":
-                HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(id);
+                HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(id);
                 if (project == null) {
                     model.addAttribute("msg", "找不到项目");
                     return "errorWithEntity";
                 }
                 HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
-                HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
-                HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+                HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+                HzBrandRecord brand = hzBrandServiceImpl.doGetByPuid(platform.getpPertainToBrandPuid());
                 model.addAttribute("brand", brand);
                 model.addAttribute("platform", platform);
                 model.addAttribute("vehicle", vehicle);
@@ -539,15 +537,15 @@ public class HzProjectLibsController {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
 
-        if (!hzBrandService.validate(brand)) {
+        if (!hzBrandServiceImpl.validate(brand)) {
             result.put("status", -1);
         }
-        if (null != hzBrandService.doGetByPuid(brand.getPuid())) {
+        if (null != hzBrandServiceImpl.doGetByPuid(brand.getPuid())) {
             brand.setpBrandLastModifier(user.getUsername());
             brand.setpBrandLastModDate(new Date());
-            if (hzBrandService.doUpdateSelective(brand)) {
+            if (hzBrandServiceImpl.doUpdateSelective(brand)) {
                 result.put("status", 1);
-                brand = hzBrandService.doGetByPuid(brand.getPuid());
+                brand = hzBrandServiceImpl.doGetByPuid(brand.getPuid());
                 result.put("entity", brand);
             } else {
                 result.put("status", -1);
@@ -568,15 +566,15 @@ public class HzProjectLibsController {
     public JSONObject modifyPlatform(@RequestBody HzPlatformRecord platform) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
-        if (!hzPlatformService.modifyValidate(platform)) {
+        if (!hzPlatformServiceImpl.modifyValidate(platform)) {
             result.put("status", -1);
         }
-        if (null != hzPlatformService.doGetByPuid(platform.getPuid())) {
+        if (null != hzPlatformServiceImpl.doGetByPuid(platform.getPuid())) {
             platform.setpPlatformLastModDate(new Date());
             platform.setpPlatformLastModifier(user.getUsername());
-            if (hzPlatformService.doUpdate(platform)) {
+            if (hzPlatformServiceImpl.doUpdate(platform)) {
                 result.put("status", 1);
-                platform = hzPlatformService.doGetByPuid(platform.getPuid());
+                platform = hzPlatformServiceImpl.doGetByPuid(platform.getPuid());
                 result.put("entity", platform);
             } else {
                 result.put("status", -1);
@@ -625,14 +623,14 @@ public class HzProjectLibsController {
     @ResponseBody
     public JSONObject modifyProject(@RequestBody HzProjectLibs project) {
         JSONObject result = new JSONObject();
-        if (!hzProjectLibsService.modifyValidate(project)) {
+        if (!hzProjectLibsServiceImpl.modifyValidate(project)) {
             result.put("status", -1);
         }
-        if (null != hzProjectLibsService.doLoadProjectLibsById(project.getPuid())) {
+        if (null != hzProjectLibsServiceImpl.doLoadProjectLibsById(project.getPuid())) {
             project.setpProjectLastModDate(new Date());
-            if (hzProjectLibsService.doUpdateByPrimaryKey(project)) {
+            if (hzProjectLibsServiceImpl.doUpdateByPrimaryKey(project)) {
                 result.put("status", 1);
-                project = hzProjectLibsService.doLoadProjectLibsById(project.getPuid());
+                project = hzProjectLibsServiceImpl.doLoadProjectLibsById(project.getPuid());
                 //不能传空值，空值可能来源于数据库
                 result.put("entity", project);
             } else {
@@ -659,11 +657,11 @@ public class HzProjectLibsController {
         }
         switch (type) {
             case "brand":
-                return hzBrandService.doDeleteByPuid(puid);
+                return hzBrandServiceImpl.doDeleteByPuid(puid);
             case "platform":
-                return hzPlatformService.doDeleteByPuid(puid);
+                return hzPlatformServiceImpl.doDeleteByPuid(puid);
             case "project":
-                return hzProjectLibsService.doDeleteByPuid(puid);
+                return hzProjectLibsServiceImpl.doDeleteByPuid(puid);
             case "vehicle":
                 return hzVehicleService.doDeleteByPuid(puid);
             default:
@@ -683,7 +681,7 @@ public class HzProjectLibsController {
     @RequestMapping(value = "/validateProjectCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public JSONObject validateProjectCodeWithPuid(HzProjectLibs project) {
-        return hzProjectLibsService.doValidateCodeWithPuid(project);
+        return hzProjectLibsServiceImpl.doValidateCodeWithPuid(project);
     }
 
     /**
@@ -711,7 +709,7 @@ public class HzProjectLibsController {
     @RequestMapping(value = "/validatePlatformCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public JSONObject validatePlatformCodeWithPuid(HzPlatformRecord platform) {
-        return hzPlatformService.doValidateCodeWithPuid(platform);
+        return hzPlatformServiceImpl.doValidateCodeWithPuid(platform);
     }
 
     /**
@@ -723,7 +721,7 @@ public class HzProjectLibsController {
     @RequestMapping(value = "/validateBrandCodeWithPuid", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public JSONObject validateBrandCodeWithPuid(HzBrandRecord brand) {
-        return hzBrandService.doValidateCodeWithPuid(brand);
+        return hzBrandServiceImpl.doValidateCodeWithPuid(brand);
     }
     //////////////////////////////////////////////////验证编号重复性/////////////////////////////////////////////////////////
 }

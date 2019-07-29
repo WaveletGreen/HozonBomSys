@@ -719,7 +719,7 @@
         )
     </insert>
 
-    <select id="selectByProjectPuid" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic" resultMap="BaseResultMap">
+    <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
           <include refid="Base_Column_List"/>
         from

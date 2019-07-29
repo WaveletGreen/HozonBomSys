@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.depository.project.HzProjectLibsDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs">
+        <!--uid，当主键-->
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <!--项目名-->
+        <result column="P_PROJECT_NAME" jdbcType="VARCHAR" property="pProjectName"/>
+        <!--归属车型，需要做外键的-->
+        <result column="P_PROJECT_PERTAIN_TO_VEHICLE" jdbcType="VARCHAR" property="pProjectPertainToVehicle"/>
+        <!--创建时间-->
+        <result column="P_PROJECT_CREATE_DATE" jdbcType="TIMESTAMP" property="pProjectCreateDate"/>
+        <!--最后一次修改时间-->
+        <result column="P_PROJECT_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="pProjectLastModDate"/>
+        <!--项目代码-->
+        <result column="P_PROJECT_CODE" jdbcType="VARCHAR" property="pProjectCode"/>
+        <!--创建项目者-->
+        <result column="P_PROJECT_OWNING_USER" jdbcType="VARCHAR" property="pProjectOwningUser"/>
+        <!--停产时间-->
+        <result column="P_PROJECT_DISCONTINUATION_DATE" jdbcType="TIMESTAMP" property="pProjectDiscontinuationDate"/>
+        <!--项目经理-->
+        <result column="P_PROJECT_MANAGER" jdbcType="VARCHAR" property="pProjectManager"/>
+        <!--项目详细信息-->
+        <result column="P_PROJECT_DETAIL" jdbcType="VARCHAR" property="pProjectDetail"/>
+        <!--最后一次修改人-->
+        <result column="P_PROJECT_LAST_MODIFIER" jdbcType="VARCHAR" property="pProjectLastModifier"/>
+
+        <!--内饰颜色代号-->
+        <result column="P_IN_COLOR_CODE" jdbcType="VARCHAR" property="pInColorCode"/>
+        <!--内饰颜色名称-->
+        <result column="P_IN_COLOR_NAME" jdbcType="VARCHAR" property="pInColorName"/>
+        <!--颜色代号-->
+        <result column="P_COLOR_CODE" jdbcType="VARCHAR" property="pColorCode"/>
+        <!--颜色代号-->
+        <result column="P_COLOR_NAME" jdbcType="VARCHAR" property="pColorName"/>
+        <!--电池型号-->
+        <result column="P_BATTERY_MODEL" jdbcType="VARCHAR" property="pBatteryModel"/>
+        <!--电机型号-->
+        <result column="P_MOTOR_MODEL" jdbcType="VARCHAR" property="pMotorModel"/>
+        <!--车型年代码-->
+        <result column="P_MODEL_YEAR_CODE" jdbcType="VARCHAR" property="pModelYearCode"/>
+        <!--车型年-->
+        <result column="P_MODEL_YEAR" jdbcType="VARCHAR" property="pModelYear"/>
+        <!--车身形式代码-->
+        <result column="P_VEHICLE_SHAPE_CODE" jdbcType="VARCHAR" property="pVehicleShapeCode"/>
+        <!--车身变形名称-->
+        <result column="P_VEHICLE_TRAN_NAME" jdbcType="VARCHAR" property="pVehicleTranName"/>
+        <!--项目经理ID-->
+        <result column="PROJECT_MANAGER_ID" jdbcType="DECIMAL" property="projectManagerId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        PUID,
+        P_PROJECT_NAME,
+        P_PROJECT_PERTAIN_TO_VEHICLE,
+        P_PROJECT_CREATE_DATE,
+        P_PROJECT_LAST_MOD_DATE,
+        P_PROJECT_CODE,
+        P_PROJECT_OWNING_USER,
+        P_PROJECT_DISCONTINUATION_DATE,
+        P_PROJECT_MANAGER,
+        P_PROJECT_DETAIL,
+        P_PROJECT_LAST_MODIFIER,
+
+        P_IN_COLOR_CODE,
+        P_IN_COLOR_NAME,
+        P_COLOR_CODE,
+        P_COLOR_NAME,
+        P_BATTERY_MODEL,
+        P_MOTOR_MODEL,
+        P_MODEL_YEAR_CODE,
+        P_MODEL_YEAR,
+        P_VEHICLE_SHAPE_CODE,
+        P_VEHICLE_TRAN_NAME,
+        PROJECT_MANAGER_ID
+    </sql>
+    <!--根据主键找项目-->
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_PROJECT_LIBS
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <!--根据项目的编号找项目-->
+    <select id="selectByProjectCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_PROJECT_LIBS
+        where P_PROJECT_CODE = #{pProjectCode,jdbcType=VARCHAR}
+    </select>
+    <!--查找所有项目-->
+    <select id="selectAllProject" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_PROJECT_LIBS
+        where P_PROJECT_CODE is not null
+        order by P_PROJECT_NAME asc
+    </select>
+    <!--添加1条项目-->
+    <select id="insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs" resultMap="BaseResultMap">
+        insert into HZ_PROJECT_LIBS
+        (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{puid,jdbcType=VARCHAR},
+        #{pProjectName,jdbcType=VARCHAR},
+        #{pProjectPertainToVehicle,jdbcType=VARCHAR},
+        #{pProjectCreateDate,jdbcType=TIMESTAMP},
+        #{pProjectLastModDate,jdbcType=TIMESTAMP},
+        #{pProjectCode,jdbcType=VARCHAR},
+        #{pProjectOwningUser,jdbcType=VARCHAR},
+        #{pProjectDiscontinuationDate,jdbcType=TIMESTAMP},
+        #{pProjectManager,jdbcType=VARCHAR},
+        #{pProjectDetail,jdbcType=VARCHAR},
+        #{pProjectLastModifier,jdbcType=VARCHAR},
+
+        #{pInColorCode,jdbcType=VARCHAR},
+        #{pInColorName,jdbcType=VARCHAR},
+        #{pColorCode,jdbcType=VARCHAR},
+        #{pColorName,jdbcType=VARCHAR},
+        #{pBatteryModel,jdbcType=VARCHAR},
+        #{pMotorModel,jdbcType=VARCHAR},
+        #{pModelYearCode,jdbcType=VARCHAR},
+        #{pModelYear,jdbcType=VARCHAR},
+        #{pVehicleShapeCode,jdbcType=VARCHAR},
+        #{pVehicleTranName,jdbcType=VARCHAR},
+        #{projectManagerId,jdbcType=DECIMAL}
+        )
+    </select>
+    <!--根据主键删除项目-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete HZ_PROJECT_LIBS where PUID=#{puid,jdbcType=VARCHAR}
+    </delete>
+    <!--更新项目名称，项目代号和详细信息，并记录更改时间-->
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs">
+      update HZ_PROJECT_LIBS
+      set
+      P_PROJECT_NAME = #{pProjectName,jdbcType=VARCHAR},
+      P_PROJECT_CODE = #{pProjectCode,jdbcType=VARCHAR},
+      P_PROJECT_LAST_MOD_DATE = #{pProjectLastModDate,jdbcType=TIMESTAMP},
+      P_PROJECT_DETAIL = #{pProjectDetail,jdbcType=VARCHAR},
+      P_PROJECT_MANAGER = #{pProjectManager,jdbcType=VARCHAR},
+      P_PROJECT_LAST_MODIFIER = #{pProjectLastModifier,jdbcType=VARCHAR},
+
+      P_IN_COLOR_CODE = #{pInColorCode,jdbcType=VARCHAR},
+      P_IN_COLOR_NAME = #{pInColorName,jdbcType=VARCHAR},
+      P_COLOR_CODE = #{pColorCode,jdbcType=VARCHAR},
+      P_COLOR_NAME = #{pColorName,jdbcType=VARCHAR},
+      P_BATTERY_MODEL = #{pBatteryModel,jdbcType=VARCHAR},
+
+      P_MOTOR_MODEL = #{pMotorModel,jdbcType=VARCHAR},
+      P_MODEL_YEAR_CODE = #{pModelYearCode,jdbcType=VARCHAR},
+      P_MODEL_YEAR = #{pModelYear,jdbcType=VARCHAR},
+      P_VEHICLE_SHAPE_CODE = #{pVehicleShapeCode,jdbcType=VARCHAR},
+      P_VEHICLE_TRAN_NAME = #{pVehicleTranName,jdbcType=VARCHAR},
+      PROJECT_MANAGER_ID = #{projectManagerId,jdbcType=DECIMAL}
+    where PUID = #{puid,jdbcType=VARCHAR}
+    </update>
+</mapper>

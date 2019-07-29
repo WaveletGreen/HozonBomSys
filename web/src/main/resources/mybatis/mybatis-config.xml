@@ -35,17 +35,17 @@
         <mapper resource="sql/mapper/bom/xmapper/HzEBomRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzBOMScheduleTaskMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzBOMScheduleResultMapper.xml"/>
-        <!--<mapper resource="sql/mapper/bom/xmapper/HzBomStateMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/bom/project/HzBomStateMapper.xml"/>-->
         <mapper resource="sql/mapper/bom/xmapper/HzMBomToERPMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzSingleVehiclesBomRecordMapper.xml"/>
-        <!--<mapper resource="sql/mapper/bom/xmapper/HzSingleVehicleDosageMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/bom/project/HzSingleVehicleDosageMapper.xml"/>-->
 
         <!--配置-->
         <!--cfg0-->
         <mapper resource="sql/mapper/cfg/cfg0/HzCfg0OptionFamilyMapper.xml"/>
         <mapper resource="sql/mapper/cfg/cfg0/HzCfg0RecordMapper.xml"/>
-        <!--color-->
-        <mapper resource="sql/mapper/cfg/color/HzCfg0ColorSetMapper.xml"/>
+        <!--&lt;!&ndash;color&ndash;&gt;-->
+        <!--<mapper resource="sql/mapper/cfg/color/HzCfg0ColorSetMapper.xml"/>-->
         <!--derivative-->
         <mapper resource="sql/mapper/cfg/derivative/HzCfg0ModelFeatureMapper.xml"/>
         <mapper resource="sql/mapper/cfg/derivative/HzCfg0ModelGroupMapper.xml"/>
@@ -97,11 +97,11 @@
 
         <!--项目-->
         <mapper resource="sql/mapper/project.xmapper/HzMaterielMapper.xml"/>
-        <mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>
-        <mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>
-        <mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>
-        <mapper resource="sql/mapper/project.xmapper/HzVehicleRecordMapper.xml"/>
-        <mapper resource="sql/mapper/project.xmapper/HzSuperMaterielMapper.xml"/>
+        <!--<mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/project.xmapper/HzVehicleRecordMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/project.xmapper/HzSuperMaterielMapper.xml"/>-->
         <!--EPL-->
         <mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
         <!--flow 流程-->

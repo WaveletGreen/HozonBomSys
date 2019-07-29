@@ -1,17 +1,13 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.resources.mybatis.change.breakpoint.HzBreakPointDao;
-import com.connor.hozon.bom.resources.mybatis.change.impl.HzBreakPointDaoImpl;
 import com.connor.hozon.bom.resources.service.change.HzBreakPointService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
-import sql.pojo.change.HzEWOImpactReference;
 import sql.pojo.integration.HzBreakPoint;
 
-import javax.xml.ws.ServiceMode;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package sql.pojo.payment;
 
 import lombok.Data;
-import sql.pojo.BaseDO;
+import cn.net.connor.hozon.dao.pojo.BaseDO;
 
 import java.util.Date;
 
