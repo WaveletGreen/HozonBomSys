@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.dao.modelColor;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import sql.pojo.cfg.modelColor.HzColorLvl2Model;
 
 import java.util.List;

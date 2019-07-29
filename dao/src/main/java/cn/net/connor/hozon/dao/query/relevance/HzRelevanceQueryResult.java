@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2018.
- * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
- * ALL RIGHTS RESERVED.
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
  */
 
-package com.connor.hozon.bom.bomSystem.dto.relevance;
+package cn.net.connor.hozon.dao.query.relevance;
 
 import lombok.Data;
 
@@ -17,7 +18,7 @@ import java.util.Date;
  * @Modified By:
  */
 @Data
-public class HzRelevanceQueryResultBean {
+public class HzRelevanceQueryResult {
     /**
      * 主键
      */

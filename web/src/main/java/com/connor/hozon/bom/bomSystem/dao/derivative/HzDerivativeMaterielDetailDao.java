@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.dao.derivative;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;

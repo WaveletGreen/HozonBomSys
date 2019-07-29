@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.dao.color;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import com.connor.hozon.bom.bomSystem.dto.HzColorSetQueryDto;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
 import sql.pojo.cfg.color.HzCfg0ColorSet;

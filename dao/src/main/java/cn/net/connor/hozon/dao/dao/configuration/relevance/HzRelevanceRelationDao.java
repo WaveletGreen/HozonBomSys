@@ -4,10 +4,11 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.relevance;
+package cn.net.connor.hozon.dao.dao.configuration.relevance;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import sql.pojo.cfg.relevance.HzRelevanceRelation;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -16,6 +17,7 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzRelevanceRelationDao extends BasicDao<HzRelevanceRelation> {
     /**
      * 批量插入

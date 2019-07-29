@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.dao.cfg0;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import sql.pojo.cfg.cfg0.HzCfg0Record;

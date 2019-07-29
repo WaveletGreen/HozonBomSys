@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2018.
- * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
- * ALL RIGHTS RESERVED.
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
  */
 
-package com.connor.hozon.bom.bomSystem.dao;
+package cn.net.connor.hozon.dao.dao.configuration;
 
 import org.springframework.stereotype.Repository;
 

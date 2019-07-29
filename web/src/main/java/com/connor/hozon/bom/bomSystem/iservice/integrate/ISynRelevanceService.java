@@ -6,11 +6,9 @@
 
 package com.connor.hozon.bom.bomSystem.iservice.integrate;
 
-import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.relevance.HzRelevanceBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 
 import java.util.List;
 

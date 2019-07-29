@@ -22,7 +22,7 @@ import java.util.Map;
  * @Description:
  */
 @Configuration
-public class FilterConfig {
+public class HzFilterConfig {
     /**
      * 配置过滤器
      * @return

@@ -7,14 +7,12 @@
 package com.connor.hozon.bom.bomSystem.impl.relevance;
 
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
-import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
-import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
-import org.springframework.context.annotation.Configuration;
+import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
+import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQuery;
+import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQueryResult;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import sql.pojo.cfg.relevance.HzRelevanceBasic;
-import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +27,7 @@ import java.util.Map;
 @Repository
 public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> implements HzRelevanceBasicDao {
     private final static HzRelevanceBasic BASIC = new HzRelevanceBasic();
-    private final static HzRelevanceQueryResultBean BEAN = new HzRelevanceQueryResultBean();
+    private final static HzRelevanceQueryResult BEAN = new HzRelevanceQueryResult();
 
     public HzRelevanceBasicDaoImpl() {
         clz = HzRelevanceBasicDao.class;
@@ -71,7 +69,7 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
      * @return
      */
     @Override
-    public List<HzRelevanceQueryResultBean> selectByPage(HzRelevanceQueryDTO dto) {
+    public List<HzRelevanceQueryResult> selectByPage(HzRelevanceQuery dto) {
         return baseSQLUtil.executeQueryByPass(BEAN, dto, clz.getCanonicalName() + ".selectByPage");
     }
 
@@ -82,7 +80,7 @@ public class HzRelevanceBasicDaoImpl extends BasicDaoImpl<HzRelevanceBasic> impl
      * @return
      */
     @Override
-    public Integer tellMeHowManyOfIt(HzRelevanceQueryDTO dto) {
+    public Integer tellMeHowManyOfIt(HzRelevanceQuery dto) {
         List<Integer> result = baseSQLUtil.executeQueryByPass(new Integer(0), dto, clz.getCanonicalName() + ".tellMeHowManyOfIt");
         if (result != null && result.size() > 0) {
             return result.get(0);
