@@ -472,12 +472,12 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     }
 
     @Override
-    public HzMbomLineRecord findHzMbomByEbomIdAndLineIndex(String ebomPuid, String lineIndex,String tableName) {
+    public List<HzMbomLineRecord> findHzMbomByEbomIdAndLineIndex(String ebomPuid, String lineIndex,String tableName) {
         Map<String,Object> map = new HashMap<>();
         map.put("puid",ebomPuid);
         map.put("lineIndex",lineIndex);
         map.put("tableName",tableName);
-        return (HzMbomLineRecord)super.findForObject("HzMbomRecordDAOImpl_findHzMbomByEbomIdAndLineIndex",map);
+        return (List<HzMbomLineRecord>)super.findForList("HzMbomRecordDAOImpl_findHzMbomByEbomIdAndLineIndex",map);
     }
 
     @Override

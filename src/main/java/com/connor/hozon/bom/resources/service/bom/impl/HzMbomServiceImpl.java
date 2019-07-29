@@ -925,6 +925,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                  //启用多线程进行数据操作
                 List<Thread> threads = new ArrayList<>();
                 CountDownLatch countDownLatch = new CountDownLatch(listMap.size()+materielMap.size());
+                //更新MBOM
                 for(Map.Entry<Integer,HzMbomLineRecordVO> entry: listMap.entrySet()){
                     RefreshMbomThread thread = new RefreshMbomThread(countDownLatch) {
                         @Override
@@ -947,7 +948,7 @@ public class HzMbomServiceImpl implements HzMbomService{
                     };
                     threads.add(new Thread(thread));
                 }
-
+            //物料更新
                 for(Map.Entry<Integer,List<HzMaterielRecord>> entry: materielMap.entrySet()){
                     RefreshMbomThread thread = new RefreshMbomThread(countDownLatch) {
                         @Override
@@ -1423,14 +1424,16 @@ public class HzMbomServiceImpl implements HzMbomService{
             d = b;
             List<HzMbomLineRecord> lineRecords = new ArrayList<>();
             for(HzMbomLineRecord record :a){
-                HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByEbomIdAndLineIndex(record.geteBomPuid(),record.getLineIndex(),MbomTableNameEnum.tableName(type));
-                if(lineRecord != null){
+                List<HzMbomLineRecord> lineRecord = hzMbomRecordDAO.findHzMbomByEbomIdAndLineIndex(record.geteBomPuid(),record.getLineIndex(),MbomTableNameEnum.tableName(type));
+                if(lineRecord != null&&!lineRecord.isEmpty()&&lineRecord.size()>0){
                     lineRecords.add(record);
-                    lineRecord.setLineId(record.getLineId());
-                    lineRecord.setIsColorPart(record.getIsColorPart());
-                    lineRecord.setColorId(record.getColorId());
-                    lineRecord.setpFactoryId(record.getpFactoryId());
-                    u.add(lineRecord);
+                    HzMbomLineRecord record1 = lineRecord.get(0);//这里只获取到查询出来的一个MBOM，并不清楚后续的MBOM是否与第一个line保持一致
+                    record1.setLineId(record.getLineId());
+                    record1.setIsColorPart(record.getIsColorPart());
+                    record1.setColorId(record.getColorId());
+                    record1.setpFactoryId(record.getpFactoryId());
+                    record1.setpBomLinePartName(record.getpBomLinePartName());//TODO 直接从已经拼接的地方获取到新的零件号
+                    u.add(record1);
                 }
             }
             a.removeAll(lineRecords);

@@ -45,16 +45,16 @@ public class HzMbomRecordFactory {
     }
 
 
-    public static HzMbomLineRecord pBomRecordToMbomRecord(HzPbomLineRecord record){
+    public static HzMbomLineRecord pBomRecordToMbomRecord(HzPbomLineRecord record) {
         HzMbomLineRecord hzMbomLineRecord = new HzMbomLineRecord();
         hzMbomLineRecord.setPuid(UUID.randomUUID().toString());
         hzMbomLineRecord.setIsHas(record.getIsHas());
         hzMbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
         hzMbomLineRecord.seteBomPuid(record.geteBomPuid());
         hzMbomLineRecord.setIsDept(record.getIsDept());
-        if(record.getLineId().endsWith("YY0")){
-            hzMbomLineRecord.setLineId(record.getLineId().substring(0,record.getLineId().length()-3));
-        }else {
+        if (record.getLineId().endsWith("YY0")) {
+            hzMbomLineRecord.setLineId(record.getLineId().substring(0, record.getLineId().length() - 3));
+        } else {
             hzMbomLineRecord.setLineId(record.getLineId());
         }
         hzMbomLineRecord.setIsPart(record.getIsPart());
@@ -74,8 +74,8 @@ public class HzMbomRecordFactory {
         return hzMbomLineRecord;
     }
 
-    public static HzMbomRecordRespDTO mbomRecordToRespDTO(HzMbomLineRecord record){
-        HzMbomRecordRespDTO respDTO  = new HzMbomRecordRespDTO();
+    public static HzMbomRecordRespDTO mbomRecordToRespDTO(HzMbomLineRecord record) {
+        HzMbomRecordRespDTO respDTO = new HzMbomRecordRespDTO();
         respDTO.setPuid(record.getPuid());
         respDTO.seteBomPuid(record.geteBomPuid());
         Integer is2Y = record.getIs2Y();
@@ -105,7 +105,7 @@ public class HzMbomRecordFactory {
         respDTO.setChangeNum(record.getChangeNum());
         if (Integer.valueOf(1).equals(record.getpLouaFlag())) {
             respDTO.setpLouaFlag("LOU");
-        }else if(Integer.valueOf(0).equals(record.getpLouaFlag())){
+        } else if (Integer.valueOf(0).equals(record.getpLouaFlag())) {
             respDTO.setpLouaFlag("LOA");
         }
         if (Integer.valueOf(1).equals(record.getpBomType())) {
@@ -115,9 +115,9 @@ public class HzMbomRecordFactory {
         } else {
             respDTO.setpBomType("");
         }
-        if(StringUtil.isEmpty(record.getFactoryCode())){
+        if (StringUtil.isEmpty(record.getFactoryCode())) {
             respDTO.setpFactoryCode("1001");
-        }else {
+        } else {
             respDTO.setpFactoryCode(record.getFactoryCode());
         }
         respDTO.setEffectTime(DateUtil.formatDefaultDate(record.getEffectTime()));
@@ -130,42 +130,43 @@ public class HzMbomRecordFactory {
 
     /**
      * 移动部分BOM结构到当前的结构下
-     * @param record 当前结构(MBOM)
+     *
+     * @param record  当前结构(MBOM)
      * @param records BOM结构(PBOM)
      * @return
      */
-    public  List<HzMbomLineRecord> movePartBomStructureToThis(HzMbomLineRecord record,List<HzPbomLineRecord> records,int n){
+    public List<HzMbomLineRecord> movePartBomStructureToThis(HzMbomLineRecord record, List<HzPbomLineRecord> records, int n) {
         List<HzMbomLineRecord> recordList = new ArrayList<>();
         String lindIndex = record.getLineIndex();
-        if(ListUtil.isNotEmpty(records)){
+        if (ListUtil.isNotEmpty(records)) {
             int length = records.get(0).getLineIndex().split("\\.").length;
-            for(int i = 1;i<records.size();i++){
+            for (int i = 1; i < records.size(); i++) {
 
                 HzMbomLineRecord lineRecord = pBomRecordToMbomRecord(records.get(i));
                 String childrenLineIndex = lineRecord.getLineIndex();
-                String []lineIns = childrenLineIndex.split("\\.");
+                String[] lineIns = childrenLineIndex.split("\\.");
                 int len = lineIns.length;
-                if(len -length == 1){
+                if (len - length == 1) {
                     lineRecord.setParentUid(record.geteBomPuid());
                 }
 
 //                lineRecord.setSortNum(String.valueOf(sortNum+n*100));
 //                this.maxSortNum = sortNum+n*100;
 
-                lineRecord.setSortNum(String.valueOf(100+n*100));
-                this.maxSortNum = 100+n*100;
+                lineRecord.setSortNum(String.valueOf(100 + n * 100));
+                this.maxSortNum = 100 + n * 100;
                 n++;
                 StringBuffer stringBuffer = new StringBuffer();
-                for(int j = length;j<len;j++){
-                    stringBuffer.append("."+lineIns[j]);
+                for (int j = length; j < len; j++) {
+                    stringBuffer.append("." + lineIns[j]);
                 }
-                lineRecord.setLineIndex(lindIndex+stringBuffer.toString());
+                lineRecord.setLineIndex(lindIndex + stringBuffer.toString());
                 lineRecord.setColorId(record.getColorId());
                 lineRecord.setpFactoryId(record.getpFactoryId());
                 recordList.add(lineRecord);
             }
-        }else {
-            throw new HzBomException(1001L,"数据操作异常!");
+        } else {
+            throw new HzBomException(1001L, "数据操作异常!");
         }
 
         return recordList;
@@ -174,39 +175,43 @@ public class HzMbomRecordFactory {
 
     /**
      * 产生超级MBOM
+     *
      * @param record PBOM数据
-     * @param i 颜色件集合下标
-     * @param bean 颜色件信息
-     * @param n 集合空间长度
+     * @param i      颜色件集合下标
+     * @param bean   颜色件信息
+     * @param n      集合空间长度
      * @return
      */
-    public  HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, HzConfigBomColorBean bean,int n,String factoryId){
+    public HzMbomLineRecord generateSupMbom(HzPbomLineRecord record, int i, HzConfigBomColorBean bean, int n, String factoryId) {
         HzMbomLineRecord mbomLineRecord = pBomRecordToMbomRecord(record);
         String lineId = mbomLineRecord.getLineId();
-        if(Integer.valueOf(1).equals(record.getColorPart())&& bean!=null){
-            if(!bean.getColorCode().equals("-")){
-                lineId = HzBomSysFactory.resultLineId(lineId)+bean.getColorCode();
+        if (Integer.valueOf(1).equals(record.getColorPart()) && bean != null) {
+            if (!bean.getColorCode().equals("-")) {
+                lineId = HzBomSysFactory.resultLineId(lineId) + bean.getColorCode();
+
             }
         }
-        if(bean!=null){
+        if (bean != null) {
             mbomLineRecord.setColorId(bean.getColorUid());
+            //TODO 替换bomline名称，将颜色名称作为前缀进行拼接
+            if (bean.getColorName() != null)
+                mbomLineRecord.setpBomLinePartName(bean.getColorName() + mbomLineRecord.getpBomLinePartName());
         }
         mbomLineRecord.setLineId(lineId);
         mbomLineRecord.setpFactoryId(factoryId);
         String lineIndex = record.getLineIndex();
 
         String firstIndex = lineIndex.split("\\.")[0];
-        String othersIndex = lineIndex.substring(firstIndex.length(),lineIndex.length());
-        Integer first = Integer.valueOf(firstIndex)+Integer.valueOf(firstIndex)*i;
-        mbomLineRecord.setLineIndex(String.valueOf(first)+othersIndex);
-        mbomLineRecord.setSortNum(String.valueOf(n*100+100));//重新分配排序号
-        this.sortNum ++;
+        String othersIndex = lineIndex.substring(firstIndex.length(), lineIndex.length());
+        Integer first = Integer.valueOf(firstIndex) + Integer.valueOf(firstIndex) * i;
+        mbomLineRecord.setLineIndex(String.valueOf(first) + othersIndex);
+        mbomLineRecord.setSortNum(String.valueOf(n * 100 + 100));//重新分配排序号
+        this.sortNum++;
         return mbomLineRecord;
     }
 
 
-
-    public static HzMbomLineRecord mbomLineRecordToMbomLineRecord(HzMbomLineRecord record){
+    public static HzMbomLineRecord mbomLineRecordToMbomLineRecord(HzMbomLineRecord record) {
         HzMbomLineRecord mbomLineRecord = new HzMbomLineRecord();
         mbomLineRecord.setPuid(record.getPuid());
         mbomLineRecord.seteBomPuid(record.geteBomPuid());
@@ -253,18 +258,19 @@ public class HzMbomRecordFactory {
     /**
      * MBOM下面添加油漆物料
      * 产生油漆物料BOM
+     *
      * @return
      */
-    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex,List<HzAccessoriesLibs> libs,
-                                                               int i,String colorId,String factoryId){
+    public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex, List<HzAccessoriesLibs> libs,
+                                                               int i, String colorId, String factoryId) {
         List<HzMbomLineRecord> list = new ArrayList<>();
-        if(ListUtil.isNotEmpty(libs)){
-            for(int j=0;j<libs.size();j++){
+        if (ListUtil.isNotEmpty(libs)) {
+            for (int j = 0; j < libs.size(); j++) {
                 HzMbomLineRecord record = new HzMbomLineRecord();
                 record.setParentUid(pbomLineRecord.geteBomPuid());
-                record.setSortNum(String.valueOf(size*100+100*j));
+                record.setSortNum(String.valueOf(size * 100 + 100 * j));
                 //油漆物料lineindex这里没做计算 这里取了极限值50000 不会超出int值的上限
-                record.setLineIndex(lineIndex+"."+Integer.valueOf(50000+j+i));
+                record.setLineIndex(lineIndex + "." + Integer.valueOf(50000 + j + i));
                 record.setLineId(libs.get(j).getpMaterielCode());
                 record.setpBomLinePartName(libs.get(j).getpMaterielName());
                 record.setPuid(UUID.randomUUID().toString());

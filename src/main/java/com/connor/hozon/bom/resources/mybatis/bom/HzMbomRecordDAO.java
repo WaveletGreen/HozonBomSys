@@ -212,7 +212,7 @@ public interface HzMbomRecordDAO {
      * @param lineIndex
      * @return
      */
-    HzMbomLineRecord findHzMbomByEbomIdAndLineIndex(String ebomPuid,String lineIndex,String tableName);
+    List<HzMbomLineRecord> findHzMbomByEbomIdAndLineIndex(String ebomPuid,String lineIndex,String tableName);
 
 
     int deleteMbomList(HzMbomLineRecordVO record);
