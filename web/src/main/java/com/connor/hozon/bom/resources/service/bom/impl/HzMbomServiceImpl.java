@@ -158,6 +158,13 @@ public class HzMbomServiceImpl implements HzMbomService {
         }
     }
 
+    @Override
+    public Page<HzMbomRecordRespDTO> queryMbomToColorPart(HzMbomByPageQuery query) {
+
+
+        return null;
+    }
+
 
     @Override
     public HzMbomRecordRespDTO findHzMbomByPuid(HzMbomByIdQuery query) {

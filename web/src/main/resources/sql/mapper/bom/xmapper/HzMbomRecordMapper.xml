@@ -126,8 +126,10 @@
             order by CAST(t.P_SORT_NUM as FLOAT),t.P_BOM_OF_WHICH_DEPT
         </where>
     </select>
+    <!--查询Mbom的颜色件的信息-->
+    <select id="HzMbomRecordDAOImpl_getMBomRecordToColorPart" resultMap="MbomResultMap" parameterType="java.util.HashMap">
 
-
+    </select>
     <!--查询Mbom信息 总数分页-->
     <select id="HzMbomRecordDAOImpl_getTotalCount" resultType="java.lang.Integer" parameterType="java.util.HashMap">
         select count(*) from  ${tableName} t

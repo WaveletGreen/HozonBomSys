@@ -158,7 +158,15 @@ public class HzMbomController extends BaseController {
         ret.put("result", _list);
         return ret;
     }
+    /**
+     * 查询颜色件信息
+     * @param query
+     * @return
+     */
+    public Map<String,Object> queryMbomToColorPart(HzMbomByPageQuery query){
 
+        return null;
+    }
     /**
      * 跳转到MBOM管理的添加页面
      *

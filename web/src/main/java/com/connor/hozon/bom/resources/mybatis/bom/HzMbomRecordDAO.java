@@ -81,6 +81,13 @@ public interface HzMbomRecordDAO {
     Page<HzMbomLineRecord> findMbomForPage(HzMbomByPageQuery query);
 
     /**
+     * 查询Mbom颜色件信息
+     * @param query
+     * @return
+     */
+    Page<HzMbomLineRecord> queryMbomToColorPart(HzMbomByPageQuery query);
+
+    /**
      * 查询Mbom信息
      * @param map
      * @return

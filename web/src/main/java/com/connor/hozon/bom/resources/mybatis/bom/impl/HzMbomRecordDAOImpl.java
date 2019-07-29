@@ -202,6 +202,18 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     }
 
+    /**
+     * 查询Mbom颜色件信息
+     * @param query
+     * @return
+     */
+    @Override
+    public Page<HzMbomLineRecord> queryMbomToColorPart(HzMbomByPageQuery query) {
+        PageRequestParam request = new PageRequestParam();
+        request.setPageNumber(query.getPage());
+        return super.findForPage("HzMbomRecordDAOImpl_getMBomRecordToColorPart","HzMbomRecordDAOImpl_getTotalCount",request);
+    }
+
     @Override
     public List<HzMbomLineRecord> findHzMbomByPuid(Map<String, Object> map) {
         if(map.get("tableName")==null || map.get("tableName") == ""){
