@@ -9,6 +9,7 @@ package cn.net.connor.hozon.config.filter;
 
 
 import javax.servlet.*;
+import javax.servlet.FilterConfig;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +27,10 @@ public class HzFilter implements Filter {
     public static List<String> getUrlList() {
         return urlList;
     }
+
+
     @Override
-    public void init(FilterConfig filterConfig) {
+    public void init(FilterConfig filterConfig) throws ServletException {
         try{
             InputStream inputStream = HzFilter.class.getResourceAsStream("/hz_bom_privilege_url.properties");
             String line;

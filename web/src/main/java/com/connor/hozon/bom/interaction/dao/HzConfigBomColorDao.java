@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.interaction.dao;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import sql.pojo.interaction.HzConfigBomColorBean;
 
 import java.util.List;

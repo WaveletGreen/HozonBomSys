@@ -6,14 +6,11 @@
 
 package com.connor.hozon.bom.bomSystem.impl.relevance;
 
-import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicDao;
-import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
-import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
+import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.stereotype.Repository;
-import sql.pojo.cfg.relevance.HzRelevanceBasic;
-import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
 
 import java.util.List;
 

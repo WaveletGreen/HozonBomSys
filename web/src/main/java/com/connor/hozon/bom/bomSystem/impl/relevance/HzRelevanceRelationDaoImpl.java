@@ -7,11 +7,9 @@
 package com.connor.hozon.bom.bomSystem.impl.relevance;
 
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceRelationDao;
-import org.springframework.context.annotation.Configuration;
+import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceRelationDao;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import sql.pojo.cfg.relevance.HzRelevanceRelation;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation;
 
 import java.util.List;
 

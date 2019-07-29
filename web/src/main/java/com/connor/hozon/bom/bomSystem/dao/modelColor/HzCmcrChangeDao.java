@@ -6,8 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.dao.modelColor;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import org.springframework.context.annotation.Configuration;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 

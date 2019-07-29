@@ -6,9 +6,8 @@
 
 package com.connor.hozon.bom.bomSystem.dao.bom;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
 import sql.pojo.bom.HZBomMainRecord;
 /**

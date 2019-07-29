@@ -1,11 +1,12 @@
-package com.connor.hozon.bom.bomSystem.dao.relevance;
+package cn.net.connor.hozon.dao.dao.configuration.relevance;
 
 
-import sql.pojo.cfg.relevance.HzRelevanceBasic;
-import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface HzRelevanceBasicChangeDao {
     int insert(HzRelevanceBasicChange record);
 

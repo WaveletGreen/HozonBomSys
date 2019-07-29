@@ -4,14 +4,15 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.relevance;
+package cn.net.connor.hozon.dao.dao.configuration.relevance;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
-import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
-import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryResultBean;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
+import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQuery;
+import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQueryResult;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.relevance.HzRelevanceBasic;
-import sql.pojo.cfg.relevance.HzRelevanceBasicChange;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzRelevanceBasicDao extends BasicDao<HzRelevanceBasic> {
     /**
      * 删除项目下的全部相关性
@@ -53,7 +55,7 @@ public interface HzRelevanceBasicDao extends BasicDao<HzRelevanceBasic> {
      * @param dto
      * @return
      */
-    List<HzRelevanceQueryResultBean> selectByPage(HzRelevanceQueryDTO dto);
+    List<HzRelevanceQueryResult> selectByPage(HzRelevanceQuery dto);
 
     /**
      * 获取当前项目下的相关性总数
@@ -61,7 +63,7 @@ public interface HzRelevanceBasicDao extends BasicDao<HzRelevanceBasic> {
      * @param dto
      * @return
      */
-    Integer tellMeHowManyOfIt(HzRelevanceQueryDTO dto);
+    Integer tellMeHowManyOfIt(HzRelevanceQuery dto);
 
     List<HzRelevanceBasic> selectByProjectPuid(String projectPuid);
 

@@ -1,8 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change.breakpoint;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import com.connor.hozon.bom.common.base.entity.QueryBase;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.integration.HzBreakPoint;
 

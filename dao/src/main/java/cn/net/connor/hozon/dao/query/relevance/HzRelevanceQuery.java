@@ -4,7 +4,7 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dto.relevance;
+package cn.net.connor.hozon.dao.query.relevance;
 
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
-public class HzRelevanceQueryDTO {
+public class HzRelevanceQuery {
     /**
      * 项目UID
      */

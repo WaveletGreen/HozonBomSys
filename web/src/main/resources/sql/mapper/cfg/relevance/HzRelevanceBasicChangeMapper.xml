@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceBasicChangeDao">
-  <resultMap id="BaseResultMap" type="sql.pojo.cfg.relevance.HzRelevanceBasicChange">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicChangeDao">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange">
     <result column="ID" jdbcType="DECIMAL" property="id" />
     <result column="RB_COLOR_CODE" jdbcType="VARCHAR" property="rbColorCode" />
     <result column="RB_COLOR_UID" jdbcType="VARCHAR" property="rbColorUid" />
@@ -53,7 +53,7 @@
       RB_RESERVED_15, CHANGE_ORDER_ID, RB_PROJECT_UID,
       IS_SENT, SRC_ID, CHANGE_STATUS,CHANGE_VERSION
   </sql>
-  <insert id="insert" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange">
+  <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange">
     insert into HZ_RELEVANCE_BASIC_CHANGE (ID, RB_COLOR_CODE, RB_COLOR_UID, 
       RB_FEATURE_CODE, RB_FEATURE_UID, RB_FEATURE_VALUE_CODE, 
       RB_FEATURE_VALUE_UID, RB_RELEVANCE, RB_RELEVANCE_DESC, 
@@ -81,7 +81,7 @@
       #{isSent,jdbcType=DECIMAL}, #{srcId,jdbcType=DECIMAL}, #{changeStatus,jdbcType=DECIMAL},#{changeVersion,jdbcType=DECIMAL}
       )
   </insert>
-  <insert id="insertSelective" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange">
+  <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange">
     insert into HZ_RELEVANCE_BASIC_CHANGE
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -324,7 +324,7 @@
     )A
   </insert>
 
-  <select id="selectMaxVersionByProject" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+  <select id="selectMaxVersionByProject" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from HZ_RELEVANCE_BASIC_CHANGE
@@ -334,7 +334,7 @@
     CHANGE_VERSION = (select MAX(CHANGE_VERSION) from HZ_RELEVANCE_BASIC_CHANGE where RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR})
   </select>
 
-  <select id="selectByOrderChangeId" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+  <select id="selectByOrderChangeId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List"/>
     from HZ_RELEVANCE_BASIC_CHANGE
@@ -342,7 +342,7 @@
     CHANGE_ORDER_ID = #{changeOrderId,jdbcType=DECIMAL}
   </select>
 
-  <select id="selectByVersionAndProjectId" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+  <select id="selectByVersionAndProjectId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from HZ_RELEVANCE_BASIC_CHANGE
@@ -369,14 +369,14 @@
     CHANGE_VERSION = (select MAX(CHANGE_VERSION) from HZ_RELEVANCE_BASIC_CHANGE where RB_PROJECT_UID = #{projectPuid,jdbcType=VARCHAR} and CHANGE_STATUS=1 group by CHANGE_VERSION)
   </select>
 
-  <update id="updateStatusByIOrderId" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange">
+  <update id="updateStatusByIOrderId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange">
     update HZ_RELEVANCE_BASIC_CHANGE
     set CHANGE_STATUS = #{changeStatus,jdbcType=DECIMAL}
     where
     CHANGE_ORDER_ID = #{changeOrderId,jdbcType=DECIMAL}
   </update>
 
-  <select id="selectByLasteBySrc" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+  <select id="selectByLasteBySrc" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from HZ_RELEVANCE_BASIC_CHANGE
@@ -384,7 +384,7 @@
     ID = (select ID from (select ID,MAX(CHANGE_VERSION) from HZ_RELEVANCE_BASIC_CHANGE where SRC_ID = #{srcId,jdbcType=DECIMAL}))
   </select>
 
-  <select id="selectLastVersion" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+  <select id="selectLastVersion" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from HZ_RELEVANCE_BASIC_CHANGE
@@ -396,7 +396,7 @@
     SRC_ID = #{srcId,jdbcType=DECIMAL}
   </select>
 
-  <select id="selectMaxVersion" parameterType="sql.pojo.cfg.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+  <select id="selectMaxVersion" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from HZ_RELEVANCE_BASIC_CHANGE

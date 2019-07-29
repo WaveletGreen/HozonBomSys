@@ -6,8 +6,8 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.relevance.HzRelevanceRelationDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.relevance.HzRelevanceRelation">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceRelationDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
         <id column="ID" jdbcType="BIGINT" property="id"/>
         <result column="RR_CFG0_UID" jdbcType="VARCHAR" property="rrCfg0Uid"/>
         <result column="RR_COLOR_MODEL_UID" jdbcType="VARCHAR" property="rrColorModelUid"/>
@@ -65,24 +65,24 @@
     RR_VWO_ID,
     RR_REVISION
   </sql>
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.relevance.HzRelevanceRelation"
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_RELEVANCE_RELATION
         where ID = #{id,jdbcType=DECIMAL}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.relevance.HzRelevanceRelation">
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
     delete from HZ_RELEVANCE_RELATION
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <!--相关性主键删除-->
-    <delete id="deleteByBasicId" parameterType="sql.pojo.cfg.relevance.HzRelevanceRelation">
+    <delete id="deleteByBasicId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
         delete from HZ_RELEVANCE_RELATION
         where RR_RELEVANCE_ID = #{rrRelevanceId,jdbcType=DECIMAL}
     </delete>
 
-    <insert id="insert" parameterType="sql.pojo.cfg.relevance.HzRelevanceRelation">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
     insert into HZ_RELEVANCE_RELATION (
         ID,
         RR_CFG0_UID,
@@ -178,7 +178,7 @@
         ) cd
     </insert>
 
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.relevance.HzRelevanceRelation">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
         insert into HZ_RELEVANCE_RELATION
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -339,7 +339,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.relevance.HzRelevanceRelation">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
         update HZ_RELEVANCE_RELATION
         <set>
             <if test="rrCfg0Uid != null">
@@ -421,7 +421,7 @@
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.relevance.HzRelevanceRelation">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
     update HZ_RELEVANCE_RELATION
     set RR_CFG0_UID = #{rrCfg0Uid,jdbcType=VARCHAR},
       RR_COLOR_MODEL_UID = #{rrColorModelUid,jdbcType=VARCHAR},
@@ -452,7 +452,7 @@
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 
-   <insert id="insertOne" parameterType="sql.pojo.cfg.relevance.HzRelevanceRelation">
+   <insert id="insertOne" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
       <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
           select SEQ_HZ_RR.Nextval from dual
       </selectKey>
