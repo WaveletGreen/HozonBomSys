@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.project.HzProjectLibsDao;
+import cn.net.connor.hozon.dao.dao.depository.project.HzProjectLibsDao;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
@@ -17,7 +17,6 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.StringUtil;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzSingleVehiclesBomRecord;
 import sql.pojo.interaction.HzSingleVehicleBomLineBean;
 import sql.pojo.interaction.HzSingleVehicles;
-import sql.pojo.project.HzProjectLibs;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.connor.hozon.bom.common.base.dao;
 
 
 
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.common.entity.QueryBase;
 
 import java.util.List;
 

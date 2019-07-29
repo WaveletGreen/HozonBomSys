@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
-import com.connor.hozon.bom.common.base.entity.Page;
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.common.entity.Page;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
 import org.springframework.http.MediaType;

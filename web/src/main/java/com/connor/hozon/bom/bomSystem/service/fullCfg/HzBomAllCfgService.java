@@ -6,6 +6,8 @@
 
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
+import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.*;
@@ -19,16 +21,13 @@ import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
-import com.connor.hozon.bom.bomSystem.service.project.HzBrandService;
-import com.connor.hozon.bom.bomSystem.service.project.HzPlatformService;
-import com.connor.hozon.bom.bomSystem.service.project.HzProjectLibsService;
-import com.connor.hozon.bom.bomSystem.service.project.HzVehicleService;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzProjectLibsServiceImpl;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzVehicleServiceImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.sys.entity.User;
-import io.swagger.models.auth.In;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.poi.hssf.usermodel.*;
@@ -43,9 +42,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.fullCfg.*;
@@ -54,13 +50,11 @@ import sql.pojo.cfg.model.HzCfg0ModelDetail;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
-import sql.pojo.project.HzBrandRecord;
-import sql.pojo.project.HzPlatformRecord;
-import sql.pojo.project.HzProjectLibs;
-import sql.pojo.project.HzVehicleRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 
-import java.io.*;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -88,13 +82,13 @@ public class HzBomAllCfgService {
 
 
     @Autowired
-    private HzProjectLibsService hzProjectLibsService;
+    private HzProjectLibsServiceImpl hzProjectLibsServiceImpl;
     @Autowired
-    private HzVehicleService hzVehicleService;
+    private HzVehicleServiceImpl hzVehicleServiceImpl;
     @Autowired
-    private HzPlatformService hzPlatformService;
+    private HzPlatformServiceImpl hzPlatformServiceImpl;
     @Autowired
-    private HzBrandService hzBrandService;
+    private HzBrandServiceImpl hzBrandServiceImpl;
 
     @Autowired
     private HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
@@ -169,10 +163,10 @@ public class HzBomAllCfgService {
         }
         initLoad(projectPuid, hzCfg0ModelRecords, lines);
 
-        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectPuid);
-        HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
-        HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
-        HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+        HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(projectPuid);
+        HzVehicleRecord vehicle = hzVehicleServiceImpl.doGetByPuid(project.getpProjectPertainToVehicle());
+        HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+        HzBrandRecord brand = hzBrandServiceImpl.doGetByPuid(platform.getpPertainToBrandPuid());
 
         JSONObject respond = new JSONObject();
         JSONArray _data = new JSONArray();
@@ -1276,10 +1270,10 @@ public class HzBomAllCfgService {
         }
         initLoad(projectUid, hzCfg0ModelRecords, lines);
 
-        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectUid);
-        HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
-        HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
-        HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+        HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(projectUid);
+        HzVehicleRecord vehicle = hzVehicleServiceImpl.doGetByPuid(project.getpProjectPertainToVehicle());
+        HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+        HzBrandRecord brand = hzBrandServiceImpl.doGetByPuid(platform.getpPertainToBrandPuid());
 
         //获取主数据
         HzFullCfgMain hzFullCfgMain  = hzFullCfgMainDao.selectByProjectId(projectUid);

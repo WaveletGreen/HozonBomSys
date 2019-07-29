@@ -59,7 +59,7 @@ import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChan
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
-import sql.pojo.project.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 import sql.pojo.work.HzWorkProcedure;
 
 import java.util.*;

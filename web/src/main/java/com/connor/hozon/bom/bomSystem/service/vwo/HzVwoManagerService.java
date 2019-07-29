@@ -6,6 +6,8 @@
 
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
+import cn.net.connor.hozon.services.service.depository.project.impl.*;
 import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
@@ -44,9 +46,8 @@ import com.connor.hozon.bom.bomSystem.service.process.FeatureProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.InterruptionContainer;
 import com.connor.hozon.bom.bomSystem.service.process.ModelColorProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.ReleaseContainer;
-import com.connor.hozon.bom.bomSystem.service.project.*;
 import com.connor.hozon.bom.bomSystem.service.task.HzTasksService;
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
@@ -87,7 +88,7 @@ import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
-import sql.pojo.project.*;
+import cn.net.connor.hozon.dao.pojo.depository.project.*;
 import sql.pojo.task.HzTasks;
 
 import java.util.*;
@@ -132,19 +133,19 @@ public class HzVwoManagerService implements IHzVWOManagerService {
      * 项目服务
      */
     @Autowired
-    HzProjectLibsService hzProjectLibsService;
+    HzProjectLibsServiceImpl hzProjectLibsServiceImpl;
     /**
      * 车型服务
      */
     @Autowired
-    HzVehicleService hzVehicleService;
+    HzVehicleServiceImpl hzVehicleServiceImpl;
     /**
      * 平台服务
      */
     @Autowired
-    HzPlatformService hzPlatformService;
+    HzPlatformServiceImpl hzPlatformServiceImpl;
     @Autowired
-    HzBrandService hzBrandService;
+    HzBrandServiceImpl hzBrandServiceImpl;
     @Autowired
     IHzVwoInfluenceDeptService iHzVwoInfluenceDeptService;
     @Autowired
@@ -213,7 +214,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     HzFactoryDAO hzFactoryDAO;
     //超级物料
     @Autowired
-    HzSuperMaterielService hzSuperMaterielService;
+    HzSuperMaterielServiceImpl hzSuperMaterielServiceImpl;
 
     @Autowired
     HzDerivativeMaterielBasicDao hzDerivativeMaterielBasicDao;
@@ -1129,9 +1130,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
              */
             hzVwoInfo = iHzVwoInfoService.generateVWONum();
             OrgGroup group = orgGroupDao.queryOrgGroupById(user.getGroupId());
-            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectUid);
-            HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
-            HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+            HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(projectUid);
+            HzVehicleRecord vehicle = hzVehicleServiceImpl.doGetByPuid(project.getpProjectPertainToVehicle());
+            HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
 
             hzVwoInfo.setVwoCreator(user.getUserName());
             hzVwoInfo.setProjectUid(projectUid);
@@ -1190,7 +1191,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         HzVwoOpiBom hzVwoOpiBom = hzVwoOpiBomDao.selectByVwoId(id);
         HzVwoOpiPmt hzVwoOpiPmt = hzVwoOpiPmtDao.selectByVwoId(id);
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(id);
-        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(vwoInfo.getProjectUid());
+        HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(vwoInfo.getProjectUid());
         //影响部门
         if (influenceDept == null) {
             influenceDept = new HzVwoInfluenceDept();
@@ -1356,7 +1357,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(id);
         if (hzVwoOpiProj == null) {
             HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(id);
-            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(info.getProjectUid());
+            HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(info.getProjectUid());
             User user = UserInfo.getUser();
             hzVwoOpiProj = new HzVwoOpiProj();
             hzVwoOpiProj.setOpiVwoId(id);
@@ -1374,7 +1375,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 
         if (hzVwoOpiProj.getOpiProjMngUserId() == null || !checkString(hzVwoOpiProj.getOpiProjMngUserName())) {
             HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(id);
-            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(info.getProjectUid());
+            HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(info.getProjectUid());
             HzVwoOpiProj proj = new HzVwoOpiProj();
             proj.setId(hzVwoOpiProj.getId());
             proj.setOpiProjMngUserName(project.getpProjectManager());
@@ -1596,7 +1597,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             return result;
         }
         HzVwoInfo vwoInfo = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
-        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(vwoInfo.getProjectUid());
+        HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(vwoInfo.getProjectUid());
         Long managerId = project.getProjectManagerId();
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(vwoId);
         if (managerId == null || hzVwoOpiProj.getOpiProjMngUserId() == null || managerId != hzVwoOpiProj.getOpiProjMngUserId()) {
@@ -3149,7 +3150,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         //工厂MAP
         Map<String,HzFactory> factoryMap = new HashMap<>();
         //超级物料
-        HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+        HzMaterielRecord superMateriel = hzSuperMaterielServiceImpl.doSelectByProjectPuid(projectUid);
 
 
         //变更前主数据
@@ -3406,13 +3407,13 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         hzFullCfgModelChangesAfter = hzFullCfgModelChangeDao.selectByMainId(hzFullCfgMainChangeAfter.getId());
         hzFullCfgWithCfgChangesAfter = hzFullCfgWithCfgChangeDao.selectByMainId(hzFullCfgMainChangeAfter.getId());
         /********初始化车型模型数据************/
-        HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectUid);
+        HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(projectUid);
         //车型
-        HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
+        HzVehicleRecord vehicle = hzVehicleServiceImpl.doGetByPuid(project.getpProjectPertainToVehicle());
         //平台
-        HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+        HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
         //品牌
-        HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+        HzBrandRecord brand = hzBrandServiceImpl.doGetByPuid(platform.getpPertainToBrandPuid());
         /*********************查询变更前的主数据************************/
         HzFullCfgMainChange hzFullCfgMainChangeBefor =null;
         //查询变更前的车辆模型

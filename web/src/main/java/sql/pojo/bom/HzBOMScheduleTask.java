@@ -1,7 +1,6 @@
 package sql.pojo.bom;
 
 import lombok.Data;
-import sql.pojo.BaseDO;
 
 import java.io.Serializable;
 import java.util.Date;

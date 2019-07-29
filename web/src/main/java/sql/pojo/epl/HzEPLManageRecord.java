@@ -1,7 +1,7 @@
 package sql.pojo.epl;
 
 import org.apache.commons.lang.StringUtils;
-import sql.pojo.BaseChangeDO;
+import cn.net.connor.hozon.dao.pojo.BaseChangeDO;
 
 import java.util.Date;
 import java.util.Objects;

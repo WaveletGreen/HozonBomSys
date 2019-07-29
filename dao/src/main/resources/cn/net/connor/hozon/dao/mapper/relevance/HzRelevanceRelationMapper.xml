@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceRelationDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
+        <id column="ID" jdbcType="BIGINT" property="id"/>
+        <result column="RR_CFG0_UID" jdbcType="VARCHAR" property="rrCfg0Uid"/>
+        <result column="RR_COLOR_MODEL_UID" jdbcType="VARCHAR" property="rrColorModelUid"/>
+        <result column="RR_COLOR_UID" jdbcType="VARCHAR" property="rrColorUid"/>
+        <result column="RR_RELEVANCE_ID" jdbcType="DECIMAL" property="rrRelevanceId"/>
+        <result column="RR_CFG_FAMILY_UID" jdbcType="VARCHAR" property="rrCfgFamilyUid"/>
+        <result column="RR_CREATOR" jdbcType="VARCHAR" property="rrCreator"/>
+        <result column="RR_CREATE_DATE" jdbcType="TIMESTAMP" property="rrCreateDate"/>
+        <result column="RR_UPDATER" jdbcType="VARCHAR" property="rrUpdater"/>
+        <result column="RR_UPDAT_DATE" jdbcType="TIMESTAMP" property="rrUpdatDate"/>
+        <result column="RR_RESERVE1" jdbcType="VARCHAR" property="rrReserve1"/>
+        <result column="RR_RESERVE2" jdbcType="VARCHAR" property="rrReserve2"/>
+        <result column="RR_RESERVE3" jdbcType="VARCHAR" property="rrReserve3"/>
+        <result column="RR_RESERVE4" jdbcType="VARCHAR" property="rrReserve4"/>
+        <result column="RR_RESERVE5" jdbcType="VARCHAR" property="rrReserve5"/>
+        <result column="RR_RESERVE6" jdbcType="VARCHAR" property="rrReserve6"/>
+        <result column="RR_RESERVE7" jdbcType="VARCHAR" property="rrReserve7"/>
+        <result column="RR_RESERVE8" jdbcType="VARCHAR" property="rrReserve8"/>
+        <result column="RR_RESERVE9" jdbcType="VARCHAR" property="rrReserve9"/>
+        <result column="RR_RESERVE10" jdbcType="VARCHAR" property="rrReserve10"/>
+        <result column="RR_RESERVE11" jdbcType="VARCHAR" property="rrReserve11"/>
+        <result column="RR_RESERVE12" jdbcType="VARCHAR" property="rrReserve12"/>
+        <result column="RR_RESERVE13" jdbcType="VARCHAR" property="rrReserve13"/>
+        <result column="RR_RESERVE14" jdbcType="VARCHAR" property="rrReserve14"/>
+        <result column="RR_RESERVE15" jdbcType="VARCHAR" property="rrReserve15"/>
+        <result column="RR_VWO_ID" jdbcType="BIGINT" property="rrVwoId"/>
+        <result column="RR_REVISION" jdbcType="BIGINT" property="rrRevision"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID,
+    RR_CFG0_UID,
+    RR_COLOR_MODEL_UID,
+    RR_COLOR_UID,
+    RR_RELEVANCE_ID,
+    RR_CFG_FAMILY_UID,
+    RR_CREATOR,
+    RR_CREATE_DATE,
+    RR_UPDATER,
+    RR_UPDAT_DATE,
+    RR_RESERVE1,
+    RR_RESERVE2,
+    RR_RESERVE3,
+    RR_RESERVE4,
+    RR_RESERVE5,
+    RR_RESERVE6,
+    RR_RESERVE7,
+    RR_RESERVE8,
+    RR_RESERVE9,
+    RR_RESERVE10,
+    RR_RESERVE11,
+    RR_RESERVE12,
+    RR_RESERVE13,
+    RR_RESERVE14,
+    RR_RESERVE15,
+    RR_VWO_ID,
+    RR_REVISION
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_RELEVANCE_RELATION
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
+    delete from HZ_RELEVANCE_RELATION
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <!--相关性主键删除-->
+    <delete id="deleteByBasicId" parameterType="java.lang.Long">
+        delete from HZ_RELEVANCE_RELATION
+        where RR_RELEVANCE_ID = #{rrRelevanceId,jdbcType=DECIMAL}
+    </delete>
+
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
+    insert into HZ_RELEVANCE_RELATION (
+        ID,
+        RR_CFG0_UID,
+        RR_COLOR_MODEL_UID,
+        RR_COLOR_UID,
+        RR_RELEVANCE_ID,
+        RR_CFG_FAMILY_UID,
+        RR_CREATOR,
+        RR_CREATE_DATE,
+        RR_UPDATER,
+        RR_UPDAT_DATE,
+        RR_RESERVE1,
+        RR_RESERVE2,
+        RR_RESERVE3,
+        RR_RESERVE4,
+        RR_RESERVE5,
+        RR_RESERVE6,
+        RR_RESERVE7,
+        RR_RESERVE8,
+        RR_RESERVE9,
+        RR_RESERVE10,
+        RR_RESERVE11,
+        RR_RESERVE12,
+        RR_RESERVE13,
+        RR_RESERVE14,
+        RR_RESERVE15,
+        RR_VWO_ID,
+        RR_REVISION
+      )
+    values (
+        #{id,jdbcType=DECIMAL},
+        #{rrCfg0Uid,jdbcType=VARCHAR},
+        #{rrColorModelUid,jdbcType=VARCHAR},
+        #{rrColorUid,jdbcType=VARCHAR},
+        #{rrRelevanceId,jdbcType=DECIMAL},
+        #{rrCfgFamilyUid,jdbcType=VARCHAR},
+        #{rrCreator,jdbcType=VARCHAR},
+        sysdate,
+        #{rrUpdater,jdbcType=VARCHAR},
+        sysdate,
+        #{rrReserve1,jdbcType=VARCHAR},
+        #{rrReserve2,jdbcType=VARCHAR},
+        #{rrReserve3,jdbcType=VARCHAR},
+        #{rrReserve4,jdbcType=VARCHAR},
+        #{rrReserve5,jdbcType=VARCHAR},
+        #{rrReserve6,jdbcType=VARCHAR},
+        #{rrReserve7,jdbcType=VARCHAR},
+        #{rrReserve8,jdbcType=VARCHAR},
+        #{rrReserve9,jdbcType=VARCHAR},
+        #{rrReserve10,jdbcType=VARCHAR},
+        #{rrReserve11,jdbcType=VARCHAR},
+        #{rrReserve12,jdbcType=VARCHAR},
+        #{rrReserve13,jdbcType=VARCHAR},
+        #{rrReserve14,jdbcType=VARCHAR},
+        #{rrReserve15,jdbcType=VARCHAR},
+        #{rrVwoId,jdbcType=DECIMAL},
+        #{rrRevision,jdbcType=DECIMAL}
+      )
+  </insert>
+    <insert id="insertByBatch" parameterType="java.util.List">
+        insert into HZ_RELEVANCE_RELATION (
+        <include refid="Base_Column_List"/>
+        )
+        select SEQ_HZ_RR.NEXTVAL,cd.* from(
+        <foreach collection="list" item="item" index="index" separator="union all">
+            #{item.rrCfg0Uid,jdbcType=VARCHAR},
+            #{item.rrColorModelUid,jdbcType=VARCHAR},
+            #{item.rrColorUid,jdbcType=VARCHAR},
+            #{item.rrRelevanceId,jdbcType=DECIMAL},
+            #{item.rrCfgFamilyUid,jdbcType=VARCHAR},
+            #{item.rrCreator,jdbcType=VARCHAR},
+            sysdate,
+            #{item.rrUpdater,jdbcType=VARCHAR},
+            sysdate,
+            #{item.rrReserve1,jdbcType=VARCHAR},
+            #{item.rrReserve2,jdbcType=VARCHAR},
+            #{item.rrReserve3,jdbcType=VARCHAR},
+            #{item.rrReserve4,jdbcType=VARCHAR},
+            #{item.rrReserve5,jdbcType=VARCHAR},
+            #{item.rrReserve6,jdbcType=VARCHAR},
+            #{item.rrReserve7,jdbcType=VARCHAR},
+            #{item.rrReserve8,jdbcType=VARCHAR},
+            #{item.rrReserve9,jdbcType=VARCHAR},
+            #{item.rrReserve10,jdbcType=VARCHAR},
+            #{item.rrReserve11,jdbcType=VARCHAR},
+            #{item.rrReserve12,jdbcType=VARCHAR},
+            #{item.rrReserve13,jdbcType=VARCHAR},
+            #{item.rrReserve14,jdbcType=VARCHAR},
+            #{item.rrReserve15,jdbcType=VARCHAR},
+            #{item.rrVwoId,jdbcType=DECIMAL},
+            #{item.rrRevision,jdbcType=DECIMAL}
+        </foreach>
+        ) cd
+    </insert>
+
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
+        insert into HZ_RELEVANCE_RELATION
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="rrCfg0Uid != null">
+                RR_CFG0_UID,
+            </if>
+            <if test="rrColorModelUid != null">
+                RR_COLOR_MODEL_UID,
+            </if>
+            <if test="rrColorUid != null">
+                RR_COLOR_UID,
+            </if>
+            <if test="rrRelevanceId != null">
+                RR_RELEVANCE_ID,
+            </if>
+            <if test="rrCfgFamilyUid != null">
+                RR_CFG_FAMILY_UID,
+            </if>
+            <if test="rrCreator != null">
+                RR_CREATOR,
+            </if>
+            RR_CREATE_DATE,
+            <if test="rrUpdater != null">
+                RR_UPDATER,
+            </if>
+            RR_UPDAT_DATE,
+            <if test="rrReserve1 != null">
+                RR_RESERVE1,
+            </if>
+            <if test="rrReserve2 != null">
+                RR_RESERVE2,
+            </if>
+            <if test="rrReserve3 != null">
+                RR_RESERVE3,
+            </if>
+            <if test="rrReserve4 != null">
+                RR_RESERVE4,
+            </if>
+            <if test="rrReserve5 != null">
+                RR_RESERVE5,
+            </if>
+            <if test="rrReserve6 != null">
+                RR_RESERVE6,
+            </if>
+            <if test="rrReserve7 != null">
+                RR_RESERVE7,
+            </if>
+            <if test="rrReserve8 != null">
+                RR_RESERVE8,
+            </if>
+            <if test="rrReserve9 != null">
+                RR_RESERVE9,
+            </if>
+            <if test="rrReserve10 != null">
+                RR_RESERVE10,
+            </if>
+            <if test="rrReserve11 != null">
+                RR_RESERVE11,
+            </if>
+            <if test="rrReserve12 != null">
+                RR_RESERVE12,
+            </if>
+            <if test="rrReserve13 != null">
+                RR_RESERVE13,
+            </if>
+            <if test="rrReserve14 != null">
+                RR_RESERVE14,
+            </if>
+            <if test="rrReserve15 != null">
+                RR_RESERVE15,
+            </if>
+            <if test="rrVwoId != null">
+                RR_VWO_ID,
+            </if>
+            <if test="rrRevision != null">
+                RR_REVISION,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="rrCfg0Uid != null">
+                #{rrCfg0Uid,jdbcType=VARCHAR},
+            </if>
+            <if test="rrColorModelUid != null">
+                #{rrColorModelUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rrColorUid != null">
+                #{rrColorUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rrRelevanceId != null">
+                #{rrRelevanceId,jdbcType=DECIMAL},
+            </if>
+            <if test="rrCfgFamilyUid != null">
+                #{rrCfgFamilyUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rrCreator != null">
+                #{rrCreator,jdbcType=VARCHAR},
+            </if>
+            sysdate,
+            <if test="rrUpdater != null">
+                #{rrUpdater,jdbcType=VARCHAR},
+            </if>
+            sysdate,
+            <if test="rrReserve1 != null">
+                #{rrReserve1,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve2 != null">
+                #{rrReserve2,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve3 != null">
+                #{rrReserve3,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve4 != null">
+                #{rrReserve4,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve5 != null">
+                #{rrReserve5,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve6 != null">
+                #{rrReserve6,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve7 != null">
+                #{rrReserve7,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve8 != null">
+                #{rrReserve8,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve9 != null">
+                #{rrReserve9,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve10 != null">
+                #{rrReserve10,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve11 != null">
+                #{rrReserve11,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve12 != null">
+                #{rrReserve12,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve13 != null">
+                #{rrReserve13,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve14 != null">
+                #{rrReserve14,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve15 != null">
+                #{rrReserve15,jdbcType=VARCHAR},
+            </if>
+            <if test="rrVwoId != null">
+                #{rrVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="rrRevision != null">
+                #{rrRevision,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
+        update HZ_RELEVANCE_RELATION
+        <set>
+            <if test="rrCfg0Uid != null">
+                RR_CFG0_UID = #{rrCfg0Uid,jdbcType=VARCHAR},
+            </if>
+            <if test="rrColorModelUid != null">
+                RR_COLOR_MODEL_UID = #{rrColorModelUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rrColorUid != null">
+                RR_COLOR_UID = #{rrColorUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rrRelevanceId != null">
+                RR_RELEVANCE_ID = #{rrRelevanceId,jdbcType=DECIMAL},
+            </if>
+            <if test="rrCfgFamilyUid != null">
+                RR_CFG_FAMILY_UID = #{rrCfgFamilyUid,jdbcType=VARCHAR},
+            </if>
+            <if test="rrCreator != null">
+                RR_CREATOR = #{rrCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="rrCreateDate != null">
+                RR_CREATE_DATE = #{rrCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="rrUpdater != null">
+                RR_UPDATER = #{rrUpdater,jdbcType=VARCHAR},
+            </if>
+            RR_UPDAT_DATE = sysdate,
+            <if test="rrReserve1 != null">
+                RR_RESERVE1 = #{rrReserve1,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve2 != null">
+                RR_RESERVE2 = #{rrReserve2,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve3 != null">
+                RR_RESERVE3 = #{rrReserve3,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve4 != null">
+                RR_RESERVE4 = #{rrReserve4,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve5 != null">
+                RR_RESERVE5 = #{rrReserve5,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve6 != null">
+                RR_RESERVE6 = #{rrReserve6,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve7 != null">
+                RR_RESERVE7 = #{rrReserve7,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve8 != null">
+                RR_RESERVE8 = #{rrReserve8,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve9 != null">
+                RR_RESERVE9 = #{rrReserve9,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve10 != null">
+                RR_RESERVE10 = #{rrReserve10,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve11 != null">
+                RR_RESERVE11 = #{rrReserve11,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve12 != null">
+                RR_RESERVE12 = #{rrReserve12,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve13 != null">
+                RR_RESERVE13 = #{rrReserve13,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve14 != null">
+                RR_RESERVE14 = #{rrReserve14,jdbcType=VARCHAR},
+            </if>
+            <if test="rrReserve15 != null">
+                RR_RESERVE15 = #{rrReserve15,jdbcType=VARCHAR},
+            </if>
+            <if test="rrVwoId != null">
+                RR_VWO_ID = #{rrVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="rrRevision != null">
+                RR_REVISION = #{rrRevision,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
+    update HZ_RELEVANCE_RELATION
+    set RR_CFG0_UID = #{rrCfg0Uid,jdbcType=VARCHAR},
+      RR_COLOR_MODEL_UID = #{rrColorModelUid,jdbcType=VARCHAR},
+      RR_COLOR_UID = #{rrColorUid,jdbcType=VARCHAR},
+      RR_RELEVANCE_ID = #{rrRelevanceId,jdbcType=DECIMAL},
+      RR_CFG_FAMILY_UID = #{rrCfgFamilyUid,jdbcType=VARCHAR},
+      RR_CREATOR = #{rrCreator,jdbcType=VARCHAR},
+      RR_CREATE_DATE = #{rrCreateDate,jdbcType=TIMESTAMP},
+      RR_UPDATER = #{rrUpdater,jdbcType=VARCHAR},
+      RR_UPDAT_DATE = sysdate,
+      RR_RESERVE1 = #{rrReserve1,jdbcType=VARCHAR},
+      RR_RESERVE2 = #{rrReserve2,jdbcType=VARCHAR},
+      RR_RESERVE3 = #{rrReserve3,jdbcType=VARCHAR},
+      RR_RESERVE4 = #{rrReserve4,jdbcType=VARCHAR},
+      RR_RESERVE5 = #{rrReserve5,jdbcType=VARCHAR},
+      RR_RESERVE6 = #{rrReserve6,jdbcType=VARCHAR},
+      RR_RESERVE7 = #{rrReserve7,jdbcType=VARCHAR},
+      RR_RESERVE8 = #{rrReserve8,jdbcType=VARCHAR},
+      RR_RESERVE9 = #{rrReserve9,jdbcType=VARCHAR},
+      RR_RESERVE10 = #{rrReserve10,jdbcType=VARCHAR},
+      RR_RESERVE11 = #{rrReserve11,jdbcType=VARCHAR},
+      RR_RESERVE12 = #{rrReserve12,jdbcType=VARCHAR},
+      RR_RESERVE13 = #{rrReserve13,jdbcType=VARCHAR},
+      RR_RESERVE14 = #{rrReserve14,jdbcType=VARCHAR},
+      RR_RESERVE15 = #{rrReserve15,jdbcType=VARCHAR},
+      RR_VWO_ID = #{rrVwoId,jdbcType=DECIMAL},
+      RR_REVISION = #{rrRevision,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+   <insert id="insertOne" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
+      <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+          select SEQ_HZ_RR.Nextval from dual
+      </selectKey>
+      insert into HZ_RELEVANCE_RELATION
+       (
+       ID,
+       RR_CFG0_UID,
+       RR_COLOR_MODEL_UID,
+       RR_COLOR_UID,
+       RR_RELEVANCE_ID,
+       RR_CFG_FAMILY_UID
+       )
+       values
+       (
+        #{id,jdbcType=BIGINT},
+        #{rrCfg0Uid,jdbcType=VARCHAR},
+        #{rrColorModelUid,jdbcType=VARCHAR},
+        #{rrColorUid,jdbcType=VARCHAR},
+        #{rrRelevanceId,jdbcType=BIGINT},
+        #{rrCfgFamilyUid,jdbcType=VARCHAR}
+       )
+   </insert>
+</mapper>

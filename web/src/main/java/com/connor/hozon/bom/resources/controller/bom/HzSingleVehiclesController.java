@@ -3,7 +3,6 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -49,73 +48,74 @@ public class HzSingleVehiclesController extends BaseController {
 
     //String code="";
 
-    @RequestMapping(value = "title",method = RequestMethod.GET)
-    public void singleVehiclesTitle(HttpServletResponse response){
+    @RequestMapping(value = "title", method = RequestMethod.GET)
+    public void singleVehiclesTitle(HttpServletResponse response) {
         LinkedHashMap<String, String> title = new LinkedHashMap<>();
         //物料编码-svlMaterialCode
         //基本信息-svlMaterialBasicInfo
-        title.put("brandCode","品牌代码");
-        title.put("brandName","中文品牌");
-        title.put("colorCode","颜色代码");
-        title.put("colorName","颜色名称");
-        title.put("platformCode","平台代码");
-        title.put("platformName","平台名称");
-        title.put("svlBatteryCode","电池型号");
-        title.put("svlInnerColorCode","内饰颜色代码");
-        title.put("svlInnerColorName","内饰颜色名称");
-        title.put("svlMaterialBasicInfo","基本信息");
-        title.put("vehicleName","车型名称");
-        title.put("vehicleCode","车型代码");
-        title.put("svlMaterialCode","物料编号");
-        title.put("svlMotorCode","电机型号");
+        title.put("brandCode", "品牌代码");
+        title.put("brandName", "中文品牌");
+        title.put("colorCode", "颜色代码");
+        title.put("colorName", "颜色名称");
+        title.put("platformCode", "平台代码");
+        title.put("platformName", "平台名称");
+        title.put("svlBatteryCode", "电池型号");
+        title.put("svlInnerColorCode", "内饰颜色代码");
+        title.put("svlInnerColorName", "内饰颜色名称");
+        title.put("svlMaterialBasicInfo", "基本信息");
+        title.put("vehicleName", "车型名称");
+        title.put("vehicleCode", "车型代码");
+        title.put("svlMaterialCode", "物料编号");
+        title.put("svlMotorCode", "电机型号");
         toJSONResponse(Result.build(title), response);
     }
-    
-    
-    @RequestMapping(value = "getDetail",method = RequestMethod.GET)
-    public String getDetailBikeBomToPage(String id,Model model){
-        model.addAttribute("data",id);
+
+
+    @RequestMapping(value = "getDetail", method = RequestMethod.GET)
+    public String getDetailBikeBomToPage(String id, Model model) {
+        model.addAttribute("data", id);
         return "bikeBom/detailBikeBom";
     }
 
-    @RequestMapping(value = "update/page",method = RequestMethod.GET)
-    public String toUpdateSingleVehiclesPage(String projectId, Long id, Model model){
-        HzSingleVehiclesRespDTO respDTO = hzSingleVehiclesServices.getSingleVehiclesById(projectId,id);
-        model.addAttribute("data",respDTO);
+    @RequestMapping(value = "update/page", method = RequestMethod.GET)
+    public String toUpdateSingleVehiclesPage(String projectId, Long id, Model model) {
+        HzSingleVehiclesRespDTO respDTO = hzSingleVehiclesServices.getSingleVehiclesById(projectId, id);
+        model.addAttribute("data", respDTO);
         return "bikeBom/updateBikeBom";
     }
 
-    @RequestMapping(value = "update",method = RequestMethod.POST)
-    public void updateSingleVehicles(@RequestBody UpdateHzSingleVehiclesReqDTO reqDTO,HttpServletResponse response){
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public void updateSingleVehicles(@RequestBody UpdateHzSingleVehiclesReqDTO reqDTO, HttpServletResponse response) {
         WriteResultRespDTO respDTO = hzSingleVehiclesServices.updateSingleVehicle(reqDTO);
-        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO)),response);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO)), response);
     }
 
-    @RequestMapping(value = "refresh",method = RequestMethod.POST)
-    public void refreshSingleVehicles(String projectId,HttpServletResponse response){
+    @RequestMapping(value = "refresh", method = RequestMethod.POST)
+    public void refreshSingleVehicles(String projectId, HttpServletResponse response) {
         WriteResultRespDTO respDTO = hzSingleVehiclesServices.refreshSingleVehicle(projectId);
-        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO)),response);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO)), response);
     }
 
     /**
      * 获取单车清单信息
+     *
      * @return
      */
     @RequestMapping(value = "record", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getSingleVehiclesRecord(String projectId) {
-        
+
         List<HzSingleVehiclesRespDTO> respDTOS = hzSingleVehiclesServices.singleVehiclesList(projectId);
         Map<String, Object> ret = new HashMap<>();
         List<Map<String, Object>> _list = new ArrayList<>();
-        if(ListUtil.isNotEmpty(respDTOS)){
+        if (ListUtil.isNotEmpty(respDTOS)) {
             respDTOS.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
                 _res.put("id", dto.getId());
                 _res.put("brandCode", dto.getBrandCode());
                 _res.put("brandName", dto.getBrandName());
                 _res.put("colorCode", dto.getColorCode());
-                _res.put("colorName",dto.getColorName());
+                _res.put("colorName", dto.getColorName());
                 _res.put("platformCode", dto.getPlatformCode());
                 _res.put("platformName", dto.getPlatformName());
                 _res.put("svlBatteryCode", dto.getSvlBatteryCode());
@@ -129,8 +129,8 @@ public class HzSingleVehiclesController extends BaseController {
                 _list.add(_res);
             });
             ret.put("totalCount", respDTOS.size());
-        }else {
-            ret.put("totalCount",0);
+        } else {
+            ret.put("totalCount", 0);
         }
         ret.put("result", _list);
 
@@ -140,6 +140,7 @@ public class HzSingleVehiclesController extends BaseController {
 
     /**
      * 单车BOM标题
+     *
      * @param response
      */
     @RequestMapping(value = "bom/title", method = RequestMethod.GET)
@@ -172,16 +173,17 @@ public class HzSingleVehiclesController extends BaseController {
 
     /**
      * 分页获取单车BOM 记录
+     *
      * @param query
      * @return
      */
     @RequestMapping(value = "bom/record", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> getSingleVehiclesBomRecordByPage(HzSingleVehiclesBomByPageQuery query) {
-        if(StringUtil.isEmpty(query.getProjectId())){
+        if (StringUtil.isEmpty(query.getProjectId())) {
             return new HashMap<>();
         }
-        if(null == query.getSingleVehiclesId()){
+        if (null == query.getSingleVehiclesId()) {
             return new HashMap<>();
         }
         Page<HzSingleVehiclesBomRespDTO> page = hzSingleVehiclesBomServices.getHzSingleVehiclesBomByPage(query);
@@ -195,7 +197,7 @@ public class HzSingleVehiclesController extends BaseController {
             Map<String, Object> _res = new HashMap<>();
             _res.put("No", dto.getNo());
             _res.put("level", dto.getLevel());
-            _res.put("eBomPuid",dto.getEBomPuid());
+            _res.put("eBomPuid", dto.getEBomPuid());
             _res.put("pBomOfWhichDept", dto.getPBomOfWhichDept());
             _res.put("lineId", dto.getLineId());
             _res.put("pBomLinePartName", dto.getPBomLinePartName());
@@ -214,8 +216,8 @@ public class HzSingleVehiclesController extends BaseController {
             _res.put("change", dto.getChange());
             _res.put("changeNum", dto.getChangeNum());
             _res.put("pFactoryCode", dto.getPFactoryCode());
-            _res.put("pStockLocation",dto.getPStockLocation());
-            _res.put("singleVehiclesId",dto.getSingleVehiclesId());
+            _res.put("pStockLocation", dto.getPStockLocation());
+            _res.put("singleVehiclesId", dto.getSingleVehiclesId());
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -224,28 +226,26 @@ public class HzSingleVehiclesController extends BaseController {
     }
 
 
-    @RequestMapping(value = "bom/refresh",method = RequestMethod.POST)
-    public void refreshSingleVehiclesBOM(String projectId,HttpServletResponse response){
+    @RequestMapping(value = "bom/refresh", method = RequestMethod.POST)
+    public void refreshSingleVehiclesBOM(String projectId, HttpServletResponse response) {
         WriteResultRespDTO respDTO = hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
-        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
     /**
      * 下载单车BOM
      */
-    @RequestMapping(value = "excelExport",method = RequestMethod.POST)
+    @RequestMapping(value = "excelExport", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject listDownLoad(
-            @RequestBody  List<HzSingleVehiclesRespDTO> dtos
-    ,HttpServletRequest request) {
-        boolean flag=true;
-        JSONObject result=new JSONObject();
+    public JSONObject listDownLoad(@RequestBody List<HzSingleVehiclesRespDTO> dtos, HttpServletRequest request) {
+        boolean flag = true;
+        JSONObject result = new JSONObject();
         try {
             String fileName = "tableExport.xlsx";//文件名-tableExport
             String[] title = {
-                    "物料编号","基本信息" ,"品牌代码","中文品牌","平台代码","平台名称",
-                    "车型代码","车型名称","内饰颜色代码","内饰颜色名称",
-                    "颜色代码","颜色名称","电池型号","电机型号"
+                    "物料编号", "基本信息", "品牌代码", "中文品牌", "平台代码", "平台名称",
+                    "车型代码", "车型名称", "内饰颜色代码", "内饰颜色名称",
+                    "颜色代码", "颜色名称", "电池型号", "电机型号"
             };//表头
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
@@ -270,20 +270,20 @@ public class HzSingleVehiclesController extends BaseController {
                 cellArr[13] = bomRespDTO.getSvlMotorCode();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"",request);
+            flag = ExcelUtil.writeExcel(fileName, title, dataList, "", request);
 
-            if(flag){
-                LOG.info(fileName+",文件创建成功");
-                result.put("status",flag);
-                result.put("msg","成功");
-                result.put("path","./files/"+fileName);
-            }else{
-                LOG.info(fileName+",文件创建失败");
-                result.put("status",flag);
-                result.put("msg","失败");
+            if (flag) {
+                LOG.info(fileName + ",文件创建成功");
+                result.put("status", flag);
+                result.put("msg", "成功");
+                result.put("path", "./files/" + fileName);
+            } else {
+                LOG.info(fileName + ",文件创建失败");
+                result.put("status", flag);
+                result.put("msg", "失败");
             }
         } catch (Exception e) {
-            if(LOG.isTraceEnabled())//isErrorEnabled()
+            if (LOG.isTraceEnabled())//isErrorEnabled()
                 LOG.error(e.getMessage());
         }
         return result;
@@ -292,25 +292,23 @@ public class HzSingleVehiclesController extends BaseController {
     /**
      * 下载单车BOM具体信息
      */
-    @RequestMapping(value = "excelExport2",method = RequestMethod.POST)
+    @RequestMapping(value = "excelExport2", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject listDownLoad2(
-            @RequestBody  List<HzSingleVehiclesBomRespDTO> dtos
-    ,HttpServletRequest request) {
-        boolean flag=true;
-        JSONObject result=new JSONObject();
+    public JSONObject listDownLoad2(@RequestBody List<HzSingleVehiclesBomRespDTO> dtos, HttpServletRequest request) {
+        boolean flag = true;
+        JSONObject result = new JSONObject();
         try {
             String fileName = "tableExport.xlsx";//文件名-tableExport
             String[] title = {
-                    "序号","零件号","名称","层级","专业","零件分类","零部件来源","备件","备件编号","工艺路线",
-                    "人工工时","节拍","焊点","机物料","标准件","工具","废品","变更","变更号","工厂代码","发货料库存地点"
+                    "序号", "零件号", "名称", "层级", "专业", "零件分类", "零部件来源", "备件", "备件编号", "工艺路线",
+                    "人工工时", "节拍", "焊点", "机物料", "标准件", "工具", "废品", "变更", "变更号", "工厂代码", "发货料库存地点"
             };//表头
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
-            int index=1;
+            int index = 1;
             for (HzSingleVehiclesBomRespDTO bomRespDTO : dtos) {
                 String[] cellArr = new String[title.length];
-                cellArr[0] = index+"";
+                cellArr[0] = index + "";
                 index++;
                 cellArr[1] = bomRespDTO.getLineId();
                 cellArr[2] = bomRespDTO.getPBomLinePartName();
@@ -334,20 +332,20 @@ public class HzSingleVehiclesController extends BaseController {
                 cellArr[20] = bomRespDTO.getPStockLocation();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"",request);
+            flag = ExcelUtil.writeExcel(fileName, title, dataList, "", request);
 
-            if(flag){
-                LOG.info(fileName+",文件创建成功");
-                result.put("status",flag);
-                result.put("msg","成功");
-                result.put("path","/files/"+fileName);
-            }else{
-                LOG.info(fileName+",文件创建失败");
-                result.put("status",flag);
-                result.put("msg","失败");
+            if (flag) {
+                LOG.info(fileName + ",文件创建成功");
+                result.put("status", flag);
+                result.put("msg", "成功");
+                result.put("path", "/files/" + fileName);
+            } else {
+                LOG.info(fileName + ",文件创建失败");
+                result.put("status", flag);
+                result.put("msg", "失败");
             }
         } catch (Exception e) {
-            if(LOG.isTraceEnabled())//isErrorEnabled()
+            if (LOG.isTraceEnabled())//isErrorEnabled()
                 LOG.error(e.getMessage());
         }
         return result;
@@ -356,13 +354,13 @@ public class HzSingleVehiclesController extends BaseController {
 
     @RequestMapping("sendSap")
     @ResponseBody
-    public JSONObject sendSap(@RequestBody List<HzSingleVehicles> hzSingleVehicles){
+    public JSONObject sendSap(@RequestBody List<HzSingleVehicles> hzSingleVehicles) {
         return hzSingleVehiclesServices.sendSap(hzSingleVehicles);
     }
 
     @RequestMapping("deleteSap")
     @ResponseBody
-    public JSONObject deleteSap(@RequestBody List<HzSingleVehicles> hzSingleVehicles){
+    public JSONObject deleteSap(@RequestBody List<HzSingleVehicles> hzSingleVehicles) {
         return hzSingleVehiclesServices.deleteSap(hzSingleVehicles);
     }
 

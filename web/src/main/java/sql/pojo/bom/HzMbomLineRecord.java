@@ -1,6 +1,6 @@
 package sql.pojo.bom;
 
-import sql.pojo.BaseChangeDO;
+import cn.net.connor.hozon.dao.pojo.BaseChangeDO;
 
 import java.util.Date;
 import java.util.Objects;

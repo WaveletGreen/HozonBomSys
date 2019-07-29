@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
+import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMaterielServiceImpl;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelFeatureDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
@@ -16,7 +17,6 @@ import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
-import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
 import integration.base.classify.ZPPTCO003;
 import integration.logic.ConfigurableMaterialAllocation;
 import integration.option.ActionFlagOption;
@@ -31,7 +31,7 @@ import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.project.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.util.*;
 /**
@@ -46,7 +46,7 @@ public class SynConfigurableMaterialService {
     @Autowired
     private HzCfg0MainService hzCfg0MainService;
     @Autowired
-    private HzSuperMaterielService hzSuperMaterielService;
+    private HzSuperMaterielServiceImpl hzSuperMaterielServiceImpl;
     @Autowired
     private HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
     @Autowired
@@ -177,7 +177,7 @@ public class SynConfigurableMaterialService {
                 HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(cfg0MainPuids[i]);
                 HzMaterielRecord superMateriel = null;
                 if (mainRecord != null) {
-                    superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
+                    superMateriel = hzSuperMaterielServiceImpl.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
                 }
                 for (HzMaterielFeatureBean hzMaterielFeatureBean : hzMaterielFeatureBeans) {
                     if (hzMaterielFeatureBean.getpCfg0ModelRecord() != null && hzMaterielFeatureBean.getpCfg0ModelRecord().equals(puids[i])) {
@@ -322,7 +322,7 @@ public class SynConfigurableMaterialService {
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(hzCfg0MainRecord.getPuid());
         HzMaterielRecord superMateriel = null;
         if (mainRecord != null) {
-            superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
+            superMateriel = hzSuperMaterielServiceImpl.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
         }
 
         List<HzCfg0ModelFeature> hzCfg0ModelFeatures = new ArrayList<>();

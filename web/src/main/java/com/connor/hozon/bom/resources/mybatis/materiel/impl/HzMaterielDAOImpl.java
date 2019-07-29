@@ -11,7 +11,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
-import sql.pojo.project.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 import sql.redis.HzDBException;
 
 import java.util.ArrayList;

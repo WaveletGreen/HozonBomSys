@@ -1,8 +1,8 @@
 package cn.net.connor.hozon.dao.dao.configuration.relevance;
 
 
-import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,9 +14,9 @@ public interface HzRelevanceBasicChangeDao {
 
     int insertList(List<HzRelevanceBasicChange> hzRelevanceBasicChanges);
 
-    List<HzRelevanceBasicChange> selectByOrderChangeId(Long orderChangeId);
+    List<HzRelevanceBasicChange> selectByOrderChangeId(@Param("changeOrderId") Long changeOrderId);
 
-    HzRelevanceBasicChange selectMaxVersionByProject(String projectPuid);
+    HzRelevanceBasicChange selectMaxVersionByProject(@Param("rbProjectUid") String rbProjectUid);
 
     List<HzRelevanceBasicChange> selectByVersionAndProjectId(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor);
 
@@ -26,7 +26,7 @@ public interface HzRelevanceBasicChangeDao {
 
     int updateStatusByIOrderId(HzRelevanceBasicChange hzRelevanceBasicChange);
 
-    HzRelevanceBasicChange selectByLasteBySrc(HzRelevanceBasic hzRelevanceBasic);
+    HzRelevanceBasicChange selectByLatestBySrc(@Param("srcId") Long srcId);
 
     HzRelevanceBasicChange selectByVersion(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor);
 

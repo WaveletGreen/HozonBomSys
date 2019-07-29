@@ -28,6 +28,10 @@ public class HzRelevanceQueryResult {
      */
     private Integer index;
     /**
+     * 特性值
+     */
+    private String rbFeatureValueCode;
+    /**
      * 相关性
      */
     private String relevance;
@@ -44,7 +48,7 @@ public class HzRelevanceQueryResult {
      */
     private Integer status;
     /**
-     *生效时间
+     * 生效时间
      */
     private Date effectedDate;
 
