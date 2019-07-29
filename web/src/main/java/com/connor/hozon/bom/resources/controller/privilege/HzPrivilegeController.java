@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
-import com.connor.hozon.bom.sys.filter.HzFilter;
+import cn.net.connor.hozon.config.filter.HzFilter;
 import com.connor.hozon.bom.sys.service.UserRolePrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

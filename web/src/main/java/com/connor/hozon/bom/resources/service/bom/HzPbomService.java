@@ -6,13 +6,13 @@ import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.domain.query.HzBomRecycleByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzPbomLineRecord;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -121,4 +121,6 @@ public interface HzPbomService {
      * @return
      */
     WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO);
+
+    JSONObject buildCraftSourceTree(HzPbomProcessComposeReqDTO reqDTO, HttpServletResponse response);
 }

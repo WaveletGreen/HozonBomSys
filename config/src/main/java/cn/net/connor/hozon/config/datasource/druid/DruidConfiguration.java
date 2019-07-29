@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.common.config.druid;
+package cn.net.connor.hozon.config.datasource.druid;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;

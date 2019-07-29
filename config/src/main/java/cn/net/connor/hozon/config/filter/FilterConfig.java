@@ -1,6 +1,12 @@
-package com.connor.hozon.bom.common.config;
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
 
-import com.connor.hozon.bom.sys.filter.HzFilter;
+package cn.net.connor.hozon.config.filter;
+
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

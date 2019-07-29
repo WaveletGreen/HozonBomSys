@@ -1,14 +1,11 @@
 package com.connor.hozon.bom.sys.controller;
 
 
-import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
 import com.connor.hozon.bom.common.base.service.GenericService;
-import com.connor.hozon.bom.common.config.websocket.SocketSessionRegistry;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateUserPasswordReqDTO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
@@ -22,9 +19,7 @@ import com.connor.hozon.bom.sys.service.UserAssociateRoleService;
 import com.connor.hozon.bom.sys.service.UserRoleService;
 import com.connor.hozon.bom.sys.service.UserService;
 import com.google.common.collect.Lists;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -36,8 +31,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
 import java.lang.reflect.ParameterizedType;
-import java.util.*;
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /*
 * 类描述：用户维护controller
@@ -59,8 +56,8 @@ public class UserController extends GenericController<User,QueryUser> {
     private UserAssociateRoleService userAssociateRoleService;
 
 
-    @Autowired
-    SocketSessionRegistry webAgentSessionRegistry;
+//    @Autowired
+//    SocketSessionRegistry webAgentSessionRegistry;
     @Override
     protected GenericService<User, QueryUser> getService() {
         return userService;

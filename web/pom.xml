@@ -40,11 +40,6 @@
             <artifactId>controller</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.connor.hozon</groupId>
-            <artifactId>view</artifactId>
-            <version>1.0.0</version>
-        </dependency>
         <!--添加自定义的子模块-->
     </dependencies>
     <build>
