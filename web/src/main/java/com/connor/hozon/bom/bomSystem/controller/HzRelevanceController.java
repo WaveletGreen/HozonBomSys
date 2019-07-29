@@ -6,9 +6,8 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import com.connor.hozon.bom.bomSystem.dto.relevance.HzRelevanceQueryDTO;
+import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQuery;
 import com.connor.hozon.bom.bomSystem.service.relevance.HzRelevanceService2;
-import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.change.HzChangeOrderRecord;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,12 +32,10 @@ import java.util.Map;
 @Controller
 @RequestMapping("/relevance")
 public class HzRelevanceController {
-    /*** 相关性服务层*/
+    /*** 相关性服务层，一个controller对应一个service*/
     @Autowired
-    HzRelevanceService2 hzRelevanceService2;
+    private HzRelevanceService2 hzRelevanceService2;
 
-    @Autowired
-    HzChangeOrderDAO hzChangeOrderDAO;
     /**
      * 生成相关性代码，生成的时，将原有的历史相关性进行删除处理
      *
@@ -56,33 +51,32 @@ public class HzRelevanceController {
     /**
      * 查询当前项目下的相关性数据，采用封装的对象进行分页查询
      *
-     * @param dto 一个封装相关性分页查询的对象，具体定义从{@link HzRelevanceQueryDTO}查看各个字段与前端进行对应
+     * @param dto 一个封装相关性分页查询的对象，具体定义从{@link HzRelevanceQuery}查看各个字段与前端进行对应
      * @return 分页查询一组相关性数据
      */
     @RequestMapping(value = "/queryRelevance", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> queryRelevance(HzRelevanceQueryDTO dto) {
+    public Map<String, Object> queryRelevance(HzRelevanceQuery dto) {
         return hzRelevanceService2.queryRelevance(dto);
     }
 
 
     @RequestMapping(value = "/getChangePage")
-    public String getChangePage(String projectUid, Model model){
-        List<HzChangeOrderRecord> hzChangeOrderRecordList = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectUid);
-        model.addAttribute("changeFroms",hzChangeOrderRecordList);
+    public String getChangePage(String projectUid, Model model) {
+        hzRelevanceService2.getChangePageModel(projectUid, model);
         return "cfg/relevance/relevanceChangeFrom";
     }
 
 
     @RequestMapping(value = "/getChange")
     @ResponseBody
-    public JSONObject getChange(String projectPuid,Long changeFromId){
-        return hzRelevanceService2.getChange(changeFromId,projectPuid);
+    public JSONObject getChange(String projectPuid, Long changeFromId) {
+        return hzRelevanceService2.getChange(changeFromId, projectPuid);
     }
 
     @RequestMapping(value = "/goBackData")
     @ResponseBody
-    public JSONObject goBackData(String projectPuid){
+    public JSONObject goBackData(String projectPuid) {
         return hzRelevanceService2.goBackData(projectPuid);
     }
 }

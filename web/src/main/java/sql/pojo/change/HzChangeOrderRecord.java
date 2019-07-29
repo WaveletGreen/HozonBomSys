@@ -1,6 +1,6 @@
 package sql.pojo.change;
 
-import sql.pojo.BaseDO;
+import cn.net.connor.hozon.dao.pojo.BaseDO;
 
 import java.util.Date;
 

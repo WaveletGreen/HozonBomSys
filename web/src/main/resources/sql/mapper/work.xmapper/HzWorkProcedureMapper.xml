@@ -140,7 +140,7 @@
       and t1.P_VALID_FLAG <![CDATA[ <> ]]>0
       and t2.P_STATUS<![CDATA[ <> ]]>0
    </where>
-    order by t1.P_MATERIEL_CODE)t
+    order by t1.P_MATERIEL_CODE,P_PROCEDURE_DESC asc)t
     WHERE ROWNUM &lt;=#{limit,jdbcType=INTEGER}) where rn &gt;#{offset,jdbcType=INTEGER}
   </select>
 

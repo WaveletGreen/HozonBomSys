@@ -3,9 +3,8 @@ package com.connor.hozon.bom.common.base.service;
 
 
 import com.connor.hozon.bom.common.base.dao.GenericDao;
-import com.connor.hozon.bom.common.base.entity.Page;
-import com.connor.hozon.bom.common.base.entity.QueryBase;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.common.entity.Page;
+import cn.net.connor.hozon.common.entity.QueryBase;
 
 
 import java.util.List;

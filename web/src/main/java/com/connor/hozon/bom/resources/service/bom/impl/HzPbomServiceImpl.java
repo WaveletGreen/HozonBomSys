@@ -1,14 +1,15 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
+import cn.net.connor.hozon.common.factory.SimpleResponseResultFactory;
+import cn.net.connor.hozon.common.setting.CommonSetting;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
-import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
@@ -19,47 +20,41 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzSimulateCraftingPart
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
-import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
+import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
-import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.entity.User;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import sql.pojo.accessories.HzAccessoriesLibs;
-import sql.pojo.bom.*;
+import sql.pojo.bom.HZBomMainRecord;
+import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
-import sql.pojo.change.HzApplicantChangeRecord;
-import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.epl.HzEPLRecord;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 
@@ -988,5 +983,34 @@ public class HzPbomServiceImpl implements HzPbomService {
         return result;
     }
 
+    @Override
+    public JSONObject buildCraftSourceTree(HzPbomProcessComposeReqDTO reqDTO, HttpServletResponse response) {
+        JSONObject result;
+        if (reqDTO == null||reqDTO.getProjectId() == null || reqDTO.getLineId() == null) {
+           return SimpleResponseResultFactory.createErrorResult("非法参数！");
+        }
 
+        JSONArray jsonArray=null;
+        if (reqDTO.getLineId().contains(CommonSetting.semicolon)) {
+            String[] lineIDs = reqDTO.getLineId().split(CommonSetting.semicolon);
+            jsonArray=new JSONArray();
+            for (String id : lineIDs) {
+                HzPbomProcessComposeReqDTO dto=new HzPbomProcessComposeReqDTO();
+                dto.setLineId(id);
+                dto.setProjectId(reqDTO.getProjectId());
+                dto.setPuid(reqDTO.getPuid());
+                JSONArray tree=getPbomForProcessCompose(dto);
+                if(tree!=null){
+                    jsonArray.addAll(tree);
+                }
+            }
+        }
+        else {
+            jsonArray= getPbomForProcessCompose(reqDTO);
+        }
+        if (jsonArray == null) {
+            return SimpleResponseResultFactory.createErrorResult("查无结果！");
+        }
+        return SimpleResponseResultFactory.createSuccessResult(jsonArray);
+    }
 }

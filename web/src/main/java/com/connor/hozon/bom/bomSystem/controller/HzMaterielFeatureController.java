@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
+import cn.net.connor.hozon.services.service.depository.project.impl.*;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
@@ -17,7 +18,6 @@ import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
-import com.connor.hozon.bom.bomSystem.service.project.*;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -56,7 +56,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
      * 超级物料服务层
      */
     @Autowired
-    HzSuperMaterielService hzSuperMaterielService;
+    HzSuperMaterielServiceImpl hzSuperMaterielServiceImpl;
     /**
      * 车型模型服务层
      */
@@ -90,13 +90,13 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
 
     //车型基本数据
     @Autowired
-    private HzProjectLibsService hzProjectLibsService;
+    private HzProjectLibsServiceImpl hzProjectLibsServiceImpl;
     @Autowired
-    private HzVehicleService hzVehicleService;
+    private HzVehicleServiceImpl hzVehicleServiceImpl;
     @Autowired
-    private HzPlatformService hzPlatformService;
+    private HzPlatformServiceImpl hzPlatformServiceImpl;
     @Autowired
-    private HzBrandService hzBrandService;
+    private HzBrandServiceImpl hzBrandServiceImpl;
 
     @Autowired
     HzBomAllCfgService hzBomAllCfgService;
@@ -159,7 +159,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
 //        List<String> column = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid, "<br/>");
 //        List<HzMaterielFeatureBean> hzMaterielFeatureBeans = hzCfg0Service.doSelectMaterielFeatureByProjectPuid(projectPuid);
 //
-//        HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectPuid);
+//        HzMaterielRecord superMateriel = hzSuperMaterielServiceImpl.doSelectByProjectPuid(projectPuid);
 //
 //        Map<String, HzMaterielFeatureBean> sortedBean = new HashMap<>();
 //
@@ -226,7 +226,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
 //        List<Map<String, Object>> data = new ArrayList<>();
 //        List<String> column = hzCfg0OptionFamilyService.doGetColumn(projectPuid);
 //        List<HzMaterielFeatureBean> hzMaterielFeatureBeans = hzCfg0Service.doSelectMaterielFeatureByProjectPuid(projectPuid);
-//        HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectPuid);
+//        HzMaterielRecord superMateriel = hzSuperMaterielServiceImpl.doSelectByProjectPuid(projectPuid);
 //
 //        if (hzMaterielFeatureBeans == null || column == null || column.size() == 0) {
 //            result.put("status", false);
@@ -296,10 +296,10 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
 //    @RequestMapping("/initAddingPageParams")
 //    public String initAddingPageParams(@RequestParam String projectPuid, Model model) {
 //        if (checkString(projectPuid)) {
-//            HzProjectLibs project = hzProjectLibsService.doLoadProjectLibsById(projectPuid);
-//            HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
-//            HzPlatformRecord platform = hzPlatformService.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
-//            HzBrandRecord brand = hzBrandService.doGetByPuid(platform.getpPertainToBrandPuid());
+//            HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(projectPuid);
+//            HzVehicleRecord vehicle = hzVehicleServiceImpl.doGetByPuid(project.getpProjectPertainToVehicle());
+//            HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
+//            HzBrandRecord brand = hzBrandServiceImpl.doGetByPuid(platform.getpPertainToBrandPuid());
 //            HzCfg0ModelDetail hzCfg0ModelDetail = new HzCfg0ModelDetail();
 //            hzCfg0ModelDetail.setpModelBrand(brand.getpBrandName());
 //            hzCfg0ModelDetail.setpModelPlatform(platform.getpPlatformName());

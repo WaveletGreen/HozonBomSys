@@ -3,7 +3,6 @@ package com.connor.hozon.bom.resources.controller.bom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
-
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -13,12 +12,14 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,10 +46,10 @@ public class HzPbomController extends BaseController {
 
     private LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
 
-    private Map<String,Object> orderDataObject = new HashMap<>();
+    private Map<String, Object> orderDataObject = new HashMap<>();
 
     @RequestMapping(value = "manage/title", method = RequestMethod.GET)
-    public void getPbomLineTitle(String projectId,HttpServletResponse response) {
+    public void getPbomLineTitle(String projectId, HttpServletResponse response) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
@@ -71,7 +72,7 @@ public class HzPbomController extends BaseController {
         tableTitle.put("mouldType", "模具类别");
         tableTitle.put("outerPart", "外委件");
         tableTitle.put("station", "工位");
-        tableTitle.put("effectTime","生效时间");
+        tableTitle.put("effectTime", "生效时间");
         //获取该项目下的所有车型模型
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
@@ -119,8 +120,8 @@ public class HzPbomController extends BaseController {
             _res.put("outerPart", dto.getOuterPart());
             _res.put("station", dto.getStation());
             _res.put("status", dto.getStatus());
-            _res.put("effectTime",dto.getEffectTime());
-            if(null != dto.getObject()){
+            _res.put("effectTime", dto.getEffectTime());
+            if (null != dto.getObject()) {
                 _res.putAll(dto.getObject());
             }
             _list.add(_res);
@@ -161,7 +162,7 @@ public class HzPbomController extends BaseController {
      * @return
      */
     @RequestMapping(value = "updatePbomManage", method = RequestMethod.GET)
-    public String updatePbomManageRecordToPage(String projectId, String eBomPuid,String puid,Integer updateType, Model model) {
+    public String updatePbomManageRecordToPage(String projectId, String eBomPuid, String puid, Integer updateType, Model model) {
         HzPbomLineRespDTO respDTO = hzPbomService.getHzPbomByPuid(projectId, eBomPuid);
         if (respDTO == null) {
             return "";
@@ -187,30 +188,19 @@ public class HzPbomController extends BaseController {
 
     /**
      * 获取PBOM结构树
-     *
+     * 	S00-5000000BBYY0;S00-5000200
      * @param reqDTO
      * @param response
      */
     @RequestMapping(value = "processComposeTree", method = RequestMethod.GET)
-    public void findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO, HttpServletResponse response) {
-        if (reqDTO == null) {
-            toJSONResponse(Result.build(false, "非法参数！"), response);
-            return;
-        }
-        if (reqDTO.getProjectId() == null || reqDTO.getLineId() == null) {
-            toJSONResponse(Result.build(false, "非法参数！"), response);
-            return;
-        }
-        JSONArray jsonArray = hzPbomService.getPbomForProcessCompose(reqDTO);
-        if (jsonArray == null) {
-            toJSONResponse(Result.build(false, "查无结果！"), response);
-            return;
-        }
-        toJSONResponse(Result.build(true, jsonArray), response);
+    @ResponseBody
+    public JSONObject findProcessComposeTree(HzPbomProcessComposeReqDTO reqDTO, HttpServletResponse response) {
+        return hzPbomService.buildCraftSourceTree(reqDTO,response);
     }
 
     /**
      * 获取一条PBOM 信息
+     *
      * @param reqDTO
      * @param response
      */
@@ -239,6 +229,7 @@ public class HzPbomController extends BaseController {
 
     /**
      * 获取合成新件界面
+     *
      * @param model
      * @return
      */
@@ -249,6 +240,7 @@ public class HzPbomController extends BaseController {
 
     /**
      * 合成工艺合件
+     *
      * @param
      * @param param
      * @Autor Fancyears·Malos
@@ -286,27 +278,27 @@ public class HzPbomController extends BaseController {
     /**
      * 下载PBOM
      */
-    @RequestMapping(value = "excelExport",method = RequestMethod.POST)
+    @RequestMapping(value = "excelExport", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject listDownLoad(
-             @RequestBody  List<HzPbomLineRespDTO> dtos,HttpServletRequest request
+            @RequestBody List<HzPbomLineRespDTO> dtos, HttpServletRequest request
     ) {
-        boolean flag=true;
-        JSONObject result=new JSONObject();
+        boolean flag = true;
+        JSONObject result = new JSONObject();
         try {
             String fileName = "tableExport.xlsx";//文件名-tableExport
             Object[] temp = tableTitle.values().toArray();
             //表头
             String[] title = new String[temp.length];
-            for(int i=0;i<temp.length;i++){
+            for (int i = 0; i < temp.length; i++) {
                 title[i] = temp[i].toString();
             }
             //当前页的数据
             List<String[]> dataList = new ArrayList<String[]>();
-            int index=1;
+            int index = 1;
             for (HzPbomLineRespDTO ebomRespDTO : dtos) {
                 String[] cellArr = new String[title.length];
-                cellArr[0] = index+"";
+                cellArr[0] = index + "";
                 index++;
                 cellArr[1] = ebomRespDTO.getLineId();
                 cellArr[2] = ebomRespDTO.getpBomLinePartName();
@@ -330,20 +322,20 @@ public class HzPbomController extends BaseController {
                 cellArr[20] = ebomRespDTO.getStation();
                 dataList.add(cellArr);
             }
-            flag = ExcelUtil.writeExcel(fileName, title, dataList,"pbom",request);
+            flag = ExcelUtil.writeExcel(fileName, title, dataList, "pbom", request);
 
-            if(flag){
-                LOG.info(fileName+",文件创建成功");
-                result.put("status",flag);
-                result.put("msg","成功");
-                result.put("path","./files/"+fileName);
-            }else{
-                LOG.info(fileName+",文件创建失败");
-                result.put("status",flag);
-                result.put("msg","失败");
+            if (flag) {
+                LOG.info(fileName + ",文件创建成功");
+                result.put("status", flag);
+                result.put("msg", "成功");
+                result.put("path", "./files/" + fileName);
+            } else {
+                LOG.info(fileName + ",文件创建失败");
+                result.put("status", flag);
+                result.put("msg", "失败");
             }
         } catch (Exception e) {
-            if(LOG.isTraceEnabled())//isErrorEnabled()
+            if (LOG.isTraceEnabled())//isErrorEnabled()
                 LOG.error(e.getMessage());
         }
         return result;
@@ -351,10 +343,11 @@ public class HzPbomController extends BaseController {
 
     /**
      * 跳转到Excel导入页面
+     *
      * @return
      */
-    @RequestMapping(value = "importExcel",method = RequestMethod.GET)
-    public String getExcelImport(){
+    @RequestMapping(value = "importExcel", method = RequestMethod.GET)
+    public String getExcelImport() {
         return "bomManage/pbom/pbomManage/excelImport";
     }
 
@@ -372,47 +365,51 @@ public class HzPbomController extends BaseController {
 
     /**
      * 获取变更表单
+     *
      * @return
      */
-    @RequestMapping(value = "find/choose",method = RequestMethod.POST)
-    public void getOrderChooseToPage(@RequestBody AddDataToChangeOrderReqDTO reqDTO,HttpServletResponse response){
+    @RequestMapping(value = "find/choose", method = RequestMethod.POST)
+    public void getOrderChooseToPage(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response) {
         List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(reqDTO.getProjectId());
         this.orderDataObject = new HashMap<>();
-        this.orderDataObject.put("data",records);
-        this.orderDataObject.put("puids",reqDTO.getPuids());
-        toJSONResponse(Result.build(orderDataObject),response);
-        toJSONResponse(Result.build(orderDataObject),response);
+        this.orderDataObject.put("data", records);
+        this.orderDataObject.put("puids", reqDTO.getPuids());
+        toJSONResponse(Result.build(orderDataObject), response);
+        toJSONResponse(Result.build(orderDataObject), response);
     }
 
     /**
      * 跳转到PBOM选择变更单
+     *
      * @return
      */
-    @RequestMapping(value = "order/choose",method = RequestMethod.GET)
-    public String getOrderChooseToPage(Model model){
-        model.addAttribute("data",this.orderDataObject.get("data"));
-        model.addAttribute("puids",this.orderDataObject.get("puids"));
+    @RequestMapping(value = "order/choose", method = RequestMethod.GET)
+    public String getOrderChooseToPage(Model model) {
+        model.addAttribute("data", this.orderDataObject.get("data"));
+        model.addAttribute("puids", this.orderDataObject.get("puids"));
         return "bomManage/pbom/pbomManage/pbomSetChangeForm";
     }
 
     /**
      * PBOM发起变更数据到变更单
+     *
      * @param reqDTO
      * @param response
      */
-    @RequestMapping(value = "data/change",method = RequestMethod.POST)
-    public void pbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response){
+    @RequestMapping(value = "data/change", method = RequestMethod.POST)
+    public void pbomDataToChangeOrder(@RequestBody AddDataToChangeOrderReqDTO reqDTO, HttpServletResponse response) {
         WriteResultRespDTO respDTO = hzPbomService.dataToChangeOrder(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
     /**
      * PBOM撤销
+     *
      * @param reqDTO
      * @param response
      */
-    @RequestMapping(value = "cancel",method = RequestMethod.POST)
-    public void pbomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
+    @RequestMapping(value = "cancel", method = RequestMethod.POST)
+    public void pbomCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response) {
         WriteResultRespDTO respDTO = hzPbomService.backBomUtilLastValidState(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }

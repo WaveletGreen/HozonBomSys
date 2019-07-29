@@ -7,11 +7,11 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 
-import com.connor.hozon.bom.bomSystem.dto.HzColorSetQueryDto;
+import cn.net.connor.hozon.dao.pojo.depository.color.HzColorSetQuery;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.sys.entity.User;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.accessories.HzAccessoriesLibs;
-import sql.pojo.cfg.color.HzCfg0ColorSet;
+import cn.net.connor.hozon.dao.pojo.depository.color.HzCfg0ColorSet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,7 +55,7 @@ public class HzCfg0ColorSetController {
 
     /***颜色库服务*/
     @Autowired
-    HzCfg0ColorSetService colorSerService;
+    HzColorSetServiceImpl colorSerService;
     /***工艺辅料库dao*/
     @Autowired
     HzAccessoriesLibsDAO hzAccessoriesLibsDAO;
@@ -65,19 +65,19 @@ public class HzCfg0ColorSetController {
     /**
      * 颜色库分页查询
      *
-     * @param hzColorSetQueryDto 分页描述对象，采用bootstrap table自带的分页，从前端table定义分页对象。
+     * @param hzColorSetQuery 分页描述对象，采用bootstrap table自带的分页，从前端table定义分页对象。
      *                  采用POST方法回传的是普通JSON对象包含{@link QueryBase}的各个字段即可
      * @return 一组颜色对象
      */
-//    @RequestMapping(value = "/queryAll2", method = RequestMethod.POST)
+//    @RequestMapping(value = "/selectAll", method = RequestMethod.POST)
 //    @ResponseBody
-//    public Map<String, Object> queryAll2(QueryBase queryBase) {
-//        return colorSerService.queryAll2(queryBase);
+//    public Map<String, Object> selectAll(QueryBase queryBase) {
+//        return colorSerService.selectAll(queryBase);
 //    }
     @RequestMapping(value = "/queryAll2", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> queryAll2(HzColorSetQueryDto hzColorSetQueryDto) {
-        return colorSerService.queryAll3(hzColorSetQueryDto);
+    public Map<String, Object> queryAll2(HzColorSetQuery hzColorSetQuery) {
+        return colorSerService.selectAll(hzColorSetQuery);
     }
 
     @RequestMapping(value = "/getAllColorSet", method = RequestMethod.GET)

@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.dao.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.BasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import sql.pojo.cfg.vwo.HzVwoOpiBom;
 /**
  * @Author: Fancyears·Maylos·Malvis

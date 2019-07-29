@@ -22,13 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 /*
-* 类描述：菜单操作controller
-* @auther linzf
-* @create 2017/10/10 0010 
-*/
+ * 类描述：菜单操作controller
+ * @auther linzf
+ * @create 2017/10/10 0010
+ */
 @Controller
 @RequestMapping("/tree")
-public class TreeController extends GenericController<Tree,QueryTree> {
+public class TreeController extends GenericController<Tree, QueryTree> {
 
     @Inject
     private TreeService treeService;
@@ -42,61 +42,66 @@ public class TreeController extends GenericController<Tree,QueryTree> {
 
     /**
      * 功能描述：跳转到修改菜单节点的页面
+     *
      * @param entity
      * @param model
      * @return
      * @throws Exception
      */
-    @RequestMapping(value="/updateTreePage")
-    public String updateTreePage(Tree entity,Model model) throws Exception{
+    @RequestMapping(value = "/updateTreePage")
+    public String updateTreePage(Tree entity, Model model) throws Exception {
         entity = treeService.get(entity);
         Tree pTree = null;
-        if(entity.getpId()==0l){
+        if (entity.getpId() == 0l) {
             pTree = new Tree();
             pTree.setId(0l);
             pTree.setName("顶层节点");
-        }else{
+        } else {
             pTree = treeService.get(new Tree(entity.getpId()));
         }
         entity.setTree(pTree);
-        model.addAttribute("entity",entity);
-        return getPageBaseRoot()+UPDATEPAGE;
+        model.addAttribute("entity", entity);
+        return getPageBaseRoot() + UPDATEPAGE;
     }
 
     /**
      * 功能描述：跳转到增加菜单节点的页面
+     *
      * @param entity
      * @param model
      * @return
      * @throws Exception
      */
-    @RequestMapping(value="/addTreePage")
-    public String addPage(Tree entity,Model model) throws Exception{
-        if(entity.getId()==0){
+    @RequestMapping(value = "/addTreePage")
+    public String addPage(Tree entity, Model model) throws Exception {
+        if (entity.getId() == 0) {
             entity = new Tree();
             entity.setId(0l);
             entity.setName("顶层节点");
-        }else{
+        } else {
             entity = treeService.get(entity);
         }
-        model.addAttribute("entity",entity);
-        String page=getPageBaseRoot()+ADDPAGE;
+        model.addAttribute("entity", entity);
+        String page = getPageBaseRoot() + ADDPAGE;
         return page;
     }
 
     /**
-     * 功能描述：直接加载整个菜单树的数据(且必须要有管理员权限才可以加载该菜单树的数据)
+     * 功能描述：直接加载整个菜单树的数据
+     * <p>
+     * 必须要有管理员权限才可以加载该菜单树的数据，如果没有管理员权限会返回403错误到前端
+     *
      * @return
      */
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @RequestMapping(value = "/loadUserTree",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/loadUserTree", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Map<String,Object> loadUserTree(){
-        Map<String,Object> result = new HashMap<String, Object>();
+    public Map<String, Object> loadUserTree() {
+        Map<String, Object> result = new HashMap<String, Object>();
         List<Tree> treeList = treeService.query(null);
         result.put(SystemStaticConst.RESULT, SystemStaticConst.SUCCESS);
-        result.put(SystemStaticConst.MSG,"加载菜单数据成功！");
-        result.put("data",treeMapper.treesToTressDTOs(treeList));
+        result.put(SystemStaticConst.MSG, "加载菜单数据成功！");
+        result.put("data", treeMapper.treesToTressDTOs(treeList));
         return result;
     }
 

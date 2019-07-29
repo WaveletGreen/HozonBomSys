@@ -16,7 +16,7 @@ import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.option.SpecialSettingOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzColorModelService;
-import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
+import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzColorLvl2ModelService;
@@ -33,7 +33,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
-import sql.pojo.cfg.color.HzCfg0ColorSet;
+import cn.net.connor.hozon.dao.pojo.depository.color.HzCfg0ColorSet;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.modelColor.*;
 import sql.pojo.change.HzChangeOrderRecord;
@@ -65,7 +65,7 @@ public class HzCfg0ModelColorController {
     HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
     /***颜色库服务*/
     @Autowired
-    HzCfg0ColorSetService hzCfg0ColorSetService;
+    HzColorSetServiceImpl hzColorSetServiceImpl;
     /***主配置*/
     @Autowired
     HzCfg0MainService hzCfg0MainService;
@@ -120,7 +120,7 @@ public class HzCfg0ModelColorController {
         /**过滤油漆车身总成*/
         columnList.addAll(_columnList.stream().filter(c -> c != null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                 .collect(Collectors.toList()));
-        List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();//颜色库所有数据
+        List<HzCfg0ColorSet> colorList = hzColorSetServiceImpl.doGetAll();//颜色库所有数据
         List<HzCfg0ColorSet> _colorList = new ArrayList<>(colorList);//将colorList复制到_colorList
         HzCfg0ModelColor mc = new HzCfg0ModelColor();
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
@@ -182,7 +182,7 @@ public class HzCfg0ModelColorController {
         /**过滤油漆车身总成*/
         columnList.addAll(_columnList.stream().filter(c -> c != null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
                 .collect(Collectors.toList()));
-        List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
+        List<HzCfg0ColorSet> colorList = hzColorSetServiceImpl.doGetAll();
         ArrayList<String> orgValue = new ArrayList<>();
         List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor(puid);
 
@@ -429,7 +429,7 @@ public class HzCfg0ModelColorController {
                 } else if ("modelShell".equals(key)) {
                     HzCfg0ColorSet set = new HzCfg0ColorSet();
                     set.setPuid(value);
-                    set = hzCfg0ColorSetService.getById(set);
+                    set = hzColorSetServiceImpl.getById(set);
                     modelColor.setpModelShellOfColorfulModel(set.getpColorCode());
                     modelColor.setpColorUid(set.getPuid());
                 } else {
@@ -740,7 +740,7 @@ public class HzCfg0ModelColorController {
             }
         }
         //这里我估计需要过滤一些紧固件胶带等东西
-        List<HzCfg0ColorSet> colorList = hzCfg0ColorSetService.doGetAll();
+        List<HzCfg0ColorSet> colorList = hzColorSetServiceImpl.doGetAll();
         model.addAttribute("assembly", lineRecords);
         model.addAttribute("colorList", colorList);
         model.addAttribute("modelUid", modelUid);

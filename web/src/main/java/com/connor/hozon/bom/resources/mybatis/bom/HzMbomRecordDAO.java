@@ -1,8 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateMbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
 import sql.pojo.bom.HzMbomLineRecord;
@@ -83,25 +81,32 @@ public interface HzMbomRecordDAO {
     Page<HzMbomLineRecord> findMbomForPage(HzMbomByPageQuery query);
 
     /**
+     * 查询Mbom颜色件信息
+     * @param query
+     * @return
+     */
+    Page<HzMbomLineRecord> queryMbomToColorPart(HzMbomByPageQuery query);
+
+    /**
      * 查询Mbom信息
      * @param map
      * @return
      */
-    List<HzMbomLineRecord> findHzMbomByPuid(Map<String,Object> map);
+    List<HzMbomLineRecord> findHzMbomByPuid(Map<String, Object> map);
 
-    List<HzMbomLineRecord> findHzMbomByPuid_before(Map<String,Object> map);
+    List<HzMbomLineRecord> findHzMbomByPuid_before(Map<String, Object> map);
 
     int insert_before(HzMbomLineRecord record);
 
     int update_before(HzMbomLineRecord record);
 
-    List<HzMbomLineRecord> findHzMbomByPuid_after(Map<String,Object> map);
+    List<HzMbomLineRecord> findHzMbomByPuid_after(Map<String, Object> map);
 
     int insert_after(HzMbomLineRecord record);
 
     int update_after(HzMbomLineRecord record);
 
-    List<HzMbomLineRecord> findMbomByItemId(String itemId,String projectId);
+    List<HzMbomLineRecord> findMbomByItemId(String itemId, String projectId);
 
     boolean checkItemIdIsRepeat(String projectId, String lineId);
 
@@ -128,10 +133,10 @@ public interface HzMbomRecordDAO {
      * @return
      */
     @Deprecated
-    HzMbomLineRecord getHzSuperMbomByPuid(String projectId,String pPuid);
+    HzMbomLineRecord getHzSuperMbomByPuid(String projectId, String pPuid);
 
     @Deprecated
-    HzMbomLineRecord getHzMbom(String projectId,String parentPuid);
+    HzMbomLineRecord getHzMbom(String projectId, String parentPuid);
 
     /**
      * 获取MBOM的数量
@@ -196,10 +201,10 @@ public interface HzMbomRecordDAO {
     int delete(String eBomPuid);
 
 
-    String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId,String orderNum);
+    String findMinOrderNumWhichGreaterThanThisOrderNum(String projectId, String orderNum);
 
 
-    List<HzMbomLineRecord> findHzMbomAll(String projectId,String tableName);
+    List<HzMbomLineRecord> findHzMbomAll(String projectId, String tableName);
 
 
     int insertVO(HzMbomLineRecordVO hzMbomLineRecordVO);
@@ -212,7 +217,7 @@ public interface HzMbomRecordDAO {
      * @param lineIndex
      * @return
      */
-    HzMbomLineRecord findHzMbomByEbomIdAndLineIndex(String ebomPuid,String lineIndex,String tableName);
+    List<HzMbomLineRecord> findHzMbomByEbomIdAndLineIndex(String ebomPuid, String lineIndex, String tableName);
 
 
     int deleteMbomList(HzMbomLineRecordVO record);
@@ -222,7 +227,7 @@ public interface HzMbomRecordDAO {
      * @param projectId
      * @return
      */
-    int deleteMbomByProjectId(String projectId,String tableName);
+    int deleteMbomByProjectId(String projectId, String tableName);
 
 
     /**

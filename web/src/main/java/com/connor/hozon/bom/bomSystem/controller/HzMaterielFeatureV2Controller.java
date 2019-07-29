@@ -22,8 +22,8 @@ import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
-import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMaterielServiceImpl;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
@@ -47,7 +47,7 @@ import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.factory.HzFactory;
-import sql.pojo.project.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.util.*;
 
@@ -81,7 +81,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
     HzCfg0Service hzCfg0Service;
     /*** 超级物料服务层*/
     @Autowired
-    HzSuperMaterielService hzSuperMaterielService;
+    HzSuperMaterielServiceImpl hzSuperMaterielServiceImpl;
     /*** 车型模型服务层*/
     @Autowired
     HzCfg0ModelRecordService hzCfg0ModelRecordService;
@@ -195,7 +195,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             if (hzCfg0ModelFeature == null)
                 hzCfg0ModelFeature = new HzCfg0ModelFeature();
 
-            HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+            HzMaterielRecord sm = hzSuperMaterielServiceImpl.doSelectByProjectPuid(projectUid);
 
             HzCfg0MainRecord hzCfg0MainRecord = hzCfg0MainService.doGetbyProjectPuid(projectUid);
             String groupName = hzCfg0ModelGroupDao.selectGroupNameByMainUid(hzCfg0MainRecord.getPuid());
@@ -213,7 +213,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
         else if ("superMateriel".equals(page)) {
             HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetByPrimaryKey(puid);
             if (mainRecord != null) {
-                HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
+                HzMaterielRecord superMateriel = hzSuperMaterielServiceImpl.doSelectByProjectPuid(mainRecord.getpCfg0OfWhichProjectPuid());
                 if (superMateriel == null) {
                     superMateriel = new HzMaterielRecord();
                 }
@@ -254,7 +254,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             model.addAttribute("msg", "没有车型模型，请至少添加一个车型模型");
             return "errorWithEntity";
         }
-        HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+        HzMaterielRecord sm = hzSuperMaterielServiceImpl.doSelectByProjectPuid(projectUid);
         model.addAttribute("colorModels", colorModels);
         model.addAttribute("models", models);
         model.addAttribute("projectUid", projectUid);
@@ -483,7 +483,7 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             /**
              * 更新超级物料
              */
-            HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+            HzMaterielRecord sm = hzSuperMaterielServiceImpl.doSelectByProjectPuid(projectUid);
             if (checkString(superMateriel)) {
                 if (null == sm) {
                     logger.warn("没有超级物料号，进行申请");
@@ -492,14 +492,14 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
                     sm.setPuid(UUIDHelper.generateUpperUid());
                     sm.setpFactoryPuid(factory == null ? factory1001.getPuid() : factory.getPuid());
                     sm.setpPertainToProjectPuid(projectUid);
-                    if (!hzSuperMaterielService.doInsertOne(sm)) {
+                    if (!hzSuperMaterielServiceImpl.doInsertOne(sm)) {
                         logger.error("存储超级物料号失败");
                     }
                 }
                 if (!superMateriel.equals(sm.getpMaterielCode())) {
                     logger.warn("已有超级物料号，进行更新超级物料号");
                     sm.setpMaterielCode(superMateriel);
-                    if (!hzSuperMaterielService.doUpdateByPrimaryKey(sm)) {
+                    if (!hzSuperMaterielServiceImpl.doUpdateByPrimaryKey(sm)) {
                         logger.error("更新超级物料号失败");
                     }
                 }
@@ -762,13 +762,13 @@ public class HzMaterielFeatureV2Controller extends ExtraIntegrate {
             return false;
         if (superMateriel.getpPertainToProjectPuid() == null || "".equals(superMateriel.getpPertainToProjectPuid()))
             return false;
-        HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(superMateriel.getpPertainToProjectPuid());
+        HzMaterielRecord sm = hzSuperMaterielServiceImpl.doSelectByProjectPuid(superMateriel.getpPertainToProjectPuid());
         if (sm == null && (superMateriel.getPuid() == null || "".equals(superMateriel.getPuid()))) {
             superMateriel.setPuid(UUID.randomUUID().toString());
-            return hzSuperMaterielService.doInsertOne(superMateriel);
+            return hzSuperMaterielServiceImpl.doInsertOne(superMateriel);
         } else if (sm != null) {
             superMateriel.setPuid(sm.getPuid());
-            return hzSuperMaterielService.doUpdateByPrimaryKey(superMateriel);
+            return hzSuperMaterielServiceImpl.doUpdateByPrimaryKey(superMateriel);
         }
         return false;
     }

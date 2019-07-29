@@ -31,6 +31,10 @@ public class HzConfigBomColorBean implements Serializable {
      */
     private String colorUid;
     /**
+     * 颜色名称
+     */
+    private String colorName;
+    /**
      * 配色模型UID
      */
     private String colorModelUid;

@@ -20,6 +20,13 @@ public interface HzMbomService {
      * @return
      */
     Page<HzMbomRecordRespDTO> findHzMbomForPage(HzMbomByPageQuery query);
+
+    /**
+     *查询颜色件信息
+     * @param query
+     * @return
+     */
+    Page<HzMbomRecordRespDTO> queryMbomToColorPart(HzMbomByPageQuery query);
     /**
      * 获取一条MBOM
      * @param query

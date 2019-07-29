@@ -1,10 +1,9 @@
 package integration.logic;
 
-import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import integration.base.relevance.ZPPTCI004;
 import integration.option.ActionFlagOption;
 import integration.option.CorrelateTypeOption;
-import sql.pojo.cfg.relevance.HzRelevanceBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

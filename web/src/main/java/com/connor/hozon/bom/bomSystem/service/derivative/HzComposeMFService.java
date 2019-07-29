@@ -18,13 +18,13 @@ import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.*;
-import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
+import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
-import com.connor.hozon.bom.bomSystem.service.project.HzSuperMaterielService;
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMaterielServiceImpl;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
@@ -48,7 +48,7 @@ import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
-import sql.pojo.project.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class HzComposeMFService {
      * 超级物料服务层
      */
     @Autowired
-    HzSuperMaterielService hzSuperMaterielService;
+    HzSuperMaterielServiceImpl hzSuperMaterielServiceImpl;
     /**
      * 衍生物料基本信息
      */
@@ -120,7 +120,7 @@ public class HzComposeMFService {
      * 颜色集
      */
     @Autowired
-    HzCfg0ColorSetService hzCfg0ColorSetService;
+    HzColorSetServiceImpl hzColorSetServiceImpl;
     /**
      * 全配置BOM一级清单的车型模型
      */
@@ -397,7 +397,7 @@ public class HzComposeMFService {
         /**
          * 如果超级物料为空，则存储超级物料
          */
-        HzMaterielRecord sm = hzSuperMaterielService.doSelectByProjectPuid(hzComposeMFDTO.getProjectUid());
+        HzMaterielRecord sm = hzSuperMaterielServiceImpl.doSelectByProjectPuid(hzComposeMFDTO.getProjectUid());
         if (null == sm) {
             if (checkString(hzComposeMFDTO.getSuperMateriel())) {
                 sm = new HzMaterielRecord();
@@ -406,7 +406,7 @@ public class HzComposeMFService {
                 sm.setpFactoryPuid(factory.getPuid());
                 sm.setpPertainToProjectPuid(hzComposeMFDTO.getProjectUid());
                 sm.setpMaterielDataType(11);
-                if (!hzSuperMaterielService.doInsertOne(sm)) {
+                if (!hzSuperMaterielServiceImpl.doInsertOne(sm)) {
                     logger.error("存储超级物料失败");
                 }
             }
@@ -550,7 +550,7 @@ public class HzComposeMFService {
         List<HzDerivativeMaterielBasic> basics = hzDerivativeMaterielBasicDao.selectByProjectUid(params);
         HzDerivativeMaterielDetail detail = new HzDerivativeMaterielDetail();
         List<Map<String, Object>> list = new ArrayList<>();
-        HzMaterielRecord superMateriel = hzSuperMaterielService.doSelectByProjectPuid(projectUid);
+        HzMaterielRecord superMateriel = hzSuperMaterielServiceImpl.doSelectByProjectPuid(projectUid);
         Map<String, HzFactory> mapOffactories = new HashMap<>();//
         for (int i = 0; i < basics.size(); i++) {
             detail.setDmdDmbId(basics.get(i).getId());

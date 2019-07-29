@@ -3,7 +3,7 @@ package com.connor.hozon.bom.sys.controller;
 
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
-import com.connor.hozon.bom.common.base.entity.Page;
+import cn.net.connor.hozon.common.entity.Page;
 import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
 
@@ -19,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import java.util.HashMap;

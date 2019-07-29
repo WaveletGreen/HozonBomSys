@@ -15,7 +15,7 @@ import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
-import com.connor.hozon.bom.bomSystem.service.color.HzCfg0ColorSetService;
+import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoManagerService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.color.HzCfg0ColorSet;
+import cn.net.connor.hozon.dao.pojo.depository.color.HzCfg0ColorSet;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
@@ -67,7 +67,7 @@ public class HzCfg0ModelColorService {
      * 颜色库
      */
     @Autowired
-    HzCfg0ColorSetService hzCfg0ColorSetService;
+    HzColorSetServiceImpl hzColorSetServiceImpl;
     @Autowired
     HzCfg0MainService hzCfg0MainService;
     @Autowired
@@ -115,7 +115,7 @@ public class HzCfg0ModelColorService {
         /**
          * 用于筛选颜色集
          */
-        List<HzCfg0ColorSet> colorSets = hzCfg0ColorSetService.doGetAll();
+        List<HzCfg0ColorSet> colorSets = hzColorSetServiceImpl.doGetAll();
         Map<String, HzCfg0ColorSet> mapOfColorSet = new HashMap<>();
         colorSets.forEach(set -> mapOfColorSet.put(set.getpColorCode(), set));
 
@@ -241,7 +241,7 @@ public class HzCfg0ModelColorService {
         /**
          * 用于筛选颜色集
          */
-        List<HzCfg0ColorSet> colorSets = hzCfg0ColorSetService.doGetAll();
+        List<HzCfg0ColorSet> colorSets = hzColorSetServiceImpl.doGetAll();
         Map<String, HzCfg0ColorSet> mapOfColorSet = new HashMap<>();
         colorSets.forEach(set -> mapOfColorSet.put(set.getpColorCode(), set));
 

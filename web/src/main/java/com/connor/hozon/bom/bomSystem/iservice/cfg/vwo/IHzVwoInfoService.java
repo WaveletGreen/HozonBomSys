@@ -7,8 +7,6 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
-import com.connor.hozon.bom.common.base.entity.QueryBase;
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.cfg.vwo.HzVwoInfo;
 
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.change;
 
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import org.springframework.context.annotation.Configuration;
 import sql.pojo.integration.HzBreakPoint;
 

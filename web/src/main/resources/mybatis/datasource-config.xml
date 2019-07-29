@@ -109,7 +109,7 @@
     </aop:config>
     <aop:config>
         <aop:advisor advice-ref="txAdvice"
-                     pointcut="execution(* cn.net.connor.hozon.services.*.*(..))" />
+                     pointcut="execution(* cn.net.connor.hozon.services.service.*.*(..))" />
     </aop:config>
 
 

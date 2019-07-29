@@ -33,7 +33,7 @@
     </select>
 
     <!--分页：当前页数据-->
-    <select id="selectAll" parameterType="com.connor.hozon.bom.common.base.entity.QueryBase" resultMap="BaseResultMap">
+    <select id="selectAll" parameterType="cn.net.connor.hozon.common.entity.QueryBase" resultMap="BaseResultMap">
         <!--select
         <include refid="Base_Column_List"/>
         from HZ_BREAKPOINT ORDER BY PID-->

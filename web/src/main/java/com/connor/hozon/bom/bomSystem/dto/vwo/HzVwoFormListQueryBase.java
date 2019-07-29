@@ -6,10 +6,8 @@
 
 package com.connor.hozon.bom.bomSystem.dto.vwo;
 
-import com.connor.hozon.bom.common.base.entity.QueryBase;
+import cn.net.connor.hozon.common.entity.QueryBase;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

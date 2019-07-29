@@ -1,14 +1,11 @@
 package integration.logic;
 
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import integration.option.ActionFlagOption;
-import integration.option.MRPControlOption;
 import integration.option.MaterialOption;
 import integration.option.PurchaseOption;
-import integration.service.impl.masterMaterial1.TransMasterMaterialService;
 import org.apache.commons.lang.StringUtils;
 import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
-import sql.pojo.project.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 
