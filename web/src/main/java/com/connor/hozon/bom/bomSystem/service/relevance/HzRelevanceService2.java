@@ -459,7 +459,7 @@ public class HzRelevanceService2 {
      */
     public Map<String, Object> queryRelevance(HzRelevanceQuery dto) {
         Map<String, Object> result = new HashMap<>();
-        dto.setSort(HzRelevanceQuery.relectSortToDB(dto.getSort()));
+        dto.setSort(HzRelevanceQuery.relectSortToDB(dto));
         Integer totalCount = hzRelevanceBasicDao.tellMeHowManyOfIt(dto);
         if ("ALL".equals(dto.getLimit())) {
             dto.setLimit(String.valueOf(totalCount));
@@ -561,7 +561,7 @@ public class HzRelevanceService2 {
 //        List<HzRelevanceBasicChange> hzRelevanceBasicChanges = hzRelevanceBasicChangeDao.selectLastexecutedByProjectId(projectPuid);
         List<HzRelevanceBasicChange> hzRelevanceBasicChanges = new ArrayList<>();
         for (HzRelevanceBasic hzRelevanceBasic : hzRelevanceBasicList) {
-            HzRelevanceBasicChange hzRelevanceBasicChange = hzRelevanceBasicChangeDao.selectByLasteBySrc(hzRelevanceBasic);
+            HzRelevanceBasicChange hzRelevanceBasicChange = hzRelevanceBasicChangeDao.selectByLatestBySrc(hzRelevanceBasic.getId());
             if (hzRelevanceBasicChange != null) {
                 hzRelevanceBasicChanges.add(hzRelevanceBasicChange);
             }

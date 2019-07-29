@@ -12,6 +12,15 @@ function getProjectUid() {
     return $("#project", window.top.document).val();
 }
 
+/**
+ * 获取到当前工作项目的代码
+ * @returns {jQuery}
+ */
+function getProjectCode(){
+    const projectCode=$("#currentProjectHead", window.top.document).text();
+    return  projectCode;
+}
+
 function checkIsSelectProject(data) {
     if (0 == data.length) {
         swal({

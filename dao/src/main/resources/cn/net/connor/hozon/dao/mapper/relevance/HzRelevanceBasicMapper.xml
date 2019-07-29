@@ -80,6 +80,8 @@
     <resultMap id="ResultMapOfQuery" type="cn.net.connor.hozon.dao.query.relevance.HzRelevanceQueryResult">
         <result column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="ROWN" jdbcType="DECIMAL" property="index"/>
+        <!--特性值代码-->
+        <result column="RB_FEATURE_VALUE_CODE" jdbcType="VARCHAR" property="rbFeatureValueCode"/>
         <result column="RB_RELEVANCE" jdbcType="VARCHAR" property="relevance"/>
         <result column="RB_RELEVANCE_DESC" jdbcType="VARCHAR" property="relevanceDesc"/>
         <result column="RB_RELEVANCE_CODE" jdbcType="VARCHAR" property="relevanceCode"/>
@@ -134,6 +136,7 @@
         select
         * FROM (
         select ID,
+        RB_FEATURE_VALUE_CODE,
         RB_RELEVANCE,
         RB_RELEVANCE_DESC,
         RB_RELEVANCE_CODE,

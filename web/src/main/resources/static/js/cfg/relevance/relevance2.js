@@ -70,6 +70,13 @@ var column = [
         title: '序号',
     },
     {
+        field: 'rbFeatureValueCode',
+        title: '特性值',
+        align: 'center',
+        valign: 'middle',
+        sortable: true,
+        sortOrder: 'asc',
+    },  {
         field: 'relevance',
         title: '相关性',
         align: 'center',
@@ -176,17 +183,17 @@ function loadData(_projectPuid) {
         columns: column,
         sortable: true,                     //是否启用排序
         sortOrder: "asc",                   //排序方式
-        sortName: 'relevance',
+        sortName: 'rbFeatureValueCode',
         //>>>>>>>>>>>>>>导出excel表格设置
         showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
-        exportDataType: "selected",              //basic', 'all', 'selected'.
+        exportDataType: "all",              //basic', 'all', 'selected'.
         exportTypes: ['xlsx'],	    //导出类型
         //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
         exportOptions: {
             //ignoreColumn: [0,0],            //忽略某一列的索引
-            fileName: '特性数据导出',              //文件名称设置
+            fileName: getProjectCode()+'相关性数据导出',              //文件名称设置
             worksheetName: 'Sheet1',          //表格工作区名称
-            tableName: '特性数据表',
+            tableName: '相关性数据表',
             excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
             //onMsoNumberFormat: DoOnMsoNumberFormat
         }

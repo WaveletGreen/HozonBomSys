@@ -78,9 +78,9 @@
         <mapper resource="sql/mapper/cfg/modelColor/HzCmcrDetailChangeMapper.xml"/>
         <mapper resource="sql/mapper/cfg/modelColor/HzColorLvl2ModelMapper.xml"/>
         <!--relevance-->
-        <mapper resource="sql/mapper/cfg/relevance/HzRelevanceBasicMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/relevance/HzRelevanceRelationMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/relevance/HzRelevanceBasicChangeMapper.xml"/>
+        <!--<mapper resource="cn/net/connor/hozon/dao/mapper/relevance/HzRelevanceBasicMapper.xml"/>-->
+        <!--<mapper resource="cn/net/connor/hozon/dao/mapper/relevance/HzRelevanceRelationMapper.xml"/>-->
+        <!--<mapper resource="cn/net/connor/hozon/dao/mapper/relevance/HzRelevanceBasicChangeMapper.xml"/>-->
         <!--流程-->
         <!--VWO-->
         <mapper resource="sql/mapper/cfg/vwo/HzFeatureChangeMapper.xml"/>

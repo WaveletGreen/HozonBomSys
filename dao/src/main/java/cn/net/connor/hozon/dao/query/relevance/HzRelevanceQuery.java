@@ -52,19 +52,21 @@ public class HzRelevanceQuery {
     /**
      * 条件搜索映射
      *
-     * @param code
+     * @param query 查询对象，从前端传过来的对象
      * @return
      */
-    public static String relectSortToDB(String code) {
-        switch (code) {
+    public static String relectSortToDB(HzRelevanceQuery query) {
+        switch (query.getSort()) {
             case "relevance":
                 return "RB_RELEVANCE";
             case "relevanceDesc":
                 return "RB_RELEVANCE_DESC";
             case "relevanceCode":
                 return "RB_RELEVANCE_CODE";
+            case "rbFeatureValueCode"://这里有2个查询条件，1是特性值查询，有升降序查询;2是颜色代码的查询，有升降序查询
+                return "RB_FEATURE_VALUE_CODE "+query.getOrder()+",RB_COLOR_CODE";//这里为了增加颜色的排序方式，默认是ASC，后面的SQL会自动拼接上Order这一段，因此不用追加Order
             default:
-                return null;
+                return "rbFeatureValueCode";
         }
     }
 

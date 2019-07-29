@@ -324,7 +324,7 @@
     )A
   </insert>
 
-  <select id="selectMaxVersionByProject" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+  <select id="selectMaxVersionByProject" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from HZ_RELEVANCE_BASIC_CHANGE
@@ -334,7 +334,7 @@
     CHANGE_VERSION = (select MAX(CHANGE_VERSION) from HZ_RELEVANCE_BASIC_CHANGE where RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR})
   </select>
 
-  <select id="selectByOrderChangeId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+  <select id="selectByOrderChangeId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List"/>
     from HZ_RELEVANCE_BASIC_CHANGE
@@ -376,7 +376,7 @@
     CHANGE_ORDER_ID = #{changeOrderId,jdbcType=DECIMAL}
   </update>
 
-  <select id="selectByLasteBySrc" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange" resultMap="BaseResultMap">
+  <select id="selectByLatestBySrc" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from HZ_RELEVANCE_BASIC_CHANGE
