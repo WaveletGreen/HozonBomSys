@@ -73,33 +73,34 @@ function loadData(projectUid) {
             $table.removeClass("table").removeClass("table-striped");
             // $table.val("");
             var temp = "";
+            const colspanNum=10;
             for (var i = 0; i < rowCount; i++) {
                 if (i == 1) {
                     temp +=
                         "<tr id='tr" + i + "'>" +
                         "<td></td>" +
-                        "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>阶段：" + main.stage + "</td>" +
+                        "<td id='row" + i + "' colspan='"+colspanNum+"' style='border: #fff' align='left'>阶段：" + main.stage + "</td>" +
                         "</tr>";
                 }
                 else if (i == 2) {
                     temp +=
                         "<tr id='tr" + i + "'>" +
                         "<td></td>" +
-                        "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>版本：" + main.version + "</td>" +
+                        "<td id='row" + i + "' colspan='"+colspanNum+"' style='border: #fff' align='left'>版本：" + main.version + "</td>" +
                         "</tr>";
                 }
                 else if (i == 3) {
                     temp +=
                         "<tr id='tr" + i + "'>" +
                         "<td></td>" +
-                        "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>生效日期：" + main.effectiveDate + "</td>" +
+                        "<td id='row" + i + "' colspan='"+colspanNum+"' style='border: #fff' align='left'>生效日期：" + main.effectiveDate + "</td>" +
                         "</tr>";
                 }
                 else if (i == 4) {
                     temp +=
                         "<tr id='tr" + i + "'>" +
                         "<td></td>" +
-                        "<td id='row" + i + "' colspan='10' style='border: #fff' align='left'>状态：" + statusIntToStr(mainStatus) + "</td>" +
+                        "<td id='row" + i + "' colspan='"+colspanNum+"' style='border: #fff' align='left'>状态：" + statusIntToStr(mainStatus) + "</td>" +
                         "</tr>";
                 }
                 else {
@@ -123,13 +124,14 @@ function loadData(projectUid) {
                 "</th>");
             $("#tr2").append("<th id='th1'><div style='width: 200px'  >平台</div></th>");
             $("#tr3").append("<th id='th2'><div style='width: 200px'  >车型</div></th>");
-            $("#tr4").append("<th id='th3'><div style='width: 200px'  >版型</div></th>");
-            $("#tr5").append("<th id='th4'><div style='width: 200px'  >车身形式</div></th>");
-            $("#tr6").append("<th id='th5'><div style='width: 200px'  >公告</div></th>");
-            $("#tr7").append("<th id='th6'><div style='width: 200px'  >配置描述</div></th>");
-            $("#tr8").append("<th id='th7'><div style='width: 200px'  >配置管理</div></th>");
-            $("#tr9").append("<th id='th8'><div style='width: 200px'  >试制号</div></th>");
-            $("#tr10").append("<th id='th9'><div style='width: 200px'  >商品号</div></th>");
+            $("#tr4").append("<th id='th3'><div style='width: 200px'  >车型年</div></th>");
+            $("#tr5").append("<th id='th4'><div style='width: 200px'  >版型</div></th>");
+            $("#tr6").append("<th id='th5'><div style='width: 200px'  >车身形式</div></th>");
+            $("#tr7").append("<th id='th6'><div style='width: 200px'  >公告</div></th>");
+            $("#tr8").append("<th id='th7'><div style='width: 200px'  >配置描述</div></th>");
+            $("#tr9").append("<th id='th8'><div style='width: 200px'  >配置管理</div></th>");
+            $("#tr10").append("<th id='th9'><div style='width: 200px'  >试制号</div></th>");
+            $("#tr11").append("<th id='th10'><div style='width: 200px'  >商品号</div></th>");
 
             //动态添加
             var t =
@@ -243,20 +245,21 @@ function loadData(projectUid) {
                 $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
                 //车型
                 $("#tr3").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
+                $("#tr4").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnual + "</div></td>");
                 //往版型数组添加数据
                 modelArr.push(v0);
                 // $("#tr4").append("<td id='td_model" + v0 + "'><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
-                $("#tr4").append("<td ><div style='width: 200px'  class='td_modelClass'><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
-                $("#tr5").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
-                $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
-                $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
+                $("#tr5").append("<td ><div style='width: 200px'  class='td_modelClass'><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
+                $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
+                $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
+                $("#tr8").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
                 //往配置管理数组添加数据
                 cfgmagArr.push(modeli.pModelCfgMng);
                 // $("#tr8").append("<td id='td_cfgmag" + modeli.pModelCfgMng + "'><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
-                $("#tr8").append("<td ><div style='width: 200px' class='td_cfgmagClass' >" + modeli.pModelCfgMng + "</div></td>");
-                $("#tr9").append("<td ><div style='width: 200px'  >" + modeli.pModelTrailNum + "</div></td>");
-                $("#tr10").append("<td ><div style='width: 200px'  >" + modeli.pModelGoodsNum + "</div></td>");
-                $("#tr11").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
+                $("#tr9").append("<td ><div style='width: 200px' class='td_cfgmagClass' >" + modeli.pModelCfgMng + "</div></td>");
+                $("#tr10").append("<td ><div style='width: 200px'  >" + modeli.pModelTrailNum + "</div></td>");
+                $("#tr11").append("<td ><div style='width: 200px'  >" + modeli.pModelGoodsNum + "</div></td>");
+                // $("#tr12").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
                 var point = modeli.point;
                 for (var j = startIndex; j < (point.length + startIndex); j++) {
                     var trNumber = "tr" + j;

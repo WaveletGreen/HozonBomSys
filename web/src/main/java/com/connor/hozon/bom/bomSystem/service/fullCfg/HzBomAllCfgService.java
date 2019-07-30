@@ -271,6 +271,7 @@ public class HzBomAllCfgService {
             object.put("hide", hzCfg0ModelRecord.getPuid());
             if (hzCfg0ModelDetails == null || hzCfg0ModelDetails.size() == 0) {
                 object.put("pModelShape", "");
+                object.put("pModelAnnual", "");
                 object.put("pModelAnnouncement", "");
                 object.put("pModelCfgDesc", "");
                 object.put("pModelCfgMng", "");
@@ -281,6 +282,7 @@ public class HzBomAllCfgService {
                 for (HzCfg0ModelDetail hzCfg0ModelDetail : hzCfg0ModelDetails) {
                     if (hzCfg0ModelDetail.getpModelPuid().equals(hzCfg0ModelRecord.getPuid())) {
                         object.put("pModelShape", hzCfg0ModelDetail.getpModelShape() == null ? "" : hzCfg0ModelDetail.getpModelShape());
+                        object.put("pModelAnnual", hzCfg0ModelDetail.getpModelAnnual() == null ? "" : hzCfg0ModelDetail.getpModelAnnual());
                         object.put("pModelAnnouncement", hzCfg0ModelDetail.getpModelAnnouncement() == null ? "" : hzCfg0ModelDetail.getpModelAnnouncement());
                         object.put("pModelCfgDesc", hzCfg0ModelDetail.getpModelCfgDesc() == null ? "" : hzCfg0ModelDetail.getpModelCfgDesc());
                         object.put("pModelCfgMng", hzCfg0ModelDetail.getpModelCfgMng() == null ? "" : hzCfg0ModelDetail.getpModelCfgMng());
@@ -291,6 +293,7 @@ public class HzBomAllCfgService {
                 }
                 if (!flag) {
                     object.put("pModelShape", "");
+                    object.put("pModelAnnual", "");
                     object.put("pModelAnnouncement", "");
                     object.put("pModelCfgDesc", "");
                     object.put("pModelCfgMng", "");

@@ -34,6 +34,12 @@
                 />
             </div>
             <div class="form-group">
+                <label for="pModelVersion">车型年</label>
+                <input class="form-control" id="pModelAnnual" name="pModelAnnual" type="text"
+                       placeholder="请输入版型" th:value="${entity.getpModelAnnual()}"
+                />
+            </div>
+            <div class="form-group">
                 <label for="pModelVersion">版型</label>
                 <input class="form-control" id="pModelVersion" name="pModelVersion" type="text"
                        placeholder="请输入版型" th:value="${entity.getpModelVersion()}"
@@ -96,6 +102,20 @@
             }
 
         });
+
+        //创建表单数据
+        function createData() {
+            const _d = $("#form").serializeArray();
+            let data = {};
+            for (let p in _d) {
+                data[_d[p].name] = _d[p].value;
+            }
+            data.pModelBrand = $("#pModelBrand").val();
+            data.pModelPlatform = $("#pModelPlatform").val();
+            data.pModelMod = $("#pModelMod").val();
+            return data;
+        }
+
         // 绑定dialog的确定按钮的监听事件
         $("#btnOk", window.top.document).click(function () {
             var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
@@ -103,14 +123,7 @@
             if (bootstrapValidator.isValid()) {
                 var url = $("#form", window.top.document).attr('action');
                 <!--其实不要puid，puid会在服务器上生成-->
-                var data = {};
-                var _d = $("#form").serializeArray();
-                for (var p in _d) {
-                    data[_d[p].name] = _d[p].value;
-                }
-                data.pModelBrand = $("#pModelBrand").val();
-                data.pModelPlatform = $("#pModelPlatform").val();
-                data.pModelMod = $("#pModelMod").val();
+                const data = createData();
                 $.ajax({
                     contentType:
                         "application/json",
@@ -120,16 +133,11 @@
                     data: JSON.stringify(data),
                     success:
                         function (result) {
-                            // $('.modal-dialog', window.top.document).parent('div').remove()
-                            // $('body', window.top.document).find('.modal-backdrop').remove();
-                            // jquery 调用刷新当前操作的table页面的refresh方法
-                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
                             activeTabBodyRefresh();
                             layer.msg(result.msg, {icon: 1, time: 2000});
-                            // window.Ewin.alert({message: result.msg});
                         },
                     error: function (status) {
-                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
                     }
                 });
             }
