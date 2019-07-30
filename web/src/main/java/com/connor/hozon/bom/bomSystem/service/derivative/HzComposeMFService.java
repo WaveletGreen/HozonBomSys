@@ -678,6 +678,9 @@ public class HzComposeMFService {
                 feature.setpFeatureCnDesc(desc.toString());
                 hzCfg0ModelFeatureService.doUpdateByPrimaryKey(feature);
             }
+            else{
+                logger.error("车型年数据不存在");
+            }
         }
 
         _result.put("modeBasicDetailDesc", feature.getpFeatureCnDesc());
