@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
@@ -30,7 +30,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -63,7 +63,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
     private HzSingleVehiclesServices hzSingleVehiclesServices;
 
     @Autowired
-    private HzCfg0ModelService hzCfg0ModelService;
+    private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
 
 
     @Autowired
@@ -128,7 +128,7 @@ public class HzChangeDataServiceImpl implements HzChangeDataService {
                 updateQuery.setOrderId(query.getOrderId());
 //                updateQuery.setPuids(puids);
                 List<HzEPLManageRecord> afterRecords = hzEbomRecordDAO.getEbomRecordsByOrderId(updateQuery);
-                List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
+                List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(query.getProjectId());
                 if(ListUtil.isNotEmpty(afterRecords)){
                     for(HzEPLManageRecord record :afterRecords){
                         HzChangeDataDetailQuery beforeUpdateQuery = new HzChangeDataDetailQuery();

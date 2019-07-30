@@ -4,7 +4,7 @@
  * ALL RIGHTS RESERVED.
  */
 
-package sql.pojo.cfg.model;
+package cn.net.connor.hozon.dao.pojo.configuration.model;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

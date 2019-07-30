@@ -4,11 +4,12 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.model;
+package cn.net.connor.hozon.dao.dao.configuration.model;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -17,6 +18,7 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzCfg0ModelRecordDao extends BasicDao<HzCfg0ModelRecord> {
     /**
      * Author: Fancyears·Maylos·Mayways
@@ -54,8 +56,8 @@ public interface HzCfg0ModelRecordDao extends BasicDao<HzCfg0ModelRecord> {
      */
     List<HzCfg0ModelRecord> selectByProjectPuid(@Param("projectPuid") String projectPuid);
 
-    int deleteModelById(String puid);
+    int deleteModelById(@Param("puid") String puid);
 
-    List<HzCfg0ModelRecord> selectByFullCfgModel(Integer orderChangeId);
+    List<HzCfg0ModelRecord> selectByFullCfgModel(@Param("orderChangeId") Integer orderChangeId);
 
 }

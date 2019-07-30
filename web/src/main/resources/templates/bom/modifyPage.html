@@ -133,7 +133,9 @@
                     data: JSON.stringify(data),
                     success:
                         function (result) {
-                            activeTabBodyRefresh();
+                            activeTabBodyReset();
+                            getActiveTab().updatePageTable(data,data.pModelPuid);
+                            // activeTabBodyRefresh();
                             layer.msg(result.msg, {icon: 1, time: 2000});
                         },
                     error: function (status) {

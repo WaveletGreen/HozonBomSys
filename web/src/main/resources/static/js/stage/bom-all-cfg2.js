@@ -18,7 +18,8 @@ var cfgmagArr = [];
 
 
 var mainStatus;
-
+//目标table
+var $table;
 function doRefresh(projectUid) {
     loadData(projectUid);
 }
@@ -85,7 +86,7 @@ function fixTable(myData) {
     mainStatus = main.status;
     var versionArr = main.version.split(".");
     versionHead = parseInt(versionArr[0]);
-    var $table = $("#cfg0Table");
+    $table = $("#cfg0Table");
     //清空
     $table.html("");
     $table.removeClass("table").removeClass("table-striped");
@@ -258,25 +259,34 @@ function fixTable(myData) {
             // "<div style='display: none' >" + modeli.modelPuid + "</div>" +
             "</td>");
         //品牌
-        $("#tr1").append("<td ><div style='width: 200px'  >" + modeli.brand + "</div></td>");
+        $("#tr1").append("<td ><div style='width: 200px' >" + modeli.brand + "</div></td>");
         //平台
-        $("#tr2").append("<td ><div style='width: 200px'  >" + modeli.platform + "</div></td>");
+        $("#tr2").append("<td ><div style='width: 200px' >" + modeli.platform + "</div></td>");
         //车型
-        $("#tr3").append("<td ><div style='width: 200px'  >" + modeli.vehicle + "</div></td>");
-        $("#tr4").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnual + "</div></td>");
+        $("#tr3").append("<td ><div style='width: 200px' >" + modeli.vehicle + "</div></td>");
+        //车型年
+        $("#tr4").append("<td ><div style='width: 200px'  id='div_content_pModelAnnual_" + v1 + "'>" + modeli.pModelAnnual + "</div></td>");
         //往版型数组添加数据
         modelArr.push(v0);
         // $("#tr4").append("<td id='td_model" + v0 + "'><div style='width: 200px'  ><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
-        $("#tr5").append("<td ><div style='width: 200px'  class='td_modelClass'><a href='javascript:void(0);' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
-        $("#tr6").append("<td ><div style='width: 200px'  >" + modeli.pModelShape + "</div></td>");
-        $("#tr7").append("<td ><div style='width: 200px'  >" + modeli.pModelAnnouncement + "</div></td>");
-        $("#tr8").append("<td ><div style='width: 200px'  >" + modeli.pModelCfgDesc + "</div></td>");
+        //版型
+        $("#tr5").append("<td ><div style='width: 200px'  class='td_modelClass'><a href='javascript:void(0);' id='div_content_pModelVersion_" + v1 + "' onclick='Botton(\"" + v1 + "\")'>" + v0 + "</a></div></td>");
+        // 车身形式
+        $("#tr6").append("<td ><div style='width: 200px'  id='div_content_pModelShape_" + v1 + "'>" + modeli.pModelShape + "</div></td>");
+        //公告
+        $("#tr7").append("<td ><div style='width: 200px'  id='div_content_pModelAnnouncement" + v1 + "'>" + modeli.pModelAnnouncement + "</div></td>");
+        //配置描述
+
+        $("#tr8").append("<td ><div style='width: 200px'  id='div_content_pModelCfgDesc_" + v1 + "'>" + modeli.pModelCfgDesc + "</div></td>");
         //往配置管理数组添加数据
         cfgmagArr.push(modeli.pModelCfgMng);
         // $("#tr8").append("<td id='td_cfgmag" + modeli.pModelCfgMng + "'><div style='width: 200px'  >" + modeli.pModelCfgMng + "</div></td>");
-        $("#tr9").append("<td ><div style='width: 200px' class='td_cfgmagClass' >" + modeli.pModelCfgMng + "</div></td>");
-        $("#tr10").append("<td ><div style='width: 200px'  >" + modeli.pModelTrailNum + "</div></td>");
-        $("#tr11").append("<td ><div style='width: 200px'  >" + modeli.pModelGoodsNum + "</div></td>");
+        //配置管理
+        $("#tr9").append("<td ><div style='width: 200px' id='div_content_pModelCfgMng_" + v1 + "' class='td_cfgmagClass' >" + modeli.pModelCfgMng + "</div></td>");
+        //试制号
+        $("#tr10").append("<td ><div style='width: 200px'  id='div_content_pModelTrailNum_" + v1 + "' >" + modeli.pModelTrailNum + "</div></td>");
+        //商品号
+        $("#tr11").append("<td ><div style='width: 200px'  id='div_content_pModelGoodsNum_" + v1 + "'>" + modeli.pModelGoodsNum + "</div></td>");
         // $("#tr12").append("<td ><div style='width: 200px'  >" + "" + "</div></td>");
         var point = modeli.point;
         for (var j = startIndex; j < (point.length + startIndex); j++) {
@@ -694,6 +704,16 @@ function Botton(id) {
             }
         }
     })
+}
+
+function updatePageTable(data,id) {
+    console.log(data);
+    for (let param in data){
+        let cell=$("#div_content_"+param+"_"+id);
+        if(cell){
+            cell.prop("innerHTML",data[param]);
+        }
+    }
 }
 
 $(function () {

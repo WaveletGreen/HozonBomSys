@@ -6,12 +6,13 @@
 
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.*;
-import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
+import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
@@ -46,8 +47,8 @@ import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.fullCfg.*;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.cfg.model.HzCfg0ModelDetail;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
@@ -72,7 +73,7 @@ public class HzBomAllCfgService {
     @Autowired
     private HzCfg0Service hzCfg0Service;
     @Autowired
-    private HzCfg0ModelService hzCfg0ModelService;
+    private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
     @Autowired
     private HzFullCfgMainDao hzFullCfgMainDao;
     @Autowired
@@ -155,7 +156,7 @@ public class HzBomAllCfgService {
 //        queryBase.setSort("P_CFG0_OBJECT_ID");
         List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
         //获取该项目下的所有车型模型
-        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectPuid);
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectPuid);
         //搜素所属有2Y层
         List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid);
         if (lines == null) {
@@ -756,7 +757,7 @@ public class HzBomAllCfgService {
      */
     public JSONObject deleteModel(String modelId) {
         JSONObject respons = new JSONObject();
-        int deleteRow = hzCfg0ModelService.deleteModelById(modelId);
+        int deleteRow = hzCfg0ModelServiceImpl.deleteModelById(modelId);
         if (deleteRow == 1) {
             respons.put("flag", true);
         } else {
@@ -1265,7 +1266,7 @@ public class HzBomAllCfgService {
         queryBase.setSort("P_CFG0_OBJECT_ID");
         List<HzCfg0Record> hzCfg0Records = hzCfg0Service.doLoadCfgListByProjectPuid(projectUid, queryBase);
         //获取该项目下的所有车型模型
-        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectUid);
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectUid);
         //搜素所属有2Y层
         List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectUid);
         if (lines == null) {

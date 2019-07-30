@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg;
 
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
 
 import java.util.List;
 

@@ -1,16 +1,18 @@
 /*
- * Copyright (c) 2018.
- * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
- * ALL RIGHTS RESERVED.
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
  */
-package com.connor.hozon.bom.bomSystem.service.fullCfg;
+package cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
-import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao;
+import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
+import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelRecordDao;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.HzCfg0ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.model.HzCfg0ModelDetail;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 
 import java.util.List;
 
@@ -21,16 +23,16 @@ import java.util.List;
  * @Modified By:
  */
 @Service("hzCfg0ModelService")
-public class HzCfg0ModelService {
+public class HzCfg0ModelServiceImpl implements HzCfg0ModelService {
     @Autowired
     HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
     @Autowired
     HzCfg0ModelRecordDao hzCfg0ModelRecordDao;
 
-    @Deprecated
-    public boolean isExist(HzCfg0ModelDetail entity) {
-        return getOneByModelId(entity) != null ? true : false;
-    }
+//    @Deprecated
+//    public boolean isExist(HzCfg0ModelDetail entity) {
+//        return getOneByModelId(entity) != null ? true : false;
+//    }
 
     /**
      * @param entity
@@ -96,6 +98,12 @@ public class HzCfg0ModelService {
         return hzCfg0ModelRecordDao.selectByProjectPuid(projectPuid);
     }
 
+    /**
+     * 根据模型ID删除模式数据
+     *
+     * @param modelId
+     * @return
+     */
     public int deleteModelById(String modelId) {
         return hzCfg0ModelRecordDao.deleteModelById(modelId);
     }

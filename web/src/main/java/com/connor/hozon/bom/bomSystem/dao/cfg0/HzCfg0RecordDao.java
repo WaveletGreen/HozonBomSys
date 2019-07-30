@@ -153,4 +153,11 @@ public interface HzCfg0RecordDao extends BasicDao<HzCfg0Record> {
     int deleteByOrderId(Long orderId);
 
     List<HzCfg0Record> selectByFamilyName(HzCfg0Record hzCfg0Record);
+
+    /**
+     * 需要传入特性组描述 pCfg0FamilyDesc和项目ID，项目ID传到 pCfg0MainItemPuid属性中进行级联查询
+     * @param cfg
+     * @return
+     */
+    List<HzCfg0Record> doSelectByDescAndProjectId(HzCfg0Record cfg);
 }
