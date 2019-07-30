@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -48,8 +48,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 import sql.pojo.accessories.HzAccessoriesLibs;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.epl.HzEPLRecord;
 
@@ -83,7 +83,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     IHzCraftService iHzCraftService;
 
     @Autowired
-    private HzCfg0ModelService hzCfg0ModelService;
+    private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
 
     @Autowired
     private HzChangeDataRecordDAO hzChangeDataRecordDAO;
@@ -330,7 +330,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             }
             List<HzPbomLineRecord> records = recordPage.getResult();
             int num = (recordPage.getPageNumber() - 1) * recordPage.getPageSize();
-            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(query.getProjectId());
 
             List<HzPbomLineRespDTO> respDTOS = pbomLineRecordToRespDTOS(records,hzCfg0ModelRecords,num);
             return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), respDTOS);

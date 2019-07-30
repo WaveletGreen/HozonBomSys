@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import net.sf.json.JSONObject;
@@ -16,10 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.cfg.model.HzCfg0ModelDetail;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
@@ -40,7 +39,7 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 public class HzCfg0ModelController {
     /*** 模型的详细信息*/
     @Autowired
-    HzCfg0ModelService hzCfg0ModelService;
+    HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
     /*** 数据库中的车型模型，没有详细信息*/
     @Autowired
     HzCfg0ModelRecordService hzCfg0modelRecordService;
@@ -70,15 +69,15 @@ public class HzCfg0ModelController {
             result.put("msg", "没有找到模型信息，请联系管理员");
             return result;
         }
-        HzCfg0ModelDetail fromDBDetail = hzCfg0ModelService.getOneByModelId(detail);
+        HzCfg0ModelDetail fromDBDetail = hzCfg0ModelServiceImpl.getOneByModelId(detail);
         if (fromDBDetail != null) {
             detail.setpModelPuid(fromDBDetail.getpModelPuid());
             detail.setPuid(fromDBDetail.getPuid());
-            isSuccess = hzCfg0ModelService.doUpdateOne(detail);
+            isSuccess = hzCfg0ModelServiceImpl.doUpdateOne(detail);
             sb.append("更新");
         } else {
             detail.setPuid(UUID.randomUUID().toString());
-            isSuccess = hzCfg0ModelService.doInsert(detail);
+            isSuccess = hzCfg0ModelServiceImpl.doInsert(detail);
             sb.append("数据");
         }
         if (isSuccess) {
@@ -114,7 +113,7 @@ public class HzCfg0ModelController {
     public String modifyModel(@RequestParam String pModelPuid, Model model) {
         HzCfg0ModelDetail fromDBDetail = new HzCfg0ModelDetail();
         fromDBDetail.setpModelPuid(pModelPuid);
-        fromDBDetail = hzCfg0ModelService.getOneByModelId2(fromDBDetail);
+        fromDBDetail = hzCfg0ModelServiceImpl.getOneByModelId2(fromDBDetail);
         HzCfg0ModelRecord hzCfg0ModelRecord = hzCfg0modelRecordService.doGetById(pModelPuid);
         HzCfg0MainRecord hzCfg0MainRecord = cfg0MainService.doGetByPrimaryKey(hzCfg0ModelRecord.getpCfg0ModelOfMainRecord());
 

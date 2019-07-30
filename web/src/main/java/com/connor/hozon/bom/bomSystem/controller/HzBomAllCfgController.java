@@ -8,10 +8,7 @@ package com.connor.hozon.bom.bomSystem.controller;
 
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
-import com.connor.hozon.bom.resources.util.FileUtils;
-import javassist.bytecode.ByteArray;
 import net.sf.json.JSONObject;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,13 +20,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.cfg.model.HzCfg0ModelDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;

@@ -6,8 +6,8 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.model.HzCfg0ModelDetail">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_MODEL_PUID" jdbcType="VARCHAR" property="pModelPuid"/>
         <result column="P_MODEL_NAME" jdbcType="VARCHAR" property="pModelName"/>
@@ -31,7 +31,7 @@
         <result column="P_MODEL_TRANSFORM" jdbcType="VARCHAR" property="pModelTransform"/>
         <result column="P_MODEL_CFG_MNG" jdbcType="VARCHAR" property="pModelCfgMng"/>
     </resultMap>
-    <resultMap id="ExtendResultMap" extends="BaseResultMap" type="sql.pojo.cfg.model.HzCfg0ModelDetail">
+    <resultMap id="ExtendResultMap" extends="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail">
         <result column="object_Name" jdbcType="VARCHAR" property="objectName"/>
         <result column="object_Desc" jdbcType="VARCHAR" property="objectDesc"/>
         <result column="p_cfg0_model_basic_detail" jdbcType="VARCHAR" property="pCfg0ModelBasicDetail"/>
@@ -60,13 +60,13 @@
     P_MODEL_TRANSFORM,
     P_MODEL_CFG_MNG
   </sql>
-    <select id="selectByModelId" parameterType="sql.pojo.cfg.model.HzCfg0ModelDetail" resultMap="BaseResultMap">
+    <select id="selectByModelId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_DETAIL
         where P_MODEL_PUID = #{pModelPuid,jdbcType=VARCHAR}
     </select>
-    <select id="selectByModelId2" parameterType="sql.pojo.cfg.model.HzCfg0ModelDetail" resultMap="ExtendResultMap">
+    <select id="selectByModelId2" parameterType="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail" resultMap="ExtendResultMap">
         select
         t.<include refid="Base_Column_List"/>,
         t2.object_name,
@@ -77,7 +77,7 @@
         where P_MODEL_PUID = #{pModelPuid,jdbcType=VARCHAR}
 
     </select>
-    <insert id="insert" parameterType="sql.pojo.cfg.model.HzCfg0ModelDetail">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail">
     insert into HZ_CFG0_MODEL_DETAIL (
       PUID,
       P_MODEL_PUID,
@@ -127,7 +127,7 @@
       #{pModelCfgMng,jdbcType=VARCHAR}
       )
   </insert>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.model.HzCfg0ModelDetail">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail">
     update HZ_CFG0_MODEL_DETAIL set
       P_MODEL_PUID=#{pModelPuid,jdbcType=VARCHAR},
       P_MODEL_NAME=#{pModelName,jdbcType=VARCHAR},
@@ -153,7 +153,7 @@
       where  PUID=#{puid,jdbcType=VARCHAR}
   </update>
 
-    <select id="selectByModelIds" parameterType="sql.pojo.cfg.model.HzCfg0ModelDetail" resultMap="BaseResultMap">
+    <select id="selectByModelIds" parameterType="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from

@@ -6,10 +6,10 @@
 
 package com.connor.hozon.bom.bomSystem.service.model;
 
-import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao;
+import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelRecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 
 import java.util.List;
 

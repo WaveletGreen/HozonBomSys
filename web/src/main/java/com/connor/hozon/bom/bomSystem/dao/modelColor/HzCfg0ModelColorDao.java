@@ -39,6 +39,8 @@ public interface HzCfg0ModelColorDao extends BasicDao<HzCfg0ModelColor> {
      */
     List<HzCfg0ModelColor> selectAll(@Param("projectPuid") String projectPuid);
 
+
+    HzCfg0ModelColor selectByPrimaryKey(@Param("puid") String puid);
     /**
      * 更新旧数据，将旧数据的大对象设置为null
      *

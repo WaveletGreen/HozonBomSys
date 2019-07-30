@@ -14,7 +14,7 @@ import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0OfBomLineService;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0BomLineOfModelService;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
 
 import java.util.*;
 
@@ -56,7 +56,7 @@ public class HzLoadBomDataController {
      * 车型模型
      */
     @Autowired
-    HzCfg0ModelService hzCfg0ModelService;
+    HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
 
     private boolean debug = false;
 
@@ -113,7 +113,7 @@ public class HzLoadBomDataController {
         /**
          * 获取该项目下的所有车型模型
          */
-        hzCfg0ModelService.doSelectByProjectPuid(projectPuid);
+        hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectPuid);
         return array;
     }
 

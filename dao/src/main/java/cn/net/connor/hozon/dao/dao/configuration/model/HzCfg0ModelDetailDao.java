@@ -4,10 +4,12 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.model;
+package cn.net.connor.hozon.dao.dao.configuration.model;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.model.HzCfg0ModelDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -16,6 +18,7 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzCfg0ModelDetailDao  extends BasicDao<HzCfg0ModelDetail>{
 
     /**
@@ -36,5 +39,5 @@ public interface HzCfg0ModelDetailDao  extends BasicDao<HzCfg0ModelDetail>{
 
     List<HzCfg0ModelDetail> selectByModelIds(List<HzCfg0ModelDetail> hzCfg0ModelRecords);
 
-    List<HzCfg0ModelDetail> selectByMainRecordId(String mainRecordId);
+    List<HzCfg0ModelDetail> selectByMainRecordId(@Param("mainRecordId") String mainRecordId);
 }

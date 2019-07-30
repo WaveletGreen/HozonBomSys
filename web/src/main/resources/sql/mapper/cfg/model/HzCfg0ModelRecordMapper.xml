@@ -6,9 +6,9 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelRecordDao">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelRecordDao">
     <resultMap id="BaseResultMap"
-               type="sql.pojo.cfg.model.HzCfg0ModelRecord">
+               type="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="OBJECT_NAME" jdbcType="VARCHAR"
                 property="objectName"/>
@@ -36,7 +36,7 @@
 		MODEL_UPDATE_DATE
 	</sql>
     <!--根据主键筛选-->
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.model.HzCfg0ModelRecord"
+    <select id="selectByPrimaryKey" parameterType="java.lang.String"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"

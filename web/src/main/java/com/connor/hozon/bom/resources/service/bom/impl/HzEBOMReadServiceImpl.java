@@ -3,46 +3,30 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
-import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.*;
 import com.connor.hozon.bom.resources.domain.query.*;
-import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
-import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
-import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
-import com.connor.hozon.bom.resources.util.StringUtil;
-import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sql.pojo.bom.*;
-import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
-import sql.pojo.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import sql.pojo.epl.HzEPLManageRecord;
-import sql.redis.SerializeUtil;
 
 import java.util.*;
 
@@ -80,7 +64,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
     private HzSingleVehiclesServices hzSingleVehiclesServices;
 
     @Autowired
-    private HzCfg0ModelService hzCfg0ModelService;
+    private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
 
 
     @Override
@@ -103,7 +87,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
                 return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), 0);
             }
             List<HzEPLManageRecord> records = recordPage.getResult();
-            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(query.getProjectId());
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(query.getProjectId());
             for (HzEPLManageRecord record : records) {
                 JSONObject jsonObject = HzEbomRecordFactory.bomLineRecordTORespDTO(record);
 //                //获取分组号
@@ -137,7 +121,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
         try {
             HzEPLManageRecord record = hzEbomRecordDAO.findEbomById(puid, projectId);
             HzEbomRespDTO respDTO = new HzEbomRespDTO();
-            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectId);
             if (record != null) {
                 respDTO = HzEbomRecordFactory.eplRecordToEbomRespDTO(record);
                 JSONObject object1 = hzSingleVehiclesServices.singleVehNum(record.getVehNum(),hzCfg0ModelRecords);

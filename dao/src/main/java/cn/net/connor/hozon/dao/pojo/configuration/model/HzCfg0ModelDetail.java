@@ -4,7 +4,7 @@
  * ALL RIGHTS RESERVED.
  */
 
-package sql.pojo.cfg.model;
+package cn.net.connor.hozon.dao.pojo.configuration.model;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -69,9 +69,8 @@ public class HzCfg0ModelDetail {
      */
     private String pModelMod;
     /**
-     * 年型
+     * 年型年
      */
-    @Deprecated
     private String pModelAnnual;
     /**
      * 版型

@@ -334,4 +334,7 @@ public class HzCfg0Service {
         return hzCfg0RecordDao.updateList(hzCfg0RecordList);
     }
 
+    public List<HzCfg0Record> doSelectByDescAndProjectId(HzCfg0Record cfg) {
+        return hzCfg0RecordDao.doSelectByDescAndProjectId(cfg);
+    }
 }
