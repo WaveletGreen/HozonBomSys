@@ -560,6 +560,9 @@ public class HzComposeMFService {
             /**没有加排序，存在相同特性的特性值，最后的特性值将覆盖前面的，显示在前端就是最后一个，这样的话会造成解算出错*/
             details.forEach(d -> mapOfDetails.put(d.getDmdCfg0FamilyUid(), d));
             HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(basics.get(i).getDmbModelUid(), basics.get(i).getDmbColorModelUid());
+            if (null == feature) {
+                continue;
+            }
             HzCfg0ModelRecord modelRecord = hzCfg0ModelService.getModelByPuid(feature.getpPertainToModel());
             Map<String, Object> _result = new HashMap<>();
 //            /**
@@ -617,9 +620,9 @@ public class HzComposeMFService {
 //            }else if(basics.get(i).getDmbStatus()==999){
 //                _result.put("status","已发布");
 //            }
-            _result.put("status",basics.get(i).getDmbStatus());
-            _result.put("changeOrderNo",basics.get(i).getChangeOrderNo());
-            _result.put("effectedDate",basics.get(i).getEffectedDate()==null?"-":sdf.format(basics.get(i).getEffectedDate()));
+            _result.put("status", basics.get(i).getDmbStatus());
+            _result.put("changeOrderNo", basics.get(i).getChangeOrderNo());
+            _result.put("effectedDate", basics.get(i).getEffectedDate() == null ? "-" : sdf.format(basics.get(i).getEffectedDate()));
             list.add(_result);
         }
         result.put("result", list);
@@ -673,7 +676,7 @@ public class HzComposeMFService {
 
     public int deleteVehicleFake(List<HzComposeDelDto> delDtos) {
         List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics = new ArrayList<>();
-        for(HzComposeDelDto hzComposeDelDto : delDtos){
+        for (HzComposeDelDto hzComposeDelDto : delDtos) {
             HzDerivativeMaterielBasic hzDerivativeMaterielBasic = new HzDerivativeMaterielBasic();
             hzDerivativeMaterielBasic.setId(hzComposeDelDto.getBasicId());
             hzDerivativeMaterielBasic.setDmbStatus(2);
