@@ -74,10 +74,10 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
     @Override
     public WriteResultRespDTO insertHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO) {
         try {
-            boolean b = PrivilegeUtil.writePrivilege();
-            if (!b) {
-                return WriteResultRespDTO.getFailPrivilege();
-            }
+//            boolean b = PrivilegeUtil.writePrivilege();
+//            if (!b) {
+//                return WriteResultRespDTO.getFailPrivilege();
+//            }
             int j = hzVPPSLibraryDao.findVPPSLibraryOrCodeToCount(reqDTO.getVppsCode());
             if (j > 0){
                 WriteResultRespDTO resultMessageRespDTO = new WriteResultRespDTO();
@@ -145,10 +145,10 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
     @Override
     public WriteResultRespDTO updateHzVPPSLibrary(AddHzVPPSLibraryReqDTO reqDTO) {
         try {
-            boolean b = PrivilegeUtil.writePrivilege();
-            if (!b) {
-                return WriteResultRespDTO.getFailPrivilege();
-            }
+//            boolean b = PrivilegeUtil.writePrivilege();
+//            if (!b) {
+//                return WriteResultRespDTO.getFailPrivilege();
+//            }
             int j = hzVPPSLibraryDao.findVPPSLibraryOrCodeToCount(reqDTO.getVppsCode());
             HzVPPSLibrary hzVPPSLibrary = hzVPPSLibraryDao.findVPPSLibraryOrCode(reqDTO.getVppsCode());
             WriteResultRespDTO resultMessageRespDTO = new WriteResultRespDTO();
@@ -192,10 +192,10 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
     @Override
     public WriteResultRespDTO deleteHzVPPSLibrary(String puid) {
         try {
-            boolean b  = PrivilegeUtil.writePrivilege();
-            if(!b){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
+//            boolean b  = PrivilegeUtil.writePrivilege();
+//            if(!b){
+//                return WriteResultRespDTO.getFailPrivilege();
+//            }
 
             int i = hzVPPSLibraryDao.delete(puid);
             if (i>0){

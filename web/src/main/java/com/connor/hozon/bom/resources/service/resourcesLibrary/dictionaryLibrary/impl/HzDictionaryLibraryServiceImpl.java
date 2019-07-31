@@ -39,10 +39,10 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
     @Override
     public WriteResultRespDTO insertHzDictionaryLibrary(AddHzDictionaryLibraryReqDTO reqDTO) {
         try {
-            boolean b  = PrivilegeUtil.writePrivilege();
-            if(!b){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
+//            boolean b  = PrivilegeUtil.writePrivilege();
+//            if(!b){
+//                return WriteResultRespDTO.getFailPrivilege();
+//            }
             int j = hzDictionaryLibraryDao.findDictionaryLibraryOrCodeToCount(reqDTO.getEigenValue());
             WriteResultRespDTO resultMessageRespDTO = new WriteResultRespDTO();
             if (j>0){
@@ -69,10 +69,10 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
     @Override
     public WriteResultRespDTO updateHzDictionaryLibrary(UpdateHzDictionaryLibraryReqDTO reqDTO) {
         try {
-            boolean b  = PrivilegeUtil.writePrivilege();
-            if(!b){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
+//            boolean b  = PrivilegeUtil.writePrivilege();
+//            if(!b){
+//                return WriteResultRespDTO.getFailPrivilege();
+//            }
             int j =hzDictionaryLibraryDao.findDictionaryLibraryOrCodeToCount(reqDTO.getEigenValue());
             HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryDao.findDictionaryLibraryOrCode(reqDTO.getEigenValue());
             WriteResultRespDTO resultMessageRespDTO = new WriteResultRespDTO();
@@ -179,10 +179,10 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
             return writeResultRespDTO;
         }
         try {
-            boolean b  = PrivilegeUtil.writePrivilege();
-            if(!b){
-                return WriteResultRespDTO.getFailPrivilege();
-            }
+//            boolean b  = PrivilegeUtil.writePrivilege();
+//            if(!b){
+//                return WriteResultRespDTO.getFailPrivilege();
+//            }
             int i = hzDictionaryLibraryDao.delete(puid);
             if (i>0){
                 return WriteResultRespDTO.getSuccessResult();
