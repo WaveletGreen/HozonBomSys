@@ -1,13 +1,16 @@
 /*
- * Copyright (c) 2018.
- * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
- * ALL RIGHTS RESERVED.
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
  */
 
-package com.connor.hozon.bom.bomSystem.dao.fullCfg;
+package cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -16,6 +19,7 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzCfg0OfBomLineRecordDao extends BasicDao<HzCfg0OfBomLineRecord> {
     /**
      * 主键删除
@@ -23,7 +27,7 @@ public interface HzCfg0OfBomLineRecordDao extends BasicDao<HzCfg0OfBomLineRecord
      * @param puid
      * @return
      */
-    int deleteByPrimaryKey(String puid);
+    int deleteByPrimaryKey(@Param("puid") String puid);
 
 
     /**
@@ -32,7 +36,7 @@ public interface HzCfg0OfBomLineRecordDao extends BasicDao<HzCfg0OfBomLineRecord
      * @param puid
      * @return
      */
-    HzCfg0OfBomLineRecord selectByPrimaryKey(String puid);
+    HzCfg0OfBomLineRecord selectByPrimaryKey(@Param("puid") String puid);
 
     /**
      * 根据项目ID和Bomline UID查找一条配置+BOMLine关联数据

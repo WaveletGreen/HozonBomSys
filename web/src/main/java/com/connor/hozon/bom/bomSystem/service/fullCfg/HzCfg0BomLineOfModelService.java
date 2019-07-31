@@ -6,11 +6,12 @@
 
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzProjectLibsServiceImpl;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0BomLineOfModelDao;
-import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
+import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzFcfgBomLvl1ListOperationService;
 import cn.net.connor.hozon.services.service.depository.project.HzVehicleService;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
@@ -23,8 +24,8 @@ import org.springframework.stereotype.Service;
 import sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel;
 import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.cfg.model.HzCfg0ModelDetail;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
@@ -73,7 +74,7 @@ public class HzCfg0BomLineOfModelService {
 
 
     @Autowired
-    HzCfg0ModelService hzCfg0ModelService;
+    HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
 
     @Autowired
     public HzCfg0BomLineOfModelService(
@@ -121,7 +122,7 @@ public class HzCfg0BomLineOfModelService {
             HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
             HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
             HzBrandRecord brand = hzBrandServiceImpl.doGetByPuid(platform.getpPertainToBrandPuid());
-            List<HzCfg0ModelRecord> listOfModel = hzCfg0ModelService.doSelectByProjectPuid(bdf);
+            List<HzCfg0ModelRecord> listOfModel = hzCfg0ModelServiceImpl.doSelectByProjectPuid(bdf);
             if (hzCfg0BomlineOfModels == null || hzCfg0BomlineOfModels.size() <= 0)
                 return null;
             JSONObject respond = new JSONObject();

@@ -6,11 +6,11 @@
 
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0OfBomLineRecordDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzCfg0OfBomLineRecordDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0OfBomLineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.fullCfg.HzCfg0OfBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
 
 import java.util.List;
 /**

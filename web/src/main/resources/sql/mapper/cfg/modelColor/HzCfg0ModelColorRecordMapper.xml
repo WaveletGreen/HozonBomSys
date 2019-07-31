@@ -108,12 +108,6 @@
         from HZ_CFG0_MODEL_COLOR_RECORD where P_CFG0_MAIN_RECORD_OF_MC=#{pCfg0MainRecordOfMC,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor"
-            resultMap="ResultMapWithColorJudge">
-        select
-        <include refid="Base_Column_List"/>
-        from HZ_CFG0_MODEL_COLOR_RECORD where PUID=#{puid,jdbcType=VARCHAR}
-    </select>
     <select id="selectAll" resultMap="VwoMap">
         select
         t.
@@ -131,6 +125,14 @@
         )
 
     </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_COLOR_RECORD where PUID=#{puid,jdbcType=VARCHAR}
+    </select>
+
     <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
         insert into HZ_CFG0_MODEL_COLOR_RECORD
         (

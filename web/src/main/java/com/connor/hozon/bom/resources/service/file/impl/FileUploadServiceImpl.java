@@ -1,8 +1,7 @@
 package com.connor.hozon.bom.resources.service.file.impl;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
-import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -13,38 +12,31 @@ import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
-import com.connor.hozon.bom.resources.service.RefreshMbomThread;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
-import com.google.common.base.Strings;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import sql.pojo.bom.HZBomMainRecord;
-import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.epl.HzEPLRecord;
-import sql.redis.SerializeUtil;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * @Author: haozt
@@ -65,7 +57,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private HzMbomService hzMbomService;
 
-    private HzCfg0ModelService hzCfg0ModelService;
+    private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
 
     private HzEPLDAO hzEPLDAO;
 
@@ -88,8 +80,8 @@ public class FileUploadServiceImpl implements FileUploadService {
         this.hzMbomService = hzMbomService;
     }
     @Autowired
-    public void setHzCfg0ModelService(HzCfg0ModelService hzCfg0ModelService) {
-        this.hzCfg0ModelService = hzCfg0ModelService;
+    public void setHzCfg0ModelServiceImpl(HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl) {
+        this.hzCfg0ModelServiceImpl = hzCfg0ModelServiceImpl;
     }
     @Autowired
     public void setHzEPLDAO(HzEPLDAO hzEPLDAO) {
@@ -1093,7 +1085,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             this.errorCount = 0;
             WriteResultRespDTO respDTO = new WriteResultRespDTO();
 //            List<HzBomLineRecord> bomLineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(projectId);
-            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectId);
             Set<HzCfg0ModelRecord> set = new HashSet<>(hzCfg0ModelRecords);
             List<HzCfg0ModelRecord> records = new ArrayList<>(set);
             String errorMsg = singleVehiclesDosageExcelErrorMsg(records,sheet,projectId);

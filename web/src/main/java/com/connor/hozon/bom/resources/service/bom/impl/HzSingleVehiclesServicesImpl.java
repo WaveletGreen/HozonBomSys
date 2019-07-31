@@ -2,7 +2,7 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielCfgService;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
@@ -11,14 +11,13 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzSingleVehiclesFactory;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 import sql.pojo.cfg.derivative.HzMaterielCfgBean;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import sql.pojo.interaction.HzSingleVehicles;
 import sql.redis.SerializeUtil;
 
@@ -40,7 +39,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
 
 
     @Autowired
-    private HzCfg0ModelService hzCfg0ModelService;
+    private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
 
     @Autowired
     private SynMaterielCfgService synMaterielCfgService;
@@ -159,7 +158,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     @Override
     public LinkedHashMap<String, String> singleVehDosageTitle(String projectId) {
         //获取该项目下的所有车型模型
-        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectId);
         LinkedHashMap<String,String> map = new LinkedHashMap();
         if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
             Set<HzCfg0ModelRecord> set = new HashSet<>(hzCfg0ModelRecords);

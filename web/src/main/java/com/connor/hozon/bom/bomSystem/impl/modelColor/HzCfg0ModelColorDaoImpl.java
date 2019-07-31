@@ -8,11 +8,7 @@ package com.connor.hozon.bom.bomSystem.impl.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import sql.IBaseSQLUtil;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 
@@ -51,6 +47,11 @@ public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> impl
                 clzName + ".selectAll");
     }
 
+    @Override
+    public HzCfg0ModelColor selectByPrimaryKey(String puid) {
+        return baseSQLUtil.executeQueryByPass(COLOR, puid,clzName + ".selectByPrimaryKey", true);
+    }
+
     /**
      * 更新旧数据，将旧数据的大对象设置为null
      *
@@ -83,35 +84,35 @@ public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> impl
 
     @Override
     public int updateByVwoId(HzCfg0ModelColor hzCfg0ModelColor) {
-        return baseSQLUtil.executeUpdate(hzCfg0ModelColor,clzName + ".updateByVwoId");
+        return baseSQLUtil.executeUpdate(hzCfg0ModelColor, clzName + ".updateByVwoId");
     }
 
     @Override
     public int updateStatus(List<HzCfg0ModelColor> hzCfg0ModelColorsUpdate) {
-        return baseSQLUtil.executeUpdate(hzCfg0ModelColorsUpdate,clzName+".updateStatus");
+        return baseSQLUtil.executeUpdate(hzCfg0ModelColorsUpdate, clzName + ".updateStatus");
     }
 
     @Override
     public int updateListAll(List<HzCfg0ModelColor> hzCfg0ModelColorsUpdate) {
-        return baseSQLUtil.executeUpdate(hzCfg0ModelColorsUpdate,clzName+".updateListAll");
+        return baseSQLUtil.executeUpdate(hzCfg0ModelColorsUpdate, clzName + ".updateListAll");
     }
 
     @Override
     public int updateStatusByOrderId(Long orderId, int status) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("orderId",orderId);
-        map.put("status",status);
-        map.put("effectedDate",new Date());
-        return baseSQLUtil.executeUpdate(map,clzName+".updateStatusByOrderId");
+        Map<String, Object> map = new HashMap<>();
+        map.put("orderId", orderId);
+        map.put("status", status);
+        map.put("effectedDate", new Date());
+        return baseSQLUtil.executeUpdate(map, clzName + ".updateStatusByOrderId");
     }
 
     @Override
     public int updateByChangeIds(List<HzCmcrChange> hzCmcrChanges) {
-        return baseSQLUtil.executeUpdate(hzCmcrChanges,clzName+".updateByChangeIds");
+        return baseSQLUtil.executeUpdate(hzCmcrChanges, clzName + ".updateByChangeIds");
     }
 
     @Override
     public int deleteByOrderId(Long orderId) {
-        return baseSQLUtil.executeDelete(orderId,clzName+".deleteByOrderId");
+        return baseSQLUtil.executeDelete(orderId, clzName + ".deleteByOrderId");
     }
 }

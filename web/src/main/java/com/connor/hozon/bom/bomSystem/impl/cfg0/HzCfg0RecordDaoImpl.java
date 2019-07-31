@@ -6,15 +6,12 @@
 
 package com.connor.hozon.bom.bomSystem.impl.cfg0;
 
+import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 
@@ -222,6 +219,9 @@ public class HzCfg0RecordDaoImpl extends BasicDaoImpl<HzCfg0Record> implements H
     @Override
     public List<HzCfg0Record> selectByFamilyName(HzCfg0Record hzCfg0Record) {
         return baseSQLUtil.executeQueryByPass(new HzCfg0Record(),hzCfg0Record,clzName+".selectByFamilyName");
+    }  @Override
+    public List<HzCfg0Record> doSelectByDescAndProjectId(HzCfg0Record hzCfg0Record) {
+        return baseSQLUtil.executeQueryByPass(new HzCfg0Record(),hzCfg0Record,clzName+".doSelectByDescAndProjectId");
     }
 
 }

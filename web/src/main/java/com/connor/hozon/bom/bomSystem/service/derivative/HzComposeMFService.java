@@ -6,25 +6,29 @@
 
 package com.connor.hozon.bom.bomSystem.service.derivative;
 
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
+import cn.net.connor.hozon.common.entity.QueryBase;
+import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
+import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMaterielServiceImpl;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielDetailDao;
-import com.connor.hozon.bom.bomSystem.dao.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dto.HzMaterielFeatureBean;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
-import com.connor.hozon.bom.bomSystem.service.cfg.*;
-import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0ModelService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
 import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
-import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMaterielServiceImpl;
-import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
@@ -32,23 +36,22 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
 import sql.pojo.cfg.cfg0.HzCfg0Record;
+import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
 import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
 import sql.pojo.cfg.fullCfg.HzFullCfgModel;
 import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
-import sql.pojo.cfg.model.HzCfg0ModelDetail;
-import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
-import sql.pojo.cfg.model.HzCfg0ModelRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
-import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -95,7 +98,7 @@ public class HzComposeMFService {
      * 车型模型
      */
     @Autowired
-    HzCfg0ModelService hzCfg0ModelService;
+    HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
     /**
      * 配色模型
      */
@@ -205,7 +208,7 @@ public class HzComposeMFService {
 
         HzCfg0ModelColor modelColor = new HzCfg0ModelColor();
         modelColor.setPuid(hzComposeMFDTO.getColorModel());
-        HzCfg0ModelRecord cmodel = hzCfg0ModelService.getModelByPuid(hzComposeMFDTO.getModelUid());
+        HzCfg0ModelRecord cmodel = hzCfg0ModelServiceImpl.getModelByPuid(hzComposeMFDTO.getModelUid());
         modelColor = hzCfg0ModelColorService.doGetById(modelColor);
 
         feature.setpFeatureSingleVehicleCode(modelDetail.getpModelCfgMng().replace("**", modelColor.getpModelShellOfColorfulModel()));
@@ -294,7 +297,7 @@ public class HzComposeMFService {
 
         HzCfg0ModelColor modelColor = new HzCfg0ModelColor();
         modelColor.setPuid(hzComposeMFDTO.getColorModel());
-        HzCfg0ModelRecord cmodel = hzCfg0ModelService.getModelByPuid(hzComposeMFDTO.getModelUid());
+        HzCfg0ModelRecord cmodel = hzCfg0ModelServiceImpl.getModelByPuid(hzComposeMFDTO.getModelUid());
         modelColor = hzCfg0ModelColorService.doGetById(modelColor);
 
         HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(hzComposeMFDTO.getProjectUid());
@@ -552,6 +555,15 @@ public class HzComposeMFService {
         List<Map<String, Object>> list = new ArrayList<>();
         HzMaterielRecord superMateriel = hzSuperMaterielServiceImpl.doSelectByProjectPuid(projectUid);
         Map<String, HzFactory> mapOffactories = new HashMap<>();//
+        HzCfg0Record param = new HzCfg0Record();
+        param.setpCfg0FamilyDesc("内饰颜色");
+        param.setpCfg0MainItemPuid(projectUid);
+        List<HzCfg0Record> innerColor = hzCfg0Service.doSelectByDescAndProjectId(param);
+        HzCfg0Record inner = null;
+        //就去除第一个作为所有的内饰颜色
+        if (innerColor != null && !innerColor.isEmpty()) {
+            inner = innerColor.get(0);
+        }
         for (int i = 0; i < basics.size(); i++) {
             detail.setDmdDmbId(basics.get(i).getId());
             //详情
@@ -560,7 +572,10 @@ public class HzComposeMFService {
             /**没有加排序，存在相同特性的特性值，最后的特性值将覆盖前面的，显示在前端就是最后一个，这样的话会造成解算出错*/
             details.forEach(d -> mapOfDetails.put(d.getDmdCfg0FamilyUid(), d));
             HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(basics.get(i).getDmbModelUid(), basics.get(i).getDmbColorModelUid());
-            HzCfg0ModelRecord modelRecord = hzCfg0ModelService.getModelByPuid(feature.getpPertainToModel());
+            if (null == feature) {
+                continue;
+            }
+            HzCfg0ModelRecord modelRecord = hzCfg0ModelServiceImpl.getModelByPuid(feature.getpPertainToModel());
             Map<String, Object> _result = new HashMap<>();
 //            /**
 //             * 从配置中包括品牌平台车型项目等单车信息数据，包括了衍生物料和基本信息数据，不能当作返回前端的数据，因为前端需要从其他地方获取到内饰颜色等信息
@@ -608,7 +623,8 @@ public class HzComposeMFService {
             _result.put("puidOfModelFeature", feature.getPuid());
 //            _result.put("factory", cfg0.getFactoryCode());
             _result.put("modeBasicDetail", feature.getpFeatureSingleVehicleCode());
-            _result.put("modeBasicDetailDesc", feature.getpFeatureCnDesc());
+            //重新运算一遍基本信息
+            remarkBaseInfo(feature, _result, modelRecord,inner);
             _result.put("cfg0MainPuid", modelRecord.getpCfg0ModelOfMainRecord());
 //            if(basics.get(i).getDmbStatus()==null||basics.get(i).getDmbStatus()==0){
 //                _result.put("status","草稿状态");
@@ -617,14 +633,57 @@ public class HzComposeMFService {
 //            }else if(basics.get(i).getDmbStatus()==999){
 //                _result.put("status","已发布");
 //            }
-            _result.put("status",basics.get(i).getDmbStatus());
-            _result.put("changeOrderNo",basics.get(i).getChangeOrderNo());
-            _result.put("effectedDate",basics.get(i).getEffectedDate()==null?"-":sdf.format(basics.get(i).getEffectedDate()));
+            _result.put("status", basics.get(i).getDmbStatus());
+            _result.put("changeOrderNo", basics.get(i).getChangeOrderNo());
+            _result.put("effectedDate", basics.get(i).getEffectedDate() == null ? "-" : sdf.format(basics.get(i).getEffectedDate()));
             list.add(_result);
         }
         result.put("result", list);
         result.put("totalCount", list.size());
         return result;
+    }
+
+    @Transactional
+    public void remarkBaseInfo(HzCfg0ModelFeature feature, Map<String, Object> _result, HzCfg0ModelRecord modelRecord, HzCfg0Record inner) {
+        String descCn = feature.getpFeatureCnDesc();
+        String 平台;
+        String 车型年;
+        String 版型;
+        StringBuilder desc = null;
+        if (StringUtils.isEmpty(descCn)) {
+            desc=new StringBuilder();
+            HzCfg0ModelDetail param = new HzCfg0ModelDetail();
+            param.setpModelPuid(modelRecord.getPuid());
+            param = hzCfg0ModelDetailDao.selectByModelId(param);
+
+            if(StringUtils.isNotEmpty(param.getpModelAnnual())) {
+                HzCfg0ModelDetail modelDetail = new HzCfg0ModelDetail();
+                modelDetail.setpModelPuid(modelRecord.getPuid());
+                //TODO 多次查询很消耗性能，可以考虑放到一个新的实体对象上进行查询
+                modelDetail = hzCfg0ModelDetailDao.selectByModelId(modelDetail);
+                HzCfg0ModelColor outerColor = hzCfg0ModelColorDao.selectByPrimaryKey(feature.getpPertainToColorModel());
+                平台 = param.getpModelPlatform();
+                车型年 = param.getpModelAnnual() == null ? "" : param.getpModelAnnual();
+                版型 = param.getpModelVersion();
+                desc.append(平台).append(" ").append(车型年).append(" ").append(版型).append(" ");
+                //内饰颜色拼接进去
+                if (inner != null) {
+                    desc.append(inner.getpCfg0Desc()).append("/");
+                }
+                if (outerColor != null) {
+                    desc.append(outerColor.getpDescOfColorfulModel()).append(" ");
+                }
+                desc.append(modelDetail.getpModelCfgDesc());
+                System.out.println(desc);
+                feature.setpFeatureCnDesc(desc.toString());
+                hzCfg0ModelFeatureService.doUpdateByPrimaryKey(feature);
+            }
+            else{
+                logger.error("车型年数据不存在");
+            }
+        }
+
+        _result.put("modeBasicDetailDesc", feature.getpFeatureCnDesc());
     }
 
     /**
@@ -673,7 +732,7 @@ public class HzComposeMFService {
 
     public int deleteVehicleFake(List<HzComposeDelDto> delDtos) {
         List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasics = new ArrayList<>();
-        for(HzComposeDelDto hzComposeDelDto : delDtos){
+        for (HzComposeDelDto hzComposeDelDto : delDtos) {
             HzDerivativeMaterielBasic hzDerivativeMaterielBasic = new HzDerivativeMaterielBasic();
             hzDerivativeMaterielBasic.setId(hzComposeDelDto.getBasicId());
             hzDerivativeMaterielBasic.setDmbStatus(2);
