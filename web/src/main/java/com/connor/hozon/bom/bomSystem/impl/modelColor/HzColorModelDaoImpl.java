@@ -8,10 +8,7 @@ package com.connor.hozon.bom.bomSystem.impl.modelColor;
 
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import sql.IBaseSQLUtil;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.pojo.cfg.modelColor.HzColorModel2;
@@ -140,6 +137,5 @@ public class HzColorModelDaoImpl extends BasicDaoImpl<HzCfg0ModelColorDetail> im
         return baseSQLUtil.executeQueryByPass(new HzColorModel2(), projectPuid,
                 clzName + ".selectByProjectPuid");
     }
-
 
 }

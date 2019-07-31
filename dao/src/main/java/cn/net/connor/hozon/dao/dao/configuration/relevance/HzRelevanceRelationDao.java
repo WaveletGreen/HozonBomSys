@@ -41,4 +41,6 @@ public interface HzRelevanceRelationDao extends BasicDao<HzRelevanceRelation> {
      * @return
      */
     int insertOne(HzRelevanceRelation hzRelevanceRelation);
+
+    HzRelevanceRelation selectByFeature(HzRelevanceRelation hzRelevanceRelation);
 }

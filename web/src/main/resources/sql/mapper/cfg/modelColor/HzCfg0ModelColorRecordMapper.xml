@@ -34,6 +34,10 @@
                type="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
         <!--是否多色-->
         <result column="P_COLOR_IS_MULTIPLY" jdbcType="VARCHAR" property="pColorIsMultiply"/>
+        <!--颜色名称-->
+        <result column="ORG_COLOR_PUID" jdbcType="VARCHAR" property="orgColorUid"/>
+        <!--颜色名称-->
+        <result column="P_COLOR_NAME" jdbcType="VARCHAR" property="colorName"/>
         <!--VWO变更号的ID，外键-->
         <result column="CMCR_CHANGE_ORDER_UID" jdbcType="BIGINT" property="cmcrVwoId"/>
         <!--创建时间-->
@@ -74,7 +78,9 @@
         P_COLORFUL_MAP_BLOCK
     </sql>
     <sql id="Color_Is_Multiply">
-        P_COLOR_IS_MULTIPLY,
+        t2.P_COLOR_IS_MULTIPLY,
+        t2.PUID as ORG_COLOR_PUID,
+        t2.P_COLOR_NAME,
         CMCR_CHANGE_ORDER_UID,
         CMCR_CREATE_DATE,
         CMCR_CREATOR,
@@ -112,7 +118,6 @@
         select
         t.
         <include refid="Base_Column_List"/>,
-        t2.
         <include refid="Color_Is_Multiply"/>,
         t3.CHANGE_NO as cmcrVwoNum
         from HZ_CFG0_MODEL_COLOR_RECORD t
