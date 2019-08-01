@@ -1066,7 +1066,7 @@
         P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,P_FACTORY_ID,P_LOU_LOA_FLAG,
         P_SPARE_PART,P_SPARE_PART_NUM,P_PROCESS_ROUTE,P_LABOR_HOUR,P_RHYTHM,P_SOLDER_JOINT,
         P_MACHINE_MATERITAL,P_STANDARD_PART,P_TOOLS,P_WASTER_PRODUCT,P_CHANGE,P_CHANGE_NUM,
-        P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME)
+        P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME,P_COLOR_PART)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
@@ -1085,7 +1085,7 @@
             #{item.wasterProduct,jdbcType=VARCHAR},#{item.change,jdbcType=VARCHAR},#{item.changeNum,jdbcType=VARCHAR},
             #{item.updateName,jdbcType=VARCHAR},
             #{item.colorId,jdbcType=VARCHAR},
-            #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR},#{item.effectTime,jdbcType=TIMESTAMP}
+            #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR},#{item.effectTime,jdbcType=TIMESTAMP},#{item.isColorPart,jdbcType=INTEGER}
             from DUAL
         </foreach>
     </insert>
@@ -1183,6 +1183,9 @@
                 </if>
                 <if test="item.pLouaFlag != null">
                     P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=VARCHAR},
+                </if>
+                <if test="item.isColorPart != null">
+                    P_COLOR_PART = #{item.isColorPart,jdbcType=VARCHAR},
                 </if>
             </set>
             where PUID = #{item.puid,jdbcType=VARCHAR}

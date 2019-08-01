@@ -91,7 +91,7 @@ public class HzMbomController extends BaseController {
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
-
+        refreshMBOM(projectId,response);
     }
 
     @RequestMapping(value = "refreshMBOM", method = RequestMethod.GET)
