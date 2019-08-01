@@ -160,9 +160,32 @@ public class HzMbomServiceImpl implements HzMbomService {
 
     @Override
     public Page<HzMbomRecordRespDTO> queryMbomToColorPart(HzMbomByPageQuery query) {
-
-
-        return null;
+        try {
+            query = HzBomSysFactory.bomQueryLevelTrans(query);
+            Page<HzMbomLineRecord> recordPage;
+            recordPage = hzMbomRecordDAO.queryMbomToColorPart(query);
+            int num = (recordPage.getPageNumber() - 1) * recordPage.getPageSize();
+            if (recordPage.getResult() == null) {
+                return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), 0);
+            }
+            List<HzMbomLineRecord> lineRecords = recordPage.getResult();
+            List<HzMbomRecordRespDTO> respDTOList = new ArrayList<>();
+            List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(query.getProjectId());
+            for (HzMbomLineRecord record : lineRecords) {
+                HzMbomRecordRespDTO respDTO = HzMbomRecordFactory.mbomRecordToRespDTO(record);
+                respDTO.setNo(++num);
+                if(Integer.valueOf(1).equals(query.getType())){
+                    respDTO.setpBomType("生产");
+                }else if(Integer.valueOf(6).equals(query.getType())){
+                    respDTO.setpBomType("财务");
+                }
+                respDTO.setVehNum(hzSingleVehiclesServices.singleVehNum(record.getVehNum(),hzCfg0ModelRecords));
+                respDTOList.add(respDTO);
+            }
+            return new Page<>(recordPage.getPageNumber(), recordPage.getPageSize(), recordPage.getTotalCount(), respDTOList);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 
