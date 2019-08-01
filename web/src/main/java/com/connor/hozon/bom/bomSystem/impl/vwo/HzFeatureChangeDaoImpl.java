@@ -8,10 +8,9 @@ package com.connor.hozon.bom.bomSystem.impl.vwo;
 
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.vwo.HzFeatureChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +70,7 @@ public class HzFeatureChangeDaoImpl extends BasicDaoImpl<HzFeatureChangeBean> im
     }
 
     @Override
-    public List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records) {
+    public List<HzFeatureChangeBean> doSelectHasEffect(List<HzFeatureValue> records) {
         return baseSQLUtil.executeQueryByPass(new HzFeatureChangeBean(),records,clzName+".doSelectHasEffect");
     }
 

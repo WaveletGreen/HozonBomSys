@@ -6,6 +6,8 @@
 
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
 import cn.net.connor.hozon.common.entity.QueryBase;
@@ -14,7 +16,6 @@ import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ui.Model;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import sql.pojo.cfg.vwo.*;
@@ -37,7 +38,7 @@ public interface IHzVWOManagerService {
      * @param beans      一组特性列表
      * @return 操作消息
      */
-    JSONObject featureGetIntoVWO(String projectUid, List<HzCfg0Record> beans);
+    JSONObject featureGetIntoVWO(String projectUid, List<HzFeatureValue> beans);
     /**
      * 特性进入vwo流程
      *
@@ -45,7 +46,7 @@ public interface IHzVWOManagerService {
      * @param beans      一组特性列表
      * @return 操作消息
      */
-    JSONObject featureGetIntoVWO2(String projectUid, List<HzCfg0Record> beans,Long changeFromId);
+    JSONObject featureGetIntoVWO2(String projectUid, List<HzFeatureValue> beans, Long changeFromId);
 
     /**
      * 产生一个最新的Vwo实体类对象

@@ -224,7 +224,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
                 if (cfg.getCfg() == null) {
                     continue;
                 }
-                sb.append("2Y层:" + cfg.getBomLine().getLineID() + " 已关联特性值" + cfg.getCfg().getpCfg0ObjectId() + "，请在全配置BOM一级清单中将" + cfg.getBomLine().getLineID() + "去除绑定特性值<br>");
+                sb.append("2Y层:" + cfg.getBomLine().getLineID() + " 已关联特性值" + cfg.getCfg().getFeatureValueCode() + "，请在全配置BOM一级清单中将" + cfg.getBomLine().getLineID() + "去除绑定特性值<br>");
             }
         }
         String errMsg = sb.toString();

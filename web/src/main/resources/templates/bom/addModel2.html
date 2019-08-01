@@ -14,7 +14,7 @@
 <body>
 <form class="form-horizontal" id="addModelForm" role="form" method="post" th:action="${action}">
     <input class="form-control" id="pCfg0ModelOfMainRecord" name="pCfg0ModelOfMainRecord" type="hidden"
-           th:value="${cfgmain.getPuid()}"
+           th:value="${cfgmain.getId()}"
     />
     <div class="form-group col-lg-12">
         <label for="pModelBrand">品牌</label>

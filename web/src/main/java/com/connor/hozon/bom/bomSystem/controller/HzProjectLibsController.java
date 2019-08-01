@@ -6,10 +6,11 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
+import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
-import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
+import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
+import cn.net.connor.hozon.dao.dao.main.HzMainConfigDao;
 import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
@@ -29,8 +30,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.bom.HZBomMainRecord;
-import sql.pojo.cfg.main.HzCfg0MainRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
@@ -71,10 +71,10 @@ public class HzProjectLibsController {
     //    HzPreferenceSettingDao hzPreferenceSettingDao;
     /*** 主配置dao层*/
     @Autowired
-    HzCfg0MainRecordDao hzCfg0MainRecordDao;
+    HzMainConfigDao hzMainConfigDao;
     /*** BOM主数据层*/
     @Autowired
-    HzBomMainRecordDao hzBomMainRecordDao;
+    HzMainBomDao hzMainBomDao;
     /***项目助手*/
     @Autowired
     ProjectHelper projectHelper;
@@ -378,44 +378,44 @@ public class HzProjectLibsController {
                 {
 
                     //数模层
-                    HZBomMainRecord hzBomMainRecord = new HZBomMainRecord();
+                    HzMainBom hzMainBom = new HzMainBom();
                     //主配置
-                    HzCfg0MainRecord hzCfg0MainRecord = new HzCfg0MainRecord();
+                    HzMainConfig hzMainConfig = new HzMainConfig();
 
                     //数模层
-                    hzBomMainRecord.setPuid(UUIDHelper.generateUpperUid());
-                    hzBomMainRecord.setPostDate(now);
-                    hzBomMainRecord.setPoster(user.getUserName());
-                    hzBomMainRecord.setBomDigifax("BOM系统自动创建:" + project.getpProjectCode() + "的数模层");
+                    hzMainBom.setPuid(UUIDHelper.generateUpperUid());
+                    hzMainBom.setCreateDate(now);
+                    hzMainBom.setCreator(user.getUserName());
+                    hzMainBom.setDigifaxName("BOM系统自动创建:" + project.getpProjectCode() + "的数模层");
                     //由于不是从TC中来，因此原始的TC UID将不存在，只能街截取首16位
-                    hzBomMainRecord.setBomOrgPuid(hzBomMainRecord.getPuid().substring(0, 15));
-                    hzBomMainRecord.setpCfg0LastModDate(now);
-                    hzBomMainRecord.setpCfg0OfWhichProjectPuid(project.getPuid());
-                    hzBomMainRecord.setpCfg0OfWhichProject(project.getpProjectName() == null ? project.getpProjectCode() : project.getpProjectName());
-                    hzBomMainRecord.setpCfg0OrgPoster(user.getUserName());
+                    hzMainBom.setDigifaxUidFromTC(hzMainBom.getPuid().substring(0, 15));
+                    hzMainBom.setLastModifyDate(now);
+                    hzMainBom.setProjectId(project.getPuid());
+                    hzMainBom.setProjectName(project.getpProjectName() == null ? project.getpProjectCode() : project.getpProjectName());
+                    hzMainBom.setUpdater(user.getUserName());
 
                     //主配置
-                    hzCfg0MainRecord.setPuid(UUIDHelper.generateUpperUid());
-                    hzCfg0MainRecord.setpCfg0LastModDate(now);
-                    hzCfg0MainRecord.setpCfg0OfWhichProject(project.getpProjectName() == null ? project.getpProjectCode() : project.getpProjectName());
-                    hzCfg0MainRecord.setpCfg0OfWhichProjectPuid(project.getPuid());
-                    hzCfg0MainRecord.setpCfg0OrgPuid(hzCfg0MainRecord.getPuid().substring(0, 15));
-                    hzCfg0MainRecord.setpItemName("BOM系统自动创建:" + project.getpProjectCode() + "的主配置");
-                    hzCfg0MainRecord.setPostDate(now);
-                    hzCfg0MainRecord.setPoster(user.getUserName());
-                    hzCfg0MainRecord.setpCfg0OrgPoster(user.getUserName());
+                    hzMainConfig.setId(UUIDHelper.generateUpperUid());
+                    hzMainConfig.setLastModifyDate(now);
+                    hzMainConfig.setProjectName(project.getpProjectName() == null ? project.getpProjectCode() : project.getpProjectName());
+                    hzMainConfig.setProjectId(project.getPuid());
+                    hzMainConfig.setConfigUidFromTC(hzMainConfig.getId().substring(0, 15));
+                    hzMainConfig.setItemName("BOM系统自动创建:" + project.getpProjectCode() + "的主配置");
+                    hzMainConfig.setCreateDate(now);
+                    hzMainConfig.setCreator(user.getUserName());
+                    hzMainConfig.setUpdater(user.getUserName());
                     //新的项目的特性都将继承配置字典的数据
-                    hzCfg0MainRecord.setFeatureSynDicFlag(1);
+                    hzMainConfig.setFeatureSynDicFlag(1);
 
                     //同步插入数模层和主配置
-                    if (hzCfg0MainRecordDao.insert(hzCfg0MainRecord) > 0) {
+                    if (hzMainConfigDao.insert(hzMainConfig) > 0) {
                         result.put("dxgMainMsg", "自动创建关联数模层成功");
                         status1 = 1;
                     } else {
                         result.put("dxgMainMsg", "自动创建关联数模层失败，请联系系统管理员");
                         status1 = 0;
                     }
-                    if (hzBomMainRecordDao.insert(hzBomMainRecord) > 0) {
+                    if (hzMainBomDao.insert(hzMainBom) > 0) {
                         result.put("cfgMsg", "自动创建主配置数据成功");
                         status2 = 1;
                     } else {
@@ -433,8 +433,8 @@ public class HzProjectLibsController {
 //                        status1 = 0;
 //                    } else {
 //                        thisSetting = list.get(0);
-//                        thisSetting.setBomMainRecordPuid(hzBomMainRecord.getPuid());
-//                        thisSetting.setPuid(UUIDHelper.generateUpperUid());
+//                        thisSetting.setBomMainRecordPuid(hzMainBom.getId());
+//                        thisSetting.setId(UUIDHelper.generateUpperUid());
 //                        thisSetting.setSettingName("Hz_ExportBomPreferenceRedis_" + project.getpProjectCode());
 //                        if (status2 == 1) {
 //                            if (hzPreferenceSettingDao.insert(thisSetting) > 0) {

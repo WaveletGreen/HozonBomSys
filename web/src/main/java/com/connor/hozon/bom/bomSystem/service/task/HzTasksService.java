@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.service.task;
 
-import com.connor.hozon.bom.bomSystem.dao.task.HzTasksDao;
+import cn.net.connor.hozon.dao.dao.task.HzTasksDao;
 import com.connor.hozon.bom.bomSystem.dto.task.HzTaskPostDto;
 import com.connor.hozon.bom.bomSystem.dto.task.TaskReceivedDto;
 import com.connor.hozon.bom.bomSystem.iservice.task.IHzTaskService;
@@ -14,7 +14,6 @@ import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
-import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.sys.entity.Tree;
@@ -26,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.vwo.HzVwoInfo;
-import sql.pojo.task.HzTasks;
+import cn.net.connor.hozon.dao.pojo.task.HzTasks;
 
 import java.util.ArrayList;
 import java.util.HashMap;

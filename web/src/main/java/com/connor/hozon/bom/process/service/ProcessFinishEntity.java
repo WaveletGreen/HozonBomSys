@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeOrderRecord;
-import sql.pojo.task.HzTasks;
+import cn.net.connor.hozon.dao.pojo.task.HzTasks;
 
 import java.util.Date;
 import java.util.List;

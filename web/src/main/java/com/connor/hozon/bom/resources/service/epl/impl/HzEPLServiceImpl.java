@@ -147,7 +147,7 @@ public class HzEPLServiceImpl implements HzEPLService {
 //                        if(!carParts.contains(partResource)){//标记为删除状态,走流程后就直接删除
 //                            StringBuffer stringBuffer = new StringBuffer();
 //                            pbomLineRecords.forEach(pbomLineRecord -> {
-//                                stringBuffer.append(pbomLineRecord.getPuid()+",");
+//                                stringBuffer.append(pbomLineRecord.getId()+",");
 //                            });
 //                            hzPbomRecordDAO.deleteByPuids(stringBuffer.toString());
 //                        }

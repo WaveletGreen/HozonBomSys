@@ -6,11 +6,11 @@
 
 package com.connor.hozon.bom.bomSystem.service.cfg;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
+import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service("hzCfg0OptionFamilyService")
 public class HzCfg0OptionFamilyService {
     @Autowired
-    HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+    HzFeatureDao hzFeatureDao;
     private static final Map<String, Object> paramMap = new HashMap<>();
     private static final List<String> paramList = new ArrayList<>();
 
@@ -39,8 +39,8 @@ public class HzCfg0OptionFamilyService {
      * @param mainId
      * @return
      */
-    public List<HzCfg0OptionFamily> doGetCfg0OptionFamilyListByProjectPuid(String mainId) {
-        return hzCfg0OptionFamilyDao.selectNameByMainId(mainId);
+    public List<HzFeature> doGetCfg0OptionFamilyListByProjectPuid(String mainId) {
+        return hzFeatureDao.selectByProjectIdWithOrderMainId(mainId);
     }
 
     /**
@@ -49,8 +49,8 @@ public class HzCfg0OptionFamilyService {
      * @param mainId
      * @return
      */
-    public List<HzCfg0OptionFamily> doGetCfg0OptionFamilyListByProjectPuid2(String mainId) {
-        return hzCfg0OptionFamilyDao.selectNameByMainId2(mainId);
+    public List<HzFeature> doGetCfg0OptionFamilyListByProjectPuid2(String mainId) {
+        return hzFeatureDao.selectByProjectIdWithOrderPuid(mainId);
     }
 
     /**
@@ -60,9 +60,9 @@ public class HzCfg0OptionFamilyService {
      * @return
      */
     public boolean doDeleteByPrimaryKey(String uid) {
-        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
-        family.setPuid(uid);
-        return hzCfg0OptionFamilyDao.deleteByPrimaryKey(family) > 0 ? true : false;
+        HzFeature family = new HzFeature();
+        family.setId(uid);
+        return hzFeatureDao.deleteByPrimaryKey(family) > 0 ? true : false;
     }
 
     /**
@@ -72,11 +72,11 @@ public class HzCfg0OptionFamilyService {
      * @param isColor    1，带颜色的特性；0，不带颜色的特性
      * @return
      */
-    public List<HzCfg0OptionFamily> selectForColorBluePrint(String projectUid, Integer isColor) {
+    public List<HzFeature> selectForColorBluePrint(String projectUid, Integer isColor) {
         Map<String, Object> param = new HashMap<>();
         param.put("projectUid", projectUid);
         param.put("isColor", isColor);
-        return hzCfg0OptionFamilyDao.selectForColorBluePrint(param);
+        return hzFeatureDao.selectForColorBluePrint(param);
     }
 
     /**
@@ -86,11 +86,11 @@ public class HzCfg0OptionFamilyService {
      * @return 一组列信息
      */
     public List<String> doGetColumn(String mainId) {
-        List<HzCfg0OptionFamily> families = doGetCfg0OptionFamilyListByProjectPuid(mainId);
+        List<HzFeature> families = doGetCfg0OptionFamilyListByProjectPuid(mainId);
         if (families == null || families.isEmpty())
             return null;
         List<String> result = new ArrayList<>();
-        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getpOptionfamilyDesc() + "<br/>" + f.getpOptionfamilyName()));
+        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getFeatureDesc() + "<br/>" + f.getFeatureCode()));
         return result;
     }
 
@@ -101,11 +101,11 @@ public class HzCfg0OptionFamilyService {
      * @return 一组列信息
      */
     public List<String> doGetColumn2(String mainId) {
-        List<HzCfg0OptionFamily> families = doGetCfg0OptionFamilyListByProjectPuid(mainId);
+        List<HzFeature> families = doGetCfg0OptionFamilyListByProjectPuid(mainId);
         if (families == null || families.isEmpty())
             return null;
         List<String> result = new ArrayList<>();
-        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getpOptionfamilyDesc() + "\t" + f.getpOptionfamilyName()));
+        families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getFeatureDesc() + "\t" + f.getFeatureCode()));
         return result;
     }
 
@@ -117,7 +117,7 @@ public class HzCfg0OptionFamilyService {
      * @return 一组列信息，包含分隔符
      */
     public List<String> doGetColumnDef(String mainId, String def) {
-        List<HzCfg0OptionFamily> families = doGetCfg0OptionFamilyListByProjectPuid(mainId);
+        List<HzFeature> families = doGetCfg0OptionFamilyListByProjectPuid(mainId);
         if (families == null || families.isEmpty())
             return null;
         List<String> result = new ArrayList<>();
@@ -132,7 +132,7 @@ public class HzCfg0OptionFamilyService {
      * @return 一组列信息，包含分隔符
      */
     public List<String> doGetColumnDef2(String mainId, String def) {
-        List<HzCfg0OptionFamily> families = doGetCfg0OptionFamilyListByProjectPuid2(mainId);
+        List<HzFeature> families = doGetCfg0OptionFamilyListByProjectPuid2(mainId);
         if (families == null || families.isEmpty())
             return null;
         return sortFamiliesCode(families, def);
@@ -145,15 +145,15 @@ public class HzCfg0OptionFamilyService {
      * @param def
      * @return
      */
-    private List<String> sortFamiliesCode(List<HzCfg0OptionFamily> families, String def) {
+    private List<String> sortFamiliesCode(List<HzFeature> families, String def) {
         List<String> result = new ArrayList<>();
         families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> {
             StringBuilder sb = new StringBuilder();
-            if ("车身颜色".equals(f.getpOptionfamilyDesc())) {
+            if ("车身颜色".equals(f.getFeatureDesc())) {
                 String localTemp = null;
-                sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
+                sb.append(f.getFeatureDesc() == null ? f.getFeatureCode() : f.getFeatureDesc());
                 sb.append(def);
-                sb.append(f.getpOptionfamilyName() == null ? "" : f.getpOptionfamilyName());
+                sb.append(f.getFeatureCode() == null ? "" : f.getFeatureCode());
                 //交换一下位置
                 if(!result.isEmpty()){
                     localTemp=result.get(0);
@@ -165,9 +165,9 @@ public class HzCfg0OptionFamilyService {
                 }
 
             } else {
-                sb.append(f.getpOptionfamilyDesc() == null ? f.getpOptionfamilyName() : f.getpOptionfamilyDesc());
+                sb.append(f.getFeatureDesc() == null ? f.getFeatureCode() : f.getFeatureDesc());
                 sb.append(def);
-                sb.append(f.getpOptionfamilyName() == null ? "" : f.getpOptionfamilyName());
+                sb.append(f.getFeatureCode() == null ? "" : f.getFeatureCode());
                 result.add(sb.toString());
             }
         });
@@ -180,23 +180,23 @@ public class HzCfg0OptionFamilyService {
      * @param family 一个含有puid的组对象
      * @return
      */
-    public HzCfg0OptionFamily doGetById(HzCfg0OptionFamily family) {
-        return hzCfg0OptionFamilyDao.selectByPrimaryKey(family);
+    public HzFeature doGetById(HzFeature family) {
+        return hzFeatureDao.selectByPrimaryKey(family);
     }
 
-    public HzCfg0OptionFamily doGetByCodeAndDescWithMain(HzCfg0OptionFamily family) {
-        return hzCfg0OptionFamilyDao.selectByCodeAndDescWithMain(family);
+    public HzFeature doGetByCodeAndDescWithMain(HzFeature family) {
+        return hzFeatureDao.selectByCodeAndDescWithMain(family);
     }
 
-    public boolean doInsert(HzCfg0OptionFamily family) {
-        return hzCfg0OptionFamilyDao.insert(family) > 0 ? true : false;
+    public boolean doInsert(HzFeature family) {
+        return hzFeatureDao.insert(family) > 0 ? true : false;
     }
 
-    public List<HzCfg0OptionFamily> doSelectByDesc(String mainUid, String desc) {
-        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
-        family.setpOfCfg0Main(mainUid);
-        family.setpOptionfamilyDesc(desc);
-        return hzCfg0OptionFamilyDao.selectByCodeAndDescWithMain2(family);
+    public List<HzFeature> doSelectByDesc(String mainUid, String desc) {
+        HzFeature family = new HzFeature();
+        family.setMainConfigUid(mainUid);
+        family.setFeatureDesc(desc);
+        return hzFeatureDao.selectByCodeAndDescWithMain2(family);
     }
 
     /**
@@ -207,9 +207,9 @@ public class HzCfg0OptionFamilyService {
      * @return
      */
     public List<String> getColumnNew(String projectUid, String def) {
-        List<HzCfg0OptionFamily> families = getFamilies(projectUid, 0, 1);
+        List<HzFeature> families = getFamilies(projectUid, 0, 1);
         List<String> result = new ArrayList<>();
-        families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
+        families.forEach(fn -> result.add(fn.getFeatureDesc() + def + fn.getFeatureCode()));
         return result;
     }
 
@@ -221,9 +221,9 @@ public class HzCfg0OptionFamilyService {
      * @return
      */
     public List<String> getColumnNew2(String projectUid, String def) {
-        List<HzCfg0OptionFamily> families = getFamilies(projectUid, 0, 2);
+        List<HzFeature> families = getFamilies(projectUid, 0, 2);
         List<String> result = new ArrayList<>();
-        families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
+        families.forEach(fn -> result.add(fn.getFeatureDesc() + def + fn.getFeatureCode()));
         return result;
     }
 
@@ -234,9 +234,9 @@ public class HzCfg0OptionFamilyService {
      * @param def
      * @return
      */
-    public List<String> getColumnNewWithFamilies(List<HzCfg0OptionFamily> families, String def) {
+    public List<String> getColumnNewWithFamilies(List<HzFeature> families, String def) {
         List<String> result = new ArrayList<>();
-        families.forEach(fn -> result.add(fn.getpOptionfamilyDesc() + def + fn.getpOptionfamilyName()));
+        families.forEach(fn -> result.add(fn.getFeatureDesc() + def + fn.getFeatureCode()));
         return result;
     }
 
@@ -248,17 +248,17 @@ public class HzCfg0OptionFamilyService {
      * @param end
      * @return
      */
-    public List<HzCfg0OptionFamily> getFamilies(String projectUid, int start, int end) {
+    public List<HzFeature> getFamilies(String projectUid, int start, int end) {
         paramMap.put("isIn", false);
         paramMap.put("list", paramList);
         paramMap.put("projectUid", projectUid);
-        List<HzCfg0OptionFamily> familiesNew1 = hzCfg0OptionFamilyDao.selectNameByMap(paramMap);
+        List<HzFeature> familiesNew1 = hzFeatureDao.selectNameByMap(paramMap);
         paramMap.put("isIn", true);
         /**
          * 拆分list
          */
         paramMap.put("list", paramList.subList(start, end));
-        List<HzCfg0OptionFamily> familiesNew2 = hzCfg0OptionFamilyDao.selectNameByMap(paramMap);
+        List<HzFeature> familiesNew2 = hzFeatureDao.selectNameByMap(paramMap);
         familiesNew2.addAll(familiesNew1);
         return familiesNew2;
     }
@@ -272,12 +272,12 @@ public class HzCfg0OptionFamilyService {
      * @return
      * @Desc 如果想查询项目中的使用的特性，且特性经过特性代码排序后的数据，将names设为null即可
      */
-    public List<HzCfg0OptionFamily> doSelectNameByMap(String projectUid, List<String> names, boolean isIn) {
+    public List<HzFeature> doSelectNameByMap(String projectUid, List<String> names, boolean isIn) {
         Map<String, Object> params = new LinkedHashMap<>();
         params.put("isIn", isIn);
         params.put("list", names);
         params.put("projectUid", projectUid);
-        return hzCfg0OptionFamilyDao.selectNameByMap(params);
+        return hzFeatureDao.selectNameByMap(params);
     }
 
     /**
@@ -286,8 +286,8 @@ public class HzCfg0OptionFamilyService {
      * @param family 特性对象
      * @return
      */
-    public boolean doUpdateByPrimaryKeySelective(HzCfg0OptionFamily family) {
-        return hzCfg0OptionFamilyDao.updateByPrimaryKeySelective(family) > 0 ? true : false;
+    public boolean doUpdateByPrimaryKeySelective(HzFeature family) {
+        return hzFeatureDao.updateByPrimaryKeySelective(family) > 0 ? true : false;
     }
 
 }

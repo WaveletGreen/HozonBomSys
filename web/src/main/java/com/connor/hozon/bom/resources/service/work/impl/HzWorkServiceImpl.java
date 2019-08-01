@@ -58,7 +58,7 @@ public class HzWorkServiceImpl implements HzWorkService {
                 respDTO.setNo(++num);
                 respDTO.setPuid(center.getPuid());
                 respDTO.setFactoryCode("1001");
-//                respDTO.setFactoryId(hzFactory.getPuid());
+//                respDTO.setFactoryId(hzFactory.getId());
                 if(StringUtil.isEmpty(center.getpFactoryCode())){
                     respDTO.setFactoryCode("1001");
                 }else {

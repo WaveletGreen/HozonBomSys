@@ -40,7 +40,7 @@
 //    @Override
 //    public HzProjectLibs selectByPrimaryKey(String puid) {
 //        HzProjectLibs libs = new HzProjectLibs();
-//        libs.setPuid(puid);
+//        libs.setId(puid);
 //        return baseSQLUtil.executeQueryById(libs,
 //                clzName + ".selectByPrimaryKey");
 //    }

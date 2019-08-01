@@ -6,8 +6,8 @@
 
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
-import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.vwo.HzFeatureChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 
 import java.util.List;
 
@@ -118,7 +118,7 @@ public interface IHzFeatureChangeService {
      * @param record
      * @return
      */
-    Long insertByCfgAfter(HzCfg0Record record);
+    Long insertByCfgAfter(HzFeatureValue record);
 
     /**
      * 根据配置进行插入
@@ -126,7 +126,7 @@ public interface IHzFeatureChangeService {
      * @param record
      * @return
      */
-    Long insertByCfgBefore(HzCfg0Record record);
+    Long insertByCfgBefore(HzFeatureValue record);
 
     /**
      * 配置对应的变更，做字段按对应
@@ -135,7 +135,7 @@ public interface IHzFeatureChangeService {
      * @param bean
      * @return
      */
-    HzFeatureChangeBean reflect(HzCfg0Record record, HzFeatureChangeBean bean);
+    HzFeatureChangeBean reflect(HzFeatureValue record, HzFeatureChangeBean bean);
 
     List<HzFeatureChangeBean> doSelectAfterByVwoId(Long vwo);
 
@@ -149,7 +149,7 @@ public interface IHzFeatureChangeService {
 
     List<HzFeatureChangeBean> doSelectCfgUidsByVwoId(Long vwoId);
 
-    List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records);
+    List<HzFeatureChangeBean> doSelectHasEffect(List<HzFeatureValue> records);
 
     boolean updateStatusByOrderId(Long orderId, int status);
 

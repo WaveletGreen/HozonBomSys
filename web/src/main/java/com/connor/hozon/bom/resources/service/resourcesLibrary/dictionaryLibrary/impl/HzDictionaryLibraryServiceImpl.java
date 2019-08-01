@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
+import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureValueDao;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
@@ -10,10 +11,8 @@ import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryDao;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
-import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.*;
@@ -30,7 +29,7 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
     HzDictionaryLibraryDao hzDictionaryLibraryDao;
 
     @Autowired
-    HzCfg0RecordDao hzCfg0RecordDao;
+    HzFeatureValueDao hzFeatureValueDao;
     /**
      * 添加数据
      * @param reqDTO
@@ -86,21 +85,21 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
                 return resultMessageRespDTO;
             }
             //判断其修改数据是否特性和特性值没变，如没变则修改特性表中的特性描述和特性值描述
-            List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByDictionaryLibId(reqDTO.getPuid());
-            for(HzCfg0Record hzCfg0Record : hzCfg0RecordList){
-                if(hzCfg0Record.getCfgIsInProcess()!=null&&hzCfg0Record.getCfgIsInProcess()==1){
+            List<HzFeatureValue> hzFeatureValueList = hzFeatureValueDao.selectByDictionaryLibId(reqDTO.getPuid());
+            for(HzFeatureValue hzFeatureValue : hzFeatureValueList){
+                if(hzFeatureValue.getCfgIsInProcess()!=null&& hzFeatureValue.getCfgIsInProcess()==1){
                     resultMessageRespDTO.setErrMsg("修改的特性已在特性变更流程中，请先结束流程后再进行修改");
                     return resultMessageRespDTO;
                 }
             }
-            if(hzCfg0RecordList!=null&&hzCfg0RecordList.size()>0){
+            if(hzFeatureValueList !=null&& hzFeatureValueList.size()>0){
                 HzDictionaryLibrary hzDictionaryLibrary1 = hzDictionaryLibraryDao.findDictionaryLibrary(reqDTO.getPuid());
                 if(hzDictionaryLibrary1.getFamillyCode().equals(reqDTO.getFamillyCode())&&hzDictionaryLibrary1.getEigenValue().equals(reqDTO.getEigenValue())) {
-                    HzCfg0Record hzCfg0Record = new HzCfg0Record();
-                    hzCfg0Record.setCfgDicLibUid(hzDictionaryLibrary1.getPuid());
-                    hzCfg0Record.setpCfg0FamilyDesc(reqDTO.getFamillyCh());
-                    hzCfg0Record.setpCfg0Desc(reqDTO.getValueDescCh());
-                    if (hzCfg0RecordDao.updateDescByDictionaryLib(hzCfg0Record) <= 0 ? true : false) {
+                    HzFeatureValue hzFeatureValue = new HzFeatureValue();
+                    hzFeatureValue.setCfgDicLibUid(hzDictionaryLibrary1.getPuid());
+                    hzFeatureValue.setpCfg0FamilyDesc(reqDTO.getFamillyCh());
+                    hzFeatureValue.setpCfg0Desc(reqDTO.getValueDescCh());
+                    if (hzFeatureValueDao.updateDescByDictionaryLib(hzFeatureValue) <= 0 ? true : false) {
                         resultMessageRespDTO.setErrMsg("修改特性表中对应数据的描述失败");
                         return resultMessageRespDTO;
                     }
@@ -171,8 +170,8 @@ public class HzDictionaryLibraryServiceImpl implements HzDictionaryLibraryServic
      */
     @Override
     public WriteResultRespDTO deleteHzDictionaryLibrary(String puid) {
-        List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByDictionaryLibId(puid);
-        if(hzCfg0RecordList!=null&&hzCfg0RecordList.size()>0){
+        List<HzFeatureValue> hzFeatureValueList = hzFeatureValueDao.selectByDictionaryLibId(puid);
+        if(hzFeatureValueList !=null&& hzFeatureValueList.size()>0){
             WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
             writeResultRespDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
             writeResultRespDTO.setErrMsg("该特性已被引用，不能被删除");

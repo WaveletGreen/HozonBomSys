@@ -23,7 +23,7 @@ public interface HzCfg0ModelService {
 
     /**
      * @param entity
-     * @return sql.pojo.cfg0.model.HzCfg0ModelDetail
+     * @return sql.pojo.feature.model.HzCfg0ModelDetail
      * @Author: Fancyears·Maylos·Mayways
      * @Description: 根据模型的ID，获取到相关的详细模型数据
      * @Date: 2018/5/21 17:06
@@ -32,7 +32,7 @@ public interface HzCfg0ModelService {
 
     /**
      * @param entity
-     * @return sql.pojo.cfg0.model.HzCfg0ModelDetail
+     * @return sql.pojo.feature.model.HzCfg0ModelDetail
      * @Author: Fancyears·Maylos·Mayways
      * @Description: 根据模型的ID，获取到相关的详细模型数据
      * @Date: 2018/5/21 17:06

@@ -162,15 +162,15 @@
 //    @RequestMapping(value = "recover",method = RequestMethod.POST)
 //    public void recoverHasDeletedBom(@RequestBody RecoverHzBomReqDTO recoverHzBomReqDTO, HttpServletResponse response){
 //        if(recoverHzBomReqDTO.getType() ==1){
-//            WriteResultRespDTO respDTO = hzEBOMReadService.recoverDeleteEbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
+//            WriteResultRespDTO respDTO = hzEBOMReadService.recoverDeleteEbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getId());
 //            toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
 //            return;
 //        }else if(recoverHzBomReqDTO.getType() ==2){
-//            WriteResultRespDTO respDTO = hzPbomService.recoverDeletePbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
+//            WriteResultRespDTO respDTO = hzPbomService.recoverDeletePbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getId());
 //            toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
 //            return;
 //        }else if(recoverHzBomReqDTO.getType() == 3){
-//            WriteResultRespDTO respDTO = hzMbomService.recoverDeleteMbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getPuid());
+//            WriteResultRespDTO respDTO = hzMbomService.recoverDeleteMbomRecord(recoverHzBomReqDTO.getProjectId(),recoverHzBomReqDTO.getId());
 //            toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
 //            return;
 //        }else{

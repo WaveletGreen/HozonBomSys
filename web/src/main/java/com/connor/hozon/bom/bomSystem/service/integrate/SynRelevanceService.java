@@ -11,7 +11,7 @@ import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynRelevanceService;
 import integration.base.relevance.ZPPTCO004;
 import integration.logic.Correlate;
@@ -36,7 +36,7 @@ public class SynRelevanceService implements ISynRelevanceService {
     TransOptionsService transOptionsService;
 
     @Autowired
-    HzCfg0Service hzCfg0Service;
+    HzFeatureServiceImpl hzFeatureServiceImpl;
     /**
      * 模型族dao层
      */
@@ -55,7 +55,7 @@ public class SynRelevanceService implements ISynRelevanceService {
 //     */
 //    @Override
 //    public JSONObject synAllByProjectPuid(String projectPuid) throws Exception {
-//        List<HzCfg0Record> list = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, new HzFeatureQueryDto());
+//        List<HzFeatureValue> list = hzFeatureServiceImpl.selectFeatureListByProjectId(projectPuid, new HzFeatureQuery());
 //        List<HzRelevanceBean> beans = new ArrayList<>();
 //        if (list != null && list.size() > 0) {
 //            sortData(list, beans);
@@ -106,13 +106,13 @@ public class SynRelevanceService implements ISynRelevanceService {
 //     * @param list  特性列表
 //     * @param beans 相关性结果集
 //     */
-//    public void sortData(List<HzCfg0Record> list, List<HzRelevanceBean> beans) {
+//    public void sortData(List<HzFeatureValue> list, List<HzRelevanceBean> beans) {
 //        list.forEach(cfg0Record -> {
 //            HzRelevanceBean bean = new HzRelevanceBean();
 //            //相关性代码
 //            bean.setRelevanceCode(cfg0Record.getpCfg0Relevance());
 //            //相关性
-//            bean.setRelevance(cfg0Record.getpCfg0FamilyName() + "-" + cfg0Record.getpCfg0ObjectId());
+//            bean.setRelevance(cfg0Record.getpCfg0FamilyName() + "-" + cfg0Record.getFeatureValueCode());
 //            //相关性描述
 //            bean.setRelevanceDesc(cfg0Record.getpCfg0FamilyDesc() + "-" + cfg0Record.getpCfg0Desc());
 //            //创建时间
@@ -122,7 +122,7 @@ public class SynRelevanceService implements ISynRelevanceService {
 //            //相关性是否已发送
 //            bean.setIsRelevanceSended(cfg0Record.getIsRelevanceSent());
 //            //存入puid
-//            bean.setPuid(cfg0Record.getPuid());
+//            bean.setId(cfg0Record.getId());
 //            //添加进缓存
 //            beans.add(bean);
 //        });
@@ -207,7 +207,7 @@ public class SynRelevanceService implements ISynRelevanceService {
 //                HzRelevanceBean record = _mapCoach.get(_l.getPPACKNO());
 //                dto.setItemId(record.getRelevanceCode());
 //                dto.setMsg(_l.getPMESSAGE());
-//                dto.setPuid(record.getPuid());
+//                dto.setId(record.getId());
 //                if ("S".equalsIgnoreCase(_l.getPTYPE())) {
 //                    success.add(dto);
 //                    totalOfSuccess++;
@@ -223,7 +223,7 @@ public class SynRelevanceService implements ISynRelevanceService {
 //        _map.put("isRelevanceSent", 1);
 //        _map.put("list", needToUpdateStatus);
 //        if (needToUpdateStatus != null && needToUpdateStatus.size() > 0)
-//            hzCfg0Service.doUpdateByBatch(_map);
+//            hzFeatureServiceImpl.doUpdateByBatch(_map);
 //
 //        result.put("status", true);
 //        result.put("success", success);

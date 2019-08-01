@@ -5,43 +5,45 @@
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.cfg0.HzCfg0OptionFamily">
-        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
-        <result column="P_OF_CFG0_MAIN" jdbcType="VARCHAR" property="pOfCfg0Main"/>
-        <result column="P_OPTIONFAMILY_NAME" jdbcType="VARCHAR" property="pOptionfamilyName"/>
-        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="pOptionfamilyDesc"/>
-        <result column="OPTIONFAMILY_DIC_LIB_UID" jdbcType="VARCHAR" property="ofDicLibUid"/>
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature">
+        <id column="PUID" jdbcType="VARCHAR" property="id"/>
+        <result column="P_OF_CFG0_MAIN" jdbcType="VARCHAR" property="mainConfigUid"/>
+        <result column="P_OPTIONFAMILY_NAME" jdbcType="VARCHAR" property="featureCode"/>
+        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="featureDesc"/>
+        <result column="OPTIONFAMILY_DIC_LIB_UID" jdbcType="VARCHAR" property="dicLibUid"/>
     </resultMap>
 
     <resultMap id="FamilyName" type="java.lang.String">
-        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="pOptionfamilyDesc"/>
+        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="featureDesc"/>
     </resultMap>
 
+    <!--基础信息-->
     <sql id="Base_Column_List">
-    PUID,
-    P_OF_CFG0_MAIN,
-    P_OPTIONFAMILY_NAME,
-    P_OPTIONFAMILY_DESC,
-    OPTIONFAMILY_DIC_LIB_UID
+        PUID,
+        P_OF_CFG0_MAIN,
+        P_OPTIONFAMILY_NAME,
+        P_OPTIONFAMILY_DESC,
+        OPTIONFAMILY_DIC_LIB_UID
   </sql>
     <!--**************************************select**************************************-->
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.cfg0.HzCfg0OptionFamily" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_OPTIONFAMILY_RECORD
-        where PUID = #{puid,jdbcType=VARCHAR}
+        where PUID = #{id,jdbcType=VARCHAR}
     </select>
-    <select id="selectByCodeAndDescWithMain" parameterType="sql.pojo.cfg.cfg0.HzCfg0OptionFamily" resultMap="BaseResultMap">
+    <select id="selectByCodeAndDescWithMain" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature"
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_OPTIONFAMILY_RECORD
-        where P_OF_CFG0_MAIN=#{pOfCfg0Main,jdbcType=VARCHAR}
-        <if test="pOptionfamilyName!=null">
-            and P_OPTIONFAMILY_NAME = #{pOptionfamilyName,jdbcType=VARCHAR}
+        where P_OF_CFG0_MAIN=#{mainConfigUid,jdbcType=VARCHAR}
+        <if test="featureCode!=null">
+            and P_OPTIONFAMILY_NAME = #{featureCode,jdbcType=VARCHAR}
         </if>
-        <if test="pOptionfamilyDesc!=null">
-            and P_OPTIONFAMILY_DESC=#{pOptionfamilyDesc,jdbcType=VARCHAR}
+        <if test="featureDesc!=null">
+            and P_OPTIONFAMILY_DESC=#{featureDesc,jdbcType=VARCHAR}
         </if>
     </select>
     <select id="selectForColorBluePrint" parameterType="Map" resultMap="BaseResultMap">
@@ -67,7 +69,7 @@
         order by txx.p_optionfamily_name asc
 
     </select>
-    <select id="selectNameByMainId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="selectByProjectIdWithOrderMainId" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_OPTIONFAMILY_RECORD
@@ -77,14 +79,14 @@
         where t2.p_cfg0_of_which_project_puid =#{mainId}
         ) order by P_OF_CFG0_MAIN ASC/*by PUID*/
     </select>
-    <select id="selectNameByMainId2" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="selectByProjectIdWithOrderPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_OPTIONFAMILY_RECORD
         where P_OF_CFG0_MAIN = (
         select t2.puid
         from hz_cfg0_main_record t2
-        where t2.p_cfg0_of_which_project_puid =#{mainId}
+        where t2.p_cfg0_of_which_project_puid =#{projectId}
         ) order by PUID ASC
     </select>
     <select id="selectNameByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
@@ -111,45 +113,45 @@
         order by P_OPTIONFAMILY_NAME ASC
     </select>
     <!--**************************************update**************************************-->
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.cfg0.HzCfg0OptionFamily">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature">
         UPDATE HZ_CFG0_OPTIONFAMILY_RECORD t
         <set>
-            <if test="pOptionfamilyName!=null">
-                P_OPTIONFAMILY_NAME=#{pOptionfamilyName,jdbcType=VARCHAR},
+            <if test="featureCode!=null">
+                P_OPTIONFAMILY_NAME=#{featureCode,jdbcType=VARCHAR},
             </if>
-            <if test="pOptionfamilyDesc!=null">
-                P_OPTIONFAMILY_DESC=#{pOptionfamilyDesc,jdbcType=VARCHAR},
+            <if test="featureDesc!=null">
+                P_OPTIONFAMILY_DESC=#{featureDesc,jdbcType=VARCHAR},
             </if>
-            <if test="ofDicLibUid!=null">
-                OPTIONFAMILY_DIC_LIB_UID=#{ofDicLibUid,jdbcType=VARCHAR},
+            <if test="dicLibUid!=null">
+                OPTIONFAMILY_DIC_LIB_UID=#{dicLibUid,jdbcType=VARCHAR},
             </if>
         </set>
         <where>
-            t.puid= #{puid,jdbcType=VARCHAR}
+            t.puid= #{id,jdbcType=VARCHAR}
         </where>
     </update>
     <!--**************************************insert**************************************-->
-    <select id="insert" parameterType="sql.pojo.cfg.cfg0.HzCfg0OptionFamily" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature">
         insert into
         HZ_CFG0_OPTIONFAMILY_RECORD
         (<include refid="Base_Column_List"/>)
         VALUES
         (
-        #{puid,jdbcType=VARCHAR},
-        #{pOfCfg0Main,jdbcType=VARCHAR},
-        #{pOptionfamilyName,jdbcType=VARCHAR},
-        #{pOptionfamilyDesc,jdbcType=VARCHAR},
-        #{ofDicLibUid,jdbcType=VARCHAR}
+        #{id,jdbcType=VARCHAR},
+        #{mainConfigUid,jdbcType=VARCHAR},
+        #{featureCode,jdbcType=VARCHAR},
+        #{featureDesc,jdbcType=VARCHAR},
+        #{dicLibUid,jdbcType=VARCHAR}
         )
-    </select>
+    </insert>
     <!--**************************************delete**************************************-->
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.cfg0.HzCfg0OptionFamily">
-        delete HZ_CFG0_OPTIONFAMILY_RECORD t where t.PUID=#{puid,jdbcType=VARCHAR}
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature">
+        delete HZ_CFG0_OPTIONFAMILY_RECORD t where t.PUID=#{id,jdbcType=VARCHAR}
     </delete>
 
     <select id="selectByDM" parameterType="java.util.List" resultMap="BaseResultMap">
         select
-          <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>
         from
         HZ_CFG0_OPTIONFAMILY_RECORD
         where
@@ -159,7 +161,7 @@
         </foreach>
     </select>
 
-    <delete id="deleteByFamilyName" parameterType="java.util.List">
+    <delete id="deleteByFamilyName" parameterType="java.util.Map">
         delete HZ_CFG0_OPTIONFAMILY_RECORD t where t.P_OPTIONFAMILY_NAME in
         <foreach collection="date" index="index" item="item" open="(" close=")" separator=",">
             #{item.pCfg0FamilyName,jdbcType=VARCHAR}

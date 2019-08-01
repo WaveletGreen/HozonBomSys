@@ -7,7 +7,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzFeatureChangeBean">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean">
         <id column="ID" jdbcType="DOUBLE" property="id"/>
         <result column="FEATURE_VALUE_NAME" jdbcType="VARCHAR" property="featureValueName"/>
         <result column="FEATURE_VALUE_DESC" jdbcType="VARCHAR" property="featureValueDesc"/>
@@ -97,19 +97,19 @@
         #{vwoId,jdbcType=DECIMAL}
 
     </sql>
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
         where ID = #{id,jdbcType=DECIMAL}
     </select>
-    <select id="selectByVwoId" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+    <select id="selectByVwoId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName}
         where CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL}
     </select>
-    <select id="selectCfgUidsByVwoId" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+    <select id="selectCfgUidsByVwoId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean" resultMap="BaseResultMap">
         select distinct(temp.CFG_PUID) from (
             select distinct(t.cfg_puid) CFG_PUID,t.id from
               HZ_CFG0_AFTER_CHANGE_RECORD t
@@ -120,7 +120,7 @@
 
 
     <!--查询区域内最大的VWO号-->
-    <select id="findNewestChange" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+    <select id="findNewestChange" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${tableName} t
@@ -128,11 +128,11 @@
         order by t.change_create_date desc
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean">
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean">
     delete from HZ_CFG0_BEFORE_CHANGE_RECORD
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
-    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select ${seqName}.Nextval from dual
@@ -145,7 +145,7 @@
         <include refid="Values_Of_Result"/>
         )
     </insert>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean">
         update ${tableName}
         <set>
             <if test="featureValueName!=null">
@@ -266,7 +266,7 @@
 
     </insert>
 
-    <select id="doQueryLastTwoChange" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+    <select id="doQueryLastTwoChange" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean" resultMap="BaseResultMap">
         select
           <include refid="Base_Column_List"/>
         from(
@@ -294,8 +294,8 @@
         where
         ID in (
         select Max(ID) from HZ_CFG0_AFTER_CHANGE_RECORD where CFG_PUID in
-        <foreach collection="list" index="index" item="hzCfg0Record" open="(" separator="," close=")">
-            #{hzCfg0Record.puid,jdbcType=VARCHAR}
+        <foreach collection="list" index="index" item="hzFeatureValue" open="(" separator="," close=")">
+            #{hzFeatureValue.puid,jdbcType=VARCHAR}
         </foreach>
         and PROCESS_STATUS = 1
         group by CFG_PUID
@@ -355,7 +355,7 @@
         <!--)-->
     </delete>
 
-    <select id="selectLast" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+    <select id="selectLast" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean" resultMap="BaseResultMap">
         select
           <include refid="Base_Column_List"/>
         from
@@ -366,7 +366,7 @@
         )
     </select>
 
-    <select id="selectByChangeIdAndCfgid" parameterType="sql.pojo.cfg.vwo.HzFeatureChangeBean" resultMap="BaseResultMap">
+    <select id="selectByChangeIdAndCfgid" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean" resultMap="BaseResultMap">
         select
           <include refid="Base_Column_List"/>
         from

@@ -6,7 +6,7 @@
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielDetailDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.derivative.HzDerivativeMaterielDetail">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
         <!--主键-->
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <!--基本信息外键-->
@@ -36,7 +36,7 @@
         <!--特性值,放在最后直接显示在前端-->
         <result column="DMD_FEATURE_VALUE" jdbcType="VARCHAR" property="dmdFeatureValue"/>
     </resultMap>
-    <resultMap id="BaseResultWithCfg" type="sql.pojo.cfg.derivative.HzDerivativeMaterielDetail">
+    <resultMap id="BaseResultWithCfg" type="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
         <!--主键-->
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <!--基本信息外键-->
@@ -66,7 +66,7 @@
         <!--特性值,放在最后直接显示在前端-->
         <result column="DMD_FEATURE_VALUE" jdbcType="VARCHAR" property="dmdFeatureValue"/>
         <!--特性对象-->
-        <association property="cfg0Record" javaType="sql.pojo.cfg.cfg0.HzCfg0Record" column="DMD_CFG0_UID">
+        <association property="cfg0Record" javaType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue" column="DMD_CFG0_UID">
             <id column="PUID" jdbcType="VARCHAR" property="puid"/>
             <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="pCfg0ObjectId"/>
             <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc"/>
@@ -123,7 +123,7 @@
     delete from HZ_DERIVATIVE_MATERIEL_DETAIL
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
-    <insert id="insert" parameterType="sql.pojo.cfg.derivative.HzDerivativeMaterielDetail">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select seq_hz_dmd_id.Nextval from dual
@@ -140,7 +140,7 @@
         #{dmdReserved5,jdbcType=VARCHAR}, #{dmdFeatureValue,jdbcType=VARCHAR})
     </insert>
     <!--选择性单个插入-->
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.derivative.HzDerivativeMaterielDetail">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select seq_hz_dmd_id.Nextval from dual
@@ -231,7 +231,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.derivative.HzDerivativeMaterielDetail">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
         update HZ_DERIVATIVE_MATERIEL_DETAIL
         <set>
             <if test="dmdDmbId != null">
@@ -274,7 +274,7 @@
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.derivative.HzDerivativeMaterielDetail">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
     update HZ_DERIVATIVE_MATERIEL_DETAIL
     set DMD_DMB_ID = #{dmdDmbId,jdbcType=DECIMAL},
       DMD_CFG0_UID = #{dmdCfg0Uid,jdbcType=VARCHAR},

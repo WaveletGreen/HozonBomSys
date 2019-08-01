@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.file.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
+import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
@@ -28,7 +29,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
@@ -49,7 +49,7 @@ import java.util.*;
 @Service("fileUploadService")
 public class FileUploadServiceImpl implements FileUploadService {
 
-    private HzBomMainRecordDao hzBomMainRecordDao;
+    private HzMainBomDao hzMainBomDao;
 
     private HzEbomRecordDAO hzEbomRecordDAO;
 
@@ -64,8 +64,8 @@ public class FileUploadServiceImpl implements FileUploadService {
     private TransactionTemplate configTransactionTemplate;
 
     @Autowired
-    public void setHzBomMainRecordDao(HzBomMainRecordDao hzBomMainRecordDao) {
-        this.hzBomMainRecordDao = hzBomMainRecordDao;
+    public void setHzMainBomDao(HzMainBomDao hzMainBomDao) {
+        this.hzMainBomDao = hzMainBomDao;
     }
     @Autowired
     public void setHzEbomRecordDAO(HzEbomRecordDAO hzEbomRecordDAO) {
@@ -354,7 +354,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
             List<List<HzImportEbomRecord>> list1 = new ArrayList<>();
 
-            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
+            HzMainBom hzMainBom = hzMainBomDao.selectByProjectId(projectId);
             Double maxSortNum =hzEbomRecordDAO.findMaxBomOrderNum(projectId);
             if(maxSortNum != null){
                 maxOrderNum = maxSortNum.intValue();
@@ -374,7 +374,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                             String level = ExcelUtil.getCell(sheet.getRow(rowNum),3).getStringCellValue();
                             record.setLevel(level);
                             record.setHigh(high);
-                            record.setBomDigifaxId(hzBomMainRecord.getPuid());
+                            record.setBomDigifaxId(hzMainBom.getPuid());
                             if("2Y".equals(level)){
                                 record.setIs2Y(1);
                             }else {
@@ -1081,7 +1081,7 @@ public class FileUploadServiceImpl implements FileUploadService {
      */
     private WriteResultRespDTO importBomSingleVehDosageToDB(Sheet sheet,String projectId){
         try {
-            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
+            HzMainBom hzMainBom = hzMainBomDao.selectByProjectId(projectId);
             this.errorCount = 0;
             WriteResultRespDTO respDTO = new WriteResultRespDTO();
 //            List<HzBomLineRecord> bomLineRecords = hzBomLineRecordDao.getAllBomLineRecordByProjectId(projectId);
@@ -1127,7 +1127,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                         }
                     }
                     record.setVehNum(builder.toString());
-                    record.setBomDigifaxId(hzBomMainRecord.getPuid());
+                    record.setBomDigifaxId(hzMainBom.getPuid());
                     record.setTableName(ChangeTableNameEnum.HZ_EBOM.getTableName());
                     singleVehDosageRecords.add(record);
                 }

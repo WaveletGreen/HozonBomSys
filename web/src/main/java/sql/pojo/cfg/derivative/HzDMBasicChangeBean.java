@@ -1,10 +1,15 @@
 package sql.pojo.cfg.derivative;
 
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
+import lombok.Data;
+import lombok.ToString;
 
 import java.util.Date;
 
+@Data
+@ToString
 public class HzDMBasicChangeBean {
 
     /**
@@ -99,182 +104,6 @@ public class HzDMBasicChangeBean {
      * 源数据状态
      */
     private Integer dmbSrcStatus;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getFormId() {
-        return formId;
-    }
-
-    public void setFormId(Long formId) {
-        this.formId = formId;
-    }
-
-    public String getDmbModelUid() {
-        return dmbModelUid;
-    }
-
-    public void setDmbModelUid(String dmbModelUid) {
-        this.dmbModelUid = dmbModelUid;
-    }
-
-    public String getDmbColorModelUid() {
-        return dmbColorModelUid;
-    }
-
-    public void setDmbColorModelUid(String dmbColorModelUid) {
-        this.dmbColorModelUid = dmbColorModelUid;
-    }
-
-    public String getDmbCreator() {
-        return dmbCreator;
-    }
-
-    public void setDmbCreator(String dmbCreator) {
-        this.dmbCreator = dmbCreator;
-    }
-
-    public Date getDmbCreateDate() {
-        return dmbCreateDate;
-    }
-
-    public void setDmbCreateDate(Date dmbCreateDate) {
-        this.dmbCreateDate = dmbCreateDate;
-    }
-
-    public String getDmbUpdater() {
-        return dmbUpdater;
-    }
-
-    public void setDmbUpdater(String dmbUpdater) {
-        this.dmbUpdater = dmbUpdater;
-    }
-
-    public Date getDmbUpdateDate() {
-        return dmbUpdateDate;
-    }
-
-    public void setDmbUpdateDate(Date dmbUpdateDate) {
-        this.dmbUpdateDate = dmbUpdateDate;
-    }
-
-    public String getChangeCreator() {
-        return changeCreator;
-    }
-
-    public void setChangeCreator(String changeCreator) {
-        this.changeCreator = changeCreator;
-    }
-
-    public Date getChangeCreateDate() {
-        return changeCreateDate;
-    }
-
-    public void setChangeCreateDate(Date changeCreateDate) {
-        this.changeCreateDate = changeCreateDate;
-    }
-
-    public String getChangeUpdater() {
-        return changeUpdater;
-    }
-
-    public void setChangeUpdater(String changeUpdater) {
-        this.changeUpdater = changeUpdater;
-    }
-
-    public Date getChangeUpdateDate() {
-        return changeUpdateDate;
-    }
-
-    public void setChangeUpdateDate(Date changeUpdateDate) {
-        this.changeUpdateDate = changeUpdateDate;
-    }
-
-    public String getDmbProjectUid() {
-        return dmbProjectUid;
-    }
-
-    public void setDmbProjectUid(String dmbProjectUid) {
-        this.dmbProjectUid = dmbProjectUid;
-    }
-
-    public String getDmbReserved2() {
-        return dmbReserved2;
-    }
-
-    public void setDmbReserved2(String dmbReserved2) {
-        this.dmbReserved2 = dmbReserved2;
-    }
-
-    public String getDmbReserved3() {
-        return dmbReserved3;
-    }
-
-    public void setDmbReserved3(String dmbReserved3) {
-        this.dmbReserved3 = dmbReserved3;
-    }
-
-    public String getDmbReserved4() {
-        return dmbReserved4;
-    }
-
-    public void setDmbReserved4(String dmbReserved4) {
-        this.dmbReserved4 = dmbReserved4;
-    }
-
-    public String getDmbReserved5() {
-        return dmbReserved5;
-    }
-
-    public void setDmbReserved5(String dmbReserved5) {
-        this.dmbReserved5 = dmbReserved5;
-    }
-
-    public String getDmbModelFeatureUid() {
-        return dmbModelFeatureUid;
-    }
-
-    public void setDmbModelFeatureUid(String dmbModelFeatureUid) {
-        this.dmbModelFeatureUid = dmbModelFeatureUid;
-    }
-
-    public String getDmbSpecialFeatureUid() {
-        return dmbSpecialFeatureUid;
-    }
-
-    public void setDmbSpecialFeatureUid(String dmbSpecialFeatureUid) {
-        this.dmbSpecialFeatureUid = dmbSpecialFeatureUid;
-    }
-
-    public Long getDmbSrcId() {
-        return dmbSrcId;
-    }
-
-    public void setDmbSrcId(Long dmbSrcId) {
-        this.dmbSrcId = dmbSrcId;
-    }
-
-    public Integer getDmbChangeStatus() {
-        return dmbChangeStatus;
-    }
-
-    public void setDmbChangeStatus(Integer dmbChangeStatus) {
-        this.dmbChangeStatus = dmbChangeStatus;
-    }
-
-    public Integer getDmbSrcStatus() {
-        return dmbSrcStatus;
-    }
-
-    public void setDmbSrcStatus(Integer dmbSrcStatus) {
-        this.dmbSrcStatus = dmbSrcStatus;
-    }
 
     public void srcSetChange(HzDerivativeMaterielBasic hzDerivativeMaterielBasic){
         Date date = new Date();
