@@ -1058,6 +1058,38 @@
         and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
     </select>
 
+    <!--<insert id="HzMbomRecordDAOImpl_insertVO" parameterType="java.util.HashMap">-->
+        <!--insert  into ${tableName} (PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_BOM_PUID,-->
+        <!--P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,-->
+        <!--P_BOM_LINE_IS_PART,P_BOM_LINE_IS_DEPT,P_BOM_OF_WHICH_DEPT,P_BOM_LINE_PART_NAME,-->
+        <!--P_BOM_LINE_PART_CLASS,P_BOM_LINE_PART_EN_NAME,P_BOM_LINE_PART_RESOURCE,P_SORT_NUM,P_MBOM_STATUS,-->
+        <!--P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,P_FACTORY_ID,P_LOU_LOA_FLAG,-->
+        <!--P_SPARE_PART,P_SPARE_PART_NUM,P_PROCESS_ROUTE,P_LABOR_HOUR,P_RHYTHM,P_SOLDER_JOINT,-->
+        <!--P_MACHINE_MATERITAL,P_STANDARD_PART,P_TOOLS,P_WASTER_PRODUCT,P_CHANGE,P_CHANGE_NUM,-->
+        <!--P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME,P_COLOR_PART)-->
+        <!--<foreach collection="list" item="item" index="index" separator="UNION ALL">-->
+            <!--select-->
+            <!--#{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},-->
+            <!--#{item.bomDigifaxId,jdbcType=VARCHAR},-->
+            <!--#{item.eBomPuid,jdbcType=VARCHAR},-->
+            <!--#{item.lineIndex,jdbcType=VARCHAR},-->
+            <!--#{item.isHas,jdbcType=INTEGER},-->
+            <!--#{item.linePuid,jdbcType=VARCHAR}, #{item.lineId,jdbcType=VARCHAR}, #{item.is2Y,jdbcType=INTEGER},-->
+            <!--#{item.isPart,jdbcType=INTEGER}, #{item.isDept,jdbcType=INTEGER}, #{item.pBomOfWhichDept,jdbcType=VARCHAR},-->
+            <!--#{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},-->
+            <!--#{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},-->
+            <!--sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.pFactoryId,jdbcType=VARCHAR},#{item.pLouaFlag,jdbcType=INTEGER},-->
+            <!--#{item.sparePart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR}, #{item.processRoute,jdbcType=VARCHAR},-->
+            <!--#{item.laborHour,jdbcType=VARCHAR}, #{item.rhythm,jdbcType=VARCHAR}, #{item.solderJoint,jdbcType=VARCHAR},-->
+            <!--#{item.machineMaterial,jdbcType=VARCHAR}, #{item.standardPart,jdbcType=VARCHAR}, #{item.tools,jdbcType=VARCHAR},-->
+            <!--#{item.wasterProduct,jdbcType=VARCHAR},#{item.change,jdbcType=VARCHAR},#{item.changeNum,jdbcType=VARCHAR},-->
+            <!--#{item.updateName,jdbcType=VARCHAR},-->
+            <!--#{item.colorId,jdbcType=VARCHAR},-->
+            <!--#{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR},#{item.effectTime,jdbcType=TIMESTAMP},#{item.isColorPart,jdbcType=INTEGER}-->
+            <!--from DUAL-->
+        <!--</foreach>-->
+    <!--</insert>-->
+
     <insert id="HzMbomRecordDAOImpl_insertVO" parameterType="java.util.HashMap">
         insert  into ${tableName} (PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_BOM_PUID,
         P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
@@ -1066,7 +1098,7 @@
         P_CREATE_TIME, P_UPDATE_TIME, P_CREATE_NAME,P_FACTORY_ID,P_LOU_LOA_FLAG,
         P_SPARE_PART,P_SPARE_PART_NUM,P_PROCESS_ROUTE,P_LABOR_HOUR,P_RHYTHM,P_SOLDER_JOINT,
         P_MACHINE_MATERITAL,P_STANDARD_PART,P_TOOLS,P_WASTER_PRODUCT,P_CHANGE,P_CHANGE_NUM,
-        P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME,P_COLOR_PART)
+        P_UPDATE_NAME,P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME)
         <foreach collection="list" item="item" index="index" separator="UNION ALL">
             select
             #{item.puid,jdbcType=VARCHAR},#{item.parentUid,jdbcType=VARCHAR},
@@ -1085,11 +1117,10 @@
             #{item.wasterProduct,jdbcType=VARCHAR},#{item.change,jdbcType=VARCHAR},#{item.changeNum,jdbcType=VARCHAR},
             #{item.updateName,jdbcType=VARCHAR},
             #{item.colorId,jdbcType=VARCHAR},
-            #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR},#{item.effectTime,jdbcType=TIMESTAMP},#{item.isColorPart,jdbcType=INTEGER}
+            #{item.orderId,jdbcType=DOUBLE},#{item.revision,jdbcType=VARCHAR},#{item.effectTime,jdbcType=TIMESTAMP}
             from DUAL
         </foreach>
     </insert>
-
 
     <!--根据层级和ebomPuid获取一条MBOM-->
     <select id="HzMbomRecordDAOImpl_findHzMbomByEbomIdAndLineIndex" parameterType="java.util.HashMap" resultMap="MbomResultMap" >
@@ -1184,13 +1215,92 @@
                 <if test="item.pLouaFlag != null">
                     P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=VARCHAR},
                 </if>
-                <if test="item.isColorPart != null">
-                    P_COLOR_PART = #{item.isColorPart,jdbcType=VARCHAR},
-                </if>
             </set>
             where PUID = #{item.puid,jdbcType=VARCHAR}
         </foreach>
     </update>
+    <!--&lt;!&ndash;批量更新MBOM&ndash;&gt;-->
+    <!--<update id="HzMbomRecordDAOImpl_updateVO" parameterType="java.util.HashMap">-->
+        <!--<foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">-->
+            <!--update ${tableName}-->
+            <!--<set>-->
+                <!--P_UPDATE_TIME =sysdate,-->
+                <!--<if test="item.updateName != null">-->
+                    <!--P_UPDATE_NAME = #{item.updateName,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.parentUid != null">-->
+                    <!--P_PARENT_UID = #{item.parentUid,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.bomDigifaxId != null">-->
+                    <!--P_BOM_DIGIFAX_ID = #{item.bomDigifaxId,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.lineIndex != null">-->
+                    <!--P_LINE_INDEX = #{item.lineIndex,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.isHas != null">-->
+                    <!--P_BOM_LINE_IS_HAS = #{item.isHas,jdbcType=INTEGER},-->
+                <!--</if>-->
+                <!--<if test="item.lineId != null">-->
+                    <!--P_BOM_LINE_ID = #{item.lineId,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.is2Y != null">-->
+                    <!--P_BOM_LINE_IS_2Y = #{item.is2Y,jdbcType=INTEGER},-->
+                <!--</if>-->
+                <!--<if test="item.isPart != null">-->
+                    <!--P_BOM_LINE_IS_PART = #{item.isPart,jdbcType=INTEGER},-->
+                <!--</if>-->
+                <!--<if test="item.isDept != null">-->
+                    <!--P_BOM_LINE_IS_DEPT = #{item.isDept,jdbcType=INTEGER},-->
+                <!--</if>-->
+                <!--<if test="item.pBomOfWhichDept != null">-->
+                    <!--P_BOM_OF_WHICH_DEPT = #{item.pBomOfWhichDept,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.pBomLinePartName != null">-->
+                    <!--P_BOM_LINE_PART_NAME = #{item.pBomLinePartName,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.pBomLinePartClass != null">-->
+                    <!--P_BOM_LINE_PART_CLASS = #{item.pBomLinePartClass,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.pBomLinePartEnName != null">-->
+                    <!--P_BOM_LINE_PART_EN_NAME = #{item.pBomLinePartEnName,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.pBomLinePartResource != null">-->
+                    <!--P_BOM_LINE_PART_RESOURCE = #{item.pBomLinePartResource,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.pBomType != null">-->
+                    <!--P_BOM_TYPE = #{item.pBomType,jdbcType=INTEGER},-->
+                <!--</if>-->
+                <!--<if test="item.pStockLocation != null">-->
+                    <!--P_STOCK_LOCATION = #{item.pStockLocation,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.colorId != null">-->
+                    <!--P_COLOR_PUID = #{item.colorId,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.orderId != null">-->
+                    <!--P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},-->
+                <!--</if>-->
+                <!--<if test="item.effectTime != null">-->
+                    <!--P_EFFECT_TIME = #{item.effectTime,jdbcType=TIMESTAMP},-->
+                <!--</if>-->
+                <!--<if test="item.revision != null">-->
+                    <!--P_REVISION = #{item.revision,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.status != null">-->
+                    <!--P_MBOM_STATUS = #{item.status,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.pFactoryId != null">-->
+                    <!--P_FACTORY_ID = #{item.pFactoryId,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.pLouaFlag != null">-->
+                    <!--P_LOU_LOA_FLAG = #{item.pLouaFlag,jdbcType=VARCHAR},-->
+                <!--</if>-->
+                <!--<if test="item.isColorPart != null">-->
+                    <!--P_COLOR_PART = #{item.isColorPart,jdbcType=VARCHAR},-->
+                <!--</if>-->
+            <!--</set>-->
+            <!--where PUID = #{item.puid,jdbcType=VARCHAR}-->
+        <!--</foreach>-->
+    <!--</update>-->
 
     <!--删除MBOM-->
     <delete id="HzMbomRecordDAOImpl_deleteMbomList" parameterType="java.util.HashMap">
