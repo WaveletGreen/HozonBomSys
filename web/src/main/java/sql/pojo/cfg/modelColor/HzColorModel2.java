@@ -6,12 +6,15 @@
 
 package sql.pojo.cfg.modelColor;
 
+import lombok.ToString;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 配色方案附加bean
  * @Date: Created in 2018/8/10 13:55
  * @Modified By:
  */
+@ToString
 public class HzColorModel2 {
 
     //主键
@@ -156,4 +159,5 @@ public class HzColorModel2 {
     public void setColorCode(String colorCode) {
         this.colorCode = colorCode;
     }
+
 }

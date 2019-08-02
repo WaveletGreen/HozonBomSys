@@ -72,6 +72,15 @@
         from HZ_RELEVANCE_RELATION
         where ID = #{id,jdbcType=DECIMAL}
     </select>
+    <select id="selectByFeature" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_RELEVANCE_RELATION t
+        where t.RR_CFG0_UID=#{rrCfg0Uid,jdbcType=VARCHAR}
+        and t.RR_CFG_FAMILY_UID=#{rrCfgFamilyUid,jdbcType=VARCHAR}
+        and t.RR_RELEVANCE_ID = #{rrRelevanceId,jdbcType=DECIMAL}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceRelation">
     delete from HZ_RELEVANCE_RELATION
     where ID = #{id,jdbcType=DECIMAL}

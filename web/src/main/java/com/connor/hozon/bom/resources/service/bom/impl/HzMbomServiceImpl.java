@@ -626,6 +626,8 @@ public class HzMbomServiceImpl implements HzMbomService {
                     }
                     Set<HzPbomLineRecord> bodyOfWhiteSet = new HashSet<>();
                     boolean b = false;
+
+
                     if(Integer.valueOf(1).equals(record.getColorPart())){//是颜色件 找出对应的颜色 多色时，需要乘以颜色信息
                         List<HzConfigBomColorBean> beans = null;
                         if(record.getpBomLinePartName().contains("油漆车身总成")){
@@ -873,20 +875,25 @@ public class HzMbomServiceImpl implements HzMbomService {
                 HzMbomLineRecordVO deleteFinanceMbom = new HzMbomLineRecordVO();
 
 
+
+
                 Map<Integer,HzMbomLineRecordVO> listMap = new HashMap<>();
 
                 Map<Integer,List<HzMaterielRecord>> materielMap = new HashMap<>();
                 if(ListUtil.isNotEmpty(superMboms)){
+//                    setIsColorPart(superMboms);
                     superMbom.setRecordList(superMboms);
                     superMbom.setTableName(MbomTableNameEnum.tableName(0));
                     listMap.put(1,superMbom);
                 }
                 if(ListUtil.isNotEmpty(productMboms)){
+//                    setIsColorPart(productMboms);
                     productMbom.setTableName(MbomTableNameEnum.tableName(1));
                     productMbom.setRecordList(productMboms);
                     listMap.put(2,productMbom);
                 }
                 if(ListUtil.isNotEmpty(financeMboms)){
+//                    setIsColorPart(financeMboms);
                     financeMbom.setRecordList(financeMboms);
                     financeMbom.setTableName(MbomTableNameEnum.tableName(6));
                     listMap.put(3,financeMbom);
@@ -894,16 +901,19 @@ public class HzMbomServiceImpl implements HzMbomService {
 
 
                 if(ListUtil.isNotEmpty(updateSuperMboms)){
+//                    setIsColorPart(updateSuperMboms);
                     updateSuperMbom.setRecordList(updateSuperMboms);
                     updateSuperMbom.setTableName(MbomTableNameEnum.tableName(0));
                     listMap.put(4,updateSuperMbom);
                 }
                 if(ListUtil.isNotEmpty(updateProductMboms)){
+//                    setIsColorPart(updateProductMboms);
                     updateProductMbom.setTableName(MbomTableNameEnum.tableName(1));
                     updateProductMbom.setRecordList(updateProductMboms);
                     listMap.put(5,updateProductMbom);
                 }
                 if(ListUtil.isNotEmpty(updateFinanceMboms)){
+//                    setIsColorPart(updateFinanceMboms);
                     updateFinanceMbom.setRecordList(updateFinanceMboms);
                     updateFinanceMbom.setTableName(MbomTableNameEnum.tableName(6));
                     listMap.put(6,updateFinanceMbom);
@@ -911,16 +921,19 @@ public class HzMbomServiceImpl implements HzMbomService {
 
 
                 if(ListUtil.isNotEmpty(deleteSuperMboms)){
+//                    setIsColorPart(deleteSuperMboms);
                     deleteSuperMbom.setRecordList(deleteSuperMboms);
                     deleteSuperMbom.setTableName(MbomTableNameEnum.tableName(0));
                     listMap.put(7,deleteSuperMbom);
                 }
                 if(ListUtil.isNotEmpty(deleteProductMboms)){
+//                    setIsColorPart(deleteProductMboms);
                     deleteProductMbom.setTableName(MbomTableNameEnum.tableName(1));
                     deleteProductMbom.setRecordList(deleteProductMboms);
                     listMap.put(8,deleteProductMbom);
                 }
                 if(ListUtil.isNotEmpty(deleteFinanceMboms)){
+//                    setIsColorPart(deleteFinanceMboms);
                     deleteFinanceMbom.setRecordList(deleteFinanceMboms);
                     deleteFinanceMbom.setTableName(MbomTableNameEnum.tableName(6));
                     listMap.put(9,deleteFinanceMbom);
@@ -1012,6 +1025,17 @@ public class HzMbomServiceImpl implements HzMbomService {
             return WriteResultRespDTO.getFailResult();
         }
 
+    }
+
+
+    public void setIsColorPart(List<HzMbomLineRecord> superMboms) {
+        //设置是否颜色件
+        for(HzMbomLineRecord superMbom:superMboms){
+
+            if (superMbom.getIsColorPart()==null){
+                superMbom.setIsColorPart(0);
+            }
+        }
     }
 
     @Override

@@ -6,8 +6,7 @@
 
 package sql.pojo.cfg.modelColor;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -18,6 +17,7 @@ import java.util.LinkedHashMap;
  * @Date: Created in 2018/8/10 13:55
  * @Modified By:
  */
+@Data
 public class HzCfg0ModelColor {
     /**
      * 模型主键
@@ -44,52 +44,50 @@ public class HzCfg0ModelColor {
     private String pColorUid;
 
     private String pShellCfg0Puid;
-    @Getter
-    @Setter
+
     //VWO变更id
     private Long cmcrVwoId;
-    @Getter
-    @Setter
+
     //VWO变更号
     private String cmcrVwoNum;
     //创建时间
-    @Getter
-    @Setter
+
     private Date cmcrCreateDate;
     //创建人
-    @Getter
-    @Setter
+
     private String cmcrCreator;
     //跟新时间
-    @Getter
-    @Setter
+
     private Date cmcrUpdateDate;
     //跟新人
-    @Getter
-    @Setter
+
     private String cmcrUpdater;
     //保留字段1-5
-    @Getter
-    @Setter
+
     private String cmcrReserve1;
-    @Getter
-    @Setter
+
     private String cmcrReserve2;
-    @Getter
-    @Setter
+
     private String cmcrReserve3;
-    @Getter
-    @Setter
+
     private String cmcrReserve4;
     /**
      * 流程状态
      */
-    @Getter
-    @Setter
+
     private String cmcrStatus;
-    @Getter
-    @Setter
+
     private Date cmcrEffectedDate;
+
+    /**
+     * 颜色名称
+     */
+
+    private String colorName;
+    /**
+     * 这个是级联查询出来的颜色库的UID，有一些历史数据没有存储颜色可的UID
+     */
+    private String orgColorUid;
 
     public HzCfg0ModelColor() {
         mapOfCfg0 = new LinkedHashMap<>();

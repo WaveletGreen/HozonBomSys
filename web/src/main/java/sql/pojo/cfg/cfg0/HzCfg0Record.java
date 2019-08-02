@@ -398,4 +398,40 @@ public class HzCfg0Record {
     public void setVwoNum(String vwoNum) {
         this.vwoNum = vwoNum;
     }
+
+    @Override
+    public String toString() {
+        return "\nHzCfg0Record{" +
+                "puid='" + puid + '\'' +
+                ", pCfg0ObjectId='" + pCfg0ObjectId + '\'' +
+                ", pCfg0Desc='" + pCfg0Desc + '\'' +
+                ", pCfg0FamilyName='" + pCfg0FamilyName + '\'' +
+                ", pCfg0FamilyPuid='" + pCfg0FamilyPuid + '\'' +
+                ", pCfg0MainItemPuid='" + pCfg0MainItemPuid + '\'' +
+                ", pH9featureenname='" + pH9featureenname + '\'' +
+                ", pCfg0FamilyDesc='" + pCfg0FamilyDesc + '\'' +
+                ", whichTable='" + whichTable + '\'' +
+                ", projectPuid='" + projectPuid + '\'' +
+                ", pCfg0Relevance='" + pCfg0Relevance + '\'' +
+                ", isFeatureSent=" + isFeatureSent +
+                ", isRelevanceSent=" + isRelevanceSent +
+                ", createDate=" + createDate +
+                ", lastModifyDate=" + lastModifyDate +
+                ", creator='" + creator + '\'' +
+                ", lastModifier='" + lastModifier + '\'' +
+                ", cfgEffectedDate=" + cfgEffectedDate +
+                ", cfgAbolishDate=" + cfgAbolishDate +
+                ", cfgStatus=" + cfgStatus +
+                ", cfgIsInProcess=" + cfgIsInProcess +
+                ", vwoId=" + vwoId +
+                ", vwoNum='" + vwoNum + '\'' +
+                ", cfgDicLibUid='" + cfgDicLibUid + '\'' +
+                ", cfgReverse2='" + cfgReverse2 + '\'' +
+                ", cfgReverse3='" + cfgReverse3 + '\'' +
+                ", cfgReverse4='" + cfgReverse4 + '\'' +
+                ", cfgReverse5='" + cfgReverse5 + '\'' +
+                ", cfgReverse6='" + cfgReverse6 + '\'' +
+                ", length=" + length +
+                '}';
+    }
 }

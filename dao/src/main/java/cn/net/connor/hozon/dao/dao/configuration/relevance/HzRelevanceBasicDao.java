@@ -84,4 +84,7 @@ public interface HzRelevanceBasicDao extends BasicDao<HzRelevanceBasic> {
     List<HzRelevanceBasic> selectByProjectPuidAndStatus(String projectPuid);
 
     int deleteByOrderId(Long orderId);
+
+    HzRelevanceBasic selectByFeatureAndProjectUid(HzRelevanceBasic hzRelevanceBasic);
+
 }

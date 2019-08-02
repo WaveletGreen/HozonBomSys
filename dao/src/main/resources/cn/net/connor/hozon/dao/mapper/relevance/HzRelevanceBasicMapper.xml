@@ -785,7 +785,6 @@
             ID = #{item.id,jdbcType=DECIMAL}
         </foreach>
     </update>
-
     <update id="doUpdateIsSent" parameterType="java.util.List">
         update HZ_RELEVANCE_BASIC
         set
@@ -806,7 +805,6 @@
             )
         </if>
     </update>
-
     <select id="selectByProjectPuidAndStatus" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -817,7 +815,19 @@
         and
         RELEVANCE_STATUS = 0
     </select>
-
+    <select id="selectByFeatureAndProjectUid" parameterType="cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_RELEVANCE_BASIC
+        where RB_PROJECT_UID = #{rbProjectUid,jdbcType=VARCHAR}
+        and RB_FEATURE_UID=#{rbFeatureUid,jdbcType=VARCHAR}
+        and RB_FEATURE_VALUE_UID=#{rbFeatureValueUid,jdbcType=VARCHAR}
+        <if test="rbColorUid !=null">
+            and  RB_COLOR_UID = #{rbColorUid,jdbcType=VARCHAR}
+        </if>
+        and RELEVANCE_STATUS = 0
+    </select>
     <delete id="deleteByOrderId" parameterType="java.lang.Long">
         delete from
         HZ_RELEVANCE_BASIC
