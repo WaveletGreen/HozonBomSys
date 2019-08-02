@@ -92,7 +92,6 @@ public class HzProjectLibsController {
     @RequestMapping(value = "/loadAll", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> loadAll(HttpServletRequest request) {
-        System.out.println("Session过期时间" + request.getSession().getMaxInactiveInterval());
         Map<String, Object> result = new HashMap<>();
         User user = UserInfo.getUser();
         Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
