@@ -8,8 +8,8 @@ package com.connor.hozon.bom.bomSystem.dao.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
-import sql.pojo.cfg.derivative.HzDerivativeMaterielBasic;
-import sql.pojo.cfg.derivative.HzDerivativeMaterielDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail;
 
 import java.util.List;
 /**

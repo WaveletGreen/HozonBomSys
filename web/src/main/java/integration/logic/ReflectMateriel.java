@@ -219,7 +219,7 @@ public class ReflectMateriel {
 
 //    public static void main(String[] args) {
 //        HzMaterielRecord materiel = new HzMaterielRecord();
-//        materiel.setPuid("2123132131");
+//        materiel.setId("2123132131");
 //        materiel.setpFactoryPuid("22133");
 //        //物料编号
 //        materiel.setpMaterielCode("S00-5206010");

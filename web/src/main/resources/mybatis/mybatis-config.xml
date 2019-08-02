@@ -26,9 +26,9 @@
     <!--映射文件：描述某个实体和数据库表的对应关系 -->
     <mappers>
         <!--共有项-->
-        <mapper resource="sql/mapper/bom/xmapper/HzPreferenceSettingMapper.xml"/>
+        <!--<mapper resource="sql/mapper/bom/xmapper/HzPreferenceSettingMapper.xml"/>-->
         <!--bom-->
-        <mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml"/>
+        <!--<mapper resource="sql/mapper/bom/xmapper/HzBomMainRecordMapper.xml"/>-->
         <mapper resource="sql/mapper/bom/xmapper/HzBomLineRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzPbomRecordMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzMbomRecordMapper.xml"/>
@@ -41,7 +41,7 @@
         <!--<mapper resource="sql/mapper/bom/project/HzSingleVehicleDosageMapper.xml"/>-->
 
         <!--配置-->
-        <!--cfg0-->
+        <!--feature-->
         <mapper resource="sql/mapper/cfg/cfg0/HzCfg0OptionFamilyMapper.xml"/>
         <mapper resource="sql/mapper/cfg/cfg0/HzCfg0RecordMapper.xml"/>
         <!--&lt;!&ndash;color&ndash;&gt;-->
@@ -66,7 +66,7 @@
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelChangeMapper.xml"/>
         <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgChangeMapper.xml"/>
         <!--main-->
-        <mapper resource="sql/mapper/cfg/main/HzCfg0MainRecordMapper.xml"/>
+        <!--<mapper resource="sql/mapper/cfg/main/HzCfg0MainRecordMapper.xml"/>-->
         <!--model-->
         <mapper resource="sql/mapper/cfg/model/HzCfg0ModelDetailMapper.xml"/>
         <mapper resource="sql/mapper/cfg/model/HzCfg0ModelRecordMapper.xml"/>
@@ -138,7 +138,7 @@
         <mapper resource="sql/mapper/interaction/HzSingleVehiclesBomLineMapper.xml"/>
         <mapper resource="sql/mapper/interaction/HzSingleVehiclesMapper.xml"/>
         <!--任务-->
-        <mapper resource="sql/mapper/task/HzTaskMapper.xml"/>
+        <!--<mapper resource="sql/mapper/task/HzTaskMapper.xml"/>-->
         <!--derivative变更 -->
         <mapper resource="sql/mapper/cfg/derivative/HzMDBasicChangeBeanMapper.xml"/>
         <mapper resource="sql/mapper/cfg/derivative/HzMDDetailChangeBeanMapper.xml"/>

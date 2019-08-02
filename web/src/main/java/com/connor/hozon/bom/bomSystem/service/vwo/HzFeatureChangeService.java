@@ -6,14 +6,13 @@
 
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.vwo.HzFeatureChangeBean;
-import sql.pojo.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 
 import java.util.*;
 
@@ -167,7 +166,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
      * @return
      */
     @Override
-    public Long insertByCfgAfter(HzCfg0Record record) {
+    public Long insertByCfgAfter(HzFeatureValue record) {
         HzFeatureChangeBean bean = new HzFeatureChangeBean();
         setAfterTable(bean);
         bean.setChangeCreateDate(new Date());
@@ -181,7 +180,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
      * @return
      */
     @Override
-    public Long insertByCfgBefore(HzCfg0Record record) {
+    public Long insertByCfgBefore(HzFeatureValue record) {
         HzFeatureChangeBean bean = new HzFeatureChangeBean();
         setBeforeTable(bean);
         bean.setChangeCreateDate(new Date());
@@ -219,7 +218,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
      * @param record
      * @return
      */
-    public Long insertByCfg(HzCfg0Record record, HzFeatureChangeBean bean) {
+    public Long insertByCfg(HzFeatureValue record, HzFeatureChangeBean bean) {
         reflect(record, bean);
 //        /*所属表*/
 //        bean.setTableName(tableName);
@@ -237,7 +236,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
      * @return
      */
     @Override
-    public HzFeatureChangeBean reflect(HzCfg0Record record, HzFeatureChangeBean bean) {
+    public HzFeatureChangeBean reflect(HzFeatureValue record, HzFeatureChangeBean bean) {
         /*主配置的puid，用这个可以找到主配置的对象*/
         bean.setCfg0MainItemPuid(record.getpCfg0MainItemPuid());
         /*废止时间*/
@@ -269,7 +268,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         /*配置描述*/
         bean.setFeatureValueDesc(record.getpCfg0Desc());
         /*选项值的objectid*/
-        bean.setFeatureValueName(record.getpCfg0ObjectId());
+        bean.setFeatureValueName(record.getFeatureValueCode());
         /*特性英文名*/
         bean.setH9featureenname(record.getpH9featureenname());
         /*特性是否已成功发送到SAP*/
@@ -330,7 +329,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
     }
 
     @Override
-    public List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records) {
+    public List<HzFeatureChangeBean> doSelectHasEffect(List<HzFeatureValue> records) {
         return hzFeatureChangeDao.doSelectHasEffect(records);
     }
 

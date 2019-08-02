@@ -96,7 +96,7 @@
         order by P_PROJECT_NAME asc
     </select>
     <!--添加1条项目-->
-    <select id="insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs">
         insert into HZ_PROJECT_LIBS
         (
         <include refid="Base_Column_List"/>
@@ -126,7 +126,7 @@
         #{pVehicleTranName,jdbcType=VARCHAR},
         #{projectManagerId,jdbcType=DECIMAL}
         )
-    </select>
+    </insert>
     <!--根据主键删除项目-->
     <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
         delete HZ_PROJECT_LIBS where PUID=#{puid,jdbcType=VARCHAR}

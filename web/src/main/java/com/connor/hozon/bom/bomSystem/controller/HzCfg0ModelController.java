@@ -6,18 +6,18 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
+import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
-import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
+import cn.net.connor.hozon.services.service.main.HzMainConfigService;
+import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.main.HzCfg0MainRecord;
-import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
-import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 
 import java.util.UUID;
 
@@ -39,16 +39,16 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 public class HzCfg0ModelController {
     /*** 模型的详细信息*/
     @Autowired
-    HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
+    private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
     /*** 数据库中的车型模型，没有详细信息*/
     @Autowired
-    HzCfg0ModelRecordService hzCfg0modelRecordService;
+    private HzCfg0ModelRecordService hzCfg0modelRecordService;
     /*** 配置主数据服务层*/
     @Autowired
-    HzCfg0MainService cfg0MainService;
+    private HzMainConfigService hzMainConfigService;
     /***项目助手*/
     @Autowired
-    ProjectHelper projectHelper;
+    private ProjectHelper projectHelper;
 
     /**
      * 保存基本车型的详情数据
@@ -115,9 +115,9 @@ public class HzCfg0ModelController {
         fromDBDetail.setpModelPuid(pModelPuid);
         fromDBDetail = hzCfg0ModelServiceImpl.getOneByModelId2(fromDBDetail);
         HzCfg0ModelRecord hzCfg0ModelRecord = hzCfg0modelRecordService.doGetById(pModelPuid);
-        HzCfg0MainRecord hzCfg0MainRecord = cfg0MainService.doGetByPrimaryKey(hzCfg0ModelRecord.getpCfg0ModelOfMainRecord());
+        HzMainConfig hzMainConfig = hzMainConfigService.doGetByPrimaryKey(hzCfg0ModelRecord.getpCfg0ModelOfMainRecord());
 
-        projectHelper.doGetProjectTreeByProjectId(hzCfg0MainRecord.getpCfg0OfWhichProjectPuid());
+        projectHelper.doGetProjectTreeByProjectId(hzMainConfig.getProjectId());
         if (projectHelper.getProject() == null ||
                 projectHelper.getVehicle() == null ||
                 projectHelper.getPlatform() == null ||

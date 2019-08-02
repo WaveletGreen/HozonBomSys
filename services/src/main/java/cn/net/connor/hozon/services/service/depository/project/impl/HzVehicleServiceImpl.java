@@ -55,10 +55,10 @@ public class HzVehicleServiceImpl implements HzVehicleService {
     @Override
     public boolean validate(HzVehicleRecord vehicle) {
         if (null == vehicle ||
-//                null == vehicle.getPuid() ||
+//                null == vehicle.getId() ||
                 null == vehicle.getpVehicleCode() ||
                 null == vehicle.getpVehicleName() ||
-//                "".equals(vehicle.getPuid()) ||
+//                "".equals(vehicle.getId()) ||
                 "".equals(vehicle.getpVehicleCode()) ||
                 "".equals(vehicle.getpVehicleName())
                 )

@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureService;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
@@ -46,7 +46,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import sql.pojo.accessories.HzAccessoriesLibs;
-import sql.pojo.bom.HZBomMainRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
@@ -96,7 +96,7 @@ public class HzMbomServiceImpl implements HzMbomService {
     private HzChangeDataRecordDAO hzChangeDataRecordDAO;
 
     @Autowired
-    private HzBomMainRecordDao hzBomMainRecordDao;
+    private HzMainBomDao hzMainBomDao;
 
     @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
@@ -257,7 +257,7 @@ public class HzMbomServiceImpl implements HzMbomService {
             if(StringUtils.isBlank(reqDTO.getProjectId())){
                 return WriteResultRespDTO.IllgalArgument();
             }
-            HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(reqDTO.getProjectId());
+            HzMainBom hzMainBom = hzMainBomDao.selectByProjectId(reqDTO.getProjectId());
             HzMbomLineRecord record = new HzMbomLineRecord();
             record.setTableName(MbomTableNameEnum.tableName(reqDTO.getType()));
             record.setUpdateName(user.getUserName());
@@ -291,12 +291,12 @@ public class HzMbomServiceImpl implements HzMbomService {
                 record.setpBomType(null);
             }
             record.setpStockLocation(reqDTO.getpStockLocation());
-            record.setBomDigifaxId(hzBomMainRecord.getPuid());
+            record.setBomDigifaxId(hzMainBom.getPuid());
             record.setLineId(reqDTO.getLineId());
             int i = hzMbomRecordDAO.update(record);
             if (i > 0) {
                 //更新后传输到SAP
-                //synBomService.updateByUids(record.getPuid(), record.getProjectPuid());
+                //synBomService.updateByUids(record.getId(), record.getProjectPuid());
                 return WriteResultRespDTO.getSuccessResult();
             }
         } catch (Exception e) {
@@ -695,7 +695,7 @@ public class HzMbomServiceImpl implements HzMbomService {
 //
 //                                        HzPbomTreeQuery query = new HzPbomTreeQuery();
 //                                        query.setProjectId(projectId);
-//                                        query.setPuid(whiteBody.geteBomPuid());
+//                                        query.setId(whiteBody.geteBomPuid());
 //                                        List<HzPbomLineRecord> buyRecords = hzPbomRecordDAO.getHzPbomTree(query);
 //                                        if(ListUtil.isNotEmpty(buyRecords)){
 //                                            j+=buyRecords.size()-1;
@@ -785,7 +785,7 @@ public class HzMbomServiceImpl implements HzMbomService {
                         List<HzMaterielRecord> recordList = hzMaterielDAO.findHzMaterielForList(hzMaterielQuery);
                         if(ListUtil.isNotEmpty(recordList)){//物料中会出现的多颜色件 来源是相同的
 //                            if(!recordList.get(0).getpMaterielCode().equals(hzMaterielRecord.getpMaterielCode())){
-//                                hzMaterielRecord.setPuid(recordList.get(0).getPuid());
+//                                hzMaterielRecord.setId(recordList.get(0).getId());
 //                                updateMaterielRecords.add(hzMaterielRecord);
 //                            }
                             if(recordList.contains(hzMaterielRecord)){

@@ -230,7 +230,7 @@ public class HzWorkProcessController2 extends BaseController {
 //            for(String routing : routings){
 //                HzWorkProcedure hzWorkProcedure1 = new HzWorkProcedure();
 //                String puid1 = UUID.randomUUID().toString();
-//                hzWorkProcedure1.setPuid(puid1);
+//                hzWorkProcedure1.setId(puid1);
 //                hzWorkProcedure1.setMaterielId(puidArr[i]);
 //                hzWorkProcedure1.setProjectId(projectId);
 //                hzWorkProcedure1.setpFactoryId("1001");
@@ -238,7 +238,7 @@ public class HzWorkProcessController2 extends BaseController {
 //
 //                HzWorkProcedure hzWorkProcedure2 = new HzWorkProcedure();
 //                String puid2 = UUID.randomUUID().toString();
-//                hzWorkProcedure2.setPuid(puid2);
+//                hzWorkProcedure2.setId(puid2);
 //                hzWorkProcedure2.setMaterielId(puidArr[i]);
 //                hzWorkProcedure2.setProjectId(projectId);
 //                hzWorkProcedure2.setpFactoryId("1001");

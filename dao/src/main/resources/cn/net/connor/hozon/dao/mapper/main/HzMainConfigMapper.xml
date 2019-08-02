@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.main.HzMainConfigDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.main.HzMainConfig">
+        <id column="PUID" jdbcType="VARCHAR" property="id"/>
+        <result column="P_ITEM_NAME" jdbcType="VARCHAR" property="itemName"/>
+        <result column="POST_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="POSTER" jdbcType="VARCHAR" property="creator"/>
+        <result column="P_CFG0_ORG_PUID" jdbcType="VARCHAR" property="configUidFromTC"/>
+        <result column="P_CFG0_OF_WHICH_PROJECT" jdbcType="VARCHAR" property="projectName"/>
+        <result column="P_CFG0_OF_WHICH_PROJECT_PUID" jdbcType="VARCHAR" property="projectId"/>
+        <result column="P_CFG0_LAST_MOD_DATE" jdbcType="TIMESTAMP" property="lastModifyDate"/>
+        <result column="P_CFG0_ORG_POSTER" jdbcType="VARCHAR" property="updater"/>
+        <result column="FEATURE_SYN_DIC_FLAG" jdbcType="INTEGER" property="featureSynDicFlag"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        PUID,
+        P_ITEM_NAME,
+        POST_DATE,
+        POSTER,
+        P_CFG0_ORG_PUID,
+        P_CFG0_OF_WHICH_PROJECT,
+        P_CFG0_OF_WHICH_PROJECT_PUID,
+        P_CFG0_LAST_MOD_DATE,
+        P_CFG0_ORG_POSTER,
+        FEATURE_SYN_DIC_FLAG
+  </sql>
+    <sql id="Base_Values_List">
+        #{id,jdbcType=VARCHAR},
+        #{itemName,jdbcType=VARCHAR},
+        #{createDate,jdbcType=TIMESTAMP},
+        #{creator,jdbcType=VARCHAR},
+        #{configUidFromTC,jdbcType=VARCHAR},
+        #{projectName,jdbcType=VARCHAR},
+        #{projectId,jdbcType=VARCHAR},
+        #{lastModifyDate,jdbcType=TIMESTAMP},
+        #{updater,jdbcType=VARCHAR},
+        #{featureSynDicFlag,jdbcType=INTEGER}
+    </sql>
+    <!--根据主配置ID查询主配置对象-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MAIN_RECORD
+        where PUID = #{id,jdbcType=VARCHAR}
+    </select>
+    <!--根据项目ID查询到主配置-->
+    <select id="selectByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MAIN_RECORD
+        where P_CFG0_OF_WHICH_PROJECT_PUID = #{projectId,jdbcType=VARCHAR}
+    </select>
+    <!--全部插入-->
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.main.HzMainConfig">
+        insert into HZ_CFG0_MAIN_RECORD(
+        <include refid="Base_Column_List"/>
+        )
+        values(
+        <include refid="Base_Values_List"/>
+        )
+    </insert>
+    <!--只是更新是否已经从配置字典同步特性值数据到特性值表中记录-->
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.main.HzMainConfig">
+        UPDATE HZ_CFG0_MAIN_RECORD t
+        <set>
+            <if test="featureSynDicFlag!=null">
+                FEATURE_SYN_DIC_FLAG=#{featureSynDicFlag,jdbcType=INTEGER}
+            </if>
+        </set>
+        <where>
+            t.PUID = #{id,jdbcType=VARCHAR}
+        </where>
+    </update>
+</mapper>

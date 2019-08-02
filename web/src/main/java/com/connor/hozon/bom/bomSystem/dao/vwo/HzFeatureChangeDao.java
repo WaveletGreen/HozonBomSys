@@ -7,8 +7,8 @@
 package com.connor.hozon.bom.bomSystem.dao.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
-import sql.pojo.cfg.vwo.HzFeatureChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 
 import java.util.List;
 import java.util.Map;
@@ -49,7 +49,7 @@ public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
 
     List<HzFeatureChangeBean> doQueryLastTwoChange(HzFeatureChangeBean hzFeatureChangeBean);
 
-    List<HzFeatureChangeBean> doSelectHasEffect(List<HzCfg0Record> records);
+    List<HzFeatureChangeBean> doSelectHasEffect(List<HzFeatureValue> records);
 
     int updateStatusByOrderId(Map<String,Object> map);
 

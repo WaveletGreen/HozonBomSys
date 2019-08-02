@@ -394,8 +394,8 @@ public class HzCraftService implements IHzCraftService {
                                     }
 
                                     if (toChildrenNeedToUpdateItsLineIndex.containsKey(myUid)) {
-//                                        if (toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getPuid()).containsKey(isWithsChild.getLineIndex())) {
-//                                            toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getPuid()).remove(isWithsChild.getLineIndex());
+//                                        if (toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getId()).containsKey(isWithsChild.getLineIndex())) {
+//                                            toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getId()).remove(isWithsChild.getLineIndex());
 //                                        } else {
                                         toChildrenNeedToUpdateItsLineIndex.get(myUid).put(isWithsChild.getLineIndex(), isWithsChild);
 //                                        }
@@ -413,9 +413,9 @@ public class HzCraftService implements IHzCraftService {
 //                        if (isNeedToUpdate) {
 //
 //                        } else {
-//                            logger.warn("虽然PBOM中PUID为" + allCodeIsWithToParentCode.get(i1).getPuid() +
+//                            logger.warn("虽然PBOM中PUID为" + allCodeIsWithToParentCode.get(i1).getId() +
 //                                    "的所有子层与合成源父层的子数量一致，但是没有找到合成源的父层" + parent.getLineId() + "(" +
-//                                    parent.getPuid() + ")与合成源的查找编号一致的BOM行，认定不是同一个BOM，或者BOM错误，又或是BOM已被更改"
+//                                    parent.getId() + ")与合成源的查找编号一致的BOM行，认定不是同一个BOM，或者BOM错误，又或是BOM已被更改"
 //                            );
 //                        }
                     }
@@ -545,7 +545,7 @@ public class HzCraftService implements IHzCraftService {
             stringBuffer.append(record.geteBomPuid()+",");
 //            dto.seteBomPuid(record.geteBomPuid());
 //            dto.setProjectId(projectUid);
-//            dto.setPuids(record.getPuid());
+//            dto.setPuids(record.getId());
 //            listOfDto.add(dto);
         }
         dto.setPuids(stringBuffer.toString());

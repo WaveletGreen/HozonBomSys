@@ -2,8 +2,6 @@ package com.connor.hozon.bom.resources.service.epl.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
@@ -13,16 +11,10 @@ import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import share.bean.PreferenceSetting;
-import sql.pojo.HzPreferenceSetting;
-import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.epl.HzEPLManageRecord;
-import sql.redis.SerializeUtil;
 
 import java.util.*;
-
-import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 
 /**
  * Created by haozt on 2018/06/05
@@ -65,7 +57,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 //            List<HzEPLManageRecord> records = recordPage.getResult();
 //            for(HzEPLManageRecord record:records){
 //                JSONObject jsonObject = new JSONObject();
-//                jsonObject.put("puid", record.getPuid());
+//                jsonObject.put("puid", record.getId());
 //                jsonObject.put("parentUid", record.getParentUid());
 //                Integer is2Y = record.getIs2Y();
 //                Integer hasChildren = record.getIsHas();
@@ -214,11 +206,11 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 //            int appendNum = 23;
 //            HzPreferenceSetting setting = new HzPreferenceSetting();
 //            setting.setSettingName("Hz_ExportBomPreferenceRedis");
-//            HZBomMainRecord main = hzBomMainRecordDao.selectByProjectPuid(projectId);
+//            HzMainBom main = hzBomMainRecordDao.selectByProjectId(projectId);
 //            if(main == null){
 //                return null;
 //            }
-//            setting.setBomMainRecordPuid(main.getPuid());
+//            setting.setBomMainRecordPuid(main.getId());
 //            setting = hzBomDataDao.loadSetting(setting);
 //            byte[] btOfSetting = setting.getPreferencesettingblock();
 //            Object objOfSetting = SerializeUtil.unserialize(btOfSetting);

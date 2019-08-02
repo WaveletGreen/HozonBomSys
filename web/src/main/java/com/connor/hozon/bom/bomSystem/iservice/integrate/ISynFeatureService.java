@@ -6,9 +6,9 @@
 
 package com.connor.hozon.bom.bomSystem.iservice.integrate;
 
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.List;
 /**
@@ -34,7 +34,7 @@ public interface ISynFeatureService {
      * @param features
      * @return
      */
-    JSONObject addFeature(List<HzCfg0Record> features) throws Exception;
+    JSONObject addFeature(List<HzFeatureValue> features) throws Exception;
 
     /**
      * 更新特性值
@@ -42,7 +42,7 @@ public interface ISynFeatureService {
      * @param features
      * @return
      */
-    JSONObject updateFeature(List<HzCfg0Record> features) throws Exception;
+    JSONObject updateFeature(List<HzFeatureValue> features) throws Exception;
 
     /**
      * 删除特性值
@@ -50,7 +50,7 @@ public interface ISynFeatureService {
      * @param features
      * @return
      */
-    JSONObject deleteFeature(List<HzCfg0Record> features) throws Exception;
+    JSONObject deleteFeature(List<HzFeatureValue> features) throws Exception;
 
     /**
      * 先删除后添加ERP

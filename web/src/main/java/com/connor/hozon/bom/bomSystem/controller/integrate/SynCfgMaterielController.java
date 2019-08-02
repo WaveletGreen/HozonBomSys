@@ -29,7 +29,7 @@ public class SynCfgMaterielController extends ExtraIntegrate {
 //    @RequestMapping("/synMateriel")
 //    public String modPage(@RequestParam String puid,Model model) {
 //        HzMaterielCfgBean bean = new HzMaterielCfgBean();
-//        bean.setPuid(puid);
+//        bean.setId(puid);
 //        JSONObject result = synMaterielCfgService.addMaterielCfg(Collections.singletonList(bean));
 //        addToModel(result, model);
 //        return "stage/templateOfIntegrate";
@@ -37,7 +37,7 @@ public class SynCfgMaterielController extends ExtraIntegrate {
 //    @RequestMapping("/synMaterielDelete")
 //    public String delete(@RequestParam String puid,Model model) {
 //        HzMaterielCfgBean bean = new HzMaterielCfgBean();
-//        bean.setPuid(puid);
+//        bean.setId(puid);
 //        JSONObject result = synMaterielCfgService.deleteMaterielCfg(Collections.singletonList(bean));
 //        addToModel(result, model);
 //        return "stage/templateOfIntegrate";

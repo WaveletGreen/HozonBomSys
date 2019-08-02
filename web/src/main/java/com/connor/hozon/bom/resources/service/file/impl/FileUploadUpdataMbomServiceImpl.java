@@ -1,13 +1,11 @@
 package com.connor.hozon.bom.resources.service.file.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
+import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
-import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.file.FileUploadUpdataMbomService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
@@ -19,10 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzMbomRecord;
-import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.factory.HzFactory;
 
 import java.util.*;
@@ -33,7 +28,7 @@ public class FileUploadUpdataMbomServiceImpl implements FileUploadUpdataMbomServ
     private HzMbomRecordDAO hzMbomRecordDAO;
 
     @Autowired
-    private HzBomMainRecordDao hzBomMainRecordDao;
+    private HzMainBomDao hzMainBomDao;
 
     @Autowired
     private HzFactoryDAO hzFactoryDAO;
@@ -198,8 +193,8 @@ public class FileUploadUpdataMbomServiceImpl implements FileUploadUpdataMbomServ
 
                                 record.setLineId(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue());//零件号
                                 //获取项目ID
-                                HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
-                                record.setBomDigifaxId(hzBomMainRecord.getPuid());
+                                HzMainBom hzMainBom = hzMainBomDao.selectByProjectId(projectId);
+                                record.setBomDigifaxId(hzMainBom.getPuid());
 
                                 hzMbomLineRecords.add(record);
                                 //修改之前保存原数据到before记录表(插入或更新)

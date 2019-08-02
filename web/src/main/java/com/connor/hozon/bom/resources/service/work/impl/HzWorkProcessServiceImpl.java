@@ -336,7 +336,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
 //            hzWorkCenter.setpWorkCode(reqDTO.getpWorkCode());
 //            hzWorkCenter.setpWorkDesc(reqDTO.getpWorkDesc());
 //            hzWorkCenter.setProjectId(reqDTO.getProjectId());
-//            hzWorkCenter.setPuid(hzWorkCenterList.get(0).getPuid());
+//            hzWorkCenter.setId(hzWorkCenterList.get(0).getId());
 //            if(!workCenter.equals(hzWorkCenter)){
 //                hzWorkCenterDAO.update(hzWorkCenter);
 //            }

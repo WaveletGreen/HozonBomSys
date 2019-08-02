@@ -248,7 +248,7 @@ public class SynBomService implements ISynBomService {
             if (bean.getIs2Y() == 1) {
                 continue;
             }
-//            if (mapOf2YUid.containsKey(bean.getPuid())) {
+//            if (mapOf2YUid.containsKey(bean.getId())) {
 //                continue;
 //            }
 
@@ -425,7 +425,7 @@ public class SynBomService implements ISynBomService {
 //        Set<String> parents = new HashSet<>();
 //
 //        all.stream().filter(a -> a.getParentUID() != null && !("".equalsIgnoreCase(a.getParentUID()))).forEach(a -> {
-//            children.add(a.getPuid());
+//            children.add(a.getId());
 //            parents.add(a.getParentUID());
 //        });
 //        //存放所有父层puid
@@ -436,8 +436,8 @@ public class SynBomService implements ISynBomService {
 //        List<String> is2YUids = new ArrayList<>();
 //
 //        筛选puid
-//        beanListIs2Y.forEach(l -> is2YUids.add(l.getPuid()));
-//        beanListIsnot2Y.forEach(l -> isNot2YUids.add(l.getPuid()));
+//        beanListIs2Y.forEach(l -> is2YUids.add(l.getId()));
+//        beanListIsnot2Y.forEach(l -> isNot2YUids.add(l.getId()));
 //         再次获取数据
 //        int count = is2YUids.size() / 1000;
 //
@@ -481,7 +481,7 @@ public class SynBomService implements ISynBomService {
 //        for (HzMBomToERPBean bean : beanListOfChildren) {
 //            HzMBomToERPBean parent = null;
 //            //判断是否是2Y层，2Y层没有父层
-//            if (mapOfparents.containsKey(bean.getPuid())) {
+//            if (mapOfparents.containsKey(bean.getId())) {
 //                continue;
 //            } else {
 //                //从2Y层中取

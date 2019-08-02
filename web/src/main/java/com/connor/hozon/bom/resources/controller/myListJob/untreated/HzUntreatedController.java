@@ -1,18 +1,15 @@
 package com.connor.hozon.bom.resources.controller.myListJob.untreated;
 
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.dao.task.HzTasksDao;
-import com.connor.hozon.bom.bomSystem.service.task.HzTasksService;
+import cn.net.connor.hozon.dao.dao.task.HzTasksDao;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.request.EditHzChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
@@ -28,8 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sql.pojo.change.HzAuditorChangeRecord;
 import sql.pojo.change.HzChangeListRecord;
-import sql.pojo.change.HzChangeOrderRecord;
-import sql.pojo.task.HzTasks;
+import cn.net.connor.hozon.dao.pojo.task.HzTasks;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;

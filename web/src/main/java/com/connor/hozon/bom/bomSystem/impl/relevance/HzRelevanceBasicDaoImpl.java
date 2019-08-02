@@ -89,10 +89,10 @@
 ////    }
 //
 ////    @Override
-////    public List<HzRelevanceBasic> selectByProjectPuid(String projectPuid) {
+////    public List<HzRelevanceBasic> selectByProjectId(String projectPuid) {
 ////        HzRelevanceBasic hzRelevanceBasic = new HzRelevanceBasic();
 ////        hzRelevanceBasic.setRbProjectUid(projectPuid);
-////        return baseSQLUtil.executeQuery(hzRelevanceBasic,clz.getCanonicalName()+".selectByProjectPuid");
+////        return baseSQLUtil.executeQuery(hzRelevanceBasic,clz.getCanonicalName()+".selectByProjectId");
 ////    }
 //
 ////    @Override

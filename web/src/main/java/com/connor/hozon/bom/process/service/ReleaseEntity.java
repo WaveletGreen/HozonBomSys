@@ -6,7 +6,11 @@
 
 package com.connor.hozon.bom.process.service;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
+import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicChangeDao;
+import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
@@ -14,13 +18,12 @@ import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
-import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicChangeDao;
-import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynProcessRouteService;
 import com.connor.hozon.bom.process.iservice.IDataModifier;
@@ -53,13 +56,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.pojo.bom.*;
-import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
-import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
+import sql.pojo.bom.HzBOMScheduleTask;
+import sql.pojo.bom.HzMbomLineRecord;
+import sql.pojo.bom.HzMbomLineRecordVO;
+import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
-import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 import sql.pojo.work.HzWorkProcedure;
 
 import java.util.*;
@@ -105,7 +108,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     @Autowired
     private IHzFeatureChangeService iHzFeatureChangeService;
     @Autowired
-    private HzCfg0RecordDao hzCfg0RecordDao;
+    private HzFeatureService hzFeatureService;
 
     @Autowired
     private HzCmcrDetailChangeDao hzCmcrDetailChangeDao;
@@ -215,7 +218,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         return false;
                     }
                     //将源数据修改为已生效
-                    if(hzCfg0RecordDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                    if(hzFeatureService.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
                     //配色方案变更批准

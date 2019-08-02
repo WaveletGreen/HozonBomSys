@@ -6,12 +6,16 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
+import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao;
+import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureValueDao;
+import cn.net.connor.hozon.dao.dao.main.HzMainConfigDao;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
+import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
+import cn.net.connor.hozon.dao.query.feature.HzFeatureQuery;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
-import com.connor.hozon.bom.bomSystem.dao.main.HzCfg0MainRecordDao;
-import com.connor.hozon.bom.bomSystem.dto.HzFeatureQueryDto;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
@@ -19,23 +23,18 @@ import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynFeatureService;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynRelevanceService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import com.connor.hozon.bom.sys.entity.User;
 import integration.Author;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
 import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
-import sql.pojo.cfg.main.HzCfg0MainRecord;
-import sql.pojo.cfg.vwo.HzFeatureChangeBean;
 import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.*;
@@ -53,14 +52,15 @@ import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
  * @Modified By:
  */
 @Controller
-@RequestMapping("/cfg0")
+@RequestMapping("/feature")
+@Slf4j
 public class HzCfg0Controller extends ExtraIntegrate {
     /***特性值服务*/
     @Autowired
-    HzCfg0Service hzCfg0Service;
+    HzFeatureService hzFeatureService;
     /***主配置Dao层*/
     @Autowired
-    HzCfg0MainRecordDao hzCfg0MainRecordDao;
+    HzMainConfigDao hzMainConfigDao;
     /*** 同步特性，不再在当前controller中使用*/
     @Autowired
     ISynFeatureService iSynFeatureService;
@@ -77,38 +77,25 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @Autowired
     HzDictionaryLibraryService hzDictionaryLibraryService;
     @Autowired
-    HzCfg0RecordDao hzCfg0RecordDao;
+    HzFeatureValueDao hzFeatureValueDao;
 
     @Autowired
     HzFullCfgWithCfgDao hzFullCfgWithCfgDao;
 
     @Autowired
-    HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
-    /*** 日志记录*/
-    private final static Logger logger = LoggerFactory.getLogger(HzCfg0Controller.class);
+    HzFeatureDao hzFeatureDao;
 
     /**
      * 特性页面初始化显示，查询当前项目下的特性值并进行分页显示到前端
      *
      * @param projectPuid 项目UID
-     * @param queryBase   分页操作实体，具体字段{@link HzFeatureQueryDto}POST进来交由Spring自动高解析，字段对应上即可解析
+     * @param queryBase   分页操作实体，具体字段{@link HzFeatureQuery}POST进来交由Spring自动高解析，字段对应上即可解析
      * @return 特性值的分页查询数据
      */
     @RequestMapping("/loadFeature")
     @ResponseBody
-    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, HzFeatureQueryDto queryBase) {
-        Map<String, Object> result = new HashMap<>();
-        queryBase.setSort(HzCfg0Record.reflectToDBField(queryBase.getSort()));
-        queryBase.setProjectUid(projectPuid);
-        int totalCount = hzCfg0Service.tellMeHowManyOfThose(queryBase);
-        if("ALL".equals(queryBase.getLimit())){
-            queryBase.setLimit(String.valueOf(totalCount));
-        }
-        List<HzCfg0Record> records = hzCfg0Service.doLoadCfgListByProjectPuid(projectPuid, queryBase);
-        result.put("totalCount", totalCount);
-        result.put("result", records);
-        hzCfg0Service.synDictionaryAfterOption(projectPuid);
-        return result;
+    public Map<String, Object> loadCfg0(@RequestParam("projectPuid") String projectPuid, HzFeatureQuery queryBase) {
+        return hzFeatureService.loadFeature(projectPuid,queryBase);
     }
 
     /**
@@ -119,7 +106,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
      */
     @RequestMapping("/addPage2")
     public String addPage2(@RequestParam("projectPuid") String projectPuid, Model model) {
-        HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
+        HzMainConfig mainRecord = hzMainConfigDao.selectByProjectId(projectPuid);
         if (mainRecord == null) {
             return "error";
         }
@@ -142,12 +129,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
      */
     @RequestMapping(value = "/add2", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject add2(@RequestBody HzCfg0Record record) {
+    public JSONObject add2(@RequestBody HzFeatureValue record) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
 
         //获取特性值
-        String cfgObjectId = record.getpCfg0ObjectId();
+        String cfgObjectId = record.getFeatureValueCode();
         HzDictionaryLibrary hzDictionaryLibrary = hzDictionaryLibraryService.queryLibraryDTOByCfgObject(cfgObjectId);
         if (hzDictionaryLibrary == null || hzDictionaryLibrary.getPuid() == null) {
             result.put("status", false);
@@ -160,7 +147,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
             return result;
         }
         record.setpCfg0FamilyName(hzDictionaryLibrary.getFamillyCode().toUpperCase());
-        record.setpCfg0ObjectId(hzDictionaryLibrary.getEigenValue().toUpperCase());
+        record.setFeatureValueCode(hzDictionaryLibrary.getEigenValue().toUpperCase());
         //创建人和修改人
         record.setCreator(user.getUserName());
         record.setLastModifier(user.getUserName());
@@ -170,29 +157,29 @@ public class HzCfg0Controller extends ExtraIntegrate {
         record.setpCfg0Desc(hzDictionaryLibrary.getValueDescCh());
         record.setpH9featureenname(hzDictionaryLibrary.getValueDescEn());
 
-        if (!hzCfg0Service.preCheck(record)) {
+        if (!hzFeatureService.preCheck(record)) {
             result.put("status", false);
             result.put("msg", "<p style='color:red;'>特性值已存在</p>");
             return result;
         }
         /**生成自身的puid*/
         record.setPuid(UUIDHelper.generateUpperUid());
-        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        HzFeature family = new HzFeature();
         //主配置
-        family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
+        family.setMainConfigUid(record.getpCfg0MainItemPuid());
         //特性代码
-        family.setpOptionfamilyName(record.getpCfg0FamilyName());
+        family.setFeatureCode(record.getpCfg0FamilyName());
         //特性描述
-        family.setpOptionfamilyDesc(record.getpCfg0FamilyDesc());
+        family.setFeatureDesc(record.getpCfg0FamilyDesc());
 
-        HzCfg0OptionFamily _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
+        HzFeature _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
         //检查当前项目有没有用到特定的特性
         if (_family == null) {
-            family.setPuid(UUIDHelper.generateUpperUid());
+            family.setId(UUIDHelper.generateUpperUid());
             //没有用到，则进行特性插入
             if (!cfg0OptionFamilyService.doInsert(family)) {
                 result.put("status", false);
-                result.put("msg", "添加特性" + family.getpOptionfamilyName() + "失败，请联系系统管理员");
+                result.put("msg", "添加特性" + family.getFeatureCode() + "失败，请联系系统管理员");
                 return result;
             }
         } else {
@@ -200,24 +187,24 @@ public class HzCfg0Controller extends ExtraIntegrate {
         }
 
         //关联到特性的UID
-        record.setpCfg0FamilyPuid(family.getPuid());
+        record.setpCfg0FamilyPuid(family.getId());
         if (!checkString(record.getpCfg0Relevance())) {
-            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getFeatureValueCode() + "'");
         }
         //将特性值插入到表中
-        if (hzCfg0Service.doInsertOne(record)) {
+        if (hzFeatureService.doInsertOne(record)) {
             result.put("status", true);
-            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
+            result.put("msg", "添加特性值" + record.getFeatureValueCode() + "成功");
 //            //发送到SAP,走流程
 //            if (!SynMaterielService.debug) {
 //                iSynFeatureService.addFeature(Collections.singletonList(record));
 //            }
-            record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
+            record = hzFeatureService.doSelectOneByPuid(record.getPuid());
 //            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
-//                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
+//                log.error("创建后自动同步变更后记录值失败，请联系管理员");
 //            }
-//            HzCfg0Record record1 = new HzCfg0Record();
-//            record1.setPuid(record.getPuid());
+//            HzFeatureValue record1 = new HzFeatureValue();
+//            record1.setId(record.getId());
 //            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
 //                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
 //            }
@@ -225,23 +212,23 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
         } else {
             result.put("status", false);
-            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
+            result.put("msg", "添加特性值" + record.getFeatureValueCode() + "失败，请联系系统管理员");
         }
         return result;
     }
 
     @RequestMapping("/deleteByPuidFake")
     @ResponseBody
-    public JSONObject deleteByPuidFake(@RequestBody List<HzCfg0Record> records){
+    public JSONObject deleteByPuidFake(@RequestBody List<HzFeatureValue> records){
         JSONObject result = new JSONObject();
-        List<HzCfg0Record> toDelete = new ArrayList<>();
-        Map<String, HzCfg0Record> mapOfDelete = new HashMap<>();
+        List<HzFeatureValue> toDelete = new ArrayList<>();
+        Map<String, HzFeatureValue> mapOfDelete = new HashMap<>();
         if (records == null || records.size() <= 0) {
             result.put("status", false);
             result.put("msg", "选择的列为空，请至少选择1列做删除");
             return result;
         }
-        for (HzCfg0Record record : records) {
+        for (HzFeatureValue record : records) {
             if (record == null || "".equalsIgnoreCase(record.getPuid()) || null == record.getPuid()) {
                 result.put("status", false);
                 result.put("msg", "找不到需要删除的数据，请重试或联系系统管理员");
@@ -253,15 +240,15 @@ public class HzCfg0Controller extends ExtraIntegrate {
                 HzFullCfgWithCfg hzFullCfgWithCfg = hzFullCfgWithCfgDao.selectByFeatureId(record.getPuid());
                 if(hzFullCfgWithCfg!=null){
                     result.put("status", false);
-                    result.put("msg", record.getpCfg0ObjectId()+"在全配置中BOM一级清单中已被引用，如需删除请在全配置中先解除引用");
+                    result.put("msg", record.getFeatureValueCode()+"在全配置中BOM一级清单中已被引用，如需删除请在全配置中先解除引用");
                     return result;
                 }
 
 
-                if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
+                if (hzFeatureService.doSelectOneByPuid(record.getPuid()) != null) {
                     //如果需要删除原数据
                     toDelete.add(record);
-                    mapOfDelete.put(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getpCfg0ObjectId() + "-" + record.getpCfg0FamilyDesc(), record);
+                    mapOfDelete.put(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getFeatureValueCode() + "-" + record.getpCfg0FamilyDesc(), record);
                 } else {
                     result.put("status", false);
                     result.put("msg", "找不到需要删除的数据，请重试或联系系统管理员");
@@ -278,25 +265,25 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
         //判读变更中是否存在已生效数据，如没有则直接删除，有则改成删除状态
         List<HzFeatureChangeBean> hzFeatureChangeBeans = iHzFeatureChangeService.doSelectHasEffect(records);
-        List<HzCfg0Record> hzCfg0RecordsDelete = new ArrayList<>();
-        List<HzCfg0Record> hzCfg0RecordsUpdate = new ArrayList<>();
+        List<HzFeatureValue> hzCfg0RecordsDelete = new ArrayList<>();
+        List<HzFeatureValue> hzCfg0RecordsUpdate = new ArrayList<>();
         if(hzFeatureChangeBeans!=null&&hzFeatureChangeBeans.size()>0){
-            for(HzCfg0Record hzCfg0Record : records){
+            for(HzFeatureValue hzFeatureValue : records){
                 boolean flag = false;
                 for(HzFeatureChangeBean hzFeatureChangeBean : hzFeatureChangeBeans){
-                    if(hzCfg0Record.getPuid().equals(hzFeatureChangeBean.getCfgPuid())){
+                    if(hzFeatureValue.getPuid().equals(hzFeatureChangeBean.getCfgPuid())){
                         flag = true;
                         break;
                     }
                 }
                 if(flag){
-                    hzCfg0RecordsUpdate.add(hzCfg0Record);
+                    hzCfg0RecordsUpdate.add(hzFeatureValue);
                 }else {
-                    hzCfg0RecordsDelete.add(hzCfg0Record);
+                    hzCfg0RecordsDelete.add(hzFeatureValue);
                 }
             }
             if(hzCfg0RecordsUpdate!=null&&hzCfg0RecordsUpdate.size()>0){
-                int updateNum = hzCfg0RecordDao.updateStatus(hzCfg0RecordsUpdate);
+                int updateNum = hzFeatureValueDao.updateStatus(hzCfg0RecordsUpdate);
                 if(updateNum<=0){
                     result.put("status", false);
                     result.put("msg", "删除失败");
@@ -307,17 +294,22 @@ public class HzCfg0Controller extends ExtraIntegrate {
                 }
             }
             if(hzCfg0RecordsDelete!=null&&hzCfg0RecordsDelete.size()>0){
-                int daleteNum = hzCfg0RecordDao.deleteCfgByList(hzCfg0RecordsDelete);
-                List<HzCfg0Record> familyNames = new ArrayList<>();
-                for(HzCfg0Record hzCfg0Record : hzCfg0RecordsDelete){
-                    String familyName = hzCfg0Record.getpCfg0FamilyName();
-                    List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByFamilyName(hzCfg0Record);
-                    if(hzCfg0RecordList==null||hzCfg0RecordList.size()<=0){
-                        familyNames.add(hzCfg0Record);
+                int daleteNum = hzFeatureValueDao.deleteCfgByList(hzCfg0RecordsDelete);
+                List<HzFeatureValue> familyNames = new ArrayList<>();
+                for(HzFeatureValue hzFeatureValue : hzCfg0RecordsDelete){
+                    String familyName = hzFeatureValue.getpCfg0FamilyName();
+                    List<HzFeatureValue> hzFeatureValueList = hzFeatureValueDao.selectByFamilyName(hzFeatureValue);
+                    if(hzFeatureValueList ==null|| hzFeatureValueList.size()<=0){
+                        familyNames.add(hzFeatureValue);
                     }
                 }
                 if(familyNames!=null&&familyNames.size()>0){
-                    if(hzCfg0OptionFamilyDao.deleteByFamilyName(familyNames)<=0){
+
+                    Map<String,Object> map = new HashMap<>();
+                    map.put("date",familyNames);
+                    map.put("mainItemPuid",familyNames.get(0).getpCfg0MainItemPuid());
+
+                    if(hzFeatureDao.deleteByFamilyName(map)<=0){
                         result.put("status", false);
                         result.put("msg", "删除失败");
                         return result;
@@ -333,17 +325,22 @@ public class HzCfg0Controller extends ExtraIntegrate {
                 }
             }
         }else {
-            int deleteNum = hzCfg0RecordDao.deleteCfgByList(records);
-            List<HzCfg0Record> familyNames = new ArrayList<>();
-            for(HzCfg0Record hzCfg0Record : records){
-                String familyName = hzCfg0Record.getpCfg0FamilyName();
-                List<HzCfg0Record> hzCfg0RecordList = hzCfg0RecordDao.selectByFamilyName(hzCfg0Record);
-                if(hzCfg0RecordList==null||hzCfg0RecordList.size()<=0){
-                    familyNames.add(hzCfg0Record);
+            int deleteNum = hzFeatureValueDao.deleteCfgByList(records);
+            List<HzFeatureValue> familyNames = new ArrayList<>();
+            for(HzFeatureValue hzFeatureValue : records){
+                String familyName = hzFeatureValue.getpCfg0FamilyName();
+                List<HzFeatureValue> hzFeatureValueList = hzFeatureValueDao.selectByFamilyName(hzFeatureValue);
+                if(hzFeatureValueList ==null|| hzFeatureValueList.size()<=0){
+                    familyNames.add(hzFeatureValue);
                 }
             }
             if(familyNames!=null&&familyNames.size()>0){
-                if(hzCfg0OptionFamilyDao.deleteByFamilyName(familyNames)<=0){
+
+                Map<String,Object> map = new HashMap<>();
+                map.put("date",familyNames);
+                map.put("mainItemPuid",familyNames.get(0).getpCfg0MainItemPuid());
+
+                if(hzFeatureDao.deleteByFamilyName(map)<=0){
                     result.put("status", false);
                     result.put("msg", "删除失败");
                     return result;
@@ -363,22 +360,22 @@ public class HzCfg0Controller extends ExtraIntegrate {
     /**
      * 通过特性值主键删除特性值，删除特性值的同时，判断特性值父层下是否还有其他特性值，如果该特性是最后一个特性值，则连同特性一起删除
      *
-     * @param records 一组前端选择的特性值记录，这些记录存储{@link HzCfg0Record#puid}即可
+     * @param records 一组前端选择的特性值记录，这些记录存储{@link HzFeatureValue#puid}即可
      * @return 操作成功与否标识和消息
      * @throws Exception
      */
     @RequestMapping(value = "/deleteByPuid", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject deleteByPuid(@RequestBody List<HzCfg0Record> records) throws Exception {
-        List<HzCfg0Record> toDelete = new ArrayList<>();
-        Map<String, HzCfg0Record> mapOfDelete = new HashMap<>();
+    public JSONObject deleteByPuid(@RequestBody List<HzFeatureValue> records) throws Exception {
+        List<HzFeatureValue> toDelete = new ArrayList<>();
+        Map<String, HzFeatureValue> mapOfDelete = new HashMap<>();
         JSONObject result = new JSONObject();
         if (records == null || records.size() <= 0) {
             result.put("status", false);
             result.put("msg", "选择的列为空，请至少选择1列做删除");
             return result;
         }
-        for (HzCfg0Record record : records) {
+        for (HzFeatureValue record : records) {
             if (record == null || "".equalsIgnoreCase(record.getPuid()) || null == record.getPuid()) {
                 result.put("status", false);
                 result.put("msg", "找不到需要删除的数据，请重试或联系系统管理员");
@@ -386,14 +383,14 @@ public class HzCfg0Controller extends ExtraIntegrate {
             }
             //原始配置先不给删除，只能删除新加的配置项
             else {
-                /*if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
+                /*if (hzFeatureService.doSelectOneAddedCfgByPuid(record.getId()) != null) {
                     toDelete.add(record);
                 }
                 else*/
-                if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
+                if (hzFeatureService.doSelectOneByPuid(record.getPuid()) != null) {
                     //如果需要删除原数据
                     toDelete.add(record);
-                    mapOfDelete.put(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getpCfg0ObjectId() + "-" + record.getpCfg0FamilyDesc(), record);
+                    mapOfDelete.put(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getFeatureValueCode() + "-" + record.getpCfg0FamilyDesc(), record);
 //                    result.put("status", false);
 //                    result.put("msg", "目前不允许删除原数据，请重试或联系系统管理员");
 //                    return result;
@@ -411,7 +408,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
                 return result;
             }
         }
-        List<HzCfg0Record> _toDelete = new ArrayList<>();
+        List<HzFeatureValue> _toDelete = new ArrayList<>();
 
         /**同步删除已发送到ERP的特性值和相关性值（标记为状态3：不可用）*/
         if (Author.SYN_DELETE) {
@@ -423,7 +420,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //            iSynRelevanceService.sortData(records, myBeans);
 
             for (HzRelevanceBean myBean : myBeans) {
-                logger.warn("---------------同步在SAP中标记像关系状态为3:" + (myBean.getRelevanceCode()));
+                log.warn("---------------同步在SAP中标记像关系状态为3:" + (myBean.getRelevanceCode()));
             }
 //            resultFromSapOfRelevance = iSynRelevanceService.deleteRelevance(myBeans);
 
@@ -435,7 +432,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
                     for (int i = 0; i < ((List<String>) obj).size(); i++) {
                         if (mapOfDelete.containsKey(((List<String>) obj).get(i))) {
                             _toDelete.add(mapOfDelete.get(((List) obj).get(i)));
-                            logger.warn("---------------同步在SAP中删除特性:" + (mapOfDelete.get(((List) obj).get(i)).getpCfg0ObjectId()));
+                            log.warn("---------------同步在SAP中删除特性:" + (mapOfDelete.get(((List) obj).get(i)).getFeatureValueCode()));
                         }
                     }
                 }
@@ -448,29 +445,29 @@ public class HzCfg0Controller extends ExtraIntegrate {
             _toDelete.addAll(records);
         }
 
-        HzCfg0MainRecord main = null;
-        Map<String, HzCfg0MainRecord> mapOfMain = new HashMap<>();
-//        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        HzMainConfig main = null;
+        Map<String, HzMainConfig> mapOfMain = new HashMap<>();
+//        HzFeature family = new HzFeature();
 
         for (int i = 0; i < _toDelete.size(); i++) {
             if (mapOfMain.containsKey(_toDelete.get(i).getpCfg0MainItemPuid())) {
                 main = mapOfMain.get(_toDelete.get(i).getpCfg0MainItemPuid());
             } else {
-                main = hzCfg0MainRecordDao.selectByPrimaryKey(_toDelete.get(i).getpCfg0MainItemPuid());
-                mapOfMain.put(main.getPuid(), main);
+                main = hzMainConfigDao.selectByPrimaryKey(_toDelete.get(i).getpCfg0MainItemPuid());
+                mapOfMain.put(main.getId(), main);
             }
-            List<HzCfg0Record> children = hzCfg0Service.doSelectByFamilyUidWithProject(_toDelete.get(i).getpCfg0FamilyPuid(), main.getpCfg0OfWhichProjectPuid());
+            List<HzFeatureValue> children = hzFeatureService.doSelectByFamilyUidWithProject(_toDelete.get(i).getpCfg0FamilyPuid(), main.getProjectId());
             if (children.size() <= 1 && children.get(0).getPuid().equals(_toDelete.get(i).getPuid())) {
-//                family.setPuid(_toDelete.get(i).getpCfg0FamilyPuid());
-                logger.warn("正在自动删除特性");
+//                family.setId(_toDelete.get(i).getpCfg0FamilyPuid());
+                log.warn("正在自动删除特性");
                 if (cfg0OptionFamilyService.doDeleteByPrimaryKey(_toDelete.get(i).getpCfg0FamilyPuid())) {
-                    logger.warn("自动删除特性失败，请手动删除");
+                    log.warn("自动删除特性失败，请手动删除");
                 }
             }
         }
 
         if (_toDelete.size() > 0) {
-            logger.warn(hzCfg0Service.doDeleteCfgByList(_toDelete) ? "删除特性多个" : "删除失败或已经删除族");
+            log.warn(hzFeatureService.doDeleteCfgByList(_toDelete) ? "删除特性多个" : "删除失败或已经删除族");
         }
         result.put("status", true);
         result.put("msg", "删除成功");
@@ -512,7 +509,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @RequestMapping("/addPage")
     @Deprecated
     public String addPage(@RequestParam("projectPuid") String projectPuid, Model model) {
-        HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(projectPuid);
+        HzMainConfig mainRecord = hzMainConfigDao.selectByProjectId(projectPuid);
         if (mainRecord == null) {
             model.addAttribute("msg", "请选择一个项目进行操作");
             return "errorWithEntity";
@@ -532,22 +529,22 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @Deprecated
     @RequestMapping("/modifyPage")
     public String modifyPage(@RequestParam("projectPuid") String puid, Model model) {
-        HzCfg0Record record = hzCfg0Service.doSelectOneByPuid(puid);
+        HzFeatureValue record = hzFeatureService.doSelectOneByPuid(puid);
         if (record == null) {
-//            record = hzCfg0Service.doSelectOneAddedCfgByPuid(puid);
+//            record = hzFeatureService.doSelectOneAddedCfgByPuid(puid);
 //            if (record == null) {
             model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员");
             return "errorWithEntity";
 //            }
         }
         model.addAttribute("entity", record);
-        model.addAttribute("action", "./cfg0/modify");
+        model.addAttribute("action", "./feature/modify");
         return "cfg/feature/modFeature";
     }
 
     /**
      * 已废除
-     * 该方法可以直接添加特性到数据库中，缺少配置字典的约束，请采用{@link HzCfg0Controller#add2(HzCfg0Record)}代替
+     * 该方法可以直接添加特性到数据库中，缺少配置字典的约束，请采用{@link HzCfg0Controller#add2(HzFeatureValue)}代替
      *
      * @param record
      * @return
@@ -557,17 +554,17 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     @Deprecated
-    public JSONObject add(@RequestBody HzCfg0Record record) throws Exception {
+    public JSONObject add(@RequestBody HzFeatureValue record) throws Exception {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
 
         record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
-        record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
+        record.setFeatureValueCode(record.getFeatureValueCode().toUpperCase());
         //创建人和修改人
         record.setCreator(user.getUserName());
         record.setLastModifier(user.getUserName());
         record.setCfgAbolishDate(DateStringHelper.forever());
-        if (!hzCfg0Service.preCheck(record)) {
+        if (!hzFeatureService.preCheck(record)) {
             result.put("status", false);
             result.put("msg", "<p style='color:red;'>特性值已存在</p>");
             return result;
@@ -575,22 +572,22 @@ public class HzCfg0Controller extends ExtraIntegrate {
         /**生成自身的puid*/
         record.setPuid(UUIDHelper.generateUpperUid());
 
-        HzCfg0OptionFamily family = new HzCfg0OptionFamily();
+        HzFeature family = new HzFeature();
         //主配置
-        family.setpOfCfg0Main(record.getpCfg0MainItemPuid());
+        family.setMainConfigUid(record.getpCfg0MainItemPuid());
         //特性代码
-        family.setpOptionfamilyName(record.getpCfg0FamilyName());
+        family.setFeatureCode(record.getpCfg0FamilyName());
         //特性描述
-        family.setpOptionfamilyDesc(record.getpCfg0FamilyDesc());
+        family.setFeatureDesc(record.getpCfg0FamilyDesc());
 
-        HzCfg0OptionFamily _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
+        HzFeature _family = cfg0OptionFamilyService.doGetByCodeAndDescWithMain(family);
         //检查当前项目有没有用到特定的特性
         if (_family == null) {
-            family.setPuid(UUIDHelper.generateUpperUid());
+            family.setId(UUIDHelper.generateUpperUid());
             //没有用到，则进行特性插入
             if (!cfg0OptionFamilyService.doInsert(family)) {
                 result.put("status", false);
-                result.put("msg", "添加特性" + family.getpOptionfamilyName() + "失败，请联系系统管理员");
+                result.put("msg", "添加特性" + family.getFeatureCode() + "失败，请联系系统管理员");
                 return result;
             }
         } else {
@@ -598,32 +595,32 @@ public class HzCfg0Controller extends ExtraIntegrate {
         }
 
         //关联到特性的UID
-        record.setpCfg0FamilyPuid(family.getPuid());
+        record.setpCfg0FamilyPuid(family.getId());
         if (!checkString(record.getpCfg0Relevance())) {
-            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getFeatureValueCode() + "'");
         }
         //将特性值插入到表中
-        if (hzCfg0Service.doInsertOne(record)) {
+        if (hzFeatureService.doInsertOne(record)) {
             result.put("status", true);
-            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "成功");
+            result.put("msg", "添加特性值" + record.getFeatureValueCode() + "成功");
 //            //发送到SAP,走流程
 //            if (!SynMaterielService.debug) {
 //                iSynFeatureService.addFeature(Collections.singletonList(record));
 //            }
-            record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
+            record = hzFeatureService.doSelectOneByPuid(record.getPuid());
             if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
-                logger.error("创建后自动同步变更后记录值失败，请联系管理员");
+                log.error("创建后自动同步变更后记录值失败，请联系管理员");
             }
-            HzCfg0Record record1 = new HzCfg0Record();
+            HzFeatureValue record1 = new HzFeatureValue();
             record1.setPuid(record.getPuid());
             if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
-                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
+                log.error("创建后自动同步变更前记录值失败，请联系管理员");
             }
 
 
         } else {
             result.put("status", false);
-            result.put("msg", "添加特性值" + record.getpCfg0ObjectId() + "失败，请联系系统管理员");
+            result.put("msg", "添加特性值" + record.getFeatureValueCode() + "失败，请联系系统管理员");
         }
         return result;
     }
@@ -637,7 +634,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     @ResponseBody
     @Deprecated
-    public JSONObject modify(@RequestBody HzCfg0Record record) {
+    public JSONObject modify(@RequestBody HzFeatureValue record) {
         JSONObject result = new JSONObject();
         User user = UserInfo.getUser();
         result.put("status", true);
@@ -647,38 +644,38 @@ public class HzCfg0Controller extends ExtraIntegrate {
             return result;
         }
         record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
-        record.setpCfg0ObjectId(record.getpCfg0ObjectId().toUpperCase());
+        record.setFeatureValueCode(record.getFeatureValueCode().toUpperCase());
         record.setLastModifier(user.getUserName());
 
-        if (!hzCfg0Service.preCheck(record)) {
+        if (!hzFeatureService.preCheck(record)) {
             result.put("status", false);
             result.put("msg", "已存在的特性值");
             return result;
         }
 
         if (!checkString(record.getpCfg0Relevance())) {
-            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getpCfg0ObjectId() + "'");
+            record.setpCfg0Relevance("$ROOT." + record.getpCfg0FamilyName() + " = '" + record.getFeatureValueCode() + "'");
         }
-        if (hzCfg0Service.doSelectOneByPuid(record.getPuid()) != null) {
-            if (hzCfg0Service.doUpdate(record)) {
+        if (hzFeatureService.doSelectOneByPuid(record.getPuid()) != null) {
+            if (hzFeatureService.doUpdate(record)) {
                 //重新取回一遍数据
-                record = hzCfg0Service.doSelectOneByPuid(record.getPuid());
-                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
+                record = hzFeatureService.doSelectOneByPuid(record.getPuid());
+                result.put("msg", "更新特性值" + record.getFeatureValueCode() + "成功");
                 HzFeatureChangeBean after = new HzFeatureChangeBean();
                 after.setCfgPuid(record.getPuid());
                 after = iHzFeatureChangeService.doSelectAfterByPk(after);
                 if (after == null) {
                     if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
-                        logger.error("更新" + record.getpCfg0ObjectId() + "变更后记录数据失败，请联系系统管理员");
+                        log.error("更新" + record.getFeatureValueCode() + "变更后记录数据失败，请联系系统管理员");
                     }
                     HzFeatureChangeBean before = new HzFeatureChangeBean();
                     before.setCfgPuid(record.getPuid());
                     before = iHzFeatureChangeService.doSelectBeforeByPk(before);
                     if (before == null) {
-                        HzCfg0Record localRecord = new HzCfg0Record();
+                        HzFeatureValue localRecord = new HzFeatureValue();
                         localRecord.setPuid(record.getPuid());
                         if (iHzFeatureChangeService.insertByCfgBefore(localRecord) <= 0) {
-                            logger.error("更新" + record.getpCfg0ObjectId() + "变更前记录数据失败，请联系系统管理员");
+                            log.error("更新" + record.getFeatureValueCode() + "变更前记录数据失败，请联系系统管理员");
                         }
                     }
                 } else {
@@ -686,25 +683,25 @@ public class HzCfg0Controller extends ExtraIntegrate {
                     iHzFeatureChangeService.reflect(record, after);
                     //再进行更新
                     if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
-                        logger.error("更新" + record.getpCfg0ObjectId() + "变更后记录数据失败，请联系系统管理员");
+                        log.error("更新" + record.getFeatureValueCode() + "变更后记录数据失败，请联系系统管理员");
                     }
                 }
             } else {
-                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
-                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
+                result.put("msg", "更新特性值" + record.getFeatureValueCode() + "失败");
+                log.error("更新特性值" + record.getFeatureValueCode() + "失败");
 
             }
         }
-//        else if (hzCfg0Service.doSelectOneAddedCfgByPuid(record.getPuid()) != null) {
-//            if (hzCfg0Service.doUpdateAddedCfg(record)) {
-//                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "成功");
+//        else if (hzFeatureService.doSelectOneAddedCfgByPuid(record.getId()) != null) {
+//            if (hzFeatureService.doUpdateAddedCfg(record)) {
+//                result.put("msg", "更新特性值" + record.getFeatureValueCode() + "成功");
 //            } else {
-//                logger.error("更新特性值" + record.getpCfg0ObjectId() + "失败");
-//                result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "失败");
+//                logger.error("更新特性值" + record.getFeatureValueCode() + "失败");
+//                result.put("msg", "更新特性值" + record.getFeatureValueCode() + "失败");
 //            }
 //        }
         else {
-            result.put("msg", "更新特性值" + record.getpCfg0ObjectId() + "时发生错误，请联系系统管理员");
+            result.put("msg", "更新特性值" + record.getFeatureValueCode() + "时发生错误，请联系系统管理员");
         }
         return result;
     }
@@ -719,7 +716,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
      */
     @Deprecated
     @RequestMapping(value = "/sendToERP", method = RequestMethod.POST)
-    public String sendToERP(@RequestBody List<HzCfg0Record> records, Model model) throws Exception {
+    public String sendToERP(@RequestBody List<HzFeatureValue> records, Model model) throws Exception {
         JSONObject result = iSynFeatureService.addFeature(records);
         addToModel(result, model);
         return "stage/templateOfIntegrate";
@@ -737,8 +734,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
         Map<String, Object> result = new HashMap<>();
         List<HzRelevanceBean> _list = new ArrayList<>();
         int _index = 0;
-        _index = hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
-//        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
+        _index = hzFeatureService.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
+//        hzFeatureService.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
         result.put("totalCount", _list.size());
         result.put("result", _list);
         return result;
@@ -757,8 +754,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
         Map<String, Object> result = new HashMap<>();
         List<HzRelevanceBean> _list = new ArrayList<>();
         int _index = 0;
-        _index = hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
-//        hzCfg0Service.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
+        _index = hzFeatureService.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
+//        hzFeatureService.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
         result.put("totalCount", _list.size());
         result.put("result", _list);
         return result;
@@ -777,17 +774,17 @@ public class HzCfg0Controller extends ExtraIntegrate {
         if (bean == null || "".equalsIgnoreCase(bean.getPuid()) || null == bean.getPuid()) {
             return false;
         }
-        HzCfg0Record record;
+        HzFeatureValue record;
 
-        record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
+        record = hzFeatureService.doSelectOneByPuid(bean.getPuid());
         if (record != null) {
-            record = hzCfg0Service.doSelectOneByPuid(bean.getPuid());
+            record = hzFeatureService.doSelectOneByPuid(bean.getPuid());
             record.setpCfg0Relevance(bean.getRelevanceCode());
-            return hzCfg0Service.doUpdate(record);
+            return hzFeatureService.doUpdate(record);
         }
-//        else if ((record = hzCfg0Service.doSelectOneAddedCfgByPuid(bean.getPuid())) != null) {
+//        else if ((record = hzFeatureService.doSelectOneAddedCfgByPuid(bean.getId())) != null) {
 //            record.setpCfg0Relevance(bean.getRelevanceCode());
-//            return hzCfg0Service.doUpdateAddedCfg(record);
+//            return hzFeatureService.doUpdateAddedCfg(record);
 //        }
         else {
             return false;
@@ -809,15 +806,15 @@ public class HzCfg0Controller extends ExtraIntegrate {
         HzRelevanceBean bean = new HzRelevanceBean();
         //其实没有添加的页面
         if ("addPage".equals(page)) {
-            HzCfg0MainRecord mainRecord = hzCfg0MainRecordDao.selectByProjectPuid(uid);
+            HzMainConfig mainRecord = hzMainConfigDao.selectByProjectId(uid);
             if (mainRecord == null) {
                 return "error";
             }
-            model.addAttribute("action", "./cfg0/relModify");
+            model.addAttribute("action", "./feature/relModify");
         } else if ("modifyPage".equals(page)) {
-            HzCfg0Record record = hzCfg0Service.doSelectOneByPuid(uid);
+            HzFeatureValue record = hzFeatureService.doSelectOneByPuid(uid);
             if (record == null) {
-//                record = hzCfg0Service.doSelectOneAddedCfgByPuid(uid);
+//                record = hzFeatureService.doSelectOneAddedCfgByPuid(uid);
 //                if (record == null) {
                 model.addAttribute("msg", "没有找到对应的特性数据，请重试或联系系统管理员!");
                 return "errorWithEntity";
@@ -828,12 +825,12 @@ public class HzCfg0Controller extends ExtraIntegrate {
             }
 
             bean.setPuid(record.getPuid());
-            bean.setRelevance(record.getpCfg0FamilyName() + "-" + record.getpCfg0ObjectId());
+            bean.setRelevance(record.getpCfg0FamilyName() + "-" + record.getFeatureValueCode());
             bean.setRelevanceDesc((record.getpCfg0FamilyDesc() == null ? "" : record.getpCfg0FamilyDesc()) + "-" + (record.getpCfg0Desc() == null ? "" : record.getpCfg0Desc()));
             bean.setRelevanceCode(record.getpCfg0Relevance());
             bean.set_table(record.getWhichTable());
 
-            model.addAttribute("action", "./cfg0/relModify");
+            model.addAttribute("action", "./feature/relModify");
         }
         model.addAttribute("entity", bean);
         return "cfg/relevance/mergeRelevance";
@@ -850,11 +847,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //        //清空上次传输的内容
 //        JSONObject result;
 //        List<String> puids = new ArrayList<>();
-//        List<HzCfg0Record> records;
+//        List<HzFeatureValue> records;
 //        //只要求获取puid
-//        beans.forEach(bean -> puids.add(bean.getPuid()));
+//        beans.forEach(bean -> puids.add(bean.getId()));
 //        //从根本根本上查找数据
-//        records = hzCfg0Service.doLoadListByPuids(puids);
+//        records = hzFeatureService.doLoadListByPuids(puids);
 //        //整理数据
 //        List<HzRelevanceBean> myBeans = new ArrayList<>();
 //        iSynRelevanceService.sortData(records, myBeans);
@@ -874,11 +871,11 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //        //清空上次传输的内容
 //        JSONObject result;
 //        List<String> puids = new ArrayList<>();
-//        List<HzCfg0Record> records;
+//        List<HzFeatureValue> records;
 //        //只要求获取puid
-//        beans.forEach(bean -> puids.add(bean.getPuid()));
+//        beans.forEach(bean -> puids.add(bean.getId()));
 //        //从根本根本上查找数据
-//        records = hzCfg0Service.doLoadListByPuids(puids);
+//        records = hzFeatureService.doLoadListByPuids(puids);
 //        //整理数据
 //        List<HzRelevanceBean> myBeans = new ArrayList<>();
 //        iSynRelevanceService.sortData(records, myBeans);

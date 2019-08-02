@@ -6,15 +6,22 @@
 
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
+import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
+import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
+import cn.net.connor.hozon.services.service.main.HzMainConfigService;
+import cn.net.connor.hozon.services.service.depository.project.HzVehicleService;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzProjectLibsServiceImpl;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0BomLineOfModelDao;
-import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzFcfgBomLvl1ListOperationService;
-import cn.net.connor.hozon.services.service.depository.project.HzVehicleService;
-import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -23,13 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel;
 import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
-import sql.pojo.cfg.main.HzCfg0MainRecord;
-import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
-import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
-import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
-import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
-import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 
 import java.util.*;
 
@@ -44,60 +44,49 @@ public class HzCfg0BomLineOfModelService {
     /**
      * BOMLine对应车型模型dao层
      */
-    private final HzCfg0BomLineOfModelDao hzCfg0BomLineOfModelDao;
+    @Autowired
+    private  HzCfg0BomLineOfModelDao hzCfg0BomLineOfModelDao;
     /**
      * 配置主数据服务层
      */
-    private final HzCfg0MainService hzCfg0MainService;
+    @Autowired
+    private HzMainConfigService hzMainConfigService;
     /**
      * 全配置bom一级清单操作类型服务层，拓展层
      */
-    private final IHzFcfgBomLvl1ListOperationService hzFcfgBomLvl1ListOperationService;
+    @Autowired
+    private  IHzFcfgBomLvl1ListOperationService hzFcfgBomLvl1ListOperationService;
     /***
      * 项目服务层
      */
-    private final HzProjectLibsServiceImpl hzProjectLibsServiceImpl;
+    @Autowired
+    private  HzProjectLibsServiceImpl hzProjectLibsServiceImpl;
     /***
      * 车型服务层
      */
-    private final HzVehicleService hzVehicleService;
+    @Autowired
+    private  HzVehicleService hzVehicleService;
     /***
      * 平台服务层
      */
-    private final HzPlatformServiceImpl hzPlatformServiceImpl;
+    @Autowired
+    private  HzPlatformServiceImpl hzPlatformServiceImpl;
     /**
      * 品牌服务层
      */
-    private final HzBrandServiceImpl hzBrandServiceImpl;
+    @Autowired
+    private  HzBrandServiceImpl hzBrandServiceImpl;
+
+    @Autowired
+    private  HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
+
     private final Logger logger = LoggerFactory.getLogger(HzCfg0BomLineOfModelService.class);
-    private final HzCfg0ModelDetailDao hzCfg0ModelDetailDao;
-
 
     @Autowired
-    HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
-
-    @Autowired
-    public HzCfg0BomLineOfModelService(
-            HzCfg0BomLineOfModelDao hzCfg0BomLineOfModelDao,
-            HzCfg0MainService hzCfg0MainService,
-            IHzFcfgBomLvl1ListOperationService hzFcfgBomLvl1ListOperationService,
-            HzProjectLibsServiceImpl hzProjectLibsServiceImpl,
-            HzVehicleService hzVehicleService,
-            HzPlatformServiceImpl platformService,
-            HzBrandServiceImpl hzBrandServiceImpl, HzCfg0ModelDetailDao hzCfg0ModelDetailDao) {
-        this.hzCfg0BomLineOfModelDao = hzCfg0BomLineOfModelDao;
-        this.hzCfg0MainService = hzCfg0MainService;
-        this.hzFcfgBomLvl1ListOperationService = hzFcfgBomLvl1ListOperationService;
-        this.hzProjectLibsServiceImpl = hzProjectLibsServiceImpl;
-        this.hzVehicleService = hzVehicleService;
-        this.hzPlatformServiceImpl = platformService;
-        this.hzBrandServiceImpl = hzBrandServiceImpl;
-        this.hzCfg0ModelDetailDao = hzCfg0ModelDetailDao;
-    }
-
+    private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
     /**
      * @param bdf 数模层ID
-     * @return java.util.List<sql.pojo.cfg0.cfg0.HzCfg0BomLineOfModel>
+     * @return java.util.List<sql.pojo.feature.feature.HzCfg0BomLineOfModel>
      * Author: Fancyears·Maylos·Mayways
      * Description: 根据数模层的puid获取到下级的所有bom行的配置信息，包含了车型模型的信息在内
      * Date: 2018/5/21 18:28
@@ -115,8 +104,8 @@ public class HzCfg0BomLineOfModelService {
      */
     public JSONObject parse(String bdf) {
         try {
-            HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(bdf);
-            List<HzCfg0BomLineOfModel> hzCfg0BomlineOfModels = doLoadByModelMainId(mainRecord.getPuid());
+            HzMainConfig mainRecord = hzMainConfigService.selectByProjectId(bdf);
+            List<HzCfg0BomLineOfModel> hzCfg0BomlineOfModels = doLoadByModelMainId(mainRecord.getId());
 
             HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(bdf);
             HzVehicleRecord vehicle = hzVehicleService.doGetByPuid(project.getpProjectPertainToVehicle());
