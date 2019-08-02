@@ -2,9 +2,10 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 
 import cn.net.connor.hozon.common.factory.SimpleResponseResultFactory;
 import cn.net.connor.hozon.common.setting.CommonSetting;
+import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
@@ -46,7 +47,6 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import sql.pojo.accessories.HzAccessoriesLibs;
-import sql.pojo.bom.HZBomMainRecord;
 import sql.pojo.bom.HzPbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
@@ -67,7 +67,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzPbomRecordDAO hzPbomRecordDAO;
 
     @Autowired
-    private HzBomMainRecordDao hzBomMainRecordDao;
+    private HzMainBomDao hzMainBomDao;
 
     @Autowired
     private HzMbomRecordDAO hzMbomRecordDAO;
@@ -103,7 +103,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     @Override
     public WriteResultRespDTO updateHzPbomRecord(UpdateHzPbomRecordReqDTO recordReqDTO) {
         try {
-            HZBomMainRecord record = hzBomMainRecordDao.selectByProjectPuid(recordReqDTO.getProjectId());
+            HzMainBom record = hzMainBomDao.selectByProjectId(recordReqDTO.getProjectId());
             if(record == null){
                 return WriteResultRespDTO.getFailResult();
             }
@@ -878,8 +878,8 @@ public class HzPbomServiceImpl implements HzPbomService {
     public JSONObject addAccessories(String puid, String materielCode, String projectId) {
         JSONObject result = new JSONObject();
         //projectPuid
-        HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
-        String projectPuid = hzBomMainRecord.getPuid();
+        HzMainBom hzMainBom = hzMainBomDao.selectByProjectId(projectId);
+        String projectPuid = hzMainBom.getPuid();
 
         //根据父的puid查找出所有跟父BomLineId相同的PBOM
         List<HzPbomLineRecord> hzPbomLineRecords = hzPbomRecordDAO.queryAllBomLineIdByPuid(puid, projectId);

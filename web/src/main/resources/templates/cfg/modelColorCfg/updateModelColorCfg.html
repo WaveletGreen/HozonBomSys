@@ -33,16 +33,16 @@
                 <input class="form-control" id="modelShell" name="modelShell" type="text"
                        disabled="disabled" th:value="${entity.pModelShellOfColorfulModel}"/>
             </div>
-            <!--循环放入数据 th:id="${column.getpOptionfamilyName()}"-->
+            <!--循环放入数据 th:id="${column.getFeatureCode()}"-->
             <div class="form-group col-lg-12" th:each="column,c:${columnList}">
                 <label class="control-label"
-                       th:text="${column.getpOptionfamilyName()+'-'+column.getpOptionfamilyDesc()}"
-                       th:for="${column.getPuid()}"
-                       th:id="${column.getpOptionfamilyName()}"
+                       th:text="${column.getFeatureCode()+'-'+column.getFeatureDesc()}"
+                       th:for="${column.getId()}"
+                       th:id="${column.getFeatureCode()}"
 
                 ></label>
-                <select class="form-control input-small" th:name="${column.getPuid()}" data-style="btn-info"
-                        th:id="${column.getPuid()}"
+                <select class="form-control input-small" th:name="${column.getId()}" data-style="btn-info"
+                        th:id="${column.getId()}"
                 >
                     <option th:each="color:${colorList}" th:value="${color.getPuid()}"
                             th:text="${color.getpColorCode()+'&emsp;&emsp;'+color.getpColorName()+'&emsp;&emsp;'+color.getpColorOfSet()}"

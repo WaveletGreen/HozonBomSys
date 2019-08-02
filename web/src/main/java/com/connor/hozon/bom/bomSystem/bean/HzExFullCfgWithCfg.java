@@ -2,7 +2,7 @@ package com.connor.hozon.bom.bomSystem.bean;
 
 import lombok.Data;
 import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 
 import java.util.Date;
 
@@ -42,7 +42,7 @@ public class HzExFullCfgWithCfg {
     /***
      * 特性值
      */
-    private HzCfg0Record cfg;
+    private HzFeatureValue cfg;
     /**
      * 2Y层
      */

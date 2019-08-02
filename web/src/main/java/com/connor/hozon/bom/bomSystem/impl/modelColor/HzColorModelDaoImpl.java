@@ -135,7 +135,7 @@ public class HzColorModelDaoImpl extends BasicDaoImpl<HzCfg0ModelColorDetail> im
     @Override
     public List<HzColorModel2> selectByProjectPuid(String projectPuid) {
         return baseSQLUtil.executeQueryByPass(new HzColorModel2(), projectPuid,
-                clzName + ".selectByProjectPuid");
+                clzName + ".selectByProjectId");
     }
 
 }

@@ -7,12 +7,9 @@
 package com.connor.hozon.bom.bomSystem.impl.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzMBomToERPBean;
-import sql.IBaseSQLUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +51,7 @@ public class HzMBomToERPDaoImpl extends BaseSQLUtil implements HzMBomToERPDao {
     public List<HzMBomToERPBean> selectbyParentUidOfBatch(String projectUid, List<String> list) {
         Map<String, Object> _param = new HashMap<>();
         _param.put("projectUid", projectUid);
-        _param.put("flag", "T.p_Ebom_PUID");
+        _param.put("flag", "T.P_EBOM_PUID");
         _param.put("list", list);
         return super.findForList("HzMBomToERPDaoImpl_selectByUidOfBatch",_param);
 

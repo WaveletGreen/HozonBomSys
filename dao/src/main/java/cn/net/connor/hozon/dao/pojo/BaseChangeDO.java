@@ -36,36 +36,4 @@ public abstract class BaseChangeDO extends BaseDO {
      * 对应操作的表名
      */
     private String tableName;
-
-//    public Long getOrderId() {
-//        return orderId;
-//    }
-//
-//    public void setOrderId(Long orderId) {
-//        this.orderId = orderId;
-//    }
-//
-//    public Date getEffectTime() {
-//        return effectTime;
-//    }
-//
-//    public void setEffectTime(Date effectTime) {
-//        this.effectTime = effectTime;
-//    }
-//
-//    public String getRevision() {
-//        return revision;
-//    }
-//
-//    public void setRevision(String revision) {
-//        this.revision = revision;
-//    }
-//
-//    public String getTableName() {
-//        return tableName;
-//    }
-//
-//    public void setTableName(String tableName) {
-//        this.tableName = tableName;
-//    }
 }

@@ -75,16 +75,16 @@ public class HzMWOServiceImpl implements HzMWOService {
 //
 //                    srcRecord.setEwoNo(ewoNo);
 //                    srcRecord.setTableName("HZ_BOM_LINE_RECORD");
-//                    srcRecord.setPuid(bomLineRecord.getPuid());
+//                    srcRecord.setId(bomLineRecord.getId());
 //
 //                    beforeRecord.setEwoNo(ewoNo);
 //                    beforeRecord.setTableName("HZ_EBOM_REOCRD_BEFORE_CHANGE");
-//                    beforeRecord.setPuid(bomLineRecord.getPuid());
+//                    beforeRecord.setId(bomLineRecord.getId());
 //                    beforeRecords.add(beforeRecord);
 //
 //                    afterRecord.setEwoNo(ewoNo);
 //                    afterRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
-//                    afterRecord.setPuid(bomLineRecord.getPuid());
+//                    afterRecord.setId(bomLineRecord.getId());
 //                    afterRecords.add(afterRecord);
 //
 //                    if(bomLineRecord.getStatus().equals(2)){//草稿状态
@@ -92,20 +92,20 @@ public class HzMWOServiceImpl implements HzMWOService {
 //                        srcRecords.add(srcRecord);
 //                    }else if(bomLineRecord.getStatus().equals(4)){//删除状态 需要根据父获取全部子
 //                        HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
-//                        hzEbomTreeQuery.setPuid(bomLineRecord.getPuid());
+//                        hzEbomTreeQuery.setId(bomLineRecord.getId());
 //                        hzEbomTreeQuery.setProjectId(reqDTO.getProjectId());
 //                        List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
 //                        if(ListUtil.isNotEmpty(records)){
 //                            records.forEach(record -> {
 //                                HzBomLineRecord srcBomLineRecord = new HzBomLineRecord();
-//                                srcBomLineRecord.setPuid(record.getPuid());
+//                                srcBomLineRecord.setId(record.getId());
 //                                srcBomLineRecord.setEwoNo(ewoNo);
 //                                srcBomLineRecord.setStatus(6);
 //                                srcBomLineRecord.setTableName("HZ_BOM_LINE_RECORD");
 //                                srcRecords.add(srcBomLineRecord);
 //
 //                                HzBomLineRecord afterBomLineRecord = new HzBomLineRecord();
-//                                afterBomLineRecord.setPuid(record.getPuid());
+//                                afterBomLineRecord.setId(record.getId());
 //                                afterBomLineRecord.setEwoNo(ewoNo);
 //                                afterBomLineRecord.setTableName("HZ_EBOM_REOCRD_AFTER_CHANGE");
 //                                afterRecords.add(afterBomLineRecord);

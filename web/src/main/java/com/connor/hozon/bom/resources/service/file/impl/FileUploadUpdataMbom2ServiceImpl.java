@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.file.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
@@ -16,7 +16,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import sql.pojo.bom.HZBomMainRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.factory.HzFactory;
 
@@ -28,7 +28,7 @@ public class FileUploadUpdataMbom2ServiceImpl implements FileUploadUpdataMbom2Se
     private HzMbomRecordDAO hzMbomRecordDAO;
 
     @Autowired
-    private HzBomMainRecordDao hzBomMainRecordDao;
+    private HzMainBomDao hzMainBomDao;
 
     @Autowired
     private HzFactoryDAO hzFactoryDAO;
@@ -191,8 +191,8 @@ public class FileUploadUpdataMbom2ServiceImpl implements FileUploadUpdataMbom2Se
 
                                 record.setLineId(ExcelUtil.getCell(sheet.getRow(rowNum),1).getStringCellValue());//零件号
                                 //获取项目ID
-                                HZBomMainRecord hzBomMainRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
-                                record.setBomDigifaxId(hzBomMainRecord.getPuid());
+                                HzMainBom hzMainBom = hzMainBomDao.selectByProjectId(projectId);
+                                record.setBomDigifaxId(hzMainBom.getPuid());
 
                                 hzMbomLineRecords.add(record);
                                 //updateInput

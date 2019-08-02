@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.service.process;
 
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0RecordDao;
+import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureValueDao;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IInterruptionCallBack;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
@@ -15,7 +15,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import sql.pojo.cfg.vwo.HzVwoInfo;
 
 /**
@@ -30,7 +30,7 @@ public class FeatureProcessManager implements IInterruptionCallBack, IReleaseCal
     @Autowired
     private HzVwoInfoService hzVwoInfoService;
     @Autowired
-    private HzCfg0RecordDao hzCfg0RecordDao;
+    private HzFeatureValueDao hzFeatureValueDao;
     /**
      * 中断操作
      *
@@ -81,11 +81,11 @@ public class FeatureProcessManager implements IInterruptionCallBack, IReleaseCal
         if (info.getVwoStatus() == 999 || info.getVwoStatus() == 899) {
             return false;
         }
-        HzCfg0Record hzCfg0Record = new HzCfg0Record();
-        hzCfg0Record.setVwoId(info.getId());
-        hzCfg0Record.setCfgStatus(cfgStatus);
-        hzCfg0Record.setCfgIsInProcess(0);
-        if(hzCfg0RecordDao.updateByVwoid(hzCfg0Record)>0){
+        HzFeatureValue hzFeatureValue = new HzFeatureValue();
+        hzFeatureValue.setVwoId(info.getId());
+        hzFeatureValue.setCfgStatus(cfgStatus);
+        hzFeatureValue.setCfgIsInProcess(0);
+        if(hzFeatureValueDao.updateByVwoid(hzFeatureValue)>0){
             flag = true;
         }else {
             return flag;

@@ -43,9 +43,9 @@
     </div>
     </div>
     <div class="form-group">
-        <label for="pCfg0ObjectId">特性值/配置代码<span>*</span></label>
-        <input class="form-control" id="pCfg0ObjectId" name="pCfg0ObjectId" type="text"
-               th:value="${entity.pCfg0ObjectId}" disabled="disabled"
+        <label for="featureValueCode">特性值/配置代码<span>*</span></label>
+        <input class="form-control" id="featureValueCode" name="featureValueCode" type="text"
+               th:value="${entity.featureValueCode}" disabled="disabled"
                placeholder="请输入特性值/配置代码"
         />
     </div>
@@ -97,7 +97,7 @@
                         }
                     }
                 },
-                pCfg0ObjectId: {
+                featureValueCode: {
                     message: '特性值/配置代码验证失败',
                     validators: {
                         notEmpty: {
@@ -144,7 +144,7 @@
                     "pCfg0FamilyPuid": $("#pCfg0FamilyPuid").val(),
                     "pCfg0FamilyName": $("#pCfg0FamilyName").val(),
                     "pCfg0FamilyDesc": $("#pCfg0FamilyDesc").val(),
-                    "pCfg0ObjectId": $("#pCfg0ObjectId").val(),
+                    "featureValueCode": $("#featureValueCode").val(),
                     "pCfg0Desc": $("#pCfg0Desc").val(),
                     "pH9featureenname": $("#pH9featureenname").val(),
                     "length": $("#length").val(),

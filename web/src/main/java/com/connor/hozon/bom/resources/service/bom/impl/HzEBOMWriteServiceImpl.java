@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomMainRecordDao;
+import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
@@ -11,14 +11,11 @@ import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.model.HzPbomRecordFactory;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
-import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
-import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
-import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
@@ -37,15 +34,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.pojo.bom.HZBomMainRecord;
-import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
 import sql.pojo.bom.HzPbomLineRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.epl.HzEPLRecord;
 
-import java.util.*;
 import java.util.*;
 
 import java.util.List;
@@ -64,7 +58,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 
     private HzEbomRecordDAO hzEbomRecordDAO;
 
-    private HzBomMainRecordDao hzBomMainRecordDao;
+    private HzMainBomDao hzMainBomDao;
 
     private HzMbomService hzMbomService;
 
@@ -100,8 +94,8 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
     }
 
     @Autowired
-    public void setHzBomMainRecordDao(HzBomMainRecordDao hzBomMainRecordDao) {
-        this.hzBomMainRecordDao = hzBomMainRecordDao;
+    public void setHzMainBomDao(HzMainBomDao hzMainBomDao) {
+        this.hzMainBomDao = hzMainBomDao;
     }
 
     @Autowired
@@ -159,7 +153,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             if(null == hzEPLRecord){
                 return WriteResultRespDTO.failResultRespDTO("当前零件号EPL中不存在生效记录！");
             }
-            HZBomMainRecord projectRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
+            HzMainBom projectRecord = hzMainBomDao.selectByProjectId(projectId);
             if(projectRecord == null){
                 return WriteResultRespDTO.failResultRespDTO("当前项目不存在！");
             }
@@ -194,7 +188,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 //        if(StringUtils.isNotBlank(reqDTO.getLineNo())){
 //            List<HzEPLManageRecord> hzEPLManageRecordUpdate = new ArrayList<>();
 //
-//            HzEPLManageRecord hzEPLManageRecord = hzEbomRecordDAO.findEbomById(reqDTO.getPuid(), reqDTO.getProjectId());
+//            HzEPLManageRecord hzEPLManageRecord = hzEbomRecordDAO.findEbomById(reqDTO.getId(), reqDTO.getProjectId());
 //            if(hzEPLManageRecord == null){
 //                return WriteResultRespDTO.failResultRespDTO("当前要修改的BOM不存在！");
 //            }
@@ -209,7 +203,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 //                return WriteResultRespDTO.failResultRespDTO("重复的查找编号输入");
 //            }
 //            HzEbomTreeQuery query = new HzEbomTreeQuery();
-//            query.setPuid(reqDTO.getPuid());
+//            query.setId(reqDTO.getId());
 //            query.setProjectId(reqDTO.getProjectId());
 //            List<HzEPLManageRecord> hzEPLManageRecordsChildren = hzEbomRecordDAO.getHzBomLineChildren(query);
 //
@@ -922,7 +916,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
      * @return
      */
     private WriteResultRespDTO insert2YBOMStructure(String lineNo,String projectId,AddHzEbomReqDTO reqDTO,HzEPLRecord hzEPLRecord){
-        HZBomMainRecord projectRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
+        HzMainBom projectRecord = hzMainBomDao.selectByProjectId(projectId);
         if(projectRecord == null){
             return WriteResultRespDTO.failResultRespDTO("当前项目不存在！");
         }
@@ -1018,7 +1012,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
         //当前BOM数据 要添加到某个父层下面 为了保持结构的一致性 给所有相同零件号（eplId）下都添加该结构
         //EBOM  PBOM
         try {
-            HZBomMainRecord projectRecord = hzBomMainRecordDao.selectByProjectPuid(projectId);
+            HzMainBom projectRecord = hzMainBomDao.selectByProjectId(projectId);
             if(projectRecord == null){
                 return WriteResultRespDTO.failResultRespDTO("当前项目不存在！");
             }

@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;

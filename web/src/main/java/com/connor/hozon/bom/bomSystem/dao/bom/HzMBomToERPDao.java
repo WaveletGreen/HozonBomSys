@@ -6,7 +6,6 @@
 
 package com.connor.hozon.bom.bomSystem.dao.bom;
 
-import org.springframework.context.annotation.Configuration;
 import sql.pojo.bom.HzMBomToERPBean;
 
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-@Configuration
 public interface HzMBomToERPDao {
     /**
      * 根据项目UID和MBOM行的UID列表获取到一组记录

@@ -42,9 +42,9 @@
 //    }
 //
 //    @Override
-//    public HzMaterielRecord selectByProjectPuid(String projectPuid) {
+//    public HzMaterielRecord selectByProjectId(String projectPuid) {
 //        return baseSQLUtil.executeQueryByPass(MATERIEL, projectPuid,
-//                clzName + ".selectByProjectPuid", true);
+//                clzName + ".selectByProjectId", true);
 //    }
 //
 //}

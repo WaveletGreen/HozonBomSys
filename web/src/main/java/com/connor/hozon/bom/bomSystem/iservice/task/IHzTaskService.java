@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.iservice.task;
 import com.connor.hozon.bom.bomSystem.dto.task.TaskReceivedDto;
 import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.task.HzTasks;
+import cn.net.connor.hozon.dao.pojo.task.HzTasks;
 
 import java.util.List;
 

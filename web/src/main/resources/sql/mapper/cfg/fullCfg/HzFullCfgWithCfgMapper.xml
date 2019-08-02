@@ -24,7 +24,7 @@
     <!--包括特性一起查出来-->
     <resultMap extends="BaseResultMap" id="BaseResultMapWithCfg"
                type="com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg">
-        <association property="cfg" javaType="sql.pojo.cfg.cfg0.HzCfg0Record">
+        <association property="cfg" javaType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue">
             <id column="PUID" jdbcType="VARCHAR" property="puid"/>
             <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="pCfg0ObjectId"/>
             <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc"/>

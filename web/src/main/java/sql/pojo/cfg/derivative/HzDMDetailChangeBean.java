@@ -1,18 +1,20 @@
 package sql.pojo.cfg.derivative;
 
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
-import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
+import lombok.Data;
+import lombok.ToString;
 
 import java.util.Date;
 
 /**
  * 衍生物料变更详情信息
  */
+@Data
+@ToString
 public class HzDMDetailChangeBean {
-
-
     /**
      * 主键
      */
@@ -92,7 +94,7 @@ public class HzDMDetailChangeBean {
     /**
      * 特性对象
      */
-    private HzCfg0Record cfg0Record;
+    private HzFeatureValue cfg0Record;
 
     private Long dmbChangeBasicId;
 
@@ -102,189 +104,6 @@ public class HzDMDetailChangeBean {
      */
     private Long dbdSrcDetailId;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getFormId() {
-        return formId;
-    }
-
-    public void setFormId(Long formId) {
-        this.formId = formId;
-    }
-
-    public Long getDmdDmbId() {
-        return dmdDmbId;
-    }
-
-    public void setDmdDmbId(Long dmdDmbId) {
-        this.dmdDmbId = dmdDmbId;
-    }
-
-    public String getDmdCfg0Uid() {
-        return dmdCfg0Uid;
-    }
-
-    public void setDmdCfg0Uid(String dmdCfg0Uid) {
-        this.dmdCfg0Uid = dmdCfg0Uid;
-    }
-
-    public String getDmdCfg0FamilyUid() {
-        return dmdCfg0FamilyUid;
-    }
-
-    public void setDmdCfg0FamilyUid(String dmdCfg0FamilyUid) {
-        this.dmdCfg0FamilyUid = dmdCfg0FamilyUid;
-    }
-
-    public String getDmdCreator() {
-        return dmdCreator;
-    }
-
-    public void setDmdCreator(String dmdCreator) {
-        this.dmdCreator = dmdCreator;
-    }
-
-    public Date getDmdCreateDate() {
-        return dmdCreateDate;
-    }
-
-    public void setDmdCreateDate(Date dmdCreateDate) {
-        this.dmdCreateDate = dmdCreateDate;
-    }
-
-    public String getDmdUpdater() {
-        return dmdUpdater;
-    }
-
-    public void setDmdUpdater(String dmdUpdater) {
-        this.dmdUpdater = dmdUpdater;
-    }
-
-    public Date getDmdUpdateDate() {
-        return dmdUpdateDate;
-    }
-
-    public void setDmdUpdateDate(Date dmdUpdateDate) {
-        this.dmdUpdateDate = dmdUpdateDate;
-    }
-
-    public String getChangeCreator() {
-        return changeCreator;
-    }
-
-    public void setChangeCreator(String changeCreator) {
-        this.changeCreator = changeCreator;
-    }
-
-    public Date getChangeCreateDate() {
-        return changeCreateDate;
-    }
-
-    public void setChangeCreateDate(Date changeCreateDate) {
-        this.changeCreateDate = changeCreateDate;
-    }
-
-    public String getChangeUpdater() {
-        return changeUpdater;
-    }
-
-    public void setChangeUpdater(String changeUpdater) {
-        this.changeUpdater = changeUpdater;
-    }
-
-    public Date getChangeUpdateDate() {
-        return changeUpdateDate;
-    }
-
-    public void setChangeUpdateDate(Date changeUpdateDate) {
-        this.changeUpdateDate = changeUpdateDate;
-    }
-
-    public String getDmdReserved1() {
-        return dmdReserved1;
-    }
-
-    public void setDmdReserved1(String dmdReserved1) {
-        this.dmdReserved1 = dmdReserved1;
-    }
-
-    public String getDmdReserved2() {
-        return dmdReserved2;
-    }
-
-    public void setDmdReserved2(String dmdReserved2) {
-        this.dmdReserved2 = dmdReserved2;
-    }
-
-    public String getDmdReserved3() {
-        return dmdReserved3;
-    }
-
-    public void setDmdReserved3(String dmdReserved3) {
-        this.dmdReserved3 = dmdReserved3;
-    }
-
-    public String getDmdReserved4() {
-        return dmdReserved4;
-    }
-
-    public void setDmdReserved4(String dmdReserved4) {
-        this.dmdReserved4 = dmdReserved4;
-    }
-
-    public String getDmdReserved5() {
-        return dmdReserved5;
-    }
-
-    public void setDmdReserved5(String dmdReserved5) {
-        this.dmdReserved5 = dmdReserved5;
-    }
-
-    public String getDmdFeatureValue() {
-        return dmdFeatureValue;
-    }
-
-    public void setDmdFeatureValue(String dmdFeatureValue) {
-        this.dmdFeatureValue = dmdFeatureValue;
-    }
-
-    public HzCfg0Record getCfg0Record() {
-        return cfg0Record;
-    }
-
-    public void setCfg0Record(HzCfg0Record cfg0Record) {
-        this.cfg0Record = cfg0Record;
-    }
-
-    public Long getDmbChangeBasicId() {
-        return dmbChangeBasicId;
-    }
-
-    public void setDmbChangeBasicId(Long dmbChangeBasicId) {
-        this.dmbChangeBasicId = dmbChangeBasicId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Long getDbdSrcDetailId() {
-        return dbdSrcDetailId;
-    }
-
-    public void setDbdSrcDetailId(Long dbdSrcDetailId) {
-        this.dbdSrcDetailId = dbdSrcDetailId;
-    }
 
     public void srcSetChange(HzDerivativeMaterielDetail hzDerivativeMaterielDetail) {
         Date date = new Date();

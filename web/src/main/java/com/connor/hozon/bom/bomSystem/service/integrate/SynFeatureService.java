@@ -6,9 +6,10 @@
 
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynFeatureService;
 import integration.base.feature.ZPPTCO002;
 import integration.logic.Features;
@@ -19,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,7 +34,7 @@ public class SynFeatureService implements ISynFeatureService {
     @Autowired
     TransCfgService transCfgService;
     @Autowired
-    HzCfg0Service hzCfg0Service;
+    HzFeatureServiceImpl hzFeatureServiceImpl;
     /**
      * 日志记录
      */
@@ -58,7 +58,7 @@ public class SynFeatureService implements ISynFeatureService {
      * @return
      */
     @Override
-    public JSONObject addFeature(List<HzCfg0Record> features) throws Exception {
+    public JSONObject addFeature(List<HzFeatureValue> features) throws Exception {
         return execute(features, ActionFlagOption.ADD);
     }
 
@@ -69,7 +69,7 @@ public class SynFeatureService implements ISynFeatureService {
      * @return
      */
     @Override
-    public JSONObject updateFeature(List<HzCfg0Record> features) throws Exception {
+    public JSONObject updateFeature(List<HzFeatureValue> features) throws Exception {
         return execute(features, ActionFlagOption.UPDATE);
     }
 
@@ -80,8 +80,8 @@ public class SynFeatureService implements ISynFeatureService {
      * @return
      */
     @Override
-    public JSONObject deleteFeature(List<HzCfg0Record> features) throws Exception {
-        List<HzCfg0Record> records;
+    public JSONObject deleteFeature(List<HzFeatureValue> features) throws Exception {
+        List<HzFeatureValue> records;
         records = features.stream().filter(f -> f.getIsFeatureSent() == 1).collect(Collectors.toList());
         return execute(records, ActionFlagOption.DELETE);
     }
@@ -98,12 +98,12 @@ public class SynFeatureService implements ISynFeatureService {
     }
 
 
-    private JSONObject execute(List<HzCfg0Record> records, ActionFlagOption option) throws Exception {
+    private JSONObject execute(List<HzFeatureValue> records, ActionFlagOption option) throws Exception {
         transCfgService.setClearInputEachTime(true);
-        List<HzCfg0Record> toSend = new ArrayList<>();
+        List<HzFeatureValue> toSend = new ArrayList<>();
         //需要更新的数据，更新特性属性
-        List<HzCfg0Record> needToUpdateStatus = new ArrayList<>();
-        Map<String, List<HzCfg0Record>> _mapCoach = new HashMap<>();
+        List<HzFeatureValue> needToUpdateStatus = new ArrayList<>();
+        Map<String, List<HzFeatureValue>> _mapCoach = new HashMap<>();
         JSONObject result = new JSONObject();
         /**
          * 成功项
@@ -130,24 +130,24 @@ public class SynFeatureService implements ISynFeatureService {
             return result;
         }
 
-        Map<String, Map<String, HzCfg0Record>> coach = new HashMap<>();
+        Map<String, Map<String, HzFeatureValue>> coach = new HashMap<>();
         Map<String, String> packNumOfFeature = new HashMap<>();
         String packnum = UUIDHelper.generateUpperUid();
         records.forEach(_r -> {
-            HzCfg0Record record;
-            if ((record = hzCfg0Service.doSelectOneByPuid(_r.getPuid())) != null
-//                    || (record = hzCfg0Service.doSelectOneAddedCfgByPuid(_r.getPuid())) != null
+            HzFeatureValue record;
+            if ((record = hzFeatureServiceImpl.doSelectOneByPuid(_r.getPuid())) != null
+//                    || (record = hzFeatureServiceImpl.doSelectOneAddedCfgByPuid(_r.getId())) != null
                     ) {
                 toSend.add(record);
             }
         });
 
         int index;
-        for (HzCfg0Record record : toSend) {
+        for (HzFeatureValue record : toSend) {
             String fpuid = record.getpCfg0FamilyPuid();
 //            //收录特性集合
 //            if (!_mapCoach.containsKey(fpuid)) {
-//                List<HzCfg0Record> _list = new ArrayList<>();
+//                List<HzFeatureValue> _list = new ArrayList<>();
 //                _list.add(record);
 //                _mapCoach.put(fpuid, _list);
 //            } else {
@@ -164,7 +164,7 @@ public class SynFeatureService implements ISynFeatureService {
             Features features = new Features();
             //有没有包号，没有则添加包号
             if (!coach.containsKey(packNumOfFeature.get(fpuid))) {
-                Map<String, HzCfg0Record> _m = new HashMap<>();
+                Map<String, HzFeatureValue> _m = new HashMap<>();
                 _m.put(String.valueOf(index), record);
                 coach.put(packNumOfFeature.get(fpuid), _m);
             } else {
@@ -195,7 +195,7 @@ public class SynFeatureService implements ISynFeatureService {
             //特性描述
             features.setFeaturesDescribe(record.getpCfg0FamilyDesc());
             //特性值编码
-            features.setPropertyValuesCode(record.getpCfg0ObjectId());
+            features.setPropertyValuesCode(record.getFeatureValueCode());
             //特性值描述
             features.setPropertyValuesDescribe(record.getpCfg0Desc());
             //            featuresList.add(features);
@@ -217,13 +217,13 @@ public class SynFeatureService implements ISynFeatureService {
                         continue;
                     }
                     IntegrateMsgDTO dto = new IntegrateMsgDTO();
-                    HzCfg0Record record = coach.get(_l.getPPACKNO()).get(_l.getPZITEM());
-                    dto.setItemId(record.getpCfg0ObjectId());
+                    HzFeatureValue record = coach.get(_l.getPPACKNO()).get(_l.getPZITEM());
+                    dto.setItemId(record.getFeatureValueCode());
                     dto.setMsg(_l.getPMESSAGE());
                     dto.setPuid(record.getPuid());
                     if ("S".equalsIgnoreCase(_l.getPTYPE())) {
                         success.add(dto);
-                        _forDelete.add(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getpCfg0ObjectId() + "-" + record.getpCfg0FamilyDesc());
+                        _forDelete.add(record.getpCfg0FamilyName() + "-" + record.getpCfg0FamilyDesc() + "-" + record.getFeatureValueCode() + "-" + record.getpCfg0FamilyDesc());
                         totalOfSuccess++;
                         //添加进传输成功list中进行批量更新
                         needToUpdateStatus.add(record);
@@ -238,7 +238,7 @@ public class SynFeatureService implements ISynFeatureService {
                 _map.put("list", needToUpdateStatus);
                 //像这里就执行更新了，把某个字段更新,我记得字段都定义成了is_sent
                 if (needToUpdateStatus.size() > 0) {
-                    hzCfg0Service.doUpdateByBatch(_map);
+                    hzFeatureServiceImpl.doUpdateByBatch(_map);
                 }
             }
         } catch (Exception e) {

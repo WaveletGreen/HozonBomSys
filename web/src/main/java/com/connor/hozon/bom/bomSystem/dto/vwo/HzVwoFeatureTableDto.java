@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.dto.vwo;
 
 import lombok.Data;
-import sql.pojo.cfg.vwo.HzFeatureChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 
 import java.util.Date;
 

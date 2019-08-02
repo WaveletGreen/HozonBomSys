@@ -60,9 +60,9 @@
 //     * @return
 //     */
 //    @Override
-//    public List<HzCfg0ModelRecord> selectByProjectPuid(String projectPuid) {
+//    public List<HzCfg0ModelRecord> selectByProjectId(String projectPuid) {
 //        return baseSQLUtil.executeQueryByPass(RECORD, projectPuid,
-//                clzName + ".selectByProjectPuid");
+//                clzName + ".selectByProjectId");
 //    }
 //
 //    @Override

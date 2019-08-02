@@ -19,7 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import sql.pojo.cfg.fullCfg.HzFullCfgMain;
-import sql.pojo.cfg.main.HzCfg0MainRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
 import sql.pojo.change.HzChangeOrderRecord;
 
@@ -60,7 +60,7 @@ public class HzBomAllCfgController {
     public String addVehicleModelPage2(@RequestParam String projectPuid, Model model) {
         if (checkString(projectPuid)) {
             HzCfg0ModelDetail detail = new HzCfg0ModelDetail();
-            HzCfg0MainRecord mainRecord = new HzCfg0MainRecord();
+            HzMainConfig mainRecord = new HzMainConfig();
             hzBomAllCfgService.initAddingPageParams(projectPuid, detail, mainRecord);
             model.addAttribute("hzCfg0ModelDetail", detail);
             model.addAttribute("cfgmain", mainRecord);

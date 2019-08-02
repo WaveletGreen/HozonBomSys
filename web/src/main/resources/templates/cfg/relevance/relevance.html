@@ -5,9 +5,12 @@
   ~ ALL RIGHTS RESERVED.
   -->
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="zh-cmn-Hans"
+>
 <head th:include="include/includebase"></head>
-<!--<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>-->
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
 <title>Hz-相关性表</title>
 <!--<body>-->
 <!--<div class="panel-body">-->
@@ -20,38 +23,41 @@
 
 <body class="content-body">
 <div class="panel-body">
-    <div class="content col-lg-4">
-        <div class="input-group">
-            <!--<button class="btn btn-default" id="query" type="button">查询相关性表</button>-->
-            <button class="btn btn-default" id="refresh" type="button" disabled="disabled">刷新</button>
-            <!--<button class="btn btn-default" id="query" type="button">查询配置物料特性表</button>-->
-            <!--<button class="btn btn-default" id="refresh" type="button" disabled="disabled">刷新</button>-->
-        </div>
+    <div class="content col-md-12">
+        <form class="form-inline" role="form" id="queryRelevance">
+            <input class="form-control" id="projectUid" name="projectUid" type="hidden" value=""/>
+            <div class="form-group" style="margin-right: 30px">
+                <label for="featureCode">特性代码:</label>
+                <input class="form-control" style="width: 200px;" id="featureCode" name="featureCode" type="text"
+                       placeholder="请输入查找的特性代码"
+                />
+            </div>
+            <div class="form-group">
+                <label for="featureValueCode">特性值代码:</label>
+                <input class="form-control" style="width: 200px;" id="featureValueCode" name="featureValueCode" type="text"
+                       placeholder="请输入查找的相特性值代码"
+                />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" id="refresh" type="button" disabled="disabled">查询</button>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" id="generateRelevance" type="button" >生成相关性</button>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" id="getChange" type="button" >关联变更单</button>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-default" id="goBackData" type="button" >撤销</button>
+            </div>
+        </form>
     </div>
-    <div class="content col-lg-12">
+    <div class="content col-md-12">
         <table class="table table-striped tableNormalStyle" id="dataTable"></table>
     </div>
 </div>
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-hidden="true">×
-                </button>
-                <h4 class="modal-title" id="myModalLabel">操作错误</h4>
-            </div>
-            <div class="modal-body">请在首页选择一个项目进行查询</div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/dateFormater.js}"></script>
+<script charset="utf-8" th:src="@{/js/helper/projectHelper.js}"></script>
 <script th:src="@{/js/cfg/relevance/relevance.js}"></script>
 </body>
 <script th:inline="javascript">

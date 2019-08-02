@@ -58,7 +58,7 @@ public interface ISynRelevanceService {
 //     * @param srcOfFeature      特性列表
 //     * @param resultOfRelevance 相关性结果集
 //     */
-//    void sortData(List<HzCfg0Record> srcOfFeature, List<HzRelevanceBean> resultOfRelevance);
+//    void sortData(List<HzFeatureValue> srcOfFeature, List<HzRelevanceBean> resultOfRelevance);
 
     JSONObject addRelevance(List<HzRelevanceBasic> relevance) throws Exception;
 

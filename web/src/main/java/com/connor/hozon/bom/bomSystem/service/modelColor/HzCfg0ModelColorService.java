@@ -6,17 +6,21 @@
 
 package com.connor.hozon.bom.bomSystem.service.modelColor;
 
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
+import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
+import cn.net.connor.hozon.dao.pojo.depository.color.HzCfg0ColorSet;
+import cn.net.connor.hozon.services.service.main.HzMainConfigService;
+import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
+import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
-import com.connor.hozon.bom.bomSystem.dao.cfg0.HzCfg0OptionFamilyDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0Service;
-import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
-import com.connor.hozon.bom.bomSystem.service.main.HzCfg0MainService;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoManagerService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.sys.entity.User;
@@ -25,10 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.cfg0.HzCfg0OptionFamily;
-import sql.pojo.cfg.cfg0.HzCfg0Record;
-import cn.net.connor.hozon.dao.pojo.depository.color.HzCfg0ColorSet;
-import sql.pojo.cfg.main.HzCfg0MainRecord;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
 import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
 import sql.redis.SerializeUtil;
@@ -49,40 +49,40 @@ public class HzCfg0ModelColorService {
      * 车型模型
      */
     @Autowired
-    HzCfg0ModelColorDao hzCfg0ModelColorDao;
+    private HzCfg0ModelColorDao hzCfg0ModelColorDao;
     /**
      * 族
      */
     @Autowired
-    HzCfg0OptionFamilyDao hzCfg0OptionFamilyDao;
+    private HzFeatureDao hzFeatureDao;
 
     @Autowired
-    HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
+    private HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
     /**
      * 颜色车型
      */
     @Autowired
-    HzColorModelService hzColorModelService;
+    private HzColorModelService hzColorModelService;
     /**
      * 颜色库
      */
     @Autowired
-    HzColorSetServiceImpl hzColorSetServiceImpl;
+    private HzColorSetServiceImpl hzColorSetServiceImpl;
     @Autowired
-    HzCfg0MainService hzCfg0MainService;
+    private HzMainConfigService hzMainConfigService;
     @Autowired
-    HzCfg0Service hzCfg0Service;
+    private HzFeatureServiceImpl hzFeatureServiceImpl;
 
     @Autowired
-    HzVwoManagerService hzVwoManagerService;
+    private HzVwoManagerService hzVwoManagerService;
 
     @Autowired
-    HzColorModelDao hzColorModelDao;
+    private HzColorModelDao hzColorModelDao;
 
     @Autowired
-    HzCmcrChangeDao hzCmcrChangeDao;
+    private HzCmcrChangeDao hzCmcrChangeDao;
     @Autowired
-    HzCmcrDetailChangeDao hzCmcrDetailChangeDao;
+    private HzCmcrDetailChangeDao hzCmcrDetailChangeDao;
     /**
      * 日志
      */
@@ -110,8 +110,8 @@ public class HzCfg0ModelColorService {
         User user = UserInfo.getUser();
         Map<String, Object> result = new HashMap<>();
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
-        List<HzCfg0OptionFamily> families = hzCfg0OptionFamilyDao.selectNameByMainId(projectPuid);
-        List<HzCfg0OptionFamily> familiesNew = hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
+        List<HzFeature> families = hzFeatureDao.selectByProjectIdWithOrderMainId(projectPuid);
+        List<HzFeature> familiesNew = hzFeatureDao.selectByProjectIdWithOrderPuid(projectPuid);
         /**
          * 用于筛选颜色集
          */
@@ -148,7 +148,7 @@ public class HzCfg0ModelColorService {
                             hzCfg0ModelColorDetail.setPuid(UUIDHelper.generateUpperUid());
                             hzCfg0ModelColorDetail.setModelUid(color.getPuid());
                             hzCfg0ModelColorDetail.setColorUid(colorUid);
-                            hzCfg0ModelColorDetail.setCfgUid(families.get(index).getPuid());
+                            hzCfg0ModelColorDetail.setCfgUid(families.get(index).getId());
                             hzCfg0ModelColorDetail.setCfgMainUid(color.getpCfg0MainRecordOfMC());
                             hzCfg0ModelColorDetail.setCreateDate(date);
                             hzCfg0ModelColorDetail.setModifyDate(date);
@@ -199,7 +199,7 @@ public class HzCfg0ModelColorService {
                 } else {
                     //添加颜色值用于显示
                     for (int i = 0; i < cm.size(); i++) {
-                        if ("车身颜色".equals(familiesNew.get(i).getpOptionfamilyDesc())) {
+                        if ("车身颜色".equals(familiesNew.get(i).getFeatureDesc())) {
                             vehicleColor = cm.get(i).getpColorCode();
                             localTemp = _result.get("s0");
                             _result.put("s0", vehicleColor);
@@ -232,12 +232,12 @@ public class HzCfg0ModelColorService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
-        List<HzCfg0OptionFamily> familiesNewFromDb = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//.getFamilies(projectPuid, 0, 1);//hzCfg0OptionFamilyDao.selectNameByMainId2(projectPuid);
-        List<HzCfg0OptionFamily> familiesNew = new ArrayList<>();
-        familiesNew.addAll(familiesNewFromDb.stream().filter(c->c!=null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
+        List<HzFeature> familiesNewFromDb = hzCfg0OptionFamilyService.selectForColorBluePrint(projectPuid, 1);//.getFamilies(projectPuid, 0, 1);//hzCfg0OptionFamilyDao.selectByProjectIdWithOrderPuid(projectPuid);
+        List<HzFeature> familiesNew = new ArrayList<>();
+        familiesNew.addAll(familiesNewFromDb.stream().filter(c->c!=null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getFeatureCode()))
                 .collect(Collectors.toList()));
-        //.forEach(c -> mapWithColor.put(c.getPuid(), c));
-        HzCfg0MainRecord mainRecord = hzCfg0MainService.doGetbyProjectPuid(projectPuid);
+        //.forEach(c -> mapWithColor.put(c.getId(), c));
+        HzMainConfig mainRecord = hzMainConfigService.selectByProjectId(projectPuid);
         /**
          * 用于筛选颜色集
          */
@@ -256,7 +256,7 @@ public class HzCfg0ModelColorService {
             _result.put("modeColorIsMultiply", color.getpColorIsMultiply());
             _result.put("vwoNum", String.valueOf(color.getCmcrVwoId()));
             _result.put("cmcrEffectedDate", color.getCmcrEffectedDate()==null?"":sdf.format(color.getCmcrEffectedDate()));
-//            List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
+//            List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor(color.getId());
             List<HzCfg0ModelColorDetail> cm = hzColorModelService.doSelectByModelUidWithColor2(color.getPuid());
             coach.clear();
             cm.forEach(c -> coach.put(c.getCfgUid(), c));
@@ -329,14 +329,14 @@ public class HzCfg0ModelColorService {
                     //添加颜色值用于显示
                     List<HzCfg0ModelColorDetail> list = new ArrayList<>();
                     for (int i = 0; i < familiesNew.size(); i++) {
-//                        if ("车身颜色".equals(familiesNew.get(i).getpOptionfamilyDesc())) {
+//                        if ("车身颜色".equals(familiesNew.get(i).getFeatureDesc())) {
 //                            vehicleColor = cm.get(i).getpColorCode();
 //                            localTemp = _result.get("s0");
 //                            _result.put("s0", vehicleColor);
 //                            _result.put("s" + i, localTemp);F56B98AB58C04CA4AC5007C216A967BC
 //                        } else {
-                        if (coach.containsKey(familiesNew.get(i).getPuid())) {
-                            _result.put("s" + i, coach.get(familiesNew.get(i).getPuid()).getpColorCode());
+                        if (coach.containsKey(familiesNew.get(i).getId())) {
+                            _result.put("s" + i, coach.get(familiesNew.get(i).getId()).getpColorCode());
                         } else {
                             _result.put("s" + i, "-");
                             HzCfg0ModelColorDetail hcm = new HzCfg0ModelColorDetail();
@@ -347,12 +347,12 @@ public class HzCfg0ModelColorService {
                             hcm.setModifier(user.getUsername());
                             hcm.setModifyDate(date);
                             hcm.setModelUid(color.getPuid());
-                            hcm.setCfgMainUid(mainRecord.getPuid());
-                            hcm.setCfgUid(familiesNew.get(i).getPuid());
+                            hcm.setCfgMainUid(mainRecord.getId());
+                            hcm.setCfgUid(familiesNew.get(i).getId());
                             list.add(hcm);
-                            logger.error(familiesNew.get(i).getpOptionfamilyName());
-                            logger.error(familiesNew.get(i).getpOptionfamilyDesc());
-                            logger.error(familiesNew.get(i).getPuid());
+                            logger.error(familiesNew.get(i).getFeatureCode());
+                            logger.error(familiesNew.get(i).getFeatureDesc());
+                            logger.error(familiesNew.get(i).getId());
                         }
 //                        }
                     }
@@ -436,21 +436,21 @@ public class HzCfg0ModelColorService {
         if (projectUid == null || "".equals(projectUid)) {
             object.put("status", false);
         } else {
-            List<HzCfg0OptionFamily> withColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 1);
-            List<HzCfg0OptionFamily> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 0);
-            Map<String, HzCfg0OptionFamily> mapWithColor = new LinkedHashMap<>();
-            withColor.stream().filter(c -> c != null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getpOptionfamilyName()))
-                    .collect(Collectors.toList()).forEach(c -> mapWithColor.put(c.getPuid(), c));
+            List<HzFeature> withColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 1);
+            List<HzFeature> withoutColor = hzCfg0OptionFamilyService.selectForColorBluePrint(projectUid, 0);
+            Map<String, HzFeature> mapWithColor = new LinkedHashMap<>();
+            withColor.stream().filter(c -> c != null).filter(c -> false == SpecialFeatureOptions.YQCSCODE.getDesc().equals(c.getFeatureCode()))
+                    .collect(Collectors.toList()).forEach(c -> mapWithColor.put(c.getId(), c));
             if (mapWithColor.isEmpty()) {
                 object.put("status", 1);
                 object.put("msg", "没有找到表头，请到全配置BOM一级清单中将特性值和带颜色的2Y进行关联");
                 return object;
             }
             for (int i = 0; i < withoutColor.size(); i++) {
-                if (withoutColor.get(i) != null && mapWithColor.containsKey(withoutColor.get(i).getPuid())) {
-                    List<HzCfg0Record> list = hzCfg0Service.doSelectByFamilyUidWithProject(withoutColor.get(i).getPuid(), projectUid);
+                if (withoutColor.get(i) != null && mapWithColor.containsKey(withoutColor.get(i).getId())) {
+                    List<HzFeatureValue> list = hzFeatureServiceImpl.doSelectByFamilyUidWithProject(withoutColor.get(i).getId(), projectUid);
                     StringBuilder _sb = new StringBuilder();
-                    list.forEach(l -> _sb.append(l.getpCfg0ObjectId() + " "));
+                    list.forEach(l -> _sb.append(l.getFeatureValueCode() + " "));
                     error.add(_sb.toString());
                 }
             }
@@ -460,7 +460,7 @@ public class HzCfg0ModelColorService {
                 return object;
             } else {
                 column = new ArrayList<>();
-                mapWithColor.forEach((key, value) -> column.add(value.getpOptionfamilyDesc() + "<br>" + value.getpOptionfamilyName()));
+                mapWithColor.forEach((key, value) -> column.add(value.getFeatureDesc() + "<br>" + value.getFeatureCode()));
             }
             if (column == null || column.size() <= 0) {
                 object.put("status", 1);

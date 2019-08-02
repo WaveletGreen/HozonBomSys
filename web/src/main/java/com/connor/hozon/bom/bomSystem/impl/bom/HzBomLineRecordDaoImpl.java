@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.impl.bom;
 
+import com.connor.hozon.bom.bomSystem.dao.bom.HzBomLineRecordDao;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import java.util.Map;
  * @Modified By:
  */
 @Service("hzBomLineRecordDao")
-public class HzBomLineRecordDaoImpl extends BaseSQLUtil {
+public class HzBomLineRecordDaoImpl extends BaseSQLUtil implements HzBomLineRecordDao {
     /**
      * 更新颜色件信息  1是颜色件 0不是
      * @param puid
