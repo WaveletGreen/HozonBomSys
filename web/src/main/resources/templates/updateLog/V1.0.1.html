@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <!--User: xulf Date: 2018/9/11 Time: 13:22-->
-<meta charset="UTF-8">
-<title>V1.0.1</title>
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${version}"></title>
 </head>
 <body>
-<div style="text-align: center;font-size: 35px;font-family: 黑体, 微软雅黑, 宋体">更新日志V1.0.1</div>
+<div style="text-align: center;font-size: 22px;font-family: 黑体, 微软雅黑, 宋体" ><h2 th:text="'更新日志'+${version}"></h2></div>
+
 <div style="text-align: left;font-size: 16px;font-family: 黑体, 微软雅黑, 宋体">
 <p style="font-size: 24px"><strong>1.BOM管理</strong></p>
 <xmp>
