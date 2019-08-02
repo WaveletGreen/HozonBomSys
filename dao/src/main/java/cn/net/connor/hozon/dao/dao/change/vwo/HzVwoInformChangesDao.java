@@ -7,8 +7,9 @@
 package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import org.apache.ibatis.annotations.Param;
 import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -17,6 +18,7 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzVwoInformChangesDao extends BasicDao<HzVwoInformChanges> {
     /**
      * 主键删除

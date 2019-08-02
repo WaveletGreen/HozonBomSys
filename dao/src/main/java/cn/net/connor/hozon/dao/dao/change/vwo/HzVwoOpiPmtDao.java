@@ -9,6 +9,7 @@ package cn.net.connor.hozon.dao.dao.change.vwo;
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -16,6 +17,7 @@ import org.apache.ibatis.annotations.Param;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzVwoOpiPmtDao extends BasicDao<HzVwoOpiPmt>{
     HzVwoOpiPmt selectByVwoId(@Param("opiVwoId") Long opiVwoId);
 
