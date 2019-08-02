@@ -6,13 +6,10 @@
 
 package com.connor.hozon.bom.bomSystem.impl.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInformChangesDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoInformChangesDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import sql.IBaseSQLUtil;
-import sql.pojo.cfg.vwo.HzVwoInformChanges;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges;
 
 import java.util.List;
 
@@ -77,9 +74,9 @@ public class HzVwoInformChangesDaoImpl extends BasicDaoImpl<HzVwoInformChanges> 
      * @return
      */
     @Override
-    public Long tellMeHowManyOfIt(Long vwoId) {
+    public Long count(Long vwoId) {
         return baseSQLUtil.executeQueryById(vwoId,
-                clzName + ".tellMeHowManyOfIt");
+                clzName + ".count");
     }
 
 }

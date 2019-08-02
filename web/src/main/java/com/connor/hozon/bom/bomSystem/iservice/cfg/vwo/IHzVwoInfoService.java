@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
-import sql.pojo.cfg.vwo.HzVwoInfo;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo;
 
 import java.util.List;
 
@@ -68,7 +68,7 @@ public interface IHzVwoInfoService {
      * @param projectUid
      * @return
      */
-    int tellMeHowManyOfIt(String projectUid);
+    int count(String projectUid);
 
     /**
      * 生成VWO号码

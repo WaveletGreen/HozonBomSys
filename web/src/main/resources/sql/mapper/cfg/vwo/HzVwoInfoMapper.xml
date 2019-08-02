@@ -6,8 +6,8 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInfoDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoInfo">
+<mapper namespace="cn.net.connor.hozon.dao.dao.change.vwo.HzVwoInfoDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo">
         <!--主键-->
         <id column="ID" jdbcType="DOUBLE" property="id"/>
         <!--VWO号-->
@@ -225,7 +225,7 @@
             ASC
         </if>
     </select>
-    <select id="tellMeHowManyOfIt" parameterType="java.lang.String" resultType="java.lang.Integer">
+    <select id="count" parameterType="java.lang.String" resultType="java.lang.Integer">
         select COUNT (*) from HZ_VWO_INFO
         <if test="projectUid!=null">where PROJECT_UID=#{projectUid}</if>
     </select>
@@ -243,7 +243,7 @@
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <!--插入1个记录，返回主键-->
-    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo">
 
         <!--
         对于 Oracle 而言, 需要使用 selectKey 来生成主键值，
@@ -269,7 +269,7 @@
         )
     </insert>
     <!--主键更新-->
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo">
         update HZ_VWO_INFO
         <set>
             <!--审批类型-->
@@ -370,7 +370,7 @@
             ID = #{id,jdbcType=DECIMAL}
         </where>
     </update>
-    <update id="updateByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoInfo">
+    <update id="updateByVwoId" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo">
         update
           HZ_VWO_INFO t
         set

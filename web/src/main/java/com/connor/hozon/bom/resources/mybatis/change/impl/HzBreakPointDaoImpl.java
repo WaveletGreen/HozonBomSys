@@ -49,8 +49,8 @@ public class HzBreakPointDaoImpl extends BasicDaoImpl<HzBreakPoint> implements H
      * @return
      */
     @Override
-    public Long tellMeHowManyOfIt() {
-        return baseSQLUtil.executeQueryById(new Long(0),clz.getCanonicalName()+".tellMeHowManyOfIt");
+    public Long count() {
+        return baseSQLUtil.executeQueryById(new Long(0),clz.getCanonicalName()+".count");
     }
 
 }

@@ -6,8 +6,8 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInfluenceUserDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+<mapper namespace="cn.net.connor.hozon.dao.dao.change.vwo.HzVwoInfluenceUserDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfluenceUser">
         <!--主键-->
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <!--vwo id，外键-->
@@ -77,7 +77,7 @@
     delete from HZ_VWO_INFLUENCE_USER
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
-    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfluenceUser">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_VWO_INFLUENCE_USER_ID.Nextval from dual
@@ -98,7 +98,7 @@
         #{vwoChassisName,jdbcType=VARCHAR},
         #{vwoIeoId,jdbcType=DECIMAL}, #{vwoIeoName,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfluenceUser">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_VWO_INFLUENCE_USER_ID.Nextval from dual
@@ -205,7 +205,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfluenceUser">
         update HZ_VWO_INFLUENCE_USER
         <set>
             <if test="vwoId != null">
@@ -256,7 +256,7 @@
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInfluenceUser">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfluenceUser">
     update HZ_VWO_INFLUENCE_USER
     set VWO_ID = #{vwoId,jdbcType=DECIMAL},
       VWO_PRO_SECTION_CHIEF_NAME = #{vwoProSectionChiefName,jdbcType=VARCHAR},

@@ -4,10 +4,12 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.vwo;
+package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.vwo.HzVwoExecute;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -16,14 +18,15 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzVwoExecuteDao extends BasicDao<HzVwoExecute> {
     /**
      * 根据VWO号ID查询
      *
-     * @param vwoId vwo号的ID，主键
+     * @param exeVwoId vwo号的ID，主键
      * @return 一组分发与实施对象
      */
-    List<HzVwoExecute> selectByVwoId(Long vwoId);
+    List<HzVwoExecute> selectByVwoId(@Param("exeVwoId") Long exeVwoId);
 
     /**
      * 批量删除发布与实施数据

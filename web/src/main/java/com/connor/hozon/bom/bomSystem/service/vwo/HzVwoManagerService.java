@@ -23,9 +23,9 @@ import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
 import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelRecordDao;
 import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicChangeDao;
 import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
-import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiBomDao;
-import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao;
-import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiBomDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiPmtDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiProjDao;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFeatureTableDto;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
@@ -84,7 +84,7 @@ import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
-import sql.pojo.cfg.vwo.*;
+import cn.net.connor.hozon.dao.pojo.change.vwo.*;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 import sql.pojo.epl.HzEPLManageRecord;
@@ -163,7 +163,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     HzEbomRecordDAO hzEbomRecordDAO;
 
     @Autowired
-    IHzVwoExecuteService iHzVwoExecuteService;
+    HzVwoExecuteService hzVwoExecuteService;
 
     @Autowired
     HzCfg0ModelColorDao hzCfg0ModelColorDao;
@@ -1904,7 +1904,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     public Map<String, Object> queryByBase(String projectUid, HzVwoFormListQueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzVwoInfo.reflectToDBField(queryBase.getSort()));
-        result.put("totalCount", iHzVwoInfoService.tellMeHowManyOfIt(projectUid));
+        result.put("totalCount", iHzVwoInfoService.count(projectUid));
         result.put("result", iHzVwoInfoService.doSelectListByProjectUid(queryBase, projectUid));
         return result;
     }
@@ -2025,7 +2025,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     @Override
     public Map<String, Object> getExecuteInfo(Long vwo) {
         Map<String, Object> result = new HashMap<>();
-        List<HzVwoExecute> executes = iHzVwoExecuteService.doSelectByVwoId(vwo);
+        List<HzVwoExecute> executes = hzVwoExecuteService.selectByVwoId(vwo);
         if (executes != null) {
             result.put("totalCount", executes.size());
             result.put("result", executes);
@@ -2047,7 +2047,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             result.put("msg", "参数错误");
             return result;
         }
-        if (iHzVwoExecuteService.doInsert(execute)) {
+        if (hzVwoExecuteService.insert(execute)) {
             success = true;
             result.put("msg", "存储发布与实施数据成功");
         } else {
@@ -2066,7 +2066,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             result.put("msg", "请至少选择一条数据进行删除");
             return result;
         }
-        if (iHzVwoExecuteService.doDeleteByBatch(executes)) {
+        if (hzVwoExecuteService.deleteByBatch(executes)) {
             success = true;
             result.put("msg", "删除发布与实施数据成功");
         } else {
@@ -2442,7 +2442,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 taskOfProj.setTaskUserId(proj.getOpiProjMngUserId());
                 taskOfProj.setTaskStatus(800);
 
-//                if (!hzTasksService.doInsert(taskOfBom) || !hzTasksService.doInsert(taskOfPmt) || !hzTasksService.doInsert(taskOfProj)) {
+//                if (!hzTasksService.insert(taskOfBom) || !hzTasksService.insert(taskOfPmt) || !hzTasksService.insert(taskOfProj)) {
 //                    logger.error("通知任务失败");
 //                }
                 list.add(taskOfBom);

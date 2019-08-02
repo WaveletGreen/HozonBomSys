@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.vwo.HzVwoInfluenceDept;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfluenceDept;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

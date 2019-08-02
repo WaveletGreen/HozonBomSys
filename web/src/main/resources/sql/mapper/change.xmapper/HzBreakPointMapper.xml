@@ -64,11 +64,11 @@
     </select>
 
     <!--返回断点信息总数-->
-    <select id="tellMeHowManyOfIt" resultType="java.lang.Long">
+    <select id="count" resultType="java.lang.Long">
         select count(*) from HZ_BREAKPOINT
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.integration.HzBreakPoint">
     delete from HZ_BREAKPOINT
     where PID = #{pid,jdbcType=DECIMAL}
   </delete>

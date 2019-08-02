@@ -23,7 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.vwo.*;
+import cn.net.connor.hozon.dao.pojo.change.vwo.*;
 import sql.pojo.change.HzChangeOrderRecord;
 
 import java.util.HashMap;

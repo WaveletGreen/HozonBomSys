@@ -4,10 +4,12 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.vwo;
+package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.vwo.HzVwoOpiPmt;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt;
+import org.apache.ibatis.annotations.Param;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: PMT经理意见
@@ -15,7 +17,7 @@ import sql.pojo.cfg.vwo.HzVwoOpiPmt;
  * @Modified By:
  */
 public interface HzVwoOpiPmtDao extends BasicDao<HzVwoOpiPmt>{
-    HzVwoOpiPmt selectByVwoId(Long id);
+    HzVwoOpiPmt selectByVwoId(@Param("opiVwoId") Long opiVwoId);
 
     int updateUserByVwoId(HzVwoOpiPmt hzVwoOpiPmt);
 }

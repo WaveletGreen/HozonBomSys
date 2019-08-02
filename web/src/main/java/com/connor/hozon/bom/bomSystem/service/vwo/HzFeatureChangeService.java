@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
-import com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzFeatureChangeDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -310,7 +310,12 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         for(HzFeatureChangeBean hzFeatureChangeBean : hzFeatureChangeBeanListBefore){
             setBeforeTable(hzFeatureChangeBean);
         }
-        return hzFeatureChangeDao.insertList(hzFeatureChangeBeanListBefore);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("tableName", "HZ_CFG0_BEFORE_CHANGE_RECORD");
+        map.put("seqName", "SEQ_HZ_FEATURE_BEFORE_CHANGE");
+        map.put("hzFeatureChangeBeans", hzFeatureChangeBeanListBefore);
+
+        return hzFeatureChangeDao.insertList(map);
     }
 
     @Override
@@ -318,7 +323,12 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         for(HzFeatureChangeBean hzFeatureChangeBean : hzFeatureChangeBeanListAfter){
             setAfterTable(hzFeatureChangeBean);
         }
-        return hzFeatureChangeDao.insertList(hzFeatureChangeBeanListAfter);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("tableName", "HZ_CFG0_AFTER_CHANGE_RECORD");
+        map.put("seqName", "SEQ_HZ_FEATURE_AFTER_CHANGE");
+        map.put("hzFeatureChangeBeans", hzFeatureChangeBeanListAfter);
+        return hzFeatureChangeDao.insertList(map);
     }
 
     @Override
@@ -330,7 +340,7 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
 
     @Override
     public List<HzFeatureChangeBean> doSelectHasEffect(List<HzFeatureValue> records) {
-        return hzFeatureChangeDao.doSelectHasEffect(records);
+        return hzFeatureChangeDao.selectHasEffect(records);
     }
 
     @Override
@@ -347,17 +357,17 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
 
     @Override
     public int doDeleteByPrimaryKeys(List<Long> changeFeatureIds) {
-        return hzFeatureChangeDao.doDeleteByPrimaryKeys(changeFeatureIds);
+        return hzFeatureChangeDao.deleteByPrimaryKeys(changeFeatureIds);
     }
 
     @Override
     public List<HzFeatureChangeBean> doselectByChangeId(Long orderId) {
-        return hzFeatureChangeDao.doselectByChangeId(orderId);
+        return hzFeatureChangeDao.selectByChangeId(orderId);
     }
 
     @Override
     public List<HzFeatureChangeBean> doSelectHasNotEffect(List<Long> changeFeatureIds) {
-        return hzFeatureChangeDao.doSelectHasNotEffect(changeFeatureIds);
+        return hzFeatureChangeDao.selectHasNotEffect(changeFeatureIds);
     }
 
     /**
@@ -379,6 +389,6 @@ public class HzFeatureChangeService implements IHzFeatureChangeService {
         hzFeatureChangeBeans.add(hzFeatureChangeBeanBefor);
         hzFeatureChangeBeans.add(hzFeatureChangeBeanAfter);
         return hzFeatureChangeBeans;
-//        return hzFeatureChangeDao.doQueryLastTwoChange(hzFeatureChangeBean);
+//        return hzFeatureChangeDao.findLastTwoChange(hzFeatureChangeBean);
     }
 }

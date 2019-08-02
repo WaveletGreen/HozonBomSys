@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.ui.Model;
 import sql.pojo.cfg.modelColor.HzCmcrChange;
 import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
-import sql.pojo.cfg.vwo.*;
+import cn.net.connor.hozon.dao.pojo.change.vwo.*;
 
 import java.util.List;
 import java.util.Map;

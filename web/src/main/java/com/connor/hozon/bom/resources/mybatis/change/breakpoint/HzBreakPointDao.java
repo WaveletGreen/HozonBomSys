@@ -19,5 +19,5 @@ public interface HzBreakPointDao extends BasicDao<HzBreakPoint> {
      * 查找所有断点信息总数据
      * @return
      */
-    Long tellMeHowManyOfIt();
+    Long count();
 }

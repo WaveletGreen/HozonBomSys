@@ -4,11 +4,11 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.vwo;
+package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.vwo.HzVwoInformChanges;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges;
 
 import java.util.List;
 /**
@@ -48,5 +48,5 @@ public interface HzVwoInformChangesDao extends BasicDao<HzVwoInformChanges> {
      * @param vwoId
      * @return
      */
-    Long tellMeHowManyOfIt(@Param("vwoId") Long vwoId);
+    Long count(@Param("vwoId") Long vwoId);
 }

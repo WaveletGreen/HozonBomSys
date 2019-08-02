@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
-import sql.pojo.cfg.vwo.HzVwoInfluenceUser;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfluenceUser;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

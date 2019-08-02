@@ -79,8 +79,8 @@
 //     * @return
 //     */
 ////    @Override
-////    public Integer tellMeHowManyOfIt(HzRelevanceQuery dto) {
-////        List<Integer> result = baseSQLUtil.executeQueryByPass(new Integer(0), dto, clz.getCanonicalName() + ".tellMeHowManyOfIt");
+////    public Integer count(HzRelevanceQuery dto) {
+////        List<Integer> result = baseSQLUtil.executeQueryByPass(new Integer(0), dto, clz.getCanonicalName() + ".count");
 ////        if (result != null && result.size() > 0) {
 ////            return result.get(0);
 ////        } else {
