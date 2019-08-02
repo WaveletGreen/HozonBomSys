@@ -91,7 +91,7 @@ public class HzMbomController extends BaseController {
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
-
+        //refreshMBOM(projectId,response);
     }
 
     @RequestMapping(value = "refreshMBOM", method = RequestMethod.GET)
@@ -163,9 +163,56 @@ public class HzMbomController extends BaseController {
      * @param query
      * @return
      */
+    @RequestMapping(value = "toColorPart", method = RequestMethod.GET)
+    @ResponseBody
     public Map<String,Object> queryMbomToColorPart(HzMbomByPageQuery query){
-
-        return null;
+        Page<HzMbomRecordRespDTO> page = hzMbomService.queryMbomToColorPart(query);
+        if (page == null) {
+            return new HashMap<>();
+        }
+        List<HzMbomRecordRespDTO> list = page.getResult();
+        Map<String, Object> ret = new HashMap<>();
+        List<Map<String, Object>> _list = new ArrayList<>();
+        list.forEach(dto -> {
+            Map<String, Object> _res = new HashMap<>();
+            _res.put("eBomPuid", dto.geteBomPuid());
+            _res.put("puid", dto.getPuid());
+            _res.put("colorId", dto.getColorId());
+            _res.put("No", dto.getNo());
+            _res.put("rank", dto.getRank());
+            _res.put("level", dto.getLevel());
+//            _res.put("lineNo",ProcessReceiveDto.getLineNo());
+            _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
+            _res.put("lineId", dto.getLineId());
+            _res.put("pBomLinePartName", dto.getpBomLinePartName());
+            _res.put("pBomLinePartClass", dto.getpBomLinePartClass());
+            _res.put("pBomLinePartResource", dto.getpBomLinePartResource());
+            _res.put("sparePart", dto.getSparePart());
+            _res.put("sparePartNum", dto.getSparePartNum());
+            _res.put("processRoute", dto.getProcessRoute());
+            _res.put("laborHour", dto.getLaborHour());
+            _res.put("rhythm", dto.getRhythm());
+            _res.put("pLouaFlag", dto.getpLouaFlag());
+            _res.put("solderJoint", dto.getSolderJoint());
+            _res.put("machineMaterial", dto.getMachineMaterial());
+            _res.put("standardPart", dto.getStandardPart());
+            _res.put("tools", dto.getTools());
+            _res.put("wasterProduct", dto.getWasterProduct());
+            _res.put("change", dto.getChange());
+            _res.put("changeNum", dto.getChangeNum());
+            _res.put("pFactoryCode", dto.getpFactoryCode());
+            _res.put("pStockLocation", dto.getpStockLocation());
+            _res.put("pBomType", dto.getpBomType());
+            _res.put("status", dto.getStatus());
+            _res.put("effectTime", dto.getEffectTime());
+            if (null != dto.getVehNum()) {
+                _res.putAll(dto.getVehNum());
+            }
+            _list.add(_res);
+        });
+        ret.put("totalCount", page.getTotalCount());
+        ret.put("result", _list);
+        return ret;
     }
     /**
      * 跳转到MBOM管理的添加页面

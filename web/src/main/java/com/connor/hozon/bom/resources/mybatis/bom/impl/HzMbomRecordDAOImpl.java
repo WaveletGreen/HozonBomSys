@@ -211,6 +211,15 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
     public Page<HzMbomLineRecord> queryMbomToColorPart(HzMbomByPageQuery query) {
         PageRequestParam request = new PageRequestParam();
         request.setPageNumber(query.getPage());
+        if(BOMTransConstants.ALL.equals(query.getLimit())){
+            request.setAllNumber(true);
+        }else {
+            request.setPageSize(Integer.valueOf(query.getLimit()));
+        }
+        Map map = new HashMap();
+        map.put("projectId",query.getProjectId());
+        map.put("isColorPart",query.getIsColorPart());
+        map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
         return super.findForPage("HzMbomRecordDAOImpl_getMBomRecordToColorPart","HzMbomRecordDAOImpl_getTotalCount",request);
     }
 
