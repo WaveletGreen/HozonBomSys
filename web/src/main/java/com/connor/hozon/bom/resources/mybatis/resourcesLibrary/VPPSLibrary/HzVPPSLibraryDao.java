@@ -45,6 +45,14 @@ public interface HzVPPSLibraryDao {
      */
     int delete(String puid);
 
+
+    /**
+     * 批量删除数据
+     * @param puid
+     * @return
+     */
+    int deleteByPuids(String puid);
+
     /**
      * 根据VPPS代码查询条数
      * @param vppsCode

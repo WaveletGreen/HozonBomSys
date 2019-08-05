@@ -4,11 +4,13 @@ import com.connor.hozon.bom.resources.domain.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.VPPSLibrary.HzVPPSLibraryDao;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
+import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -79,6 +81,23 @@ public class HzVPPSLibraryDaoImpl extends BaseSQLUtil implements HzVPPSLibraryDa
     public int delete(String puid) {
         return super.delete("HzVPPSLibraryDaoImpl_delete",puid);
     }
+
+    /**
+     * 删除多条数据
+     * @param puids
+     * @return
+     */
+    @Override
+    public int deleteByPuids(String puids) {
+        List<String> puidList = Lists.newArrayList(puids.split(","));
+        int size = puidList.size();
+        Map<String,Object> m = new HashMap<>();
+        m.put("tableName","HZ_VPPS_LIBRARY");
+        m.put("puids",puidList);
+        return super.delete("HzVPPSLibraryDaoImpl_deleteByPuids",m);
+    }
+
+
 
     @Override
     public int findVPPSLibraryOrCodeToCount(String vppsCode) {

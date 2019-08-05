@@ -186,18 +186,18 @@ public class HzVPPSLibraryServiceImpl implements HzVPPSLibraryService {
     /**
      * 根据puid删除一条数据
      *
-     * @param puid
+     * @param puids
      * @return
      */
     @Override
-    public WriteResultRespDTO deleteHzVPPSLibrary(String puid) {
+    public WriteResultRespDTO deleteHzVPPSLibrary(String puids) {
         try {
 //            boolean b  = PrivilegeUtil.writePrivilege();
 //            if(!b){
 //                return WriteResultRespDTO.getFailPrivilege();
 //            }
 
-            int i = hzVPPSLibraryDao.delete(puid);
+            int i = hzVPPSLibraryDao.deleteByPuids(puids);
             if (i>0){
                 return WriteResultRespDTO.getSuccessResult();
             }

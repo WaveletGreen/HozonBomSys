@@ -173,6 +173,10 @@ function initTable(url) {
                         iconCls: 'glyphicon glyphicon-remove',
                         handler: function () {
                             var rows = $('#VPPSLibraryTable').bootstrapTable('getSelections');
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].puid + ",";
+                            }
                             if (rows.length == 0) {
                                 window.Ewin.alert({message: '请选择一条需要删除的数据!'});
                                 return false;
@@ -192,7 +196,7 @@ function initTable(url) {
                                                 $.ajax({
                                                     type: "POST",
                                                     //ajax需要添加打包名
-                                                    url: "vpps/delete?puid=" + rows[0].puid,
+                                                    url: "vpps/delete?puid=" + puids,
                                                     // data: JSON.stringify(rows),
                                                     contentType: "application/json",
                                                     success: function (result) {
