@@ -5,10 +5,10 @@ import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
-import sql.pojo.accessories.HzAccessoriesLibs;
+import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.interaction.HzConfigBomColorBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,4 @@
-package sql.pojo.accessories;
-
-import io.swagger.models.auth.In;
+package cn.net.connor.hozon.dao.pojo.depository.accessories;
 
 import java.util.Date;
 

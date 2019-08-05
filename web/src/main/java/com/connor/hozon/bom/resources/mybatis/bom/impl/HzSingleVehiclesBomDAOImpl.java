@@ -14,7 +14,6 @@ import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import sql.pojo.bom.HzSingleVehiclesBomRecord;
-import sql.pojo.interaction.HzSingleVehicles;
 import sql.redis.HzDBException;
 
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 /**
  * @Author: haozt

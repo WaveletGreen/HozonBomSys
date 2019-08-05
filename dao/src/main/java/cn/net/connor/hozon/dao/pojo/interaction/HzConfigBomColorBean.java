@@ -1,7 +1,7 @@
-package sql.pojo.interaction;
+package cn.net.connor.hozon.dao.pojo.interaction;
 
 import lombok.Data;
-import sql.pojo.accessories.HzAccessoriesLibs;
+import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
 
 import java.io.Serializable;
 import java.util.List;

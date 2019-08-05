@@ -9,7 +9,6 @@ package com.connor.hozon.bom.bomSystem.impl.bom;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.stereotype.Repository;
-import sql.pojo.HzPreferenceSetting;
 import sql.pojo.bom.HzBomLineRecord;
 
 import java.util.List;
@@ -34,13 +33,6 @@ public class HzBomDataDaoImpl extends BasicDaoImpl<HzBomLineRecord> implements H
     @Override
     public List<HzBomLineRecord> selectByProjectPuid(HzBomLineRecord bomLineRecord) {
         return baseSQLUtil.executeQuery(bomLineRecord, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao.selectByProjectId");
-    }
-
-
-    @Override
-    public HzPreferenceSetting loadSetting(HzPreferenceSetting setting) {
-        return baseSQLUtil.executeQueryById(setting,
-                "com.connor.hozon.bom.bomSystem.dao.bom.HzPreferenceSettingDao.selectSettingByNameWithMainRecord");
     }
 
     /**

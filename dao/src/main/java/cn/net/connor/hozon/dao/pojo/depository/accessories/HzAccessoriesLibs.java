@@ -1,4 +1,4 @@
-package sql.pojo.accessories;
+package cn.net.connor.hozon.dao.pojo.depository.accessories;
 
 import java.io.Serializable;
 import java.util.Date;

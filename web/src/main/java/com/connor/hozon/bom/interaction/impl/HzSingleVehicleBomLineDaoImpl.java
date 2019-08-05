@@ -8,9 +8,8 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.bom.HzSingleVehiclesBomRecord;
-import sql.pojo.interaction.HzConfigBomColorBean;
-import sql.pojo.interaction.HzSingleVehicleBomLineBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
 
 import java.util.ArrayList;
 import java.util.List;

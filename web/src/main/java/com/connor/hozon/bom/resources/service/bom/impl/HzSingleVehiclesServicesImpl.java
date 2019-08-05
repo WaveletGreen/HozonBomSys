@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import sql.pojo.interaction.HzSingleVehicles;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 import sql.redis.SerializeUtil;
 
 import java.util.*;

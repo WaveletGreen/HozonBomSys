@@ -46,7 +46,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.pojo.accessories.HzAccessoriesLibs;
+import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
 import sql.pojo.bom.HzPbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;

@@ -4,7 +4,7 @@ import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.interaction.HzSingleVehicles;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 
 import java.util.HashMap;
 import java.util.List;

@@ -5,7 +5,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesR
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import sql.pojo.interaction.HzSingleVehicles;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 
 import java.util.LinkedHashMap;
 import java.util.List;

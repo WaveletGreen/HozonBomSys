@@ -7,7 +7,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.accessories.HzAccessoriesLib;
+import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLib;
 
 import java.util.HashMap;
 import java.util.List;

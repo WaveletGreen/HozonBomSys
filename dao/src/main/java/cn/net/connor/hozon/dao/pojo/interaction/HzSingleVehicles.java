@@ -1,4 +1,4 @@
-package sql.pojo.interaction;
+package cn.net.connor.hozon.dao.pojo.interaction;
 
 import lombok.Data;
 

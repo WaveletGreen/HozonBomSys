@@ -2,7 +2,7 @@ package com.connor.hozon.bom.interaction.dao;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.interaction.HzSingleVehicleBomLineBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
 
 import java.util.List;
 

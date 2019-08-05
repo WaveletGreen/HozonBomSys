@@ -24,8 +24,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzSingleVehiclesBomRecord;
-import sql.pojo.interaction.HzSingleVehicleBomLineBean;
-import sql.pojo.interaction.HzSingleVehicles;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
 
 import java.util.ArrayList;
