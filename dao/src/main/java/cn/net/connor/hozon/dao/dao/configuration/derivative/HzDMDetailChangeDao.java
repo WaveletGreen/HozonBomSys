@@ -4,11 +4,11 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.derivative;
+package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
-import sql.pojo.cfg.derivative.HzDMDetailChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMDetailChangeBean;
 
 import java.util.List;
 

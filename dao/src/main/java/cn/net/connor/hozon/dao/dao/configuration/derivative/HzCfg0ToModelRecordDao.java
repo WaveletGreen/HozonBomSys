@@ -4,11 +4,11 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.derivative;
+package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ToModelRecord;
 
 import java.util.List;
 /**

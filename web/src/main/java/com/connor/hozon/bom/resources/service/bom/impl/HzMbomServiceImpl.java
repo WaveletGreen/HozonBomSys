@@ -50,7 +50,7 @@ import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
 import sql.pojo.bom.HzMbomLineRecord;
 import sql.pojo.bom.HzMbomLineRecordVO;
 import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;

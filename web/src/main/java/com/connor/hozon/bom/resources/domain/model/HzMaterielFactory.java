@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
 import sql.pojo.epl.HzEPLManageRecord;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 

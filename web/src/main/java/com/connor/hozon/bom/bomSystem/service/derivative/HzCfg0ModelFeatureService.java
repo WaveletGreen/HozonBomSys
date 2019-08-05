@@ -6,11 +6,11 @@
 
 package com.connor.hozon.bom.bomSystem.service.derivative;
 
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelFeatureDao;
+import cn.net.connor.hozon.dao.dao.configuration.derivative.HzCfg0ModelFeatureDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0ModelFeatureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
 
 import java.util.List;
 /**

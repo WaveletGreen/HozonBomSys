@@ -23,7 +23,7 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.util.*;

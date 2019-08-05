@@ -4,13 +4,16 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.derivative;
+package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
-import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author: zhuDB
@@ -18,20 +21,21 @@ import java.util.List;
  * @Date: Created in 2018/11/9 10:49
  * @Modified By:
  */
+@Repository
 public interface HzDMBasicChangeDao extends BasicDao<HzDMBasicChangeBean> {
 
     int insertList(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);
 
-    List<HzDMBasicChangeBean> selectByFormid(Long changeFromId);
+    List<HzDMBasicChangeBean> selectByFormid(@Param("changeFromId") Long changeFromId);
 
     HzDMBasicChangeBean selectBefor(HzDMBasicChangeBean hzDMBasicChangeBeanAfter);
 
 
-    List<HzDMBasicChangeBean> selectAfter(Long formId);
+    List<HzDMBasicChangeBean> selectAfter(@Param("formId") Long formId);
 
-    List<HzDMBasicChangeBean> selectLastByPuid(List<HzComposeDelDto> delDtos);
+    List<HzDMBasicChangeBean> selectLastById(List<HzComposeDelDto> delDtos);
 
-    int updateStatusByOrderId(Long orderId, int status);
+    int updateStatusByOrderId(Map<String,Object> params);
 
     int deleteByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);
 

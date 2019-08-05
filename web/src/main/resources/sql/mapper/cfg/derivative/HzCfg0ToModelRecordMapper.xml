@@ -5,8 +5,8 @@
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.derivative.HzCfg0ToModelRecord">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.derivative.HzCfg0ToModelRecordDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ToModelRecord">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_CFG0_ID_RECORD" jdbcType="VARCHAR" property="pCfg0IdRecord"/>
         <result column="P_CFG0_OPTION_VALUE" jdbcType="VARCHAR" property="pCfg0OptionValue"/>
@@ -34,7 +34,7 @@
     delete from HZ_CFG0_TO_MODEL_RECORD
     where PUID = #{puid,jdbcType=VARCHAR}
   </delete>
-    <insert id="insert" parameterType="sql.pojo.cfg.derivative.HzCfg0ToModelRecord">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ToModelRecord">
     insert into HZ_CFG0_TO_MODEL_RECORD (PUID, P_CFG0_ID_RECORD, P_CFG0_OPTION_VALUE, 
       P_OF_CFG0_MAIN_RECORD, P_CFG0_MODEL_RECORD, P_PARSE_LOGIC_VALUE
       )
@@ -42,7 +42,7 @@
       #{pOfCfg0MainRecord,jdbcType=VARCHAR}, #{pCfg0ModelRecord,jdbcType=VARCHAR}, #{pParseLogicValue,jdbcType=INTEGER}
       )
   </insert>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.derivative.HzCfg0ToModelRecord">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ToModelRecord">
     update HZ_CFG0_TO_MODEL_RECORD
     set P_CFG0_ID_RECORD = #{pCfg0IdRecord,jdbcType=VARCHAR},
       P_CFG0_OPTION_VALUE = #{pCfg0OptionValue,jdbcType=VARCHAR},

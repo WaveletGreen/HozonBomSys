@@ -1,3 +1,10 @@
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
 package sql.pojo.bom;
 
 import cn.net.connor.hozon.dao.pojo.BaseChangeDO;

@@ -3,10 +3,7 @@ package integration.logic;
 import integration.base.bom.ZPPTCI005;
 import integration.option.ActionFlagOption;
 import integration.option.BomOption;
-import sql.pojo.bom.HzMBomToERPBean;
-import sql.redis.SerializeUtil;
-
-import java.util.LinkedHashMap;
+import cn.net.connor.hozon.dao.pojo.integration.HzMBomToERPBean;
 
 /**
  * 从MBOM中数据映射到SAP传输的DTO上，父层的物料编号需要单独设置，预料字段没有做对应

@@ -4,10 +4,10 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.derivative;
+package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.derivative.HzCfg0ModelGroup;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelGroup;
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 衍生物料物料组，传ERP用到，但是BOM系统并没有进行维护该部分数据，老子也不知道

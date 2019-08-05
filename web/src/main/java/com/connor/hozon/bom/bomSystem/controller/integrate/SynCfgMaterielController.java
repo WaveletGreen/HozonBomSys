@@ -6,16 +6,10 @@
 
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
-import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielCfgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import sql.pojo.cfg.derivative.HzMaterielCfgBean;
-
-import java.util.*;
 
 /**
  *

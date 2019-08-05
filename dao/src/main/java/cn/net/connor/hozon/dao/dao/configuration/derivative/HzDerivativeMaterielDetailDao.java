@@ -4,10 +4,10 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.derivative;
+package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail;
 

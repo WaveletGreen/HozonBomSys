@@ -5,8 +5,8 @@
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.derivative.HzCfg0ModelGroup">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.derivative.HzCfg0ModelGroupDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelGroup">
         <id column="ID" jdbcType="VARCHAR" property="id"/>
         <result column="TC_UID" jdbcType="VARCHAR" property="tcUid"/>
         <result column="GROUP_DESC" jdbcType="OTHER" property="groupDesc"/>
@@ -33,13 +33,13 @@
     delete from HZ_CFG0_MODEL_GROUP
     where ID = #{id,jdbcType=VARCHAR}
   </delete>
-    <insert id="insert" parameterType="sql.pojo.cfg.derivative.HzCfg0ModelGroup">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelGroup">
     insert into HZ_CFG0_MODEL_GROUP (ID, TC_UID, GROUP_DESC, 
       GROUP_NAME, MAIN_UID)
     values (#{id,jdbcType=VARCHAR}, #{tcUid,jdbcType=VARCHAR}, #{groupDesc,jdbcType=VARCHAR},
       #{groupName,jdbcType=VARCHAR}, #{mainUid,jdbcType=VARCHAR})
   </insert>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.derivative.HzCfg0ModelGroup">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelGroup">
     update HZ_CFG0_MODEL_GROUP
     set TC_UID = #{tcUid,jdbcType=VARCHAR},
       GROUP_DESC = #{groupDesc,jdbcType=OTHER},
@@ -55,7 +55,7 @@
         where MAIN_UID = #{mainUid,jdbcType=VARCHAR}
     </select>
 
-    <update id="updateByMainId" parameterType="sql.pojo.cfg.derivative.HzCfg0ModelGroup">
+    <update id="updateByMainId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelGroup">
         update HZ_CFG0_MODEL_GROUP
         set
           GROUP_DESC = #{groupDesc,jdbcType=OTHER},

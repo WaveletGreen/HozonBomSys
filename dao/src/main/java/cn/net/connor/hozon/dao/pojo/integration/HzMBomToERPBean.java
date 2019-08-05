@@ -1,8 +1,13 @@
-package sql.pojo.bom;
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
+package cn.net.connor.hozon.dao.pojo.integration;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 @Data
 public class HzMBomToERPBean {
 

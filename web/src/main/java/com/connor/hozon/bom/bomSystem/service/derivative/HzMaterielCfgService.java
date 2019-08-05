@@ -6,11 +6,11 @@
 
 package com.connor.hozon.bom.bomSystem.service.derivative;
 
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzMaterielCfgBeanDao;
+import cn.net.connor.hozon.dao.dao.configuration.derivative.HzMaterielCfgBeanDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzMaterielCfgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.derivative.HzMaterielCfgBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
 
 import java.util.List;
 import java.util.Map;

@@ -1,8 +1,12 @@
-package sql.pojo.cfg.derivative;
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
 
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail;
-import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.sys.entity.User;
+package cn.net.connor.hozon.dao.pojo.configuration.derivative;
+
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import lombok.Data;
 import lombok.ToString;
@@ -105,10 +109,8 @@ public class HzDMDetailChangeBean {
     private Long dbdSrcDetailId;
 
 
-    public void srcSetChange(HzDerivativeMaterielDetail hzDerivativeMaterielDetail) {
+    public void srcSetChange(HzDerivativeMaterielDetail hzDerivativeMaterielDetail,String username) {
         Date date = new Date();
-        User user = UserInfo.getUser();
-
         this.setDbdSrcDetailId(hzDerivativeMaterielDetail.getId());
         this.setDmdDmbId(hzDerivativeMaterielDetail.getDmdDmbId());
         this.setDmdCfg0Uid(hzDerivativeMaterielDetail.getDmdCfg0Uid());
@@ -117,9 +119,9 @@ public class HzDMDetailChangeBean {
         this.setDmdCreateDate(hzDerivativeMaterielDetail.getDmdCreateDate());
         this.setDmdUpdater(hzDerivativeMaterielDetail.getDmdUpdater());
         this.setDmdUpdateDate(hzDerivativeMaterielDetail.getDmdUpdateDate());
-        this.setChangeCreator(user.getLogin());
+        this.setChangeCreator(username);
         this.setChangeCreateDate(date);
-        this.setChangeUpdater(user.getLogin());
+        this.setChangeUpdater(username);
         this.setChangeUpdateDate(date);
         this.setDmdReserved1(hzDerivativeMaterielDetail.getDmdReserved1());
         this.setDmdReserved2(hzDerivativeMaterielDetail.getDmdReserved2());

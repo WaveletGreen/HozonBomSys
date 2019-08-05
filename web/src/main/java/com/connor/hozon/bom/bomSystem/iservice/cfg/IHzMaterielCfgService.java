@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg;
 
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.derivative.HzMaterielCfgBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
 
 import java.util.List;
 import java.util.Map;

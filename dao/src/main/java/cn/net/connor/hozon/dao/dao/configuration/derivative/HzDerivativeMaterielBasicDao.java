@@ -4,12 +4,13 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.derivative;
+package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
-import sql.pojo.cfg.derivative.HzDMBasicChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzDerivativeMaterielBasicDao extends BasicDao<HzDerivativeMaterielBasic> {
     /**
      * 根据项目查找项目下的所有配置物料特性数据

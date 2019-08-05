@@ -3,7 +3,6 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 

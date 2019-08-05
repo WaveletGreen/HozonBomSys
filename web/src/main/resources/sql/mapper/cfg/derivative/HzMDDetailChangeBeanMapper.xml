@@ -5,8 +5,8 @@
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.derivative.HzDMDetailChangeDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.derivative.HzDMDetailChangeBean">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.derivative.HzDMDetailChangeDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMDetailChangeBean">
         <!--主键-->
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <!--变更表单ID-->

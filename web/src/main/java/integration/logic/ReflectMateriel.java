@@ -4,7 +4,7 @@ import integration.option.ActionFlagOption;
 import integration.option.MaterialOption;
 import integration.option.PurchaseOption;
 import org.apache.commons.lang.StringUtils;
-import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import static cn.net.connor.hozon.common.util.StringHelper.checkString;

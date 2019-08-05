@@ -14,7 +14,6 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.bom.HzBomLineRecord;
 import sql.pojo.bom.HzImportEbomRecord;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.redis.HzDBException;

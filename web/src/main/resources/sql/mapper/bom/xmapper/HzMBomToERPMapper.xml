@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.bom.HzMBomToERPBean">
+<mapper namespace="cn.net.connor.hozon.dao.dao.integration.HzMBomToERPDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.integration.HzMBomToERPBean">
         <id column="ID" jdbcType="DOUBLE" property="id"/>
         <!--MBOM主键-->
         <result column="P_MBOM_PUID" jdbcType="VARCHAR" property="puid"/>
@@ -61,7 +61,7 @@
     </resultMap>
 
     <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"-->
-               <!--type="sql.pojo.bom.HzMBomToERPBean">-->
+               <!--type="cn.net.connor.hozon.dao.pojo.integration.HzMBomToERPBean">-->
         <!--<result column="P_BOM_LINE_BLOCK" jdbcType="BLOB"-->
                 <!--property="bomLineBlock"/>-->
     <!--</resultMap>-->
@@ -190,7 +190,7 @@
 
 
 
-    <select id="HzMBomToERPDaoImpl_selectByUidOfBatch" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    <select id="selectByUidOfBatch" parameterType="java.util.HashMap" resultMap="BaseResultMap">
 
         select
 
@@ -223,7 +223,7 @@
     </select>
 
 
-    <select id="HzMBomToERPDaoImpl_selectByProjectUidWithCondition"
+    <select id="selectByProjectUidWithCondition"
             parameterType="java.util.Map"
             resultMap="BaseResultMap">
         select

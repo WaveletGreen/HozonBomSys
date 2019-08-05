@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.iservice.cfg;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.derivative.HzCfg0ModelFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
 
 import java.util.List;
 

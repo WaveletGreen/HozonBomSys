@@ -4,9 +4,9 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.derivative;
+package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
-import sql.pojo.cfg.derivative.HzMaterielCfgBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
 
 import java.util.List;
 import java.util.Map;
