@@ -4,10 +4,9 @@ import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkCenterDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.work.HzWorkCenter;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkCenter;
 
 import java.util.HashMap;
 import java.util.List;

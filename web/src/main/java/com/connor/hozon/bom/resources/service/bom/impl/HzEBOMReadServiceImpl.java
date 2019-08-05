@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import sql.pojo.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 
 import java.util.*;
 

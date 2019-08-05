@@ -7,7 +7,7 @@ import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.change.HzEWOImpactReference;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactReference;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.util.Result;
-import sql.pojo.epl.HzEPLRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
 
 import java.util.List;
 

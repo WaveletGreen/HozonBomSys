@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOBasicInfoDAO;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.change.HzEWOBasicInfo;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo;
 
 import java.util.HashMap;
 import java.util.List;

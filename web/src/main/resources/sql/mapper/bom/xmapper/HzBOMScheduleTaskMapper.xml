@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzBOMScheduleTaskMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBOMScheduleTask">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleTask">
     <id column="ID" jdbcType="DOUBLE" property="id" />
     <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
     <result column="CONFIG_FEATURE_CHANGED" jdbcType="INTEGER" property="configFeatureChanged" />
@@ -35,7 +35,7 @@
   </select>
 
 
-  <insert id="HzBOMScheduleTaskDAOImpl_insert" parameterType="sql.pojo.bom.HzBOMScheduleTask">
+  <insert id="HzBOMScheduleTaskDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleTask">
     insert into HZ_BOM_SCHEDULE_TASK (ID, PROJECT_ID, CONFIG_FEATURE_CHANGED,
       PBOM_CHANGED, MBOM_CHANGED, AUDIT_PASSED_TIME, 
       ORDER_ID,SYNCHRONIZED
@@ -48,7 +48,7 @@
 
 
 
-  <update id="HzBOMScheduleTaskDAOImpl_updateByOrderId" parameterType="sql.pojo.bom.HzBOMScheduleTask">
+  <update id="HzBOMScheduleTaskDAOImpl_updateByOrderId" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleTask">
     update HZ_BOM_SCHEDULE_TASK
     <set>
         DATA_SYNCHRONIZED_TIME = sysdate,

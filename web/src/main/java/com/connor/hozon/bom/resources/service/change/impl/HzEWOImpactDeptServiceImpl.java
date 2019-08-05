@@ -12,15 +12,14 @@ import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptEmpDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.dao.OrgGroupDao;
-import com.connor.hozon.bom.sys.dao.UserDao;
 import com.connor.hozon.bom.sys.entity.OrgGroup;
 import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.change.HzEWOAllImpactDept;
-import sql.pojo.change.HzEWOImpactDept;
-import sql.pojo.change.HzEWOImpactDeptEmp;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOAllImpactDept;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactDept;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactDeptEmp;
 
 import java.util.*;
 

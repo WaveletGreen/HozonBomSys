@@ -5,7 +5,6 @@ import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
 import com.connor.hozon.bom.resources.domain.query.*;
-import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
@@ -16,7 +15,6 @@ import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
-import com.connor.hozon.bom.resources.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,15 +22,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.connor.hozon.bom.resources.domain.model.HzBomSysFactory.getLevelAndRank;
 

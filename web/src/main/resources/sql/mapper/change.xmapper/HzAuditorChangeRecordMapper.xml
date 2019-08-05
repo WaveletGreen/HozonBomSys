@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzAuditorChangeRecordMapper">
-    <resultMap id="BaseResultMap" type="sql.pojo.change.HzAuditorChangeRecord">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord">
         <id column="ID" jdbcType="DOUBLE" property="id"/>
         <result column="AUDITOR_ID" jdbcType="DOUBLE" property="auditorId"/>
         <result column="AUDIT_TIME" jdbcType="TIMESTAMP" property="auditTime"/>
@@ -17,7 +17,7 @@
   </sql>
 
     <!--insert-->
-    <insert id="HzAuditorChangeDAOImpl_insert" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+    <insert id="HzAuditorChangeDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_HZ_AUDITOR_CHANGE_RECORD.nextval as id from dual
@@ -75,7 +75,7 @@
     <!--根据变更表单的ID查询一个审核意见数据-->
     <!--既然一个表单只能有一个人审核，则表单在审核的时候没有审核结果，有审核结果的不应该再被审核
         因此前提是AUDIT_RESULT is null-->
-    <select id="HzAuditorChangeDAOImpl_findByOrderId" parameterType="sql.pojo.change.HzAuditorChangeRecord"
+    <select id="HzAuditorChangeDAOImpl_findByOrderId" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord"
             resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -85,7 +85,7 @@
     </select>
 
     <!--接口人查询出的记录可能有多条返回list集合-->
-    <select id="HzAuditorChangeDAOImpl_findByOrdersId" parameterType="sql.pojo.change.HzAuditorChangeRecord"
+    <select id="HzAuditorChangeDAOImpl_findByOrdersId" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord"
             resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
@@ -94,7 +94,7 @@
         and AUDIT_RESULT is null
     </select>
 
-    <insert id="insertSelective" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord">
         insert into HZ_AUDITOR_CHANGE_RECORD
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -159,7 +159,7 @@
 
     <!--update-->
     <update id="HzAuditorChangeDAOImpl_updateByPrimaryKeySelective"
-            parameterType="sql.pojo.change.HzAuditorChangeRecord">
+            parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord">
         update HZ_AUDITOR_CHANGE_RECORD
         <set>
             <if test="auditorId != null">
@@ -184,7 +184,7 @@
         where ID = #{id,jdbcType=DECIMAL}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.change.HzAuditorChangeRecord">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord">
     update HZ_AUDITOR_CHANGE_RECORD
     set AUDITOR_ID = #{auditorId,jdbcType=DECIMAL},
       AUDIT_TIME = #{auditTime,jdbcType=DATE},

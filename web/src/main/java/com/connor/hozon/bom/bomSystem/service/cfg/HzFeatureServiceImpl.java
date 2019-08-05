@@ -21,7 +21,7 @@ import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
+import cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.*;
 

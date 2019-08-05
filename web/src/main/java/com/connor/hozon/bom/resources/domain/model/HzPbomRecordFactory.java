@@ -7,11 +7,11 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.sys.entity.User;
-import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.bom.HzImportEbomRecord;
-import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.epl.HzEPLManageRecord;
-import sql.pojo.epl.HzEPLRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzImportEbomRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
 
 import java.util.UUID;
 

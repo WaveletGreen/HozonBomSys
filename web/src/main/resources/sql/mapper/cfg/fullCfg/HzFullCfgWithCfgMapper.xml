@@ -37,7 +37,7 @@
     </resultMap>
     <resultMap extends="BaseResultMapWithCfg" id="BaseResultMapWithCfgAndBl"
                type="com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg">
-        <association property="bomLine" javaType="sql.pojo.bom.HzBomLineRecord">
+        <association property="bomLine" javaType="cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord">
             <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID"/>
             <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y"/>
             <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>

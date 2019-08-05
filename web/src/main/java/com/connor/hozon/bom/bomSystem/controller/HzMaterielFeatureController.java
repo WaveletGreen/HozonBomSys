@@ -45,9 +45,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.change.HzChangeOrderRecord;
-import sql.pojo.factory.HzFactory;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
 
 import java.util.*;
 

@@ -1,7 +1,5 @@
 package com.connor.hozon.bom.resources.controller.change;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
@@ -10,25 +8,19 @@ import com.connor.hozon.bom.resources.mybatis.change.HzAttachmentRecordDao;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
-import com.connor.hozon.bom.resources.util.FileUtils;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.change.HzAttachmentRecord;
-import sql.pojo.change.HzChangeListRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeListRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;

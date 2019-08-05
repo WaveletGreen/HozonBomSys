@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
 import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
-import sql.pojo.change.HzEWOBasicInfo;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo;
 
 import java.util.List;
 

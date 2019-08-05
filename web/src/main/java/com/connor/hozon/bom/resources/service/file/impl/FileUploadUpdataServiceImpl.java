@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
-import sql.pojo.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
 
 import java.util.*;
 

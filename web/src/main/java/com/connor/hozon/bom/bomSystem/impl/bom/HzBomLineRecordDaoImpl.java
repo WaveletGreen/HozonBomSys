@@ -11,7 +11,7 @@ import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;

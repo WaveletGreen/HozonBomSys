@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.AddHzDictionaryLibraryR
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzDictionaryLibraryReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRespDTO;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
+import cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.UUID;
 

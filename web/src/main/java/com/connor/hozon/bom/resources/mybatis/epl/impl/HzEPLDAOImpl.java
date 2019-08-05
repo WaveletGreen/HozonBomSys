@@ -11,11 +11,10 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.epl.HzEPLRecord;
-import sql.redis.HzDBException;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
+import cn.net.connor.hozon.common.exception.HzDBException;
 
 import java.util.HashMap;
 import java.util.List;

@@ -3,8 +3,8 @@ package com.connor.hozon.bom.resources.domain.model;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzSingleVehiclesBomRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzSingleVehiclesBomRecord;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 
 import java.util.Date;

@@ -35,10 +35,10 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
-import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.epl.HzEPLManageRecord;
-import sql.pojo.epl.HzEPLRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
 
 import java.util.*;
 

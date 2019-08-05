@@ -1,16 +1,13 @@
 package com.connor.hozon.bom.resources.controller.epl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzEPLReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEplRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.service.epl.HzEPLService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
@@ -20,7 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sql.pojo.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;

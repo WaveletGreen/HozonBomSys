@@ -5,9 +5,9 @@ import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import sql.pojo.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
-import sql.pojo.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.util.UUID;

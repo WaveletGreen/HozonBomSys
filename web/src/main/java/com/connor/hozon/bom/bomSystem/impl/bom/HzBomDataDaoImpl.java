@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.impl.bom;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.stereotype.Repository;
-import sql.pojo.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 
 import java.util.List;
 import java.util.Map;

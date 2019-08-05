@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.dao.bom;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 
 import java.util.List;
 import java.util.Map;

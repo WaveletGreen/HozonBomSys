@@ -50,8 +50,8 @@ import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterie
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgModel;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
-import sql.pojo.epl.HzEPLManageRecord;
-import sql.pojo.factory.HzFactory;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

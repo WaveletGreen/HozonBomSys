@@ -47,15 +47,15 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
 import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzMbomLineRecordVO;
-import sql.pojo.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecordVO;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.change.HzChangeOrderRecord;
-import sql.pojo.epl.HzEPLManageRecord;
-import sql.pojo.factory.HzFactory;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
 import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
@@ -695,7 +695,7 @@ public class HzMbomServiceImpl implements HzMbomService {
 //
 //                                        HzPbomTreeQuery query = new HzPbomTreeQuery();
 //                                        query.setProjectId(projectId);
-//                                        query.setId(whiteBody.geteBomPuid());
+//                                        query.setId(whiteBody.getEBomPuid());
 //                                        List<HzPbomLineRecord> buyRecords = hzPbomRecordDAO.getHzPbomTree(query);
 //                                        if(ListUtil.isNotEmpty(buyRecords)){
 //                                            j+=buyRecords.size()-1;
@@ -1444,7 +1444,7 @@ public class HzMbomServiceImpl implements HzMbomService {
             if(ListUtil.isNotEmpty(recordList)){
                 for(HzPbomLineRecord pbomLineRecord:recordList){
                     HzMbomLineRecord mbomLineRecord = factory.generateSupMbom(pbomLineRecord,i,bean,superMboms.size(),factoryId);
-//                    HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByEbomIdAndLineIndex(mbomLineRecord.geteBomPuid(),mbomLineRecord.getLineIndex(),MbomTableNameEnum.tableName(0));
+//                    HzMbomLineRecord lineRecord = hzMbomRecordDAO.findHzMbomByEbomIdAndLineIndex(mbomLineRecord.getEBomPuid(),mbomLineRecord.getLineIndex(),MbomTableNameEnum.tableName(0));
                     superMboms.add(mbomLineRecord);
                 }
 

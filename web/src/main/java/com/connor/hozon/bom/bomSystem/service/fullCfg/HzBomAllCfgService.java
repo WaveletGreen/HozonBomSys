@@ -52,9 +52,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

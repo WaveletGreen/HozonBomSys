@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.change.breakpoint;
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.common.entity.QueryBase;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.integration.HzBreakPoint;
+import cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint;
 
 import java.util.List;
 

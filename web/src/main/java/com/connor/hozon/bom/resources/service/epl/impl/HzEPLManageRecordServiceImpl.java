@@ -11,8 +11,8 @@ import com.connor.hozon.bom.resources.service.epl.HzEPLManageRecordService;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 
 import java.util.*;
 

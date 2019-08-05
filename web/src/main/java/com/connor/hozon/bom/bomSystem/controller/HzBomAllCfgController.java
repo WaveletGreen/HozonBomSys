@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
-import sql.pojo.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

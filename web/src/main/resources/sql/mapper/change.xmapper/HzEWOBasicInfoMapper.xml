@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzEWOBasicInfoMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.change.HzEWOBasicInfo">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo">
     <id column="ID" jdbcType="DOUBLE" property="id" />
     <result column="EWO_NO" jdbcType="VARCHAR" property="ewoNo" />
     <result column="DEPT" jdbcType="VARCHAR" property="dept" />
@@ -64,7 +64,7 @@
   </delete>
 
 
-  <insert id="HzEWOBasicInfoDAOImpl_insert" parameterType="sql.pojo.change.HzEWOBasicInfo">
+  <insert id="HzEWOBasicInfoDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo">
     insert into HZ_EWO_BASIC_INFO (ID,EWO_NO, DEPT,
       CHANGE_TYPE, REASON_CODE, FORM_CREATE_TIME, 
       FLOW_STATUS, TITLE, ORIGINATOR, 
@@ -86,7 +86,7 @@
   </insert>
 
 
-  <update id="HzEWOBasicInfoDAOImpl_update" parameterType="sql.pojo.change.HzEWOBasicInfo">
+  <update id="HzEWOBasicInfoDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo">
     update HZ_EWO_BASIC_INFO
     <set>
       <if test="ewoNo != null">

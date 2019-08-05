@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzWorkProcedureMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.work.HzWorkProcedure">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure">
       <id column="PUID" jdbcType="VARCHAR" property="puid" />
       <result column="P_WORK_PUID" jdbcType="VARCHAR" property="pWorkPuid" />
       <result column="P_PROCEDURE_CODE" jdbcType="VARCHAR" property="pProcedureCode" />
@@ -37,7 +37,7 @@
   </resultMap>
 
 
-  <resultMap extends="BaseResultMap" id="HzWorkProcessMap" type="sql.pojo.work.HzWorkProcess">
+  <resultMap extends="BaseResultMap" id="HzWorkProcessMap" type="cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcess">
     <!--<result column="P_MATERIEL_CODE" jdbcType="OTHER" property="pMaterielCode"/>-->
     <!--<result column="P_MATERIEL_DESC" jdbcType="OTHER" property="pMaterielDesc"/>-->
     <!--<result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />-->
@@ -214,7 +214,7 @@
   </update>
 
 
-  <insert id="HzWorkProcedureDAOImpl_insert" parameterType="sql.pojo.work.HzWorkProcedure">
+  <insert id="HzWorkProcedureDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure">
     insert into HZ_WORK_PROCEDURE
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="puid != null">
@@ -354,7 +354,7 @@
   </insert>
 
 
-  <update id="HzWorkProcedureDAOImpl_update" parameterType="sql.pojo.work.HzWorkProcedure">
+  <update id="HzWorkProcedureDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure">
     update HZ_WORK_PROCEDURE
     <set>
       <if test="pWorkPuid != null">
@@ -417,7 +417,7 @@
     where P_MATERIEL_PUID = #{materielId,jdbcType=VARCHAR}
   </update>
 
-  <update id="HzWorkProcedureDAOImpl_update2" parameterType="sql.pojo.work.HzWorkProcedure">
+  <update id="HzWorkProcedureDAOImpl_update2" parameterType="cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure">
     update HZ_WORK_PROCEDURE
     <set>
       <if test="pWorkPuid != null">

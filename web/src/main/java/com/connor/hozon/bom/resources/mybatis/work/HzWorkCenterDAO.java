@@ -2,10 +2,9 @@ package com.connor.hozon.bom.resources.mybatis.work;
 
 import com.connor.hozon.bom.resources.domain.query.HzWorkByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.work.HzWorkCenter;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkCenter;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: haozt

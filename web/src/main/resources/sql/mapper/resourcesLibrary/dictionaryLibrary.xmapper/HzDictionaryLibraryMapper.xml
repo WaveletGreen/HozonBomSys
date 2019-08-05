@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzDictionaryLibraryMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary">
     <id column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="PROFESSION_CH" jdbcType="VARCHAR" property="professionCh" />
     <result column="PROFESSION_EN" jdbcType="VARCHAR" property="professionEn" />
@@ -36,7 +36,7 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </select>
     <!--插入一条数据-->
-    <insert id="HzDictionaryLibraryDaoImpl_insert" parameterType="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+    <insert id="HzDictionaryLibraryDaoImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary">
         insert into HZ_DICTIONARY_LIBRARY
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="puid != null">
@@ -164,7 +164,7 @@
         </trim>
     </insert>
     <!--编辑一条数据-->
-    <update id="HzDictionaryLibraryDaoImpl_update" parameterType="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+    <update id="HzDictionaryLibraryDaoImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary">
         update HZ_DICTIONARY_LIBRARY
         <set>
             <if test="professionCh != null">
@@ -321,7 +321,7 @@
     delete from HZ_DICTIONARY_LIBRARY
     where PUID = #{puid,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+  <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary">
     insert into HZ_DICTIONARY_LIBRARY (PUID, PROFESSION_CH, PROFESSION_EN, 
       CLASSIFICATION_CH, CLASSIFICATION_EN, GROUP_CODE, 
       GROUP_CH, GROUP_EN, FAMILLY_CODE, 
@@ -337,7 +337,7 @@
       #{valueSource,jdbcType=VARCHAR}, #{effectTime,jdbcType=DATE}, #{failureTime,jdbcType=DATE}, 
       #{note,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary">
+  <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary">
     update HZ_DICTIONARY_LIBRARY
     set PROFESSION_CH = #{professionCh,jdbcType=VARCHAR},
       PROFESSION_EN = #{professionEn,jdbcType=VARCHAR},

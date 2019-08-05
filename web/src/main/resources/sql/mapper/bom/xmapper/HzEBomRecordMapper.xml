@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzEBOMRecordMapper">
 
-  <resultMap  id="BaseResultMap" type="sql.pojo.epl.HzEPLManageRecord">
+  <resultMap  id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord">
       <!--BOM属性-->
       <id column="PUID" jdbcType="VARCHAR" property="puid" />
       <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
@@ -370,7 +370,7 @@
     </select>
 
 
-    <insert id="HzEbomRecordDAOImpl_insert" parameterType="sql.pojo.epl.HzEPLManageRecord">
+    <insert id="HzEbomRecordDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord">
         insert into ${tableName}
         (
         <include refid="BASE_BOM_INSERT"/>
@@ -383,7 +383,7 @@
     </insert>
 
     <!--更新-->
-    <update id="HzEbomRecordDAOImpl_update" parameterType="sql.pojo.epl.HzEPLManageRecord">
+    <update id="HzEbomRecordDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord">
         update HZ_BOM_LINE_RECORD
         <set>
               P_UPDATE_TIME =sysdate,
@@ -973,7 +973,7 @@
 
 
 
-    <select id="HzEbomRecordDAOImpl_findEbomChildrenByLineIndex" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+    <select id="HzEbomRecordDAOImpl_findEbomChildrenByLineIndex" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord" resultMap="BaseResultMap">
       select
         <include refid="BASE_BOM_COLUMN"/>
       from
@@ -982,7 +982,7 @@
         TO_NUMBER ((SUBSTR (P_LINE_INDEX,INSTR (P_LINE_INDEX, '.', -1) + 1))) = TO_NUMBER (#{lineIndex,jdbcType=VARCHAR})
     </select>
 
-    <select id="HzEbomRecordDAOImpl_findPreviousEbom" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+    <select id="HzEbomRecordDAOImpl_findPreviousEbom" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord" resultMap="BaseResultMap">
         select
         <include refid="BASE_BOM_COLUMN"/>
         from
@@ -995,7 +995,7 @@
         t.P_BOM_DIGIFAX_ID = #{bomDigifaxId,jdbcType=VARCHAR}
     </select>
 
-    <select id="HzEbomRecordDAOImpl_findNextLineIndex" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+    <select id="HzEbomRecordDAOImpl_findNextLineIndex" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord" resultMap="BaseResultMap">
         select
         <include refid="BASE_BOM_COLUMN"/>
         from
@@ -1024,7 +1024,7 @@
           t.P_EPL_ID = (select ID from HZ_EPL_RECORD where PART_ID = #{lineId,jdbcType=VARCHAR} and PROJECT_ID =#{projectId,jdbcType=VARCHAR})
     </select>
 
-    <select id="HzEbomRecordDAOImpl_findNextSortNum" parameterType="sql.pojo.epl.HzEPLManageRecord" resultMap="BaseResultMap">
+    <select id="HzEbomRecordDAOImpl_findNextSortNum" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord" resultMap="BaseResultMap">
         SELECT <include refid="BASE_BOM_COLUMN"/>
         from
         HZ_BOM_LINE_RECORD t

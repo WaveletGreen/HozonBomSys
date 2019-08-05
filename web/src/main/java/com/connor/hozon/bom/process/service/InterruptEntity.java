@@ -24,10 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
-import sql.pojo.work.HzWorkProcedure;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
 
 import java.util.ArrayList;
 import java.util.List;

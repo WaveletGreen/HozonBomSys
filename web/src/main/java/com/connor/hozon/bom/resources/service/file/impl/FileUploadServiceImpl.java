@@ -29,11 +29,11 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import sql.pojo.bom.HzImportEbomRecord;
-import sql.pojo.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzImportEbomRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import sql.pojo.epl.HzEPLManageRecord;
-import sql.pojo.epl.HzEPLRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
 
 import java.math.BigDecimal;
 import java.util.*;

@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.domain.dto.response;
 
 import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
-import sql.pojo.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 
 /**
  * @Author: haozt

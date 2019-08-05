@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.mybatis.change.breakpoint.HzBreakPointDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import sql.BaseSQLUtil;
-import sql.pojo.integration.HzBreakPoint;
+import cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint;
 
 import java.util.HashMap;
 import java.util.List;

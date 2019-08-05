@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import sql.pojo.bom.HzSingleVehicleDosage;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzSingleVehicleDosage;
 
 import java.util.List;
 

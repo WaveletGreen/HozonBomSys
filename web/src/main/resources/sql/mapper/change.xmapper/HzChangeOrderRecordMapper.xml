@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzChangeOrderRecordMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.change.HzChangeOrderRecord">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord">
     <id column="ID" jdbcType="DOUBLE" property="id" />
     <result column="CHANGE_NO" jdbcType="VARCHAR" property="changeNo" />
     <result column="CREATE_ID" jdbcType="DOUBLE" property="createId" />
@@ -48,7 +48,7 @@
 
 
     <!--insert-->
-    <insert id="HzChangeOrderDAOImpl_insert" parameterType="sql.pojo.change.HzChangeOrderRecord">
+    <insert id="HzChangeOrderDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord">
     insert into HZ_CHANGE_ORDER_RECORD (ID, CHANGE_NO, CREATE_ID, 
       CREATE_TIME, CREATE_NO, TEL, CHANGE_TYPE,
       HAS_RELATED_CHANGE, RELATION_CHANGE_NO, MARKET_TYPE, 
@@ -62,7 +62,7 @@
   </insert>
 
   <!--update-->
-  <update id="HzChangeOrderDAOImpl_update" parameterType="sql.pojo.change.HzChangeOrderRecord">
+  <update id="HzChangeOrderDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord">
     update HZ_CHANGE_ORDER_RECORD
     <set>
       <if test="changeNo!= null">

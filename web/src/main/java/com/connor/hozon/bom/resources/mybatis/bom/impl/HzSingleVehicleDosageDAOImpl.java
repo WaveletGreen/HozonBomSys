@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzSingleVehicleDosageDAO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.bom.HzSingleVehicleDosage;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzSingleVehicleDosage;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -5,7 +5,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.work.HzWorkProcedure;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
 
 import java.util.List;
 import java.util.Map;

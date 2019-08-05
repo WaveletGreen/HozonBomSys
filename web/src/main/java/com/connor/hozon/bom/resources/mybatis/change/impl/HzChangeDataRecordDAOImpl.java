@@ -1,13 +1,11 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
-import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
-import com.connor.hozon.bom.resources.enumtype.TableNameToHyperLinkNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;

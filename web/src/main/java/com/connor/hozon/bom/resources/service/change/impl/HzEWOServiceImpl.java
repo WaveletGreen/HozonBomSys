@@ -18,9 +18,9 @@ import com.connor.hozon.bom.sys.entity.OrgGroup;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.change.HzEWOBasicInfo;
-import sql.pojo.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 
 import java.util.*;
 

@@ -1,6 +1,5 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkListBasicInfoRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzWorkListBasicInfoQuery;
 import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
@@ -9,8 +8,7 @@ import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.change.HzEWOBasicInfo;
-import sql.pojo.workList.HzWorkListRecord;
+import cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -33,8 +33,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorModel2;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 
 import java.util.*;
 

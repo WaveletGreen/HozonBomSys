@@ -9,9 +9,9 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import org.apache.commons.lang.StringUtils;
-import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.bom.HzImportEbomRecord;
-import sql.pojo.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzImportEbomRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 
 import java.util.Map;
 import java.util.UUID;

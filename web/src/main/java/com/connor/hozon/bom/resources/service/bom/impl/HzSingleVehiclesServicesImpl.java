@@ -19,7 +19,7 @@ import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterie
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
-import sql.redis.SerializeUtil;
+import cn.net.connor.hozon.common.util.SerializeUtil;
 
 import java.util.*;
 

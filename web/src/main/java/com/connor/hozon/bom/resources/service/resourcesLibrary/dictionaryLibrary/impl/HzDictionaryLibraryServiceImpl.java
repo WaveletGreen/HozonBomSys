@@ -13,7 +13,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
+import cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.*;
 

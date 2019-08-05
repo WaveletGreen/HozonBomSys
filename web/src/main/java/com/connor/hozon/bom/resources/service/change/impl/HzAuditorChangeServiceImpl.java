@@ -1,8 +1,6 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzChangeOrderFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
@@ -13,8 +11,8 @@ import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.change.HzAuditorChangeRecord;
-import sql.pojo.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

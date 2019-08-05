@@ -5,7 +5,7 @@ import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.change.HzApplicantChangeRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord;
 
 import java.util.HashMap;
 import java.util.List;

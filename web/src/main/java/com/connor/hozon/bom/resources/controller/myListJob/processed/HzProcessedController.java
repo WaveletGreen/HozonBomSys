@@ -16,8 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.change.HzAuditorChangeRecord;
-import sql.pojo.change.HzChangeListRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeListRecord;
 
 import java.util.*;
 

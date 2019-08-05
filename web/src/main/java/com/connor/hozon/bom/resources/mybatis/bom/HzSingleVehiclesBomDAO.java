@@ -2,7 +2,7 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.bom.HzSingleVehiclesBomRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzSingleVehiclesBomRecord;
 
 import java.util.List;
 

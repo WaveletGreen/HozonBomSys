@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
-import sql.pojo.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzSingleVehiclesBomRecord">
 
-    <resultMap id="BaseResultMap" type="sql.pojo.bom.HzSingleVehiclesBomRecord">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.bom.HzSingleVehiclesBomRecord">
         <result column="ID" jdbcType="DOUBLE" property="id"/>
         <result column="P_EBOM_PUID" jdbcType="VARCHAR" property="eBomPuid"/>
         <result column="P_MBOM_PUID" jdbcType="VARCHAR" property="mBomPuid"/>

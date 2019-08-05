@@ -23,9 +23,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import sql.pojo.change.HzApplicantChangeRecord;
-import sql.pojo.change.HzAuditorChangeRecord;
-import sql.pojo.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 import cn.net.connor.hozon.dao.pojo.task.HzTasks;
 
 import java.util.Date;

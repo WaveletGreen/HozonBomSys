@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.bomSystem.bean;
 
 import lombok.Data;
-import sql.pojo.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 
 import java.util.Date;

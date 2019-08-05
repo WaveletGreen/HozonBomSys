@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.resources.mybatis.change.breakpoint.HzBreakPointDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.integration.HzBreakPoint">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
         <id column="PID" jdbcType="DECIMAL" property="pid"/>
         <result column="P_PACKNO" jdbcType="VARCHAR" property="pPackno"/>
         <result column="P_ITEM" jdbcType="VARCHAR" property="pItem"/>
@@ -68,11 +68,11 @@
         select count(*) from HZ_BREAKPOINT
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.integration.HzBreakPoint">
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
     delete from HZ_BREAKPOINT
     where PID = #{pid,jdbcType=DECIMAL}
   </delete>
-    <insert id="insert" parameterType="sql.pojo.integration.HzBreakPoint">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
     insert into HZ_BREAKPOINT (PID, P_PACKNO, P_ITEM, 
       P_TCECN, P_ECN, P_DATE, 
       P_OECN, P_ODATE, P_VIN, 
@@ -88,7 +88,7 @@
       #{pReserve4,jdbcType=VARCHAR}, #{pReserve5,jdbcType=VARCHAR}, #{feedbackTime,jdbcType=TIMESTAMP}
       )
   </insert>
-    <insert id="insertSelective" parameterType="sql.pojo.integration.HzBreakPoint">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
         insert into HZ_BREAKPOINT
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="pid != null">
@@ -203,7 +203,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.integration.HzBreakPoint">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
         update HZ_BREAKPOINT
         <set>
             <if test="pPackno != null">
@@ -260,7 +260,7 @@
         </set>
         where PID = #{pid,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.integration.HzBreakPoint">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
     update HZ_BREAKPOINT
     set P_PACKNO = #{pPackno,jdbcType=VARCHAR},
       P_ITEM = #{pItem,jdbcType=VARCHAR},

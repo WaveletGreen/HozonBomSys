@@ -20,8 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import sql.pojo.change.HzAuditorChangeRecord;
-import sql.pojo.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 import cn.net.connor.hozon.dao.pojo.task.HzTasks;
 
 import java.util.Date;

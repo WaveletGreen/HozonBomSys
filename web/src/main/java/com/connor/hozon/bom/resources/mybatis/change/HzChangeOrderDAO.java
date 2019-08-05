@@ -1,9 +1,8 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 
 import java.util.List;
 

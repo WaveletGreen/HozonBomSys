@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
-import sql.pojo.change.HzEWOImpactReference;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactReference;
 
 import java.util.List;
 

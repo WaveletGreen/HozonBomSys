@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
+import cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary;
 
 import java.util.HashMap;
 import java.util.Map;
