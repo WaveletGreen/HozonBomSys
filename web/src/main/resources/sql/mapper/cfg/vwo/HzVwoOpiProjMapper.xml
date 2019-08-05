@@ -6,8 +6,8 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoOpiProj">
+<mapper namespace="cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiProjDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj">
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="OPI_PROJ_MNG_VWO_ID" jdbcType="DECIMAL" property="opiVwoId"/>
         <result column="OPI_PROJ_MNG_OPINION" jdbcType="VARCHAR" property="opiProjMngOpinion"/>
@@ -28,25 +28,25 @@
     OPI_PROJ_MNG_UPDATER, OPI_PROJ_MNG_STAGE,OPI_PROJ_MNG_USER_ID,OPI_PROJ_MNG_USER_NAME
   </sql>
     <!--**************************************select**************************************-->
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_VWO_OPI_PROJ
         where ID = #{id,jdbcType=DECIMAL}
     </select>
-    <select id="selectByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj" resultMap="BaseResultMap">
+    <select id="selectByVwoId" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_VWO_OPI_PROJ
         where OPI_PROJ_MNG_VWO_ID = #{opiVwoId,jdbcType=DECIMAL}
     </select>
     <!--**************************************delete**************************************-->
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj">
     delete from HZ_VWO_OPI_PROJ
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <!--**************************************insert**************************************-->
-    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_VWO_OPI_PROJ_ID.Nextval from dual
@@ -68,7 +68,7 @@
       #{opiProjMngUserId,jdbcType=DECIMAL}, #{opiProjMngUserName,jdbcType=VARCHAR}
         )
   </insert>
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_VWO_OPI_PROJ_ID.Nextval from dual
@@ -158,7 +158,7 @@
         </trim>
     </insert>
     <!--**************************************update**************************************-->
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj">
         update HZ_VWO_OPI_PROJ
         <set>
             <if test="opiVwoId != null">
@@ -199,7 +199,7 @@
 
         where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj">
     update HZ_VWO_OPI_PROJ
     set OPI_PROJ_MNG_VWO_ID = #{opiVwoId,jdbcType=DECIMAL},
       OPI_PROJ_MNG_OPINION = #{opiProjMngOpinion,jdbcType=VARCHAR},
@@ -216,7 +216,7 @@
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 
-    <update id="updateUserByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoOpiProj">
+    <update id="updateUserByVwoId" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj">
         update HZ_VWO_OPI_PROJ
         set
           OPI_PROJ_MNG_USER_ID = #{opiProjMngUserId,jdbcType=DECIMAL},

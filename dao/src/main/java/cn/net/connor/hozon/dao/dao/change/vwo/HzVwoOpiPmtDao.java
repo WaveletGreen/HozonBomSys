@@ -4,18 +4,22 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.vwo;
+package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.vwo.HzVwoOpiPmt;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: PMT经理意见
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzVwoOpiPmtDao extends BasicDao<HzVwoOpiPmt>{
-    HzVwoOpiPmt selectByVwoId(Long id);
+    HzVwoOpiPmt selectByVwoId(@Param("opiVwoId") Long opiVwoId);
 
     int updateUserByVwoId(HzVwoOpiPmt hzVwoOpiPmt);
 }

@@ -4,7 +4,7 @@
  * ALL RIGHTS RESERVED.
  */
 
-package sql.pojo.cfg.vwo;
+package cn.net.connor.hozon.dao.pojo.change.vwo;
 
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import lombok.Data;
@@ -158,6 +158,16 @@ public class HzVwoInfo {
      */
     private String vwoComment;
 
+    /**
+     * 项目ID
+     */
+    private String projectUid;
+
+    /**
+     * 从当前的查询字段映射到数据库字段上
+     * @param code
+     * @return
+     */
     public static String reflectToDBField(String code) {
         switch (code) {
             /**
@@ -263,7 +273,7 @@ public class HzVwoInfo {
         }
     }
 
-    private String projectUid;
+
 
 
 

@@ -6,8 +6,8 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoExecuteDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoExecute">
+<mapper namespace="cn.net.connor.hozon.dao.dao.change.vwo.HzVwoExecuteDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute">
         <!--主键-->
         <id column="EXE_ID" jdbcType="DECIMAL" property="exeId"/>
         <!--VWO号外键-->
@@ -62,7 +62,7 @@
     EXE_RESERVE7, EXE_RESERVE8, EXE_RESERVE9, EXE_RESERVE10
   </sql>
     <!--**************************************select**************************************-->
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoExecute" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_VWO_EXECUTE
@@ -75,7 +75,7 @@
         where EXE_VWO_ID = #{exeVwoId,jdbcType=DECIMAL}
     </select>
     <!--**************************************delete**************************************-->
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute">
     delete from HZ_VWO_EXECUTE
     where EXE_ID = #{exeId,jdbcType=DECIMAL}
   </delete>
@@ -89,7 +89,7 @@
         )
     </delete>
     <!--**************************************insert**************************************-->
-    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute">
         <selectKey order="BEFORE"
                    keyColumn="EXE_ID" keyProperty="exeId" resultType="java.lang.Long">
             select SEQ_VWO_INFLUENCE_DEPT_ID.Nextval from dual
@@ -111,7 +111,7 @@
         #{exeReserve6,jdbcType=VARCHAR}, #{exeReserve7,jdbcType=VARCHAR}, #{exeReserve8,jdbcType=VARCHAR},
         #{exeReserve9,jdbcType=VARCHAR}, #{exeReserve10,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute">
         insert into HZ_VWO_EXECUTE
         <selectKey order="BEFORE"
                    keyColumn="EXE_ID" keyProperty="exeId" resultType="java.lang.Long">
@@ -261,7 +261,7 @@
         </trim>
     </insert>
     <!--**************************************update**************************************-->
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute">
         update HZ_VWO_EXECUTE
         <set>
             <if test="exeVwoId != null">
@@ -333,7 +333,7 @@
         </set>
         where EXE_ID = #{exeId,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoExecute">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute">
     update HZ_VWO_EXECUTE
     set EXE_VWO_ID = #{exeVwoId,jdbcType=DECIMAL},
       EXE_DEPT = #{exeDept,jdbcType=VARCHAR},

@@ -4,18 +4,22 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.vwo;
+package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.vwo.HzVwoOpiProj;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 项目经理意见
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzVwoOpiProjDao extends BasicDao<HzVwoOpiProj>{
-    HzVwoOpiProj selectByVwoId(Long id);
+    HzVwoOpiProj selectByVwoId(@Param("opiVwoId") Long opiVwoId);
 
     int updateUserByVwoId(HzVwoOpiProj hzVwoOpiProj);
 }

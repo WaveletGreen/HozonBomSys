@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.vwo.HzVwoInfo;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo;
 import cn.net.connor.hozon.dao.pojo.task.HzTasks;
 
 import java.util.ArrayList;

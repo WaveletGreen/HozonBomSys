@@ -4,11 +4,12 @@
  * ALL RIGHTS RESERVED.
  */
 
-package sql.pojo.cfg.vwo;
+package cn.net.connor.hozon.dao.pojo.change.vwo;
 
 import lombok.Data;
 
 import java.util.Date;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck
@@ -18,26 +19,49 @@ import java.util.Date;
 
 @Data
 public class HzVwoOpiProj {
+    /**
+     * 主键
+     */
     private Long id;
-
+    /**
+     * vwo外键
+     */
     private Long opiVwoId;
-
+    /**
+     * 项目经理意见
+     */
     private String opiProjMngOpinion;
-
+    /**
+     * 项目经理是否同意
+     */
     private Integer opiProjMngAgreement;
-
+    /**
+     * 项目经理决策日期
+     */
     private Date opiProjMngOptionDate;
-
+    /**
+     * 项目经理决策说明
+     */
     private String opiProjMngComment;
-
+    /**
+     * 创建时间
+     */
     private Date opiProjMngCreateDate;
-
+    /**
+     * 更新时间
+     */
     private Date opiProjMngUpdateDate;
-
+    /**
+     * 创建人
+     */
     private String opiProjMngCreator;
-
+    /**
+     * 更新人
+     */
     private String opiProjMngUpdater;
-
+    /**
+     * 状态，没到这个人决策则不会出现选择项
+     */
     private Integer opiProjMngStage;
 
     /**

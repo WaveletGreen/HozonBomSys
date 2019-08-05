@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.vwo.HzVwoInformChanges;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges;
 
 import java.util.List;
 

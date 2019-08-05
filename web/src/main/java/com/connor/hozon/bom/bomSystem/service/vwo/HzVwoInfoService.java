@@ -6,13 +6,13 @@
 
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInfoDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoInfoDao;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVwoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.vwo.HzVwoInfo;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ import java.util.Map;
 @Service("hzVwoInfoService")
 public class HzVwoInfoService implements IHzVwoInfoService {
     @Autowired
-    HzVwoInfoDao hzVwoInfoDao;
+    private HzVwoInfoDao hzVwoInfoDao;
 
     /**
      * 主键删除
@@ -105,8 +105,8 @@ public class HzVwoInfoService implements IHzVwoInfoService {
      * @return
      */
     @Override
-    public int tellMeHowManyOfIt(String projectUid) {
-        return hzVwoInfoDao.tellMeHowManyOfIt(projectUid);
+    public int count(String projectUid) {
+        return hzVwoInfoDao.count(projectUid);
     }
 
     /**

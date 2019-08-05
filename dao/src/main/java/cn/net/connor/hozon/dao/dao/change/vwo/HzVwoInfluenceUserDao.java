@@ -4,25 +4,29 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.vwo;
+package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.vwo.HzVwoInfluenceDept;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfluenceUser;
+import org.springframework.stereotype.Repository;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
- * @Description: 影响部门
+ * @Description: 影响人员
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
-public interface HzVwoInfluenceDeptDao  extends BasicDao<HzVwoInfluenceDept>{
+@Repository
+public interface HzVwoInfluenceUserDao  extends BasicDao<HzVwoInfluenceUser>{
     /**
      * 主键删除
      *
      * @param id
      * @return
      */
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(@Param("id") Long id);
+
 
     /**
      * 主键查询
@@ -31,14 +35,14 @@ public interface HzVwoInfluenceDeptDao  extends BasicDao<HzVwoInfluenceDept>{
      * @return
      */
 
-    HzVwoInfluenceDept selectByPrimaryKey(Long id);
+    HzVwoInfluenceUser selectByPrimaryKey(@Param("id") Long id);
 
     /**
-     * 根据VWO ID查找影响部门
+     * 根据VWO主键进行查询
      *
      * @param vwoId
      * @return
      */
-    HzVwoInfluenceDept selectByVwoId(@Param("vwoId") Long vwoId);
+    HzVwoInfluenceUser selectByVwoId(@Param("vwoId") Long vwoId);
 
 }

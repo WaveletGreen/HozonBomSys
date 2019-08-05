@@ -6,11 +6,11 @@
 
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoExecuteDao;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVwoExecuteService;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoExecuteDao;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzVwoExecuteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.vwo.HzVwoExecute;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute;
 
 import java.util.List;
 
@@ -21,10 +21,10 @@ import java.util.List;
  * @Modified By:
  */
 @Service("hzVwoExecuteService")
-public class HzVwoExecuteService implements IHzVwoExecuteService {
+public class HzVwoExecuteServiceImpl implements HzVwoExecuteService {
 
     @Autowired
-    HzVwoExecuteDao hzVwoExecuteDao;
+    private HzVwoExecuteDao hzVwoExecuteDao;
 
     /**
      * 根据VWO ID查询
@@ -33,7 +33,7 @@ public class HzVwoExecuteService implements IHzVwoExecuteService {
      * @return 一组分发与实施对象
      */
     @Override
-    public List<HzVwoExecute> doSelectByVwoId(Long VwoId) {
+    public List<HzVwoExecute> selectByVwoId(Long VwoId) {
         return hzVwoExecuteDao.selectByVwoId(VwoId);
     }
 
@@ -44,7 +44,7 @@ public class HzVwoExecuteService implements IHzVwoExecuteService {
      * @return
      */
     @Override
-    public boolean doInsert(HzVwoExecute execute) {
+    public boolean insert(HzVwoExecute execute) {
         return hzVwoExecuteDao.insertSelective(execute) > 0 ? true : false;
     }
 
@@ -55,7 +55,7 @@ public class HzVwoExecuteService implements IHzVwoExecuteService {
      * @return
      */
     @Override
-    public boolean doDeleteByBatch(List<HzVwoExecute> executes) {
+    public boolean deleteByBatch(List<HzVwoExecute> executes) {
         return hzVwoExecuteDao.deleteByBatch(executes) > 0 ? true : false;
     }
 }

@@ -4,7 +4,7 @@
  * ALL RIGHTS RESERVED.
  */
 
-package sql.pojo.cfg.vwo;
+package cn.net.connor.hozon.dao.pojo.change.vwo;
 
 import lombok.Data;
 

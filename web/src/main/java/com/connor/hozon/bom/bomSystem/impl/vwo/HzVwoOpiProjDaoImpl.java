@@ -6,12 +6,10 @@
 
 package com.connor.hozon.bom.bomSystem.impl.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiProjDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiProjDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import sql.pojo.cfg.vwo.HzVwoOpiProj;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiProj;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

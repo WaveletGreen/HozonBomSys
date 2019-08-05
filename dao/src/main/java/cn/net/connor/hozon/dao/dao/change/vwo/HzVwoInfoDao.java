@@ -4,11 +4,12 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.vwo;
+package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.vwo.HzVwoInfo;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzVwoInfoDao extends BasicDao<HzVwoInfo> {
     /**
      * 主键删除
@@ -25,7 +27,7 @@ public interface HzVwoInfoDao extends BasicDao<HzVwoInfo> {
      * @param id
      * @return
      */
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(@Param("id") Long id);
 
 
     /**
@@ -34,7 +36,7 @@ public interface HzVwoInfoDao extends BasicDao<HzVwoInfo> {
      * @param id
      * @return
      */
-    HzVwoInfo selectByPrimaryKey(Long id);
+    HzVwoInfo selectByPrimaryKey(@Param("id") Long id);
 
     /**
      * 寻找当月最大的vwo
@@ -57,7 +59,7 @@ public interface HzVwoInfoDao extends BasicDao<HzVwoInfo> {
      * @param projectUid
      * @return
      */
-    int tellMeHowManyOfIt(@Param("projectUid") String projectUid);
+    int count(@Param("projectUid") String projectUid);
 
     int updateByVwoId(HzVwoInfo info);
 }

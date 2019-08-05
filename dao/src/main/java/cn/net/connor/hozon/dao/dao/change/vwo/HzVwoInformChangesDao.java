@@ -4,11 +4,12 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.vwo;
+package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.vwo.HzVwoInformChanges;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -17,6 +18,7 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzVwoInformChangesDao extends BasicDao<HzVwoInformChanges> {
     /**
      * 主键删除
@@ -48,5 +50,5 @@ public interface HzVwoInformChangesDao extends BasicDao<HzVwoInformChanges> {
      * @param vwoId
      * @return
      */
-    Long tellMeHowManyOfIt(@Param("vwoId") Long vwoId);
+    Long count(@Param("vwoId") Long vwoId);
 }

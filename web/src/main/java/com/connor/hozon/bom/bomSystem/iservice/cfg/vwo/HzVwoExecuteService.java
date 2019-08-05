@@ -6,8 +6,8 @@
 
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
-import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.vwo.HzVwoExecute;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,15 +17,15 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Configuration
-public interface IHzVwoExecuteService {
+@Service
+public interface HzVwoExecuteService {
     /**
      * 根据VWO ID查询
      *
      * @param VwoId VWO主键
      * @return 一组分发与实施对象
      */
-    List<HzVwoExecute> doSelectByVwoId(Long VwoId);
+    List<HzVwoExecute> selectByVwoId(Long VwoId);
 
     /**
      * 增加一个发布与实施对象
@@ -33,7 +33,7 @@ public interface IHzVwoExecuteService {
      * @param execute
      * @return
      */
-    boolean doInsert(HzVwoExecute execute);
+    boolean insert(HzVwoExecute execute);
 
     /**
      * 批量删除发布与实施数据
@@ -41,5 +41,5 @@ public interface IHzVwoExecuteService {
      * @param executes
      * @return
      */
-    boolean doDeleteByBatch(List<HzVwoExecute> executes);
+    boolean deleteByBatch(List<HzVwoExecute> executes);
 }

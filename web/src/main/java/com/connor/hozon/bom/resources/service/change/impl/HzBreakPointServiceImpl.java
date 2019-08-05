@@ -42,7 +42,7 @@ public class HzBreakPointServiceImpl implements HzBreakPointService {
      */
     @Override
     public Long doTellMeHowManyOfIt() {
-        return breakPointDao.tellMeHowManyOfIt();
+        return breakPointDao.count();
     }
 
 }

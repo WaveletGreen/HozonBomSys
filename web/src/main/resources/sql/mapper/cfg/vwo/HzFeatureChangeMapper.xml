@@ -6,7 +6,7 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzFeatureChangeDao">
+<mapper namespace="cn.net.connor.hozon.dao.dao.change.vwo.HzFeatureChangeDao">
     <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean">
         <id column="ID" jdbcType="DOUBLE" property="id"/>
         <result column="FEATURE_VALUE_NAME" jdbcType="VARCHAR" property="featureValueName"/>
@@ -266,7 +266,7 @@
 
     </insert>
 
-    <select id="doQueryLastTwoChange" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean" resultMap="BaseResultMap">
+    <select id="findLastTwoChange" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean" resultMap="BaseResultMap">
         select
           <include refid="Base_Column_List"/>
         from(
@@ -286,7 +286,7 @@
           te.id
     </select>
 
-    <select id="doSelectHasEffect" parameterType="java.util.List" resultMap="BaseResultMap">
+    <select id="selectHasEffect" parameterType="java.util.List" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from
@@ -311,7 +311,7 @@
         PROCESS_STATUS = 0
     </update>
 
-    <delete id="doDeleteByPrimaryKeys" parameterType="java.util.List">
+    <delete id="deleteByPrimaryKeys" parameterType="java.util.List">
         delete from HZ_CFG0_AFTER_CHANGE_RECORD
         where
         ID in
@@ -377,7 +377,7 @@
           CHANGE_ORDER_ID = #{vwoId,jdbcType=DECIMAL}
     </select>
 
-    <select id="doselectByChangeId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="selectByChangeId" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from
@@ -388,7 +388,7 @@
         PROCESS_STATUS = 0
     </select>
 
-    <select id="doSelectHasNotEffect" parameterType="java.util.List" resultMap="BaseResultMap">
+    <select id="selectHasNotEffect" parameterType="java.util.List" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from

@@ -102,8 +102,8 @@
 ////     * @return
 ////     */
 ////    @Override
-////    public int tellMeHowManyOfIt(HzColorSetQuery hzColorSetQuery) {
-////        List<Integer> count = baseSQLUtil.executeQueryByPass(new Integer(0), hzColorSetQuery, clzName + ".tellMeHowManyOfIt");
+////    public int count(HzColorSetQuery hzColorSetQuery) {
+////        List<Integer> count = baseSQLUtil.executeQueryByPass(new Integer(0), hzColorSetQuery, clzName + ".count");
 ////        return count.get(0);
 ////    }
 //}

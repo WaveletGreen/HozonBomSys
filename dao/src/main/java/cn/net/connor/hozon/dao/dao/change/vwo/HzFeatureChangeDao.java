@@ -4,11 +4,13 @@
  * ALL RIGHTS RESERVED.
  */
 
-package com.connor.hozon.bom.bomSystem.dao.vwo;
+package cn.net.connor.hozon.dao.dao.change.vwo;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
 
     /**
@@ -38,7 +41,7 @@ public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
      */
     List<HzFeatureChangeBean> selectByVwoId(HzFeatureChangeBean bean);
 
-    int insertList(List<HzFeatureChangeBean> hzFeatureChangeBeans);
+    int insertList(Map<String, Object> map );
 
     /**
      * 根据VWO ID找到当前变更的特性UID
@@ -47,19 +50,19 @@ public interface HzFeatureChangeDao extends BasicDao<HzFeatureChangeBean> {
      */
     List<HzFeatureChangeBean> selectCfgUidsByVwoId(HzFeatureChangeBean bean);
 
-    List<HzFeatureChangeBean> doQueryLastTwoChange(HzFeatureChangeBean hzFeatureChangeBean);
+    List<HzFeatureChangeBean> findLastTwoChange(HzFeatureChangeBean hzFeatureChangeBean);
 
-    List<HzFeatureChangeBean> doSelectHasEffect(List<HzFeatureValue> records);
+    List<HzFeatureChangeBean> selectHasEffect(List<HzFeatureValue> records);
 
     int updateStatusByOrderId(Map<String,Object> map);
 
-    int doDeleteByPrimaryKeys(List<Long> changeFeatureIds);
+    int deleteByPrimaryKeys(List<Long> changeFeatureIds);
 
     HzFeatureChangeBean selectLast(HzFeatureChangeBean hzFeatureChangeBean);
 
     HzFeatureChangeBean selectByChangeIdAndCfgid(HzFeatureChangeBean hzFeatureChangeBean);
 
-    List<HzFeatureChangeBean> doselectByChangeId(Long orderId);
+    List<HzFeatureChangeBean> selectByChangeId(@Param("orderId") Long orderId);
 
-    List<HzFeatureChangeBean> doSelectHasNotEffect(List<Long> changeFeatureIds);
+    List<HzFeatureChangeBean> selectHasNotEffect(List<Long> changeFeatureIds);
 }

@@ -6,8 +6,8 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInformChangesDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoInformChanges">
+<mapper namespace="cn.net.connor.hozon.dao.dao.change.vwo.HzVwoInformChangesDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges">
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="VWO_ID" jdbcType="DECIMAL" property="vwoId"/>
         <result column="VWO_NUM" jdbcType="VARCHAR" property="vwoNum"/>
@@ -43,23 +43,23 @@
         #{partName,jdbcType=VARCHAR},
         #{partPuid,jdbcType=VARCHAR}
     </sql>
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInformChanges" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_VWO_INFORM_CHANGES
         where ID = #{id,jdbcType=DECIMAL}
     </select>
-    <select id="selectByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoInformChanges" resultMap="BaseResultMap">
+    <select id="selectByVwoId" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_VWO_INFORM_CHANGES
         where VWO_ID = #{vwoId,jdbcType=DECIMAL}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInformChanges">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from HZ_VWO_INFORM_CHANGES
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
-    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoInformChanges">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_HZ_VWO_INFO_CHANGE_ID.Nextval from dual
@@ -72,7 +72,7 @@
         <include refid="Value_Of_Base_Column"/>
         )
     </insert>
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoInformChanges">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges">
         insert into HZ_VWO_INFORM_CHANGES
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -139,10 +139,10 @@
             </if>
         </trim>
     </insert>
-    <select id="tellMeHowManyOfIt" parameterType="java.lang.Long" resultType="java.lang.Long">
+    <select id="count" parameterType="java.lang.Long" resultType="java.lang.Long">
         select count(*) from HZ_VWO_INFORM_CHANGES where VWO_ID=#{vwoId,jdbcType=DECIMAL}
     </select>
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoInformChanges">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges">
         update HZ_VWO_INFORM_CHANGES
         <set>
             <if test="vwoId != null">
@@ -175,7 +175,7 @@
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoInformChanges">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges">
     update HZ_VWO_INFORM_CHANGES
     set VWO_ID = #{vwoId,jdbcType=DECIMAL},
       VWO_NUM = #{vwoNum,jdbcType=VARCHAR},

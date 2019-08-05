@@ -6,8 +6,8 @@
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoOpiPmtDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+<mapper namespace="cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiPmtDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt">
         <!--主键-->
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <!--vwo号-->
@@ -41,25 +41,25 @@
     OPI_PMT_MNG_UPDATER, OPI_PMT_MNG_STAGE,OPI_PMT_MNG_USER_ID,OPI_PMT_MNG_USER_NAME
   </sql>
     <!--**************************************select**************************************-->
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_VWO_OPI_PMT
         where ID = #{id,jdbcType=DECIMAL}
     </select>
-    <select id="selectByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt" resultMap="BaseResultMap">
+    <select id="selectByVwoId" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_VWO_OPI_PMT
         where OPI_PMT_MNG_VWO_ID = #{opiVwoId,jdbcType=DECIMAL}
     </select>
     <!--**************************************delete**************************************-->
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt">
     delete from HZ_VWO_OPI_PMT
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
     <!--**************************************insert**************************************-->
-    <insert id="insert" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_VWO_OPI_PMT_ID.Nextval from dual
@@ -77,7 +77,7 @@
       #{opiPmtMngUpdater,jdbcType=VARCHAR}, #{opiPmtMngStage,jdbcType=DECIMAL},
       #{opiPmtMngUserId,jdbcType=DECIMAL},#{opiPmtMngUserName,jdbcType=VARCHAR})
   </insert>
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt">
         <selectKey order="BEFORE"
                    keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_VWO_OPI_PMT_ID.Nextval from dual
@@ -167,7 +167,7 @@
         </trim>
     </insert>
     <!--**************************************update**************************************-->
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt">
         update HZ_VWO_OPI_PMT
         <set>
             <if test="opiVwoId != null">
@@ -207,7 +207,7 @@
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt">
     update HZ_VWO_OPI_PMT
     set OPI_PMT_MNG_VWO_ID = #{opiVwoId,jdbcType=DECIMAL},
       OPI_PMT_MNG_OPINION = #{opiPmtMngOpinion,jdbcType=VARCHAR},
@@ -224,7 +224,7 @@
     where ID = #{id,jdbcType=DECIMAL}
   </update>
 
-    <update id="updateUserByVwoId" parameterType="sql.pojo.cfg.vwo.HzVwoOpiPmt">
+    <update id="updateUserByVwoId" parameterType="cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoOpiPmt">
         update HZ_VWO_OPI_PMT
         set
           OPI_PMT_MNG_USER_ID = #{opiPmtMngUserId,jdbcType=DECIMAL},

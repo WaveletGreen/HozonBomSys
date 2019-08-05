@@ -6,11 +6,11 @@
 
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
-import com.connor.hozon.bom.bomSystem.dao.vwo.HzVwoInformChangesDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoInformChangesDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVwoInformChangesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.vwo.HzVwoInformChanges;
+import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInformChanges;
 
 import java.util.List;
 
@@ -110,6 +110,6 @@ public class HzVwoInformChangesService implements IHzVwoInformChangesService {
      */
     @Override
     public Long tellMeHowManyOfIt(Long vwoId) {
-        return hzVwoInformChangesDao.tellMeHowManyOfIt(vwoId);
+        return hzVwoInformChangesDao.count(vwoId);
     }
 }
