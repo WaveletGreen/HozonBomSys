@@ -42,7 +42,7 @@ import sql.pojo.epl.HzEPLManageRecord;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringHelper.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

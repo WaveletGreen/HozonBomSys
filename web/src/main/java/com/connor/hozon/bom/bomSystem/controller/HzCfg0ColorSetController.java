@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.controller;
 
 
 import cn.net.connor.hozon.dao.pojo.depository.color.HzColorSetQuery;
-import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
 import cn.net.connor.hozon.common.entity.QueryBase;
@@ -36,7 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringHelper.checkString;
 
 
 /**

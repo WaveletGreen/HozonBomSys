@@ -53,7 +53,7 @@ import sql.pojo.factory.HzFactory;
 
 import java.util.*;
 
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringHelper.checkString;
 
 
 /**
