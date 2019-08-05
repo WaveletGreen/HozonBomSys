@@ -28,8 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel;
-import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0BomLineOfModel;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFcfgBomLvl1ListOperation;
 
 import java.util.*;
 

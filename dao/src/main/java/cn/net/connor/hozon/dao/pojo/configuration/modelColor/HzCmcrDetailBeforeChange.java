@@ -1,10 +1,11 @@
 /*
- * Copyright (c) 2018.
- * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
- * ALL RIGHTS RESERVED.
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
  */
 
-package sql.pojo.cfg.modelColor;
+package cn.net.connor.hozon.dao.pojo.configuration.modelColor;
 
 import lombok.Data;
 

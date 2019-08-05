@@ -6,7 +6,7 @@
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor">
         <!--puid主键-->
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <!--产品配置器puid-->
@@ -25,13 +25,13 @@
         <result column="P_SHELL_CFG0_PUID" jdbcType="VARCHAR" property="pShellCfg0Puid"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
-               type="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+               type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor">
         <!--系统层颜色记录-->
         <result column="P_COLORFUL_MAP_BLOCK" jdbcType="BLOB"
                 property="pColorfulMapBlock"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithColorJudge"
-               type="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+               type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor">
         <!--是否多色-->
         <result column="P_COLOR_IS_MULTIPLY" jdbcType="VARCHAR" property="pColorIsMultiply"/>
         <!--颜色名称-->
@@ -62,7 +62,7 @@
         <result column="CMCR_EFFECTED_DATE" jdbcType="DATE" property="cmcrEffectedDate"/>
     </resultMap>
 
-    <resultMap extends="ResultMapWithColorJudge" id="VwoMap" type="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+    <resultMap extends="ResultMapWithColorJudge" id="VwoMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor">
         <result column="cmcrVwoNum" jdbcType="VARCHAR" property="cmcrVwoNum"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -107,7 +107,7 @@
         CMCR_STATUS = #{cmcrStatus,jdbcType=VARCHAR}
     </sql>
 
-    <select id="selectByMainId" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor"
+    <select id="selectByMainId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor"
             resultMap="ResultMapWithColorJudge">
         select
         <include refid="Base_Column_List"/>
@@ -138,7 +138,7 @@
         from HZ_CFG0_MODEL_COLOR_RECORD where PUID=#{puid,jdbcType=VARCHAR}
     </select>
 
-    <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor">
         insert into HZ_CFG0_MODEL_COLOR_RECORD
         (
         <include refid="Base_Column_List"/>,
@@ -149,13 +149,13 @@
         #{cmcrStatus,jdbcType=VARCHAR}
         )
     </insert>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor">
         update HZ_CFG0_MODEL_COLOR_RECORD
         set
         <include refid="reflect"/>
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
-    <update id="updateOldData" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+    <update id="updateOldData" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor">
         update HZ_CFG0_MODEL_COLOR_RECORD
         set
         P_COLORFUL_MAP_BLOCK=null,
@@ -172,7 +172,7 @@
         )
     </delete>
 
-    <select id="selectByPuids" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor"
+    <select id="selectByPuids" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor"
             resultMap="ResultMapWithColorJudge">
         select
         <include refid="Base_Column_List"/>,
@@ -208,7 +208,7 @@
         </foreach>
     </update>
 
-    <update id="updateByVwoId" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor">
+    <update id="updateByVwoId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor">
         update
           HZ_CFG0_MODEL_COLOR_RECORD t
         set

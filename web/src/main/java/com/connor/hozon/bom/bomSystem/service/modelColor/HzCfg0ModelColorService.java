@@ -29,8 +29,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail;
 import sql.redis.SerializeUtil;
 
 import java.text.SimpleDateFormat;

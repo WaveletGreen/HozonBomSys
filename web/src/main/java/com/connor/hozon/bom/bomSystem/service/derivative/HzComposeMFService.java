@@ -48,8 +48,8 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail;
-import sql.pojo.cfg.fullCfg.HzFullCfgModel;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgModel;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
 import sql.pojo.epl.HzEPLManageRecord;
 import sql.pojo.factory.HzFactory;
 

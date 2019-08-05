@@ -1,4 +1,4 @@
-package sql.pojo.payment;
+package cn.net.connor.hozon.dao.pojo.depository.payment;
 
 import lombok.Data;
 import cn.net.connor.hozon.dao.pojo.BaseDO;

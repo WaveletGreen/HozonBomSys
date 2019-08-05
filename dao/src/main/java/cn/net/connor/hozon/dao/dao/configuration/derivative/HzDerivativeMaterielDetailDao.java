@@ -10,6 +10,7 @@ import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -18,6 +19,7 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzDerivativeMaterielDetailDao extends BasicDao<HzDerivativeMaterielDetail> {
 
     /**

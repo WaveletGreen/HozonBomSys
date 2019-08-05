@@ -8,6 +8,7 @@ package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
 import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.*;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
@@ -52,7 +53,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.cfg.fullCfg.*;
 import sql.pojo.change.HzChangeDataRecord;
 import sql.pojo.change.HzChangeOrderRecord;
 
@@ -1101,7 +1101,7 @@ public class HzBomAllCfgService {
 
         //变更主数据集合
         HzFullCfgMainChange hzFullCfgMainChange = new HzFullCfgMainChange();
-        hzFullCfgMainChange.srcSetChange(hzFullCfgMain);
+        hzFullCfgMainChange.srcSetChange(hzFullCfgMain,UserInfo.getUser().getLogin());
         hzFullCfgMainChange.setChangeOrderId(changeFromId);
         hzFullCfgMainChange.setChangeStatus(0);
         //变更车型模型集合
@@ -1114,7 +1114,7 @@ public class HzBomAllCfgService {
 
 
             HzFullCfgModelChange hzFullCfgModelChange = new HzFullCfgModelChange();
-            hzFullCfgModelChange.srcSetChange(hzFullCfgModel);
+            hzFullCfgModelChange.srcSetChange(hzFullCfgModel,UserInfo.getUser().getLogin());
             hzFullCfgModelChange.setChangeOrderId(changeFromId);
             hzFullCfgModelChange.setMainID(hzFullCfgMainChange.getId());
 
@@ -1133,7 +1133,7 @@ public class HzBomAllCfgService {
         List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChanges = new ArrayList<HzFullCfgWithCfgChange>();
         for(HzFullCfgWithCfg hzFullCfgWithCfg : hzFullCfgWithCfgs){
             HzFullCfgWithCfgChange hzFullCfgWithCfgChange = new HzFullCfgWithCfgChange();
-            hzFullCfgWithCfgChange.srcSetChange(hzFullCfgWithCfg);
+            hzFullCfgWithCfgChange.srcSetChange(hzFullCfgWithCfg,UserInfo.getUser().getLogin());
             hzFullCfgWithCfgChange.setChangeOrderId(changeFromId);
             hzFullCfgWithCfgChange.setMainID(hzFullCfgMainChange.getId());
             //查询特性

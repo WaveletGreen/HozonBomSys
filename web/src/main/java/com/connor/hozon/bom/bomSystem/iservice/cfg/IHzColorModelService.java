@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg;
 
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail;
 
 import java.util.List;
 

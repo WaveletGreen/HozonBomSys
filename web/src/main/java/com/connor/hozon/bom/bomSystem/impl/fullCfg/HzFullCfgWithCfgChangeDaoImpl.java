@@ -1,11 +1,9 @@
 package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.stereotype.Repository;
-import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
-import sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfgChange;
 
 import java.util.List;
 

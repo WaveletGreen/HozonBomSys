@@ -10,6 +10,7 @@ import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,11 +34,11 @@ public interface HzDerivativeMaterielBasicDao extends BasicDao<HzDerivativeMater
 
     /**
      * 车型模型+配色模型组成唯一的配置物料特性数据
-     * @param modelUid 车型模型UID
-     * @param colorModel 配色模型UID
+     * @param dmbModelUid 车型模型UID
+     * @param dmbColorModelUid 配色模型UID
      * @return
      */
-    HzDerivativeMaterielBasic selectByModelAndColorUid(String modelUid, String colorModel);
+    HzDerivativeMaterielBasic selectByModelAndColorUid(@Param("dmbModelUid") String dmbModelUid, @Param("dmbColorModelUid") String dmbColorModelUid);
 
     List<HzDerivativeMaterielBasic> selectByPuids(List<String> puids);
 

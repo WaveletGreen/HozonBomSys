@@ -1,9 +1,7 @@
 package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 
-import org.springframework.context.annotation.Configuration;
-import sql.pojo.cfg.fullCfg.HzFullCfgMain;
-import sql.pojo.cfg.fullCfg.HzFullCfgMainChange;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMainChange;
 
 import java.util.List;
 
