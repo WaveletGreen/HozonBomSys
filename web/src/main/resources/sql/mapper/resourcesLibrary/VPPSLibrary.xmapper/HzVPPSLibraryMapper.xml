@@ -215,6 +215,18 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
 
+
+  <!--批量删除 vpps-->
+  <update id="HzVPPSLibraryDaoImpl_deleteByPuids" parameterType="java.util.HashMap">
+    update ${tableName}
+    set STATUS = 0
+    where puid in
+    <foreach collection="puids" index="index" item="item"  open="(" separator="," close=")">
+      #{puids[${index}]}
+    </foreach>
+  </update>
+
+
   <!--根据VPPS代码查询条数-->
   <select id="HzVPPSLibraryDaoImpl_findByCodeOrCount" parameterType="java.lang.String" resultType="java.lang.Integer">
     select count(*) from HZ_VPPS_LIBRARY

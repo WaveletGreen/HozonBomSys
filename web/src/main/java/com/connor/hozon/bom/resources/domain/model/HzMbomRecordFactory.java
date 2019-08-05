@@ -195,11 +195,11 @@ public class HzMbomRecordFactory {
             if (bean.getColorName() != null)
                 mbomLineRecord.setpBomLinePartName(bean.getColorName() + mbomLineRecord.getpBomLinePartName());
 
-           // mbomLineRecord.setIsColorPart(1);//设置是否颜色件(是)
+            mbomLineRecord.setIsColorPart(1);//设置是否颜色件(是)
         }
-//        else{
-//            mbomLineRecord.setIsColorPart(0);//设置是否颜色件
-//        }
+        else{
+            mbomLineRecord.setIsColorPart(0);//设置是否颜色件
+        }
         mbomLineRecord.setLineId(lineId);
         mbomLineRecord.setpFactoryId(factoryId);
         String lineIndex = record.getLineIndex();
