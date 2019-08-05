@@ -208,7 +208,7 @@
     where MODEL_UID = #{modelUid,jdbcType=VARCHAR} and P_CFG_UID = #{cfgUid,jdbcType=VARCHAR}
   </update>
 
-    <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap2">
+    <select id="selectByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap2">
         select
         <include refid="Base_Column_List2"/>
         from

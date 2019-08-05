@@ -26,5 +26,5 @@ public interface HzMainBomDao extends BasicDao<HzMainBom> {
      * @param projectUid 项目UID
      * @return 返回当前项目下的主配置
      */
-    HzMainBom selectByProjectId(@Param("projectUid") String projectUid);
+    HzMainBom selectByProjectId(@Param("换成projectId") String projectUid);
 }
