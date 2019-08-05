@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
 import net.sf.json.JSONObject;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringHelper.checkString;
 
 
 /**

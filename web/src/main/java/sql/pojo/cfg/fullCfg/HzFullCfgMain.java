@@ -6,10 +6,8 @@
 
 package sql.pojo.cfg.fullCfg;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 全配置一级BOM清单主数据

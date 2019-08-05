@@ -24,7 +24,7 @@ import cn.net.connor.hozon.services.service.depository.project.impl.HzVehicleSer
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
 import com.alibaba.fastjson.JSON;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.*;
-import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
@@ -59,7 +59,7 @@ import sql.pojo.change.HzChangeOrderRecord;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringHelper.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

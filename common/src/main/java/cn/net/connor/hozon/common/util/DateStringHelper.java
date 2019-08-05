@@ -1,17 +1,16 @@
 /*
- * Copyright (c) 2018.
- * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
- * ALL RIGHTS RESERVED.
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
  */
 
-package com.connor.hozon.bom.bomSystem.helper;
+package cn.net.connor.hozon.common.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 日期-字符串自首
@@ -82,7 +81,7 @@ public class DateStringHelper {
      * @throws ParseException
      */
     public static Date stringToDate(String str) throws ParseException {
-        if (checkString(str)) {
+        if (StringHelper.checkString(str)) {
             return format.parse(str);
         } else {
             return null;
@@ -97,7 +96,7 @@ public class DateStringHelper {
      * @throws ParseException
      */
     public static Date stringToDate2(String str) throws ParseException {
-        if (checkString(str)) {
+        if (StringHelper.checkString(str)) {
             return format2.parse(str);
         } else {
             return null;

@@ -28,7 +28,7 @@ import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.util.*;
 
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkStringIsEmpty;
+import static cn.net.connor.hozon.common.util.StringHelper.checkStringIsEmpty;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

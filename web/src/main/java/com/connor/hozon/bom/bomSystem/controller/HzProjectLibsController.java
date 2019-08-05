@@ -12,7 +12,7 @@ import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformSe
 import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import cn.net.connor.hozon.dao.dao.main.HzMainConfigDao;
 import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
-import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import cn.net.connor.hozon.services.service.depository.project.HzVehicleService;
@@ -39,7 +39,7 @@ import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static com.connor.hozon.bom.bomSystem.helper.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringHelper.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

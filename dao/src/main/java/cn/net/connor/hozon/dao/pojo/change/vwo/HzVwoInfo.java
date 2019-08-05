@@ -6,7 +6,7 @@
 
 package cn.net.connor.hozon.dao.pojo.change.vwo;
 
-import com.connor.hozon.bom.bomSystem.helper.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringHelper;
 import lombok.Data;
 
 import java.util.Date;
