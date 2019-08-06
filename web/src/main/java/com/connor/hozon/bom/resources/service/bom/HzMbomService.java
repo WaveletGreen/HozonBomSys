@@ -26,7 +26,7 @@ public interface HzMbomService {
      * @param query
      * @return
      */
-    Page<HzMbomRecordRespDTO> queryMbomToColorPart(HzMbomByPageQuery query);
+//    Page<HzMbomRecordRespDTO> queryMbomToColorPart(HzMbomByPageQuery query);  已废除@xulf
     /**
      * 获取一条MBOM
      * @param query

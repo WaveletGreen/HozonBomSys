@@ -110,6 +110,18 @@ public class HzMbomRecord extends BaseChangeDO {
      * 工厂
      */
     private String pFactoryId;
+    /**
+     * 是否颜色件
+     */
+    private Integer pColorPart;
+
+    public Integer getpColorPart() {
+        return pColorPart;
+    }
+
+    public void setpColorPart(Integer pColorPart) {
+        this.pColorPart = pColorPart;
+    }
 
     public Integer getPBomType() {
         return pBomType;

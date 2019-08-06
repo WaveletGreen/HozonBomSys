@@ -85,7 +85,7 @@ public interface HzMbomRecordDAO {
      * @param query
      * @return
      */
-    Page<HzMbomLineRecord> queryMbomToColorPart(HzMbomByPageQuery query);
+//    Page<HzMbomLineRecord> queryMbomToColorPart(HzMbomByPageQuery query);   废除   @xulf
 
     /**
      * 查询Mbom信息

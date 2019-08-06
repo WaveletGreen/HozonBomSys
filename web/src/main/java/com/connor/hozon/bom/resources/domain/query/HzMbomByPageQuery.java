@@ -34,7 +34,7 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
     /**
      * 是否颜色件
      */
-    private  Integer IsColorPart;
+    private  String pColorPart;
 
     /**
      * 备件
@@ -195,12 +195,11 @@ public class HzMbomByPageQuery extends DefaultPageQuery {
         this.cfg0ModelRecordId = cfg0ModelRecordId;
     }
 
-    public Integer getIsColorPart() {
-        return IsColorPart;
+    public String getpColorPart() {
+        return pColorPart;
     }
 
-    public void setIsColorPart(Integer isColorPart) {
-       this.IsColorPart = isColorPart;
+    public void setpColorPart(String pColorPart) {
+        this.pColorPart = pColorPart;
     }
-
 }

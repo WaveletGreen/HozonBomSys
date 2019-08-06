@@ -244,6 +244,16 @@ public class HzMbomLineRecord extends BaseChangeDO {
 
     private String vehNum;
 
+    private Integer pColorPart;
+
+    public Integer getpColorPart() {
+        return pColorPart;
+    }
+
+    public void setpColorPart(Integer pColorPart) {
+        this.pColorPart = pColorPart;
+    }
+
     public String getVehNum() {
         return vehNum;
     }

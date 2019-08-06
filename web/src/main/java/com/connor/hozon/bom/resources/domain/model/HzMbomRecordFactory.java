@@ -122,6 +122,14 @@ public class HzMbomRecordFactory {
         respDTO.setStatus(record.getStatus());
         respDTO.setpStockLocation(record.getpStockLocation());
         respDTO.setColorId(record.getColorId());
+        if (Integer.valueOf(1).equals(record.getpColorPart())){
+            respDTO.setpColorPart("Y");
+        }else if(Integer.valueOf(0).equals(record.getpColorPart())){
+            respDTO.setpColorPart("N");
+        }else {
+            respDTO.setpColorPart("");
+        }
+        //respDTO.setpColorPart(record.getpColorPart()+"");
         return respDTO;
     }
 
