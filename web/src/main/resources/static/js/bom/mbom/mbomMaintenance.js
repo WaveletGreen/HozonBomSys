@@ -616,34 +616,24 @@ function initTable1(mBomUrl) {
                             }
                         }
                     },
-                    // {
-                    //     text: '查看颜色件',
-                    //     iconCls: 'glyphicon glyphicon-search',
-                    //     handler: function () {
-                    //         var rows = $mBomTable.bootstrapTable('getSelections');
-                    //         var lineIds = "";
-                    //         var colorIds = "";
-                    //         for (var i = 0; i < rows.length; i++) {
-                    //             lineIds += rows[i].eBomPuid + ",";
-                    //             colorIds += rows[i].colorId + ","
-                    //         }
-                    //         ;
-                    //         if (rows.length <= 0) {
-                    //             window.Ewin.alert({message: '请至少选择一条需要显示层级的数据!'});
-                    //             return false;
-                    //         }
-                    //         if (this.innerText == '显示子层') {
-                    //             $mBomTable.bootstrapTable('destroy');
-                    //             initTable11(mBomUrl, lineIds, colorIds);
-                    //         }
-                    //         if (this.innerText == '显示子层') {
-                    //             this.innerText = '取消显示子层'
-                    //         }
-                    //         else {
-                    //             this.innerText = '显示子层'
-                    //         }
-                    //     }
-                    // },
+                    {
+                        text: '查看颜色件',
+                        iconCls: 'glyphicon glyphicon-search',
+                        handler: function () {
+                            var rows = $mBomTable.bootstrapTable('getSelections');
+                            var isColorPart = "1"
+                            if (this.innerText == '查看颜色件') {
+                                $mBomTable.bootstrapTable('destroy');
+                                initTable11(mBomUrl, isColorPart);
+                            }
+                            if (this.innerText == '查看颜色件') {
+                                this.innerText = '取消查看颜色件'
+                            }
+                            else {
+                                this.innerText = '查看颜色件'
+                            }
+                        }
+                    },
                     {
                         text: '导出Excel',
                         iconCls: 'glyphicon glyphicon-export',

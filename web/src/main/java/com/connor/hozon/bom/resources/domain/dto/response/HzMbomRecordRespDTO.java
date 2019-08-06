@@ -132,6 +132,11 @@ public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
     private String colorId;
 
     /**
+     * 是否颜色件
+     */
+    private  String pColorPart;
+
+    /**
      * 单车用量
      */
     private JSONObject vehNum;
@@ -394,5 +399,11 @@ public class HzMbomRecordRespDTO  extends BaseChangeRespDTO {
         this.changeNum = changeNum;
     }
 
+    public String getpColorPart() {
+        return pColorPart;
+    }
 
+    public void setpColorPart(String pColorPart) {
+        this.pColorPart = pColorPart;
+    }
 }

@@ -195,6 +195,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("lineId",query.getLineId().trim());
         map.put("pBomLinePartClass",query.getpBomLinePartClass());
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
+        map.put("pColorPart",query.getpColorPart());
         map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
 
         request.setFilters(map);
@@ -207,21 +208,21 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
      * @param query
      * @return
      */
-    @Override
-    public Page<HzMbomLineRecord> queryMbomToColorPart(HzMbomByPageQuery query) {
-        PageRequestParam request = new PageRequestParam();
-        request.setPageNumber(query.getPage());
-        if(BOMTransConstants.ALL.equals(query.getLimit())){
-            request.setAllNumber(true);
-        }else {
-            request.setPageSize(Integer.valueOf(query.getLimit()));
-        }
-        Map map = new HashMap();
-        map.put("projectId",query.getProjectId());
-        map.put("isColorPart",query.getIsColorPart());
-        map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
-        return super.findForPage("HzMbomRecordDAOImpl_getMBomRecordToColorPart","HzMbomRecordDAOImpl_getTotalCount",request);
-    }
+//    @Override   废除  @xulf
+//    public Page<HzMbomLineRecord> queryMbomToColorPart(HzMbomByPageQuery query) {
+//        PageRequestParam request = new PageRequestParam();
+//        request.setPageNumber(query.getPage());
+//        if(BOMTransConstants.ALL.equals(query.getLimit())){
+//            request.setAllNumber(true);
+//        }else {
+//            request.setPageSize(Integer.valueOf(query.getLimit()));
+//        }
+//        Map map = new HashMap();
+//        map.put("projectId",query.getProjectId());
+//        map.put("isColorPart",query.getIsColorPart());
+//        map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
+//        return super.findForPage("HzMbomRecordDAOImpl_getMBomRecordToColorPart","HzMbomRecordDAOImpl_getTotalCount",request);
+//    }
 
     @Override
     public List<HzMbomLineRecord> findHzMbomByPuid(Map<String, Object> map) {
