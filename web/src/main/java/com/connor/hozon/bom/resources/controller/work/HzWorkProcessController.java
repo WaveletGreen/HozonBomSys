@@ -1,7 +1,11 @@
 package com.connor.hozon.bom.resources.controller.work;
 
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
+import cn.net.connor.hozon.services.DTOMapper.WorkProcessDTO;
+import cn.net.connor.hozon.services.DTOMapper.WorkProcessDTOMapper;
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
-
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
@@ -13,7 +17,6 @@ import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
-import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -294,6 +295,7 @@ public class HzWorkProcessController extends BaseController {
             _res.put("pMachineMaterialLabor", dto.getpMachineMaterialLabor());
             _res.put("pOtherCost", dto.getpOtherCost());
             _res.put("status",dto.getStatus());
+            _res.put("pWorkPuid",dto.getpWorkPuid());
             _list.add(_res);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -432,5 +434,12 @@ public class HzWorkProcessController extends BaseController {
     public void workProcessCancel(@RequestBody BomBackReqDTO reqDTO, HttpServletResponse response){
         WriteResultRespDTO respDTO = hzWorkProcessService.backBomUtilLastValidState(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+    @RequestMapping(value = "updateList",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject updateList(@RequestBody List<WorkProcessDTO> list){
+        List<HzWorkProcedure> params=WorkProcessDTOMapper.INSTANCE.DTOToBean(list);
+        return hzWorkProcessService.updateList(params);
     }
 }

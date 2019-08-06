@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.work;
 
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -92,4 +93,10 @@ public interface HzWorkProcessService {
      * @return
      */
     WriteResultRespDTO backBomUtilLastValidState(BomBackReqDTO reqDTO);
+
+    /**
+     * 批量更新数据，选择性更新数据而不是全部更新
+     * @param params
+     */
+    JSONObject updateList(List<HzWorkProcedure> params);
 }
