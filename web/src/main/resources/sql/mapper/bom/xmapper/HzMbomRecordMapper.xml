@@ -124,7 +124,7 @@
                 and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
             </if>
             <if test="pColorPart != null and pColorPart == 1">
-                and t.P_COLOR_PART = 1}
+                and t.P_COLOR_PART = 1
             </if>
             and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
             order by CAST(t.P_SORT_NUM as FLOAT),t.P_BOM_OF_WHICH_DEPT
@@ -177,6 +177,9 @@
             </if>
             <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
                 and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
+            </if>
+            <if test="pColorPart != null and pColorPart == 1">
+                and t.P_COLOR_PART = 1
             </if>
             and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
         </where>

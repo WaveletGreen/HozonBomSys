@@ -620,11 +620,10 @@ function initTable1(mBomUrl) {
                         text: '查看颜色件',
                         iconCls: 'glyphicon glyphicon-search',
                         handler: function () {
-                            var rows = $mBomTable.bootstrapTable('getSelections');
-                            var isColorPart = "1"
+                            var pColorPart = "1"
                             if (this.innerText == '查看颜色件') {
                                 $mBomTable.bootstrapTable('destroy');
-                                initTable11(mBomUrl, isColorPart);
+                                initTable111(mBomUrl, pColorPart);
                             }
                             if (this.innerText == '查看颜色件') {
                                 this.innerText = '取消查看颜色件'
@@ -770,7 +769,154 @@ function initTable1(mBomUrl) {
         }
     });
 }
+function initTable111(mBomUrl,pColorPart ) {
+    var projectPuid = $("#project", window.top.document).val();
+    if (!checkIsSelectProject(projectPuid)) {
+        return;
+    }
+    var $mBomTable = $("#mbomMaintenanceTable");
+    var currentProjectHead = $("#currentProjectHead", window.top.document).val();
+    var column = [];
+    selections = [];
 
+    $.ajax({
+        url: "mbom/manage/title?projectId=" + projectPuid,
+        type: "GET",
+        success: function (result) {
+            var column = [];
+            column.push({field: 'ck', checkbox: true, Width: 50});
+            var data = result.data;
+            var keys = [];
+            var values;
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    if ('pLouaFlag' === key) {
+                        var json = {
+                            field: key,
+                            title: data[key],
+                            // align: 'center',
+                            valign: 'middle',
+                            formatter: function (value, row, index) {
+                                if (value == "LOA") {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLoa(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
+                                    ].join("");
+                                }
+                                else if (value == "LOU") {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLou(\''+row.puid+'\',+'+ 0 + ')">' + value + '</a>'
+                                    ].join("");
+                                }
+                                else {
+                                    return [
+                                        value
+                                    ].join("");
+                                }
+                            }
+                        };
+                        column.push(json);
+                    }
+                    else {
+                        var json = {
+                            field: key,
+                            title: data[key],
+                            // align: 'center',
+                            valign: 'middle',
+                            formatter: function (value, row, index) {
+                                if (value == "LOA") {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLoa(' + row.eBomPuid + ')">' + value + '</a>'
+                                    ].join("");
+                                }
+                                else if (value == "LOU") {
+                                    return [
+                                        '<a href="javascript:void(0)" onclick="queryLou(\'' + row.eBomPuid + '\')">' + value + '</a>'
+                                    ].join("");
+                                }
+                                else {
+                                    return [
+                                        value
+                                    ].join("");
+                                }
+                            }
+                        };
+                        column.push(json);
+                    }
+                }
+            }
+            column.push({
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                valign: 'middle',
+                formatter: function (value, row, index) {
+                    if (value == 1 || "1" == value) {
+                        return "<span style='color: #00B83F'>已生效</span>";
+                    }
+                    if (value == 2 || "2" == value) {
+                        return "<span style='color: #ff7cf4'>草稿状态</span>";
+                    }
+                    if (3 == value || "3" == value) {
+                        return "<span style='color: #9492a9'>废除状态</span>";
+                    }
+                    if (4 == value || "4" == value) {
+                        return "<span style='color: #a90009'>删除状态</span>";
+                    }
+                    if (value == 5 || value == "5") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                    if (value == 6 || value == "6") {
+                        return "<span style='color: #e2ab2f'>审核中</span>"
+                    }
+                }
+            })
+            $mBomTable.bootstrapTable({
+                url: mBomUrl + "&pColorPart=" + pColorPart ,
+                method: 'GET',
+                dataType: 'json',
+                cache: false,
+                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+                height: $(window.parent.document).find("#wrapper").height() - 200,
+                width: $(window).width(),
+                formId: "queryMbomMain",
+                undefinedText: "",//当数据为 undefined 时显示的字符
+                pagination: true,
+                pageNumber: 1,                       //初始化加载第一页，默认第一页
+                pageSize: 20,                       //每页的记录行数（*）
+                pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）                uniqueId: "puid",                     //每一行的唯一标识，一般为主键列
+                // showExport: true,
+                columns: column,
+                sortable: true,                     //是否启用排序
+                sortOrder: "asc",                   //排序方式
+                clickToSelect: true,// 单击某一行的时候选中某一条记录
+                striped: true, //是否显示行间隔色
+                showColumns: true, //是否显示所有的列
+                showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
+                showRefresh: true,                  //是否显示刷新按钮
+                minimumCountColumns: 4,
+                toolbars: [
+                    {
+                        text: '取消查看颜色件',
+                        iconCls: 'glyphicon glyphicon-search',
+                        handler: function () {
+                            if (this.innerText == '取消查看颜色件') {
+                                $mBomTable.bootstrapTable('destroy');
+                                initTable1(mBomUrl);
+                            }
+                            if (this.innerText == '查看颜色件') {
+                                this.innerText = '取消查看颜色件'
+                            }
+                            else {
+                                this.innerText = '查看颜色件'
+                            }
+                        }
+                    },
+                ],
+            });
+            $mBomTable.bootstrapTable('hideColumn', 'level');
+        }
+    });
+}
 function initTable11(mBomUrl, lineIds, colorIds) {
     var projectPuid = $("#project", window.top.document).val();
     if (!checkIsSelectProject(projectPuid)) {
