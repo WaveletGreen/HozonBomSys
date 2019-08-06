@@ -46,12 +46,12 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.pojo.accessories.HzAccessoriesLibs;
-import sql.pojo.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.epl.HzEPLRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;

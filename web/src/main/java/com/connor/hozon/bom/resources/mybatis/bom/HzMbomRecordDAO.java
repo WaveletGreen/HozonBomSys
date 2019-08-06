@@ -3,9 +3,9 @@ package com.connor.hozon.bom.resources.mybatis.bom;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzMbomLineRecordVO;
-import sql.pojo.bom.HzMbomRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecordVO;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomRecord;
 
 import java.util.List;
 import java.util.Map;

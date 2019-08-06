@@ -6,7 +6,7 @@
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
         <!--主键-->
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <!--模型外键-->
@@ -26,7 +26,7 @@
         <!--修改者-->
         <result column="MODIFIER" jdbcType="VARCHAR" property="modifier"/>
     </resultMap>
-    <resultMap id="ResultMapWithColor" extends="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
+    <resultMap id="ResultMapWithColor" extends="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
         <!--色集-->
         <result column="P_COLOR_OF_SET" jdbcType="VARCHAR" property="pColorOfSet"/>
         <!--颜色名称-->
@@ -55,7 +55,7 @@
         <!--<result column="P_COLOR_IS_DELETED" jdbcType="INTEGER" property="pColorIsDeleted"/>-->
     </resultMap>
 
-    <resultMap id="BaseResultMap2" type="sql.pojo.cfg.modelColor.HzColorModel2">
+    <resultMap id="BaseResultMap2" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorModel2">
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="MODEL_UID" jdbcType="VARCHAR" property="modelUid"/>
         <result column="P_CFG_UID" jdbcType="VARCHAR" property="pCfgUid"/>
@@ -161,7 +161,7 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </delete>
     <!--插入-->
-    <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
         insert into HZ_CFG0_MODEL_COLOR_DETAIL (
         <include refid="Base_Column_List"/>
         )
@@ -191,7 +191,7 @@
         select 1 from dual
     </insert>
     <!--主键更新-->
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
     update HZ_CFG0_MODEL_COLOR_DETAIL
     set MODEL_PUID = #{modelUid,jdbcType=VARCHAR},
       P_CFG_PUID = #{cfgUid,jdbcType=VARCHAR},
@@ -199,7 +199,7 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </update>
     <!--按车型和配置更新颜色，进行单点更新-->
-    <update id="updateColorModelWithCfg" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColorDetail">
+    <update id="updateColorModelWithCfg" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
     update HZ_CFG0_MODEL_COLOR_DETAIL
     set
       P_COLOR_UID = #{colorUid,jdbcType=VARCHAR},
@@ -220,7 +220,7 @@
 
     </select>
 
-    <select id="selectByModelColors" parameterType="sql.pojo.cfg.modelColor.HzCfg0ModelColor" resultMap="BaseResultMap">
+    <select id="selectByModelColors" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from

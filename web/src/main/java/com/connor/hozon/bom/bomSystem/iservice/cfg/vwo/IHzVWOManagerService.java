@@ -16,8 +16,8 @@ import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.ui.Model;
-import sql.pojo.cfg.modelColor.HzCmcrChange;
-import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange;
 import cn.net.connor.hozon.dao.pojo.change.vwo.*;
 
 import java.util.List;

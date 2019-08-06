@@ -1,8 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
 
-import org.springframework.context.annotation.Configuration;
-import sql.pojo.change.HzAttachmentRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord;
 
 import java.util.List;
 

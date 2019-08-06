@@ -7,7 +7,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0BomLineOfModelDao">
     <resultMap id="BaseResultMap"
-               type="sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel">
+               type="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0BomLineOfModel">
         <result column="OBJECT_NAME" jdbcType="VARCHAR"
                 property="objectName"/>
         <result column="OBJECT_DESC" jdbcType="VARCHAR"

@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactReferenceDAO;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.change.HzEWOImpactReference;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactReference;
 
 import java.util.HashMap;
 import java.util.List;

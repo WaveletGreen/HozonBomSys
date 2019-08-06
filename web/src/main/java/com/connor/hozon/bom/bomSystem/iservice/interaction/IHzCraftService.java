@@ -7,8 +7,6 @@
 package com.connor.hozon.bom.bomSystem.iservice.interaction;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzPbomLineRecord;
 
 import java.util.List;
 import java.util.Map;

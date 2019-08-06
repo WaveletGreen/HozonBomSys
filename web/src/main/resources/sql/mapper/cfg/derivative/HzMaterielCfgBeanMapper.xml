@@ -5,8 +5,8 @@
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.derivative.HzMaterielCfgBeanDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.derivative.HzMaterielCfgBean">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.derivative.HzMaterielCfgBeanDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean">
         <result column="P_BRAND_CODE" jdbcType="VARCHAR" property="pBrandCode"/>
         <result column="P_BRAND_NAME" jdbcType="VARCHAR" property="pBrandName"/>
         <result column="P_PLATFORM_CODE" jdbcType="VARCHAR" property="pPlatformCode"/>
@@ -41,7 +41,7 @@
         IS_SENT
   </sql>
     <!--根据项目查找所有的整车物料属性-->
-    <select id="selectByDiff" parameterType="sql.pojo.cfg.derivative.HzMaterielCfgBean" resultMap="BaseResultMap">
+    <select id="selectByDiff" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean" resultMap="BaseResultMap">
         select t.p_brand_code,
         t.p_brand_name,
         t2.p_platform_code,

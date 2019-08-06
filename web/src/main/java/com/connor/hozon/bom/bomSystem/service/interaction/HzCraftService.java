@@ -26,8 +26,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.epl.HzEPLRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
 
 import java.io.IOException;
 import java.util.*;
@@ -382,11 +382,11 @@ public class HzCraftService implements IHzCraftService {
                                         if (toChildrenNeedToUpdateItsLineIndex.containsKey(myUid)) {
                                             toChildrenNeedToUpdateItsLineIndex.get(allCodeIsWithToParentCode.get(i1).getPuid()).remove(isWithsChild.getLineIndex());
                                         }
-//                                        this.myWavelet.get(allCodeIsWithToParentCode.get(i1).geteBomPuid()).remove(isWithsChild.getLineIndex());
+//                                        this.myWavelet.get(allCodeIsWithToParentCode.get(i1).getEBomPuid()).remove(isWithsChild.getLineIndex());
                                         continue;
                                     }
                                     if (this.myLovelyWavelet.containsKey(ebomUid) && this.myLovelyWavelet.get(ebomUid).containsKey(isWithsChild.getLineIndex())) {
-//                                        this.myLovelyWavelet.get(allCodeIsWithToParentCode.get(i1).geteBomPuid()).remove(isWithsChild.getLineIndex());
+//                                        this.myLovelyWavelet.get(allCodeIsWithToParentCode.get(i1).getEBomPuid()).remove(isWithsChild.getLineIndex());
                                         if (toChildrenNeedToUpdateItsLineIndex.containsKey(myUid)) {
                                             toChildrenNeedToUpdateItsLineIndex.get(ebomUid).remove(isWithsChild.getLineIndex());
                                         }
@@ -543,7 +543,7 @@ public class HzCraftService implements IHzCraftService {
         for (int i = 0; i < theChildrenNeedToDelete.size(); i++) {
             HzPbomLineRecord record = theChildrenNeedToDelete.get(i);
             stringBuffer.append(record.geteBomPuid()+",");
-//            dto.seteBomPuid(record.geteBomPuid());
+//            dto.setEBomPuid(record.getEBomPuid());
 //            dto.setProjectId(projectUid);
 //            dto.setPuids(record.getId());
 //            listOfDto.add(dto);
@@ -685,7 +685,7 @@ public class HzCraftService implements IHzCraftService {
 //            //同号的父层节点
 //            List<HzPbomLineRecord> allCodeIsWithToParentCode = hzPbomRecordDAO.findPbom(param);
 //            for (int i1 = 0; i1 < allCodeIsWithToParentCode.size(); i1++) {
-//                List<HzPbomLineRecord> isWithsChildren = hzPbomRecordDAO.getFirstLevelBomByParentId(allCodeIsWithToParentCode.get(i1).geteBomPuid(), projectUid);
+//                List<HzPbomLineRecord> isWithsChildren = hzPbomRecordDAO.getFirstLevelBomByParentId(allCodeIsWithToParentCode.get(i1).getEBomPuid(), projectUid);
 //                Iterator<HzPbomLineRecord> it = isWithsChildren.iterator();
 //                while (it.hasNext()) {
 //                    HzPbomLineRecord next = it.next();
@@ -693,7 +693,7 @@ public class HzCraftService implements IHzCraftService {
 //                        it.remove();
 //                    }
 //                }
-//                temp.put(allCodeIsWithToParentCode.get(i1).geteBomPuid() + "|" + allCodeIsWithToParentCode.get(i1).getLineIndex(), isWithsChildren);
+//                temp.put(allCodeIsWithToParentCode.get(i1).getEBomPuid() + "|" + allCodeIsWithToParentCode.get(i1).getLineIndex(), isWithsChildren);
 //            }
 //        }
         System.out.println();

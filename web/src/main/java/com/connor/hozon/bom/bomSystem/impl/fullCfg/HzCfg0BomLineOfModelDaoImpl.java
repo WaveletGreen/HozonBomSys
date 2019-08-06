@@ -8,10 +8,8 @@ package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzCfg0BomLineOfModelDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0BomLineOfModel;
 
 import java.util.List;
 

@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.fullCfg.HzCfg0BomLineOfModel;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0BomLineOfModel;
 
 import java.util.List;
 /**

@@ -5,7 +5,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.EditHzEPLReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEplRespDTO;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.sys.entity.User;
-import sql.pojo.epl.HzEPLRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
 
 /**
  * @Author: haozt

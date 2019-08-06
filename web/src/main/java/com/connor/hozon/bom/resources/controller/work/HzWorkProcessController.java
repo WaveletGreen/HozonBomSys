@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.change.HzChangeOrderRecord;
-import sql.pojo.work.HzWorkProcedure;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;

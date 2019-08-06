@@ -1,8 +1,7 @@
 package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 
-import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
-import sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfgChange;
 
 import java.util.List;
 

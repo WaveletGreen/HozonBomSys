@@ -1,22 +1,8 @@
 package com.connor.hozon.bom.resources.controller.work;
 
 import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzProcessReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
-import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
-import com.connor.hozon.bom.resources.util.Result;
-import net.sf.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.work.HzWorkProcedure;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.*;
 
 /**
  * @Author: haozt
@@ -233,7 +219,7 @@ public class HzWorkProcessController2 extends BaseController {
 //                hzWorkProcedure1.setId(puid1);
 //                hzWorkProcedure1.setMaterielId(puidArr[i]);
 //                hzWorkProcedure1.setProjectId(projectId);
-//                hzWorkProcedure1.setpFactoryId("1001");
+//                hzWorkProcedure1.setPFactoryId("1001");
 //                hzWorkProcedure1.setpProcedureDesc(routing+"-时间维度");
 //
 //                HzWorkProcedure hzWorkProcedure2 = new HzWorkProcedure();
@@ -241,7 +227,7 @@ public class HzWorkProcessController2 extends BaseController {
 //                hzWorkProcedure2.setId(puid2);
 //                hzWorkProcedure2.setMaterielId(puidArr[i]);
 //                hzWorkProcedure2.setProjectId(projectId);
-//                hzWorkProcedure2.setpFactoryId("1001");
+//                hzWorkProcedure2.setPFactoryId("1001");
 //                hzWorkProcedure2.setpProcedureDesc(routing+"-数量维度");
 //                hzWorkProceduresAdd.add(hzWorkProcedure1);
 //                hzWorkProceduresAdd.add(hzWorkProcedure2);

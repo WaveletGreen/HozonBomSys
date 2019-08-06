@@ -9,7 +9,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import sql.redis.HzDBException;
+import cn.net.connor.hozon.common.exception.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

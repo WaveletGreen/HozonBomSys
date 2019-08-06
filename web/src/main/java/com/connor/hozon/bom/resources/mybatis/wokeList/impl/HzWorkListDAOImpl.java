@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.workList.HzWorkListRecord;
+import cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord;
 
 import java.util.HashMap;
 import java.util.List;

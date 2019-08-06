@@ -7,8 +7,8 @@
 package com.connor.hozon.bom.bomSystem.dao.modelColor;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.modelColor.HzCmcrChange;
-import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange;
 
 import java.util.List;
 /**

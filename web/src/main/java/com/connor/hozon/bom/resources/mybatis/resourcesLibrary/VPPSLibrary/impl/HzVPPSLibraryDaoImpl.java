@@ -7,7 +7,7 @@ import com.connor.hozon.bom.resources.page.PageRequestParam;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary;
+import cn.net.connor.hozon.dao.pojo.depository.VPPSLibrary.HzVPPSLibrary;
 
 import java.util.HashMap;
 import java.util.List;

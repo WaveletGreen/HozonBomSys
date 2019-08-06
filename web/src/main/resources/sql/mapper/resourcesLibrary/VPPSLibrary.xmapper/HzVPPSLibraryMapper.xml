@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzVPPSLibraryMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.depository.VPPSLibrary.HzVPPSLibrary">
     <id column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="VPPS_LEVEL" jdbcType="VARCHAR" property="vppsLevel" />
     <result column="VSG_CODE" jdbcType="VARCHAR" property="vsgCode" />
@@ -82,7 +82,7 @@
   </select>
 
   <!--添加一条数据-->
-  <insert id="HzVPPSLibraryDaoImpl_insert" parameterType="sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary">
+  <insert id="HzVPPSLibraryDaoImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.VPPSLibrary.HzVPPSLibrary">
     insert into HZ_VPPS_LIBRARY
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="puid != null">
@@ -165,7 +165,7 @@
   </select>
 
   <!--编辑一条数据-->
-  <update id="HzVPPSLibraryDaoImpl_update" parameterType="sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary">
+  <update id="HzVPPSLibraryDaoImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.depository.VPPSLibrary.HzVPPSLibrary">
     update HZ_VPPS_LIBRARY
     <set>
       <if test="vppsLevel != null">

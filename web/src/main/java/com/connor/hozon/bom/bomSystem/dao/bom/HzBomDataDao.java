@@ -8,8 +8,7 @@ package com.connor.hozon.bom.bomSystem.dao.bom;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.HzPreferenceSetting;
-import sql.pojo.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 
 import java.util.List;
 import java.util.Map;
@@ -31,15 +30,7 @@ public interface HzBomDataDao extends BasicDao<HzBomLineRecord>{
      */
     List<HzBomLineRecord> selectByProjectPuid(HzBomLineRecord bomLineRecord);
 
-    /**
-     * Author: Fancyears·Maylos·Mayways
-     * Description: 根据数模层的puid，获取到数模层对应的bom设置的首选项信息，用于显示在前端
-     * Date: 2018/5/23 10:00
-     *
-     * @param setting
-     * @return
-     */
-    HzPreferenceSetting loadSetting(HzPreferenceSetting setting);
+
 
     /**
      * Author: Fancyears·Maylos·Mayways

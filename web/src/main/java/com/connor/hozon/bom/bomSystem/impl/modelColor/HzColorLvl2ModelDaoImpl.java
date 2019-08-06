@@ -9,11 +9,8 @@ package com.connor.hozon.bom.bomSystem.impl.modelColor;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorLvl2ModelDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import sql.IBaseSQLUtil;
-import sql.pojo.cfg.modelColor.HzColorLvl2Model;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorLvl2Model;
 
 import java.util.List;
 

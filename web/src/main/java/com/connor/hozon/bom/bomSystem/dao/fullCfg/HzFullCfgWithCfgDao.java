@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 import com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg;
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg;
 
 import java.util.List;
 /**

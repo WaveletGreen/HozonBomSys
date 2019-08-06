@@ -87,7 +87,7 @@
 //            List<Map<String, Object>> _list = new ArrayList<>();
 //            respDTOS.forEach(dto -> {
 //                Map<String, Object> _res = new HashMap<>();
-//                _res.put("eBomPuid", dto.geteBomPuid());
+//                _res.put("eBomPuid", dto.getEBomPuid());
 //                _res.put("No",dto.getNo());
 //                _res.put("level", dto.getLevel());
 //                _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
@@ -123,7 +123,7 @@
 //            List<Map<String, Object>> _list = new ArrayList<>();
 //            list.forEach(dto -> {
 //                Map<String, Object> _res = new HashMap<>();
-//                _res.put("eBomPuid", dto.geteBomPuid());
+//                _res.put("eBomPuid", dto.getEBomPuid());
 //                _res.put("No", dto.getNo());
 //                _res.put("level", dto.getLevel());
 //                _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
@@ -142,8 +142,8 @@
 //                _res.put("change", dto.getChange());
 //                _res.put("changeNum", dto.getChangeNum());
 //                _res.put("pFactoryCode", dto.getpFactoryCode());
-//                _res.put("pStockLocation",dto.getpStockLocation());
-//                _res.put("pBomType", dto.getpBomType());
+//                _res.put("pStockLocation",dto.getPStockLocation());
+//                _res.put("pBomType", dto.getPBomType());
 //                _list.add(_res);
 //            });
 //            ret.put("totalCount", page.getTotalCount());

@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.derivative.HzMaterielCfgBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
 
 import java.util.ArrayList;
 import java.util.HashMap;

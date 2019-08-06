@@ -9,8 +9,8 @@ package com.connor.hozon.bom.bomSystem.option;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sql.pojo.cfg.modelColor.HzCmcrChange;
-import sql.pojo.cfg.modelColor.HzCmcrDetailChange;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange;
 
 import java.util.HashSet;
 import java.util.Set;

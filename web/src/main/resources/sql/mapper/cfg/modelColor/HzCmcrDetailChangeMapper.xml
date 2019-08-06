@@ -7,7 +7,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
         <!--主键-->
         <id column="CMCR_DETAIL_CG_ID" jdbcType="DECIMAL" property="cmcrDetailCgId"/>
         <!--源数据PUID，从源数据中继承过来，外键，级联删除-->
@@ -61,7 +61,7 @@
         <!--变更主表ID-->
         <result column="CMCR_CG_CHANGE_ID" jdbcType="DECIMAL" property="cmcrCgChangeId"/>
     </resultMap>
-    <resultMap extends="BaseResultMap" id="VWO_Result_map" type="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+    <resultMap extends="BaseResultMap" id="VWO_Result_map" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
         <result column="colorCode" jdbcType="VARCHAR" property="colorCode"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -124,7 +124,7 @@
   </sql>
     <!--**************************************select**************************************-->
     <!--主键查询-->
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange"
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -133,13 +133,13 @@
     </select>
     <!--**************************************delete**************************************-->
     <!--主键删除-->
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
     delete from ${whichTable}
     where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
   </delete>
     <!--**************************************insert**************************************-->
     <!--全数据插入-->
-    <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
         insert into ${whichTable} (
         <include refid="Base_Column_List"/>
         )
@@ -185,7 +185,7 @@
         )A
     </insert>
     <!--选择插入-->
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
         insert into ${whichTable}
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="cmcrDetailCgId != null">
@@ -350,7 +350,7 @@
     </insert>
     <!--**************************************update**************************************-->
     <!--主键选择性更新-->
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
         update ${whichTable}
         <set>
             <if test="cmcrDetailSrcPuid != null">
@@ -432,7 +432,7 @@
         where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
     </update>
     <!--主键全更新-->
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrDetailChange">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
     update ${whichTable}
     set CMCR_DETAIL_SRC_PUID = #{cmcrDetailSrcPuid,jdbcType=VARCHAR},
       CMCR_DETAIL_SRC_CFG_UID = #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR},
@@ -509,7 +509,7 @@
           te.CMCR_DETAIL_CG_ID
     </select>
 
-    <select id="doQueryCmcrDetailChangBefor" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+    <select id="doQueryCmcrDetailChangBefor" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
         select
           <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
         from
@@ -532,7 +532,7 @@
           CMCR_DETAIL_SRC_CFG_UID is not null
     </select>
 
-    <select id="doQueryCmcrDetailChangFirst" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+    <select id="doQueryCmcrDetailChangFirst" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
         select
             <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
         from
@@ -545,7 +545,7 @@
         and
             CMCR_DETAIL_SRC_CFG_UID is null
     </select>
-    <!--<select id="doQueryCmcrDetailChangFirst" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">-->
+    <!--<select id="doQueryCmcrDetailChangFirst" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">-->
         <!--select-->
             <!--<include refid="Base_Column_List"/>,t2.p_color_code as colorCode-->
         <!--from-->
@@ -561,7 +561,7 @@
             <!--</if>-->
     <!--</select>-->
 
-    <select id="doQueryCmcrDetailChangFirstAfter" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+    <select id="doQueryCmcrDetailChangFirstAfter" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
 
         select
             <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
@@ -596,7 +596,7 @@
         <!--#{vwoId,jdbcType=INTEGER})-->
     <!--</select>-->
 
-    <select id="doQueryCmcrDetailChangAfter" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+    <select id="doQueryCmcrDetailChangAfter" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
         select
         <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
         from

@@ -8,7 +8,7 @@
 <!--该文件暂时不用-->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrBeforeChangeDao">
-  <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCmcrBeforeChange">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
     <id column="CMCR_CG_ID" jdbcType="DECIMAL" property="cmcrCgId" />
     <result column="CMCR_CG_VWO_ID" jdbcType="DECIMAL" property="cmcrCgVwoId" />
     <result column="CMCR_CG_SHELL_CODE" jdbcType="VARCHAR" property="cmcrCgShellCode" />
@@ -55,7 +55,7 @@
     delete from HZ_CMCR_BEFORE_CHANGE
     where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
   </delete>
-  <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCmcrBeforeChange">
+  <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
     insert into HZ_CMCR_BEFORE_CHANGE (CMCR_CG_ID, CMCR_CG_VWO_ID, CMCR_CG_SHELL_CODE, 
       CMCR_CG_CREATE_DATE, CMCR_CG_CREATOR, CMCR_CG_UPDATE_DATE, 
       CMCR_CG_UPDATER, CMCR_CG_RESERVE1, CMCR_CG_RESERVE2, 
@@ -79,7 +79,7 @@
       #{cmcrSrcCodeOfColorMod,jdbcType=VARCHAR}, #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrBeforeChange">
+  <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
     insert into HZ_CMCR_BEFORE_CHANGE
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="cmcrCgId != null">
@@ -248,7 +248,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrBeforeChange">
+  <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
     update HZ_CMCR_BEFORE_CHANGE
     <set>
       <if test="cmcrCgVwoId != null">
@@ -332,7 +332,7 @@
     </set>
     where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
   </update>
-  <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrBeforeChange">
+  <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
     update HZ_CMCR_BEFORE_CHANGE
     set CMCR_CG_VWO_ID = #{cmcrCgVwoId,jdbcType=DECIMAL},
       CMCR_CG_SHELL_CODE = #{cmcrCgShellCode,jdbcType=VARCHAR},

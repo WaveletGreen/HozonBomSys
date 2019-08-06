@@ -13,16 +13,14 @@ import com.connor.hozon.bom.sys.exception.HzBomException;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.bom.HzSingleVehiclesBomRecord;
-import sql.pojo.interaction.HzSingleVehicles;
-import sql.redis.HzDBException;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzSingleVehiclesBomRecord;
+import cn.net.connor.hozon.common.exception.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 /**
  * @Author: haozt

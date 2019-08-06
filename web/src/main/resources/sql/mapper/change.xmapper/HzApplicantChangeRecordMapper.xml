@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzApplicantChangeRecordMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.change.HzApplicantChangeRecord">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
     <id column="ID" jdbcType="DOUBLE" property="id" />
     <result column="APPLICANT_ID" jdbcType="DOUBLE" property="applicantId" />
     <result column="APPLICANT_TIME" jdbcType="TIMESTAMP" property="applicantTime" />
@@ -29,7 +29,7 @@
   </select>
 
   <!--insert-->
-  <insert id="HzApplicantChangeDAOImpl_insert" parameterType="sql.pojo.change.HzApplicantChangeRecord">
+  <insert id="HzApplicantChangeDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
     insert into HZ_APPLICANT_CHANGE_RECORD (ID, APPLICANT_ID, APPLICANT_TIME,
       ORDER_ID, AUDIT_RECORD_ID)
     values (SEQ_HZ_APPLICANT_CHANGE_RECORD.nextval, #{applicantId,jdbcType=DOUBLE}, sysdate,
@@ -37,7 +37,7 @@
   </insert>
 
 
-  <insert id="insertSelective" parameterType="sql.pojo.change.HzApplicantChangeRecord">
+  <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
     insert into HZ_APPLICANT_CHANGE_RECORD
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -76,7 +76,7 @@
   </insert>
 
   <!--update-->
-  <update id="HzApplicantChangeDAOImpl_update" parameterType="sql.pojo.change.HzApplicantChangeRecord">
+  <update id="HzApplicantChangeDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
     update HZ_APPLICANT_CHANGE_RECORD
     <set>
       <if test="applicantId != null">
@@ -96,7 +96,7 @@
   </update>
 
 
-  <update id="updateByPrimaryKey" parameterType="sql.pojo.change.HzApplicantChangeRecord">
+  <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
     update HZ_APPLICANT_CHANGE_RECORD
     set APPLICANT_ID = #{applicantId,jdbcType=DECIMAL},
       APPLICANT_TIME = #{applicantTime,jdbcType=DATE},

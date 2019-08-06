@@ -5,8 +5,8 @@
   ~ ALL RIGHTS RESERVED.
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelFeatureDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.derivative.HzCfg0ModelFeature">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.derivative.HzCfg0ModelFeatureDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature">
         <!--主键-->
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <!--归属车型-->
@@ -139,7 +139,7 @@
         where P_PERTAIN_TO_COLOR_MODEL = #{pPertainToColorModel,jdbcType=VARCHAR}
     </select>
     <!--根据车型模型和颜色车身查找-->
-    <select id="selectByModelAndColorPuids" parameterType="sql.pojo.cfg.derivative.HzCfg0ModelFeature" resultMap="BaseResultMap">
+    <select id="selectByModelAndColorPuids" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_MODEL_FEATURE
@@ -164,7 +164,7 @@
   </delete>
     <!--插入1条车型特性数据，1阶段不包含颜色车身-->
     <!--**************************************insert**************************************-->
-    <insert id="insert" parameterType="sql.pojo.cfg.derivative.HzCfg0ModelFeature">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature">
         insert into
         HZ_CFG0_MODEL_FEATURE (
         <include refid="Base_Column_List"/>
@@ -200,7 +200,7 @@
     </insert>
     <!--根据主键更新1条车型特性数据-->
     <!--**************************************update**************************************-->
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.derivative.HzCfg0ModelFeature">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature">
         update HZ_CFG0_MODEL_FEATURE
         <set>
             <if test="pFeatureCnDesc != null">
@@ -267,7 +267,7 @@
         </set>
         where PUID = #{puid,jdbcType=VARCHAR}
     </update>
-    <update id="updateByModelPuidWithBasic" parameterType="sql.pojo.cfg.derivative.HzCfg0ModelFeature">
+    <update id="updateByModelPuidWithBasic" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature">
         update HZ_CFG0_MODEL_FEATURE
         set
         <set>

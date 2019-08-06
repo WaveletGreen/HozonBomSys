@@ -8,8 +8,8 @@ package com.connor.hozon.bom.bomSystem.dao.modelColor;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
-import sql.pojo.cfg.modelColor.HzCmcrChange;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange;
 
 import java.util.List;
 

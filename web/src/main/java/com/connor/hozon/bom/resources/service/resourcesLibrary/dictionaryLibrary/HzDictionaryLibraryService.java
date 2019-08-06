@@ -6,10 +6,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzDictionaryLibraryRes
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzDictionaryLibraryQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
-
-import java.util.List;
-import sql.pojo.resourcesLibrary.dictionaryLibrary.HzDictionaryLibrary;
+import cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLibrary;
 
 /**
  * Created with IntelliJ IDEA.

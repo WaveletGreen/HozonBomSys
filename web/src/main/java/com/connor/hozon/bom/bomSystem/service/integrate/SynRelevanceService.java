@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ModelGroupDao;
+import cn.net.connor.hozon.dao.dao.configuration.derivative.HzCfg0ModelGroupDao;
 import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;

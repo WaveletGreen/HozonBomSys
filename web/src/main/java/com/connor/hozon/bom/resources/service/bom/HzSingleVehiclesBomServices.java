@@ -1,13 +1,9 @@
 package com.connor.hozon.bom.resources.service.bom;
 
-import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.interaction.HzSingleVehicles;
-
-import java.util.List;
 
 /**
  * @Author: haozt

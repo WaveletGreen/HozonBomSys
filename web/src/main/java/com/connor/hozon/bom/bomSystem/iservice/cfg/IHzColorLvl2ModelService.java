@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg;
 
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.modelColor.HzColorLvl2Model;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorLvl2Model;
 
 import java.util.List;
 

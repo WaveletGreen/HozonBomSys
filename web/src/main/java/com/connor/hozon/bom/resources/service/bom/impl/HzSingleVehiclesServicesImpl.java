@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicDao;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielCfgService;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
@@ -16,10 +16,10 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
-import sql.pojo.cfg.derivative.HzMaterielCfgBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import sql.pojo.interaction.HzSingleVehicles;
-import sql.redis.SerializeUtil;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
+import cn.net.connor.hozon.common.util.SerializeUtil;
 
 import java.util.*;
 

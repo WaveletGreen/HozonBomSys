@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.accessories;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesDTO;
 import com.connor.hozon.bom.resources.domain.query.HzAccessoriesPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.accessories.HzAccessoriesLib;
+import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLib;
 
 import java.util.List;
 

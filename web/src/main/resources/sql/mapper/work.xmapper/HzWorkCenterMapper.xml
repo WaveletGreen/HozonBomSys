@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzWorkCenterMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.work.HzWorkCenter">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.depository.work.HzWorkCenter">
     <id column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="P_FACTORY_PUID" jdbcType="VARCHAR" property="pFactoryPuid" />
     <result column="P_WORK_CODE" jdbcType="VARCHAR" property="pWorkCode" />
@@ -136,7 +136,7 @@
         </where>
     </select>
 <!-- 添加一条数据-->
-  <insert id="HzWorkCenterDAOImpl_insert" parameterType="sql.pojo.work.HzWorkCenter">
+  <insert id="HzWorkCenterDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.work.HzWorkCenter">
     insert into HZ_WORK_CENTER
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="puid != null">
@@ -375,7 +375,7 @@
   </insert>
 
 <!-- 修改一条数据-->
-  <update id="HzWorkCenterDAOImpl_update" parameterType="sql.pojo.work.HzWorkCenter">
+  <update id="HzWorkCenterDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.depository.work.HzWorkCenter">
     update HZ_WORK_CENTER
     <set>
       <if test="pFactoryPuid != null">

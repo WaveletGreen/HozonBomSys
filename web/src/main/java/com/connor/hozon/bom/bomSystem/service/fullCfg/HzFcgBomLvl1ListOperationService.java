@@ -10,7 +10,7 @@ import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFcfgBomLvl1ListOperationDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzFcfgBomLvl1ListOperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFcfgBomLvl1ListOperation;
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: fuck

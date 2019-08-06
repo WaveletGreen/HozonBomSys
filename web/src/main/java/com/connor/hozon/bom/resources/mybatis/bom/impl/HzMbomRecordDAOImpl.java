@@ -14,10 +14,10 @@ import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzMbomLineRecordVO;
-import sql.pojo.bom.HzMbomRecord;
-import sql.redis.HzDBException;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecordVO;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomRecord;
+import cn.net.connor.hozon.common.exception.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

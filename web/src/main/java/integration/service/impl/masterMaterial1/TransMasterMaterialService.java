@@ -1,18 +1,14 @@
 package integration.service.impl.masterMaterial1;
 
-import com.connor.hozon.bom.resources.util.ListUtil;
 import integration.Author;
 import integration.base.masterMaterial.TABLEOFZPPTCI001;
 import integration.base.masterMaterial.TABLEOFZPPTCO001;
-import integration.base.masterMaterial.ZPPTCI001;
 import integration.base.masterMaterial.ZPPTCO001;
 import integration.logic.MasterMaterial;
 import integration.service.i.ITransmitService;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzMbomLineRecord;
 
 import javax.xml.ws.Holder;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

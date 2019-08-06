@@ -6,7 +6,6 @@
 
 package com.connor.hozon.bom.bomSystem.service.integrate;
 
-import com.connor.hozon.bom.bomSystem.dao.bom.HzMBomToERPDao;
 import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
@@ -18,7 +17,7 @@ import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
-import sql.pojo.bom.HzMBomToERPBean;
+import cn.net.connor.hozon.dao.pojo.integration.HzMBomToERPBean;
 
 import java.util.*;
 /**
@@ -38,7 +37,7 @@ public class SynBomService implements ISynBomService {
      * 用来获取传输MBOM的数据
      */
     @Autowired
-    HzMBomToERPDao hzMBomToERPDao;
+    HzMBomToERPService hzMBomToERPService;
     /**
      * 发送服务
      */
@@ -141,15 +140,15 @@ public class SynBomService implements ISynBomService {
 
         JSONObject result = new JSONObject();
         //查询所有的2Y层，因为2Y层没有父层，所以2Y层不进行单独传输，只能依赖下层的子层进行2Y层的标识
-        List<HzMBomToERPBean> beanListIs2Y = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 1);
+        List<HzMBomToERPBean> beanListIs2Y = hzMBomToERPService.selectByProjectUidWithCondition(projectPuid, 1);
         //非2Y层作为所有的子层，2Y层的直接子层要标识其父层是2Y作为传输的标准，其余非2Y都从改List中取出重新搭建BOM的树形结构批量传输
-        List<HzMBomToERPBean> beanListIsnot2Y = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 0);
+        List<HzMBomToERPBean> beanListIsnot2Y = hzMBomToERPService.selectByProjectUidWithCondition(projectPuid, 0);
         //父层所有的
         List<HzMBomToERPBean> beanListOfParent;
         //实际上是所有的
         List<HzMBomToERPBean> beanListOfChildren;
         //所有数据
-        List<HzMBomToERPBean> all = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 3);
+        List<HzMBomToERPBean> all = hzMBomToERPService.selectByProjectUidWithCondition(projectPuid, 3);
 
         //筛选所有父id和子id
         List<String> children = new ArrayList<>();
@@ -178,12 +177,12 @@ public class SynBomService implements ISynBomService {
          */
         HzMBomToERPBean bom = new HzMBomToERPBean();
 
-        beanListIs2Y = splitListThenQuery(bom, projectPuid, is2YUids, 1)/*hzMBomToERPDao.selectByUidOfBatch(projectPuid, is2YUids)*/;
-        beanListIsnot2Y = splitListThenQuery(bom, projectPuid, isNot2YUids, 1)/* hzMBomToERPDao.selectByUidOfBatch(projectPuid, isNot2YUids)*/;
+        beanListIs2Y = splitListThenQuery(bom, projectPuid, is2YUids, 1)/*hzMBomToERPService.selectByUidOfBatch(projectPuid, is2YUids)*/;
+        beanListIsnot2Y = splitListThenQuery(bom, projectPuid, isNot2YUids, 1)/* hzMBomToERPService.selectByUidOfBatch(projectPuid, isNot2YUids)*/;
         //父层
-        beanListOfParent = splitListThenQuery(bom, projectPuid, parentPuids, 2)/* hzMBomToERPDao.selectbyParentUidOfBatch(projectPuid, parentPuids)*/;
+        beanListOfParent = splitListThenQuery(bom, projectPuid, parentPuids, 2)/* hzMBomToERPService.selectbyParentUidOfBatch(projectPuid, parentPuids)*/;
         //所有的
-        beanListOfChildren = splitListThenQuery(bom, projectPuid, children, 1)/*hzMBomToERPDao.selectByUidOfBatch(projectPuid, children)*/;
+        beanListOfChildren = splitListThenQuery(bom, projectPuid, children, 1)/*hzMBomToERPService.selectByUidOfBatch(projectPuid, children)*/;
 
 
         Map<String, HzMBomToERPBean> mapOf2YUid = new HashMap<>();
@@ -408,15 +407,15 @@ public class SynBomService implements ISynBomService {
 //
 //        boolean hasFail = false;
 //
-//        List<HzMBomToERPBean> beanListIs2Y = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 1);
-//        List<HzMBomToERPBean> beanListIsnot2Y = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 0);
+//        List<HzMBomToERPBean> beanListIs2Y = hzMBomToERPService.selectByProjectUidWithCondition(projectPuid, 1);
+//        List<HzMBomToERPBean> beanListIsnot2Y = hzMBomToERPService.selectByProjectUidWithCondition(projectPuid, 0);
 //        //父层所有的
 //        List<HzMBomToERPBean> beanListOfParent;
 //        //实际上是所有的
 //        List<HzMBomToERPBean> beanListOfChildren;
 //
 //        //所有数据
-//        List<HzMBomToERPBean> all = hzMBomToERPDao.selectByProjectUidWithCondition(projectPuid, 3);
+//        List<HzMBomToERPBean> all = hzMBomToERPService.selectByProjectUidWithCondition(projectPuid, 3);
 //
 //        //筛选所有父id和子id
 //        List<String> children = new ArrayList<>();
@@ -443,12 +442,12 @@ public class SynBomService implements ISynBomService {
 //
 //        HzMBomToERPBean bom = new HzMBomToERPBean();
 //
-//        beanListIs2Y = splitListThenQuery(bom, projectPuid, is2YUids, 1)hzMBomToERPDao.selectByUidOfBatch(projectPuid, is2YUids);
-//        beanListIsnot2Y = splitListThenQuery(bom, projectPuid, isNot2YUids, 1) hzMBomToERPDao.selectByUidOfBatch(projectPuid, isNot2YUids);
+//        beanListIs2Y = splitListThenQuery(bom, projectPuid, is2YUids, 1)hzMBomToERPService.selectByUidOfBatch(projectPuid, is2YUids);
+//        beanListIsnot2Y = splitListThenQuery(bom, projectPuid, isNot2YUids, 1) hzMBomToERPService.selectByUidOfBatch(projectPuid, isNot2YUids);
 //        //父层
-//        beanListOfParent = splitListThenQuery(bom, projectPuid, parentPuids, 2) hzMBomToERPDao.selectbyParentUidOfBatch(projectPuid, parentPuids);
+//        beanListOfParent = splitListThenQuery(bom, projectPuid, parentPuids, 2) hzMBomToERPService.selectbyParentUidOfBatch(projectPuid, parentPuids);
 //        //所有的
-//        beanListOfChildren = splitListThenQuery(bom, projectPuid, children, 1)hzMBomToERPDao.selectByUidOfBatch(projectPuid, children);
+//        beanListOfChildren = splitListThenQuery(bom, projectPuid, children, 1)hzMBomToERPService.selectByUidOfBatch(projectPuid, children);
 //
 //
 //        Map<String, HzMBomToERPBean> mapOf2YUid = new HashMap<>();
@@ -811,9 +810,9 @@ public class SynBomService implements ISynBomService {
         switch (byUid) {
             //找子x
             case 1:
-                return (List<T>) hzMBomToERPDao.selectByUidOfBatch(projectPuid, list);
+                return (List<T>) hzMBomToERPService.selectByUidOfBatch(projectPuid, list);
             case 2:
-                return (List<T>) hzMBomToERPDao.selectbyParentUidOfBatch(projectPuid, list);
+                return (List<T>) hzMBomToERPService.selectbyParentUidOfBatch(projectPuid, list);
             default:
                 return null;
         }

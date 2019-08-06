@@ -27,12 +27,12 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.factory.HzFactory;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
-import sql.pojo.work.HzWorkCenter;
-import sql.pojo.work.HzWorkProcedure;
-import sql.pojo.work.HzWorkProcess;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkCenter;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcess;
 
 import java.util.*;
 

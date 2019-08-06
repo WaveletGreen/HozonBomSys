@@ -9,8 +9,8 @@ package com.connor.hozon.bom.bomSystem.impl.modelColor;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.stereotype.Repository;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
-import sql.pojo.cfg.modelColor.HzCmcrChange;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange;
 
 import java.util.Date;
 import java.util.HashMap;

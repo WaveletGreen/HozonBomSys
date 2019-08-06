@@ -9,13 +9,9 @@ package com.connor.hozon.bom.bomSystem.impl.fullCfg;
 import com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import sql.IBaseSQLUtil;
-import sql.pojo.cfg.fullCfg.HzFullCfgWithCfg;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**

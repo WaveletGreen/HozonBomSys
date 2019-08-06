@@ -5,11 +5,10 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.factory.HzFactory;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @Author: haozt

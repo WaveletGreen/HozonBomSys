@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
-import sql.pojo.change.HzChangeListRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeListRecord;
 
 import java.util.List;
 

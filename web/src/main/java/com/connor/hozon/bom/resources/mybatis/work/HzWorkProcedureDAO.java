@@ -3,8 +3,8 @@ package com.connor.hozon.bom.resources.mybatis.work;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
-import sql.pojo.work.HzWorkProcedure;
-import sql.pojo.work.HzWorkProcess;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcess;
 
 import java.util.List;
 import java.util.Map;

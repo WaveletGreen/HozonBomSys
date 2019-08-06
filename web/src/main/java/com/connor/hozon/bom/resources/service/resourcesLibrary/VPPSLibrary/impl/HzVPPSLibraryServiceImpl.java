@@ -7,10 +7,9 @@ import com.connor.hozon.bom.resources.domain.query.HzVPPSLibraryQuery;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.VPPSLibrary.HzVPPSLibraryDao;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.VPPSLibrary.HzVPPSLibraryService;
-import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.resourcesLibrary.VPPSLibrary.HzVPPSLibrary;
+import cn.net.connor.hozon.dao.pojo.depository.VPPSLibrary.HzVPPSLibrary;
 
 import java.util.ArrayList;
 import java.util.List;

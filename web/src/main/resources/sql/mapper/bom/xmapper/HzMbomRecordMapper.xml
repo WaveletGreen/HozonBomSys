@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MbomLineMaintainRecord">
 
-    <resultMap id="BaseResultMap" type="sql.pojo.bom.HzMbomRecord">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomRecord">
         <result column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="P_BOM_PUID" jdbcType="VARCHAR" property="eBomPuid"/>
         <result column="P_SPARE_PART" jdbcType="VARCHAR" property="sparePart"/>
@@ -25,7 +25,7 @@
     </resultMap>
 
     <!--查询全MBOM信息-->
-    <resultMap extends="BaseResultMap" id="MbomResultMap" type="sql.pojo.bom.HzMbomLineRecord">
+    <resultMap extends="BaseResultMap" id="MbomResultMap" type="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord">
         <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid" />
         <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId" />
         <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
@@ -312,7 +312,7 @@
     </insert>
 
     <!-- 对应属性 -->
-    <insert id="HzMbomRecordDAOImpl_insert2" parameterType="sql.pojo.bom.HzMbomLineRecord">
+    <insert id="HzMbomRecordDAOImpl_insert2" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord">
       insert into HZ_MBOM_RECORD(
         PUID,P_PARENT_UID,P_BOM_DIGIFAX_ID,P_BOM_PUID,
         P_LINE_INDEX,P_BOM_LINE_IS_HAS,P_BOM_LINE_PUID,P_BOM_LINE_ID,P_BOM_LINE_IS_2Y,
@@ -336,7 +336,7 @@
   </insert>
 
     <!--插入数据-->
-    <insert id="HzMbomRecordDAOImpl_insert" parameterType="sql.pojo.bom.HzMbomRecord">
+    <insert id="HzMbomRecordDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomRecord">
         insert into HZ_MBOM_RECORD
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="puid != null">
@@ -453,7 +453,7 @@
         </trim>
     </insert>
 
-    <insert id="HzMbomRecordDAOImpl_insert_before" parameterType="sql.pojo.bom.HzMbomRecord">
+    <insert id="HzMbomRecordDAOImpl_insert_before" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomRecord">
         insert into HZ_MBOM_REOCRD_BEFORE_CHANGE
         (
         PUID,P_SPARE_PART,P_SPARE_PART_NUM,P_PROCESS_ROUTE,P_LABOR_HOUR,P_RHYTHM,P_SOLDER_JOINT,
@@ -480,7 +480,7 @@
       )
     </insert>
 
-    <insert id="HzMbomRecordDAOImpl_insert_after" parameterType="sql.pojo.bom.HzMbomRecord">
+    <insert id="HzMbomRecordDAOImpl_insert_after" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomRecord">
         insert into HZ_MBOM_REOCRD_AFTER_CHANGE
         (
         PUID,P_SPARE_PART,P_SPARE_PART_NUM,P_PROCESS_ROUTE,P_LABOR_HOUR,P_RHYTHM,P_SOLDER_JOINT,
@@ -507,7 +507,7 @@
       )
     </insert>
 
-    <update id="HzMbomRecordDAOImpl_update_before" parameterType="sql.pojo.bom.HzMbomLineRecord">
+    <update id="HzMbomRecordDAOImpl_update_before" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord">
         update HZ_MBOM_REOCRD_BEFORE_CHANGE
         <set>
             P_MBOM_STATUS = 2,
@@ -562,7 +562,7 @@
         and (P_MBOM_STATUS <![CDATA[ <> ]]>5 and P_MBOM_STATUS <![CDATA[ <> ]]>6)
     </update>
 
-    <update id="HzMbomRecordDAOImpl_update_after" parameterType="sql.pojo.bom.HzMbomLineRecord">
+    <update id="HzMbomRecordDAOImpl_update_after" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord">
         update HZ_MBOM_REOCRD_AFTER_CHANGE
         <set>
 
@@ -618,7 +618,7 @@
     </update>
 
     <!--导入更新数据-->
-    <update id="HzMbomRecordDAOImpl_updateInput" parameterType="sql.pojo.bom.HzMbomLineRecord">
+    <update id="HzMbomRecordDAOImpl_updateInput" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord">
         update ${tableName}
         <set>
             P_MBOM_STATUS = 2,
@@ -674,7 +674,7 @@
     </update>
 
     <!--更新数据-->
-    <update id="HzMbomRecordDAOImpl_update" parameterType="sql.pojo.bom.HzMbomLineRecord">
+    <update id="HzMbomRecordDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord">
         update ${tableName}
         <set>
             <if test="sparePart != null">

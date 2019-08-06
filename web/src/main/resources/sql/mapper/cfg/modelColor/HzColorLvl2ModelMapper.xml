@@ -7,7 +7,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorLvl2ModelDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzColorLvl2Model">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorLvl2Model">
         <!--主键-->
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <!--颜色车型外键-->
@@ -50,7 +50,7 @@
         where P_MODEL_UID = #{pModelUid,jdbcType=VARCHAR}
     </select>
     <!--根据模型主键进行筛选，主要用于新增或更新时的检查-->
-    <select id="selectByModelAndFunctionLvl" parameterType="sql.pojo.cfg.modelColor.HzColorLvl2Model" resultMap="BaseResultMap">
+    <select id="selectByModelAndFunctionLvl" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorLvl2Model" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_COLOR_LVL2_MODEL
@@ -62,7 +62,7 @@
     where PUID = #{puid,jdbcType=VARCHAR}
   </delete>
     <!--插入1条二级配色方案-->
-    <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzColorLvl2Model">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorLvl2Model">
     insert into HZ_COLOR_LVL2_MODEL (
       PUID,
       P_MODEL_UID,
@@ -84,7 +84,7 @@
       )
   </insert>
     <!--更新二级配色方案-->
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzColorLvl2Model">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorLvl2Model">
     update HZ_COLOR_LVL2_MODEL
     set
       P_COLOR_UID = #{pColorUid,jdbcType=VARCHAR},

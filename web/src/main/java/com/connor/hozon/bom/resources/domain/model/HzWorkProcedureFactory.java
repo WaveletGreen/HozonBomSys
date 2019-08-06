@@ -1,8 +1,8 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
-import sql.pojo.work.HzWorkProcedure;
-import sql.pojo.work.HzWorkProcess;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcess;
 
 /**
  * @Author: haozt

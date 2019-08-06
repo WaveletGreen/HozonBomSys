@@ -10,7 +10,7 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorLvl2ModelDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzColorLvl2ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.cfg.modelColor.HzColorLvl2Model;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorLvl2Model;
 
 import java.util.List;
 

@@ -8,8 +8,7 @@ package com.connor.hozon.bom.bomSystem.controller;
 
 import cn.net.connor.hozon.common.entity.QueryBase;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.*;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
@@ -18,9 +17,9 @@ import cn.net.connor.hozon.services.service.main.HzMainConfigService;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMaterielServiceImpl;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao;
-import com.connor.hozon.bom.bomSystem.dao.derivative.*;
+import cn.net.connor.hozon.dao.dao.configuration.derivative.*;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
-import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeDelDto;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0ModelFeatureService;
@@ -45,11 +44,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.cfg.derivative.*;
-import sql.pojo.cfg.modelColor.HzCfg0ModelColor;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.change.HzChangeOrderRecord;
-import sql.pojo.factory.HzFactory;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
 
 import java.util.*;
 
@@ -342,7 +340,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             result.put("msg", "请至少选择一个衍生物料进行操作");
             return result;
         }
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = hzDMBasicChangeDao.selectLastByPuid(delDtos);
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = hzDMBasicChangeDao.selectLastById(delDtos);
         if(hzDMBasicChangeBeans !=null&&hzDMBasicChangeBeans.size()>0){
             List<HzComposeDelDto> hzComposeDelDtosUpdate = new ArrayList<>();
             List<HzComposeDelDto> hzComposeDelDtosDelete = new ArrayList<>();
@@ -553,7 +551,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         for(HzDerivativeMaterielBasic hzDerivativeMaterielBasic : hzDerivativeMaterielBasics){
             HzDMBasicChangeBean hzDMBasicChangeBean = new HzDMBasicChangeBean();
             hzDMBasicChangeBean.setFormId(changeFromId);
-            hzDMBasicChangeBean.srcSetChange(hzDerivativeMaterielBasic);
+            hzDMBasicChangeBean.srcSetChange(hzDerivativeMaterielBasic,UserInfo.getUser().getLogin());
             hzDMBasicChangeBean.setDmbChangeStatus(0);
             hzDMBasicChangeBeans.add(hzDMBasicChangeBean);
         }
@@ -578,7 +576,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         for(HzDerivativeMaterielDetail hzDerivativeMaterielDetail : hzDerivativeMaterielDetails){
             HzDMDetailChangeBean hzDMDetailChangeBean = new HzDMDetailChangeBean();
             hzDMDetailChangeBean.setFormId(changeFromId);
-            hzDMDetailChangeBean.srcSetChange(hzDerivativeMaterielDetail);
+            hzDMDetailChangeBean.srcSetChange(hzDerivativeMaterielDetail,UserInfo.getUser().getLogin());
             hzDMDetailChangeBean.setDmbChangeBasicId(idMap.get(hzDerivativeMaterielDetail.getDmdDmbId()));
             HzFeature hzFeature = map.get(hzDerivativeMaterielDetail.getDmdCfg0FamilyUid());
             hzDMDetailChangeBean.setTitle(hzFeature.getFeatureDesc() + "<br/>" + hzFeature.getFeatureCode());
@@ -689,7 +687,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetailsUpdate = new ArrayList<>();
         //根据主数据id查找最近一次有效数据
         List<HzDMBasicChangeBean> hzDMBasicChangeBeans = new ArrayList<>();
-        hzDMBasicChangeBeans = hzDMBasicChangeDao.selectLastByPuid(delDtos);
+        hzDMBasicChangeBeans = hzDMBasicChangeDao.selectLastById(delDtos);
         //根据主数据找到从数据
         List<HzDMDetailChangeBean> hzDMDetailChangeBeans = new ArrayList<>();
         if(hzDMBasicChangeBeans!=null&&hzDMBasicChangeBeans.size()!=0){

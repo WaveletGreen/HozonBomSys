@@ -6,10 +6,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.epl.HzEPLManageRecord;
-
-import java.util.HashMap;
-import java.util.Map;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 
 /**
  * Created by haozt on 2018/06/05

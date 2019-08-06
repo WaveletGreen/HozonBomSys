@@ -4,8 +4,8 @@ import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
-import sql.pojo.change.HzEWOAllImpactDept;
-import sql.pojo.change.HzEWOImpactDept;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOAllImpactDept;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactDept;
 
 import java.util.HashMap;
 import java.util.List;

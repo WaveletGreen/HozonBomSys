@@ -1,8 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.change;
 
 import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
-import org.apache.ibatis.annotations.Param;
-import sql.pojo.change.HzAuditorChangeRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzWorkListRecordMapper">
-	<resultMap type="sql.pojo.workList.HzWorkListRecord" id="BaseResultMap">
+	<resultMap type="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord" id="BaseResultMap">
         <id column="ID" jdbcType="INTEGER" property="id" />
 		<result column="CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
 		<result column="LAUNCHER" jdbcType="VARCHAR" property="launcher" />
@@ -31,7 +31,7 @@
 	</resultMap>
 
 	<!-- 增加 -->
-	<insert id="HzWorkListDAOImpl_insert" parameterType="sql.pojo.workList.HzWorkListRecord">
+	<insert id="HzWorkListDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord">
         insert into HZ_WORK_LIST
         (
         CHANGE_NUM,LAUNCHER,LAUNCHER_ID,LAUNCHER_DEP,LAUNCHER_CONTACT,AUDITER,
@@ -50,7 +50,7 @@
     </insert>
 
 	<!-- 更新 -->
-	<update id="HzWorkListDAOImpl_update" parameterType="sql.pojo.workList.HzWorkListRecord">
+	<update id="HzWorkListDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord">
 		update HZ_WORK_LIST
 		<set>
 			<if test="changeNum != null">
@@ -231,7 +231,7 @@
         </where>
     </select>
 
-	<insert id="save" parameterType="sql.pojo.workList.HzWorkListRecord">
+	<insert id="save" parameterType="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord">
 		<!--oracle插入数据返回主键到外键-->
 		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">
 			SELECT SEQ_HZ_USERRECORD.Nextval as ID from DUAL
@@ -309,7 +309,7 @@
 	</insert>
 
 	<!--删除-->
-	<delete id="delete" parameterType="sql.pojo.workList.HzWorkListRecord">
+	<delete id="delete" parameterType="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord">
 		 DELETE FROM userRecord WHERE id=#{id}
 	</delete>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzEplRecordMapper">
-    <resultMap id="BaseResultMap" type="sql.pojo.epl.HzEPLRecord">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord">
         <id column="ID" jdbcType="DOUBLE" property="id" />
         <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
         <result column="PART_ID" jdbcType="VARCHAR" property="partId" />
@@ -71,7 +71,7 @@
   </sql>
 
     <!--insert-->
-    <insert id="HzEPLDAOImpl_insert" parameterType="sql.pojo.epl.HzEPLRecord">
+    <insert id="HzEPLDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord">
     insert into HZ_EPL_RECORD (ID, PROJECT_ID, PART_ID,
       PART_OF_WHICH_DEPT, PART_NAME, PART_CLASS,
       PART_EN_NAME, PART_RESOURCE, STATUS,
@@ -107,7 +107,7 @@
   </insert>
 
     <!--update-->
-    <update id="HzEPLDAOImpl_update" parameterType="sql.pojo.epl.HzEPLRecord">
+    <update id="HzEPLDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord">
         update HZ_EPL_RECORD
         <set>
             <if test="partId != null">
@@ -359,7 +359,7 @@
         </where>
     </select>
 
-    <select id="HzEPLDAOImpl_selectByPartId" parameterType="sql.pojo.epl.HzEPLRecord" resultMap="BaseResultMap">
+    <select id="HzEPLDAOImpl_selectByPartId" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_EPL_RECORD

@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.service.change.HzBreakPointService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import sql.pojo.integration.HzBreakPoint;
+import cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint;
 
 import java.util.ArrayList;
 import java.util.List;

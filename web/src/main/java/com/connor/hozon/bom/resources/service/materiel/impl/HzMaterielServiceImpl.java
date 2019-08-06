@@ -30,8 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.factory.HzFactory;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.util.*;

@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom;
 
-import sql.pojo.bom.HzBOMScheduleTask;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleTask;
 
 import java.util.List;
 

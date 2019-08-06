@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.pojo.bom.HzBOMScheduleResult;
-import sql.pojo.bom.HzBOMScheduleTask;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleResult;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleTask;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
 
 import java.util.List;

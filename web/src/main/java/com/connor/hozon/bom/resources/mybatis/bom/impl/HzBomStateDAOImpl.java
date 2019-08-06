@@ -2,9 +2,8 @@ package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
 import com.connor.hozon.bom.resources.mybatis.bom.HzBomStateDAO;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import sql.BaseSQLUtil;
-import sql.pojo.bom.HzBomState;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomState;
 
 /**
  * @Author: haozt

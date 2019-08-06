@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sql.mapper.imapper.HzAccessoriesLibMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.accessories.HzAccessoriesLib">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLib">
     <result column="PUID" jdbcType="VARCHAR" property="puid" />
     <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName" />
     <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName" />
@@ -31,7 +31,7 @@
     <result column="P_STATUS" jdbcType="INTEGER" property="pStatus" />
   </resultMap>
 
-  <insert id="HzAccessoriesDAOImpl_insert" parameterType="sql.pojo.accessories.HzAccessoriesLib">
+  <insert id="HzAccessoriesDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLib">
     insert into HZ_ACCESSORIES_LIB
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="puid != null">
@@ -185,7 +185,7 @@
 
 
 
-  <update id="HzAccessoriesDAOImpl_update" parameterType="sql.pojo.accessories.HzAccessoriesLib">
+  <update id="HzAccessoriesDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLib">
     update  HZ_ACCESSORIES_LIB
     <set>
 

@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.wokeList;
 
 import com.connor.hozon.bom.resources.domain.query.HzWorkListBasicInfoQuery;
-import sql.pojo.workList.HzWorkListRecord;
+import cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord;
 
 import java.util.List;
 import java.util.Map;

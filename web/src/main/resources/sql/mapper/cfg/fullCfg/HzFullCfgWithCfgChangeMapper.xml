@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao">
-  <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfgChange">
     <id column="ID" jdbcType="DECIMAL" property="id" />
     <result column="CHANGE_ORDER_UID" jdbcType="DECIMAL" property="changeOrderId" />
     <result column="FL_MAIN_ID" jdbcType="DECIMAL" property="mainID" />
@@ -40,7 +40,7 @@
     delete from HZ_FC_WITHCFG_RECORD_CHANGE
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
-  <insert id="insert" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+  <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfgChange">
     insert into HZ_FC_WITHCFG_RECORD_CHANGE (ID, CFG_CFG0_UID, CFG_BOMLINE_UID, 
       FL_CFG_CREATE_DATE, FL_CFG_UPDATE_DATE, FL_CFG_CREATOR, 
       FL_CFG_UPDATOR, FL_CFG_CREATE_DATE_CHANGE, FL_CFG_UPDATE_DATE_CHANGE, 
@@ -55,7 +55,7 @@
       #{cfgDesc,jdbcType=VARCHAR}, #{cfgCode,jdbcType=VARCHAR}, #{isColor,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+  <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfgChange">
     insert into HZ_FC_WITHCFG_RECORD_CHANGE
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -152,7 +152,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+  <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfgChange">
     update HZ_FC_WITHCFG_RECORD_CHANGE
     <set>
       <if test="cfgCfg0Uid != null">
@@ -200,7 +200,7 @@
     </set>
     where ID = #{id,jdbcType=DECIMAL}
   </update>
-  <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfgChange">
+  <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfgChange">
     update HZ_FC_WITHCFG_RECORD_CHANGE
     set CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR},
       CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR},

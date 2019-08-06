@@ -7,7 +7,7 @@
 package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import sql.pojo.cfg.fullCfg.HzFullCfgMain;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain;
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 全配置BOM一级清单主数据dao层

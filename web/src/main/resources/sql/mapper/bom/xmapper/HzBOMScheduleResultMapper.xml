@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="HzBOMScheduleResultMapper">
-  <resultMap id="BaseResultMap" type="sql.pojo.bom.HzBOMScheduleResult">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleResult">
     <result column="ID" jdbcType="DOUBLE" property="id" />
     <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId" />
     <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
@@ -11,7 +11,7 @@
     ID,ORDER_ID,CREATE_TIME,RESULT
   </sql>
 
-  <insert id="HzBOMScheduleResultDAOImpl_insert" parameterType="sql.pojo.bom.HzBOMScheduleResult">
+  <insert id="HzBOMScheduleResultDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleResult">
     insert into HZ_BOM_SCHEDULE_RESULT  (
     <include refid="Base_Column_List"/>
     )

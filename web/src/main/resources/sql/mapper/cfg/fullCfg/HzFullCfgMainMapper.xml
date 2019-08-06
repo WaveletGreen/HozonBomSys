@@ -7,7 +7,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid"/>
         <result column="STATUS" jdbcType="DECIMAL" property="status"/>
@@ -33,7 +33,7 @@
     delete from HZ_FULL_CFG_MAIN_RECORD
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
-    <insert id="insertBackId" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+    <insert id="insertBackId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
         <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_HZ_FL_CFG_MAIN_ID.Nextval from dual
         </selectKey>
@@ -42,7 +42,7 @@
         values (#{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=DECIMAL},
         #{version,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR}, #{updater,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
 
         insert into HZ_FULL_CFG_MAIN_RECORD
 
@@ -111,7 +111,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
         update HZ_FULL_CFG_MAIN_RECORD
         <set>
             <if test="projectUid != null">
@@ -144,7 +144,7 @@
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
     update HZ_FULL_CFG_MAIN_RECORD
     set PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
       STATUS = #{status,jdbcType=DECIMAL},
@@ -171,7 +171,7 @@
         PROJECT_UID = #{projectUid,jdbcType=VARCHAR}
     </delete>
 
-    <insert id="insertSeqAll" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+    <insert id="insertSeqAll" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
         <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
             select SEQ_HZ_FL_CFG_MAIN_ID.Nextval from dual
         </selectKey>
@@ -190,7 +190,7 @@
         )
     </update>
 
-    <update id="updateStatusById" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgMain">
+    <update id="updateStatusById" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
         update HZ_FULL_CFG_MAIN_RECORD
         set STATUS = #{status,jdbcType=DECIMAL}
         where ID = #{id,jdbcType=DECIMAL}

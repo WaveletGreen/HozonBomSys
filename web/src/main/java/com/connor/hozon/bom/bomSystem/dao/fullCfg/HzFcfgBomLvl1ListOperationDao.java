@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.bomSystem.dao.fullCfg;
 
-import sql.pojo.cfg.fullCfg.HzFcfgBomLvl1ListOperation;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFcfgBomLvl1ListOperation;
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 忘了

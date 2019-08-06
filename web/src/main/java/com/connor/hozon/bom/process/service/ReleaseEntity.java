@@ -6,13 +6,13 @@
 
 package com.connor.hozon.bom.process.service;
 
+import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicDao;
 import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicChangeDao;
 import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzDMBasicChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzDerivativeMaterielBasicDao;
+import cn.net.connor.hozon.services.service.configuration.derivative.HzDMBasicChangeService;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
@@ -56,14 +56,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import sql.pojo.bom.HzBOMScheduleTask;
-import sql.pojo.bom.HzMbomLineRecord;
-import sql.pojo.bom.HzMbomLineRecordVO;
-import sql.pojo.bom.HzPbomLineRecord;
-import sql.pojo.change.HzChangeDataRecord;
-import sql.pojo.change.HzChangeOrderRecord;
-import sql.pojo.epl.HzEPLManageRecord;
-import sql.pojo.work.HzWorkProcedure;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleTask;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecordVO;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -118,7 +118,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     private HzCfg0ModelColorDao hzCfg0ModelColorDao;
 
     @Autowired
-    private HzDMBasicChangeDao hzDMBasicChangeDao;
+    private HzDMBasicChangeService hzDMBasicChangeService;
     @Autowired
     private HzDerivativeMaterielBasicDao hzDerivativeMaterielBasicDao;
 
@@ -248,7 +248,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             }
             for(HzChangeDataRecord hzChangeDataRecord : list){
                 if(ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
-                    if(hzDMBasicChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                    if(hzDMBasicChangeService.updateStatusByOrderId(orderId,1)<=0?true:false){
                         return false;
                     }
                     if(hzDerivativeMaterielBasicDao.updateStatusByOrderId(orderId,1)<=0?true:false){

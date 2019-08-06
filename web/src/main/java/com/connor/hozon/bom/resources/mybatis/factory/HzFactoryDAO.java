@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.factory;
 
-import sql.pojo.factory.HzFactory;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
 
 /**
  * @Author: haozt

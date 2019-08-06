@@ -7,7 +7,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.modelColor.HzCmcrChange">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange">
         <!--主键，从序列中获得-->
         <id column="CMCR_CG_ID" jdbcType="DECIMAL" property="cmcrCgId"/>
         <!--VWO号，外键，级联删除-->
@@ -99,19 +99,19 @@
     CMCR_SRC_STATUS
   </sql>
     <!--**************************************select**************************************-->
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from ${whichTable}
         where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
     </select>
     <!--**************************************delete**************************************-->
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange">
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange">
     delete from ${whichTable}
     where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
   </delete>
     <!--**************************************insert**************************************-->
-    <insert id="insert" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange">
         <selectKey order="BEFORE"
                    keyColumn="CMCR_CG_ID" keyProperty="cmcrCgId" resultType="java.lang.Long">
             select ${seqName}.Nextval from dual
@@ -187,7 +187,7 @@
         </foreach>
         )A
     </insert>
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange">
         <selectKey order="BEFORE"
                    keyColumn="CMCR_CG_ID" keyProperty="cmcrCgId" resultType="java.lang.Long">
             select ${seqName}.Nextval from dual
@@ -373,7 +373,7 @@
         </trim>
     </insert>
     <!--**************************************update**************************************-->
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange">
         update ${whichTable}
         <set>
             <if test="cmcrCgVwoId != null">
@@ -463,7 +463,7 @@
         </set>
         where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange">
     update ${whichTable}
     set CMCR_CHANGE_ORDER_UID = #{cmcrCgVwoId,jdbcType=DECIMAL},
       CMCR_CG_SHELL_CODE = #{cmcrCgShellCode,jdbcType=VARCHAR},
@@ -542,7 +542,7 @@
         )
     </select>
 
-    <select id="doQueryCmcrDetailChangeBeforAndAfter" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="BaseResultMap">
+    <select id="doQueryCmcrDetailChangeBeforAndAfter" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from(
@@ -689,7 +689,7 @@
 
     </delete>
 
-    <select id="doQueryCmcrChangeBeforByAfter" parameterType="sql.pojo.cfg.modelColor.HzCmcrChange" resultMap="BaseResultMap">
+    <select id="doQueryCmcrChangeBeforByAfter" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from

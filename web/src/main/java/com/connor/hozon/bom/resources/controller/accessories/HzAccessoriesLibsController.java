@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.accessories.HzAccessoriesLibs;
+import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;

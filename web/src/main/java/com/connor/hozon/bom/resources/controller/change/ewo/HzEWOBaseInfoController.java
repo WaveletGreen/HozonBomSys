@@ -28,8 +28,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sql.pojo.change.HzEWOAllImpactDept;
-import sql.pojo.change.HzEWOImpactReference;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOAllImpactDept;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactReference;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;

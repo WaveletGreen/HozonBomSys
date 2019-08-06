@@ -12,7 +12,7 @@ import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sql.pojo.change.HzEWOBasicInfo;
+import cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo;
 
 import java.util.ArrayList;
 import java.util.List;

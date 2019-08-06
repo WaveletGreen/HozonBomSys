@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao">
     <!--数据库字段-->
-    <resultMap id="BaseResultMap" type="sql.pojo.interaction.HzSingleVehicles">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles">
         <!--主键-->
         <id column="ID" jdbcType="DOUBLE" property="id"/>
         <!--项目UID，外键-->
@@ -65,7 +65,7 @@
         <result column="IS_SEND" jdbcType="INTEGER" property="isSend"/>
     </resultMap>
     <!--拓展结果-->
-    <resultMap id="ExWithProjectBaseResult" extends="BaseResultMap" type="sql.pojo.interaction.HzSingleVehicles">
+    <resultMap id="ExWithProjectBaseResult" extends="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles">
         <!--物料编号-->
         <result column="svl_Material_Code" jdbcType="VARCHAR" property="svlMaterialCode"/>
         <!--基本信息-->
@@ -130,7 +130,7 @@
 
 
     <!--**************************************select**************************************-->
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.interaction.HzSingleVehicles" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_SINGLE_VEHICLES
@@ -262,7 +262,7 @@
 
 
     <!--**************************************delete**************************************-->
-    <delete id="deleteByPrimaryKey" parameterType="sql.pojo.interaction.HzSingleVehicles">
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles">
     delete from HZ_SINGLE_VEHICLES
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
@@ -294,7 +294,7 @@
     </insert>
 
 
-    <insert id="insert" parameterType="sql.pojo.interaction.HzSingleVehicles">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles">
     insert into HZ_SINGLE_VEHICLES (ID, SVL_PROJECT_UID, SVL_DMB_ID,
     SVL_INNER_COLOR_CODE, SVL_INNER_COLOR_NAME, SVL_COLOR_CODE,
     SVL_COLOR_NAME, SVL_BATTERY_CODE, SVL_MOTOR_CODE,
@@ -325,7 +325,7 @@
   </insert>
 
 
-    <insert id="insertSelective" parameterType="sql.pojo.interaction.HzSingleVehicles">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles">
         insert into HZ_SINGLE_VEHICLES
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -509,7 +509,7 @@
 
 
     <!--**************************************update**************************************-->
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.interaction.HzSingleVehicles">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles">
         update HZ_SINGLE_VEHICLES
         <set>
             <if test="svlProjectUid != null">
@@ -599,7 +599,7 @@
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.interaction.HzSingleVehicles">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles">
     update HZ_SINGLE_VEHICLES
     set SVL_PROJECT_UID = #{svlProjectUid,jdbcType=VARCHAR},
     SVL_DMB_ID = #{svlDmbId,jdbcType=DECIMAL},
@@ -633,7 +633,7 @@
   </update>
 
 
-    <update id="updateSingleVehicles" parameterType="sql.pojo.interaction.HzSingleVehicles">
+    <update id="updateSingleVehicles" parameterType="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles">
         update HZ_SINGLE_VEHICLES
         <set>
             <if test="svlInnerColorCode != null">

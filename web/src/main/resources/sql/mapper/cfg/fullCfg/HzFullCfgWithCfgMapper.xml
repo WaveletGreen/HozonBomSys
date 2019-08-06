@@ -6,7 +6,7 @@
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao">
-    <resultMap id="BaseResultMap" type="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg">
         <id column="ID" jdbcType="DECIMAL" property="id"/>
         <result column="CFG_CFG0_UID" jdbcType="VARCHAR" property="cfgCfg0Uid"/>
         <result column="CFG_BOMLINE_UID" jdbcType="VARCHAR" property="cfgBomlineUid"/>
@@ -37,7 +37,7 @@
     </resultMap>
     <resultMap extends="BaseResultMapWithCfg" id="BaseResultMapWithCfgAndBl"
                type="com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg">
-        <association property="bomLine" javaType="sql.pojo.bom.HzBomLineRecord">
+        <association property="bomLine" javaType="cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord">
             <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineID"/>
             <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y"/>
             <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName"/>
@@ -58,21 +58,21 @@
   </sql>
     <!--***************************************************select***************************************************-->
 
-    <select id="selectByPrimaryKey" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_FULL_CFG_WITHCFG_RECORD
         where ID = #{id,jdbcType=DECIMAL}
     </select>
     <!--根据主表查询所有的特性-BOMLine对应关系-->
-    <select id="selectByMainID" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
+    <select id="selectByMainID" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_FULL_CFG_WITHCFG_RECORD
         where FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL}
     </select>
     <!--全配主配置和BOMLine一起找-->
-    <select id="selectByBomLineUidWithVersion" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
+    <select id="selectByBomLineUidWithVersion" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from HZ_FULL_CFG_WITHCFG_RECORD
@@ -160,7 +160,7 @@
         </foreach>
         )A
     </insert>
-    <insert id="insertSelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg">
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg">
         insert into HZ_FULL_CFG_WITHCFG_RECORD
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -239,7 +239,7 @@
         )A
     </insert>
     <!--***************************************************update***************************************************-->
-    <update id="updateByPrimaryKeySelective" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg">
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg">
         update HZ_FULL_CFG_WITHCFG_RECORD
         <set>
             <if test="cfgCfg0Uid != null">
@@ -269,7 +269,7 @@
         </set>
         where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByPrimaryKey" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg">
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg">
     update HZ_FULL_CFG_WITHCFG_RECORD
     set CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR},
       CFG_BOMLINE_UID = #{cfgBomlineUid,jdbcType=VARCHAR},
@@ -281,7 +281,7 @@
       FL_CFG_VERSION = #{flCfgVersion,jdbcType=DECIMAL}
     where ID = #{id,jdbcType=DECIMAL}
     </update>
-    <update id="updateByBomLinePuid" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg">
+    <update id="updateByBomLinePuid" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg">
         update HZ_FULL_CFG_WITHCFG_RECORD
         set
           CFG_CFG0_UID = #{cfgCfg0Uid,jdbcType=VARCHAR},
@@ -295,7 +295,7 @@
           )
     </update>
 
-    <select id="selectBy2Yid" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
+    <select id="selectBy2Yid" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg" resultMap="BaseResultMap">
         select
           <include refid="Base_Column_List"/>
         from
@@ -305,7 +305,7 @@
     </select>
 
 
-    <select id="selectByFeatureId" parameterType="sql.pojo.cfg.fullCfg.HzFullCfgWithCfg" resultMap="BaseResultMap">
+    <select id="selectByFeatureId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfg" resultMap="BaseResultMap">
         select
           <include refid="Base_Column_List"/>
         from

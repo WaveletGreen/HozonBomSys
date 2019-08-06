@@ -11,12 +11,11 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkService;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sql.pojo.factory.HzFactory;
-import sql.pojo.work.HzWorkCenter;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkCenter;
 
 import java.util.*;
 

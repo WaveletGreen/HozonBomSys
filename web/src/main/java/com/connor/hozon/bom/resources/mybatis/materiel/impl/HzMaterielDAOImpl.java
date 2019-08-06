@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
-import sql.redis.HzDBException;
+import cn.net.connor.hozon.common.exception.HzDBException;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -6,11 +6,10 @@
 
 package com.connor.hozon.bom.bomSystem.impl.derivative;
 
-import com.connor.hozon.bom.bomSystem.dao.derivative.HzCfg0ToModelRecordDao;
+import cn.net.connor.hozon.dao.dao.configuration.derivative.HzCfg0ToModelRecordDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
-import sql.pojo.cfg.derivative.HzCfg0ToModelRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ToModelRecord;
 
 import java.util.List;
 /**

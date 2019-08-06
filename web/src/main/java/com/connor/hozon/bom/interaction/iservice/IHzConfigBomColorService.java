@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.interaction.iservice;
 
 import org.springframework.stereotype.Service;
-import sql.pojo.interaction.HzConfigBomColorBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
 
 import java.util.List;
 

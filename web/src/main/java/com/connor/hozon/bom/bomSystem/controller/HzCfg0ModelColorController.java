@@ -7,6 +7,7 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.modelColor.*;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.dao.pojo.depository.color.HzCfg0ColorSet;
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
@@ -34,10 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import sql.pojo.bom.HzBomLineRecord;
-import sql.pojo.cfg.modelColor.*;
-import sql.pojo.change.HzChangeOrderRecord;
-import sql.pojo.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 
 import java.util.*;
 import java.util.stream.Collectors;
