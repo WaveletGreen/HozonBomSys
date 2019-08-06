@@ -199,15 +199,15 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
 
         request.setFilters(map);
-        return super.findForPage("HzMbomRecordDAOImpl_getMBomRecord","HzMbomRecordDAOImpl_getTotalCount",request);
-
+        if (Integer.valueOf(1).equals(query.getType()) ||Integer.valueOf(6).equals(query.getType())) {
+            return super.findForPage("HzMbomRecordDAOImpl_getMBomRecord", "HzMbomRecordDAOImpl_getTotalCount", request);
+        }
+        else {
+            return super.findForPage("HzSuperMbomRecordDAOImpl_getMBomRecord","HzMbomRecordDAOImpl_getTotalCount",request);
+        }
     }
 
-    /**
-     * 查询Mbom颜色件信息
-     * @param query
-     * @return
-     */
+
 //    @Override   废除  @xulf
 //    public Page<HzMbomLineRecord> queryMbomToColorPart(HzMbomByPageQuery query) {
 //        PageRequestParam request = new PageRequestParam();

@@ -23,9 +23,8 @@
         <result column="P_CREATE_NAME" jdbcType="VARCHAR" property="createName"/>
         <result column="P_UPDATE_NAME" jdbcType="VARCHAR" property="updateName"/>
     </resultMap>
-
-    <!--查询全MBOM信息-->
-    <resultMap extends="BaseResultMap" id="MbomResultMap" type="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord">
+    <!--查询MBom信息-->
+    <resultMap extends="BaseResultMap" id="SuperMbomResultMap" type="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord">
         <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid" />
         <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId" />
         <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
@@ -65,6 +64,46 @@
         <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
         <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
     </resultMap>
+    <!--查询白车身生产白车身财务信息-->
+    <resultMap extends="BaseResultMap" id="MbomResultMap" type="cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord">
+        <result column="P_PARENT_UID" jdbcType="VARCHAR" property="parentUid" />
+        <result column="P_BOM_DIGIFAX_ID" jdbcType="VARCHAR" property="bomDigifaxId" />
+        <result column="P_LINE_INDEX" jdbcType="VARCHAR" property="lineIndex" />
+        <result column="P_BOM_LINE_IS_HAS" jdbcType="INTEGER" property="isHas" />
+        <result column="P_BOM_LINE_PUID" jdbcType="VARCHAR" property="linePuid" />
+        <result column="P_BOM_LINE_ID" jdbcType="VARCHAR" property="lineId" />
+        <result column="P_BOM_LINE_IS_2Y" jdbcType="INTEGER" property="is2Y" />
+        <result column="P_BOM_LINE_IS_PART" jdbcType="INTEGER" property="isPart" />
+        <result column="P_BOM_LINE_IS_DEPT" jdbcType="INTEGER" property="isDept" />
+        <result column="P_BOM_OF_WHICH_DEPT" jdbcType="VARCHAR" property="pBomOfWhichDept" />
+        <result column="P_BOM_LINE_PART_NAME" jdbcType="VARCHAR" property="pBomLinePartName" />
+        <result column="P_BOM_LINE_PART_CLASS" jdbcType="VARCHAR" property="pBomLinePartClass" />
+        <result column="P_BOM_LINE_PART_EN_NAME" jdbcType="VARCHAR" property="pBomLinePartEnName" />
+        <result column="P_BOM_LINE_PART_RESOURCE" jdbcType="VARCHAR" property="pBomLinePartResource" />
+        <result column="P_BOM_ORDER_NUM" jdbcType="INTEGER" property="orderNum" />
+        <result column="P_SORT_NUM" jdbcType="VARCHAR" property="sortNum" />
+        <result column="P_COLOR_PUID" jdbcType="VARCHAR" property="colorId" />
+        <result column="P_VEH_NUM" jdbcType="VARCHAR" property="vehNum" />
+
+        <result column="P_BOM_TYPE" jdbcType="INTEGER" property="pBomType" />
+        <result column="P_STOCK_LOCATION" jdbcType="VARCHAR" property="pStockLocation" />
+        <result column="P_FACTORY_ID" jdbcType="VARCHAR" property="pFactoryId" />
+        <result column="P_LOU_LOA_FLAG" jdbcType="INTEGER" property="pLouaFlag"/>
+        <!--插入配置信息 车型信息-->
+        <result column="P_CFG0_MODEL_RECORD" jdbcType="VARCHAR" property="cfg0ModelRecordId"/>
+        <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="cfg0Desc"/>
+        <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="cfg0FamilyName"/>
+        <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="cfg0FamilyDesc"/>
+        <result column="OBJECT_NAME" jdbcType="VARCHAR" property="objectName"/>
+        <result column="OBJECT_DESC" jdbcType="VARCHAR" property="objectDesc"/>
+        <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="cfg0ModelBasicDetail"/>
+
+        <result column="P_FACTORY_CODE" jdbcType="VARCHAR" property="factoryCode" />
+        <result column="P_MWO_NO" jdbcType="VARCHAR" property="mwoNo"/>
+        <result column="P_ORDER_ID" jdbcType="DOUBLE" property="orderId"/>
+        <result column="P_REVISION" jdbcType="VARCHAR" property="revision"/>
+        <result column="P_EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime"/>
+    </resultMap>
 
 
     <sql id="Mbom_Column_List">
@@ -75,11 +114,10 @@
         P_BOM_LINE_PUID, P_BOM_LINE_ID, P_BOM_LINE_IS_2Y, P_BOM_LINE_IS_PART, P_BOM_LINE_IS_DEPT,
         P_BOM_OF_WHICH_DEPT, P_BOM_LINE_PART_NAME, P_BOM_LINE_PART_CLASS, P_BOM_LINE_PART_EN_NAME,
         P_BOM_LINE_PART_RESOURCE, P_BOM_ORDER_NUM,P_BOM_TYPE, P_STOCK_LOCATION,P_FACTORY_ID,P_SORT_NUM,
-        P_LOU_LOA_FLAG, P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME,P_COLOR_PART
+        P_LOU_LOA_FLAG, P_COLOR_PUID,P_ORDER_ID,P_REVISION,P_EFFECT_TIME
   </sql>
 
-
-    <sql id="Base_Column_List">
+    <sql id="SuperMBomBase_Column_List">
         t.PUID, t.P_SPARE_PART,t.P_SPARE_PART_NUM, t.P_PROCESS_ROUTE, t.P_LABOR_HOUR, t.P_RHYTHM,
         t.P_SOLDER_JOINT, t.P_MACHINE_MATERITAL, t.P_STANDARD_PART, t.P_TOOLS, t.P_WASTER_PRODUCT,
         t.P_CHANGE, t.P_CHANGE_NUM, t.P_BOM_PUID, t.P_MBOM_STATUS, t.P_CREATE_TIME, t.P_UPDATE_TIME,
@@ -89,10 +127,19 @@
         t.P_BOM_LINE_PART_RESOURCE, t.P_BOM_ORDER_NUM,t.P_BOM_TYPE, t.P_STOCK_LOCATION,t.P_FACTORY_ID,t.P_SORT_NUM,
         t.P_COLOR_PUID,t.P_ORDER_ID,t.P_REVISION,t.P_EFFECT_TIME,t.P_LOU_LOA_FLAG,t.P_COLOR_PART
   </sql>
-
-    <!--查询Mbom信息 分页-->
-    <select id="HzMbomRecordDAOImpl_getMBomRecord" resultMap="MbomResultMap" parameterType="java.util.HashMap">
-        select <include refid="Base_Column_List"/>,tt.P_FACTORY_CODE,t10.P_VEH_NUM from ${tableName} t
+    <sql id="Base_Column_List">
+        t.PUID, t.P_SPARE_PART,t.P_SPARE_PART_NUM, t.P_PROCESS_ROUTE, t.P_LABOR_HOUR, t.P_RHYTHM,
+        t.P_SOLDER_JOINT, t.P_MACHINE_MATERITAL, t.P_STANDARD_PART, t.P_TOOLS, t.P_WASTER_PRODUCT,
+        t.P_CHANGE, t.P_CHANGE_NUM, t.P_BOM_PUID, t.P_MBOM_STATUS, t.P_CREATE_TIME, t.P_UPDATE_TIME,
+        t.P_CREATE_NAME, t.P_UPDATE_NAME, t.P_PARENT_UID, t.P_BOM_DIGIFAX_ID, t.P_LINE_INDEX, t.P_BOM_LINE_IS_HAS,
+        t.P_BOM_LINE_PUID, t.P_BOM_LINE_ID, t.P_BOM_LINE_IS_2Y, t.P_BOM_LINE_IS_PART, t.P_BOM_LINE_IS_DEPT,
+        t.P_BOM_OF_WHICH_DEPT, t.P_BOM_LINE_PART_NAME, t.P_BOM_LINE_PART_CLASS, t.P_BOM_LINE_PART_EN_NAME,
+        t.P_BOM_LINE_PART_RESOURCE, t.P_BOM_ORDER_NUM,t.P_BOM_TYPE, t.P_STOCK_LOCATION,t.P_FACTORY_ID,t.P_SORT_NUM,
+        t.P_COLOR_PUID,t.P_ORDER_ID,t.P_REVISION,t.P_EFFECT_TIME,t.P_LOU_LOA_FLAG
+  </sql>
+    <!--查询超级Mbom的信息  分页-->
+    <select id="HzSuperMbomRecordDAOImpl_getMBomRecord" resultMap="SuperMbomResultMap" parameterType="java.util.HashMap">
+        select <include refid="SuperMBomBase_Column_List"/>,tt.P_FACTORY_CODE,t10.P_VEH_NUM from ${tableName} t
         left join HZ_FACTORY tt on t.p_factory_id = tt.puid
         left outer join HZ_BOM_LINE_RECORD t10
         on t.P_BOM_PUID = t10.puid
@@ -125,6 +172,43 @@
             </if>
             <if test="pColorPart != null and pColorPart == 1">
                 and t.P_COLOR_PART = 1
+            </if>
+            and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
+            order by CAST(t.P_SORT_NUM as FLOAT),t.P_BOM_OF_WHICH_DEPT
+        </where>
+    </select>
+    <!--查询白车身生产白车身财务信息 分页-->
+    <select id="HzMbomRecordDAOImpl_getMBomRecord" resultMap="MbomResultMap" parameterType="java.util.HashMap">
+        select <include refid="Base_Column_List"/>,tt.P_FACTORY_CODE,t10.P_VEH_NUM from ${tableName} t
+        left join HZ_FACTORY tt on t.p_factory_id = tt.puid
+        left outer join HZ_BOM_LINE_RECORD t10
+        on t.P_BOM_PUID = t10.puid
+        and tt.P_FACTORY_STATUS <![CDATA[ <> ]]>0
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        select t2.puid from Hz_project_libs t2
+        <where>
+            t2.puid=#{projectId,jdbcType=VARCHAR}))
+            <if test="lineIndex != null and lineIndex!=''">
+                and LENGTH(TRANSLATE(t.P_LINE_INDEX,',0123456789','.'))=#{lineIndex,jdbcType=VARCHAR}
+            </if>
+            <if test="isHas != null and isHas==0">
+                and (t.P_BOM_LINE_IS_HAS = 0)
+            </if>
+            <if test="isHas != null and isHas==1">
+                and t.P_BOM_LINE_IS_HAS = 1
+            </if>
+            <if test="lineId != null and lineId!=''">
+                and t.P_BOM_LINE_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomOfWhichDept != null and  pBomOfWhichDept!='' ">
+                and t.P_BOM_OF_WHICH_DEPT like CONCAT(CONCAT('%',#{pBomOfWhichDept,jdbcType=VARCHAR}),'%')
+            </if>
+            <if test="pBomLinePartClass != null and pBomLinePartClass!=''">
+                and t.P_BOM_LINE_PART_CLASS = #{pBomLinePartClass,jdbcType=VARCHAR}
+            </if>
+            <if test="pBomLinePartResource != null and pBomLinePartResource!=''">
+                and t.P_BOM_LINE_PART_RESOURCE = #{pBomLinePartResource,jdbcType=VARCHAR}
             </if>
             and t.P_MBOM_STATUS<![CDATA[ <> ]]>0
             order by CAST(t.P_SORT_NUM as FLOAT),t.P_BOM_OF_WHICH_DEPT
