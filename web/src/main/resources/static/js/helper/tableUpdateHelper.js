@@ -12,7 +12,7 @@ var tableUpdateHelper = tableUpdateHelper || (function () {
         //需要更新的table的id
         tableId:null,
         // 默认更新之后不勾选
-        uncheck: true
+        uncheck: true,
     };
 
     /**
@@ -45,7 +45,28 @@ var tableUpdateHelper = tableUpdateHelper || (function () {
         }
         return true;
     }
+    /**
+     *
+     * @param updateData 需要更新的数据
+     * @param tableId 需要更新的table的id
+     * @param uncheck 是否还勾选
+     * @param index 索引位置
+     * @returns {boolean} 默认更新之后不勾选
+     */
+    function updateTableRowWithIndex(opts) {
+        options = $.extend({}, options, opts);
+        if(null==opts){
+            error("无入参数，请设置入参");
+            return false;
+        }
+        log(opts.updateData);
+        let tableId=opts.tableId;
+        let myData = opts.updateData;
+        $('#'+tableId).bootstrapTable('updateRow', {row: myData});
+        return true;
+    }
    return {
-       updateTableRow: updateTableRow
+       updateTableRow: updateTableRow,
+       updateTableRowWithIndex: updateTableRowWithIndex,
     };
 })();

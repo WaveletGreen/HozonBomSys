@@ -1,6 +1,403 @@
 var type;
+var $table;
+var projectId;
+var checkArray = ["No", "ck", "materielId", "factoryCode", "pMaterielCode", "pMaterielDesc", "puid", "status"]
+/**
+ * 删除功能
+ * @returns {boolean}
+ */
+const dataDelete = function () {
+    var rows = $table.bootstrapTable('getSelections');
+    var materielIds = [];
+    var procedureDesc = [];
+    if (rows.length == 0) {
+        window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+        return false;
+    }
+    else if (rows[0].status == 5 || rows[0].status == 6) {
+        window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
+        return false;
+    }
+    var url = "work/process/delete2";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                var _table = '<p>是否要删除您所选择的记录？</p>' +
+                    '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
+                for (var index in rows) {
+                    var pMaterielDesc = (rows[index].pMaterielDesc == undefined ? "" : rows[index].pMaterielDesc);
+                    var pMaterielDesc = (rows[index].pMaterielDesc == null ? "" : rows[index].pMaterielDesc);
+                    _table += '<tr><td>' + pMaterielDesc + '</td></tr>';
+                    materielIds.push(rows[index].materielId);
+                    procedureDesc.push(rows[index].pProcedureDesc);
+                }
+                var data = {};
+                data["materielIds"] = materielIds;
+                data["procedureDesc"] = procedureDesc;
+                _table += '</table></div>';
+                window.Ewin.confirm({
+                    title: '提示',
+                    message: _table,
+                    width: 500
+                }).on(function (e) {
+                    if (e) {
+                        $.ajax({
+                            type: "POST",
+                            //ajax需要添加打包名
+                            url: "work/process/delete2",
+                            data: JSON.stringify(data),
+                            contentType: "application/json",
+                            success: function (result) {
+                                if (result.success) {
+                                    layer.msg('删除成功', {icon: 1, time: 2000})
+                                }
+                                else if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                }
+                                $table.bootstrapTable("refresh");
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: "操作删除:" + info.status});
+                            }
+                        })
+                    }
+                });
+            }
+        }
+    })
+};
+/**
+ * 修改功能
+ * @returns {boolean}
+ */
+const update = function () {
+    var rows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (rows.length != 1) {
+        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+        return false;
+    }
+    else if (rows[0].status == 5 || rows[0].status == 6) {
+        window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+        return false;
+    }
+    var url = "work/process/updateWorkProcess2";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "修改",
+                    url: "work/process/updateWorkProcess2?projectId=" + projectId + "&materielId=" + rows[0].materielId + "&procedureDesc=" + rows[0].pProcedureDesc,
+                    gridId: "gridId",
+                    width: 500,
+                    height: 500
+                });
+            }
+        }
+    })
+}
+/**
+ * 修改四大工艺功能
+ * @returns {boolean}
+ */
+const modifyRouting = function () {
+    var rows = $table.bootstrapTable('getSelections');
+    type = $("#type").val();
+    if (type != "1" && type != "2") {
+        window.Ewin.alert({message: '请先选择工艺路线'})
+        return false;
+    }
+    else if (rows[0].status == 5 || rows[0].status == 6) {
+        window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+        return false;
+    }
+    for (var i = 0; i < rows.length; i++) {
+        for (var j = i + 1; j < rows.length; j++) {
+            if (rows[i].materielId == rows[j].materielId) {
+                window.Ewin.alert({message: '请不要选择重复物料!'});
+                return false;
+            }
+        }
+    }
+    var puids = "";
+    var processDescList = "";
+    for (var i = 0; i < rows.length; i++) {
+        puids += rows[i].materielId + ",";
+        processDescList += rows[i].pProcedureDesc + ",";
+    }
+    if (rows.length < 1) {
+        window.Ewin.alert({message: '请至少选择一条需要修改的数据!'});
+        return false;
+    }
+    var url = "work/process/four2"
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "修改四大工艺",
+                    url: "work/process/four2?projectId=" + projectId + "&puids=" + puids + "&type=" + type + "&processDescs=" + processDescList,
+                    gridId: "gridId",
+                    contentType: "application/json",
+                    width: 350,
+                    height: 300,
+                });
+            }
+        }
+    })
+};
+/**
+ * 数据复制功能
+ */
+//复制的源数据
+let sourceRows = [];
+//粘贴的目标选择数据
+let targetRows = [];
+/**
+ * 属性复制
+ */
+const dataCopy = function () {
+    function doCopy(rows) {
+        sourceRows = rows;
+        $table.bootstrapTable("uncheckAll");
+    }
+
+    function doPaste(rows) {
+        targetRows = rows;
+
+        if (targetRows.length !== sourceRows.length) {
+            window.Ewin.alert({message: '请选择正确选择4工艺路线数据无法对其，请重新选择'});
+            return;
+        }
+        for (let i = 0; i < sourceRows.length; i++) {
+            for (let j = 0; j < targetRows.length; j++) {
+                if (sourceRows[i].pProcedureDesc === targetRows[j].pProcedureDesc) {
+
+                    for (let param in sourceRows[i]) {
+                        if (checkArray.indexOf(param) > -1) {
+                            continue;
+                        }
+                        targetRows[j][param] = sourceRows[i][param];
+                    }
+                    //更新行
+                    tableUpdateHelper.updateTableRowWithIndex({
+                        updateData: targetRows[j],
+                        tableId: "routingDataTable",
+                        uncheck: false
+                    });
+                    break;
+                }
+            }
+        }
+    }
+
+    function switchText(btn, rows) {
+        let text = btn.innerText;
+        if (text === "数据复制") {
+            btn.innerHTML = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>粘贴";
+            targetRows = [];
+            doCopy(rows);
+        }
+        else if (text === "粘贴") {
+            btn.innerHTML = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>提交";
+            doPaste(rows);
+        }
+        else if (text === "提交") {
+            btn.innerHTML = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>数据复制";
+            const param=targetRows;
+            log(param);
+            $.ajax({
+                url: "work/process/updateList",
+                contentType:
+                    "application/json",
+                data: JSON.stringify(param),
+                type:"POST",
+                success: function (result) {
+                    if (!result.success) {
+                        window.Ewin.alert({message: result.errMsg});
+                        return false;
+                    }
+                    else {
+                        layer.msg(result.data, {icon: 1, time: 2000})
+                    }
+                },
+                error: function (err) {
+                    error(err);
+                    window.Ewin.alert({message: '网络连接错误，请稍后重试'});
+                }
+            })
+            sourceRows=[];
+            targetRows=[];
+        }
+    }
+
+    var rows = $table.bootstrapTable('getSelections');
+
+    if (rows.length === 4 || rows.length === 6) {
+        switchText(this, rows);
+    }
+    else {
+        window.Ewin.alert({message: '请选择正确选择4条或6条工艺路线进行复制和粘贴'});
+    }
+}
+/**
+ * 撤销
+ * @returns {boolean}
+ */
+const revoke = function () {
+    var rows = $table.bootstrapTable('getSelections');
+    var puids = "";
+    for (var i = 0; i < rows.length; i++) {
+        puids += rows[i].puid + ",";
+    }
+    var myData = JSON.stringify({
+        "projectId": $("#project", window.top.document).val(),
+        "puids": puids,
+    });
+    if (rows.length == 0) {
+        window.Ewin.alert({message: '请选择需要撤销的数据!'});
+        return false;
+    }
+    else {
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].status != 4 && rows[i].status != 2) {
+                window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
+                return false;
+            }
+        }
+    }
+    var url = "work/process/cancel"
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
+                    if (e) {
+                        $.ajax({
+                            type: "POST",
+                            //ajax需要添加打包名
+                            url: "work/process/cancel",
+                            data: myData,
+                            contentType: "application/json",
+                            success: function (result) {
+                                if (result.success) {
+                                    layer.msg('撤销成功', {icon: 1, time: 2000})
+                                } else if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                }
+                                $table.bootstrapTable("refresh");
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: ":" + info.status});
+                            }
+                        })
+                    }
+                });
+            }
+        }
+    })
+};
+/**
+ * 关联变更单
+ * @returns {boolean}
+ */
+const relate = function () {
+    var rows = $table.bootstrapTable('getSelections');
+    var puids = "";
+    for (var i = 0; i < rows.length; i++) {
+        puids += rows[i].puid + ",";
+    }
+    if (rows.length == 0) {
+        window.Ewin.alert({message: '请选择需要变更的数据!'});
+        return false;
+    }
+    else {
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].status != 4 && rows[i].status != 2) {
+                window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
+                return false;
+            }
+        }
+    }
+    var url = "work/process/order/choose";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "选择变更表单",
+                    url: "work/process/order/choose?projectId=" + projectId + "&puids=" + puids,
+                    gridId: "gridId",
+                    width: 450,
+                    height: 450
+                });
+            }
+        }
+    })
+};
+/**工具栏*/
+const toolbar = [
+    {
+        text: '修改',
+        iconCls: 'glyphicon glyphicon-pencil',
+        handler: update
+    },
+    {
+        text: '修改四大工艺',
+        iconCls: 'glyphicon glyphicon-pencil',
+        handler: modifyRouting
+    },
+    {
+        text: '数据复制',
+        iconCls: 'glyphicon glyphicon-magnet',
+        handler: dataCopy
+    },
+    {
+        text: '删除',
+        iconCls: 'glyphicon glyphicon-remove',
+        handler: dataDelete
+    },
+    {
+        text: '撤销',
+        iconCls: 'glyphicon glyphicon-share-alt',
+        handler: revoke
+    },
+    {
+        text: '关联变更单',
+        iconCls: 'glyphicon glyphicon-log-out',
+        handler: relate
+    },
+]
+
 $(document).ready((function () {
-    var projectId = $("#project", window.top.document).val();
+    projectId = getProjectUid();
     var url = "work/process/record/page2?projectId=" + projectId;
     initTable(url);
 }))
@@ -11,6 +408,9 @@ function doRefresh(projectId) {
     initTable(url);
 }
 
+/**
+ * 必须提供的查询方法
+ */
 function doQuery() {
     var projectId = $("#project", window.top.document).val();
     var url = "work/process/record/page2?projectId=" + projectId;
@@ -25,13 +425,16 @@ function doQuery() {
     $('#routingDataTable').bootstrapTable('destroy');
 }
 
-
+/**
+ * table初始化
+ * @param url
+ */
 function initTable(url) {
-    var projectId = $("#project", window.top.document).val();
+    projectId = getProjectUid();
     if (!checkIsSelectProject(projectId)) {
         return;
     }
-    var $table = $("#routingDataTable");
+    $table = $("#routingDataTable");
     var column = [];
     $.ajax({
         url: "work/process/title",
@@ -55,7 +458,6 @@ function initTable(url) {
                     column.push(json);
                 }
             }
-            ;
             column.push({
                 field: 'status',
                 title: '变更状态',
@@ -118,419 +520,15 @@ function initTable(url) {
                     excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
                     //onMsoNumberFormat: DoOnMsoNumberFormat
                 },
-                toolbars: [
-                    {
-                        text: '修改',
-                        iconCls: 'glyphicon glyphicon-pencil',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                                return false;
-                            }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
-                                return false;
-                            }
-                            var url = "work/process/updateWorkProcess2";
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        window.Ewin.dialog({
-                                            title: "修改",
-                                            url: "work/process/updateWorkProcess2?projectId=" + projectId + "&materielId=" + rows[0].materielId + "&procedureDesc=" + rows[0].pProcedureDesc,
-                                            gridId: "gridId",
-                                            width: 500,
-                                            height: 500
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    },
-                    {
-                        text: '修改四大工艺',
-                        iconCls: 'glyphicon glyphicon-pencil',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            if (type != "1" && type != "2") {
-                                window.Ewin.alert({message: '请先选择工艺路线'})
-                                return false;
-                            }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
-                                return false;
-                            }
-                            for (var i = 0; i < rows.length; i++) {
-                                for (var j = i + 1; j < rows.length; j++) {
-                                    if (rows[i].materielId == rows[j].materielId) {
-                                        window.Ewin.alert({message: '请不要选择重复物料!'});
-                                        return false;
-                                    }
-                                }
-                            }
-                            var puids = "";
-                            var processDescList = "";
-                            for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].materielId + ",";
-                                processDescList += rows[i].pProcedureDesc + ",";
-                            }
-                            if (rows.length < 1) {
-                                window.Ewin.alert({message: '请至少选择一条需要修改的数据!'});
-                                return false;
-                            }
-                            var url = "work/process/four2"
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        window.Ewin.dialog({
-                                            title: "修改四大工艺",
-                                            url: "work/process/four2?projectId=" + projectId + "&puids=" + puids + "&type=" + type + "&processDescs=" + processDescList,
-                                            gridId: "gridId",
-                                            contentType: "application/json",
-                                            width: 350,
-                                            height: 300,
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    },
-                    {
-                        text: '删除',
-                        iconCls: 'glyphicon glyphicon-remove',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            var materielIds = [];
-                            var procedureDesc = [];
-                            if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
-                                return false;
-                            }
-                            else if (rows[0].status == 5 || rows[0].status == 6) {
-                                window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
-                                return false;
-                            }
-                            var url = "work/process/delete2";
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        var _table = '<p>是否要删除您所选择的记录？</p>' +
-                                            '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                                        for (var index in rows) {
-                                            var pMaterielDesc = (rows[index].pMaterielDesc == undefined ? "" : rows[index].pMaterielDesc);
-                                            var pMaterielDesc = (rows[index].pMaterielDesc == null ? "" : rows[index].pMaterielDesc);
-                                            _table += '<tr><td>' + pMaterielDesc + '</td></tr>';
-                                            materielIds.push(rows[index].materielId);
-                                            procedureDesc.push(rows[index].pProcedureDesc);
-                                        }
-                                        var data = {};
-                                        data["materielIds"] = materielIds;
-                                        data["procedureDesc"] = procedureDesc;
-                                        _table += '</table></div>';
-                                        window.Ewin.confirm({
-                                            title: '提示',
-                                            message: _table,
-                                            width: 500
-                                        }).on(function (e) {
-                                            if (e) {
-                                                $.ajax({
-                                                    type: "POST",
-                                                    //ajax需要添加打包名
-                                                    url: "work/process/delete2",
-                                                    data: JSON.stringify(data),
-                                                    contentType: "application/json",
-                                                    success: function (result) {
-                                                        if (result.success) {
-                                                            layer.msg('删除成功', {icon: 1, time: 2000})
-                                                        }
-                                                        else if (!result.success) {
-                                                            window.Ewin.alert({message: result.errMsg});
-                                                        }
-                                                        $table.bootstrapTable("refresh");
-                                                    },
-                                                    error: function (info) {
-                                                        window.Ewin.alert({message: "操作删除:" + info.status});
-                                                    }
-                                                })
-                                            }
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    },
-                    {
-                        text: '撤销',
-                        iconCls: 'glyphicon glyphicon-share-alt',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
-                            for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
-                            }
-                            var myData = JSON.stringify({
-                                "projectId": $("#project", window.top.document).val(),
-                                "puids": puids,
-                            });
-                            if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择需要撤销的数据!'});
-                                return false;
-                            }
-                            else {
-                                for (var i = 0; i < rows.length; i++) {
-                                    if (rows[i].status != 4 && rows[i].status != 2) {
-                                        window.Ewin.alert({message: '撤销功能只能选择状态为草稿状态或删除状态的数据!'});
-                                        return false;
-                                    }
-                                }
-                            }
-                            var url = "work/process/cancel"
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        window.Ewin.confirm({title: '提示', message: '确定要撤销数据吗?', width: 500}).on(function (e) {
-                                            if (e) {
-                                                $.ajax({
-                                                    type: "POST",
-                                                    //ajax需要添加打包名
-                                                    url: "work/process/cancel",
-                                                    data: myData,
-                                                    contentType: "application/json",
-                                                    success: function (result) {
-                                                        if (result.success) {
-                                                            layer.msg('撤销成功', {icon: 1, time: 2000})
-                                                        } else if (!result.success) {
-                                                            window.Ewin.alert({message: result.errMsg});
-                                                        }
-                                                        $table.bootstrapTable("refresh");
-                                                    },
-                                                    error: function (info) {
-                                                        window.Ewin.alert({message: ":" + info.status});
-                                                    }
-                                                })
-                                            }
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    },
-                    // {
-                    //     text: '发送MBOM到SAP',
-                    //     iconCls: 'glyphicon glyphicon-remove',
-                    //     handler: function () {
-                    //         var rows = $table.bootstrapTable('getSelections');
-                    //         var projectId = $("#project", window.top.document).val();
-                    //         if (rows.length == 0) {
-                    //             window.Ewin.alert({message: '请选择一条需要发送的数据!'});
-                    //             return false;
-                    //         }
-                    //         else if (rows[0].status == 5 || rows[0].status == 6) {
-                    //             window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
-                    //             return false;
-                    //         }
-                    //         var _table = '<p>是否要发送您所选择的记录？</p>' +
-                    //             '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                    //         for (var index in rows) {
-                    //             _table += '<tr><td>' + rows[index].pMaterielDesc + '</td></tr>';
-                    //         }
-                    //         _table += '</table></div>';
-                    //         window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
-                    //             if (e) {
-                    //                 var materielIds = new Array();
-                    //                 for (var i = 0; i < rows.length; i++) {
-                    //                     materielIds[i] = rows[i].materielId;
-                    //                 }
-                    //                 $.ajax({
-                    //                     type: "POST",
-                    //                     //ajax需要添加打包名
-                    //                     url: "work/process/submit?projectId=" + projectId + "&materielIds=" + materielIds,
-                    //                     success: function (result) {
-                    //                         if (result.success) {
-                    //                             layer.msg('提交成功', {icon: 1, time: 2000})
-                    //                         }
-                    //                         else if (!result.success) {
-                    //                             window.Ewin.alert({message: result.errMsg});
-                    //                         }
-                    //                         $table.bootstrapTable("refresh");
-                    //                     },
-                    //                     error: function (info) {
-                    //                         window.Ewin.alert({message: "操作提交:" + info.status});
-                    //                     }
-                    //                 })
-                    //             }
-                    //         });
-                    //     }
-                    // },
-                    // {
-                    //     text: '删除MBOM到SAP',
-                    //     iconCls: 'glyphicon glyphicon-remove',
-                    //     handler: function () {
-                    //         var rows = $table.bootstrapTable('getSelections');
-                    //         var projectId = $("#project", window.top.document).val();
-                    //         if (rows.length == 0) {
-                    //             window.Ewin.alert({message: '请选择一条需要发送的数据!'});
-                    //             return false;
-                    //         }
-                    //         else if (rows[0].status == 5 || rows[0].status == 6) {
-                    //             window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
-                    //             return false;
-                    //         }
-                    //         var _table = '<p>是否要发送您所选择的记录？</p>' +
-                    //             '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                    //         for (var index in rows) {
-                    //             _table += '<tr><td>' + rows[index].pMaterielDesc + '</td></tr>';
-                    //         }
-                    //         _table += '</table></div>';
-                    //         window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
-                    //             if (e) {
-                    //                 var materielIds = new Array();
-                    //                 for (var i = 0; i < rows.length; i++) {
-                    //                     materielIds[i] = rows[i].materielId;
-                    //                 }
-                    //                 $.ajax({
-                    //                     type: "POST",
-                    //                     //ajax需要添加打包名
-                    //                     url: "work/process/delete1?projectId=" + projectId + "&materielIds=" + materielIds,
-                    //                     success: function (result) {
-                    //                         if (result.success) {
-                    //                             layer.msg('提交成功', {icon: 1, time: 2000})
-                    //                         }
-                    //                         else if (!result.success) {
-                    //                             window.Ewin.alert({message: result.errMsg});
-                    //                         }
-                    //                         $table.bootstrapTable("refresh");
-                    //                     },
-                    //                     error: function (info) {
-                    //                         window.Ewin.alert({message: "操作提交:" + info.status});
-                    //                     }
-                    //                 })
-                    //             }
-                    //         });
-                    //     }
-                    // },
-                    // {
-                    //     text: '修改MBOM到SAP',
-                    //     iconCls: 'glyphicon glyphicon-remove',
-                    //     handler: function () {
-                    //         var rows = $table.bootstrapTable('getSelections');
-                    //         var projectId = $("#project", window.top.document).val();
-                    //         if (rows.length == 0) {
-                    //             window.Ewin.alert({message: '请选择一条需要发送的数据!'});
-                    //             return false;
-                    //         }
-                    //         else if (rows[0].status == 5 || rows[0].status == 6) {
-                    //             window.Ewin.alert({message: '对不起,审核中的数据不能发送!'});
-                    //             return false;
-                    //         }
-                    //         var _table = '<p>是否要发送您所选择的记录？</p>' +
-                    //             '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                    //         for (var index in rows) {
-                    //             _table += '<tr><td>' + rows[index].pMaterielDesc + '</td></tr>';
-                    //         }
-                    //         _table += '</table></div>';
-                    //         window.Ewin.confirm({title: '提示', message: _table, width: 500}).on(function (e) {
-                    //             if (e) {
-                    //                 var materielIds = new Array();
-                    //                 for (var i = 0; i < rows.length; i++) {
-                    //                     materielIds[i] = rows[i].materielId;
-                    //                 }
-                    //                 $.ajax({
-                    //                     type: "POST",
-                    //                     //ajax需要添加打包名
-                    //                     url: "work/process/updata?projectId=" + projectId + "&materielIds=" + materielIds,
-                    //                     success: function (result) {
-                    //                         if (result.success) {
-                    //                             layer.msg('提交成功', {icon: 1, time: 2000})
-                    //                         }
-                    //                         else if (!result.success) {
-                    //                             window.Ewin.alert({message: result.errMsg});
-                    //                         }
-                    //                         $table.bootstrapTable("refresh");
-                    //                     },
-                    //                     error: function (info) {
-                    //                         window.Ewin.alert({message: "操作提交:" + info.status});
-                    //                     }
-                    //                 })
-                    //             }
-                    //         });
-                    //     }
-                    // },
-                    {
-                        text: '关联变更单',
-                        iconCls: 'glyphicon glyphicon-log-out',
-                        handler: function () {
-                            var rows = $table.bootstrapTable('getSelections');
-                            var puids = "";
-                            for (var i = 0; i < rows.length; i++) {
-                                puids += rows[i].puid + ",";
-                            }
-                            if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择需要变更的数据!'});
-                                return false;
-                            }
-                            else {
-                                for (var i = 0; i < rows.length; i++) {
-                                    if (rows[i].status != 4 && rows[i].status != 2) {
-                                        window.Ewin.alert({message: '只能选择状态为草稿状态或删除状态的数据发起流程!'});
-                                        return false;
-                                    }
-                                }
-                            }
-                            var url = "work/process/order/choose";
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        window.Ewin.dialog({
-                                            title: "选择变更表单",
-                                            url: "work/process/order/choose?projectId=" + projectId + "&puids=" + puids,
-                                            gridId: "gridId",
-                                            width: 450,
-                                            height: 450
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    },
-                ],
+                toolbars: toolbar
             });
         }
     })
 }
 
+/**
+ * 页面跳转
+ */
 function toPage() {
     var pageNum = $("#pageNum").val();
     if (pageNum) {
