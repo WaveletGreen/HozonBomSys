@@ -127,7 +127,7 @@ public class HzMbomRecordFactory {
         }else if(Integer.valueOf(0).equals(record.getpColorPart())){
             respDTO.setpColorPart("N");
         }else {
-            respDTO.setpColorPart("");
+            respDTO.setpColorPart("N");
         }
         //respDTO.setpColorPart(record.getpColorPart()+"");
         return respDTO;

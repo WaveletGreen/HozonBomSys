@@ -181,31 +181,40 @@ const dataCopy = function () {
 
     function doPaste(rows) {
         targetRows = rows;
-
+        let message = "";
         if (targetRows.length !== sourceRows.length) {
-            window.Ewin.alert({message: '请选择正确选择4工艺路线数据无法对其，请重新选择'});
-            return;
+            window.Ewin.alert({message: '工艺路线数据无法对其,请正确选择对应的工艺路线数据'});
+            return false
+                ;
         }
         for (let i = 0; i < sourceRows.length; i++) {
-            for (let j = 0; j < targetRows.length; j++) {
-                if (sourceRows[i].pProcedureDesc === targetRows[j].pProcedureDesc) {
+            // for (let j = 0; j < targetRows.length; j++) {
+            if (sourceRows[i].pProcedureDesc === targetRows[i].pProcedureDesc) {
 
-                    for (let param in sourceRows[i]) {
-                        if (checkArray.indexOf(param) > -1) {
-                            continue;
-                        }
-                        targetRows[j][param] = sourceRows[i][param];
+                for (let param in sourceRows[i]) {
+                    if (checkArray.indexOf(param) > -1) {
+                        continue;
                     }
-                    //更新行
-                    tableUpdateHelper.updateTableRowWithIndex({
-                        updateData: targetRows[j],
-                        tableId: "routingDataTable",
-                        uncheck: false
-                    });
-                    break;
+                    targetRows[i][param] = sourceRows[i][param];
                 }
+                //更新行
+                tableUpdateHelper.updateTableRowWithIndex({
+                    updateData: targetRows[i],
+                    tableId: "routingDataTable",
+                    uncheck: false
+                });
+                break;
             }
+            else {
+                message += sourceRows[i].materielId + "选择的维度无法对应，请重新选择";
+            }
+            // }
         }
+        if (message !== "") {
+            window.Ewin.alert({message: '工艺路线数据无法对其,请正确选择对应的工艺路线数据'});
+            return false;
+        }
+        return true;
     }
 
     function switchText(btn, rows) {
@@ -216,19 +225,20 @@ const dataCopy = function () {
             doCopy(rows);
         }
         else if (text === "粘贴") {
-            btn.innerHTML = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>提交";
-            doPaste(rows);
+            if (doPaste(rows))
+                btn.innerHTML = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>提交";
+
         }
         else if (text === "提交") {
             btn.innerHTML = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>数据复制";
-            const param=targetRows;
+            const param = targetRows;
             log(param);
             $.ajax({
                 url: "work/process/updateList",
                 contentType:
                     "application/json",
                 data: JSON.stringify(param),
-                type:"POST",
+                type: "POST",
                 success: function (result) {
                     if (!result.success) {
                         window.Ewin.alert({message: result.errMsg});
@@ -243,19 +253,19 @@ const dataCopy = function () {
                     window.Ewin.alert({message: '网络连接错误，请稍后重试'});
                 }
             })
-            sourceRows=[];
-            targetRows=[];
+            sourceRows = [];
+            targetRows = [];
         }
     }
 
     var rows = $table.bootstrapTable('getSelections');
 
-    if (rows.length === 4 || rows.length === 6) {
+    // if (rows.length === 1 || rows.length === 4 || rows.length === 6 || rows.length === 2 || rows.length === 8) {
         switchText(this, rows);
-    }
-    else {
-        window.Ewin.alert({message: '请选择正确选择4条或6条工艺路线进行复制和粘贴'});
-    }
+    // }
+    // else {
+    //     window.Ewin.alert({message: '请选择正确选择工艺路线进行复制和粘贴'});
+    // }
 }
 /**
  * 撤销
