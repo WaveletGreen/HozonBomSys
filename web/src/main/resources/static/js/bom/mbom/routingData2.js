@@ -1,7 +1,7 @@
-var type;
-var $table;
-var projectId;
-var checkArray = ["No", "ck", "materielId", "factoryCode", "pMaterielCode", "pMaterielDesc", "puid", "status"]
+let type;
+let $table;
+let projectId;
+let checkArray = ["No", "ck", "materielId", "factoryCode", "pMaterielCode", "pMaterielDesc", "puid", "status"]
 /**
  * 删除功能
  * @returns {boolean}
@@ -166,7 +166,7 @@ const modifyRouting = function () {
 /**
  * 数据复制功能
  */
-//复制的源数据
+    //复制的源数据
 let sourceRows = [];
 //粘贴的目标选择数据
 let targetRows = [];
@@ -174,23 +174,31 @@ let targetRows = [];
  * 属性复制
  */
 const dataCopy = function () {
+    /**
+     * 执行复制功能
+     * @param rows
+     */
     function doCopy(rows) {
         sourceRows = rows;
         $table.bootstrapTable("uncheckAll");
     }
 
+    /**
+     * 执行粘贴
+     * @param rows
+     * @returns {boolean}
+     */
     function doPaste(rows) {
         targetRows = rows;
         let message = "";
         if (targetRows.length !== sourceRows.length) {
             window.Ewin.alert({message: '工艺路线数据无法对其,请正确选择对应的工艺路线数据'});
-            return false
-                ;
+            return false;
         }
         for (let i = 0; i < sourceRows.length; i++) {
             // for (let j = 0; j < targetRows.length; j++) {
+            //必须对其才允许进行粘贴
             if (sourceRows[i].pProcedureDesc === targetRows[i].pProcedureDesc) {
-
                 for (let param in sourceRows[i]) {
                     if (checkArray.indexOf(param) > -1) {
                         continue;
@@ -201,23 +209,60 @@ const dataCopy = function () {
                 tableUpdateHelper.updateTableRowWithIndex({
                     updateData: targetRows[i],
                     tableId: "routingDataTable",
-                    uncheck: false
+                    uncheck: true
                 });
-                break;
             }
             else {
-                message += sourceRows[i].materielId + "选择的维度无法对应，请重新选择";
+                message += sourceRows[i].pMaterielCode + "选择的维度无法对应，请重新选择<br>";
             }
             // }
         }
         if (message !== "") {
-            window.Ewin.alert({message: '工艺路线数据无法对其,请正确选择对应的工艺路线数据'});
+            window.Ewin.alert({message: message});
             return false;
         }
         return true;
     }
 
-    function switchText(btn, rows) {
+    /**
+     * 提交数据
+     */
+    function doPost(btn) {
+        btn.innerHTML = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>数据复制";
+        const param = targetRows;
+        log(param);
+        $.ajax({
+            url: "work/process/updateList",
+            contentType:
+                "application/json",
+            data: JSON.stringify(param),
+            type: "POST",
+            success: function (result) {
+                if (!result.success) {
+                    window.Ewin.alert({message: result.errMsg});
+                    return false;
+                }
+                else {
+                    layer.msg(result.data, {icon: 1, time: 2000})
+                }
+            },
+            error: function (err) {
+                error(err);
+                window.Ewin.alert({message: '网络连接错误，请稍后重试'});
+            }
+        })
+        sourceRows = [];
+        targetRows = [];
+    }
+
+    /**
+     * 执行操作
+     * @param btn 工具条的按钮
+     * @param rows 选中的行数据
+     */
+    function execute(btn) {
+        //选中行
+        let rows = $table.bootstrapTable('getSelections');
         let text = btn.innerText;
         if (text === "数据复制") {
             btn.innerHTML = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>粘贴";
@@ -230,42 +275,11 @@ const dataCopy = function () {
 
         }
         else if (text === "提交") {
-            btn.innerHTML = "<span class='glyphicon glyphicon-magnet' aria-hidden='true'></span>数据复制";
-            const param = targetRows;
-            log(param);
-            $.ajax({
-                url: "work/process/updateList",
-                contentType:
-                    "application/json",
-                data: JSON.stringify(param),
-                type: "POST",
-                success: function (result) {
-                    if (!result.success) {
-                        window.Ewin.alert({message: result.errMsg});
-                        return false;
-                    }
-                    else {
-                        layer.msg(result.data, {icon: 1, time: 2000})
-                    }
-                },
-                error: function (err) {
-                    error(err);
-                    window.Ewin.alert({message: '网络连接错误，请稍后重试'});
-                }
-            })
-            sourceRows = [];
-            targetRows = [];
+            doPost(btn);
         }
     }
 
-    var rows = $table.bootstrapTable('getSelections');
-
-    // if (rows.length === 1 || rows.length === 4 || rows.length === 6 || rows.length === 2 || rows.length === 8) {
-        switchText(this, rows);
-    // }
-    // else {
-    //     window.Ewin.alert({message: '请选择正确选择工艺路线进行复制和粘贴'});
-    // }
+    execute(this);
 }
 /**
  * 撤销
@@ -545,11 +559,3 @@ function toPage() {
         $('#routingDataTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
-
-$(document).keydown(function (event) {
-    if (event.keyCode == 13) {
-        $('form').each(function () {
-            event.preventDefault();
-        });
-    }
-});
