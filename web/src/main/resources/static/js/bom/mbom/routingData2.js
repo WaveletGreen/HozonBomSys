@@ -377,7 +377,7 @@ const relate = function () {
             else {
                 window.Ewin.dialog({
                     title: "选择变更表单",
-                    url: "work/process/order/choose?projectId=" + projectId + "&puids=" + puids,
+                    url: "work/process/forder/choose?projectId=" + projectId + "&puids=" + puids,
                     gridId: "gridId",
                     width: 450,
                     height: 450

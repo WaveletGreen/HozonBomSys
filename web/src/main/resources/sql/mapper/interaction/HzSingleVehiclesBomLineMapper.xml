@@ -18,6 +18,7 @@
     <sql id="ColumnWithColorCode">
         CFG_BOMLINE_UID
     </sql>
+    <!--查询带颜色的2Y层，一并带出颜色，颜色UID，跟随的特性，特性UID-->
     <select id="selectListByInquirer"
             resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
             resultMap="BaseResultMap">
