@@ -12,6 +12,22 @@
         <result column="colorUid" jdbcType="VARCHAR" property="colorUid"/>
         <result column="materielCodes" jdbcType="VARCHAR" property="materielCodes"/>
     </resultMap>
+    <!--特性值对应的bomline-->
+    <resultMap id="configToBomLine" type="cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomLineBean">
+        <!--特性值主键，存储在Hz_Cfg0_Record表中的主键-->
+        <result column="CFG_CFG0_UID" jdbcType="VARCHAR" property="featureValueId"/>
+        <!--特性描述-->
+        <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="featureDesc"/>
+        <!--特性值代码，数字+英文-->
+        <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="featureValueCode"/>
+        <!--BOM条数主键，存储在HZ_Bomline_record表中-->
+        <result column="CFG_BOMLINE_UID" jdbcType="VARCHAR" property="bomLineId"/>
+        <!--bomline名称-->
+        <result column="FL_CFG_BOMLINE_NAME" jdbcType="VARCHAR" property="bomLineName"/>
+        <!--项目ID-->
+        <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectId"/>
+    </resultMap>
+
     <sql id="ColumnWithColorCode">
         CFG_BOMLINE_UID,
         MODEL_UID,
@@ -43,7 +59,6 @@
     </select>
 
 
-
     <select id="selectPaintColorSet" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
         T1.P_COLOR_CODE,T1.CS_PAINT_MATERIEL_CODES as materielCodes,T1.puid as colorUid,T1.P_COLOR_NAME as P_COLOR_NAME
@@ -64,7 +79,7 @@
 
     <select id="selectPaintBomLinePuidFormConfig" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
-        t1.CFG_BOMLINE_UID as CFG_BOMLINE_UID,t2.P_COLOR_NAME as P_COLOR_NAME
+        t1.CFG_BOMLINE_UID as CFG_BOMLINE_UID/*,t2.P_COLOR_NAME as P_COLOR_NAME*/
         FROM
         HZ_FULL_CFG_WITHCFG_RECORD t1
         JOIN HZ_CFG0_RECORD t2 ON t1.CFG_CFG0_UID = T2.puid
@@ -72,5 +87,21 @@
         JOIN HZ_CFG0_OPTIONFAMILY_RECORD t4 ON T2.P_CFG0_FAMILY_PUID = t4.puid
         WHERE t3.PROJECT_UID = #{projectId,jdbcType=VARCHAR}
         and t4.P_OPTIONFAMILY_NAME = 'HZYQCS'
+    </select>
+
+    <select id="selectAllConfigToBomline" parameterType="java.lang.String" resultMap="configToBomLine">
+        SELECT
+            t1.CFG_CFG0_UID,
+            t1.CFG_BOMLINE_UID,
+            t2.P_CFG0_FAMILY_DESC,
+            t2.P_CFG0_OBJECT_ID,
+            t1.FL_CFG_BOMLINE_NAME,
+            t3.PROJECT_UID
+        FROM
+        HZ_FULL_CFG_WITHCFG_RECORD t1
+        JOIN HZ_CFG0_RECORD t2 ON t1.CFG_CFG0_UID = T2.puid
+        join HZ_FULL_CFG_MAIN_RECORD t3 on t1.FL_CFG_VERSION = t3.id
+        JOIN HZ_CFG0_OPTIONFAMILY_RECORD t4 ON T2.P_CFG0_FAMILY_PUID = t4.puid
+        WHERE t3.PROJECT_UID = #{projectId,jdbcType=VARCHAR}
     </select>
 </mapper>

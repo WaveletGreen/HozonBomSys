@@ -4,6 +4,7 @@ import com.connor.hozon.bom.common.base.dao.GenericDao;
 import com.connor.hozon.bom.sys.entity.QueryTree;
 import com.connor.hozon.bom.sys.entity.Tree;
 import com.connor.hozon.bom.sys.entity.User;
+import org.springframework.stereotype.Repository;
 
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * @author linzf
  **/
+@Repository
 public interface TreeDao extends GenericDao<Tree, QueryTree> {
 
 	/**

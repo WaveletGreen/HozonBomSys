@@ -86,7 +86,7 @@
 ////    }
 //
 //    @Override
-//    public HzRelevanceBasicChange selectByVersion(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor) {
+//    public HzRelevanceBasicChange selectLastVersion(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor) {
 //        return baseSQLUtil.executeQueryById(hzRelevanceBasicChangeQueryBefor,clzName+"selectLastVersion");
 //    }
 //

@@ -2,6 +2,7 @@ package com.connor.hozon.bom.interaction.dao;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomLineBean;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public interface HzConfigBomColorDao extends BasicDao<HzConfigBomColorBean> {
 
     /**
      * 查询油漆车身的颜色件信息
+     *
      * @param projectId
      * @return
      */
@@ -30,8 +32,17 @@ public interface HzConfigBomColorDao extends BasicDao<HzConfigBomColorBean> {
 
     /**
      * 查询配置那边记录的油漆车身对应的BOM主键
+     *
      * @param projectId
      * @return
      */
     List<HzConfigBomColorBean> selectPaintBomLinePuidFormConfig(String projectId);
+
+    /**
+     * 查询当前项目下所有的bomline对应的特性值记录
+     *
+     * @param projectId 项目id
+     * @return
+     */
+    List<HzConfigBomLineBean> selectAllConfigToBomline(String projectId);
 }

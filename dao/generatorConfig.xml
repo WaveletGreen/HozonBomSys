@@ -45,9 +45,9 @@
                              targetProject="D:\IdealWorkspace\HozonBomSys\dao\src\main\java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
-        <!--<table tableName="TEST" domainObjectName="Test">-->
-            <!--<property name="useActualColumnNames" value="false"/>-->
-        <!--</table>-->
+        <table tableName="CFG_BOMLINE_RELATION_HISTORY" domainObjectName="CfgBomLineRelationHistory">
+            <property name="useActualColumnNames" value="false"/>
+        </table>
 
     </context>
 </generatorConfiguration>

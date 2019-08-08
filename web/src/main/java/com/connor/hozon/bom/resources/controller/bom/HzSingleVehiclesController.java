@@ -1,6 +1,12 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import cn.net.connor.hozon.common.setting.CommonSetting;
+import cn.net.connor.hozon.dao.dao.integration.FeatureBomLineRelationHistoryDao;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 import com.alibaba.fastjson.JSONObject;
+import com.connor.hozon.bom.interaction.dao.HzConfigBomColorDao;
+import com.connor.hozon.bom.interaction.service.FeatureBomLineRelationHistoryService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
@@ -21,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
+import org.thymeleaf.util.ListUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -122,6 +128,7 @@ public class HzSingleVehiclesController extends BaseController {
                 _res.put("svlInnerColorCode", dto.getSvlInnerColorCode());
                 _res.put("svlInnerColorName", dto.getSvlInnerColorName());
                 _res.put("svlMaterialBasicInfo", dto.getSvlMaterialBasicInfo());
+                _res.put("checkStatus", dto.getCheckStatus());//检查状态
                 _res.put("vehicleName", dto.getVehicleName());
                 _res.put("vehicleCode", dto.getVehicleCode());
                 _res.put("svlMaterialCode", dto.getSvlMaterialCode());
@@ -365,4 +372,30 @@ public class HzSingleVehiclesController extends BaseController {
     }
 
 
+    @RequestMapping("checkStatus")
+    public String checkStatus(String projectId, Long vehiclesId, Model model) {
+        List<HzSingleVehicleBomLineBean> list = hzSingleVehiclesServices.checkStatus(projectId, vehiclesId, model);
+        if (ListUtils.isEmpty(list)) {
+            model.addAttribute(CommonSetting.STATUS_FIELD, false);
+            model.addAttribute(CommonSetting.ERROR_FIELD, "查询不到单车配置信息，需要重新生成单车数据");
+        } else {
+            model.addAttribute(CommonSetting.STATUS_FIELD, true);
+            model.addAttribute(CommonSetting.RESULT_DATA, list);
+        }
+        return "bikeBom/checkStatus";
+    }
+
+    @Autowired
+    HzConfigBomColorDao hzConfigBomColorDao;
+    @Autowired
+    FeatureBomLineRelationHistoryDao featureBomLineRelationHistoryDao;
+
+    @Autowired
+    FeatureBomLineRelationHistoryService featureBomLineRelationHistoryService;
+
+    @RequestMapping("testCheckStatus")
+    @ResponseBody
+    public String testCheckStatus(String projectId, Long vehiclesId, Model model) {
+        return featureBomLineRelationHistoryService.checkStatus(projectId, vehiclesId, model);
+    }
 }

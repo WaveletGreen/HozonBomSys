@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.service.bom;
 
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
+import org.springframework.ui.Model;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -79,4 +81,6 @@ public interface HzSingleVehiclesServices {
     JSONObject sendSap(List<HzSingleVehicles> hzSingleVehicles);
 
     JSONObject deleteSap(List<HzSingleVehicles> hzSingleVehicles);
+
+    List<HzSingleVehicleBomLineBean> checkStatus(String projectId, Long vehiclesId, Model model);
 }

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
 import com.connor.hozon.bom.resources.controller.BaseController;
@@ -11,7 +12,9 @@ import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.bom.resources.schedule.BOMTaskJobs;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
+import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.Result;
@@ -19,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -72,7 +74,7 @@ public class HzMbomController extends BaseController {
         tableTitle.put("pLouaFlag", "LOU/LOA");
         tableTitle.put("pBomLinePartClass", "零件分类");
         tableTitle.put("pBomLinePartResource", "零部件来源");
-        tableTitle.put("pColorPart","是否颜色件");
+        tableTitle.put("pColorPart", "是否颜色件");
         tableTitle.put("sparePart", "备件");
         tableTitle.put("sparePartNum", "备件编号");
         tableTitle.put("processRoute", "工艺路线");
@@ -92,14 +94,24 @@ public class HzMbomController extends BaseController {
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
         this.tableTitle = tableTitle;
         toJSONResponse(Result.build(tableTitle), response);
-       // refreshMBOM(projectId,response);
+        // refreshMBOM(projectId,response);
     }
 
     @RequestMapping(value = "refreshMBOM", method = RequestMethod.GET)
     @ResponseBody
-    public String refreshMBOM(@RequestParam String projectId, HttpServletResponse response) {
+    public void refreshMBOM(@RequestParam String projectId, HttpServletResponse response) {
         refreshMbom(projectId, response);
-        return "测试成功";
+    }
+
+    @Autowired
+    BOMTaskJobs job;
+    @Autowired
+    HzSingleVehiclesBomServices hzSingleVehiclesBomServices;
+
+    @RequestMapping(value = "analysisSingleVehicles", method = RequestMethod.GET)
+    @ResponseBody
+    public WriteResultRespDTO analysisSingleVehicles(@RequestParam String projectId) {
+        return hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
     }
 
     /**
@@ -150,7 +162,7 @@ public class HzMbomController extends BaseController {
             _res.put("pBomType", dto.getpBomType());
             _res.put("status", dto.getStatus());
             _res.put("effectTime", dto.getEffectTime());
-            _res.put("pColorPart",dto.getpColorPart());
+            _res.put("pColorPart", dto.getpColorPart());
             if (null != dto.getVehNum()) {
                 _res.putAll(dto.getVehNum());
             }
@@ -217,6 +229,7 @@ public class HzMbomController extends BaseController {
 //        ret.put("result", _list);
 //        return ret;
 //    }
+
     /**
      * 跳转到MBOM管理的添加页面
      *

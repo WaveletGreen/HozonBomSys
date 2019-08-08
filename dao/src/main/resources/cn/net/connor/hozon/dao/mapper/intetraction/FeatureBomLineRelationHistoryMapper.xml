@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.integration.FeatureBomLineRelationHistoryDao">
+    <!--主键序列为SEQ_CFG_BL_REL_HIS-->
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId"/>
+        <result column="FEATURE_VALUE_ID" jdbcType="VARCHAR" property="featureValueId"/>
+        <result column="FEATURE_DESC" jdbcType="OTHER" property="featureDesc"/>
+        <result column="FEATURE_VALUE_CODE" jdbcType="OTHER" property="featureValueCode"/>
+        <result column="BOM_LINE_ID" jdbcType="VARCHAR" property="bomLineId"/>
+        <result column="BOM_LINE_NAME" jdbcType="OTHER" property="bomLineName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID,
+    PROJECT_ID,
+    FEATURE_VALUE_ID,
+    FEATURE_DESC,
+    FEATURE_VALUE_CODE,
+    BOM_LINE_ID,
+    BOM_LINE_NAME
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from CFG_BOMLINE_RELATION_HISTORY
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from CFG_BOMLINE_RELATION_HISTORY
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+    insert into CFG_BOMLINE_RELATION_HISTORY (ID, PROJECT_ID, FEATURE_VALUE_ID, 
+      FEATURE_DESC, FEATURE_VALUE_CODE, BOM_LINE_ID, 
+      BOM_LINE_NAME)
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=VARCHAR}, #{featureValueId,jdbcType=VARCHAR}, 
+      #{featureDesc,jdbcType=OTHER}, #{featureValueCode,jdbcType=OTHER}, #{bomLineId,jdbcType=VARCHAR}, 
+      #{bomLineName,jdbcType=OTHER})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+        insert into CFG_BOMLINE_RELATION_HISTORY
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="projectId != null">
+                PROJECT_ID,
+            </if>
+            <if test="featureValueId != null">
+                FEATURE_VALUE_ID,
+            </if>
+            <if test="featureDesc != null">
+                FEATURE_DESC,
+            </if>
+            <if test="featureValueCode != null">
+                FEATURE_VALUE_CODE,
+            </if>
+            <if test="bomLineId != null">
+                BOM_LINE_ID,
+            </if>
+            <if test="bomLineName != null">
+                BOM_LINE_NAME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="featureValueId != null">
+                #{featureValueId,jdbcType=VARCHAR},
+            </if>
+            <if test="featureDesc != null">
+                #{featureDesc,jdbcType=OTHER},
+            </if>
+            <if test="featureValueCode != null">
+                #{featureValueCode,jdbcType=OTHER},
+            </if>
+            <if test="bomLineId != null">
+                #{bomLineId,jdbcType=VARCHAR},
+            </if>
+            <if test="bomLineName != null">
+                #{bomLineName,jdbcType=OTHER},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertList" parameterType="java.util.List">
+        insert into
+        CFG_BOMLINE_RELATION_HISTORY (<include refid="Base_Column_List"/>)
+        select SEQ_CFG_BL_REL_HIS.Nextval, A.* from(
+        <foreach collection="list" index="index" item="bean" separator="union all">
+            select
+            #{bean.projectId,jdbcType=VARCHAR},
+            #{bean.featureValueId,jdbcType=VARCHAR},
+            #{bean.featureDesc,jdbcType=VARCHAR},
+            #{bean.featureValueCode,jdbcType=VARCHAR},
+            #{bean.bomLineId,jdbcType=VARCHAR},
+            #{bean.bomLineName,jdbcType=VARCHAR}
+            from
+            dual
+        </foreach>
+        )A
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+        update CFG_BOMLINE_RELATION_HISTORY
+        <set>
+            <if test="projectId != null">
+                PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="featureValueId != null">
+                FEATURE_VALUE_ID = #{featureValueId,jdbcType=VARCHAR},
+            </if>
+            <if test="featureDesc != null">
+                FEATURE_DESC = #{featureDesc,jdbcType=OTHER},
+            </if>
+            <if test="featureValueCode != null">
+                FEATURE_VALUE_CODE = #{featureValueCode,jdbcType=OTHER},
+            </if>
+            <if test="bomLineId != null">
+                BOM_LINE_ID = #{bomLineId,jdbcType=VARCHAR},
+            </if>
+            <if test="bomLineName != null">
+                BOM_LINE_NAME = #{bomLineName,jdbcType=OTHER},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+    update CFG_BOMLINE_RELATION_HISTORY
+    set PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+      FEATURE_VALUE_ID = #{featureValueId,jdbcType=VARCHAR},
+      FEATURE_DESC = #{featureDesc,jdbcType=OTHER},
+      FEATURE_VALUE_CODE = #{featureValueCode,jdbcType=OTHER},
+      BOM_LINE_ID = #{bomLineId,jdbcType=VARCHAR},
+      BOM_LINE_NAME = #{bomLineName,jdbcType=OTHER}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

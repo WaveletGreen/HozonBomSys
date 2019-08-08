@@ -96,6 +96,15 @@
     t.P_UPDATE_NAME,t.P_NUMBER, t.P_ORDER_ID, t.P_LOU_LOA_FLAG, t.P_SORT_NUM, t.P_COLOR_PART, t.P_REVISION,
     t.P_EFFECT_TIME, t.P_EPL_ID,t.P_VEH_NUM,t.P_SPARE_PART,t.P_SPARE_PART_NUM
   </sql>
+    <!-- 变更表的BOM属性，没有lou/loa字段-->
+    <sql id="CHANGE_BASE_BOM_COLUMN">
+    t.PUID, t.P_PARENT_UID,t.P_BOM_DIGIFAX_ID, t.P_LINE_INDEX, t.P_BOM_LINE_IS_HAS,
+    t.P_BOM_LINE_ID, t.P_BOM_LINE_IS_2Y,
+    t.P_FNA_INFO, t.P_EBOM_STATUS, t.P_CREATE_TIME, t.P_UPDATE_TIME,
+    t.P_UPC, t.P_FNA_DESC, t.P_CREATE_NAME,
+    t.P_UPDATE_NAME,t.P_NUMBER, t.P_ORDER_ID, t.P_SORT_NUM, t.P_COLOR_PART, t.P_REVISION,
+    t.P_EFFECT_TIME, t.P_EPL_ID,t.P_VEH_NUM,t.P_SPARE_PART,t.P_SPARE_PART_NUM
+  </sql>
 
     <!--BOM的零部件属性 放到EPL中维护 但是需要在EBOM中显示出来-->
     <sql id="EPL_COLUMN">
@@ -806,7 +815,7 @@
 
     <!--根据变更单id 查询变更数据-->
     <select id="HzEbomRecordDAOImpl_getEbomRecordsByOrderId" parameterType="java.util.HashMap" resultMap="BaseResultMap">
-        SELECT <include refid="BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
+        SELECT <include refid="CHANGE_BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
         from ${tableName} t
         left join HZ_EPL_RECORD t10 on t.P_EPL_ID = t10.ID
         where t.p_bom_digifax_id=(

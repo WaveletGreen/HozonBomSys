@@ -25,32 +25,32 @@
         <!--&lt;!&ndash; 产生的构件的文件名，默认值是${artifactId}-${version}。 &ndash;&gt;-->
         <!--<finalName>hozon</finalName>-->
         <!--<plugins>-->
-            <!--&lt;!&ndash;<plugin>&ndash;&gt;-->
-                <!--&lt;!&ndash;<groupId>org.mybatis.generator</groupId>&ndash;&gt;-->
-                <!--&lt;!&ndash;<artifactId>mybatis-generator-maven-plugin</artifactId>&ndash;&gt;-->
-                <!--&lt;!&ndash;<version>1.3.5</version>&ndash;&gt;-->
-                <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
-                    <!--&lt;!&ndash;&lt;!&ndash;配置文件的位置&ndash;&gt;&ndash;&gt;-->
-                    <!--&lt;!&ndash;<configurationFile>generatorConfig.xml</configurationFile>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<verbose>true</verbose>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<overwrite>true</overwrite>&ndash;&gt;-->
-                <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
-                <!--&lt;!&ndash;<executions>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<execution>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<id>Generate MyBatis Artifacts</id>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<goals>&ndash;&gt;-->
-                            <!--&lt;!&ndash;<goal>generate</goal>&ndash;&gt;-->
-                        <!--&lt;!&ndash;</goals>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</execution>&ndash;&gt;-->
-                <!--&lt;!&ndash;</executions>&ndash;&gt;-->
-                <!--&lt;!&ndash;<dependencies>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<dependency>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<groupId>org.mybatis.generator</groupId>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<artifactId>mybatis-generator-core</artifactId>&ndash;&gt;-->
-                        <!--&lt;!&ndash;<version>1.3.5</version>&ndash;&gt;-->
-                    <!--&lt;!&ndash;</dependency>&ndash;&gt;-->
-                <!--&lt;!&ndash;</dependencies>&ndash;&gt;-->
-            <!--&lt;!&ndash;</plugin>&ndash;&gt;-->
+            <!--<plugin>-->
+                <!--<groupId>org.mybatis.generator</groupId>-->
+                <!--<artifactId>mybatis-generator-maven-plugin</artifactId>-->
+                <!--<version>1.3.5</version>-->
+                <!--<configuration>-->
+                    <!--&lt;!&ndash;配置文件的位置&ndash;&gt;-->
+                    <!--<configurationFile>generatorConfig.xml</configurationFile>-->
+                    <!--<verbose>true</verbose>-->
+                    <!--<overwrite>true</overwrite>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>Generate MyBatis Artifacts</id>-->
+                        <!--<goals>-->
+                            <!--<goal>generate</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<dependencies>-->
+                    <!--<dependency>-->
+                        <!--<groupId>org.mybatis.generator</groupId>-->
+                        <!--<artifactId>mybatis-generator-core</artifactId>-->
+                        <!--<version>1.3.5</version>-->
+                    <!--</dependency>-->
+                <!--</dependencies>-->
+            <!--</plugin>-->
         <!--</plugins>-->
     <!--</build>-->
 

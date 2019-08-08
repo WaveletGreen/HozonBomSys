@@ -1,9 +1,16 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import com.alibaba.fastjson.JSONObject;
+import cn.net.connor.hozon.common.util.SerializeUtil;
 import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicDao;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
+import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielCfgService;
+import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
@@ -15,11 +22,7 @@ import com.connor.hozon.bom.resources.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
-import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
-import cn.net.connor.hozon.common.util.SerializeUtil;
+import org.springframework.ui.Model;
 
 import java.util.*;
 
@@ -44,6 +47,9 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     @Autowired
     private SynMaterielCfgService synMaterielCfgService;
 
+    @Autowired
+    private HzSingleVehicleBomLineDao hzSingleVehicleBomLineDao;
+
     @Override
     public List<HzSingleVehiclesRespDTO> singleVehiclesList(String projectId) {
 
@@ -56,6 +62,8 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
             if(ListUtil.isNotEmpty(hzSingleVehicles)){
                 for(HzSingleVehicles vehicles :hzSingleVehicles){
                     HzSingleVehiclesRespDTO respDTO = HzSingleVehiclesFactory.singleVehiclesToRespDTO(vehicles);
+                    //TODO 追加检查状态校验
+                    respDTO.setCheckStatus("完整");
                     vehiclesRespDTOS.add(respDTO);
                 }
                 return vehiclesRespDTOS;
@@ -321,4 +329,9 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
         return synMaterielCfgService.deleteMaterielCfg(hzMaterielCfgBeans);
     }
 
+    @Override
+    public List<HzSingleVehicleBomLineBean> checkStatus(String projectId, Long vehiclesId, Model model) {
+        List<HzSingleVehicleBomLineBean> hzSingleVehicleBomLineBeans = hzSingleVehicleBomLineDao.selectFullConfigColorSet(projectId,vehiclesId);
+        return hzSingleVehicleBomLineBeans;
+    }
 }

@@ -1,9 +1,10 @@
 package com.connor.hozon.bom.interaction.impl;
 
+import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomLineBean;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.interaction.dao.HzConfigBomColorDao;
 import org.springframework.context.annotation.Configuration;
-import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class HzConfigBomColorDaoImpl extends BasicDaoImpl<HzConfigBomColorBean> 
     /**
      * 根据某个2Y的主键和项目主键查找2Y的所有配色代码
      *
-     * @param bomLineUid    2Y主键
+     * @param bomLineUid 2Y主键
      * @param projectUid 项目主键
      * @return
      */
@@ -40,12 +41,17 @@ public class HzConfigBomColorDaoImpl extends BasicDaoImpl<HzConfigBomColorBean> 
     }
 
 
-    public List<HzConfigBomColorBean> selectPaintColorSet(String projectId){
-        return baseSQLUtil.findForList(clz.getCanonicalName() + ".selectPaintColorSet",projectId);
+    public List<HzConfigBomColorBean> selectPaintColorSet(String projectId) {
+        return baseSQLUtil.findForList(clz.getCanonicalName() + ".selectPaintColorSet", projectId);
     }
 
     @Override
     public List<HzConfigBomColorBean> selectPaintBomLinePuidFormConfig(String projectId) {
-        return baseSQLUtil.findForList(clz.getCanonicalName() + ".selectPaintBomLinePuidFormConfig",projectId);
+        return baseSQLUtil.findForList(clz.getCanonicalName() + ".selectPaintBomLinePuidFormConfig", projectId);
+    }
+
+    @Override
+    public List<HzConfigBomLineBean> selectAllConfigToBomline(String projectId) {
+        return baseSQLUtil.findForList(clz.getCanonicalName() + ".selectAllConfigToBomline", projectId);
     }
 }
