@@ -7,7 +7,7 @@
     <form id="form" role="form" method="post" action="materiel/data/change">
         <div class="row">
             <div class="col-md-12">
-                <input id="puids" type="hidden" th:value="${puids}">
+                <!--<input id="puids" type="hidden" th:value="${puids}">-->
                 <div class="form-group">
                     <label for="stage">选择变更表单</label>
                     <select class="form-control" id="stage" name="stage">
@@ -28,7 +28,7 @@
         $("#btnOk", window.top.document).click(function () {
             var changeFromId = $("#stage option:selected").val();
             var projectId = $("#project", window.top.document).val();
-            var puids = $("#puids").val();
+            var puids = /*$("#puids").val();*/getActiveTab().getPuids();
             // var typeId = $("#typeId").val();
             var myData = JSON.stringify({
                 "puids": puids,
