@@ -5,12 +5,12 @@
  *
  */
 
-package cn.net.connor.hozon.dao.dao.integration;
+package cn.net.connor.hozon.dao.dao.interaction;
 
 import cn.net.connor.hozon.dao.MyBatisBaseDao;
 import cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory;
+import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleBomRelation;
 import org.apache.ibatis.annotations.Param;
-import org.hibernate.annotations.SQLDelete;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,13 +25,22 @@ public interface FeatureBomLineRelationHistoryDao extends MyBatisBaseDao<Feature
      *
      * @return
      */
-    @SQLDelete(sql = "delete from CFG_BOMLINE_RELATION_HISTORY where PROJECT_ID = #{projectId}")
     int deleteByProjectId(@Param("projectId") String projectId);
 
     /**
      * 批量插入数据
+     *
      * @param list
      * @return
      */
     int insertList(List<FeatureBomLineRelationHistory> list);
+
+    /**
+     * 查询历史的2Y层与特性值对应的数据
+     *
+     * @param projectId
+     * @param dmbId
+     * @return
+     */
+    List<SingleVehicleBomRelation> selectHistory(@Param("projectId") String projectId, @Param("dmbId") Long dmbId);
 }

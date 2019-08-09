@@ -1,12 +1,9 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
 import cn.net.connor.hozon.common.setting.CommonSetting;
-import cn.net.connor.hozon.dao.dao.integration.FeatureBomLineRelationHistoryDao;
-import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
+import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleBomRelation;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.interaction.dao.HzConfigBomColorDao;
-import com.connor.hozon.bom.interaction.service.FeatureBomLineRelationHistoryService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
@@ -233,7 +230,7 @@ public class HzSingleVehiclesController extends BaseController {
     }
 
 
-    @RequestMapping(value = "bom/refresh", method = RequestMethod.POST)
+    @RequestMapping(value = "bom/refresh", method = RequestMethod.GET)
     public void refreshSingleVehiclesBOM(String projectId, HttpServletResponse response) {
         WriteResultRespDTO respDTO = hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
@@ -371,10 +368,17 @@ public class HzSingleVehiclesController extends BaseController {
         return hzSingleVehiclesServices.deleteSap(hzSingleVehicles);
     }
 
-
+    /**
+     * 检查单车2Y与对应的特性值的对应关系
+     *
+     * @param projectId
+     * @param vehiclesId
+     * @param model
+     * @return
+     */
     @RequestMapping("checkStatus")
     public String checkStatus(String projectId, Long vehiclesId, Model model) {
-        List<HzSingleVehicleBomLineBean> list = hzSingleVehiclesServices.checkStatus(projectId, vehiclesId, model);
+        List<SingleVehicleBomRelation> list = hzSingleVehiclesServices.checkStatus(projectId, vehiclesId).getRel();
         if (ListUtils.isEmpty(list)) {
             model.addAttribute(CommonSetting.STATUS_FIELD, false);
             model.addAttribute(CommonSetting.ERROR_FIELD, "查询不到单车配置信息，需要重新生成单车数据");
@@ -385,17 +389,19 @@ public class HzSingleVehiclesController extends BaseController {
         return "bikeBom/checkStatus";
     }
 
-    @Autowired
-    HzConfigBomColorDao hzConfigBomColorDao;
-    @Autowired
-    FeatureBomLineRelationHistoryDao featureBomLineRelationHistoryDao;
-
-    @Autowired
-    FeatureBomLineRelationHistoryService featureBomLineRelationHistoryService;
-
-    @RequestMapping("testCheckStatus")
+    /**
+     * 方便重新检查某个项目的所有单车状态的前端调用API
+     * @param projectId
+     * @return
+     */
+    @RequestMapping("refreshProjectSingleVehicleStatus")
     @ResponseBody
-    public String testCheckStatus(String projectId, Long vehiclesId, Model model) {
-        return featureBomLineRelationHistoryService.checkStatus(projectId, vehiclesId, model);
+    public String refreshProjectSingleStatus(String projectId) {
+        //单车信息
+        List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesServices.selectByProjectUid(projectId);
+        hzSingleVehiclesServices.postCheck(hzSingleVehicles,projectId);
+        return "重新检查成功";
     }
+
+
 }

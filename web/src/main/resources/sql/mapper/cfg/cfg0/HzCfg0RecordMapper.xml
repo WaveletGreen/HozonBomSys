@@ -102,7 +102,7 @@
         select
         <include refid="Base_Column_List"/>
         from HZ_CFG0_RECORD
-        where PUID = #{id,jdbcType=VARCHAR}
+        where PUID = #{puid,jdbcType=VARCHAR}
         order by P_CFG0_OBJECT_ID
     </select>
     <!--HZCSYS+特性值搜索-->

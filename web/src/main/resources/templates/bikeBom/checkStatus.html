@@ -8,23 +8,24 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 <!--User: xulf Date: 2018/9/12 Time: 14:41-->
-<head th:include="include/headBom"></head>
 <meta charset="UTF-8">
 <title>单车完整性检查</title>
 <link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
 </head>
 <body>
 <div class="panel-body" style="padding-bottom: 0;">
-    <table th:if="${success} == true" th:class="table table-striped" class="table table-striped">
+    <table th:if="${success} == true" class="table table-striped">
         <tr>
             <th>特性</th>
             <th>配置代码</th>
             <th>2Y层零部件编码</th>
+            <th>状态</th>
         </tr>
         <tr th:each="bean:${data}">
             <td th:text="${bean.getFeatureDesc()}"></td>
-            <td th:text="${bean.getFeature()}"></td>
-            <td th:text="${bean.getPartId()}"></td>
+            <td th:text="${bean.getFeatureValueCode()}"></td>
+            <td th:text="${bean.getBomLineName()}"></td>
+            <td th:utext="${bean.getStatus()}"></td>
         </tr>
     </table>
 
@@ -33,4 +34,15 @@
     </div>
 </div>
 </body>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            $("#btnCancle").click();
+        });
+    })
+
+    ]]>
+</script>
 </html>

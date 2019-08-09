@@ -2,15 +2,18 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 
 import cn.net.connor.hozon.common.util.SerializeUtil;
 import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicDao;
+import cn.net.connor.hozon.dao.dao.interaction.FeatureBomLineRelationHistoryDao;
+import cn.net.connor.hozon.dao.dao.interaction.SingleVehicleStatusDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
+import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleBomRelation;
+import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleStatus;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielCfgService;
-import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
+import com.connor.hozon.bom.interaction.bean.SingleVehicleCheckStatus;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
@@ -22,7 +25,7 @@ import com.connor.hozon.bom.resources.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
+import org.thymeleaf.util.ListUtils;
 
 import java.util.*;
 
@@ -48,28 +51,26 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     private SynMaterielCfgService synMaterielCfgService;
 
     @Autowired
-    private HzSingleVehicleBomLineDao hzSingleVehicleBomLineDao;
+    private FeatureBomLineRelationHistoryDao featureBomLineRelationHistoryDao;
 
     @Override
     public List<HzSingleVehiclesRespDTO> singleVehiclesList(String projectId) {
 
         try {
             List<HzSingleVehiclesRespDTO> vehiclesRespDTOS = new ArrayList<>();
-            if(StringUtil.isEmpty(projectId)){
+            if (StringUtil.isEmpty(projectId)) {
                 return vehiclesRespDTOS;
             }
             List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesDao.selectByProjectUid(projectId);
-            if(ListUtil.isNotEmpty(hzSingleVehicles)){
-                for(HzSingleVehicles vehicles :hzSingleVehicles){
+            if (ListUtil.isNotEmpty(hzSingleVehicles)) {
+                for (HzSingleVehicles vehicles : hzSingleVehicles) {
                     HzSingleVehiclesRespDTO respDTO = HzSingleVehiclesFactory.singleVehiclesToRespDTO(vehicles);
-                    //TODO 追加检查状态校验
-                    respDTO.setCheckStatus("完整");
                     vehiclesRespDTOS.add(respDTO);
                 }
                 return vehiclesRespDTOS;
             }
             return null;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -83,11 +84,11 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
 //            }
             HzSingleVehicles hzSingleVehicles = HzSingleVehiclesFactory.updateReqDTOSingleVehicles(reqDTO);
             int i = hzSingleVehiclesDao.updateSingleVehicles(hzSingleVehicles);
-            if(i>0){
+            if (i > 0) {
                 return WriteResultRespDTO.getSuccessResult();
             }
             return WriteResultRespDTO.getFailResult();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
@@ -104,15 +105,15 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
             List<HzSingleVehicles> vehicles = hzSingleVehiclesDao.selectOrgByProjectUid(projectId);
             List<HzSingleVehicles> singleVehicles = new ArrayList<>();
             List<HzDerivativeMaterielBasic> basics = hzDerivativeMaterielBasicDao.selectByProjectUid(params);
-            if(ListUtil.isNotEmpty(basics) && ListUtil.isNotEmpty(vehicles)){
-                for(HzSingleVehicles vehicles1:vehicles){
+            if (ListUtil.isNotEmpty(basics) && ListUtil.isNotEmpty(vehicles)) {
+                for (HzSingleVehicles vehicles1 : vehicles) {
                     HzSingleVehicles hzSingleVehicles = new HzSingleVehicles();
-                    for(HzDerivativeMaterielBasic materielBasic : basics){
-                        if(null == vehicles1.getSvlDmbId()){
+                    for (HzDerivativeMaterielBasic materielBasic : basics) {
+                        if (null == vehicles1.getSvlDmbId()) {
                             vehicles1.setSvlDmbId(0L);
                         }
-                        if(vehicles1.getSvlDmbId().equals(materielBasic.getId())){
-                            if(StringUtil.isEmpty(materielBasic.getDmbModelFeatureUid())){
+                        if (vehicles1.getSvlDmbId().equals(materielBasic.getId())) {
+                            if (StringUtil.isEmpty(materielBasic.getDmbModelFeatureUid())) {
 //                                WriteResultRespDTO respDTO = new WriteResultRespDTO();
 //                                respDTO.setErrMsg("未找到相关配置项数据！");
 //                                respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
@@ -120,22 +121,22 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                                 continue;
                             }
                             //查重 存在的不在进行添加
-                            boolean b = hzSingleVehiclesDao.checkExist(projectId,materielBasic.getDmbModelFeatureUid());
-                            if(!b){
+                            boolean b = hzSingleVehiclesDao.checkExist(projectId, materielBasic.getDmbModelFeatureUid());
+                            if (!b) {
                                 hzSingleVehicles.setSvlDmbId(vehicles1.getSvlDmbId());
                                 hzSingleVehicles.setSvlCfgMaterialUid(materielBasic.getDmbModelFeatureUid());
                                 hzSingleVehicles.setSvlProjectUid(projectId);
                                 singleVehicles.add(hzSingleVehicles);
                                 break;
-                            }else {
+                            } else {
                                 break;
                             }
                         }
                     }
                 }
-                if(ListUtil.isNotEmpty(singleVehicles)){
+                if (ListUtil.isNotEmpty(singleVehicles)) {
                     int i = hzSingleVehiclesDao.insertList(singleVehicles);
-                    if(i>0){
+                    if (i > 0) {
                         return WriteResultRespDTO.getSuccessResult();
                     }
                     return WriteResultRespDTO.getFailResult();
@@ -143,7 +144,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                 return WriteResultRespDTO.getSuccessResult();
             }
             return WriteResultRespDTO.getSuccessResult();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
@@ -152,12 +153,12 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     @Override
     public HzSingleVehiclesRespDTO getSingleVehiclesById(String projectId, Long id) {
         try {
-            HzSingleVehicles hzSingleVehicles = hzSingleVehiclesDao.getSingleVehiclesById(projectId,id);
-            if(hzSingleVehicles != null){
+            HzSingleVehicles hzSingleVehicles = hzSingleVehiclesDao.getSingleVehiclesById(projectId, id);
+            if (hzSingleVehicles != null) {
                 return HzSingleVehiclesFactory.singleVehiclesToRespDTO(hzSingleVehicles);
             }
             return null;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -167,16 +168,16 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     public LinkedHashMap<String, String> singleVehDosageTitle(String projectId) {
         //获取该项目下的所有车型模型
         List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectId);
-        LinkedHashMap<String,String> map = new LinkedHashMap();
-        if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+        LinkedHashMap<String, String> map = new LinkedHashMap();
+        if (ListUtil.isNotEmpty(hzCfg0ModelRecords)) {
             Set<HzCfg0ModelRecord> set = new HashSet<>(hzCfg0ModelRecords);
             Iterator iterator = set.iterator();
-            for(int i = 0;i<set.size();i++){
+            for (int i = 0; i < set.size(); i++) {
                 HzCfg0ModelRecord record = (HzCfg0ModelRecord) iterator.next();
-                if(null == record.getObjectName()){
+                if (null == record.getObjectName()) {
                     continue;
                 }
-                map.put(record.getObjectName()+"title"+i,record.getObjectName()+"(单车用量)");
+                map.put(record.getObjectName() + "title" + i, record.getObjectName() + "(单车用量)");
             }
         }
         return map;
@@ -184,18 +185,18 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
 
     @Override
     public JSONObject singleVehDosage(byte[] bytes, List<HzCfg0ModelRecord> list, JSONObject object) {
-        if(null == bytes){
+        if (null == bytes) {
             return object;
         }
         Object obj = SerializeUtil.unserialize(bytes);
-        if(ListUtil.isNotEmpty(list)){
-            if(obj instanceof Map){
-                Map<String,Object> map = (Map)obj;
-                if(map.size()>0){
-                    for(int i = 0;i<list.size();i++){
-                        for(Map.Entry<String,Object> entry:map.entrySet()){
-                            if(list.get(i).getPuid().equals(entry.getKey())){
-                                object.put("title"+i,entry.getValue());
+        if (ListUtil.isNotEmpty(list)) {
+            if (obj instanceof Map) {
+                Map<String, Object> map = (Map) obj;
+                if (map.size() > 0) {
+                    for (int i = 0; i < list.size(); i++) {
+                        for (Map.Entry<String, Object> entry : map.entrySet()) {
+                            if (list.get(i).getPuid().equals(entry.getKey())) {
+                                object.put("title" + i, entry.getValue());
                                 break;
                             }
                         }
@@ -208,35 +209,35 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
 
     @Override
     public JSONObject singleVehNum(String vehNum, List<HzCfg0ModelRecord> list, JSONObject object) {
-        if(ListUtil.isEmpty(list)){
+        if (ListUtil.isEmpty(list)) {
             return object;
         }
         Set<HzCfg0ModelRecord> set = new HashSet<>(list);
         Iterator<HzCfg0ModelRecord> iterator = set.iterator();
 
-        for(int i = 0;i < set.size();i++){
+        for (int i = 0; i < set.size(); i++) {
             HzCfg0ModelRecord record = iterator.next();
-            if(null == record.getObjectName()){
+            if (null == record.getObjectName()) {
                 continue;
             }
-            if(StringUtils.isNotBlank(vehNum)){
+            if (StringUtils.isNotBlank(vehNum)) {
                 //智时版#12,360e#14,380pro#16   key:名字  value:value
                 String[] strings = vehNum.split(",");
                 boolean find = false;
-                for(String veh : strings){
+                for (String veh : strings) {
                     String vehName = veh.split("#")[0];
                     String vehNumber = veh.split("#")[1];
-                    if(record.getObjectName().equals(vehName)){
-                        object.put(vehName +"title"+i,vehNumber);
+                    if (record.getObjectName().equals(vehName)) {
+                        object.put(vehName + "title" + i, vehNumber);
                         find = true;
                         break;
                     }
                 }
-                if(!find){
-                    object.put(record.getObjectName()+"title"+i,"");
+                if (!find) {
+                    object.put(record.getObjectName() + "title" + i, "");
                 }
-            }else {
-                object.put(record.getObjectName()+"title"+i,"");
+            } else {
+                object.put(record.getObjectName() + "title" + i, "");
             }
         }
         return object;
@@ -245,44 +246,45 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     @Override
     public JSONObject singleVehNum(String vehNum, List<HzCfg0ModelRecord> list) {
         JSONObject object = new JSONObject();
-        if(ListUtil.isEmpty(list)){
+        if (ListUtil.isEmpty(list)) {
             return object;
         }
         Set<HzCfg0ModelRecord> set = new HashSet<>(list);
         Iterator<HzCfg0ModelRecord> iterator = set.iterator();
 
-        for(int i = 0;i < set.size();i++){
+        for (int i = 0; i < set.size(); i++) {
             HzCfg0ModelRecord record = iterator.next();
-            if(null == record.getObjectName()){
+            if (null == record.getObjectName()) {
                 continue;
             }
-            if(StringUtils.isNotBlank(vehNum)){
+            if (StringUtils.isNotBlank(vehNum)) {
                 //智时版#12,360e#14,380pro#16   key:名字  value:value
                 String[] strings = vehNum.split(",");
                 boolean find = false;
-                for(String veh : strings){
+                for (String veh : strings) {
                     String vehName = veh.split("#")[0];
                     String vehNumber = veh.split("#")[1];
-                    if(record.getObjectName().equals(vehName)){
-                        object.put(vehName,vehNumber);
+                    if (record.getObjectName().equals(vehName)) {
+                        object.put(vehName, vehNumber);
                         find = true;
                         break;
                     }
                 }
-                if(!find){
-                    object.put(record.getObjectName(),"");
+                if (!find) {
+                    object.put(record.getObjectName(), "");
                 }
-            }else {
-                object.put(record.getObjectName(),"");
+            } else {
+                object.put(record.getObjectName(), "");
             }
         }
         return object;
     }
+
     @Override
     public JSONObject sendSap(List<HzSingleVehicles> hzSingleVehicles) {
         List<HzSingleVehicles> hzSingleVehiclesSap = hzSingleVehiclesDao.selectByIds(hzSingleVehicles);
         List<HzMaterielCfgBean> hzMaterielCfgBeans = new ArrayList<>();
-        for(HzSingleVehicles hzSingleVehicles1 : hzSingleVehiclesSap){
+        for (HzSingleVehicles hzSingleVehicles1 : hzSingleVehiclesSap) {
             HzMaterielCfgBean hzMaterielCfgBean = new HzMaterielCfgBean();
             hzMaterielCfgBean.setpBrandCode(hzSingleVehicles1.getBrandCode());
             hzMaterielCfgBean.setpBrandName(hzSingleVehicles1.getBrandName());
@@ -308,7 +310,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     public JSONObject deleteSap(List<HzSingleVehicles> hzSingleVehicles) {
         List<HzSingleVehicles> hzSingleVehiclesSap = hzSingleVehiclesDao.selectByIds(hzSingleVehicles);
         List<HzMaterielCfgBean> hzMaterielCfgBeans = new ArrayList<>();
-        for(HzSingleVehicles hzSingleVehicles1 : hzSingleVehiclesSap){
+        for (HzSingleVehicles hzSingleVehicles1 : hzSingleVehiclesSap) {
             HzMaterielCfgBean hzMaterielCfgBean = new HzMaterielCfgBean();
             hzMaterielCfgBean.setpBrandCode(hzSingleVehicles1.getBrandCode());
             hzMaterielCfgBean.setpBrandName(hzSingleVehicles1.getBrandName());
@@ -330,8 +332,56 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     }
 
     @Override
-    public List<HzSingleVehicleBomLineBean> checkStatus(String projectId, Long vehiclesId, Model model) {
-        List<HzSingleVehicleBomLineBean> hzSingleVehicleBomLineBeans = hzSingleVehicleBomLineDao.selectFullConfigColorSet(projectId,vehiclesId);
-        return hzSingleVehicleBomLineBeans;
+    public SingleVehicleCheckStatus checkStatus(String projectId, Long vehiclesId) {
+        List<SingleVehicleBomRelation> list = featureBomLineRelationHistoryDao.selectHistory(projectId, vehiclesId);
+        Set<String> featureValueSet = new HashSet<>(64);
+        SingleVehicleCheckStatus status = new SingleVehicleCheckStatus();
+        SingleVehicleCheckStatus.SingleVehicleStatusCode statusCode = SingleVehicleCheckStatus.SingleVehicleStatusCode.Ok;
+        for (SingleVehicleBomRelation rel :
+                list) {
+            //存在重复项
+            if (featureValueSet.contains(rel.getFeatureValueCode())) {
+                rel.setStatus("<span style='color:red'>特性值选择重复<br>请到全配置BOM一级清单确认重复项</span>");//重复项
+                statusCode = SingleVehicleCheckStatus.SingleVehicleStatusCode.Duplicate;//重复项
+            } else {
+                rel.setStatus("OK");//OK
+                featureValueSet.add(rel.getFeatureValueCode());
+            }
+        }
+        status.setRel(list);
+        status.setStatus(statusCode);
+        return status;
     }
+
+    @Override
+    public List<HzSingleVehicles> selectByProjectUid(String projectId) {
+        return hzSingleVehiclesDao.selectByProjectUid(projectId);
+    }
+
+    /**
+     * 单车状态dao层
+     */
+    @Autowired
+    SingleVehicleStatusDao singleVehicleStatusDao;
+
+    @Override
+    public void postCheck(List<HzSingleVehicles> vehicle, String projectId) {
+        List<SingleVehicleStatus> statusList = new LinkedList();
+        for (HzSingleVehicles v :
+                vehicle) {
+            SingleVehicleCheckStatus status = checkStatus(projectId, v.getId());
+            SingleVehicleStatus vehicleStatus = new SingleVehicleStatus();
+            vehicleStatus.setProjectId(projectId);
+            vehicleStatus.setSvgId(v.getId());
+            vehicleStatus.setStatus(status.getStatus().getCode());
+            statusList.add(vehicleStatus);
+        }
+
+        if (!ListUtils.isEmpty(statusList)) {
+            //先删除以前的数据
+            singleVehicleStatusDao.deleteByProjectId(projectId);
+            singleVehicleStatusDao.insertList(statusList);
+        }
+    }
+
 }

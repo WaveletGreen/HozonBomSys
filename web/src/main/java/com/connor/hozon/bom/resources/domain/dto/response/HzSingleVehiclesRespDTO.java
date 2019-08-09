@@ -74,5 +74,5 @@ public class HzSingleVehiclesRespDTO extends BaseDTO {
     /**
      * 检查状态
      */
-    private String checkStatus;
+    private Integer checkStatus;
 }

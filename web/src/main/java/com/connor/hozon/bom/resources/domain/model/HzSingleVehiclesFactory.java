@@ -33,6 +33,7 @@ public class HzSingleVehiclesFactory {
         respDTO.setSvlMotorCode(vehicles.getSvlMotorCode());
         respDTO.setVehicleCode(vehicles.getVehicleCode());
         respDTO.setVehicleName(vehicles.getVehicleName());
+        respDTO.setCheckStatus(vehicles.getStatus());
         return  respDTO;
     }
 

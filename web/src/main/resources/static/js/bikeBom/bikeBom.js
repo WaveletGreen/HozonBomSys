@@ -6,7 +6,6 @@
  */
 //当前table对象
 let $table;
-
 //项目ID
 let projectId;
 /**
@@ -168,6 +167,11 @@ const exportToExcel = function () {
         }
     });
 };
+
+/**
+ * 工具条设置
+ * @type {*[]}
+ */
 const toolbar = [
     {
         text: '修改',
@@ -205,14 +209,11 @@ function doQuery() {
     $('#bikeBomTable').bootstrapTable('refresh');
 }
 
-function initTable() {
-    projectId = getProjectUid();
-    if (!checkIsSelectProject(projectId)) {
-        return;
-    }
-    const url = "singleVehicles/record?projectId=" + projectId
-    $table = $("#bikeBomTable");
-    $table.bootstrapTable('destroy');
+/**
+ * 创建表头
+ * @returns {Array}
+ */
+function createColumn() {
     let column = [];
     // column.push({field: 'id', title: '主键'});
     column.push({field: 'ck', checkbox: true, align: 'center', width: 50});
@@ -234,8 +235,20 @@ function initTable() {
         align: 'center',
         valign: 'middle',
         formatter: function (value, row, index) {
+            if(value===1){
+                value='完整';
+            }
+            else if(value===10){
+                value='重复';
+            }
+            else if(value===-1){
+                value='不完整';
+            }
+            else {
+                value='未知状态';
+            }
             return [
-                '<a href="javascript:void(0)" onclick="getCheckStatus(' + row.id + ')">' + value + '</a>'
+                '<a href="javascript:void(0)" onclick="getCheckStatus(' + row.id + ',\''+row.svlMaterialCode+'\')">' + value + '</a>'
             ].join("");
         }
     });
@@ -251,6 +264,18 @@ function initTable() {
     column.push({field: 'colorName', title: '颜色名称', align: 'center', valign: 'middle'});
     column.push({field: 'svlBatteryCode', title: '电池型号', align: 'center', valign: 'middle'});
     column.push({field: 'svlMotorCode', title: '电机型号', align: 'center', valign: 'middle'});
+    return column;
+}
+
+function initTable() {
+    projectId = getProjectUid();
+    if (!checkIsSelectProject(projectId)) {
+        return;
+    }
+    const url = "singleVehicles/record?projectId=" + projectId
+    $table = $("#bikeBomTable");
+    $table.bootstrapTable('destroy');
+    let column=createColumn();
     $table.bootstrapTable({
         url: url,
         method: 'get',
@@ -270,16 +295,26 @@ function initTable() {
         showColumns: true,                 //是否显示所有的列
         toolbars: toolbar
     });
-    // $table.bootstrapTable('hideColumn', 'id');
 }
 
 /**
  * 状态检查
  * @param id
  */
-function getCheckStatus(id) {
+function getCheckStatus(id,svlMaterialCode) {
     log("检查状态ID="+id);
-    window.location.href = "singleVehicles/checkStatus?projectId=" +getProjectUid()+"&vehiclesId="+id;
+    if(isAsForDialog()) {
+        window.Ewin.dialog({
+            title: svlMaterialCode+"检查状态",
+            url: "singleVehicles/checkStatus?projectId=" + getProjectUid() + "&vehiclesId=" + id,
+            width: 800,
+            height: 500
+        });
+    }
+    //不是作为弹窗，作为页面跳转
+    else{
+        window.location.href = "singleVehicles/checkStatus?projectId=" +getProjectUid()+"&vehiclesId="+id;
+    }
 }
 
 function queryLou(row) {

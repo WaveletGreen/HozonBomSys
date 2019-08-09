@@ -7,7 +7,10 @@
 
 package com.connor.hozon.bom.interaction.service;
 
-import org.springframework.ui.Model;
+import cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @Author: Fancyears Milos Malvis
@@ -15,5 +18,16 @@ import org.springframework.ui.Model;
  * @Modified By:
  */
 public interface FeatureBomLineRelationHistoryService {
-    String checkStatus(String projectId, Long vehiclesId, Model model);
+    /**
+     * 单车历史特性和bomline 2Y之间的对应关系
+     */
+    @Transactional
+    void saveHistoryRelation(String projectId);
+
+    /**
+     * 批量插入
+     * @param list
+     */
+    @Transactional
+    void insertList(List<FeatureBomLineRelationHistory> list);
 }

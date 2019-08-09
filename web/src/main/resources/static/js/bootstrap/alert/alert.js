@@ -31,7 +31,7 @@
             '<div class="modal-body" style="height: [ModalHeight]px;overflow-y:auto; ">' +
             '</div>' +
             '<div class="modal-footer" >' +
-            '<button type="button" class="btn btn-default cancel" data-dismiss="modal">取消</button>' +
+            '<button type="button" class="btn btn-default cancel" data-dismiss="modal" id="btnCancle">取消</button>' +
             '<button type="button" class="btn btn-primary ok" id="btnOk" data-dismiss="modal">确定</button>' +
             '</div>' +
             '</div>' +

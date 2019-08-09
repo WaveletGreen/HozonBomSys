@@ -45,7 +45,7 @@
                              targetProject="D:\IdealWorkspace\HozonBomSys\dao\src\main\java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
-        <table tableName="CFG_BOMLINE_RELATION_HISTORY" domainObjectName="CfgBomLineRelationHistory">
+        <table tableName="SINGLE_VEHICLE_STATUS" domainObjectName="SingleVehicleStatus">
             <property name="useActualColumnNames" value="false"/>
         </table>
 

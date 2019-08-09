@@ -15,6 +15,8 @@
         <result column="colorName" jdbcType="VARCHAR" property="colorName"/>
         <result column="colorCode" jdbcType="VARCHAR" property="colorCode"/>
     </resultMap>
+
+
     <sql id="ColumnWithColorCode">
         CFG_BOMLINE_UID
     </sql>
@@ -64,7 +66,7 @@
 
 
     <!--查询油漆车身的颜色件信息-->
-    <select id="selectPaintList"  resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+    <select id="selectPaintList" resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
             resultMap="BaseResultMap">
             SELECT
             t10.PUID  as colorUid,
@@ -79,7 +81,7 @@
     </select>
 
     <!--查询其他2Y层信息 不包含油漆车身  油漆车身存储信息比较特殊 需要单独查询 -->
-    <select id="selectOthersList"  resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+    <select id="selectOthersList" resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
             resultMap="BaseResultMap">
               SELECT
             t4.PUID as colorUid,
@@ -110,9 +112,9 @@
         )
     </select>
 
-
     <!--查询全部的实心打点图-->
-    <select id="selectSolidPointGraphFromFullConfig" resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+    <select id="selectSolidPointGraphFromFullConfig"
+            resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
             resultMap="BaseResultMap">
         SELECT
             t2.FL_MODEL_BOMLINE_UID as bomLineUid,

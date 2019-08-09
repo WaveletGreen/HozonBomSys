@@ -111,7 +111,15 @@ public class HzMbomController extends BaseController {
     @RequestMapping(value = "analysisSingleVehicles", method = RequestMethod.GET)
     @ResponseBody
     public WriteResultRespDTO analysisSingleVehicles(@RequestParam String projectId) {
+
         return hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
+    }
+
+    @RequestMapping(value = "callJob", method = RequestMethod.GET)
+    @ResponseBody
+    public String callJob() {
+        job.cronJob();
+        return "ok";
     }
 
     /**

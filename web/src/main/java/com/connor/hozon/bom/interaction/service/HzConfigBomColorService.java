@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.interaction.service;
 
-import com.connor.hozon.bom.interaction.dao.HzConfigBomColorDao;
+import cn.net.connor.hozon.dao.dao.interaction.HzConfigBomColorDao;
 import com.connor.hozon.bom.interaction.iservice.IHzConfigBomColorService;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.resources.util.ListUtil;

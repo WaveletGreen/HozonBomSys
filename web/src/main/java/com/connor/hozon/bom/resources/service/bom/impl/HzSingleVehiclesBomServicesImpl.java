@@ -1,16 +1,17 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
 import cn.net.connor.hozon.dao.dao.depository.project.HzProjectLibsDao;
+import cn.net.connor.hozon.dao.dao.interaction.FeatureBomLineRelationHistoryDao;
+import cn.net.connor.hozon.dao.dao.interaction.HzConfigBomColorDao;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzSingleVehiclesBomRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
-import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomLineBean;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
-import com.connor.hozon.bom.interaction.dao.HzConfigBomColorDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
+import com.connor.hozon.bom.interaction.service.FeatureBomLineRelationHistoryService;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
@@ -65,11 +66,16 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
     private SynBomService synBomService;
 
 
-    @Value("${localDebug}")
-    boolean debug;
+    @Value("${singleVehicleDebug}")
+    boolean singleVehicleDebug;
 
     @Autowired
     HzConfigBomColorDao hzConfigBomColorDao;
+
+    @Autowired
+    FeatureBomLineRelationHistoryService featureBomLineRelationHistoryService;
+    @Autowired
+    private FeatureBomLineRelationHistoryDao featureBomLineRelationHistoryDao;
 
     @Override
     public WriteResultRespDTO analysisSingleVehicles(String projectId) {
@@ -90,9 +96,6 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
         try {
             //单车信息
             List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesDao.selectByProjectUid(projectId);
-            //查询出当前发布过的正式进行结算的bomline对应的特性值数据，保留一份数据
-            List<HzConfigBomLineBean> cache = hzConfigBomColorDao.selectAllConfigToBomline(projectId);
-
             List<HzSingleVehiclesBomRecord> hzSingleVehiclesBomRecords = new ArrayList<>();
             if (ListUtil.isNotEmpty(hzSingleVehicles)) {
                 for (HzSingleVehicles vehicles : hzSingleVehicles) {
@@ -129,7 +132,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
             //todo  需要把数据传给SAP  单车BOM的 单车BOM不存在编辑数据 方便点 同步数据的时候 就直接先删后增
             boolean sapInsert = true;
             if (ListUtil.isNotEmpty(hzSingleVehiclesBomRecords)) {
-                if (!debug) {
+                if (!singleVehicleDebug) {
                     List<String> puids = hzSingleVehiclesBomDAO.getAllPuidByProjectId(projectId);
                     if (ListUtil.isNotEmpty(puids)) {
                         try {
@@ -184,11 +187,15 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
                     }
                 }
             }
-            if (StringUtils.isNotBlank(stringBuffer.toString())) {
+            if (StringUtils.isNotEmpty(stringBuffer.toString())) {
                 WriteResultRespDTO respDTO = new WriteResultRespDTO();
                 respDTO.setErrMsg(stringBuffer.toString());
                 respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return respDTO;
+            } else {
+                //保存当前项目下的所有特性值与2Y的关系
+                featureBomLineRelationHistoryService.saveHistoryRelation(projectId);
+                hzSingleVehiclesServices.postCheck(hzSingleVehicles, projectId);
             }
             return WriteResultRespDTO.getSuccessResult();
         } catch (Exception e) {
