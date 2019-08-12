@@ -158,10 +158,13 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 return WriteResultRespDTO.failResultRespDTO("当前项目不存在！");
             }
 
+
             String lineNo ="" ;//查找编号
             if (StringUtils.isNotBlank(reqDTO.getLineNo())) {
                 lineNo = reqDTO.getLineNo().replaceFirst("^0*", "");
             }
+
+
             if(StringUtils.isBlank(parentId)){
                 return insert2YBOMStructure(lineNo,projectId,reqDTO,hzEPLRecord);
             }else {
@@ -171,6 +174,17 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
+    }
+
+    /**
+     * 获得当前下面的所有子件
+     * @param lineId
+     * @param projectId
+     * @return
+     */
+    private List<HzEPLManageRecord> getHzEbomRecordTreeByParentId(String lineId,String projectId) {
+        List<HzEPLManageRecord> recordList=null;
+        return recordList;
     }
 
     @Override
@@ -923,7 +937,15 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
         String bomDigifaxId =projectRecord.getPuid();
         //当前BOM数据是2Y层BOM
         HzEPLManageRecord record = HzEbomRecordFactory.addEbomTOEbomRecord(reqDTO,hzEPLRecord.getId(),1,1,bomDigifaxId);
+
         try {
+
+            List<HzEPLManageRecord> addChildEBOMList = new ArrayList<>();//EBOM新增
+            List<HzPbomLineRecord> addChildPBOMList = new ArrayList<>();//PBOM 新增子
+
+            //记录子PBOM属于哪个父PBOM  key ebompuid(pbom的ebomid) value 子对象集合 目的是为了 排序号生成和查找编号累加
+            Map<String,List<HzPbomLineRecord>> pbomMap= new HashMap<>();
+
             Double maxOrderNum  = hzEbomRecordDAO.findMaxBomOrderNum(projectId);
             if(StringUtils.isNotBlank(lineNo)){//找合适的位置 插入位置为大于当前用户输入lineNo的最小lineNo
                 String lineIndex = lineNo+"."+lineNo;
@@ -976,17 +998,38 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                     record.setSortNum(String.valueOf(maxOrderNum+100));
                 }
             }
+
+            List<HzPbomLineRecord> addPBOMList=new ArrayList<HzPbomLineRecord>();
+            HzPbomLineRecord pbomRecord=null;
+            List carParts = hzMbomService.loadingCarPartType();
+            if(carParts.contains(hzEPLRecord.getPartResource())){
+                pbomRecord = HzPbomRecordFactory.editEbomToPbomRecord(hzEPLRecord,record);
+            }
+            addPBOMList.add(pbomRecord);
+
+            List<HzEPLManageRecord>  ebomRecord= hzEbomRecordDAO.findBaseEbomById(reqDTO.getLineId(), projectId);
+
+            if (ebomRecord!=null&&ebomRecord.size()>0){
+                //设置新增的子属性
+                thisHzEbom=record;
+                thisHzPbom=pbomRecord;
+                setNewHzChildEbomUids2Y(ebomRecord.get(0),addChildEBOMList,addChildPBOMList,record,pbomRecord,projectId);
+            }
+
+
             configTransactionTemplate.execute(new TransactionCallback<Void>() {
                 @Override
                 public Void doInTransaction(TransactionStatus status) {
-                    HzPbomLineRecord pbomRecord = null;
-                    List carParts = hzMbomService.loadingCarPartType();
-                    if(carParts.contains(hzEPLRecord.getPartResource())){
-                        pbomRecord = HzPbomRecordFactory.editEbomToPbomRecord(hzEPLRecord,record);
-                    }
+
                     hzEbomRecordDAO.insert(record);
-                    if(pbomRecord != null){
-                        hzPbomRecordDAO.insert(pbomRecord);
+                    if (ListUtil.isNotEmpty(addChildEBOMList)){
+                        hzEbomRecordDAO.insertList(addChildEBOMList,ChangeTableNameEnum.HZ_EBOM.getTableName());
+                    }
+                    if( ListUtil.isNotEmpty(addPBOMList)){
+                        hzPbomRecordDAO.insert(addPBOMList.get(0));
+                        if (ListUtil.isNotEmpty(addChildPBOMList)){
+                            hzPbomRecordDAO.insertList(addChildPBOMList);
+                        }
                     }
                     return null;
                 }
@@ -1033,13 +1076,36 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             }
             List<HzPbomLineRecord> pbomLineRecords = hzPbomRecordDAO.findPbomByLineId(query);
 
+            List<HzEPLManageRecord>  eboms= hzEbomRecordDAO.findBaseEbomById(reqDTO.getLineId(), projectId);
+            if (eboms != null && eboms.size() > 0) {
+                HzEbomTreeQuery queryebom = new HzEbomTreeQuery();
+                queryebom.setProjectId(reqDTO.getProjectId());
+                queryebom.setPuid(eboms.get(0).getPuid());
+                //添加的子
+                List<HzEPLManageRecord> hzBomLineChildren = hzEbomRecordDAO.getHzBomLineChildren(queryebom);
+
+                //判断子中是否存在父
+                for (HzEPLManageRecord hzEPLManageRecordChildren : hzBomLineChildren) {
+                    if (hzEPLManageRecordChildren.getPuid().equals(list.get(0).getPuid())) {
+                        return WriteResultRespDTO.failResultRespDTO("存在循环结构，不能添加");
+                    }
+                }
+            }
+
+
+
             //记录EBOM的插入操作 key parentId value eBomPuid 目的是为了 PBOM插入操作时 进行eBomPuid 匹配
             Map<String,String> map = new HashMap<>();
+            //记录子PBOM属于哪个父PBOM  key ebompuid(pbom的ebomid) value 子对象集合 目的是为了 排序号生成和查找编号累加
+            Map<String,List<HzPbomLineRecord>> pbomMap= new HashMap<>();
+
 
             List<HzEPLManageRecord> addEBOMList = new ArrayList<>();//EBOM 新增
+            List<HzEPLManageRecord> addChildEBOMList = new ArrayList<>();//EBOM新增子
             List<HzEPLManageRecord> updateEBOMList = new ArrayList<>();//EBOM更新
 
             List<HzPbomLineRecord> addPBOMList = new ArrayList<>();//PBOM 新增
+            List<HzPbomLineRecord> addChildPBOMList = new ArrayList<>();//PBOM 新增子
             List<HzPbomLineRecord> updatePBOMList = new ArrayList<>();//PBOM 更新
 
 
@@ -1145,10 +1211,24 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
 
                 }
 
+
+
                 insertRecord.setSortNum(sortNum);//设置sortNum
                 insertRecord.setLineIndex(lineIndex);//设置 lineIndex
                 addEBOMList.add(insertRecord);
                 map.put(parent.getPuid(),insertRecord.getPuid());
+
+                List<HzPbomLineRecord> pbomInParentList=new ArrayList<HzPbomLineRecord>();
+
+                List<HzEPLManageRecord>  ebomRecord= hzEbomRecordDAO.findBaseEbomById(reqDTO.getLineId(), projectId);
+
+                if (ebomRecord!=null&&ebomRecord.size()>0){
+                    //设置新增的子属性
+                    thisHzEbom=insertRecord;
+                    setNewHzChildEbomUids(ebomRecord.get(0),addChildEBOMList,addChildPBOMList,pbomInParentList,insertRecord,projectId,"");
+                }
+                pbomMap.put(parent.getPuid(),pbomInParentList);
+
             }
             List carParts = hzMbomService.loadingCarPartType();
             //PBOM 插入
@@ -1253,20 +1333,48 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                     insertRecord.setSortNum(sortNum);//设置排序号
                     insertRecord.setLineIndex(lineIndex);//设置 lineIndex
                     addPBOMList.add(insertRecord);
+
+                    List<HzPbomLineRecord> hzPbomLineRecords = pbomMap.get(parent.geteBomPuid());
+                    if (ListUtil.isNotEmpty(hzPbomLineRecords)){
+                        HzPbomLineRecord thisPbom=insertRecord;
+                        for (HzPbomLineRecord pbomline :hzPbomLineRecords){
+                            String chiLineIndex = insertRecord.getLineIndex()+pbomline.getLineIndex();
+
+                            String pbomSortNum=pbomline.getSortNum();
+                            String sortNo = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectId,thisPbom.getSortNum());
+                            if(sortNo == null){
+                                pbomSortNum = String.valueOf(Double.parseDouble(thisPbom.getSortNum())+100);
+                            }else {
+                                pbomSortNum = HzBomSysFactory.generateBomSortNum(thisPbom.getSortNum(),sortNo);
+                            }
+                            thisPbom=pbomline;
+                            pbomline.setLineIndex(chiLineIndex);
+                            pbomline.setSortNum(pbomSortNum);
+                        }
+                    }
+
                 }
             }
+
 
             configTransactionTemplate.execute(new TransactionCallback<Void>() {
                 @Override
                 public Void doInTransaction(TransactionStatus status) {
                     if(ListUtil.isNotEmpty(addEBOMList)){
                         hzEbomRecordDAO.insertList(addEBOMList,ChangeTableNameEnum.HZ_EBOM.getTableName());
+                        if (ListUtil.isNotEmpty(addChildEBOMList)){
+                            hzEbomRecordDAO.insertList(addChildEBOMList,ChangeTableNameEnum.HZ_EBOM.getTableName());
+                        }
                     }
+
                     if(ListUtil.isNotEmpty(updateEBOMList)){
                         hzEbomRecordDAO.updateListByPuids(updateEBOMList);
                     }
                     if(ListUtil.isNotEmpty(addPBOMList)){
                         hzPbomRecordDAO.insertList(addPBOMList);
+                        if (ListUtil.isNotEmpty(addChildPBOMList)){
+                            hzPbomRecordDAO.insertList(addChildPBOMList);
+                        }
                     }
                     if(ListUtil.isNotEmpty(updatePBOMList)){
                         hzPbomRecordDAO.updateListByPuids(updatePBOMList);
@@ -1281,4 +1389,167 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
         return WriteResultRespDTO.getSuccessResult();
     }
 
+/**
+ * 递归设置新子ebom的UID等
+ * @param oldRecordEbom 原父ebom的实体类
+ * @param addChildEBOMList 添加的ebom集合
+ * @param projectId 项目的的UID
+ */
+    /**
+     * 递归设置新子ebom的UID等
+     * @param oldRecordEbom 原父ebom的实体类
+     * @param addChildEBOMList 要添加的子ebom集合
+     * @param addChildPBOMList 要添加的子pbom集合
+     * @param pbomInParentList 单个父对应的所有子pbom
+     * @param insertRecord 父Ebom
+     * @param projectId 项目号
+     * @param pbomlineIndex pbom的查找编号(未累加前)
+     */
+    private void  setNewHzChildEbomUids(HzEPLManageRecord oldRecordEbom,List<HzEPLManageRecord> addChildEBOMList,List<HzPbomLineRecord> addChildPBOMList,List<HzPbomLineRecord> pbomInParentList,HzEPLManageRecord insertRecord ,String projectId,String pbomlineIndex){
+        String ebomPuid= insertRecord.getPuid();
+        String ebomlineIndex=insertRecord.getLineIndex();
+        List<HzEPLManageRecord> recordEbomList=null;
+        if (oldRecordEbom!=null){
+            HzBOMQuery hzBOMQuery = new HzBOMQuery();
+            hzBOMQuery.setParentId(oldRecordEbom.getPuid());
+            hzBOMQuery.setProjectId(projectId);
+            recordEbomList =hzEbomRecordDAO.findNextLevelRecordByParentId(hzBOMQuery);
+        }
+       if (recordEbomList!=null&&recordEbomList.size()>0){
+            //设置是否父层
+           insertRecord.setIsHas(1);
+
+           for (HzEPLManageRecord chiRecord:recordEbomList) {
+               if(oldRecordEbom.getPuid().equals(chiRecord.getParentUid())){
+                   //生成新的子Ebomline
+                   HzEPLManageRecord newChiRecord=(HzEPLManageRecord)chiRecord.clone();
+                  String newEbomlineEnd=newChiRecord.getLineIndex().split("\\.")[newChiRecord.getLineIndex().split("\\.").length-1];
+                  String newebomlineIndex= ebomlineIndex+"."+newEbomlineEnd;
+                   String newEbomPuid=UUID.randomUUID().toString();
+                   String sortNum=insertRecord.getSortNum();
+                   String sortNo = hzEbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectId,thisHzEbom.getSortNum());
+                   if(sortNo == null){
+                       sortNum = String.valueOf(Double.parseDouble(thisHzEbom.getSortNum())+100);
+                   }else {
+                       sortNum = HzBomSysFactory.generateBomSortNum(thisHzEbom.getSortNum(),sortNo);
+                   }
+                   thisHzEbom=newChiRecord;
+                   newChiRecord.setParentUid(ebomPuid);
+                   newChiRecord.setPuid(newEbomPuid);
+                   newChiRecord.setLineIndex(newebomlineIndex);
+                   newChiRecord.setSortNum(sortNum);
+                   addChildEBOMList.add(newChiRecord);
+
+                   //获得新的子Pbomline
+                   String newpbomlineIndex=null;
+                   if (pbomlineIndex!=null){
+                       HzPbomLineRecord oldHzPbomByEbom = hzPbomRecordDAO.getHzPbomByEbomPuid(chiRecord.getPuid(), projectId);
+                       if (oldHzPbomByEbom!=null){
+                           HzPbomLineRecord newChiPbom=(HzPbomLineRecord)oldHzPbomByEbom.clone();
+                           String newPbomlineEnd=newChiPbom.getLineIndex().split("\\.")[newChiPbom.getLineIndex().split("\\.").length-1];
+                           newpbomlineIndex= pbomlineIndex+"."+newPbomlineEnd;
+                           newChiPbom.setPuid(UUID.randomUUID().toString());
+                           newChiPbom.setParentUid(ebomPuid);
+                           newChiPbom.seteBomPuid(newEbomPuid);
+                           newChiPbom.setLineIndex(newpbomlineIndex);
+                           addChildPBOMList.add(newChiPbom);
+                           pbomInParentList.add(newChiPbom);
+                       }
+                   }
+
+                   //递归获得所有子
+                   setNewHzChildEbomUids(chiRecord,addChildEBOMList,addChildPBOMList,pbomInParentList,newChiRecord,projectId,newpbomlineIndex);
+
+               }
+
+           }
+       }
+
+    };
+
+    HzEPLManageRecord thisHzEbom;
+    HzPbomLineRecord thisHzPbom;
+
+    /**
+     * 递归设置新子ebom的UID等2Y层
+     * @param oldRecordEbom 原父ebom的实体
+     * @param addChildEBOMList 要添加的子ebom集合
+     * @param addChildPBOMList 要添加的子pbom集合
+     * @param insertRecord 父Ebom
+     * @param pbomInParent 父Pbom
+     * @param projectId 项目号
+     */
+    private void  setNewHzChildEbomUids2Y(HzEPLManageRecord oldRecordEbom,List<HzEPLManageRecord> addChildEBOMList,List<HzPbomLineRecord> addChildPBOMList,HzEPLManageRecord insertRecord ,HzPbomLineRecord pbomInParent,String projectId){
+        String ebomPuid= insertRecord.getPuid();
+        String ebomlineIndex=insertRecord.getLineIndex();
+        List<HzEPLManageRecord> recordEbomList=null;
+        if (oldRecordEbom!=null){
+            HzBOMQuery hzBOMQuery = new HzBOMQuery();
+            hzBOMQuery.setParentId(oldRecordEbom.getPuid());
+            hzBOMQuery.setProjectId(projectId);
+            recordEbomList =hzEbomRecordDAO.findNextLevelRecordByParentId(hzBOMQuery);
+        }
+        if (recordEbomList!=null&&recordEbomList.size()>0){
+            //设置是否父层
+            insertRecord.setIsHas(1);
+
+            for (HzEPLManageRecord chiRecord:recordEbomList) {
+                if(oldRecordEbom.getPuid().equals(chiRecord.getParentUid())){
+                    //生成新的子Ebomline
+                    HzEPLManageRecord newChiRecord=(HzEPLManageRecord)chiRecord.clone();
+                    String newEbomlineEnd=newChiRecord.getLineIndex().split("\\.")[newChiRecord.getLineIndex().split("\\.").length-1];
+                    String newebomlineIndex= ebomlineIndex+"."+newEbomlineEnd;
+                    String newEbomPuid=UUID.randomUUID().toString();
+                    String sortNum=insertRecord.getSortNum();
+                    String sortNo = hzEbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectId,thisHzEbom.getSortNum());
+                    if(sortNo == null){
+                        sortNum = String.valueOf(Double.parseDouble(thisHzEbom.getSortNum())+100);
+                    }else {
+                        sortNum = HzBomSysFactory.generateBomSortNum(thisHzEbom.getSortNum(),sortNo);
+                    }
+                    thisHzEbom=newChiRecord;
+                    newChiRecord.setParentUid(ebomPuid);
+                    newChiRecord.setPuid(newEbomPuid);
+                    newChiRecord.setLineIndex(newebomlineIndex);
+                    newChiRecord.setSortNum(sortNum);
+                    addChildEBOMList.add(newChiRecord);
+
+                    HzPbomLineRecord newChiPbom=null;
+                    //获得新的子Pbomline
+                    String newpbomlineIndex=null;
+                    if (pbomInParent!=null){
+                        HzPbomLineRecord oldHzPbomByEbom = hzPbomRecordDAO.getHzPbomByEbomPuid(chiRecord.getPuid(), projectId);
+                        if (oldHzPbomByEbom!=null){
+                            newChiPbom=(HzPbomLineRecord)oldHzPbomByEbom.clone();
+                            String newPbomlineEnd=newChiPbom.getLineIndex().split("\\.")[newChiPbom.getLineIndex().split("\\.").length-1];
+                            newpbomlineIndex= pbomInParent.getLineIndex()+"."+newPbomlineEnd;
+                            String chiLineIndex = pbomInParent.getLineIndex()+"."+newPbomlineEnd;;
+                            String pbomSortNum=pbomInParent.getSortNum();
+                            String pbomSortNo = hzPbomRecordDAO.findMinOrderNumWhichGreaterThanThisOrderNum(projectId,thisHzPbom.getSortNum());
+                            if(pbomSortNo == null){
+                                pbomSortNum = String.valueOf(Double.parseDouble(thisHzPbom.getSortNum())+100);
+                            }else {
+                                pbomSortNum = HzBomSysFactory.generateBomSortNum(thisHzPbom.getSortNum(),pbomSortNo);
+                            }
+                            thisHzPbom=newChiPbom;
+
+                            newChiPbom.setPuid(UUID.randomUUID().toString());
+                            newChiPbom.setParentUid(ebomPuid);
+                            newChiPbom.seteBomPuid(newEbomPuid);
+                            newChiPbom.setLineIndex(newpbomlineIndex);
+                            newChiPbom.setSortNum(pbomSortNum);
+
+                            addChildPBOMList.add(newChiPbom);
+                        }
+                    }
+
+                    //递归获得所有子
+                    setNewHzChildEbomUids2Y(chiRecord,addChildEBOMList,addChildPBOMList,newChiRecord,newChiPbom,projectId);
+
+                }
+
+            }
+        }
+
+    };
 }
