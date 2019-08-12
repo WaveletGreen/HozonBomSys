@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.service.bom;
 import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.FeatureAnd2YRelationQuery;
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
+import cn.net.connor.hozon.dao.dao.bom.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

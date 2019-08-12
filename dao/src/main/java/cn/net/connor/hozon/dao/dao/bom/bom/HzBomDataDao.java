@@ -1,14 +1,16 @@
 /*
- * Copyright (c) 2018.
- * This file was written by fancyears·milos·malvis @connor. Any question/bug you can't post to 1243093366@qq.com.
- * ALL RIGHTS RESERVED.
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
  */
 
-package com.connor.hozon.bom.bomSystem.dao.bom;
+package cn.net.connor.hozon.dao.dao.bom.bom;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.FeatureAnd2YRelationQuery;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,7 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzBomDataDao extends BasicDao<HzBomLineRecord>{
     /**
      * Author: Fancyears·Maylos·Mayways
@@ -28,7 +31,7 @@ public interface HzBomDataDao extends BasicDao<HzBomLineRecord>{
      * @param bomLineRecord
      * @return
      */
-    List<HzBomLineRecord> selectByProjectPuid(HzBomLineRecord bomLineRecord);
+    List<HzBomLineRecord> selectByProjectId(HzBomLineRecord bomLineRecord);
 
 
 
@@ -51,14 +54,4 @@ public interface HzBomDataDao extends BasicDao<HzBomLineRecord>{
      * @return
      */
     List<HzBomLineRecord> selectVehicleAssembly(Map<String, Object> params);
-
-    /**
-     * 查找已经存储好的2级配色方案
-     *
-     * @param params 包含modelUid
-     * @return
-     */
-    List<HzBomLineRecord> selectVehicleAssembly2(Map<String, Object> params);
-
-
 }
