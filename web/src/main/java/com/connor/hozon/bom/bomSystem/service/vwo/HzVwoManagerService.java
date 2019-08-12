@@ -2914,7 +2914,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 hzRelevanceBasicChangeQueryBefor.setChangeVersion(version-1);
                 hzRelevanceBasicChangeQueryBefor.setRbProjectUid(projectUid);
                 hzRelevanceBasicChangeQueryBefor.setSrcId(hzRelevanceBasicChangeAfter.getSrcId());
-                HzRelevanceBasicChange hzRelevanceBasicChangeBefor = hzRelevanceBasicChangeDao.selectByVersion(hzRelevanceBasicChangeQueryBefor);
+                HzRelevanceBasicChange hzRelevanceBasicChangeBefor = hzRelevanceBasicChangeDao.selectLastVersion(hzRelevanceBasicChangeQueryBefor);
 
                 if(hzRelevanceBasicChangeBefor==null){
                     continue;

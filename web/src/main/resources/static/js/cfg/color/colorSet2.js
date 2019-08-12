@@ -116,7 +116,7 @@ var toolbar = [
 /**
  * 表头设置
  */
-var column = [
+let column = [
     {
         field: 'ck',
         checkbox: true
@@ -201,7 +201,7 @@ var column = [
         sortOrder: 'asc',
     }
 ];
-var $table=null;
+let $table=null;
 $(document).ready(
     (function () {
         loadData();
@@ -254,7 +254,7 @@ function loadData() {
     });
     //设置跳转的tableID，放在table初始化语句之后
     setTargetTableId("dataTable");
-    $table.bootstrapTable('hideColumn', 'puid');
+    // $table.bootstrapTable('hideColumn', 'puid');
 }
 
 /**

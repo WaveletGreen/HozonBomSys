@@ -173,4 +173,8 @@ public class HzSingleVehicles implements Serializable {
      * 是否发送sap，0未发送，1已发送
      */
     private Integer isSend;
+    /**
+     * 检查状态，描述请查阅web模块下的SingleVehicleCheckStatus
+     */
+    private Integer status;
 }

@@ -1,8 +1,8 @@
 package com.connor.hozon.bom.interaction.dao;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import org.springframework.context.annotation.Configuration;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
@@ -30,4 +30,5 @@ public interface HzSingleVehicleBomLineDao extends BasicDao<HzSingleVehicleBomLi
      * @return 查询结果集
      */
     List<HzSingleVehicleBomLineBean> selectFullConfigColorSet(String projectId,Long dmbId);
+
 }

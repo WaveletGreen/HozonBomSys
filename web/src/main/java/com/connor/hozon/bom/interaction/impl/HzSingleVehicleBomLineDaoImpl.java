@@ -1,15 +1,15 @@
 package com.connor.hozon.bom.interaction.impl;
 
+import cn.net.connor.hozon.dao.dao.interaction.HzConfigBomColorDao;
+import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
-import com.connor.hozon.bom.interaction.dao.HzConfigBomColorDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
-import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
 
 import java.util.ArrayList;
 import java.util.List;

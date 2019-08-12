@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.interaction.SingleVehicleStatusDao">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleStatus">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="SVG_ID" jdbcType="DECIMAL" property="svgId" />
+    <result column="STATUS" jdbcType="DECIMAL" property="status" />
+    <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, SVG_ID, STATUS, PROJECT_ID
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from SINGLE_VEHICLE_STATUS
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from SINGLE_VEHICLE_STATUS
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <delete id="deleteByProjectId" parameterType="java.lang.String">
+    delete from SINGLE_VEHICLE_STATUS
+    where PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleStatus">
+    insert into SINGLE_VEHICLE_STATUS (ID, SVG_ID, STATUS,
+      PROJECT_ID)
+    values (#{id,jdbcType=DECIMAL}, #{svgId,jdbcType=DECIMAL}, #{status,jdbcType=DECIMAL},
+      #{projectId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertList" parameterType="java.util.List">
+    insert into
+    SINGLE_VEHICLE_STATUS (<include refid="Base_Column_List"/>)
+    select SEQ_SVG_STATUS.Nextval, A.* from(
+    <foreach collection="list" index="index" item="bean" separator="union all">
+      select
+      #{bean.svgId},
+      #{bean.status},
+      #{bean.projectId}
+      from
+      dual
+    </foreach>
+    )A
+  </insert>
+  <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleStatus">
+    insert into SINGLE_VEHICLE_STATUS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="svgId != null">
+        SVG_ID,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="projectId != null">
+        PROJECT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="svgId != null">
+        #{svgId,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleStatus">
+    update SINGLE_VEHICLE_STATUS
+    <set>
+      <if test="svgId != null">
+        SVG_ID = #{svgId,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleStatus">
+    update SINGLE_VEHICLE_STATUS
+    set SVG_ID = #{svgId,jdbcType=DECIMAL},
+      STATUS = #{status,jdbcType=DECIMAL},
+      PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

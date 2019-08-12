@@ -9,6 +9,7 @@ package cn.net.connor.hozon.dao.dao.configuration.derivative;
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMDetailChangeBean;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * @Date: Created in 2018/11/9 10:49
  * @Modified By:
  */
+@Repository
 public interface HzDMDetailChangeDao extends BasicDao<HzDMDetailChangeBean> {
 
     int insertList(List<HzDMDetailChangeBean> hzDMDetailChangeBeans);

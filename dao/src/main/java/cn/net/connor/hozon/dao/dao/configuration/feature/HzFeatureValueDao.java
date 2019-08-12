@@ -151,5 +151,5 @@ public interface HzFeatureValueDao extends BasicDao<HzFeatureValue> {
      */
     List<HzFeatureValue> doSelectByDescAndProjectId(HzFeatureValue cfg);
 
-    HzFeatureValue selectByPrimaryKey(@Param("id") String id);
+    HzFeatureValue selectByPrimaryKey(@Param("puid") String puid);
 }
