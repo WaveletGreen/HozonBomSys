@@ -8,9 +8,9 @@
 var tableUpdateHelper = tableUpdateHelper || (function () {
     var options = {
         // 需要更新的数据
-        updateData:null,
+        updateData: null,
         //需要更新的table的id
-        tableId:null,
+        tableId: null,
         // 默认更新之后不勾选
         uncheck: true,
     };
@@ -23,28 +23,29 @@ var tableUpdateHelper = tableUpdateHelper || (function () {
      */
     function updateTableRow(opts) {
         options = $.extend({}, options, opts);
-        if(null==opts){
+        if (null == opts) {
             error("无入参数，请设置入参");
             return false;
         }
         log(opts.updateData);
-        let tableId=opts.tableId;
+        let tableId = opts.tableId;
         let myData = JSON.parse(opts.updateData);
-        let rows = $('#'+tableId).bootstrapTable('getSelections');
+        let rows = $('#' + tableId).bootstrapTable('getSelections');
         let index = rows[0].myIndex;
         log(index)
         log(rows)
-        $('#'+tableId).bootstrapTable('updateRow', {index: index, row: myData});
+        $('#' + tableId).bootstrapTable('updateRow', {index: index, row: myData});
         log(opts.uncheck)
-        if(opts.uncheck){
-            $('#'+tableId).bootstrapTable('uncheckAll');
+        if (opts.uncheck) {
+            $('#' + tableId).bootstrapTable('uncheckAll');
 
         }
-        else{
-            $('#'+tableId).bootstrapTable('check',index);
+        else {
+            $('#' + tableId).bootstrapTable('check', index);
         }
         return true;
     }
+
     /**
      *
      * @param updateData 需要更新的数据
@@ -55,18 +56,20 @@ var tableUpdateHelper = tableUpdateHelper || (function () {
      */
     function updateTableRowWithIndex(opts) {
         options = $.extend({}, options, opts);
-        if(null==opts){
+        if (null == opts) {
             error("无入参数，请设置入参");
             return false;
         }
         log(opts.updateData);
-        let tableId=opts.tableId;
+        let tableId = opts.tableId;
         let myData = opts.updateData;
-        $('#'+tableId).bootstrapTable('updateRow', {row: myData});
+        myData.ck = opts.uncheck;
+        $('#' + tableId).bootstrapTable('updateRow', {row: myData});
         return true;
     }
-   return {
-       updateTableRow: updateTableRow,
-       updateTableRowWithIndex: updateTableRowWithIndex,
+
+    return {
+        updateTableRow: updateTableRow,
+        updateTableRowWithIndex: updateTableRowWithIndex,
     };
 })();

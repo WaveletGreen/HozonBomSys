@@ -28,7 +28,7 @@
         $("#btnOk", window.top.document).click(function () {
             var changeFromId = $("#stage option:selected").val();
             var projectId = $("#project", window.top.document).val();
-            var puids = $("#puids").val();
+            var puids =getActiveTab().getPuids();
             // var typeId = $("#typeId").val();
             var myData = JSON.stringify({
                 "puids": puids,
