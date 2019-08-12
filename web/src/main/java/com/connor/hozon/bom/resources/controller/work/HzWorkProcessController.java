@@ -404,11 +404,10 @@ public class HzWorkProcessController extends BaseController {
      * @return
      */
     @RequestMapping(value = "order/choose",method = RequestMethod.GET)
-    public String getOrderChooseToPage(String projectId,String puids,Model model){
+    public String getOrderChooseToPage(String projectId,Model model){
         List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
         if(ListUtil.isNotEmpty(records)){
             model.addAttribute("data",records);
-            model.addAttribute("puids",puids);
         }
         return "bomManage/mbom/routingData/routingSetChangeForm";
     }
