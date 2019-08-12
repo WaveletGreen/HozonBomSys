@@ -7,8 +7,8 @@
 package com.connor.hozon.bom.bomSystem.dao.bom;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import org.apache.ibatis.annotations.Param;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.FeatureAnd2YRelationQuery;
 
 import java.util.List;
 import java.util.Map;
@@ -37,10 +37,10 @@ public interface HzBomDataDao extends BasicDao<HzBomLineRecord>{
      * Description: 根据数模层puid获取到所有的BomLine
      * Date: 2018/5/23 9:59
      *
-     * @param projectPuid 项目puid
+     * @param query 查询对象，包含了排序规则
      * @return
      */
-    List<HzBomLineRecord> select2YByProjectPuid(@Param("projectPuid") String projectPuid);
+    List<HzBomLineRecord> select2YByProjectPuid(FeatureAnd2YRelationQuery query);
 
     /**
      * Author: Fancyears·Maylos·Mayways

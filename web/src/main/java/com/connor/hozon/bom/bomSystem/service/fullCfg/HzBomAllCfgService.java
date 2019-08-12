@@ -16,7 +16,7 @@ import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
-import cn.net.connor.hozon.dao.query.feature.HzFeatureQuery;
+import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
@@ -145,10 +145,11 @@ public class HzBomAllCfgService {
 
     /**
      * @param projectPuid 项目puid
+     * @param orderKey
      * @return net.sf.json.JSONObject
      * Description: 根据数模层获取到bom的配置信息和车型模型信息
      */
-    public JSONObject parse(String projectPuid) {
+    public JSONObject parse(String projectPuid, String orderKey) {
         //搜索全部特性，并经过P_CFG0_OBJECT_ID 升序排序
         HzFeatureQuery queryBase = new HzFeatureQuery();
         queryBase.setSort("P_CFG0_OBJECT_ID");
@@ -158,7 +159,7 @@ public class HzBomAllCfgService {
         //获取该项目下的所有车型模型
         List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectPuid);
         //搜素所属有2Y层
-        List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid);
+        List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectPuid,orderKey);
         if (lines == null) {
             lines = new ArrayList<HzBomLineRecord>();
         }
@@ -1262,7 +1263,7 @@ public class HzBomAllCfgService {
         return result;
     }
 
-    public SXSSFWorkbook getWorkBook(String projectUid) {
+    public SXSSFWorkbook getWorkBook(String projectUid,String orderKey) {
 
         HzFeatureQuery queryBase = new HzFeatureQuery();
         queryBase.setSort("P_CFG0_OBJECT_ID");
@@ -1270,7 +1271,7 @@ public class HzBomAllCfgService {
         //获取该项目下的所有车型模型
         List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectUid);
         //搜素所属有2Y层
-        List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectUid);
+        List<HzBomLineRecord> lines = hzBomDataService.doSelect2YByProjectPuid(projectUid, orderKey);
         if (lines == null) {
             lines = new ArrayList<HzBomLineRecord>();
         }

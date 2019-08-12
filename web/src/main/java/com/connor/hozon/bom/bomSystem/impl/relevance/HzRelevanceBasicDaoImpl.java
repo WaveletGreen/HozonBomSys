@@ -8,8 +8,8 @@
 //
 //import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 //import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
-//import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQuery;
-//import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQueryResult;
+//import cn.net.connor.hozon.dao.query.configuration.relevance.HzRelevanceQuery;
+//import cn.net.connor.hozon.dao.query.configuration.relevance.HzRelevanceQueryResult;
 //import org.springframework.stereotype.Repository;
 //import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 //import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;

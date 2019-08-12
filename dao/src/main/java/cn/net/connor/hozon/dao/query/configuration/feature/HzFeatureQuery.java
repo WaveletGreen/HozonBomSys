@@ -5,7 +5,7 @@
  *
  */
 
-package cn.net.connor.hozon.dao.query.feature;
+package cn.net.connor.hozon.dao.query.configuration.feature;
 
 import lombok.Data;
 

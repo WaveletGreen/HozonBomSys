@@ -10,7 +10,7 @@
 //import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 //import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 //import cn.net.connor.hozon.dao.pojo.configuration.feature.HzMaterielFeatureBean;
-//import cn.net.connor.hozon.dao.query.feature.HzFeatureQuery;
+//import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
 //import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;

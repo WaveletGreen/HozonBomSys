@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.impl.bom;
 
+import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.FeatureAnd2YRelationQuery;
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import org.springframework.stereotype.Repository;
@@ -40,12 +41,12 @@ public class HzBomDataDaoImpl extends BasicDaoImpl<HzBomLineRecord> implements H
      * Description: 根据数模层puid获取到所有的BomLine
      * Date: 2018/5/23 9:59
      *
-     * @param projectPuid
+     * @param query
      * @return
      */
     @Override
-    public List<HzBomLineRecord> select2YByProjectPuid(String projectPuid) {
-        return baseSQLUtil.executeQueryByPass(new HzBomLineRecord(), projectPuid, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao.select2YByProjectPuid");
+    public List<HzBomLineRecord> select2YByProjectPuid(FeatureAnd2YRelationQuery query) {
+        return baseSQLUtil.executeQueryByPass(new HzBomLineRecord(), query, "com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao.select2YByProjectPuid");
     }
 
     /**

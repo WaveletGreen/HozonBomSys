@@ -4,7 +4,7 @@
  * ALL RIGHTS RESERVED.
  */
 
-package cn.net.connor.hozon.dao.query.relevance;
+package cn.net.connor.hozon.dao.query.configuration.relevance;
 
 import lombok.Data;
 

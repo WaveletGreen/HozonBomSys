@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQuery;
+import cn.net.connor.hozon.dao.query.configuration.relevance.HzRelevanceQuery;
 import com.connor.hozon.bom.bomSystem.service.relevance.HzRelevanceService2;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -6,12 +6,13 @@
 
 package com.connor.hozon.bom.bomSystem.service.bom;
 
-import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.FeatureAnd2YRelationQuery;
+import com.connor.hozon.bom.bomSystem.dao.bom.HzBomDataDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,10 +35,14 @@ public class HzBomDataService {
      * 获取项目下的所有2Y层
      *
      * @param projectPuid
-     * @return
+     * @param orderKey
+         * @return
      */
-    public List<HzBomLineRecord> doSelect2YByProjectPuid(String projectPuid) {
-        return hzBomDataDao.select2YByProjectPuid(projectPuid);
+    public List<HzBomLineRecord> doSelect2YByProjectPuid(String projectPuid, String orderKey) {
+        FeatureAnd2YRelationQuery query=new FeatureAnd2YRelationQuery();
+        query.setProjectId(projectPuid);
+        query.setOrder(orderKey);
+        return hzBomDataDao.select2YByProjectPuid(query);
     }
 
     /**

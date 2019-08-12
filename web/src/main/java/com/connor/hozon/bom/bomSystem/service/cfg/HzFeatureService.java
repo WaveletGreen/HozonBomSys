@@ -9,7 +9,7 @@ package com.connor.hozon.bom.bomSystem.service.cfg;
 
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzMaterielFeatureBean;
-import cn.net.connor.hozon.dao.query.feature.HzFeatureQuery;
+import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 
 import java.util.List;
