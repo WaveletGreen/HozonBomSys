@@ -362,6 +362,11 @@ public class HzSingleVehiclesController extends BaseController {
         return hzSingleVehiclesServices.sendSap(hzSingleVehicles);
     }
 
+    /**
+     * 从删除操作通知到SAP
+     * @param hzSingleVehicles
+     * @return
+     */
     @RequestMapping("deleteSap")
     @ResponseBody
     public JSONObject deleteSap(@RequestBody List<HzSingleVehicles> hzSingleVehicles) {
@@ -402,6 +407,4 @@ public class HzSingleVehiclesController extends BaseController {
         hzSingleVehiclesServices.postCheck(hzSingleVehicles,projectId);
         return "重新检查成功";
     }
-
-
 }
