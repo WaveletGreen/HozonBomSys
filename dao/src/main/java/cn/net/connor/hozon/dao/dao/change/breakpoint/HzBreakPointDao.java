@@ -1,19 +1,19 @@
-package com.connor.hozon.bom.resources.mybatis.change.breakpoint;
+package cn.net.connor.hozon.dao.dao.change.breakpoint;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import cn.net.connor.hozon.common.entity.QueryBase;
-import org.springframework.context.annotation.Configuration;
 import cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint;
+import cn.net.connor.hozon.dao.query.change.breakPoint.BreakPointQuery;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Configuration
+@Repository
 public interface HzBreakPointDao extends BasicDao<HzBreakPoint> {
     /**
      * 查找当前页断点信息数据
      * @return
      */
-    List<HzBreakPoint> selectAll( QueryBase queryBase);
+    List<HzBreakPoint> selectByQueryObject(BreakPointQuery query);
 
     /**
      * 查找所有断点信息总数据
