@@ -28,15 +28,17 @@ function loadData(projectUid) {
     if (!checkIsSelectProject(projectUid)) {
         return;
     }
-
-
+    let order=$("#orderRule").val();
+    log(order);
     // $("#getExcel").attr("href","/hozon/bomAllCfg/getExcel?projectUid="+projectUid);
-    $("#getExcel").attr("href", "/hozon/bomAllCfg/getExcel?projectUid=" + projectUid);
+    $("#getExcel").attr("href", "/hozon/bomAllCfg/getExcel?projectUid=" + projectUid+"&orderKey="+order);
+
     $.ajax({
         url: 'bomAllCfg/loadCfg0BomLineOfModel',
         type: 'GET',
         data: {
-            'bdf': projectUid
+            'bdf': projectUid,
+            'orderKey':order
         },
         success: function (myData) {
             fixTable(myData);

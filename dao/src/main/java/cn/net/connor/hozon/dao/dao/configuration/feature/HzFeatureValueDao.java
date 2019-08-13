@@ -10,7 +10,7 @@ import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzMaterielFeatureBean;
-import cn.net.connor.hozon.dao.query.feature.HzFeatureQuery;
+import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -151,5 +151,5 @@ public interface HzFeatureValueDao extends BasicDao<HzFeatureValue> {
      */
     List<HzFeatureValue> doSelectByDescAndProjectId(HzFeatureValue cfg);
 
-    HzFeatureValue selectByPrimaryKey(@Param("id") String id);
+    HzFeatureValue selectByPrimaryKey(@Param("puid") String puid);
 }

@@ -80,8 +80,8 @@ public class HzBomAllCfgController {
      */
     @RequestMapping("/loadCfg0BomLineOfModel")
     @ResponseBody
-    public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf) {
-        return hzBomAllCfgService.parse(bdf);
+    public JSONObject loadCfg0BomLineOfModel(@RequestParam String bdf,@RequestParam String orderKey) {
+        return hzBomAllCfgService.parse(bdf,orderKey);
     }
 
     /**
@@ -253,7 +253,7 @@ public class HzBomAllCfgController {
     }
 
     @RequestMapping("getExcel")
-    public ResponseEntity<byte[]> getExcel(String projectUid) throws IOException {
+    public ResponseEntity<byte[]> getExcel(String projectUid,String orderKey) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         Date date = new Date();
         String pattern = "yyyy-MM-dd HH：mm：ss";
@@ -261,7 +261,7 @@ public class HzBomAllCfgController {
         String dateStr = sdf.format(date);
         String fileName = "全配置BOM一级清单"+dateStr+".xlsx";
 
-        SXSSFWorkbook hssfWorkbook = hzBomAllCfgService.getWorkBook(projectUid);
+        SXSSFWorkbook hssfWorkbook = hzBomAllCfgService.getWorkBook(projectUid,orderKey);
 
         try {
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);

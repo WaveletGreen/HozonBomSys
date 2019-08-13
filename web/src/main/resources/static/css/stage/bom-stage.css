@@ -30,18 +30,20 @@
     border: 1px solid #CCC;
     color: #000000;
     font-size: 14px;
-    padding: 2px !important;
+    padding: 4px !important;
     border: 1px solid transparent !important;
 }
 .tableNormalStyle tr:first-child {
     padding: 2px !important;
 }
-.table-striped>tbody>tr:nth-of-type(odd){background-color: #b9bbbe}
-.table-hover>tbody>tr:hover{background-color: #bce8f1}
+.table-striped>tbody>tr:nth-of-type(odd){background-color: #ffffff
+}
+.table-hover>tbody>tr:hover{background-color: #f1efb8
+}
 .tableNormalStyle tr {
 }
 .table-striped>tbody>tr:nth-of-type(even){
-    background-color: #ced4da;
+    background-color: rgba(199, 216, 232, 0.46);
 }
 .tableNormalStyle tr td {
     /* 	调整单个单元格的大小 */

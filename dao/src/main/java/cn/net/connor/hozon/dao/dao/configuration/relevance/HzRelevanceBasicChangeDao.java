@@ -28,7 +28,7 @@ public interface HzRelevanceBasicChangeDao {
 
     HzRelevanceBasicChange selectByLatestBySrc(@Param("srcId") Long srcId);
 
-    HzRelevanceBasicChange selectByVersion(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor);
+    HzRelevanceBasicChange selectLastVersion(HzRelevanceBasicChange hzRelevanceBasicChangeQueryBefor);
 
     HzRelevanceBasicChange selectMaxVersion(HzRelevanceBasicChange hzRelevanceBasicChange);
 }

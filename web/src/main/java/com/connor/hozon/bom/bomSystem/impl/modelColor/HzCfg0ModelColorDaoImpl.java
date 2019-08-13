@@ -44,7 +44,7 @@ public class HzCfg0ModelColorDaoImpl extends BasicDaoImpl<HzCfg0ModelColor> impl
     @Override
     public List<HzCfg0ModelColor> selectAll(String projectPuid) {
         return baseSQLUtil.executeQueryByPass(COLOR, projectPuid,
-                clzName + ".selectAll");
+                clzName + ".selectByQueryObject");
     }
 
     @Override

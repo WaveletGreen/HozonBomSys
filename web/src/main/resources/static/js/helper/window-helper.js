@@ -3,12 +3,21 @@
  * This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
  * ALL RIGHTS RESERVED.
  */
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description:
  * @Date: Created in  2018/11/22 11:04
  * @Modified By:
  */
+
+/**
+ * 作为dialog弹窗
+ * @type {boolean}
+ */
+const asForDialog = true;
+
+
 /**
  * 防止弹窗出来造成的页面卡死
  */
@@ -37,10 +46,16 @@ function activeTabBodyReset() {
     $('body', window.top.document).find('.modal-backdrop').remove();
     getActiveTab().undead();
 }
+
 /**
  *即重置body的样式，又刷新页面
  */
 function activeTabBodyRefresh() {
     activeTabBodyReset();
     getActiveTab().doQuery();
+}
+
+/**是否作为弹窗出现*/
+function isAsForDialog() {
+    return asForDialog;
 }

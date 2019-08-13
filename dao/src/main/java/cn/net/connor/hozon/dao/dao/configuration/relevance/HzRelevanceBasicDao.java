@@ -9,8 +9,8 @@ package cn.net.connor.hozon.dao.dao.configuration.relevance;
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
-import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQuery;
-import cn.net.connor.hozon.dao.query.relevance.HzRelevanceQueryResult;
+import cn.net.connor.hozon.dao.query.configuration.relevance.HzRelevanceQuery;
+import cn.net.connor.hozon.dao.query.configuration.relevance.HzRelevanceQueryResult;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

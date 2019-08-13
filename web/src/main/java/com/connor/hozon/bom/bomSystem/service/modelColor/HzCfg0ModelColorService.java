@@ -109,7 +109,7 @@ public class HzCfg0ModelColorService {
 //        Date date = new Date();
 //        User user = UserInfo.getUser();
 //        Map<String, Object> result = new HashMap<>();
-//        List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectAll(projectPuid);
+//        List<HzCfg0ModelColor> colorSet = hzCfg0ModelColorDao.selectByQueryObject(projectPuid);
 //        List<HzFeature> families = hzFeatureDao.selectByProjectIdWithOrderMainId(projectPuid);
 //        List<HzFeature> familiesNew = hzFeatureDao.selectByProjectIdWithOrderPuid(projectPuid);
 //        /**

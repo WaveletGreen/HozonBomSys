@@ -11,7 +11,7 @@ import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzMaterielFeatureBean;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
-import cn.net.connor.hozon.dao.query.feature.HzFeatureQuery;
+import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import cn.net.connor.hozon.common.util.DateStringHelper;

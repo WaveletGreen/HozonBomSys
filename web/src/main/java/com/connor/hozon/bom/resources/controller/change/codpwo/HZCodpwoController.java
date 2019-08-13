@@ -1,11 +1,13 @@
 package com.connor.hozon.bom.resources.controller.change.codpwo;
 
-import cn.net.connor.hozon.common.entity.QueryBase;
+import cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint;
+import cn.net.connor.hozon.dao.query.change.breakPoint.BreakPointQuery;
 import com.connor.hozon.bom.resources.service.change.HzBreakPointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,13 +21,13 @@ public class HZCodpwoController {
 
     @RequestMapping(value = "codpwoFromList" ,method = RequestMethod.GET)
     @ResponseBody
-    public Map<String,Object> getCodpwoFromList(QueryBase queryBase){
+    public Map<String,Object> getCodpwoFromList(BreakPointQuery queryBase){
         Map<String,Object> result=new HashMap<>();
         queryBase.setSort(HzBreakPoint.reflectToDBField(queryBase.getSort()));
-        List<HzBreakPoint>  list=hzBreakPointService.selectAll(queryBase);
-        //int totalCount = hzBreakPointService.selectAll().size();
+        List<HzBreakPoint>  list=hzBreakPointService.selectByQueryObject(queryBase);
+        //int totalCount = hzBreakPointService.selectByQueryObject().size();
         result.put("result",list);//当前页
-        result.put("totalCount",hzBreakPointService.doTellMeHowManyOfIt());//断点信息总数
+        result.put("totalCount",hzBreakPointService.count());//断点信息总数
         return result;
     }
 

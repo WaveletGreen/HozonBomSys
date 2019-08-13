@@ -13,7 +13,7 @@ import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
-import cn.net.connor.hozon.dao.query.feature.HzFeatureQuery;
+import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;

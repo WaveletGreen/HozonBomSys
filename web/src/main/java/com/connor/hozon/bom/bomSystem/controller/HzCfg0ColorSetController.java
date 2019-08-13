@@ -69,10 +69,10 @@ public class HzCfg0ColorSetController {
      *                  采用POST方法回传的是普通JSON对象包含{@link QueryBase}的各个字段即可
      * @return 一组颜色对象
      */
-//    @RequestMapping(value = "/selectAll", method = RequestMethod.POST)
+//    @RequestMapping(value = "/selectByQueryObject", method = RequestMethod.POST)
 //    @ResponseBody
-//    public Map<String, Object> selectAll(QueryBase queryBase) {
-//        return colorSerService.selectAll(queryBase);
+//    public Map<String, Object> selectByQueryObject(QueryBase queryBase) {
+//        return colorSerService.selectByQueryObject(queryBase);
 //    }
     @RequestMapping(value = "/queryAll2", method = RequestMethod.POST)
     @ResponseBody

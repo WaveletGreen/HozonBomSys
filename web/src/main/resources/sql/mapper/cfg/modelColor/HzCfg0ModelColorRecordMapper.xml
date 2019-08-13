@@ -175,8 +175,7 @@
     <select id="selectByPuids" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor"
             resultMap="ResultMapWithColorJudge">
         select
-        <include refid="Base_Column_List"/>,
-        <include refid="Color_Is_Multiply"/>
+       *
         from
         HZ_CFG0_MODEL_COLOR_RECORD t
         where

@@ -7,6 +7,10 @@
 $(document).ready(
     // $("#queryColorSet").click(function () {
     (function () {
+        //手动刷新按钮
+        $("#refresh").click(function () {
+            loadData();
+        });
         loadData();
     })
 );
@@ -44,7 +48,6 @@ function loadData() {
                 formatter: function (value, row, index) {
                     var options = $table.bootstrapTable('getOptions');
                     return options.pageSize * (options.pageNumber - 1) + index + 1;
-
                 }
             },
             // {
@@ -54,15 +57,15 @@ function loadData() {
             // {field: 'pid', title: '主键', sortable: true, sortOrder: 'asc',},
             // {field: 'pPackno', title: '数据包号', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
             // {field: 'pItem', title: '行号', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
-            {field: 'pTcecn', title: 'TC-ECN', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
-            {field: 'pEcn', title: 'SAP-ECN', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
-            {field: 'pDate', title: '断点日期', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
-            {field: 'pOecn', title: '断点前ECN', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
-            {field: 'pOdate', title: '前ECN结束日期', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
-            {field: 'pVin', title: '断点起始vin', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
-            {field: 'pUser', title: '断点执行工号', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
-            {field: 'pCdate', title: '断点处理日期', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
-            {field: 'pCtime', title: '断点处理时间', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
+            {field: 'tcEcn', title: 'TC-ECN', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
+            {field: 'ecn', title: 'SAP-ECN', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
+            {field: 'breakDate', title: '断点日期', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
+            {field: 'preEcn', title: '断点前ECN', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
+            {field: 'preEcnFinishDate', title: '前ECN结束日期', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
+            {field: 'startVin', title: '断点起始vin', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
+            {field: 'executeUserNo', title: '断点执行工号', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
+            {field: 'breakHandleDate', title: '断点处理日期', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
+            {field: 'breakHandlerTime', title: '断点处理时间', align: 'center', valign: 'middle', sortable: true, sortOrder: 'asc',},
             {
                 field: 'feedbackTime',
                 title: '断点回传到BOM系统时间',
@@ -78,9 +81,6 @@ function loadData() {
 
         ]
     });
-    //$table.bootstrapTable('hideColumn', 'pid');
-    // $('div').hasClass('pagination').css('display','block');
-
     //修改——转换日期格式(时间戳转换为datetime格式)
     function changeDateFormat(cellval) {
         if (cellval != null) {

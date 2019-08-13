@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.resources.mybatis.change.breakpoint.HzBreakPointDao">
+<mapper namespace="cn.net.connor.hozon.dao.dao.change.breakpoint.HzBreakPointDao">
     <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
         <id column="PID" jdbcType="DECIMAL" property="pid"/>
-        <result column="P_PACKNO" jdbcType="VARCHAR" property="pPackno"/>
-        <result column="P_ITEM" jdbcType="VARCHAR" property="pItem"/>
-        <result column="P_TCECN" jdbcType="VARCHAR" property="pTcecn"/>
-        <result column="P_ECN" jdbcType="VARCHAR" property="pEcn"/>
-        <result column="P_DATE" jdbcType="VARCHAR" property="pDate"/>
-        <result column="P_OECN" jdbcType="VARCHAR" property="pOecn"/>
-        <result column="P_ODATE" jdbcType="VARCHAR" property="pOdate"/>
-        <result column="P_VIN" jdbcType="VARCHAR" property="pVin"/>
-        <result column="P_USER" jdbcType="VARCHAR" property="pUser"/>
-        <result column="P_CDATE" jdbcType="VARCHAR" property="pCdate"/>
-        <result column="P_CTIME" jdbcType="VARCHAR" property="pCtime"/>
-        <result column="P_RESERVE1" jdbcType="VARCHAR" property="pReserve1"/>
-        <result column="P_RESERVE2" jdbcType="VARCHAR" property="pReserve2"/>
-        <result column="P_RESERVE3" jdbcType="VARCHAR" property="pReserve3"/>
-        <result column="P_RESERVE4" jdbcType="VARCHAR" property="pReserve4"/>
-        <result column="P_RESERVE5" jdbcType="VARCHAR" property="pReserve5"/>
+        <result column="P_PACKNO" jdbcType="VARCHAR" property="packNo"/>
+        <result column="P_ITEM" jdbcType="VARCHAR" property="item"/>
+        <result column="P_TCECN" jdbcType="VARCHAR" property="tcEcn"/>
+        <result column="P_ECN" jdbcType="VARCHAR" property="ecn"/>
+        <result column="P_DATE" jdbcType="VARCHAR" property="breakDate"/>
+        <result column="P_OECN" jdbcType="VARCHAR" property="preEcn"/>
+        <result column="P_ODATE" jdbcType="VARCHAR" property="preEcnFinishDate"/>
+        <result column="P_VIN" jdbcType="VARCHAR" property="startVin"/>
+        <result column="P_USER" jdbcType="VARCHAR" property="executeUserNo"/>
+        <result column="P_CDATE" jdbcType="VARCHAR" property="breakHandleDate"/>
+        <result column="P_CTIME" jdbcType="VARCHAR" property="breakHandlerTime"/>
+        <result column="P_RESERVE1" jdbcType="VARCHAR" property="reserve1"/>
+        <result column="P_RESERVE2" jdbcType="VARCHAR" property="reserve2"/>
+        <result column="P_RESERVE3" jdbcType="VARCHAR" property="reserve3"/>
+        <result column="P_RESERVE4" jdbcType="VARCHAR" property="reserve4"/>
+        <result column="P_RESERVE5" jdbcType="VARCHAR" property="reserve5"/>
         <result column="FEEDBACK_TIME" jdbcType="TIMESTAMP" property="feedbackTime"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -33,7 +33,8 @@
     </select>
 
     <!--分页：当前页数据-->
-    <select id="selectAll" parameterType="cn.net.connor.hozon.common.entity.QueryBase" resultMap="BaseResultMap">
+    <select id="selectByQueryObject" parameterType="cn.net.connor.hozon.dao.query.change.breakPoint.BreakPointQuery"
+            resultMap="BaseResultMap">
         <!--select
         <include refid="Base_Column_List"/>
         from HZ_BREAKPOINT ORDER BY PID-->
@@ -44,21 +45,37 @@
         ( select
         <include refid="Base_Column_List"/>,
         ROWNUM as rowno
-        from HZ_BREAKPOINT where 1=1
-        <if test="param.limit!=null and  param.page!=null">
-            and ROWNUM &lt;= ${param.page}*${param.limit}
-        </if>
+        from HZ_BREAKPOINT
+        <where>
+            1=1
+            <if test="P_TCECN!=null and P_TCECN !='' ">
+                and P_TCECN=#{P_TCECN}
+            </if>
+            <if test="P_ECN!=null and P_ECN !=''">
+                and P_ECN=#{P_ECN}
+            </if>
+            <if test="P_USER!=null and P_USER !=''">
+                and P_USER=#{P_USER}
+            </if>
+            -- 精确到天
+            <if test="P_CTIME!=null and P_CTIME !=''">
+                and trunc(FEEDBACK_TIME,'dd')=to_date(#{P_CTIME},'yyyy-mm-dd')
+            </if>
+            <if test="limit!=null and  page!=null">
+                and ROWNUM &lt;= ${page}*${limit}
+            </if>
+        </where>
         ) temp
-        <if test="param.offset!=null">
-            where temp.rowno &gt;= ${param.offset}+1
+        <if test="offset!=null">
+            where temp.rowno &gt;= ${offset}+1
         </if>
-        <if test="param.sort!=null">
-            order by ${param.sort}
+        <if test="sort!=null">
+            order by ${sort}
         </if>
-        <if test="param.order!=null">
-            ${param.order}
+        <if test="order!=null">
+            ${order}
         </if>
-        <if test="param.order==null">
+        <if test="order==null">
             ASC
         </if>
     </select>
@@ -80,12 +97,12 @@
       P_RESERVE1, P_RESERVE2, P_RESERVE3, 
       P_RESERVE4, P_RESERVE5, FEEDBACK_TIME
       )
-    values (#{pid,jdbcType=DECIMAL}, #{pPackno,jdbcType=VARCHAR}, #{pItem,jdbcType=VARCHAR}, 
-      #{pTcecn,jdbcType=VARCHAR}, #{pEcn,jdbcType=VARCHAR}, #{pDate,jdbcType=VARCHAR}, 
-      #{pOecn,jdbcType=VARCHAR}, #{pOdate,jdbcType=VARCHAR}, #{pVin,jdbcType=VARCHAR}, 
-      #{pUser,jdbcType=VARCHAR}, #{pCdate,jdbcType=VARCHAR}, #{pCtime,jdbcType=VARCHAR}, 
-      #{pReserve1,jdbcType=VARCHAR}, #{pReserve2,jdbcType=VARCHAR}, #{pReserve3,jdbcType=VARCHAR}, 
-      #{pReserve4,jdbcType=VARCHAR}, #{pReserve5,jdbcType=VARCHAR}, #{feedbackTime,jdbcType=TIMESTAMP}
+    values (#{pid,jdbcType=DECIMAL}, #{packNo,jdbcType=VARCHAR}, #{item,jdbcType=VARCHAR},
+      #{tcEcn,jdbcType=VARCHAR}, #{ecn,jdbcType=VARCHAR}, #{breakDate,jdbcType=VARCHAR},
+      #{preEcn,jdbcType=VARCHAR}, #{preEcnFinishDate,jdbcType=VARCHAR}, #{startVin,jdbcType=VARCHAR},
+      #{executeUserNo,jdbcType=VARCHAR}, #{breakHandleDate,jdbcType=VARCHAR}, #{breakHandlerTime,jdbcType=VARCHAR},
+      #{reserve1,jdbcType=VARCHAR}, #{reserve2,jdbcType=VARCHAR}, #{reserve3,jdbcType=VARCHAR},
+      #{reserve4,jdbcType=VARCHAR}, #{reserve5,jdbcType=VARCHAR}, #{feedbackTime,jdbcType=TIMESTAMP}
       )
   </insert>
     <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
@@ -94,52 +111,52 @@
             <if test="pid != null">
                 PID,
             </if>
-            <if test="pPackno != null">
+            <if test="packNo != null">
                 P_PACKNO,
             </if>
-            <if test="pItem != null">
+            <if test="item != null">
                 P_ITEM,
             </if>
-            <if test="pTcecn != null">
+            <if test="tcEcn != null">
                 P_TCECN,
             </if>
-            <if test="pEcn != null">
+            <if test="ecn != null">
                 P_ECN,
             </if>
-            <if test="pDate != null">
+            <if test="breakDate != null">
                 P_DATE,
             </if>
-            <if test="pOecn != null">
+            <if test="preEcn != null">
                 P_OECN,
             </if>
-            <if test="pOdate != null">
+            <if test="preEcnFinishDate != null">
                 P_ODATE,
             </if>
-            <if test="pVin != null">
+            <if test="startVin != null">
                 P_VIN,
             </if>
-            <if test="pUser != null">
+            <if test="executeUserNo != null">
                 P_USER,
             </if>
-            <if test="pCdate != null">
+            <if test="breakHandleDate != null">
                 P_CDATE,
             </if>
-            <if test="pCtime != null">
+            <if test="breakHandlerTime != null">
                 P_CTIME,
             </if>
-            <if test="pReserve1 != null">
+            <if test="reserve1 != null">
                 P_RESERVE1,
             </if>
-            <if test="pReserve2 != null">
+            <if test="reserve2 != null">
                 P_RESERVE2,
             </if>
-            <if test="pReserve3 != null">
+            <if test="reserve3 != null">
                 P_RESERVE3,
             </if>
-            <if test="pReserve4 != null">
+            <if test="reserve4 != null">
                 P_RESERVE4,
             </if>
-            <if test="pReserve5 != null">
+            <if test="reserve5 != null">
                 P_RESERVE5,
             </if>
             <if test="feedbackTime != null">
@@ -150,53 +167,53 @@
             <if test="pid != null">
                 #{pid,jdbcType=DECIMAL},
             </if>
-            <if test="pPackno != null">
-                #{pPackno,jdbcType=VARCHAR},
+            <if test="packNo != null">
+                #{packNo,jdbcType=VARCHAR},
             </if>
-            <if test="pItem != null">
-                #{pItem,jdbcType=VARCHAR},
+            <if test="item != null">
+                #{item,jdbcType=VARCHAR},
             </if>
-            <if test="pTcecn != null">
-                #{pTcecn,jdbcType=VARCHAR},
+            <if test="tcEcn != null">
+                #{tcEcn,jdbcType=VARCHAR},
             </if>
-            <if test="pEcn != null">
-                #{pEcn,jdbcType=VARCHAR},
+            <if test="ecn != null">
+                #{ecn,jdbcType=VARCHAR},
             </if>
-            <if test="pDate != null">
-                #{pDate,jdbcType=VARCHAR},
+            <if test="breakDate != null">
+                #{breakDate,jdbcType=VARCHAR},
             </if>
-            <if test="pOecn != null">
-                #{pOecn,jdbcType=VARCHAR},
+            <if test="preEcn != null">
+                #{preEcn,jdbcType=VARCHAR},
             </if>
-            <if test="pOdate != null">
-                #{pOdate,jdbcType=VARCHAR},
+            <if test="preEcnFinishDate != null">
+                #{preEcnFinishDate,jdbcType=VARCHAR},
             </if>
-            <if test="pVin != null">
-                #{pVin,jdbcType=VARCHAR},
+            <if test="startVin != null">
+                #{startVin,jdbcType=VARCHAR},
             </if>
-            <if test="pUser != null">
-                #{pUser,jdbcType=VARCHAR},
+            <if test="executeUserNo != null">
+                #{executeUserNo,jdbcType=VARCHAR},
             </if>
-            <if test="pCdate != null">
-                #{pCdate,jdbcType=VARCHAR},
+            <if test="breakHandleDate != null">
+                #{breakHandleDate,jdbcType=VARCHAR},
             </if>
-            <if test="pCtime != null">
-                #{pCtime,jdbcType=VARCHAR},
+            <if test="breakHandlerTime != null">
+                #{breakHandlerTime,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve1 != null">
-                #{pReserve1,jdbcType=VARCHAR},
+            <if test="reserve1 != null">
+                #{reserve1,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve2 != null">
-                #{pReserve2,jdbcType=VARCHAR},
+            <if test="reserve2 != null">
+                #{reserve2,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve3 != null">
-                #{pReserve3,jdbcType=VARCHAR},
+            <if test="reserve3 != null">
+                #{reserve3,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve4 != null">
-                #{pReserve4,jdbcType=VARCHAR},
+            <if test="reserve4 != null">
+                #{reserve4,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve5 != null">
-                #{pReserve5,jdbcType=VARCHAR},
+            <if test="reserve5 != null">
+                #{reserve5,jdbcType=VARCHAR},
             </if>
             <if test="feedbackTime != null">
                 #{feedbackTime,jdbcType=TIMESTAMP},
@@ -206,53 +223,53 @@
     <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
         update HZ_BREAKPOINT
         <set>
-            <if test="pPackno != null">
-                P_PACKNO = #{pPackno,jdbcType=VARCHAR},
+            <if test="packNo != null">
+                P_PACKNO = #{packNo,jdbcType=VARCHAR},
             </if>
-            <if test="pItem != null">
-                P_ITEM = #{pItem,jdbcType=VARCHAR},
+            <if test="item != null">
+                P_ITEM = #{item,jdbcType=VARCHAR},
             </if>
-            <if test="pTcecn != null">
-                P_TCECN = #{pTcecn,jdbcType=VARCHAR},
+            <if test="tcEcn != null">
+                P_TCECN = #{tcEcn,jdbcType=VARCHAR},
             </if>
-            <if test="pEcn != null">
-                P_ECN = #{pEcn,jdbcType=VARCHAR},
+            <if test="ecn != null">
+                P_ECN = #{ecn,jdbcType=VARCHAR},
             </if>
-            <if test="pDate != null">
-                P_DATE = #{pDate,jdbcType=VARCHAR},
+            <if test="breakDate != null">
+                P_DATE = #{breakDate,jdbcType=VARCHAR},
             </if>
-            <if test="pOecn != null">
-                P_OECN = #{pOecn,jdbcType=VARCHAR},
+            <if test="preEcn != null">
+                P_OECN = #{preEcn,jdbcType=VARCHAR},
             </if>
-            <if test="pOdate != null">
-                P_ODATE = #{pOdate,jdbcType=VARCHAR},
+            <if test="preEcnFinishDate != null">
+                P_ODATE = #{preEcnFinishDate,jdbcType=VARCHAR},
             </if>
-            <if test="pVin != null">
-                P_VIN = #{pVin,jdbcType=VARCHAR},
+            <if test="startVin != null">
+                P_VIN = #{startVin,jdbcType=VARCHAR},
             </if>
-            <if test="pUser != null">
-                P_USER = #{pUser,jdbcType=VARCHAR},
+            <if test="executeUserNo != null">
+                P_USER = #{executeUserNo,jdbcType=VARCHAR},
             </if>
-            <if test="pCdate != null">
-                P_CDATE = #{pCdate,jdbcType=VARCHAR},
+            <if test="breakHandleDate != null">
+                P_CDATE = #{breakHandleDate,jdbcType=VARCHAR},
             </if>
-            <if test="pCtime != null">
-                P_CTIME = #{pCtime,jdbcType=VARCHAR},
+            <if test="breakHandlerTime != null">
+                P_CTIME = #{breakHandlerTime,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve1 != null">
-                P_RESERVE1 = #{pReserve1,jdbcType=VARCHAR},
+            <if test="reserve1 != null">
+                P_RESERVE1 = #{reserve1,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve2 != null">
-                P_RESERVE2 = #{pReserve2,jdbcType=VARCHAR},
+            <if test="reserve2 != null">
+                P_RESERVE2 = #{reserve2,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve3 != null">
-                P_RESERVE3 = #{pReserve3,jdbcType=VARCHAR},
+            <if test="reserve3 != null">
+                P_RESERVE3 = #{reserve3,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve4 != null">
-                P_RESERVE4 = #{pReserve4,jdbcType=VARCHAR},
+            <if test="reserve4 != null">
+                P_RESERVE4 = #{reserve4,jdbcType=VARCHAR},
             </if>
-            <if test="pReserve5 != null">
-                P_RESERVE5 = #{pReserve5,jdbcType=VARCHAR},
+            <if test="reserve5 != null">
+                P_RESERVE5 = #{reserve5,jdbcType=VARCHAR},
             </if>
             <if test="feedbackTime != null">
                 FEEDBACK_TIME = #{feedbackTime,jdbcType=TIMESTAMP},
@@ -262,22 +279,22 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint">
     update HZ_BREAKPOINT
-    set P_PACKNO = #{pPackno,jdbcType=VARCHAR},
-      P_ITEM = #{pItem,jdbcType=VARCHAR},
-      P_TCECN = #{pTcecn,jdbcType=VARCHAR},
-      P_ECN = #{pEcn,jdbcType=VARCHAR},
-      P_DATE = #{pDate,jdbcType=VARCHAR},
-      P_OECN = #{pOecn,jdbcType=VARCHAR},
-      P_ODATE = #{pOdate,jdbcType=VARCHAR},
-      P_VIN = #{pVin,jdbcType=VARCHAR},
-      P_USER = #{pUser,jdbcType=VARCHAR},
-      P_CDATE = #{pCdate,jdbcType=VARCHAR},
-      P_CTIME = #{pCtime,jdbcType=VARCHAR},
-      P_RESERVE1 = #{pReserve1,jdbcType=VARCHAR},
-      P_RESERVE2 = #{pReserve2,jdbcType=VARCHAR},
-      P_RESERVE3 = #{pReserve3,jdbcType=VARCHAR},
-      P_RESERVE4 = #{pReserve4,jdbcType=VARCHAR},
-      P_RESERVE5 = #{pReserve5,jdbcType=VARCHAR},
+    set P_PACKNO = #{packNo,jdbcType=VARCHAR},
+      P_ITEM = #{item,jdbcType=VARCHAR},
+      P_TCECN = #{tcEcn,jdbcType=VARCHAR},
+      P_ECN = #{ecn,jdbcType=VARCHAR},
+      P_DATE = #{breakDate,jdbcType=VARCHAR},
+      P_OECN = #{preEcn,jdbcType=VARCHAR},
+      P_ODATE = #{preEcnFinishDate,jdbcType=VARCHAR},
+      P_VIN = #{startVin,jdbcType=VARCHAR},
+      P_USER = #{executeUserNo,jdbcType=VARCHAR},
+      P_CDATE = #{breakHandleDate,jdbcType=VARCHAR},
+      P_CTIME = #{breakHandlerTime,jdbcType=VARCHAR},
+      P_RESERVE1 = #{reserve1,jdbcType=VARCHAR},
+      P_RESERVE2 = #{reserve2,jdbcType=VARCHAR},
+      P_RESERVE3 = #{reserve3,jdbcType=VARCHAR},
+      P_RESERVE4 = #{reserve4,jdbcType=VARCHAR},
+      P_RESERVE5 = #{reserve5,jdbcType=VARCHAR},
       FEEDBACK_TIME = #{feedbackTime,jdbcType=TIMESTAMP}
     where PID = #{pid,jdbcType=DECIMAL}
   </update>

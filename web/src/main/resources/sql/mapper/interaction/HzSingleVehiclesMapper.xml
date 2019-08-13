@@ -86,9 +86,11 @@
         <result column="p_Color_code" jdbcType="VARCHAR" property="colorCode"/>
         <!--颜色名称-->
         <result column="p_Color_Name" jdbcType="VARCHAR" property="colorName"/>
+        <!--状态-->
+        <result column="SVS_STATUS" jdbcType="VARCHAR" property="status"/>
     </resultMap>
     <sql id="Base_Column_List">
-    ID,
+    t.ID,
     SVL_PROJECT_UID,
     SVL_DMB_ID,
     SVL_INNER_COLOR_CODE,
@@ -125,7 +127,8 @@
     p_platform_code,
     p_platform_name,
     p_vehicle_code,
-    p_vehicle_name
+    p_vehicle_name,
+    svs.STATUS as SVS_STATUS
   </sql>
 
 
@@ -133,7 +136,7 @@
     <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from HZ_SINGLE_VEHICLES
+        from HZ_SINGLE_VEHICLES t
         where ID = #{id,jdbcType=DECIMAL}
     </select>
 
@@ -174,6 +177,7 @@
         on t4.puid = t3.p_vehicle_pertain_to_platform
         left join Hz_Brand_Record t5
         on t5.puid = t4.p_pertain_to_brand_puid
+        left join SINGLE_VEHICLE_STATUS svs on svs.SVG_ID=t.ID
         <where>
             <if test="svlProjectUid!=null">
                 t.svl_project_uid=#{svlProjectUid,jdbcType=VARCHAR}

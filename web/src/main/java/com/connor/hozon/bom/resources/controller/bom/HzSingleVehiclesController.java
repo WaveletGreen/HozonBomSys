@@ -1,5 +1,8 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import cn.net.connor.hozon.common.setting.CommonSetting;
+import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
+import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleBomRelation;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
+import org.thymeleaf.util.ListUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -122,6 +125,7 @@ public class HzSingleVehiclesController extends BaseController {
                 _res.put("svlInnerColorCode", dto.getSvlInnerColorCode());
                 _res.put("svlInnerColorName", dto.getSvlInnerColorName());
                 _res.put("svlMaterialBasicInfo", dto.getSvlMaterialBasicInfo());
+                _res.put("checkStatus", dto.getCheckStatus());//检查状态
                 _res.put("vehicleName", dto.getVehicleName());
                 _res.put("vehicleCode", dto.getVehicleCode());
                 _res.put("svlMaterialCode", dto.getSvlMaterialCode());
@@ -226,7 +230,7 @@ public class HzSingleVehiclesController extends BaseController {
     }
 
 
-    @RequestMapping(value = "bom/refresh", method = RequestMethod.POST)
+    @RequestMapping(value = "bom/refresh", method = RequestMethod.GET)
     public void refreshSingleVehiclesBOM(String projectId, HttpServletResponse response) {
         WriteResultRespDTO respDTO = hzSingleVehiclesBomServices.analysisSingleVehicles(projectId);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
@@ -358,11 +362,49 @@ public class HzSingleVehiclesController extends BaseController {
         return hzSingleVehiclesServices.sendSap(hzSingleVehicles);
     }
 
+    /**
+     * 从删除操作通知到SAP
+     * @param hzSingleVehicles
+     * @return
+     */
     @RequestMapping("deleteSap")
     @ResponseBody
     public JSONObject deleteSap(@RequestBody List<HzSingleVehicles> hzSingleVehicles) {
         return hzSingleVehiclesServices.deleteSap(hzSingleVehicles);
     }
 
+    /**
+     * 检查单车2Y与对应的特性值的对应关系
+     *
+     * @param projectId
+     * @param vehiclesId
+     * @param model
+     * @return
+     */
+    @RequestMapping("checkStatus")
+    public String checkStatus(String projectId, Long vehiclesId, Model model) {
+        List<SingleVehicleBomRelation> list = hzSingleVehiclesServices.checkStatus(projectId, vehiclesId).getRel();
+        if (ListUtils.isEmpty(list)) {
+            model.addAttribute(CommonSetting.STATUS_FIELD, false);
+            model.addAttribute(CommonSetting.ERROR_FIELD, "查询不到单车配置信息，需要重新生成单车数据");
+        } else {
+            model.addAttribute(CommonSetting.STATUS_FIELD, true);
+            model.addAttribute(CommonSetting.RESULT_DATA, list);
+        }
+        return "bikeBom/checkStatus";
+    }
 
+    /**
+     * 方便重新检查某个项目的所有单车状态的前端调用API
+     * @param projectId
+     * @return
+     */
+    @RequestMapping("refreshProjectSingleVehicleStatus")
+    @ResponseBody
+    public String refreshProjectSingleStatus(String projectId) {
+        //单车信息
+        List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesServices.selectByProjectUid(projectId);
+        hzSingleVehiclesServices.postCheck(hzSingleVehicles,projectId);
+        return "重新检查成功";
+    }
 }
