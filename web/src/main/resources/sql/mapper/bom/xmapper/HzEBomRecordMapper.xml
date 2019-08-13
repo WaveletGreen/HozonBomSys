@@ -434,6 +434,58 @@
         PUID = #{puid,jdbcType=VARCHAR}
     </update>
 
+    <!--按照ID和相同父更新全部相同子件属性-->
+    <update id="HzEbomRecordDAOImpl_updateAllChild" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord">
+        update HZ_BOM_LINE_RECORD
+        <set>
+            P_UPDATE_TIME =sysdate,
+            P_EBOM_STATUS = 2,
+            <if test="fna != null">
+                P_FNA_INFO = #{fna,jdbcType=VARCHAR},
+            </if>
+            <if test="pInOutSideFlag != null">
+                P_IN_OUT_SIDE_FLAG = #{pInOutSideFlag,jdbcType=INTEGER},
+            </if>
+            <if test="pUpc != null">
+                P_UPC = #{pUpc,jdbcType=VARCHAR},
+            </if>
+            <if test="pFnaDesc != null">
+                P_FNA_DESC = #{pFnaDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="pUpdateName != null">
+                P_UPDATE_NAME = #{pUpdateName,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                P_NUMBER = #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="colorPart != null">
+                P_COLOR_PART = #{colorPart,jdbcType=INTEGER},
+            </if>
+            <if test="vehNum != null">
+                P_VEH_NUM = #{vehNum,jdbcType=VARCHAR},
+            </if>
+            <if test="sparePart != null">
+                P_SPARE_PART = #{sparePart,jdbcType=VARCHAR},
+            </if>
+            <if test="sparePartNum != null">
+                P_SPARE_PART_NUM = #{sparePartNum,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where
+        P_BOM_DIGIFAX_ID = (select puid from Hz_Bom_Main_Record  where p_cfg0_of_which_project_puid=#{projectId,jdbcType=VARCHAR})
+        and
+        P_BOM_LINE_ID = (SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD WHERE PUID = #{puid,jdbcType=VARCHAR})
+        and
+        P_PARENT_UID IN (
+        SELECT PUID FROM HZ_BOM_LINE_RECORD WHERE P_BOM_LINE_ID = (
+        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD WHERE PUID =
+        (SELECT P_PARENT_UID FROM HZ_BOM_LINE_RECORD WHERE PUID = #{puid,jdbcType=VARCHAR})
+        )
+        )
+
+    </update>
+
+
     <!--导入excel文件到EBOM写的批量插入-->
     <insert id="HzEbomRecordDAOImpl_importList" parameterType="java.util.List">
         insert into HZ_BOM_LINE_RECORD

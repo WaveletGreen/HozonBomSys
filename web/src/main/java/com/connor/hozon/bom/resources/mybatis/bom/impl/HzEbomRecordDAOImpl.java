@@ -246,7 +246,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
 
     @Override
     public int update(HzEPLManageRecord record) {
-        return super.update("HzEbomRecordDAOImpl_update",record);
+        return super.update("HzEbomRecordDAOImpl_updateAllChild",record);
     }
     @Override
     public int insertList(List<HzEPLManageRecord> records,String tableName){
