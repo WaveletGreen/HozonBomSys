@@ -18,16 +18,16 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzColorModelService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.HzColorModelService;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.option.SpecialSettingOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
-import com.connor.hozon.bom.bomSystem.service.modelColor.HzColorLvl2ModelService;
+import com.connor.hozon.bom.bomSystem.service.modelColor.HzColorLvl2ModelServiceImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,10 +71,10 @@ public class HzCfg0ModelColorController {
     private HzMainConfigService hzMainConfigService;
     /***颜色车型详情服务层，精确到每一个配色方案的所有特性下的颜色*/
     @Autowired
-    private IHzColorModelService hzColorModelService;
+    private HzColorModelService hzColorModelService;
     /***二级配色方案服务层，不再使用二级配色方案*/
     @Autowired
-    private HzColorLvl2ModelService hzColorLvl2ModelService;
+    private HzColorLvl2ModelServiceImpl hzColorLvl2ModelService;
     /***EBOM服务*/
     @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
@@ -210,9 +210,9 @@ public class HzCfg0ModelColorController {
                 model1.setPuid(UUIDHelper.generateUpperUid());
                 model1.setModelUid(currentModel.getPuid());
                 model1.setCreateDate(now);
-                model1.setCreator(user.getUserName());
+                model1.setCreator(user.getUsername());
                 model1.setModifyDate(now);
-                model1.setModifier(user.getUserName());
+                model1.setModifier(user.getUsername());
                 //插入多余项
                 toInsert.add(model1);
             }
@@ -282,7 +282,7 @@ public class HzCfg0ModelColorController {
                 model.setModelUid(color.getPuid());
                 model.setColorUid(entry.getValue());
                 model.setCfgUid(entry.getKey());
-                model.setModifier(user.getUserName());
+                model.setModifier(user.getUsername());
                 model.setModifyDate(date);
                 if (!hzColorModelService.doUpdateColorModelWithCfg(model)) {
                     logger.error("更新" + color.getpCodeOfColorfulModel() + "配置项的颜色值" + model.getColorUid() + "失败");
@@ -475,8 +475,8 @@ public class HzCfg0ModelColorController {
                 hzCfg0ModelColorDetail.setCfgMainUid(modelColor.getpCfg0MainRecordOfMC());
                 hzCfg0ModelColorDetail.setCreateDate(date);
                 hzCfg0ModelColorDetail.setModifyDate(date);
-                hzCfg0ModelColorDetail.setCreator(user.getUserName());
-                hzCfg0ModelColorDetail.setModifier(user.getUserName());
+                hzCfg0ModelColorDetail.setCreator(user.getUsername());
+                hzCfg0ModelColorDetail.setModifier(user.getUsername());
 
                 if (mapOfFamilies.containsKey(entry.getKey())) {
                     hzCfg0ModelColorDetail.setColorUid(modelColor.getpColorUid());
@@ -825,7 +825,7 @@ public class HzCfg0ModelColorController {
 
                     if ((modelFromDb = hzColorLvl2ModelService.doSelectByModelAndFunctionLvl(model)) != null) {
                         model.setPuid(modelFromDb.getPuid());
-                        model.setModifier(user.getUserName());
+                        model.setModifier(user.getUsername());
                         model.setModifyDate(date);
                         try {
                             if (hzColorLvl2ModelService.doUpdateByPrimaryKey(model) <= 0) {
@@ -836,9 +836,9 @@ public class HzCfg0ModelColorController {
                         }
                     } else {
                         model.setCreateDate(date);
-                        model.setCreator(user.getUserName());
+                        model.setCreator(user.getUsername());
                         model.setModifyDate(date);
-                        model.setModifier(user.getUserName());
+                        model.setModifier(user.getUsername());
                         model.setPuid(UUIDHelper.generateUpperUid());
                         try {
                             if (hzColorLvl2ModelService.doInsert(model) <= 0) {

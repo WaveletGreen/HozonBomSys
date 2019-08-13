@@ -4,7 +4,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 
 /**

@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.mybatis.wokeList.impl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.query.HzWorkListBasicInfoQuery;
 import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord;

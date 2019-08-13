@@ -1,8 +1,8 @@
 package com.connor.hozon.bom.common.config.security;
 
-import com.connor.hozon.bom.sys.dao.UserDao;
+import cn.net.connor.hozon.dao.dao.sys.UserDao;
 
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;

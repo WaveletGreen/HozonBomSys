@@ -2,17 +2,17 @@ package com.connor.hozon.bom.sys.service;
 
 
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
-import com.connor.hozon.bom.common.base.dao.GenericDao;
+import cn.net.connor.hozon.dao.dao.sys.GenericDao;
 import cn.net.connor.hozon.common.entity.Page;
 import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.sys.dao.UserAssociateRoleDao;
-import com.connor.hozon.bom.sys.dao.UserDao;
+import cn.net.connor.hozon.dao.dao.sys.UserAssociateRoleDao;
+import cn.net.connor.hozon.dao.dao.sys.UserDao;
 
-import com.connor.hozon.bom.sys.entity.QueryUser;
-import com.connor.hozon.bom.sys.entity.User;
-import com.connor.hozon.bom.sys.entity.UserAssociateRole;
-import com.connor.hozon.bom.sys.entity.UserRole;
+import cn.net.connor.hozon.dao.query.sys.QueryUser;
+import cn.net.connor.hozon.dao.pojo.sys.User;
+import cn.net.connor.hozon.dao.pojo.sys.UserAssociateRole;
+import cn.net.connor.hozon.dao.pojo.sys.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

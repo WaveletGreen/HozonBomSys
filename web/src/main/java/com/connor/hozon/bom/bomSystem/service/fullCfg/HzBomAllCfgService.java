@@ -6,7 +6,12 @@
 
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
+import cn.net.connor.hozon.common.util.DateStringHelper;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.*;
 import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.*;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
@@ -16,17 +21,17 @@ import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
+import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgWithCfgQuery;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzProjectLibsServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzVehicleServiceImpl;
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
+import cn.net.connor.hozon.services.service.main.ProjectHelperService;
 import com.alibaba.fastjson.JSON;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.*;
-import cn.net.connor.hozon.common.util.DateStringHelper;
-import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
@@ -37,7 +42,6 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
-import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -52,9 +56,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -108,7 +109,7 @@ public class HzBomAllCfgService {
     @Autowired
     HzMainConfigService hzMainConfigService;
     @Autowired
-    ProjectHelper projectHelper;
+    ProjectHelperService projectHelperService;
 
     /**变更**/
     @Autowired
@@ -231,7 +232,7 @@ public class HzBomAllCfgService {
 //        }
         for (HzBomLineRecord hzBomLineRecord : lines) {
             JSONObject data = new JSONObject();
-            HzFullCfgWithCfg cfg = hzFullCfgWithCfgDao.selectByBomLineUidWithVersion(hzFullCfgMain.getId(), hzBomLineRecord.getPuid());
+            HzFullCfgWithCfg cfg = hzFullCfgWithCfgDao.selectByBomLineUidWithVersion(new HzFullCfgWithCfgQuery(hzFullCfgMain.getId(), hzBomLineRecord.getPuid()));
             data.put(selfDesc[0], cfg == null ? "" : cfg.getFlOperationType() == 1 ? "新增" : cfg.getFlOperationType() == 2 ? "更新" : cfg.getFlOperationType() == 0 ? "删除" : "新增");
             data.put(selfDesc[1], hzBomLineRecord.getpBomOfWhichDept() == null ? "" : hzBomLineRecord.getpBomOfWhichDept());
             data.put(selfDesc[2], hzBomLineRecord.getLineID() == null ? "" : hzBomLineRecord.getLineID());
@@ -386,10 +387,10 @@ public class HzBomAllCfgService {
      * @param mainRecord 主配置对象
      */
     public void initAddingPageParams(String projectPuid, HzCfg0ModelDetail detail, HzMainConfig mainRecord) {
-        projectHelper.doGetProjectTreeByProjectId(projectPuid);
-        detail.setpModelBrand(projectHelper.getBrand().getpBrandName());
-        detail.setpModelPlatform(projectHelper.getPlatform().getpPlatformName());
-        detail.setpModelVehicle(projectHelper.getVehicle().getpVehicleName());
+        projectHelperService.doGetProjectTreeByProjectId(projectPuid);
+        detail.setpModelBrand(projectHelperService.getBrand().getpBrandName());
+        detail.setpModelPlatform(projectHelperService.getPlatform().getpPlatformName());
+        detail.setpModelVehicle(projectHelperService.getVehicle().getpVehicleName());
         mainRecord.setId(hzMainConfigService.selectByProjectId(projectPuid).getId());
     }
 
@@ -525,8 +526,8 @@ public class HzBomAllCfgService {
         hzFullCfgMain1.setProjectUid(projectPuid);
         hzFullCfgMain1.setStatus(0);
         hzFullCfgMain1.setVersion("1.0");
-        hzFullCfgMain1.setCreator(user.getUserName());
-        hzFullCfgMain1.setUpdater(user.getUserName());
+        hzFullCfgMain1.setCreator(user.getUsername());
+        hzFullCfgMain1.setUpdater(user.getUsername());
         Long mainPuid = hzFullCfgMainDao.insertBackId(hzFullCfgMain1);
         return mainPuid;
     }
@@ -602,9 +603,9 @@ public class HzBomAllCfgService {
 //            //特性值id
 //            hzFullCfgWithCfg.setCfgCfg0Uid(hzCfg0Record.getId());
 //            //创建者
-//            hzFullCfgWithCfg.setFlCfgCreator(user.getUserName());
+//            hzFullCfgWithCfg.setFlCfgCreator(user.getUsername());
 //            //跟新人
-//            hzFullCfgWithCfg.setFlCfgUpdator(user.getUserName());
+//            hzFullCfgWithCfg.setFlCfgUpdator(user.getUsername());
 //            //版本
 //            hzFullCfgWithCfg.setFlCfgVersion(mainPuid);
 //            hzFullCfgWithCfgs.add(hzFullCfgWithCfg);
@@ -628,9 +629,9 @@ public class HzBomAllCfgService {
             //2Y级NAME
             hzFullCfgWithCfg.setFlCfgBomlineName(hzBomLineRecord.getpBomLinePartName());
             //创建者
-            hzFullCfgWithCfg.setFlCfgCreator(user.getUserName());
+            hzFullCfgWithCfg.setFlCfgCreator(user.getUsername());
             //跟新人
-            hzFullCfgWithCfg.setFlCfgUpdator(user.getUserName());
+            hzFullCfgWithCfg.setFlCfgUpdator(user.getUsername());
             //版本
             hzFullCfgWithCfg.setFlCfgVersion(mainPuid);
             hzFullCfgWithCfgs.add(hzFullCfgWithCfg);
@@ -920,7 +921,7 @@ public class HzBomAllCfgService {
 
 
 
-            projectHelper.doGetProjectTreeByProjectId(mainRecord.getProjectId());
+            projectHelperService.doGetProjectTreeByProjectId(mainRecord.getProjectId());
             HzCfg0ModelRecord modelRecord = new HzCfg0ModelRecord();
             HzCfg0ModelDetail modelDetail = new HzCfg0ModelDetail();
             //生成UID
@@ -940,11 +941,11 @@ public class HzBomAllCfgService {
             //设置配置管理
             modelDetail.setpModelCfgMng(params.get("pModelCfgMng"));
             //车型
-            modelDetail.setpModelMod(projectHelper.getVehicle().getpVehicleCode());
+            modelDetail.setpModelMod(projectHelperService.getVehicle().getpVehicleCode());
             //平台
-            modelDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformCode());
+            modelDetail.setpModelPlatform(projectHelperService.getPlatform().getpPlatformCode());
             //品牌
-            modelDetail.setpModelBrand(projectHelper.getBrand().getpBrandName());
+            modelDetail.setpModelBrand(projectHelperService.getBrand().getpBrandName());
             //从TC继承过来的模型
             //模型名
             modelRecord.setObjectName(checkString(params.get("objectName")) ? params.get("objectName") : params.get("pModelVersion"));
@@ -1413,7 +1414,7 @@ public class HzBomAllCfgService {
 
         for (int i=0;i<lines.size();i++) {
             SXSSFRow row = sheet.createRow(11+i);
-            HzFullCfgWithCfg cfg = hzFullCfgWithCfgDao.selectByBomLineUidWithVersion(hzFullCfgMain.getId(), lines.get(i).getPuid());
+            HzFullCfgWithCfg cfg = hzFullCfgWithCfgDao.selectByBomLineUidWithVersion(new HzFullCfgWithCfgQuery(hzFullCfgMain.getId(), lines.get(i).getPuid()));
             row.createCell(0).setCellValue(i+1);
             row.createCell(1).setCellValue(cfg == null ? "" : cfg.getFlOperationType() == 1 ? "新增" : cfg.getFlOperationType() == 2 ? "更新" : cfg.getFlOperationType() == 0 ? "删除" : "新增");
             row.createCell(2).setCellValue(lines.get(i).getpBomOfWhichDept() == null ? "" : lines.get(i).getpBomOfWhichDept());

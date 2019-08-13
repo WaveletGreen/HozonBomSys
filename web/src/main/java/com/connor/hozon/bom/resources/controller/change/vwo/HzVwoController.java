@@ -10,7 +10,7 @@ import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
 import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzVWOManagerService;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -42,7 +42,7 @@ import java.util.Map;
 public class HzVwoController {
     /***VWO表单服务层*/
     @Autowired
-    IHzVWOManagerService iHzVWOManagerService;
+    HzVWOManagerService iHzVWOManagerService;
 
     @Autowired
     HzChangeOrderDAO hzChangeOrderDAO;

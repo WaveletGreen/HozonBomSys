@@ -122,7 +122,7 @@ public class HzSingleVehicleDaoImpl extends BasicDaoImpl<HzSingleVehicles> imple
 
     @Override
     public int doUpdateIsSent(Map<String, Object> map) {
-        return baseSQLUtil.executeUpdate(map,clzName+".doUpdateIsSent");
+        return baseSQLUtil.executeUpdate(map,clzName+".updateIsSent");
     }
 
 }

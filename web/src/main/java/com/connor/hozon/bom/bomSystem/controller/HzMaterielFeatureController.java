@@ -22,12 +22,12 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
 import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzCfg0ModelFeatureService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.HzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
-import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
+import integration.service.integrate.SynMaterielServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
@@ -35,7 +35,7 @@ import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import integration.option.ActionFlagOption;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -90,7 +90,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     private HzMainConfigService hzMainConfigService;
     /*** 衍生物料详情数据服务*/
     @Autowired
-    IHzCfg0ModelFeatureService hzCfg0ModelFeatureService;
+    HzCfg0ModelFeatureService hzCfg0ModelFeatureService;
     /*** 工厂*/
     @Autowired
     HzFactoryDAO hzFactoryDAO;
@@ -102,7 +102,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     HzComposeMFService hzComposeMFService;
     /*** 同步物料接口服务*/
     @Autowired
-    private SynMaterielService synMaterielService;
+    private SynMaterielServiceImpl synMaterielServiceImpl;
     /***全配置BOM一级清单服务层*/
     @Autowired
     HzBomAllCfgService hzBomAllCfgService;
@@ -340,14 +340,14 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             result.put("msg", "请至少选择一个衍生物料进行操作");
             return result;
         }
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = hzDerivativeMaterielBasicChangeDao.selectLastById(delDtos);
-        if(hzDMBasicChangeBeans !=null&&hzDMBasicChangeBeans.size()>0){
+        List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans = hzDerivativeMaterielBasicChangeDao.selectLastById(delDtos);
+        if(hzDerivativeMaterielBasicChangeBeans !=null&& hzDerivativeMaterielBasicChangeBeans.size()>0){
             List<HzComposeDelDto> hzComposeDelDtosUpdate = new ArrayList<>();
             List<HzComposeDelDto> hzComposeDelDtosDelete = new ArrayList<>();
             for(HzComposeDelDto hzComposeDelDto : delDtos){
                 boolean flag = false;
-                for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeans){
-                    if(hzDMBasicChangeBean.getDmbSrcId().equals(hzComposeDelDto.getBasicId())){
+                for(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean : hzDerivativeMaterielBasicChangeBeans){
+                    if(hzDerivativeMaterielBasicChangeBean.getDmbSrcId().equals(hzComposeDelDto.getBasicId())){
                         flag = true;
                         break;
                     }
@@ -547,43 +547,43 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetails = hzDerivativeMaterielDetailDao.selectByBasics(hzDerivativeMaterielBasics);
 
         //根据主数据生成变更主数据
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = new ArrayList<HzDMBasicChangeBean>();
+        List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans = new ArrayList<HzDerivativeMaterielBasicChangeBean>();
         for(HzDerivativeMaterielBasic hzDerivativeMaterielBasic : hzDerivativeMaterielBasics){
-            HzDMBasicChangeBean hzDMBasicChangeBean = new HzDMBasicChangeBean();
-            hzDMBasicChangeBean.setFormId(changeFromId);
-            hzDMBasicChangeBean.srcSetChange(hzDerivativeMaterielBasic,UserInfo.getUser().getLogin());
-            hzDMBasicChangeBean.setDmbChangeStatus(0);
-            hzDMBasicChangeBeans.add(hzDMBasicChangeBean);
+            HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean = new HzDerivativeMaterielBasicChangeBean();
+            hzDerivativeMaterielBasicChangeBean.setFormId(changeFromId);
+            hzDerivativeMaterielBasicChangeBean.srcSetChange(hzDerivativeMaterielBasic,UserInfo.getUser().getLogin());
+            hzDerivativeMaterielBasicChangeBean.setDmbChangeStatus(0);
+            hzDerivativeMaterielBasicChangeBeans.add(hzDerivativeMaterielBasicChangeBean);
         }
-        int basicInsertNum = hzDerivativeMaterielBasicChangeDao.insertList(hzDMBasicChangeBeans);
-        if(basicInsertNum<hzDMBasicChangeBeans.size()){
+        int basicInsertNum = hzDerivativeMaterielBasicChangeDao.insertList(hzDerivativeMaterielBasicChangeBeans);
+        if(basicInsertNum< hzDerivativeMaterielBasicChangeBeans.size()){
             result.put("status",false);
             result.put("msg","跟新变更主数据失败");
             return result;
         }
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeanList = hzDerivativeMaterielBasicChangeDao.selectByFormid(changeFromId);
+        List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeanList = hzDerivativeMaterielBasicChangeDao.selectByFormid(changeFromId);
         Map<Long,Long> idMap = new HashMap<>();
-        for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeanList){
-            idMap.put(hzDMBasicChangeBean.getDmbSrcId(),hzDMBasicChangeBean.getId());
+        for(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean : hzDerivativeMaterielBasicChangeBeanList){
+            idMap.put(hzDerivativeMaterielBasicChangeBean.getDmbSrcId(), hzDerivativeMaterielBasicChangeBean.getId());
         }
         //根据从数据生成变更从数据
-        List<HzDMDetailChangeBean> hzDMDetailChangeBeans = new ArrayList<HzDMDetailChangeBean>();
+        List<HzDerivativeMaterielDetailChangeBean> hzDerivativeMaterielDetailChangeBeans = new ArrayList<HzDerivativeMaterielDetailChangeBean>();
         List<HzFeature> familiesBefor = hzFeatureDao.selectByDM(hzDerivativeMaterielDetails);
         Map<String,HzFeature> map = new HashMap<>();
         for(HzFeature hzFeature : familiesBefor){
             map.put(hzFeature.getId(), hzFeature);
         }
         for(HzDerivativeMaterielDetail hzDerivativeMaterielDetail : hzDerivativeMaterielDetails){
-            HzDMDetailChangeBean hzDMDetailChangeBean = new HzDMDetailChangeBean();
-            hzDMDetailChangeBean.setFormId(changeFromId);
-            hzDMDetailChangeBean.srcSetChange(hzDerivativeMaterielDetail,UserInfo.getUser().getLogin());
-            hzDMDetailChangeBean.setDmbChangeBasicId(idMap.get(hzDerivativeMaterielDetail.getDmdDmbId()));
+            HzDerivativeMaterielDetailChangeBean hzDerivativeMaterielDetailChangeBean = new HzDerivativeMaterielDetailChangeBean();
+            hzDerivativeMaterielDetailChangeBean.setFormId(changeFromId);
+            hzDerivativeMaterielDetailChangeBean.srcSetChange(hzDerivativeMaterielDetail,UserInfo.getUser().getLogin());
+            hzDerivativeMaterielDetailChangeBean.setDmbChangeBasicId(idMap.get(hzDerivativeMaterielDetail.getDmdDmbId()));
             HzFeature hzFeature = map.get(hzDerivativeMaterielDetail.getDmdCfg0FamilyUid());
-            hzDMDetailChangeBean.setTitle(hzFeature.getFeatureDesc() + "<br/>" + hzFeature.getFeatureCode());
-            hzDMDetailChangeBeans.add(hzDMDetailChangeBean);
+            hzDerivativeMaterielDetailChangeBean.setTitle(hzFeature.getFeatureDesc() + "<br/>" + hzFeature.getFeatureCode());
+            hzDerivativeMaterielDetailChangeBeans.add(hzDerivativeMaterielDetailChangeBean);
         }
-        int detialnum = hzDerivativeMaterielDetailChangeDao.insertList(hzDMDetailChangeBeans);
-        if(detialnum<hzDMDetailChangeBeans.size()){
+        int detialnum = hzDerivativeMaterielDetailChangeDao.insertList(hzDerivativeMaterielDetailChangeBeans);
+        if(detialnum< hzDerivativeMaterielDetailChangeBeans.size()){
             result.put("status",false);
             result.put("msg","跟新变更从数据失败");
             return result;
@@ -686,15 +686,15 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         List<HzDerivativeMaterielBasic> hzDerivativeMaterielBasicsUpdate= new ArrayList<>();
         List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetailsUpdate = new ArrayList<>();
         //根据主数据id查找最近一次有效数据
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = new ArrayList<>();
-        hzDMBasicChangeBeans = hzDerivativeMaterielBasicChangeDao.selectLastById(delDtos);
+        List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans = new ArrayList<>();
+        hzDerivativeMaterielBasicChangeBeans = hzDerivativeMaterielBasicChangeDao.selectLastById(delDtos);
         //根据主数据找到从数据
-        List<HzDMDetailChangeBean> hzDMDetailChangeBeans = new ArrayList<>();
-        if(hzDMBasicChangeBeans!=null&&hzDMBasicChangeBeans.size()!=0){
-            hzDMDetailChangeBeans = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDMBasicChangeBeans);
+        List<HzDerivativeMaterielDetailChangeBean> hzDerivativeMaterielDetailChangeBeans = new ArrayList<>();
+        if(hzDerivativeMaterielBasicChangeBeans !=null&& hzDerivativeMaterielBasicChangeBeans.size()!=0){
+            hzDerivativeMaterielDetailChangeBeans = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDerivativeMaterielBasicChangeBeans);
             //根据变更主数据生成源主数据
-            for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeans){
-                HzDerivativeMaterielBasic hzDerivativeMaterielBasic = hzDMBasicChangeBean.getHzDerivativeMaterielBasic();
+            for(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean : hzDerivativeMaterielBasicChangeBeans){
+                HzDerivativeMaterielBasic hzDerivativeMaterielBasic = hzDerivativeMaterielBasicChangeBean.getHzDerivativeMaterielBasic();
                 hzDerivativeMaterielBasic.setDmbStatus(0);
                 hzDerivativeMaterielBasicsUpdate.add(hzDerivativeMaterielBasic);
             }
@@ -708,8 +708,8 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
                 }
             }
             //根据变更从数据生成源从数据
-            for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeans){
-                HzDerivativeMaterielDetail hzDerivativeMaterielDetail = hzDMDetailChangeBean.getHzDerivativeMaterielDetail();
+            for(HzDerivativeMaterielDetailChangeBean hzDerivativeMaterielDetailChangeBean : hzDerivativeMaterielDetailChangeBeans){
+                HzDerivativeMaterielDetail hzDerivativeMaterielDetail = hzDerivativeMaterielDetailChangeBean.getHzDerivativeMaterielDetail();
                 hzDerivativeMaterielDetailsUpdate.add(hzDerivativeMaterielDetail);
             }
             if(hzDerivativeMaterielDetailsUpdate!=null&&hzDerivativeMaterielDetailsUpdate.size()>0) {
@@ -723,10 +723,10 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             }
             //删除修改数据，只留下新增数据
             Iterator<HzComposeDelDto> iteratorUpdate = delDtos.iterator();
-            for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeans){
+            for(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean : hzDerivativeMaterielBasicChangeBeans){
                 while (iteratorUpdate.hasNext()){
                     HzComposeDelDto hzComposeDelDto = iteratorUpdate.next();
-                    if(hzComposeDelDto.getBasicId().equals(hzDMBasicChangeBean.getDmbSrcId())){
+                    if(hzComposeDelDto.getBasicId().equals(hzDerivativeMaterielBasicChangeBean.getDmbSrcId())){
                         iteratorUpdate.remove();
                         break;
                     }
@@ -883,7 +883,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
             features.add(feature);
         }
-        net.sf.json.JSONObject object = synMaterielService.tranMateriel2(features, ActionFlagOption.ADD, "HZ_CFG0_MODEL_FEATURE", "MATERIAL_CODE");
+        net.sf.json.JSONObject object = synMaterielServiceImpl.tranMateriel2(features, ActionFlagOption.ADD, "HZ_CFG0_MODEL_FEATURE", "MATERIAL_CODE");
         addToModel(object, model);
         return "stage/templateOfIntegrate";
     }
@@ -903,7 +903,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             HzCfg0ModelFeature feature = hzCfg0ModelFeatureService.doSelectByPrimaryKey(puidOfModelFeature);
             HCMfeatures.add(feature);
         }
-        net.sf.json.JSONObject object = synMaterielService.tranMateriel2(HCMfeatures, ActionFlagOption.DELETE, "HZ_CFG0_MODEL_FEATURE", "MATERIAL_CODE");
+        net.sf.json.JSONObject object = synMaterielServiceImpl.tranMateriel2(HCMfeatures, ActionFlagOption.DELETE, "HZ_CFG0_MODEL_FEATURE", "MATERIAL_CODE");
         addToModel(object, model);
         return "stage/templateOfIntegrate";
     }

@@ -1,9 +1,22 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
 import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
-import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureService;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecordVO;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
+import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
+import cn.net.connor.hozon.dao.pojo.main.HzFactory;
+import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
-import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
+import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureServiceImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.interaction.iservice.IHzConfigBomColorService;
 import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
@@ -33,31 +46,17 @@ import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.entity.User;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import com.google.common.collect.Lists;
+import integration.service.integrate.SynBomServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
-import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecordVO;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
-import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
-import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
-import cn.net.connor.hozon.dao.pojo.main.HzFactory;
-import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
-import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -71,8 +70,7 @@ import java.util.concurrent.CountDownLatch;
 public class HzMbomServiceImpl implements HzMbomService {
 
     @Autowired
-    @Qualifier("synBomService")
-    SynBomService synBomService;
+    SynBomServiceImpl synBomService;
 
     @Autowired
     private HzMbomRecordDAO hzMbomRecordDAO;
@@ -90,7 +88,7 @@ public class HzMbomServiceImpl implements HzMbomService {
     private HzPbomRecordDAO hzPbomRecordDAO;
 
     @Autowired
-    private HzCfg0ModelFeatureService hzCfg0ModelFeatureService;
+    private HzCfg0ModelFeatureServiceImpl hzCfg0ModelFeatureService;
 
     @Autowired
     private HzChangeDataRecordDAO hzChangeDataRecordDAO;
@@ -230,8 +228,8 @@ public class HzMbomServiceImpl implements HzMbomService {
             hzMbomRecord.setStandardPart(reqDTO.getStandardPart());
             hzMbomRecord.setTools(reqDTO.getTools());
             hzMbomRecord.setWasterProduct(reqDTO.getWasterProduct());
-            hzMbomRecord.setCreateName(UserInfo.getUser().getUserName());
-            hzMbomRecord.setUpdateName(UserInfo.getUser().getUserName());
+            hzMbomRecord.setCreateName(UserInfo.getUser().getUsername());
+            hzMbomRecord.setUpdateName(UserInfo.getUser().getUsername());
             Map<String, Object> map = new HashMap<>();
             map.put("pPuid", reqDTO.geteBomPuid());
             map.put("projectId", reqDTO.getProjectId());
@@ -261,7 +259,7 @@ public class HzMbomServiceImpl implements HzMbomService {
             HzMainBom hzMainBom = hzMainBomDao.selectByProjectId(reqDTO.getProjectId());
             HzMbomLineRecord record = new HzMbomLineRecord();
             record.setTableName(MbomTableNameEnum.tableName(reqDTO.getType()));
-            record.setUpdateName(user.getUserName());
+            record.setUpdateName(user.getUsername());
             record.setWasterProduct(reqDTO.getWasterProduct());
             record.setTools(reqDTO.getTools());
             record.setStandardPart(reqDTO.getStandardPart());

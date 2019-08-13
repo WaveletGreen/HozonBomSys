@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
-import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynMaterielService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.SynMaterielService;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ import static cn.net.connor.hozon.common.util.StringHelper.checkString;
 public class SynMaterielController extends ExtraIntegrate {
 
     @Autowired
-    ISynMaterielService iSynMaterielService;
+    SynMaterielService synMaterielService;
 
     /**
      * 删除物料主数据
@@ -37,7 +37,7 @@ public class SynMaterielController extends ExtraIntegrate {
     @RequestMapping("/deleteByPuids")
     @ResponseBody
     public JSONObject deleteByPuids(List<EditHzMaterielReqDTO> dtos) {
-        return iSynMaterielService.deleteByPuids(dtos,"HZ_MATERIEL_RECORD","P_MATERIEL_CODE");
+        return synMaterielService.deleteByPuids(dtos,"HZ_MATERIEL_RECORD","P_MATERIEL_CODE");
     }
 
     /**
@@ -48,7 +48,7 @@ public class SynMaterielController extends ExtraIntegrate {
      */
     @RequestMapping(value = "/updateOrAddByUids", method = RequestMethod.POST)
     public String updateOrAddByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, Model model) {
-        JSONObject entities = iSynMaterielService.updateOrAddByUids(dtos,"HZ_MATERIEL_RECORD","P_MATERIEL_CODE");
+        JSONObject entities = synMaterielService.updateOrAddByUids(dtos,"HZ_MATERIEL_RECORD","P_MATERIEL_CODE");
         addToModel(entities, model);
         return "stage/templateOfIntegrate";
     }
@@ -66,7 +66,7 @@ public class SynMaterielController extends ExtraIntegrate {
             result.put("msg", "请选择项目再操作!");
             return "errorWithEntity";
         }
-        JSONObject entities = iSynMaterielService.synAllByProjectPuid(projectId,"HZ_MATERIEL_RECORD","P_MATERIEL_CODE");
+        JSONObject entities = synMaterielService.synAllByProjectPuid(projectId,"HZ_MATERIEL_RECORD","P_MATERIEL_CODE");
         addToModel(entities, model);
         return "stage/templateOfIntegrate";
     }

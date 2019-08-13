@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgMainDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="PROJECT_UID" jdbcType="VARCHAR" property="projectUid"/>
+        <result column="STATUS" jdbcType="DECIMAL" property="status"/>
+        <result column="STAGE" jdbcType="INTEGER" property="stage"/>
+        <result column="VERSION" jdbcType="VARCHAR" property="version"/>
+        <result column="EFFECTIVE_DATE" jdbcType="TIMESTAMP" property="effectiveDate"/>
+        <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="UPDATE_DATE" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="CREATOR" jdbcType="VARCHAR" property="creator"/>
+        <result column="UPDATER" jdbcType="VARCHAR" property="updater"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, PROJECT_UID, STATUS, STAGE, VERSION, EFFECTIVE_DATE, CREATE_DATE, UPDATE_DATE, 
+    CREATOR, UPDATER
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_FULL_CFG_MAIN_RECORD
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from HZ_FULL_CFG_MAIN_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insertBackId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
+        <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_HZ_FL_CFG_MAIN_ID.Nextval from dual
+        </selectKey>
+        insert into HZ_FULL_CFG_MAIN_RECORD (ID, PROJECT_UID, STATUS,
+        VERSION, CREATOR,UPDATER)
+        values (#{id,jdbcType=DECIMAL}, #{projectUid,jdbcType=VARCHAR}, #{status,jdbcType=DECIMAL},
+        #{version,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR}, #{updater,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective"
+            parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
+
+        insert into HZ_FULL_CFG_MAIN_RECORD
+
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="projectUid != null">
+                PROJECT_UID,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="stage != null">
+                STAGE,
+            </if>
+            <if test="version != null">
+                VERSION,
+            </if>
+            <if test="effectiveDate != null">
+                EFFECTIVE_DATE,
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE,
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE,
+            </if>
+            <if test="creator != null">
+                CREATOR,
+            </if>
+            <if test="updater != null">
+                UPDATER,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="projectUid != null">
+                #{projectUid,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=DECIMAL},
+            </if>
+            <if test="stage != null">
+                #{stage,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                #{version,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveDate != null">
+                #{effectiveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createDate != null">
+                sysdate,
+            </if>
+            <if test="updateDate != null">
+                sysdate,
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="updater != null">
+                #{updater,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
+        update HZ_FULL_CFG_MAIN_RECORD
+        <set>
+            <if test="projectUid != null">
+                PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                STATUS = #{status,jdbcType=DECIMAL},
+            </if>
+            <if test="stage != null">
+                STAGE = #{stage,jdbcType=INTEGER},
+            </if>
+            <if test="version != null">
+                VERSION = #{version,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveDate != null">
+                EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createDate != null">
+                CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                UPDATE_DATE = sysdate,
+            </if>
+            <if test="creator != null">
+                CREATOR = #{creator,jdbcType=VARCHAR},
+            </if>
+            <if test="updater != null">
+                UPDATER = #{updater,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
+    update HZ_FULL_CFG_MAIN_RECORD
+    set PROJECT_UID = #{projectUid,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=DECIMAL},
+      STAGE = #{stage,jdbcType=INTEGER},
+      VERSION = #{version,jdbcType=VARCHAR},
+      EFFECTIVE_DATE = #{effectiveDate,jdbcType=TIMESTAMP},
+      CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+      UPDATE_DATE = sysdate,
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      UPDATER = #{updater,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+    <select id="selectByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_FULL_CFG_MAIN_RECORD
+        where PROJECT_UID = #{projectUid}
+    </select>
+
+    <delete id="deleteByProjectUid" parameterType="java.lang.String">
+        delete from HZ_FULL_CFG_MAIN_RECORD
+        where
+        PROJECT_UID = #{projectUid,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="insertSeqAll" parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
+        <selectKey order="BEFORE" keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_HZ_FL_CFG_MAIN_ID.Nextval from dual
+        </selectKey>
+        insert into
+        HZ_FULL_CFG_MAIN_RECORD (
+            ID,
+            PROJECT_UID,
+            STATUS,
+            STAGE,
+            VERSION,
+            EFFECTIVE_DATE,
+            CREATE_DATE,
+            UPDATE_DATE,
+            CREATOR,
+            UPDATER,
+            FM_IS_RELEASE
+        )
+        values
+            #{id,jdbcType=DECIMAL},
+            #{projectUid,jdbcType=VARCHAR},
+            #{status,jdbcType=DECIMAL},
+            #{stage,jdbcType=INTEGER},
+            #{version,jdbcType=VARCHAR},
+            #{effectiveDate,jdbcType=TIMESTAMP},
+            sysdate,
+            sysdate,
+            #{creator,jdbcType=VARCHAR},
+            #{updater,jdbcType=VARCHAR},
+            #{fmIsRelease,jdbcType=INTEGER}
+    </insert>
+
+    <update id="updateStatusByOrderId" parameterType="cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgMainChangeQuery">
+        update HZ_FULL_CFG_MAIN_RECORD
+        set STATUS = #{status,jdbcType=INTEGER},
+        EFFECTIVE_DATE = sysdate
+        where
+        ID in (
+          select SRC_MAIN_ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+        )
+    </update>
+
+    <update id="updateStatusById"
+            parameterType="cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain">
+        update HZ_FULL_CFG_MAIN_RECORD
+        set STATUS = #{status,jdbcType=DECIMAL}
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+
+    <update id="updateChangeByOrderId" parameterType="java.lang.Long">
+        update HZ_FULL_CFG_MAIN_RECORD
+        set STATUS = (select STATUS from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL})
+        where
+        ID = (
+          select SRC_MAIN_ID from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL}
+        )
+        and
+        0=(select CHANGE_STATUS from HZ_FULL_CFG_MAIN_RECORD_CHANGE where CHANGE_ORDER_UID = #{orderId,jdbcType=DECIMAL})
+    </update>
+</mapper>

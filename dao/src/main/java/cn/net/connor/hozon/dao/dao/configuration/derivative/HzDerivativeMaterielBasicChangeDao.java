@@ -8,7 +8,7 @@ package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasicChangeBean;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -22,22 +22,22 @@ import java.util.Map;
  * @Modified By:
  */
 @Repository
-public interface HzDerivativeMaterielBasicChangeDao extends BasicDao<HzDMBasicChangeBean> {
+public interface HzDerivativeMaterielBasicChangeDao extends BasicDao<HzDerivativeMaterielBasicChangeBean> {
 
-    int insertList(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);
+    int insertList(List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans);
 
-    List<HzDMBasicChangeBean> selectByFormid(@Param("changeFromId") Long changeFromId);
+    List<HzDerivativeMaterielBasicChangeBean> selectByFormid(@Param("changeFromId") Long changeFromId);
 
-    HzDMBasicChangeBean selectBefor(HzDMBasicChangeBean hzDMBasicChangeBeanAfter);
+    HzDerivativeMaterielBasicChangeBean selectBefor(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBeanAfter);
 
 
-    List<HzDMBasicChangeBean> selectAfter(@Param("formId") Long formId);
+    List<HzDerivativeMaterielBasicChangeBean> selectAfter(@Param("formId") Long formId);
 
-    List<HzDMBasicChangeBean> selectLastById(List<HzComposeDelDto> delDtos);
+    List<HzDerivativeMaterielBasicChangeBean> selectLastById(List<HzComposeDelDto> delDtos);
 
     int updateStatusByOrderId(Map<String,Object> params);
 
-    int deleteByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);
+    int deleteByChangeIds(List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans);
 
-    List<HzDMBasicChangeBean> selectNotEffect(List<Long> changeMaterielFeatureIds);
+    List<HzDerivativeMaterielBasicChangeBean> selectNotEffect(List<Long> changeMaterielFeatureIds);
 }

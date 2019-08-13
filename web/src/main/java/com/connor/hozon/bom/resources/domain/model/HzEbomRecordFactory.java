@@ -26,8 +26,8 @@ public class HzEbomRecordFactory {
         HzEPLManageRecord record = new HzEPLManageRecord();
         record.setPuid(UUID.randomUUID().toString());
         record.setLineID(reqDTO.getLineId());
-        record.setpCreateName(UserInfo.getUser().getUserName());
-        record.setpUpdateName(UserInfo.getUser().getUserName());
+        record.setpCreateName(UserInfo.getUser().getUsername());
+        record.setpUpdateName(UserInfo.getUser().getUsername());
         record.setpFnaDesc(reqDTO.getpFnaDesc());
         record.setpFnaInfo(reqDTO.getFna());
         record.setpUpc(reqDTO.getpUpc());
@@ -209,7 +209,7 @@ public class HzEbomRecordFactory {
     public static HzEPLManageRecord importEbomRecordToBomLineRecord(HzImportEbomRecord record){
         HzEPLManageRecord hzBomLineRecord = new HzEPLManageRecord();
         hzBomLineRecord.setLineID(record.getLineId());
-        hzBomLineRecord.setpUpdateName(UserInfo.getUser().getUserName());
+        hzBomLineRecord.setpUpdateName(UserInfo.getUser().getUsername());
         hzBomLineRecord.setpFnaDesc(record.getpFnaDesc());
         hzBomLineRecord.setpFnaInfo(record.getpFnaInfo());
         hzBomLineRecord.setpUpc(record.getpUpc());

@@ -6,12 +6,12 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelDetail;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
-import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
+import cn.net.connor.hozon.services.service.main.ProjectHelperService;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class HzCfg0ModelController {
     private HzMainConfigService hzMainConfigService;
     /***项目助手*/
     @Autowired
-    private ProjectHelper projectHelper;
+    private ProjectHelperService projectHelperService;
 
     /**
      * 保存基本车型的详情数据
@@ -117,11 +117,11 @@ public class HzCfg0ModelController {
         HzCfg0ModelRecord hzCfg0ModelRecord = hzCfg0modelRecordService.doGetById(pModelPuid);
         HzMainConfig hzMainConfig = hzMainConfigService.doGetByPrimaryKey(hzCfg0ModelRecord.getpCfg0ModelOfMainRecord());
 
-        projectHelper.doGetProjectTreeByProjectId(hzMainConfig.getProjectId());
-        if (projectHelper.getProject() == null ||
-                projectHelper.getVehicle() == null ||
-                projectHelper.getPlatform() == null ||
-                projectHelper.getBrand() == null
+        projectHelperService.doGetProjectTreeByProjectId(hzMainConfig.getProjectId());
+        if (projectHelperService.getProject() == null ||
+                projectHelperService.getVehicle() == null ||
+                projectHelperService.getPlatform() == null ||
+                projectHelperService.getBrand() == null
                 ) {
             model.addAttribute("msg", "无法查询项目结构，请确保选中项目或保证车型模型在项目中");
             return "errorWithEntity";
@@ -133,9 +133,9 @@ public class HzCfg0ModelController {
             } else {
                 fromDBDetail = new HzCfg0ModelDetail();
                 fromDBDetail.setpModelPuid(record.getPuid());
-                fromDBDetail.setpModelBrand(projectHelper.getBrand().getpBrandName());
-                fromDBDetail.setpModelPlatform(projectHelper.getPlatform().getpPlatformName());
-                fromDBDetail.setpModelMod(projectHelper.getVehicle().getpVehicleName());
+                fromDBDetail.setpModelBrand(projectHelperService.getBrand().getpBrandName());
+                fromDBDetail.setpModelPlatform(projectHelperService.getPlatform().getpPlatformName());
+                fromDBDetail.setpModelMod(projectHelperService.getVehicle().getpVehicleName());
                 fromDBDetail.setpModelVersion(record.getObjectName());
                 fromDBDetail.setpModelDesc(record.getObjectDesc());
                 fromDBDetail.setpModelPuid(hzCfg0ModelRecord.getPuid());

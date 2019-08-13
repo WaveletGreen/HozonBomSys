@@ -6,23 +6,23 @@
 
 package com.connor.hozon.bom.process.service;
 
+import cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.sys.User;
+import cn.net.connor.hozon.dao.pojo.task.HzTasks;
+import cn.net.connor.hozon.services.service.task.HzTaskService;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
-import com.connor.hozon.bom.bomSystem.service.task.HzTasksService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.process.iservice.IProcessFinish;
 import com.connor.hozon.bom.process.iservice.IProcessManagerService;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
-import com.connor.hozon.bom.sys.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-import cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
-import cn.net.connor.hozon.dao.pojo.task.HzTasks;
 
 import java.util.Date;
 import java.util.List;
@@ -41,7 +41,7 @@ public class ProcessFinishEntity implements IProcessFinish {
      * 任务驱动服务
      */
     @Autowired
-    HzTasksService hzTasksService;
+    HzTaskService hzTasksService;
     /***审核人记录*/
     @Autowired
     HzAuditorChangeDAO hzAuditorChangeDAO;

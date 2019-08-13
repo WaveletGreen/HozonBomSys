@@ -38,70 +38,18 @@
         <!--<mapper resource="sql/mapper/bom/project/HzBomStateMapper.xml"/>-->
         <mapper resource="sql/mapper/bom/xmapper/HzMBomToERPMapper.xml"/>
         <mapper resource="sql/mapper/bom/xmapper/HzSingleVehiclesBomRecordMapper.xml"/>
-        <!--<mapper resource="sql/mapper/bom/project/HzSingleVehicleDosageMapper.xml"/>-->
-
-        <!--配置-->
-        <!--feature-->
-        <!--<mapper resource="sql/mapper/cfg/cfg0/FeatureMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/cfg/cfg0/FeatureValueMapper.xml"/>-->
-        <!--&lt;!&ndash;color&ndash;&gt;-->
-        <!--<mapper resource="sql/mapper/cfg/color/HzCfg0ColorSetMapper.xml"/>-->
-        <!--derivative-->
-        <mapper resource="sql/mapper/cfg/derivative/HzCfg0ModelFeatureMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/derivative/HzCfg0ModelGroupMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/derivative/HzCfg0ToModelRecordMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/derivative/HzDerivativeMaterielBasicMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/derivative/HzDerivativeMaterielDetailMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/derivative/HzMaterielCfgBeanMapper.xml"/>
-        <!--fullCfg-->
-        <mapper resource="sql/mapper/cfg/fullCfg/HzCfg0BomLineOfModelMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/fullCfg/HzCfg0OfBomLineRecordMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/fullCfg/HzFcfgBomLvl1ListOperationMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgMapper.xml"/>
-
-        <!--fullCfg变更-->
-        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgMainChangeMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgModelChangeMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/fullCfg/HzFullCfgWithCfgChangeMapper.xml"/>
-        <!--main-->
-        <!--<mapper resource="sql/mapper/cfg/main/HzCfg0MainRecordMapper.xml"/>-->
-        <!--model-->
-        <mapper resource="sql/mapper/cfg/model/HzCfg0ModelDetailMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/model/HzCfg0ModelRecordMapper.xml"/>
-        <!--modelColor-->
+       <!--modelColor-->
         <mapper resource="sql/mapper/cfg/modelColor/HzCfg0ModelColorDetailMapper.xml"/>
         <mapper resource="sql/mapper/cfg/modelColor/HzCfg0ModelColorRecordMapper.xml"/>
         <mapper resource="sql/mapper/cfg/modelColor/HzCmcrChangeMapper.xml"/>
         <mapper resource="sql/mapper/cfg/modelColor/HzCmcrDetailBeforeChangeMapper.xml"/>
         <mapper resource="sql/mapper/cfg/modelColor/HzCmcrDetailChangeMapper.xml"/>
         <mapper resource="sql/mapper/cfg/modelColor/HzColorLvl2ModelMapper.xml"/>
-        <!--relevance-->
-        <!--<mapper resource="cn/net/connor/hozon/dao/mapper/relevance/HzRelevanceBasicMapper.xml"/>-->
-        <!--<mapper resource="cn/net/connor/hozon/dao/mapper/relevance/HzRelevanceRelationMapper.xml"/>-->
-        <!--<mapper resource="cn/net/connor/hozon/dao/mapper/relevance/HzRelevanceBasicChangeMapper.xml"/>-->
-        <!--流程-->
-        <!--VWO-->
-        <!--<mapper resource="sql/mapper/cfg/vwo/HzFeatureChangeMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoInfluenceDeptMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoInfluenceUserMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoInfoMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoInformChangesMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoExecuteMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoOpiBomMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoOpiPmtMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoOpiProjMapper.xml"/>-->
-        <!--CODPWO表单-->
-        <!--<mapper resource="sql/mapper/change.xmapper/HzBreakPointMapper.xml"/>-->
+
 
         <!--项目-->
         <mapper resource="sql/mapper/project.xmapper/HzMaterielMapper.xml"/>
-        <!--<mapper resource="sql/mapper/project.xmapper/HzProjectLibsMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/project.xmapper/HzBrandRecordMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/project.xmapper/HzPlatformRecordMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/project.xmapper/HzVehicleRecordMapper.xml"/>-->
-        <!--<mapper resource="sql/mapper/project.xmapper/HzSuperMaterielMapper.xml"/>-->
+
         <!--EPL-->
         <mapper resource="sql/mapper/epl.xmapper/HzEplManageMapper.xml"/>
 
@@ -135,26 +83,12 @@
         <mapper resource="sql/mapper/interaction/HzConfigBomColorMapper.xml"/>
         <mapper resource="sql/mapper/interaction/HzSingleVehiclesBomLineMapper.xml"/>
         <mapper resource="sql/mapper/interaction/HzSingleVehiclesMapper.xml"/>
-        <!--任务-->
-        <!--<mapper resource="sql/mapper/task/HzTaskMapper.xml"/>-->
-        <!--derivative变更 -->
-        <mapper resource="sql/mapper/cfg/derivative/HzMDBasicChangeBeanMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/derivative/HzMDDetailChangeBeanMapper.xml"/>
+
         <!--changeList-->
         <mapper resource="sql/mapper/change.xmapper/HzChangeListRecordMapper.xml"/>
 
         <!--报价管理-->
         <mapper resource="sql/mapper/quotemsg/HzChosenSupplierMapper.xml"/>
-
-        <!--sys-->
-        <mapper resource="sql/mapper/sys/mybatis_dict.xml"/>
-        <mapper resource="sql/mapper/sys/mybatis_orgGroup.xml"/>
-        <mapper resource="sql/mapper/sys/mybatis_roleAssociateTree.xml"/>
-        <mapper resource="sql/mapper/sys/mybatis_roleWriteAssociateTree.xml"/>
-        <mapper resource="sql/mapper/sys/mybatis_tree.xml"/>
-        <mapper resource="sql/mapper/sys/mybatis_user.xml"/>
-        <mapper  resource="sql/mapper/sys/mybatis_userAssociateRole.xml"/>
-        <mapper resource="sql/mapper/sys/mybatis_userRole.xml"/>
 
     </mappers>
 </configuration>

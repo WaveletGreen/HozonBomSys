@@ -1,10 +1,11 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
+import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgWithCfgQuery;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.bean.HzExFullCfgWithCfg;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzExFullCfgWithCfg;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgMainDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzConfigToBomLineServiceImpl;
@@ -220,7 +221,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
         }
         HzExFullCfgWithCfg cfg = null;
         for (int i = 0; i < puids.size(); i++) {
-            if (null != (cfg = hzFullCfgWithCfgDao.selectByBLOutWithCfgAndBL(hzFullCfgMain.getId(), puids.get(i)))) {
+            if (null != (cfg = hzFullCfgWithCfgDao.selectByBLOutWithCfgAndBL(new HzFullCfgWithCfgQuery(hzFullCfgMain.getId(), puids.get(i))))) {
                 if (cfg.getCfg() == null) {
                     continue;
                 }

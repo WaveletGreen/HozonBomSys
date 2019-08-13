@@ -8,7 +8,6 @@ import cn.net.connor.hozon.dao.pojo.bom.bom.HzSingleVehiclesBomRecord;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
-import com.connor.hozon.bom.bomSystem.service.integrate.SynBomService;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.interaction.service.FeatureBomLineRelationHistoryService;
@@ -25,10 +24,10 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ListUtil;
+import integration.service.integrate.SynBomServiceImpl;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -62,8 +61,7 @@ public class HzSingleVehiclesBomServicesImpl implements HzSingleVehiclesBomServi
     private HzSingleVehiclesBomDAO hzSingleVehiclesBomDAO;
 
     @Autowired
-    @Qualifier("synBomService")
-    private SynBomService synBomService;
+    private SynBomServiceImpl synBomService;
 
 
     @Value("${singleVehicleDebug}")

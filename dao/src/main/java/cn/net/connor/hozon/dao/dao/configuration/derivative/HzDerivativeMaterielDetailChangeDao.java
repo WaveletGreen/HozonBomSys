@@ -7,8 +7,8 @@
 package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMDetailChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasicChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetailChangeBean;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,9 +20,9 @@ import java.util.List;
  * @Modified By:
  */
 @Repository
-public interface HzDerivativeMaterielDetailChangeDao extends BasicDao<HzDMDetailChangeBean> {
+public interface HzDerivativeMaterielDetailChangeDao extends BasicDao<HzDerivativeMaterielDetailChangeBean> {
 
-    int insertList(List<HzDMDetailChangeBean> hzDMDetailChangeBeans);
+    int insertList(List<HzDerivativeMaterielDetailChangeBean> hzDerivativeMaterielDetailChangeBeans);
 
-    List<HzDMDetailChangeBean> selectByBasic(List<HzDMBasicChangeBean> hzDMBasicChangeBeansBefor);
+    List<HzDerivativeMaterielDetailChangeBean> selectByBasic(List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeansBefor);
 }

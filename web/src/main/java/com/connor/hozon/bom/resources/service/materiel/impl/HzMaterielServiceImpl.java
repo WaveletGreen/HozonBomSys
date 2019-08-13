@@ -20,7 +20,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,13 +82,13 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                     record.setpFactoryPuid(hzFactory.getPuid());
                 }
             }
-            record.setpCreateName(user.getUserName());
+            record.setpCreateName(user.getUsername());
             record.setpVinPerNo(editHzMaterielReqDTO.getpVinPerNo());
             record.setpSpareMaterial(editHzMaterielReqDTO.getpSpareMaterial());
             String loosePartFlag = editHzMaterielReqDTO.getpLoosePartFlag();
             record.setpLoosePartFlag(BOMTransConstants.constantStringToInteger(loosePartFlag));
             record.setpMrpController(editHzMaterielReqDTO.getpMrpController());
-            record.setpUpdateName(user.getUserName());
+            record.setpUpdateName(user.getUsername());
             record.setPuid(editHzMaterielReqDTO.getPuid());
             record.setpBasicUnitMeasure(editHzMaterielReqDTO.getpBasicUnitMeasure());
             record.setpInventedPart(BOMTransConstants.constantStringToInteger(editHzMaterielReqDTO.getpInventedPart()));

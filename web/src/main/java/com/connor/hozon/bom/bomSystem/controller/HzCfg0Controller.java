@@ -15,18 +15,18 @@ import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
 import cn.net.connor.hozon.common.util.DateStringHelper;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynFeatureService;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynRelevanceService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzFeatureChangeService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.SynFeatureService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.SynRelevanceService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import integration.Author;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
@@ -63,16 +63,16 @@ public class HzCfg0Controller extends ExtraIntegrate {
     HzMainConfigDao hzMainConfigDao;
     /*** 同步特性，不再在当前controller中使用*/
     @Autowired
-    ISynFeatureService iSynFeatureService;
+    SynFeatureService synFeatureService;
     /*** 同步相关性，不再在当前controller中使用*/
     @Autowired
-    ISynRelevanceService iSynRelevanceService;
+    SynRelevanceService synRelevanceService;
     /***项目下的特性，值针对当前项目的特性，更高一层的是字典库*/
     @Autowired
     HzCfg0OptionFamilyService cfg0OptionFamilyService;
     /*** 特性变更服务，特性的变更数据交由该服务进行操作，实际做操作的还是当前controller*/
     @Autowired
-    IHzFeatureChangeService iHzFeatureChangeService;
+    HzFeatureChangeService hzFeatureChangeService;
     /***这就是他妈的传说中的配置字典库了*/
     @Autowired
     HzDictionaryLibraryService hzDictionaryLibraryService;
@@ -149,8 +149,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
         record.setpCfg0FamilyName(hzDictionaryLibrary.getFamillyCode().toUpperCase());
         record.setFeatureValueCode(hzDictionaryLibrary.getEigenValue().toUpperCase());
         //创建人和修改人
-        record.setCreator(user.getUserName());
-        record.setLastModifier(user.getUserName());
+        record.setCreator(user.getUsername());
+        record.setLastModifier(user.getUsername());
         record.setCfgAbolishDate(DateStringHelper.forever());
         //基本信息
         record.setpCfg0FamilyDesc(hzDictionaryLibrary.getFamillyCh());
@@ -197,15 +197,15 @@ public class HzCfg0Controller extends ExtraIntegrate {
             result.put("msg", "添加特性值" + record.getFeatureValueCode() + "成功");
 //            //发送到SAP,走流程
 //            if (!SynMaterielService.debug) {
-//                iSynFeatureService.addFeature(Collections.singletonList(record));
+//                synFeatureService.addFeature(Collections.singletonList(record));
 //            }
             record = hzFeatureService.doSelectOneByPuid(record.getPuid());
-//            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+//            if (hzFeatureChangeService.insertByCfgAfter(record) <= 0) {
 //                log.error("创建后自动同步变更后记录值失败，请联系管理员");
 //            }
 //            HzFeatureValue record1 = new HzFeatureValue();
 //            record1.setId(record.getId());
-//            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
+//            if (hzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
 //                logger.error("创建后自动同步变更前记录值失败，请联系管理员");
 //            }
 
@@ -264,7 +264,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
         }
 
         //判读变更中是否存在已生效数据，如没有则直接删除，有则改成删除状态
-        List<HzFeatureChangeBean> hzFeatureChangeBeans = iHzFeatureChangeService.doSelectHasEffect(records);
+        List<HzFeatureChangeBean> hzFeatureChangeBeans = hzFeatureChangeService.doSelectHasEffect(records);
         List<HzFeatureValue> hzCfg0RecordsDelete = new ArrayList<>();
         List<HzFeatureValue> hzCfg0RecordsUpdate = new ArrayList<>();
         if(hzFeatureChangeBeans!=null&&hzFeatureChangeBeans.size()>0){
@@ -412,17 +412,17 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
         /**同步删除已发送到ERP的特性值和相关性值（标记为状态3：不可用）*/
         if (Author.SYN_DELETE) {
-            JSONObject resultFromSap = iSynFeatureService.deleteFeature(toDelete);
+            JSONObject resultFromSap = synFeatureService.deleteFeature(toDelete);
 
             JSONObject resultFromSapOfRelevance;
             //整理数据
             List<HzRelevanceBean> myBeans = new ArrayList<>();
-//            iSynRelevanceService.sortData(records, myBeans);
+//            synRelevanceService.sortData(records, myBeans);
 
             for (HzRelevanceBean myBean : myBeans) {
                 log.warn("---------------同步在SAP中标记像关系状态为3:" + (myBean.getRelevanceCode()));
             }
-//            resultFromSapOfRelevance = iSynRelevanceService.deleteRelevance(myBeans);
+//            resultFromSapOfRelevance = synRelevanceService.deleteRelevance(myBeans);
 
             Object obj = resultFromSap.get("_forDelete");
 
@@ -561,8 +561,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
         record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
         record.setFeatureValueCode(record.getFeatureValueCode().toUpperCase());
         //创建人和修改人
-        record.setCreator(user.getUserName());
-        record.setLastModifier(user.getUserName());
+        record.setCreator(user.getUsername());
+        record.setLastModifier(user.getUsername());
         record.setCfgAbolishDate(DateStringHelper.forever());
         if (!hzFeatureService.preCheck(record)) {
             result.put("status", false);
@@ -605,15 +605,15 @@ public class HzCfg0Controller extends ExtraIntegrate {
             result.put("msg", "添加特性值" + record.getFeatureValueCode() + "成功");
 //            //发送到SAP,走流程
 //            if (!SynMaterielService.debug) {
-//                iSynFeatureService.addFeature(Collections.singletonList(record));
+//                synFeatureService.addFeature(Collections.singletonList(record));
 //            }
             record = hzFeatureService.doSelectOneByPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+            if (hzFeatureChangeService.insertByCfgAfter(record) <= 0) {
                 log.error("创建后自动同步变更后记录值失败，请联系管理员");
             }
             HzFeatureValue record1 = new HzFeatureValue();
             record1.setPuid(record.getPuid());
-            if (iHzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
+            if (hzFeatureChangeService.insertByCfgBefore(record1) <= 0) {
                 log.error("创建后自动同步变更前记录值失败，请联系管理员");
             }
 
@@ -645,7 +645,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
         }
         record.setpCfg0FamilyName(record.getpCfg0FamilyName().toUpperCase());
         record.setFeatureValueCode(record.getFeatureValueCode().toUpperCase());
-        record.setLastModifier(user.getUserName());
+        record.setLastModifier(user.getUsername());
 
         if (!hzFeatureService.preCheck(record)) {
             result.put("status", false);
@@ -663,26 +663,26 @@ public class HzCfg0Controller extends ExtraIntegrate {
                 result.put("msg", "更新特性值" + record.getFeatureValueCode() + "成功");
                 HzFeatureChangeBean after = new HzFeatureChangeBean();
                 after.setCfgPuid(record.getPuid());
-                after = iHzFeatureChangeService.doSelectAfterByPk(after);
+                after = hzFeatureChangeService.doSelectAfterByPk(after);
                 if (after == null) {
-                    if (iHzFeatureChangeService.insertByCfgAfter(record) <= 0) {
+                    if (hzFeatureChangeService.insertByCfgAfter(record) <= 0) {
                         log.error("更新" + record.getFeatureValueCode() + "变更后记录数据失败，请联系系统管理员");
                     }
                     HzFeatureChangeBean before = new HzFeatureChangeBean();
                     before.setCfgPuid(record.getPuid());
-                    before = iHzFeatureChangeService.doSelectBeforeByPk(before);
+                    before = hzFeatureChangeService.doSelectBeforeByPk(before);
                     if (before == null) {
                         HzFeatureValue localRecord = new HzFeatureValue();
                         localRecord.setPuid(record.getPuid());
-                        if (iHzFeatureChangeService.insertByCfgBefore(localRecord) <= 0) {
+                        if (hzFeatureChangeService.insertByCfgBefore(localRecord) <= 0) {
                             log.error("更新" + record.getFeatureValueCode() + "变更前记录数据失败，请联系系统管理员");
                         }
                     }
                 } else {
                     //先取回所有需要存储的数据
-                    iHzFeatureChangeService.reflect(record, after);
+                    hzFeatureChangeService.reflect(record, after);
                     //再进行更新
-                    if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
+                    if (!hzFeatureChangeService.doUpdateAfterByPk(after)) {
                         log.error("更新" + record.getFeatureValueCode() + "变更后记录数据失败，请联系系统管理员");
                     }
                 }
@@ -717,7 +717,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @Deprecated
     @RequestMapping(value = "/sendToERP", method = RequestMethod.POST)
     public String sendToERP(@RequestBody List<HzFeatureValue> records, Model model) throws Exception {
-        JSONObject result = iSynFeatureService.addFeature(records);
+        JSONObject result = synFeatureService.addFeature(records);
         addToModel(result, model);
         return "stage/templateOfIntegrate";
     }
@@ -854,8 +854,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //        records = hzFeatureService.doLoadListByPuids(puids);
 //        //整理数据
 //        List<HzRelevanceBean> myBeans = new ArrayList<>();
-//        iSynRelevanceService.sortData(records, myBeans);
-//        result = iSynRelevanceService.addRelevance(myBeans);
+//        synRelevanceService.sortData(records, myBeans);
+//        result = synRelevanceService.addRelevance(myBeans);
 //        addToModel(result, model);
 //        return "stage/templateOfIntegrate";
 //    }
@@ -878,8 +878,8 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //        records = hzFeatureService.doLoadListByPuids(puids);
 //        //整理数据
 //        List<HzRelevanceBean> myBeans = new ArrayList<>();
-//        iSynRelevanceService.sortData(records, myBeans);
-//        result = iSynRelevanceService.deleteRelevance(myBeans);
+//        synRelevanceService.sortData(records, myBeans);
+//        result = synRelevanceService.deleteRelevance(myBeans);
 //        addToModel(result, model);
 //        return "stage/templateOfIntegrate";
 //    }

@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
-import com.connor.hozon.bom.bomSystem.service.integrate.SynProcessRouteService;
+import integration.service.integrate.SynProcessRouteService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

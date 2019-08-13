@@ -6,74 +6,37 @@
 
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
-import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
-import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
-import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
-import cn.net.connor.hozon.services.service.depository.project.impl.*;
-import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
-import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureValueDao;
+import cn.net.connor.hozon.common.entity.QueryBase;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiBomDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiPmtDao;
+import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiProjDao;
 import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicChangeDao;
-import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielDetailChangeDao;
 import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgChangeDao;
+import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielDetailChangeDao;
+import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao;
+import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureValueDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgMainChangeDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgMainDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgModelChangeDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgWithCfgChangeDao;
 import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
 import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelRecordDao;
 import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicChangeDao;
 import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
-import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiBomDao;
-import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiPmtDao;
-import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoOpiProjDao;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFeatureTableDto;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
-import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
-import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
-import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao;
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynFeatureService;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynRelevanceService;
-import com.connor.hozon.bom.bomSystem.iservice.process.IProcess;
-import com.connor.hozon.bom.bomSystem.option.TaskOptions;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
-import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureService;
-import com.connor.hozon.bom.bomSystem.service.integrate.SynConfigurableMaterialService;
-import com.connor.hozon.bom.bomSystem.service.process.FeatureProcessManager;
-import com.connor.hozon.bom.bomSystem.service.process.InterruptionContainer;
-import com.connor.hozon.bom.bomSystem.service.process.ModelColorProcessManager;
-import com.connor.hozon.bom.bomSystem.service.process.ReleaseContainer;
-import com.connor.hozon.bom.bomSystem.service.task.HzTasksService;
-import cn.net.connor.hozon.common.entity.QueryBase;
-import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
-import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
-import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
-import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
-import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
-import com.connor.hozon.bom.sys.dao.OrgGroupDao;
-import com.connor.hozon.bom.sys.entity.OrgGroup;
-import com.connor.hozon.bom.sys.entity.User;
-import com.connor.hozon.bom.sys.service.OrgGroupService;
-import com.connor.hozon.bom.sys.service.UserService;
-import net.sf.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import cn.net.connor.hozon.dao.dao.sys.OrgGroupDao;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
-import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
-import org.springframework.ui.Model;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
+import cn.net.connor.hozon.dao.pojo.change.vwo.*;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMDetailChangeBean;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasicChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetailChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMainChange;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgModelChange;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgWithCfgChange;
@@ -84,13 +47,53 @@ import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
-import cn.net.connor.hozon.dao.pojo.change.vwo.*;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
-import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 import cn.net.connor.hozon.dao.pojo.main.HzFactory;
-import cn.net.connor.hozon.dao.pojo.depository.project.*;
+import cn.net.connor.hozon.dao.pojo.sys.OrgGroup;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.dao.pojo.task.HzTasks;
+import cn.net.connor.hozon.services.service.depository.project.impl.*;
+import com.connor.hozon.bom.bomSystem.controller.vwo.HzVWOProcessController;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
+import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFeatureTableDto;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
+import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
+import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
+import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.SynFeatureService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.SynRelevanceService;
+import com.connor.hozon.bom.bomSystem.iservice.process.IProcess;
+import cn.net.connor.hozon.services.service.task.HzTaskService;
+import com.connor.hozon.bom.bomSystem.option.TaskOptions;
+import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
+import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureServiceImpl;
+import com.connor.hozon.bom.bomSystem.service.process.FeatureProcessManager;
+import com.connor.hozon.bom.bomSystem.service.process.InterruptionContainer;
+import com.connor.hozon.bom.bomSystem.service.process.ModelColorProcessManager;
+import com.connor.hozon.bom.bomSystem.service.process.ReleaseContainer;
+import com.connor.hozon.bom.common.util.user.UserInfo;
+import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
+import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
+import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
+import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
+import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
+import com.connor.hozon.bom.sys.service.OrgGroupService;
+import com.connor.hozon.bom.sys.service.UserService;
+import integration.service.integrate.SynConfigurableMaterialServiceImpl;
+import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -104,8 +107,8 @@ import static cn.net.connor.hozon.common.util.StringHelper.checkString;
  * @Modified By:
  */
 
-@Service("hzVWOManagerService")
-public class HzVwoManagerService implements IHzVWOManagerService {
+@Service
+public class HzVwoManagerService implements HzVWOManagerService {
     /**
      * 特性服务
      */
@@ -116,12 +119,12 @@ public class HzVwoManagerService implements IHzVWOManagerService {
      * vwo服务
      */
     @Autowired
-    IHzVwoInfoService iHzVwoInfoService;
+    com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzVwoInfoService hzVwoInfoService;
     /**
      * 特性变更表服务
      */
     @Autowired
-    IHzFeatureChangeService iHzFeatureChangeService;
+    HzFeatureChangeService hzFeatureChangeService;
 
     @Autowired
     HzFeatureValueDao hzFeatureValueDao;
@@ -148,16 +151,16 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     @Autowired
     HzBrandServiceImpl hzBrandServiceImpl;
     @Autowired
-    IHzVwoInfluenceDeptService iHzVwoInfluenceDeptService;
+    HzVwoInfluenceDeptService hzVwoInfluenceDeptService;
     @Autowired
-    IHzVwoInfluenceUserService iHzVwoInfluenceUserService;
+    HzVwoInfluenceUserService hzVwoInfluenceUserService;
     @Autowired
     OrgGroupService orgGroupService;
 
     @Autowired
     UserService userService;
     @Autowired
-    IHzVwoInformChangesService iHzVwoInformChangesService;
+    HzVwoInformChangesService hzVwoInformChangesService;
 
     @Autowired
     HzEbomRecordDAO hzEbomRecordDAO;
@@ -192,10 +195,10 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     HzVwoOpiProjDao hzVwoOpiProjDao;
 
     @Autowired
-    HzVwoInfoService hzVwoInfoService;
+    HzVwoInfoServiceImpl hzVwoInfoServiceImpl;
 
     @Autowired
-    HzTasksService hzTasksService;
+    HzTaskService hzTaskService;
 
     @Autowired
     FeatureProcessManager featureProcessManager;
@@ -209,7 +212,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
     HzDerivativeMaterielDetailChangeDao hzDerivativeMaterielDetailChangeDao;
     //车辆模型DAO
     @Autowired
-    HzCfg0ModelFeatureService hzCfg0ModelFeatureService;
+    HzCfg0ModelFeatureServiceImpl hzCfg0ModelFeatureService;
     //工厂DAO
     @Autowired
     HzFactoryDAO hzFactoryDAO;
@@ -254,11 +257,11 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 
     //SAP
     @Autowired
-    ISynFeatureService synFeatureService;
+    SynFeatureService synFeatureService;
     @Autowired
-    SynConfigurableMaterialService synConfigurableMaterialService;
+    SynConfigurableMaterialServiceImpl synConfigurableMaterialService;
     @Autowired
-    ISynRelevanceService synRelevanceService;
+    SynRelevanceService synRelevanceService;
     /**
      * 日志
      */
@@ -318,13 +321,13 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                    after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
 //                    before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
 
-                    after = iHzFeatureChangeService.doFindNewestChangeFromAfter(after);
-                    before = iHzFeatureChangeService.doFindNewestChangeFromBefore(before);
+                    after = hzFeatureChangeService.doFindNewestChangeFromAfter(after);
+                    before = hzFeatureChangeService.doFindNewestChangeFromBefore(before);
 
                     try {
                         if (after == null) {
                             after = new HzFeatureChangeBean();
-                            if ((afterId = iHzFeatureChangeService.insertByCfgAfter(localParams.get(i))) <= 0) {
+                            if ((afterId = hzFeatureChangeService.insertByCfgAfter(localParams.get(i))) <= 0) {
                                 logger.error("创建后自动同步变更后记录值失败，请联系管理员");
                                 result.put("status", false);
                                 result.put("msg", localParams.get(i).getFeatureValueCode() + "创建后自动同步变更后记录值失败，请联系管理员");
@@ -333,14 +336,14 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                        after.setTableName("HZ_CFG0_AFTER_CHANGE_RECORD");
                             /*这一段估计有bug*/
                             after.setId(afterId);
-                            after = iHzFeatureChangeService.doSelectAfterByPk(after);
+                            after = hzFeatureChangeService.doSelectAfterByPk(after);
                         }
 
                         if (before == null) {
                             before = new HzFeatureChangeBean();
                             HzFeatureValue localRecord = new HzFeatureValue();
                             localRecord.setPuid(localParams.get(i).getPuid());
-                            if ((beforeId = iHzFeatureChangeService.insertByCfgBefore(localRecord)) <= 0) {
+                            if ((beforeId = hzFeatureChangeService.insertByCfgBefore(localRecord)) <= 0) {
                                 logger.error("创建后自动同步变更前记录值失败，请联系管理员");
                                 result.put("status", false);
                                 result.put("msg", localParams.get(i).getFeatureValueCode() + "创建后自动同步变更前记录值失败，请联系管理员");
@@ -349,7 +352,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                             //before.setTableName("HZ_CFG0_BEFORE_CHANGE_RECORD");
                             /*这一段估计有bug*/
                             before.setId(beforeId);
-                            before = iHzFeatureChangeService.doSelectBeforeByPk(before);
+                            before = hzFeatureChangeService.doSelectBeforeByPk(before);
                         }
 
                         ///如果变更前后数据不为空，则是第二次变更
@@ -366,12 +369,12 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                    before.setVwoId(hzVwoInfo.getId());
 //                    before.setCfgIsInProcess(1);
 //                    before.setProcessStartDate(now);
-//                    before.setProcessStarter(user.getUserName());
+//                    before.setProcessStarter(user.getUsername());
 
-                        if (!iHzFeatureChangeService.doUpdateAfterByPk(after)) {
+                        if (!hzFeatureChangeService.doUpdateAfterByPk(after)) {
                             logger.error("更新" + localParams.get(i).getFeatureValueCode() + "的更新后VWO号失败，请联系系统管理员");
                         }
-                        if (!iHzFeatureChangeService.doUpdateBeforeByPk(before)) {
+                        if (!hzFeatureChangeService.doUpdateBeforeByPk(before)) {
                             logger.error("更新" + localParams.get(i).getFeatureValueCode() + "的更新前VWO号失败，请联系系统管理员");
                         }
 
@@ -439,7 +442,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                    //获取最近一次变更后的数据，作为本次变更的变更前数据
 //                    HzFeatureChangeBean hzFeatureChangeBeanQuery = new HzFeatureChangeBean();
 //                    hzFeatureChangeBeanQuery.setCfgPuid(puid);
-//                    HzFeatureChangeBean hzFeatureChangeBeanBefor = iHzFeatureChangeService.doFindNewestChangeFromAfter(hzFeatureChangeBeanQuery);
+//                    HzFeatureChangeBean hzFeatureChangeBeanBefor = hzFeatureChangeService.doFindNewestChangeFromAfter(hzFeatureChangeBeanQuery);
 ////                    if(hzFeatureChangeBeanBefor!=null){
 ////                        hzFeatureChangeBeanListBefore.add(hzFeatureChangeBeanBefor);
 ////                    }
@@ -516,7 +519,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
                 }
 //                //新增变更前数据
 //                if(hzFeatureChangeBeanListBefore.size()>0||hzFeatureChangeBeanListBefore!=null){
-//                    if(iHzFeatureChangeService.doInsertListBefore(hzFeatureChangeBeanListBefore)<=0){
+//                    if(hzFeatureChangeService.doInsertListBefore(hzFeatureChangeBeanListBefore)<=0){
 //                        result.put("status", false);
 //                        result.put("msg", "新增变更前数据失败");
 //                        return result;
@@ -524,7 +527,7 @@ public class HzVwoManagerService implements IHzVWOManagerService {
 //                }
                 //新增变更后数据
                 if (hzFeatureChangeBeanListAfter.size() > 0 || hzFeatureChangeBeanListAfter != null) {
-                    if (iHzFeatureChangeService.doInsertListAfter(hzFeatureChangeBeanListAfter) <= 0) {
+                    if (hzFeatureChangeService.doInsertListAfter(hzFeatureChangeBeanListAfter) <= 0) {
                         result.put("status", false);
                         result.put("msg", "新增变更后数据失败");
                         return result;
@@ -1125,17 +1128,17 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         Long id = -1L;
         HzVwoInfo hzVwoInfo;
         Date now = new Date();
-        synchronized (iHzVwoInfoService) {
+        synchronized (hzVwoInfoServiceImpl) {
             /**
              * 生成VWO号码
              */
-            hzVwoInfo = iHzVwoInfoService.generateVWONum();
+            hzVwoInfo = hzVwoInfoServiceImpl.generateVWONum();
             OrgGroup group = orgGroupDao.queryOrgGroupById(user.getGroupId());
             HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(projectUid);
             HzVehicleRecord vehicle = hzVehicleServiceImpl.doGetByPuid(project.getpProjectPertainToVehicle());
             HzPlatformRecord platform = hzPlatformServiceImpl.doGetByPuid(vehicle.getpVehiclePertainToPlatform());
 
-            hzVwoInfo.setVwoCreator(user.getUserName());
+            hzVwoInfo.setVwoCreator(user.getUsername());
             hzVwoInfo.setProjectUid(projectUid);
             hzVwoInfo.setVwoCreateDate(now);
             hzVwoInfo.setVwoType(type);
@@ -1148,7 +1151,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 hzVwoInfo.setUserDeptName(group.getName());
             }
             try {
-                if ((id = iHzVwoInfoService.doInsert(hzVwoInfo)) <= 0) {
+                if ((id = hzVwoInfoServiceImpl.doInsert(hzVwoInfo)) <= 0) {
                     logger.error("创建新的VWO号失败，请联系系统管理员");
                     result.put("status", false);
                     result.put("msg", "创建新的VWO号失败，请联系系统管理员");
@@ -1173,8 +1176,8 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     @Override
     public boolean getVwoFromList(Long id, Integer vwoType, Model model) {
         if (1 == vwoType) {
-            List<HzFeatureChangeBean> after = iHzFeatureChangeService.doSelectAfterByVwoId(id);
-            List<HzFeatureChangeBean> before = iHzFeatureChangeService.doSelectBeforeByVwoId(id);
+            List<HzFeatureChangeBean> after = hzFeatureChangeService.doSelectAfterByVwoId(id);
+            List<HzFeatureChangeBean> before = hzFeatureChangeService.doSelectBeforeByVwoId(id);
             model.addAttribute("after", after);
             model.addAttribute("before", before);
 
@@ -1186,9 +1189,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             model.addAttribute("msg", "没有对应的VWO变更");
             return false;
         }
-        HzVwoInfo vwoInfo = iHzVwoInfoService.doSelectByPrimaryKey(id);
-        HzVwoInfluenceDept influenceDept = iHzVwoInfluenceDeptService.doSelectByVwoId(id);
-        HzVwoInfluenceUser influenceUser = iHzVwoInfluenceUserService.doSelectByVwoId(id);
+        HzVwoInfo vwoInfo = hzVwoInfoServiceImpl.doSelectByPrimaryKey(id);
+        HzVwoInfluenceDept influenceDept = hzVwoInfluenceDeptService.doSelectByVwoId(id);
+        HzVwoInfluenceUser influenceUser = hzVwoInfluenceUserService.doSelectByVwoId(id);
         HzVwoOpiBom hzVwoOpiBom = hzVwoOpiBomDao.selectByVwoId(id);
         HzVwoOpiPmt hzVwoOpiPmt = hzVwoOpiPmtDao.selectByVwoId(id);
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(id);
@@ -1197,7 +1200,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         if (influenceDept == null) {
             influenceDept = new HzVwoInfluenceDept();
             influenceDept.setVwoId(id);
-            if (iHzVwoInfluenceDeptService.doInsert(influenceDept) <= 0) {
+            if (hzVwoInfluenceDeptService.doInsert(influenceDept) <= 0) {
                 logger.error("初始化VWO:" + id + "的影响部门数据失败");
                 model.addAttribute("msg", "初始化VWO:" + id + "的影响部门数据失败");
                 return false;
@@ -1207,7 +1210,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         if (influenceUser == null) {
             influenceUser = new HzVwoInfluenceUser();
             influenceUser.setVwoId(id);
-            if (iHzVwoInfluenceUserService.doInsert(influenceUser) <= 0) {
+            if (hzVwoInfluenceUserService.doInsert(influenceUser) <= 0) {
                 logger.error("初始化VWO:" + id + "的影响人员数据失败");
                 model.addAttribute("msg", "初始化VWO:" + id + "的影响人员数据失败");
                 return false;
@@ -1259,7 +1262,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     }
 
     public HzVwoInfo getVwoInfo(Long id) {
-        return iHzVwoInfoService.doSelectByPrimaryKey(id);
+        return hzVwoInfoServiceImpl.doSelectByPrimaryKey(id);
     }
 
     /**
@@ -1269,12 +1272,12 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
      * @return
      */
     public HzVwoInfluenceDept getInfluenceDept(Long id) {
-        HzVwoInfluenceDept influenceDept = iHzVwoInfluenceDeptService.doSelectByVwoId(id);
+        HzVwoInfluenceDept influenceDept = hzVwoInfluenceDeptService.doSelectByVwoId(id);
         //影响部门
         if (influenceDept == null) {
             influenceDept = new HzVwoInfluenceDept();
             influenceDept.setVwoId(id);
-            if (iHzVwoInfluenceDeptService.doInsert(influenceDept) <= 0) {
+            if (hzVwoInfluenceDeptService.doInsert(influenceDept) <= 0) {
                 logger.error("初始化VWO:" + id + "的影响部门数据失败");
             }
         }
@@ -1288,12 +1291,12 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
      * @return
      */
     public HzVwoInfluenceUser getInfluenceUser(Long id) {
-        HzVwoInfluenceUser influenceUser = iHzVwoInfluenceUserService.doSelectByVwoId(id);
+        HzVwoInfluenceUser influenceUser = hzVwoInfluenceUserService.doSelectByVwoId(id);
         //影响人员
         if (influenceUser == null) {
             influenceUser = new HzVwoInfluenceUser();
             influenceUser.setVwoId(id);
-            if (iHzVwoInfluenceUserService.doInsert(influenceUser) <= 0) {
+            if (hzVwoInfluenceUserService.doInsert(influenceUser) <= 0) {
                 logger.error("初始化VWO:" + id + "的影响人员数据失败");
             }
         }
@@ -1357,7 +1360,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     public HzVwoOpiProj getOpiOfProjMng(Long id) {
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(id);
         if (hzVwoOpiProj == null) {
-            HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(id);
+            HzVwoInfo info = hzVwoInfoServiceImpl.doSelectByPrimaryKey(id);
             HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(info.getProjectUid());
             User user = UserInfo.getUser();
             hzVwoOpiProj = new HzVwoOpiProj();
@@ -1375,7 +1378,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         }
 
         if (hzVwoOpiProj.getOpiProjMngUserId() == null || !checkString(hzVwoOpiProj.getOpiProjMngUserName())) {
-            HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(id);
+            HzVwoInfo info = hzVwoInfoServiceImpl.doSelectByPrimaryKey(id);
             HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(info.getProjectUid());
             HzVwoOpiProj proj = new HzVwoOpiProj();
             proj.setId(hzVwoOpiProj.getId());
@@ -1397,7 +1400,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
      * @return
      */
     public List<HzFeatureChangeBean> getFeatureChangeAfter(Long id) {
-        return iHzFeatureChangeService.doSelectAfterByVwoId(id);
+        return hzFeatureChangeService.doSelectAfterByVwoId(id);
     }
 
     /**
@@ -1407,7 +1410,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
      * @return
      */
     public List<HzFeatureChangeBean> getFeatureChangeBefore(Long id) {
-        return iHzFeatureChangeService.doSelectBeforeByVwoId(id);
+        return hzFeatureChangeService.doSelectBeforeByVwoId(id);
     }
 
     @Override
@@ -1436,27 +1439,27 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             interrupt(vwoType, projectUid, hzVwoOpiBom.getOpiVwoId());
         }
         //修改VWO流程状态
-        if (!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)) {
+        if (!hzVwoInfoServiceImpl.doUpdateByPrimaryKey(hzVwoInfo)) {
             result.put("status", false);
             result.put("msg", "VWO状态修改失败");
             return result;
         }
         if (hzVwoOpiBom.getOpiBomMngAgreement() != 1) {
-            if (hzTasksService.doStopTask(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId())) {
+            if (hzTaskService.doStopTask(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId())) {
                 logger.error("终止任务失败");
             }
         } else {
-            List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
+            List<HzTasks> tasks = hzTaskService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
             if (tasks != null && tasks.size() == 1) {
                 HzTasks task = tasks.get(0);
                 HzTasks taskOfPmt = new HzTasks();
                 task.setTaskStatus(999);
                 taskOfPmt.setId((task.getId() + 1));
                 taskOfPmt.setTaskStatus(1);
-                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                if (!hzTaskService.doUpdateByPrimaryKeySelective(task)) {
                     logger.error("更新BOM经理完成任务失败");
                 }
-                if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfPmt)) {
+                if (!hzTaskService.doUpdateByPrimaryKeySelective(taskOfPmt)) {
                     logger.error("更新PMT经理执行任务状态失败");
                 }
             }
@@ -1474,7 +1477,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 //        task.setTaskTargetId(targetId);
 //        task.setTaskStatus(status);
 //        task.setTaskUpdateDate(now);
-//        if (hzTasksService.doUpdateTargetStatus(task)) {
+//        if (hzTaskService.doUpdateTargetStatus(task)) {
 //            logger.error("更新任务状态失败");
 //        }
 //    }
@@ -1503,27 +1506,27 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             hzVwoInfo.setVwoStatus(899);
             interrupt(vwoType, projectUid, hzVwoOpiPmt.getOpiVwoId());
         }
-        if (!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)) {
+        if (!hzVwoInfoServiceImpl.doUpdateByPrimaryKey(hzVwoInfo)) {
             result.put("status", false);
             result.put("msg", "VWO状态修改失败");
             return result;
         }
         if (hzVwoOpiPmt.getOpiPmtMngAgreement() != 1) {
-            if (hzTasksService.doStopTask(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId())) {
+            if (hzTaskService.doStopTask(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId())) {
                 logger.error("终止任务失败");
             }
         } else {
-            List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
+            List<HzTasks> tasks = hzTaskService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
             if (tasks != null && tasks.size() == 1) {
                 HzTasks task = tasks.get(0);
                 HzTasks taskOfProj = new HzTasks();
                 task.setTaskStatus(999);
                 taskOfProj.setId((task.getId() + 1));
                 taskOfProj.setTaskStatus(1);
-                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                if (!hzTaskService.doUpdateByPrimaryKeySelective(task)) {
                     logger.error("更新PMT经理完成任务失败");
                 }
-                if (!hzTasksService.doUpdateByPrimaryKeySelective(taskOfProj)) {
+                if (!hzTaskService.doUpdateByPrimaryKeySelective(taskOfProj)) {
                     logger.error("更新项目经理执行任务状态失败");
                 }
             }
@@ -1558,21 +1561,21 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             hzVwoInfo.setVwoStatus(899);
             interrupt(vwoType, projectUid, hzVwoOpiProj.getOpiVwoId());
         }
-        if (!iHzVwoInfoService.doUpdateByPrimaryKey(hzVwoInfo)) {
+        if (!hzVwoInfoServiceImpl.doUpdateByPrimaryKey(hzVwoInfo)) {
             result.put("status", false);
             result.put("msg", "VWO状态修改失败");
             return result;
         }
         if (hzVwoOpiProj.getOpiProjMngAgreement() != 1) {
-            if (hzTasksService.doStopTask(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId())) {
+            if (hzTaskService.doStopTask(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId())) {
                 logger.error("终止任务失败");
             }
         } else {
-            List<HzTasks> tasks = hzTasksService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
+            List<HzTasks> tasks = hzTaskService.doSelectUserTargetTaskByType(TaskOptions.FORM_TYPE_VWO, vwoType, hzVwoInfo.getId(), Long.valueOf(user.getId()), 1);
             if (tasks != null && tasks.size() == 1) {
                 HzTasks task = tasks.get(0);
                 task.setTaskStatus(999);
-                if (!hzTasksService.doUpdateByPrimaryKeySelective(task)) {
+                if (!hzTaskService.doUpdateByPrimaryKeySelective(task)) {
                     logger.error("更新项目经理经理完成任务失败");
                 }
             }
@@ -1597,7 +1600,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             result.put("status", false);
             return result;
         }
-        HzVwoInfo vwoInfo = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
+        HzVwoInfo vwoInfo = hzVwoInfoServiceImpl.doSelectByPrimaryKey(vwoId);
         HzProjectLibs project = hzProjectLibsServiceImpl.doLoadProjectLibsById(vwoInfo.getProjectUid());
         Long managerId = project.getProjectManagerId();
         HzVwoOpiProj hzVwoOpiProj = hzVwoOpiProjDao.selectByVwoId(vwoId);
@@ -1687,7 +1690,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         if (influenceUser == null) {
             result.put("status", false);
         } else {
-            HzVwoInfluenceUser fromDb = iHzVwoInfluenceUserService.doSelectByVwoId(influenceUser.getVwoId());
+            HzVwoInfluenceUser fromDb = hzVwoInfluenceUserService.doSelectByVwoId(influenceUser.getVwoId());
             if (fromDb == null) {
                 result.put("status", false);
                 result.put("msg", "没有找到影响人员原始数据");
@@ -1728,7 +1731,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     result.put("msg", "选项错误");
                     return result;
             }
-            if (iHzVwoInfluenceUserService.doUpdateByPrimaryKeySelective(influenceUser) <= 0) {
+            if (hzVwoInfluenceUserService.doUpdateByPrimaryKeySelective(influenceUser) <= 0) {
                 logger.error("更新影响人员数据出错");
                 result.put("status", false);
                 result.put("msg", "更新影响人员数据出错");
@@ -1769,7 +1772,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 }
                 if (users.get(i).getGroupId() == beans.get(i1).getDbId()) {
                     VWOUserGroupDTO dto = new VWOUserGroupDTO();
-                    dto.setName(users.get(i).getUserName());
+                    dto.setName(users.get(i).getUsername());
                     dto.setUid(String.valueOf(users.get(i).getId()));
                     dto.setpUid(beans.get(i1).getUid());
                     beans.add(dto);
@@ -1794,10 +1797,10 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             result.put("msg", "请选择一个VWO表单进行操作");
             return result;
         } else {
-            HzVwoInfluenceDept fromDb = iHzVwoInfluenceDeptService.doSelectByVwoId(dept.getVwoId());
+            HzVwoInfluenceDept fromDb = hzVwoInfluenceDeptService.doSelectByVwoId(dept.getVwoId());
             dept.setVwoId(fromDb.getVwoId());
             dept.setId(fromDb.getId());
-            if (iHzVwoInfluenceDeptService.doUpdateByPrimaryKey(dept) <= 0) {
+            if (hzVwoInfluenceDeptService.doUpdateByPrimaryKey(dept) <= 0) {
                 logger.error("无法更新VWO数据,VWO ID为:" + dept.getId());
                 result.put("status", false);
                 result.put("msg", "无法更新VWO数据");
@@ -1844,7 +1847,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             }
 
 
-            HzVwoInfo info = iHzVwoInfoService.doSelectByPrimaryKey(change.getVwoId());
+            HzVwoInfo info = hzVwoInfoServiceImpl.doSelectByPrimaryKey(change.getVwoId());
             if (info == null) {
                 result.put("status", false);
                 result.put("msg", "没有找到VWO变更号");
@@ -1865,7 +1868,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             change.setVwoNum(info.getVwoNum());
             change.setPartPuid(itemList.get(0).getPuid());
             change.setPartName(itemList.get(0).getpBomLinePartName());
-            if (iHzVwoInformChangesService.doInsert(change) <= 0) {
+            if (hzVwoInformChangesService.doInsert(change) <= 0) {
                 result.put("status", false);
                 result.put("msg", "更新数据失败，请联系系统管理员");
                 logger.error("插入关联数据失败");
@@ -1886,8 +1889,8 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     @Override
     public Map<String, Object> getInformChangers(Long vwo, QueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
-        List<HzVwoInformChanges> list = iHzVwoInformChangesService.doSelectByVwoId(vwo);
-        Long totalCount = iHzVwoInformChangesService.tellMeHowManyOfIt(vwo);
+        List<HzVwoInformChanges> list = hzVwoInformChangesService.doSelectByVwoId(vwo);
+        Long totalCount = hzVwoInformChangesService.tellMeHowManyOfIt(vwo);
         result.put("totalCount", totalCount);
         result.put("result", list);
         return result;
@@ -1904,8 +1907,8 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     public Map<String, Object> queryByBase(String projectUid, HzVwoFormListQueryBase queryBase) {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzVwoInfo.reflectToDBField(queryBase.getSort()));
-        result.put("totalCount", iHzVwoInfoService.count(projectUid));
-        result.put("result", iHzVwoInfoService.doSelectListByProjectUid(queryBase, projectUid));
+        result.put("totalCount", hzVwoInfoServiceImpl.count(projectUid));
+        result.put("result", hzVwoInfoServiceImpl.doSelectListByProjectUid(queryBase, projectUid));
         return result;
     }
 
@@ -1931,7 +1934,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             result.put("status", true);
             result.put("groupName", user.getOrgGroup().getName());
             result.put("personId", user.getId());
-            result.put("personName", user.getUserName());
+            result.put("personName", user.getUsername());
         }
         return result;
     }
@@ -1953,7 +1956,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 
         } else {
             for (int i = 0; i < changes.size(); i++) {
-                if (iHzVwoInformChangesService.doDeleteByPrimaryKey(changes.get(i).getId()) <= 0) {
+                if (hzVwoInformChangesService.doDeleteByPrimaryKey(changes.get(i).getId()) <= 0) {
                     logger.error("删除ID为" + changes.get(i).getId() + "的关联数据失败");
                     result.put("status", false);
                     result.put("msg", "删除关联工程师:" + changes.get(i).getPersonName() + "&emsp;&emsp;关联零件号:" + changes.get(i).getPartId() + "数据失败");
@@ -1990,7 +1993,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 result.put("msg", "该VWO已发布，不能保存");
                 return result;
             }
-//            HzVwoInfo fromDb = iHzVwoInfoService.selectByPrimaryKey(info.getId());
+//            HzVwoInfo fromDb = hzVwoInfoServiceImpl.selectByPrimaryKey(info.getId());
 //            fromDb.setVwoName(info.getVwoName());
 //            fromDb.setContactPhoneNum(info.getContactPhoneNum());
 //            fromDb.setVwoDemandFinishTime(info.getVwoDemandFinishTime());
@@ -2007,7 +2010,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 //            fromDb.setVwoConnectedUserDept();
 //            fromDb.setVwoConnectedUserDept();
 //            fromDb.setVwoConnectedUserDept();
-            if (!iHzVwoInfoService.doUpdateByPrimaryKey(info)) {
+            if (!hzVwoInfoServiceImpl.doUpdateByPrimaryKey(info)) {
                 logger.error("无法更新VWO数据,VWO ID为:" + info.getId());
                 result.put("status", false);
                 result.put("msg", "无法更新VWO数据");
@@ -2079,13 +2082,13 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     @Override
     public Map<String, Object> getFeatureTable(Long vwoId) {
         Map<String, Object> result = new HashMap<>();
-        List<HzFeatureChangeBean> beans = iHzFeatureChangeService.doSelectCfgUidsByVwoId(vwoId);
+        List<HzFeatureChangeBean> beans = hzFeatureChangeService.doSelectCfgUidsByVwoId(vwoId);
         List<HzVwoFeatureTableDto> list = new ArrayList<>();
 
         //临近的两个，前一个为变更前数据，后一个为变更后数据
         if (beans != null && !beans.isEmpty()) {
             for (int i = 0; i < beans.size(); i++) {
-                List<HzFeatureChangeBean> bs = iHzFeatureChangeService.doQueryLastTwoChange(beans.get(i).getCfgPuid(), vwoId);
+                List<HzFeatureChangeBean> bs = hzFeatureChangeService.doQueryLastTwoChange(beans.get(i).getCfgPuid(), vwoId);
                 if(bs==null||bs.size()<=0||bs.get(1)==null){
                     continue;
                 }
@@ -2380,7 +2383,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         bean.setVwoId(id);
         bean.setCfgIsInProcess(1);
         bean.setProcessStartDate(now);
-        bean.setProcessStarter(user.getUserName());
+        bean.setProcessStarter(user.getUsername());
         bean.setProcessStatus(1);
     }
 
@@ -2394,10 +2397,10 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
      */
     public boolean toLaunch(Integer type, String projectUid, Long vwoId, Long formId) {
         User user = UserInfo.getUser();
-        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
+        HzVwoInfo info = hzVwoInfoServiceImpl.doSelectByPrimaryKey(vwoId);
         info.setVwoFinisher(user.getLogin());
         info.setVwoStatus(101);
-        boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
+        boolean vwoFlag = hzVwoInfoServiceImpl.updateByVwoId(info);
         /**发起流程之后，通知到人员*/
         noticeUsers(info, type, user, formId);
         return vwoFlag;
@@ -2410,7 +2413,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
      * @param type
      */
     private void noticeUsers(HzVwoInfo info, Integer type, User user, long formId) {
-        List<HzTasks> tasks = hzTasksService.doSelectUserVWOTaskByIds(info.getId(), null, type);
+        List<HzTasks> tasks = hzTaskService.doSelectUserVWOTaskByIds(info.getId(), null, type);
         if (tasks == null || tasks.isEmpty()) {
             HzVwoOpiBom bom = hzVwoOpiBomDao.selectByVwoId(info.getId());
             HzVwoOpiPmt pmt = hzVwoOpiPmtDao.selectByVwoId(info.getId());
@@ -2421,7 +2424,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             task.setTaskTargetId(info.getId());
             task.setTaskTargetType(type);
             task.setTaskFormType(TaskOptions.FORM_TYPE_VWO);
-            task.setTaskLauncher(user.getUserName());
+            task.setTaskLauncher(user.getUsername());
             task.setTaskLauncherId(Long.valueOf(user.getId()));
             task.setTaskCreateDate(now);
             task.setTaskUpdateDate(now);
@@ -2442,14 +2445,14 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 taskOfProj.setTaskUserId(proj.getOpiProjMngUserId());
                 taskOfProj.setTaskStatus(800);
 
-//                if (!hzTasksService.insert(taskOfBom) || !hzTasksService.insert(taskOfPmt) || !hzTasksService.insert(taskOfProj)) {
+//                if (!hzTaskService.insert(taskOfBom) || !hzTaskService.insert(taskOfPmt) || !hzTaskService.insert(taskOfProj)) {
 //                    logger.error("通知任务失败");
 //                }
                 list.add(taskOfBom);
                 list.add(taskOfPmt);
                 list.add(taskOfProj);
 //                这里批量插入插入只有2个，需要改进
-                if (!hzTasksService.doInsertByBatch(list)) {
+                if (!hzTaskService.doInsertByBatch(list)) {
                     logger.error("通知任务失败");
                 }
 
@@ -3155,129 +3158,129 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 
 
         //变更前主数据
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeansBefor = new ArrayList<>();
+        List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeansBefor = new ArrayList<>();
         //变更前从数据
-        List<HzDMDetailChangeBean> hzDMDetailChangeBeansBefor = new ArrayList<>();
+        List<HzDerivativeMaterielDetailChangeBean> hzDerivativeMaterielDetailChangeBeansBefor = new ArrayList<>();
         //变更后主数据
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeansAfter = new ArrayList<>();
+        List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeansAfter = new ArrayList<>();
         //变更后从数据
-        List<HzDMDetailChangeBean> hzDMDetailChangeBeansAfter = new ArrayList<>();
+        List<HzDerivativeMaterielDetailChangeBean> hzDerivativeMaterielDetailChangeBeansAfter = new ArrayList<>();
 
         /********查询变更前后主从数据*********/
         //根据变更表单id查询变更后主数据
-            hzDMBasicChangeBeansAfter = hzDerivativeMaterielBasicChangeDao.selectAfter(formId);
-        if(hzDMBasicChangeBeansAfter==null||hzDMBasicChangeBeansAfter.size()<=0){
+            hzDerivativeMaterielBasicChangeBeansAfter = hzDerivativeMaterielBasicChangeDao.selectAfter(formId);
+        if(hzDerivativeMaterielBasicChangeBeansAfter ==null|| hzDerivativeMaterielBasicChangeBeansAfter.size()<=0){
             return map;
         }
 
         //根据变更后数据查询最近一次变更主数据
-        if(hzDMBasicChangeBeansAfter!=null&&hzDMBasicChangeBeansAfter.size()>0){
-            for(HzDMBasicChangeBean hzDMBasicChangeBeanAfter : hzDMBasicChangeBeansAfter){
-                HzDMBasicChangeBean hzDMBasicChangeBeanBefor = hzDerivativeMaterielBasicChangeDao.selectBefor(hzDMBasicChangeBeanAfter);
-                if(hzDMBasicChangeBeanBefor!=null) {
-                    hzDMBasicChangeBeansBefor.add(hzDMBasicChangeBeanBefor);
+        if(hzDerivativeMaterielBasicChangeBeansAfter !=null&& hzDerivativeMaterielBasicChangeBeansAfter.size()>0){
+            for(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBeanAfter : hzDerivativeMaterielBasicChangeBeansAfter){
+                HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBeanBefor = hzDerivativeMaterielBasicChangeDao.selectBefor(hzDerivativeMaterielBasicChangeBeanAfter);
+                if(hzDerivativeMaterielBasicChangeBeanBefor !=null) {
+                    hzDerivativeMaterielBasicChangeBeansBefor.add(hzDerivativeMaterielBasicChangeBeanBefor);
                 }
             }
         }
-        if(hzDMBasicChangeBeansBefor!=null&&hzDMBasicChangeBeansBefor.size()!=0){
+        if(hzDerivativeMaterielBasicChangeBeansBefor !=null&& hzDerivativeMaterielBasicChangeBeansBefor.size()!=0){
             //根据最近一次变更主数据查询变更从数据
-            hzDMDetailChangeBeansBefor = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDMBasicChangeBeansBefor);
+            hzDerivativeMaterielDetailChangeBeansBefor = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDerivativeMaterielBasicChangeBeansBefor);
         }
 
         //根据变更后主数据查询变更后从数据
-        hzDMDetailChangeBeansAfter = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDMBasicChangeBeansAfter);
+        hzDerivativeMaterielDetailChangeBeansAfter = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDerivativeMaterielBasicChangeBeansAfter);
 
         /******获取列*******/
         //变更前
-        if(hzDMDetailChangeBeansBefor!=null&&hzDMDetailChangeBeansBefor.size()!=0){
-            for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansBefor){
-                titleSet.add(hzDMDetailChangeBean.getTitle());
+        if(hzDerivativeMaterielDetailChangeBeansBefor !=null&& hzDerivativeMaterielDetailChangeBeansBefor.size()!=0){
+            for(HzDerivativeMaterielDetailChangeBean hzDerivativeMaterielDetailChangeBean : hzDerivativeMaterielDetailChangeBeansBefor){
+                titleSet.add(hzDerivativeMaterielDetailChangeBean.getTitle());
             }
         }
         //变更后
-        if(hzDMDetailChangeBeansAfter==null||hzDMDetailChangeBeansAfter.size()<=0){
+        if(hzDerivativeMaterielDetailChangeBeansAfter ==null|| hzDerivativeMaterielDetailChangeBeansAfter.size()<=0){
             return map;
         }
-        for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansAfter){
-            titleSet.add(hzDMDetailChangeBean.getTitle());
+        for(HzDerivativeMaterielDetailChangeBean hzDerivativeMaterielDetailChangeBean : hzDerivativeMaterielDetailChangeBeansAfter){
+            titleSet.add(hzDerivativeMaterielDetailChangeBean.getTitle());
         }
 
 
 
         /******整理变更前后主数据*******/
         //将所有删除数据过滤出来
-        Iterator<HzDMBasicChangeBean> IteratorDelete = hzDMBasicChangeBeansAfter.iterator();
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeansDelete = new ArrayList<>();
+        Iterator<HzDerivativeMaterielBasicChangeBean> IteratorDelete = hzDerivativeMaterielBasicChangeBeansAfter.iterator();
+        List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeansDelete = new ArrayList<>();
         while (IteratorDelete.hasNext()){
-            HzDMBasicChangeBean hzDMBasicChangeBean = IteratorDelete.next();
-            if(hzDMBasicChangeBean.getDmbSrcStatus()!=null&&hzDMBasicChangeBean.getDmbSrcStatus()==2){
-                hzDMBasicChangeBeansDelete.add(hzDMBasicChangeBean);
+            HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean = IteratorDelete.next();
+            if(hzDerivativeMaterielBasicChangeBean.getDmbSrcStatus()!=null&& hzDerivativeMaterielBasicChangeBean.getDmbSrcStatus()==2){
+                hzDerivativeMaterielBasicChangeBeansDelete.add(hzDerivativeMaterielBasicChangeBean);
                 IteratorDelete.remove();
             }
         }
-        if(hzDMBasicChangeBeansDelete.size()>0){
-            List<HzDMDetailChangeBean> hzDMDetailChangeBeansDelete = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDMBasicChangeBeansDelete);
-            for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeansDelete){
+        if(hzDerivativeMaterielBasicChangeBeansDelete.size()>0){
+            List<HzDerivativeMaterielDetailChangeBean> hzDerivativeMaterielDetailChangeBeansDelete = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDerivativeMaterielBasicChangeBeansDelete);
+            for(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean : hzDerivativeMaterielBasicChangeBeansDelete){
                 Map<String,String> basicMap = new HashMap<>();
-                setMaterielFeatureBasicDate(hzDMBasicChangeBean,basicMap,"删除",factoryMap,superMateriel);
-                setMaterielFeatureDetailDate(titleSet,hzDMDetailChangeBeansDelete,hzDMBasicChangeBean,basicMap);
+                setMaterielFeatureBasicDate(hzDerivativeMaterielBasicChangeBean,basicMap,"删除",factoryMap,superMateriel);
+                setMaterielFeatureDetailDate(titleSet, hzDerivativeMaterielDetailChangeBeansDelete, hzDerivativeMaterielBasicChangeBean,basicMap);
                 result.add(basicMap);
             }
         }
 
         //将所有新增的数据过滤出来
-        if(hzDMBasicChangeBeansAfter.size()>0) {
-            Iterator<HzDMBasicChangeBean> IteratorAdd = hzDMBasicChangeBeansAfter.iterator();
-            List<HzDMBasicChangeBean> hzDMBasicChangeBeansAdd = new ArrayList<>();
+        if(hzDerivativeMaterielBasicChangeBeansAfter.size()>0) {
+            Iterator<HzDerivativeMaterielBasicChangeBean> IteratorAdd = hzDerivativeMaterielBasicChangeBeansAfter.iterator();
+            List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeansAdd = new ArrayList<>();
             while (IteratorAdd.hasNext()) {
-                HzDMBasicChangeBean hzDMBasicChangeBeanAfter = IteratorAdd.next();
+                HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBeanAfter = IteratorAdd.next();
                 boolean flag = true;
-                if(hzDMBasicChangeBeansBefor==null||hzDMBasicChangeBeansBefor.size()==0){
+                if(hzDerivativeMaterielBasicChangeBeansBefor ==null|| hzDerivativeMaterielBasicChangeBeansBefor.size()==0){
                     flag = true;
                 }else {
-                    for (HzDMBasicChangeBean hzDMBasicChangeBeanBefor : hzDMBasicChangeBeansBefor) {
-                        if (hzDMBasicChangeBeanAfter.getDmbSrcId().equals(hzDMBasicChangeBeanBefor.getDmbSrcId())) {
+                    for (HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBeanBefor : hzDerivativeMaterielBasicChangeBeansBefor) {
+                        if (hzDerivativeMaterielBasicChangeBeanAfter.getDmbSrcId().equals(hzDerivativeMaterielBasicChangeBeanBefor.getDmbSrcId())) {
                             flag = false;
                             break;
                         }
                     }
                 }
                 if (flag) {
-                    hzDMBasicChangeBeansAdd.add(hzDMBasicChangeBeanAfter);
+                    hzDerivativeMaterielBasicChangeBeansAdd.add(hzDerivativeMaterielBasicChangeBeanAfter);
                     IteratorAdd.remove();
                 }
             }
-            if(hzDMBasicChangeBeansAdd.size()>0) {
-                List<HzDMDetailChangeBean> hzDMDetailChangeBeansAdd = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDMBasicChangeBeansAdd);
-                for (HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeansAdd) {
+            if(hzDerivativeMaterielBasicChangeBeansAdd.size()>0) {
+                List<HzDerivativeMaterielDetailChangeBean> hzDerivativeMaterielDetailChangeBeansAdd = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDerivativeMaterielBasicChangeBeansAdd);
+                for (HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean : hzDerivativeMaterielBasicChangeBeansAdd) {
                     Map<String, String> basicMap = new HashMap<>();
-                    setMaterielFeatureBasicDate(hzDMBasicChangeBean, basicMap, "新增", factoryMap, superMateriel);
-                    setMaterielFeatureDetailDate(titleSet,hzDMDetailChangeBeansAdd,hzDMBasicChangeBean,basicMap);
+                    setMaterielFeatureBasicDate(hzDerivativeMaterielBasicChangeBean, basicMap, "新增", factoryMap, superMateriel);
+                    setMaterielFeatureDetailDate(titleSet, hzDerivativeMaterielDetailChangeBeansAdd, hzDerivativeMaterielBasicChangeBean,basicMap);
                     result.add(basicMap);
                 }
             }
         }
         //整理修改数据，将其变更前后放入一个list中
-        if(hzDMBasicChangeBeansAfter.size()>0) {
-            List<HzDMBasicChangeBean> hzDMBasicChangeBeansUpdate = new ArrayList<>();
-            for(HzDMBasicChangeBean hzDMBasicChangeBeanBefor : hzDMBasicChangeBeansBefor){
-                for(HzDMBasicChangeBean hzDMBasicChangeBeanAfter : hzDMBasicChangeBeansAfter){
-                    if (hzDMBasicChangeBeanBefor.getDmbSrcId().equals(hzDMBasicChangeBeanAfter.getDmbSrcId())){
-                        hzDMBasicChangeBeansUpdate.add(hzDMBasicChangeBeanBefor);
-                        hzDMBasicChangeBeansUpdate.add(hzDMBasicChangeBeanAfter);
+        if(hzDerivativeMaterielBasicChangeBeansAfter.size()>0) {
+            List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeansUpdate = new ArrayList<>();
+            for(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBeanBefor : hzDerivativeMaterielBasicChangeBeansBefor){
+                for(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBeanAfter : hzDerivativeMaterielBasicChangeBeansAfter){
+                    if (hzDerivativeMaterielBasicChangeBeanBefor.getDmbSrcId().equals(hzDerivativeMaterielBasicChangeBeanAfter.getDmbSrcId())){
+                        hzDerivativeMaterielBasicChangeBeansUpdate.add(hzDerivativeMaterielBasicChangeBeanBefor);
+                        hzDerivativeMaterielBasicChangeBeansUpdate.add(hzDerivativeMaterielBasicChangeBeanAfter);
                         break;
                     }
                 }
             }
-            if(hzDMBasicChangeBeansUpdate.size()>0) {
-                List<HzDMDetailChangeBean> hzDMDetailChangeBeansUpdate = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDMBasicChangeBeansUpdate);
-                for (int i = 0; i < hzDMBasicChangeBeansUpdate.size(); i++) {
+            if(hzDerivativeMaterielBasicChangeBeansUpdate.size()>0) {
+                List<HzDerivativeMaterielDetailChangeBean> hzDerivativeMaterielDetailChangeBeansUpdate = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDerivativeMaterielBasicChangeBeansUpdate);
+                for (int i = 0; i < hzDerivativeMaterielBasicChangeBeansUpdate.size(); i++) {
                     Map<String, String> basicMapBefor = new HashMap<>();
                     Map<String, String> basicMapAfter = new HashMap<>();
-                    setMaterielFeatureBasicDate(hzDMBasicChangeBeansUpdate.get(i), basicMapBefor, "变更前", factoryMap, superMateriel);
-                    setMaterielFeatureDetailDate(titleSet,hzDMDetailChangeBeansUpdate,hzDMBasicChangeBeansUpdate.get(i),basicMapBefor);
-                    setMaterielFeatureBasicDate(hzDMBasicChangeBeansUpdate.get(i + 1), basicMapAfter, "变更后", factoryMap, superMateriel);
-                    setMaterielFeatureDetailDate(titleSet,hzDMDetailChangeBeansUpdate,hzDMBasicChangeBeansUpdate.get(i+1),basicMapAfter);
+                    setMaterielFeatureBasicDate(hzDerivativeMaterielBasicChangeBeansUpdate.get(i), basicMapBefor, "变更前", factoryMap, superMateriel);
+                    setMaterielFeatureDetailDate(titleSet, hzDerivativeMaterielDetailChangeBeansUpdate, hzDerivativeMaterielBasicChangeBeansUpdate.get(i),basicMapBefor);
+                    setMaterielFeatureBasicDate(hzDerivativeMaterielBasicChangeBeansUpdate.get(i + 1), basicMapAfter, "变更后", factoryMap, superMateriel);
+                    setMaterielFeatureDetailDate(titleSet, hzDerivativeMaterielDetailChangeBeansUpdate, hzDerivativeMaterielBasicChangeBeansUpdate.get(i+1),basicMapAfter);
                     result.add(basicMapBefor);
                     result.add(basicMapAfter);
                     i++;
@@ -3286,11 +3289,11 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         }
 
 
-//        for(int i=0;i<hzDMBasicChangeBeansAfter.size();i++){
+//        for(int i=0;i<hzDerivativeMaterielBasicChangeBeansAfter.size();i++){
 //            Map<String,String> basicBefor = new HashMap<>();
 //            Map<String,String> basicAfter= new HashMap<>();
-//            if(hzDMBasicChangeBeansBefor.size()!=0&&hzDMBasicChangeBeansAfter!=null){
-//                HzDMBasicChangeBean hzDMBasicChangeBeanBefor = hzDMBasicChangeBeansBefor.get(i);
+//            if(hzDerivativeMaterielBasicChangeBeansBefor.size()!=0&&hzDerivativeMaterielBasicChangeBeansAfter!=null){
+//                HzDerivativeMaterielBasicChangeBean hzDMBasicChangeBeanBefor = hzDerivativeMaterielBasicChangeBeansBefor.get(i);
 //                HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBeanBefor.getDmbModelUid(),hzDMBasicChangeBeanBefor.getDmbColorModelUid());
 //                basicBefor.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
 //                if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
@@ -3310,7 +3313,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 //                basicBefor.put("modeBasicDetailDesc","-");
 //                basicBefor.put("superMateriel","-");
 //            }
-//            HzDMBasicChangeBean hzDMBasicChangeBeanAfter = hzDMBasicChangeBeansAfter.get(i);
+//            HzDerivativeMaterielBasicChangeBean hzDMBasicChangeBeanAfter = hzDerivativeMaterielBasicChangeBeansAfter.get(i);
 //            HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBeanAfter.getDmbModelUid(),hzDMBasicChangeBeanAfter.getDmbColorModelUid());
 //            basicAfter.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
 //            if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
@@ -3330,9 +3333,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 ////            while (iterator.hasNext()){
 ////                String title = iterator.next();
 ////                boolean beforTitleFlag = false;
-////                if(hzDMDetailChangeBeansBefor!=null&&hzDMDetailChangeBeansBefor.size()!=0){
-////                    for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansBefor){
-////                        if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId().equals(hzDMBasicChangeBeansBefor.get(i).getId())) {
+////                if(hzDerivativeMaterielDetailChangeBeansBefor!=null&&hzDerivativeMaterielDetailChangeBeansBefor.size()!=0){
+////                    for(HzDerivativeMaterielDetailChangeBean hzDMDetailChangeBean : hzDerivativeMaterielDetailChangeBeansBefor){
+////                        if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId().equals(hzDerivativeMaterielBasicChangeBeansBefor.get(i).getId())) {
 ////                            basicBefor.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
 ////                            beforTitleFlag = true;
 ////                            break;
@@ -3344,8 +3347,8 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 ////                }
 ////
 ////                boolean afterTitleFlag = false;
-////                for (HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeansAfter) {
-////                    if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId().equals(hzDMBasicChangeBeansAfter.get(i).getId())) {
+////                for (HzDerivativeMaterielDetailChangeBean hzDMDetailChangeBean : hzDerivativeMaterielDetailChangeBeansAfter) {
+////                    if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId().equals(hzDerivativeMaterielBasicChangeBeansAfter.get(i).getId())) {
 ////                        basicAfter.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
 ////                        afterTitleFlag = true;
 ////                        break;
@@ -3422,7 +3425,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         //查询变更前的2Y
         List<HzFullCfgWithCfgChange> hzFullCfgWithCfgChangesBefor = null;
 
-        hzFullCfgMainChangeBefor = hzFullCfgMainChangeDao.selectLast(hzFullCfgMainChangeAfter.getSrcMainId());
+        hzFullCfgMainChangeBefor = hzFullCfgMainChangeDao.selectLastFullCfg(hzFullCfgMainChangeAfter.getSrcMainId());
         if(hzFullCfgMainChangeBefor!=null){
             hzFullCfgModelChangesBefor = hzFullCfgModelChangeDao.selectByMainId(hzFullCfgMainChangeBefor.getId());
             hzFullCfgWithCfgChangesBefor = hzFullCfgWithCfgChangeDao.selectByMainId(hzFullCfgMainChangeBefor.getId());
@@ -3913,7 +3916,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 //            result.put("msg","修改源数据状态失败");
 //            return result;
 //        }
-        List<HzFeatureChangeBean> hzFeatureChangeBeanList = iHzFeatureChangeService.doSelectHasNotEffect(changeFeatureIds);
+        List<HzFeatureChangeBean> hzFeatureChangeBeanList = hzFeatureChangeService.doSelectHasNotEffect(changeFeatureIds);
         try {
             hzFeatureValueDao.updateStatusByChangeDate(hzFeatureChangeBeanList);
         }catch (Exception e){
@@ -3922,13 +3925,13 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             return result;
         }
 
-        if(iHzFeatureChangeService.doDeleteByPrimaryKeys(changeFeatureIds)<=0?true:false){
+        if(hzFeatureChangeService.doDeleteByPrimaryKeys(changeFeatureIds)<=0?true:false){
             result.put("status",false);
             result.put("msg","删除变更数据失败");
             return result;
         }
         //查询是否还存在数据,如不存在删除关系表数据
-        List<HzFeatureChangeBean> hzFeatureChangeBeans = iHzFeatureChangeService.doselectByChangeId(orderId);
+        List<HzFeatureChangeBean> hzFeatureChangeBeans = hzFeatureChangeService.doselectByChangeId(orderId);
         if(hzFeatureChangeBeans==null||hzFeatureChangeBeans.size()<=0){
             HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
             hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName());
@@ -3984,22 +3987,22 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         result.put("msg","修改成功");
         /*********根据变更数据修改源数据状态************/
         //找到变更后的数据
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeansAfter = hzDerivativeMaterielBasicChangeDao.selectNotEffect(changeMaterielFeatureIds);
+        List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeansAfter = hzDerivativeMaterielBasicChangeDao.selectNotEffect(changeMaterielFeatureIds);
         try {
-            hzDerivativeMaterielBasicDao.updateByChangeIds(hzDMBasicChangeBeansAfter);
+            hzDerivativeMaterielBasicDao.updateByChangeIds(hzDerivativeMaterielBasicChangeBeansAfter);
         }catch (Exception e){
             result.put("status",false);
             result.put("msg","修改源数据失败");
             return result;
         }
-        if(hzDerivativeMaterielBasicChangeDao.deleteByChangeIds(hzDMBasicChangeBeansAfter)<=0?true:false){
+        if(hzDerivativeMaterielBasicChangeDao.deleteByChangeIds(hzDerivativeMaterielBasicChangeBeansAfter)<=0?true:false){
             result.put("status",false);
             result.put("msg","删除变更数据失败");
             return result;
         }
         //判断是否还有变更数据
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = hzDerivativeMaterielBasicChangeDao.selectByFormid(orderId);
-        if(hzDMBasicChangeBeans==null||hzDMBasicChangeBeans.size()<=0){
+        List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans = hzDerivativeMaterielBasicChangeDao.selectByFormid(orderId);
+        if(hzDerivativeMaterielBasicChangeBeans ==null|| hzDerivativeMaterielBasicChangeBeans.size()<=0){
             HzChangeDataRecord hzChangeDataRecord = new HzChangeDataRecord();
             hzChangeDataRecord.setTableName(ChangeTableNameEnum.HZ_DM_BASIC_CHANGE.getTableName());
             hzChangeDataRecord.setOrderId(orderId);
@@ -4042,14 +4045,14 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
 
     /**
      * 衍生物料展示填充主数据方法
-     * @param hzDMBasicChangeBean  变更主数据
+     * @param hzDerivativeMaterielBasicChangeBean  变更主数据
      * @param basicMap                填充结果集
      * @param headDesc              变更类型
      * @param factoryMap            工厂Map
      * @param superMateriel         超级物料
      */
-    public void setMaterielFeatureBasicDate(HzDMBasicChangeBean hzDMBasicChangeBean, Map<String,String> basicMap, String headDesc, Map<String,HzFactory> factoryMap, HzMaterielRecord superMateriel){
-        HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDMBasicChangeBean.getDmbModelUid(),hzDMBasicChangeBean.getDmbColorModelUid());
+    public void setMaterielFeatureBasicDate(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean, Map<String,String> basicMap, String headDesc, Map<String,HzFactory> factoryMap, HzMaterielRecord superMateriel){
+        HzCfg0ModelFeature hzCfg0ModelFeature = hzCfg0ModelFeatureService.doSelectByModelAndColorPuids(hzDerivativeMaterielBasicChangeBean.getDmbModelUid(), hzDerivativeMaterielBasicChangeBean.getDmbColorModelUid());
         basicMap.put("modeBasicDetail",hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
         if(factoryMap.get(hzCfg0ModelFeature.getFactoryCode())==null){
             HzFactory factory = hzFactoryDAO.findFactory(hzCfg0ModelFeature.getFactoryCode(), null);
@@ -4063,34 +4066,34 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
             basicMap.put("superMateriel", "");
         }
         basicMap.put("headDesc",headDesc+"<br>"+hzCfg0ModelFeature.getpFeatureSingleVehicleCode());
-        basicMap.put("id",String.valueOf(hzDMBasicChangeBean.getId()));
+        basicMap.put("id",String.valueOf(hzDerivativeMaterielBasicChangeBean.getId()));
     }
 
     /**
      * 衍生物料展示填充从数据方法
      * @param titleSet                  从数据总集
-     * @param hzDMDetailChangeBeans     从数据集合
-     * @param hzDMBasicChangeBeans      从数据关联的主数据
+     * @param hzDerivativeMaterielDetailChangeBeans     从数据集合
+     * @param hzDerivativeMaterielBasicChangeBeans      从数据关联的主数据
      * @param basicMap                  结果集
      */
-    public void setMaterielFeatureDetailDate(Set<String> titleSet,List<HzDMDetailChangeBean> hzDMDetailChangeBeans,HzDMBasicChangeBean hzDMBasicChangeBeans, Map<String,String> basicMap){
+    public void setMaterielFeatureDetailDate(Set<String> titleSet, List<HzDerivativeMaterielDetailChangeBean> hzDerivativeMaterielDetailChangeBeans, HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBeans, Map<String,String> basicMap){
         Iterator<String> iterator = titleSet.iterator();
         int titleNum = 2;
         while (iterator.hasNext()){
             String title = iterator.next();
             boolean beforTitleFlag = true;
-            for(HzDMDetailChangeBean hzDMDetailChangeBean : hzDMDetailChangeBeans){
-                if (title.equals(hzDMDetailChangeBean.getTitle())&&hzDMDetailChangeBean.getDmbChangeBasicId().equals(hzDMBasicChangeBeans.getId())) {
+            for(HzDerivativeMaterielDetailChangeBean hzDerivativeMaterielDetailChangeBean : hzDerivativeMaterielDetailChangeBeans){
+                if (title.equals(hzDerivativeMaterielDetailChangeBean.getTitle())&& hzDerivativeMaterielDetailChangeBean.getDmbChangeBasicId().equals(hzDerivativeMaterielBasicChangeBeans.getId())) {
                     if("车身颜色<br/>HZCSYS".equals(title)){
-                        basicMap.put("s0", hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+                        basicMap.put("s0", hzDerivativeMaterielDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDerivativeMaterielDetailChangeBean.getDmdFeatureValue());
                         beforTitleFlag = false;
                         break;
                     }else if("油漆车身总成<br/>HZYQCS".equals(title)){
-                        basicMap.put("s1", hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+                        basicMap.put("s1", hzDerivativeMaterielDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDerivativeMaterielDetailChangeBean.getDmdFeatureValue());
                         beforTitleFlag = false;
                         break;
                     }else {
-                        basicMap.put("s" + titleNum, hzDMDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDMDetailChangeBean.getDmdFeatureValue());
+                        basicMap.put("s" + titleNum, hzDerivativeMaterielDetailChangeBean.getDmdFeatureValue() == null ? "-" : hzDerivativeMaterielDetailChangeBean.getDmdFeatureValue());
                         titleNum++;
                         beforTitleFlag = false;
                         break;

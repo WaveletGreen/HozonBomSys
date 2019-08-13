@@ -110,8 +110,8 @@ public class HzMaterielFactory {
             hzMaterielRecord.setpCreateName("system");
             hzMaterielRecord.setpUpdateName("system");
         }else {
-            hzMaterielRecord.setpCreateName(UserInfo.getUser().getUserName());
-            hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUserName());
+            hzMaterielRecord.setpCreateName(UserInfo.getUser().getUsername());
+            hzMaterielRecord.setpUpdateName(UserInfo.getUser().getUsername());
         }
         hzMaterielRecord.setpMrpController("Z02");//整车的MRP控制者都是Z02
         hzMaterielRecord.setpVinPerNo(feature.getVinCode());

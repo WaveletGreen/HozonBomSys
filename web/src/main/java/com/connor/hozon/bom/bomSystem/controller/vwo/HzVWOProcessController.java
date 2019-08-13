@@ -8,8 +8,8 @@ package com.connor.hozon.bom.bomSystem.controller.vwo;
 
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureValueDao;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzFeatureChangeService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzVWOManagerService;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import java.util.List;
 public class HzVWOProcessController {
 
     @Autowired
-    IHzVWOManagerService iHzVWOManagerService;
+    HzVWOManagerService iHzVWOManagerService;
 
     @Autowired
     HzChangeOrderDAO hzChangeOrderDAO;
@@ -45,7 +45,7 @@ public class HzVWOProcessController {
      * 特性变更表服务
      */
     @Autowired
-    IHzFeatureChangeService iHzFeatureChangeService;
+    HzFeatureChangeService hzFeatureChangeService;
 
     /**
      * 特性进入VWO流程Controller
@@ -110,7 +110,7 @@ public class HzVWOProcessController {
         if(records==null||records.size()==0){
             return reslut;
         }
-        List<HzFeatureChangeBean> hzFeatureChangeBeans = iHzFeatureChangeService.doSelectHasEffect(records);
+        List<HzFeatureChangeBean> hzFeatureChangeBeans = hzFeatureChangeService.doSelectHasEffect(records);
         //需修改的特性集合
         List<HzFeatureValue> hzFeatureValueListUpdata = new ArrayList<>();
         for(HzFeatureChangeBean hzFeatureChangeBean : hzFeatureChangeBeans){

@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzImportEbomRecord;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
@@ -33,8 +33,8 @@ public class HzPbomRecordFactory {
     public static HzPbomLineRecord editEbomToPbomRecord(HzEPLRecord record, HzEPLManageRecord bomRecord){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
         User user = UserInfo.getUser();
-        hzPbomLineRecord.setUpdateName(user.getUserName());
-        hzPbomLineRecord.setCreateName(user.getUserName());
+        hzPbomLineRecord.setUpdateName(user.getUsername());
+        hzPbomLineRecord.setCreateName(user.getUsername());
         hzPbomLineRecord.setpBomLinePartEnName(record.getPartEnName());
         hzPbomLineRecord.setpBomOfWhichDept(record.getPartOfWhichDept());
         hzPbomLineRecord.setpBomLinePartResource(record.getPartResource());
@@ -66,8 +66,8 @@ public class HzPbomRecordFactory {
     public static HzPbomLineRecord editEbomToPbomRecord(HzEPLRecord record, AddHzEbomReqDTO reqDTO){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
         User user = UserInfo.getUser();
-        hzPbomLineRecord.setUpdateName(user.getUserName());
-        hzPbomLineRecord.setCreateName(user.getUserName());
+        hzPbomLineRecord.setUpdateName(user.getUsername());
+        hzPbomLineRecord.setCreateName(user.getUsername());
         hzPbomLineRecord.setpBomLinePartEnName(record.getPartEnName());
         hzPbomLineRecord.setpBomOfWhichDept(record.getPartOfWhichDept());
         hzPbomLineRecord.setpBomLinePartResource(record.getPartResource());
@@ -91,7 +91,7 @@ public class HzPbomRecordFactory {
     public static HzPbomLineRecord editEbomToPbomRecord(UpdateHzEbomReqDTO reqDTO){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
         User user = UserInfo.getUser();
-        hzPbomLineRecord.setCreateName(user.getUserName());
+        hzPbomLineRecord.setCreateName(user.getUsername());
         hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
         hzPbomLineRecord.setIsNewPart(0);
         hzPbomLineRecord.seteBomPuid(reqDTO.getPuid());
@@ -103,8 +103,8 @@ public class HzPbomRecordFactory {
 
     public static HzPbomLineRecord ImportEbomRecordToPbomRecord(HzImportEbomRecord record){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
-        hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
-        hzPbomLineRecord.setCreateName(UserInfo.getUser().getUserName());
+        hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUsername());
+        hzPbomLineRecord.setCreateName(UserInfo.getUser().getUsername());
         hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
         hzPbomLineRecord.setIsHas(record.getIsHas());
         hzPbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
@@ -134,8 +134,8 @@ public class HzPbomRecordFactory {
     @Deprecated
     public static HzPbomLineRecord bomLineAllToPbomRecord(HzBomLineRecord record){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
-        hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
-        hzPbomLineRecord.setCreateName(UserInfo.getUser().getUserName());
+        hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUsername());
+        hzPbomLineRecord.setCreateName(UserInfo.getUser().getUsername());
         hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
         hzPbomLineRecord.setIsHas(record.getIsHas());
         hzPbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
@@ -158,7 +158,7 @@ public class HzPbomRecordFactory {
 
     public static HzPbomLineRecord bomLineRecordToPbomRecord(HzBomLineRecord record){
         HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
-        hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUserName());
+        hzPbomLineRecord.setUpdateName(UserInfo.getUser().getUsername());
         hzPbomLineRecord.setLineId(record.getLineID());
         hzPbomLineRecord.setBomDigifaxId(record.getBomDigifaxId());
         hzPbomLineRecord.setpBomLinePartClass(record.getpBomLinePartClass());

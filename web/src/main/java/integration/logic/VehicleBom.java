@@ -1,6 +1,6 @@
 package integration.logic;
 
-import com.connor.hozon.bom.bomSystem.iservice.cfg.IHzMaterielCfgService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.HzMaterielCfgService;
 import integration.base.productAttributes.ZPPTCI007;
 import integration.option.ActionFlagOption;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
@@ -169,10 +169,10 @@ public class VehicleBom {
      * @param hzmcs
      * @return
      */
-    public static List<VehicleBom> getVehicleBom(String puid,IHzMaterielCfgService hzmcs ){
+    public static List<VehicleBom> getVehicleBom(String puid,HzMaterielCfgService hzmcs ){
         HzMaterielCfgBean hzmcb = new HzMaterielCfgBean();
         hzmcb.setPuid(puid);
-        List<HzMaterielCfgBean> result = hzmcs.doSelectByDiff(hzmcb);
+        List<HzMaterielCfgBean> result = hzmcs.selectByDiff(hzmcb);
 
         List<VehicleBom> vehicleBomList = new ArrayList<VehicleBom>();
         for(int i=0;i<code.length;i++){

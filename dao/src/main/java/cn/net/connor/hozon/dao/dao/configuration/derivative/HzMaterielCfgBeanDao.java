@@ -7,6 +7,7 @@
 package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzMaterielCfgBeanDao {
     /**
      * 根据项目UID或车型模型的UID获取到整车物料属性

@@ -14,7 +14,7 @@ import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServ
 import cn.net.connor.hozon.common.entity.QueryBase;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -187,7 +187,7 @@ public class HzCfg0ColorSetController {
             set.setCsPaintMaterielUids(csPaintMaterielUids);
         }
 
-        set.setpColorModifier(user.getUserName());
+        set.setpColorModifier(user.getUsername());
         set.setpColorModifyDate(now);
         if (colorSerService.doUpdate(set)) {
             result.put("status", true);
@@ -259,7 +259,7 @@ public class HzCfg0ColorSetController {
         set.setpColorAbolishDate(DateStringHelper.forever());
         //创建时间由数据库默认值定义
         //  set.setpColorCreateDate(now);
-        set.setpColorModifier(user.getUserName());
+        set.setpColorModifier(user.getUsername());
         set.setpColorStatus(0);
         set.setpColorEffectedDate(new Date());
         while (true) {
@@ -378,7 +378,7 @@ public class HzCfg0ColorSetController {
         } else {
             set.setpColorStatus(0);
         }*/
-        set.setpColorModifier(user.getUserName());
+        set.setpColorModifier(user.getUsername());
         set.setpColorModifyDate(now);
         return colorSerService.doUpdate(set);
     }
@@ -421,7 +421,7 @@ public class HzCfg0ColorSetController {
         set.setpColorAbolishDate(DateStringHelper.forever());
         //创建时间由数据库默认值定义
         //  set.setpColorCreateDate(now);
-        set.setpColorModifier(user.getUserName());
+        set.setpColorModifier(user.getUsername());
         set.setpColorStatus(0);
 
         while (true) {

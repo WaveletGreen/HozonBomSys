@@ -11,9 +11,9 @@ import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptEmpDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.sys.dao.OrgGroupDao;
-import com.connor.hozon.bom.sys.entity.OrgGroup;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.dao.sys.OrgGroupDao;
+import cn.net.connor.hozon.dao.pojo.sys.OrgGroup;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.connor.hozon.bom.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -204,7 +204,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
                             respDTO.setChecked(1);
                             User user = userService.findByUserId(emp.getUserId(),"1");
                             if(user!=null){
-                                respDTO.setUserName(user.getUserName());
+                                respDTO.setUserName(user.getUsername());
                                 respDTO.setLogin(user.getUsername());
                             }
                             break;

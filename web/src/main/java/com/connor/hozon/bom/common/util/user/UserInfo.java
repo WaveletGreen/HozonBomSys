@@ -3,8 +3,8 @@ package com.connor.hozon.bom.common.util.user;
 
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.util.node.NodeUtil;
-import com.connor.hozon.bom.sys.entity.Tree;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.Tree;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.connor.hozon.bom.sys.service.TreeService;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;

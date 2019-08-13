@@ -10,9 +10,9 @@ import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IInterruptionCallBack;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
-import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
+import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoServiceImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
@@ -28,7 +28,7 @@ import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo;
 public class ModelColorProcessManager implements IInterruptionCallBack, IReleaseCallBack, IFunctionDesc {
 
     @Autowired
-    HzVwoInfoService hzVwoInfoService;
+    HzVwoInfoServiceImpl hzVwoInfoServiceImpl;
 
     @Autowired
     HzCfg0ModelColorService hzCfg0ModelColorService;
@@ -82,7 +82,7 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
      */
     public boolean updateModelColorAndVwoInfo(String cmcrStatus, Integer vwoStatus, Long vwoId) {
         User user = UserInfo.getUser();
-        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
+        HzVwoInfo info = hzVwoInfoServiceImpl.doSelectByPrimaryKey(vwoId);
         if (info.getVwoStatus() == 999 || info.getVwoStatus() == 899) {
             return false;
         }
@@ -92,7 +92,7 @@ public class ModelColorProcessManager implements IInterruptionCallBack, IRelease
         boolean modelColorFlag = hzCfg0ModelColorService.doRelease(hzCfg0ModelColor);
         info.setVwoFinisher(user.getLogin());
         info.setVwoStatus(vwoStatus);
-        boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
+        boolean vwoFlag = hzVwoInfoServiceImpl.updateByVwoId(info);
         return modelColorFlag && vwoFlag;
     }
 

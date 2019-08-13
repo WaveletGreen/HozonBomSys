@@ -23,7 +23,7 @@ import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoManagerService;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,7 +62,7 @@ public class HzCfg0ModelColorService {
      * 颜色车型
      */
     @Autowired
-    private HzColorModelService hzColorModelService;
+    private HzColorModelServiceImpl hzColorModelService;
     /**
      * 颜色库
      */
@@ -152,8 +152,8 @@ public class HzCfg0ModelColorService {
 //                            hzCfg0ModelColorDetail.setCfgMainUid(color.getpCfg0MainRecordOfMC());
 //                            hzCfg0ModelColorDetail.setCreateDate(date);
 //                            hzCfg0ModelColorDetail.setModifyDate(date);
-//                            hzCfg0ModelColorDetail.setCreator(user.getUserName());
-//                            hzCfg0ModelColorDetail.setModifier(user.getUserName());
+//                            hzCfg0ModelColorDetail.setCreator(user.getUsername());
+//                            hzCfg0ModelColorDetail.setModifier(user.getUsername());
 //                            colorList.add(hzCfg0ModelColorDetail);
 //                            //?，估计有bug
 //                            _result.put("s" + index, entry.getValue());
@@ -284,8 +284,8 @@ public class HzCfg0ModelColorService {
                             hzCfg0ModelColorDetail.setCfgMainUid(color.getpCfg0MainRecordOfMC());
                             hzCfg0ModelColorDetail.setCreateDate(date);
                             hzCfg0ModelColorDetail.setModifyDate(date);
-                            hzCfg0ModelColorDetail.setCreator(user.getUserName());
-                            hzCfg0ModelColorDetail.setModifier(user.getUserName());
+                            hzCfg0ModelColorDetail.setCreator(user.getUsername());
+                            hzCfg0ModelColorDetail.setModifier(user.getUsername());
                             colorList.add(hzCfg0ModelColorDetail);
                             //?，估计有bug
                             _result.put("s" + index, entry.getValue());

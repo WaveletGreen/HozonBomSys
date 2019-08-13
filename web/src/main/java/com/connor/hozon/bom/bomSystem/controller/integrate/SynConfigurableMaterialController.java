@@ -6,13 +6,12 @@
 
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
-import com.connor.hozon.bom.bomSystem.service.integrate.SynConfigurableMaterialService;
+import integration.service.integrate.SynConfigurableMaterialServiceImpl;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class SynConfigurableMaterialController extends ExtraIntegrate {
 
     @Autowired
-    private SynConfigurableMaterialService synConfigurableMaterialService;
+    private SynConfigurableMaterialServiceImpl synConfigurableMaterialService;
 
     @RequestMapping("/addConfigurableMaterial")
     public String add(String[] puids, String[] cfg0MainPuids, String[] modeBasiceDetails, String projectPuid, Model model) {

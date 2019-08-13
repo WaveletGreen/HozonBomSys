@@ -19,7 +19,7 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service("hzCfg0OfBomLineService")
+@Service
 public class HzConfigToBomLineServiceImpl implements HzConfigToBomLineService {
     @Autowired
     HzConfigToBomLineDao hzConfigToBomLineDao;

@@ -8,7 +8,7 @@
 package cn.net.connor.hozon.services.service.configuration.derivative;
 
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasicChangeBean;
 
 import java.util.List;
 
@@ -19,19 +19,19 @@ import java.util.List;
  */
 public interface HzDMBasicChangeService {
 
-    public int insertList(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);
+    public int insertList(List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans);
 
-    public List<HzDMBasicChangeBean> selectByFormid(Long changeFromId);
+    public List<HzDerivativeMaterielBasicChangeBean> selectByFormid(Long changeFromId);
 
-    public HzDMBasicChangeBean selectBefor(HzDMBasicChangeBean hzDMBasicChangeBeanAfter);
+    public HzDerivativeMaterielBasicChangeBean selectBefor(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBeanAfter);
 
-    public List<HzDMBasicChangeBean> selectAfter(Long formId);
+    public List<HzDerivativeMaterielBasicChangeBean> selectAfter(Long formId);
 
-    public List<HzDMBasicChangeBean> selectLastByPuid(List<HzComposeDelDto> delDtos);
+    public List<HzDerivativeMaterielBasicChangeBean> selectLastByPuid(List<HzComposeDelDto> delDtos);
 
     public int updateStatusByOrderId(Long orderId, int status);
 
-    public int deleteByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);
+    public int deleteByChangeIds(List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans);
 
-    public List<HzDMBasicChangeBean> selectNotEffect(List<Long> changeMaterielFeatureIds);
+    public List<HzDerivativeMaterielBasicChangeBean> selectNotEffect(List<Long> changeMaterielFeatureIds);
 }

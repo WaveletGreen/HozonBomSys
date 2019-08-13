@@ -10,9 +10,9 @@ import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureValueDao;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IInterruptionCallBack;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
-import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoService;
+import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoServiceImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
@@ -28,7 +28,7 @@ import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo;
 public class FeatureProcessManager implements IInterruptionCallBack, IReleaseCallBack, IFunctionDesc {
 
     @Autowired
-    private HzVwoInfoService hzVwoInfoService;
+    private HzVwoInfoServiceImpl hzVwoInfoServiceImpl;
     @Autowired
     private HzFeatureValueDao hzFeatureValueDao;
     /**
@@ -77,7 +77,7 @@ public class FeatureProcessManager implements IInterruptionCallBack, IReleaseCal
     private boolean updateFeatureAndVwoInfo(Integer cfgStatus, int vwoStatus, Long vwoId) {
         User user = UserInfo.getUser();
         boolean flag = false;
-        HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(vwoId);
+        HzVwoInfo info = hzVwoInfoServiceImpl.doSelectByPrimaryKey(vwoId);
         if (info.getVwoStatus() == 999 || info.getVwoStatus() == 899) {
             return false;
         }
@@ -92,7 +92,7 @@ public class FeatureProcessManager implements IInterruptionCallBack, IReleaseCal
         }
         info.setVwoFinisher(user.getLogin());
         info.setVwoStatus(vwoStatus);
-        boolean vwoFlag = hzVwoInfoService.updateByVwoId(info);
+        boolean vwoFlag = hzVwoInfoServiceImpl.updateByVwoId(info);
         return  flag&&vwoFlag;
     }
 }

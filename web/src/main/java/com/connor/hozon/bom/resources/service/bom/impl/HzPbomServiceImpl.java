@@ -15,8 +15,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.HzConfigToBomLineService;
-import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
-import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
+import com.connor.hozon.bom.bomSystem.iservice.interaction.HzCraftService;
+import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftServiceImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
@@ -80,7 +80,7 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzAccessoriesLibsDAO hzAccessoriesLibsDAO;
 
     @Autowired
-    IHzCraftService iHzCraftService;
+    HzCraftService hzCraftService;
 
     @Autowired
     private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
@@ -108,7 +108,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 return WriteResultRespDTO.getFailResult();
             }
             HzPbomLineRecord hzPbomRecord = new HzPbomLineRecord();
-            hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
+            hzPbomRecord.setUpdateName(UserInfo.getUser().getUsername());
             String buyUnit = recordReqDTO.getBuyUnit();//采购单元
             String type = recordReqDTO.getType();//焊接/装配
             hzPbomRecord.setBuyUnit(BOMTransConstants.constantStringToInteger(buyUnit));
@@ -296,7 +296,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("outerPart", record.getOuterPart());
             jsonObject.put("station", record.getStation());
             //            测试用
-            if (HzCraftService.CRAFT_DEBUG){
+            if (HzCraftServiceImpl.CRAFT_DEBUG){
                 jsonObject.put("lineIndex", record.getLineIndex());
                 jsonObject.put("sortNum", record.getSortNum());
             }
@@ -614,9 +614,9 @@ public class HzPbomServiceImpl implements HzPbomService {
         if (collectedDataObj instanceof LinkedHashMap) {
             collectedData = (Map<String, String>) collectedDataObj;
         }
-        if (iHzCraftService.autoCraft(projectUid, parentUids, childrenUids, targetUids, collectedData)) {
+        if (hzCraftService.autoCraft(projectUid, parentUids, childrenUids, targetUids, collectedData)) {
             result.put("status", true);
-            List<String> codes = iHzCraftService.getTargetPartCodes();
+            List<String> codes = hzCraftService.getTargetPartCodes();
             StringBuilder sb = null;
             if (codes != null && codes.size() > 0) {
                 sb = new StringBuilder();

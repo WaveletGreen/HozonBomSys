@@ -6,20 +6,25 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
-import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
-import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
+import cn.net.connor.hozon.common.util.DateStringHelper;
 import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import cn.net.connor.hozon.dao.dao.main.HzMainConfigDao;
-import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
-import cn.net.connor.hozon.common.util.DateStringHelper;
-import com.connor.hozon.bom.bomSystem.helper.ProjectHelper;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
+import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
+import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
+import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.services.service.depository.project.HzVehicleService;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServiceImpl;
+import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzProjectLibsServiceImpl;
+import cn.net.connor.hozon.services.service.main.ProjectHelperService;
+import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
+import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
 import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.sys.entity.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +35,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
-import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
-import cn.net.connor.hozon.dao.pojo.depository.project.HzPlatformRecord;
-import cn.net.connor.hozon.dao.pojo.depository.project.HzProjectLibs;
-import cn.net.connor.hozon.dao.pojo.depository.project.HzVehicleRecord;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -77,7 +77,7 @@ public class HzProjectLibsController {
     HzMainBomDao hzMainBomDao;
     /***项目助手*/
     @Autowired
-    ProjectHelper projectHelper;
+    ProjectHelperService projectHelperService;
     /***日志*/
     private static final Logger logger = LoggerFactory.getLogger(HzProjectLibsController.class);
     /*** session过时时间，默认为30分钟，不知道是否能生效*/
@@ -179,11 +179,11 @@ public class HzProjectLibsController {
     @ResponseBody
     public Map<String, Object> getProjectDetailById(@RequestParam String puid) {
         Map<String, Object> result = new HashMap<>();
-        projectHelper.doGetProjectTreeByProjectId(puid);
-        HzProjectLibs project = projectHelper.getProject();
-        HzVehicleRecord vehicle = projectHelper.getVehicle();
-        HzPlatformRecord platform = projectHelper.getPlatform();
-        HzBrandRecord brand = projectHelper.getBrand();
+        projectHelperService.doGetProjectTreeByProjectId(puid);
+        HzProjectLibs project = projectHelperService.getProject();
+        HzVehicleRecord vehicle = projectHelperService.getVehicle();
+        HzPlatformRecord platform = projectHelperService.getPlatform();
+        HzBrandRecord brand = projectHelperService.getBrand();
         result.put("project", project);
         result.put("vehicle", vehicle);
         result.put("platform", platform);
@@ -384,14 +384,14 @@ public class HzProjectLibsController {
                     //数模层
                     hzMainBom.setPuid(UUIDHelper.generateUpperUid());
                     hzMainBom.setCreateDate(now);
-                    hzMainBom.setCreator(user.getUserName());
+                    hzMainBom.setCreator(user.getUsername());
                     hzMainBom.setDigifaxName("BOM系统自动创建:" + project.getpProjectCode() + "的数模层");
                     //由于不是从TC中来，因此原始的TC UID将不存在，只能街截取首16位
                     hzMainBom.setDigifaxUidFromTC(hzMainBom.getPuid().substring(0, 15));
                     hzMainBom.setLastModifyDate(now);
                     hzMainBom.setProjectId(project.getPuid());
                     hzMainBom.setProjectName(project.getpProjectName() == null ? project.getpProjectCode() : project.getpProjectName());
-                    hzMainBom.setUpdater(user.getUserName());
+                    hzMainBom.setUpdater(user.getUsername());
 
                     //主配置
                     hzMainConfig.setId(UUIDHelper.generateUpperUid());
@@ -401,8 +401,8 @@ public class HzProjectLibsController {
                     hzMainConfig.setConfigUidFromTC(hzMainConfig.getId().substring(0, 15));
                     hzMainConfig.setItemName("BOM系统自动创建:" + project.getpProjectCode() + "的主配置");
                     hzMainConfig.setCreateDate(now);
-                    hzMainConfig.setCreator(user.getUserName());
-                    hzMainConfig.setUpdater(user.getUserName());
+                    hzMainConfig.setCreator(user.getUsername());
+                    hzMainConfig.setUpdater(user.getUsername());
                     //新的项目的特性都将继承配置字典的数据
                     hzMainConfig.setFeatureSynDicFlag(1);
 

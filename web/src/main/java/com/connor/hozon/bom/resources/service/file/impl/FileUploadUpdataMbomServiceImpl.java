@@ -10,7 +10,7 @@ import com.connor.hozon.bom.resources.service.file.FileUploadUpdataMbomService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -168,8 +168,8 @@ public class FileUploadUpdataMbomServiceImpl implements FileUploadUpdataMbomServ
                                         hzFactory = new HzFactory();
                                         hzFactory.setPuid(puid);
                                         hzFactory.setpFactoryCode(factory);
-                                        hzFactory.setpUpdateName(user.getUserName());
-                                        hzFactory.setpCreateName(user.getUserName());
+                                        hzFactory.setpUpdateName(user.getUsername());
+                                        hzFactory.setpCreateName(user.getUsername());
                                         int j = hzFactoryDAO.insert(hzFactory);
                                         if (j < 0) {
                                             return WriteResultRespDTO.getFailResult();

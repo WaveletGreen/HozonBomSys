@@ -2,7 +2,7 @@ package com.connor.hozon.bom.common.base.service;
 
 
 
-import com.connor.hozon.bom.common.base.dao.GenericDao;
+import cn.net.connor.hozon.dao.dao.sys.GenericDao;
 import cn.net.connor.hozon.common.entity.Page;
 import cn.net.connor.hozon.common.entity.QueryBase;
 

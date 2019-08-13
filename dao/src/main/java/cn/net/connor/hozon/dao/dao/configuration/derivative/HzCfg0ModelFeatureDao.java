@@ -9,6 +9,7 @@ package cn.net.connor.hozon.dao.dao.configuration.derivative;
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import org.apache.ibatis.annotations.Param;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -17,6 +18,7 @@ import java.util.List;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzCfg0ModelFeatureDao extends BasicDao<HzCfg0ModelFeature> {
     /**
      * 根据主键删除模型特性数据

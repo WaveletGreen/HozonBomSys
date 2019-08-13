@@ -3,7 +3,7 @@ package com.connor.hozon.bom.sys.mapper;
 
 import com.connor.hozon.bom.sys.dto.TreeDTO;
 
-import com.connor.hozon.bom.sys.entity.Tree;
+import cn.net.connor.hozon.dao.pojo.sys.Tree;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 

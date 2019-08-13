@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.process.iservice;
 
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.springframework.stereotype.Component;
 /**
  * @Author: Fancyears·Maylos·Malvis
