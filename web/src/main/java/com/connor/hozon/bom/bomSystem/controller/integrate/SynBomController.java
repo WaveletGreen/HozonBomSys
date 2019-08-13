@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzConfigToBomLineServiceImpl;
 import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
@@ -36,7 +36,7 @@ public class SynBomController extends ExtraIntegrate {
     ISynBomService bomService;
 
     @Autowired
-    HzCfg0OfBomLineService hzCfg0OfBomLineService;
+    HzConfigToBomLineServiceImpl hzConfigToBomLineServiceImpl;
 
     /**
      * 根据项目同步所有数据
@@ -94,7 +94,7 @@ public class SynBomController extends ExtraIntegrate {
      */
     @RequestMapping("/updateByUids")
     public String updateByUids(@RequestBody List<EditHzMaterielReqDTO> dtos, @RequestParam("projectUid") String projectUid, Model model) {
-        Object obj = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(projectUid, dtos.get(0).getPuid());
+//        Object obj = hzConfigToBomLineServiceImpl.selectByBLUidAndPrjUid(projectUid, dtos.get(0).getPuid());
         JSONObject result = validate(dtos, projectUid);
         if (!result.getBoolean("status")) {
             model.addAttribute("msg", result.get("msg"));

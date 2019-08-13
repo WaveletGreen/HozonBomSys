@@ -8,7 +8,7 @@
 package cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzConfigToBomLine;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -20,30 +20,30 @@ import java.util.List;
  * @Modified By:
  */
 @Repository
-public interface HzCfg0OfBomLineRecordDao extends BasicDao<HzCfg0OfBomLineRecord> {
+public interface HzConfigToBomLineDao extends BasicDao<HzConfigToBomLine> {
     /**
      * 主键删除
      *
-     * @param puid
+     * @param id
      * @return
      */
-    int deleteByPrimaryKey(@Param("puid") String puid);
+    int deleteByPrimaryKey(@Param("id") String id);
 
 
     /**
      * 根据主键搜索
      *
-     * @param puid
+     * @param id
      * @return
      */
-    HzCfg0OfBomLineRecord selectByPrimaryKey(@Param("puid") String puid);
+    HzConfigToBomLine selectByPrimaryKey(@Param("id") String id);
 
     /**
      * 根据项目ID和Bomline UID查找一条配置+BOMLine关联数据
      *
      * @return
      */
-    HzCfg0OfBomLineRecord selectByBLUidAndPrjUid(HzCfg0OfBomLineRecord record);
+    HzConfigToBomLine selectByBLUidAndPrjUid(HzConfigToBomLine record);
 
 
     /**
@@ -52,5 +52,5 @@ public interface HzCfg0OfBomLineRecordDao extends BasicDao<HzCfg0OfBomLineRecord
      * @param records
      * @return
      */
-    int insertByBatch(List<HzCfg0OfBomLineRecord> records);
+    int insertByBatch(List<HzConfigToBomLine> records);
 }

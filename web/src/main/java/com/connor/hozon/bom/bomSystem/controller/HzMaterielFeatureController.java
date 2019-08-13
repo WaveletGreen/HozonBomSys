@@ -112,10 +112,10 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     HzDerivativeMaterielDetailDao hzDerivativeMaterielDetailDao;
     /**主数据变更**/
     @Autowired
-    HzDMBasicChangeDao hzDMBasicChangeDao;
+    HzDerivativeMaterielBasicChangeDao hzDerivativeMaterielBasicChangeDao;
     /**从数据变更**/
     @Autowired
-    HzDMDetailChangeDao hzDMDetailChangeDao;
+    HzDerivativeMaterielDetailChangeDao hzDerivativeMaterielDetailChangeDao;
     @Autowired
     HzChangeOrderDAO hzChangeOrderDAO;
     @Autowired
@@ -340,7 +340,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             result.put("msg", "请至少选择一个衍生物料进行操作");
             return result;
         }
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = hzDMBasicChangeDao.selectLastById(delDtos);
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeans = hzDerivativeMaterielBasicChangeDao.selectLastById(delDtos);
         if(hzDMBasicChangeBeans !=null&&hzDMBasicChangeBeans.size()>0){
             List<HzComposeDelDto> hzComposeDelDtosUpdate = new ArrayList<>();
             List<HzComposeDelDto> hzComposeDelDtosDelete = new ArrayList<>();
@@ -555,13 +555,13 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             hzDMBasicChangeBean.setDmbChangeStatus(0);
             hzDMBasicChangeBeans.add(hzDMBasicChangeBean);
         }
-        int basicInsertNum = hzDMBasicChangeDao.insertList(hzDMBasicChangeBeans);
+        int basicInsertNum = hzDerivativeMaterielBasicChangeDao.insertList(hzDMBasicChangeBeans);
         if(basicInsertNum<hzDMBasicChangeBeans.size()){
             result.put("status",false);
             result.put("msg","跟新变更主数据失败");
             return result;
         }
-        List<HzDMBasicChangeBean> hzDMBasicChangeBeanList =hzDMBasicChangeDao.selectByFormid(changeFromId);
+        List<HzDMBasicChangeBean> hzDMBasicChangeBeanList = hzDerivativeMaterielBasicChangeDao.selectByFormid(changeFromId);
         Map<Long,Long> idMap = new HashMap<>();
         for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeanList){
             idMap.put(hzDMBasicChangeBean.getDmbSrcId(),hzDMBasicChangeBean.getId());
@@ -582,7 +582,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             hzDMDetailChangeBean.setTitle(hzFeature.getFeatureDesc() + "<br/>" + hzFeature.getFeatureCode());
             hzDMDetailChangeBeans.add(hzDMDetailChangeBean);
         }
-        int detialnum = hzDMDetailChangeDao.insertList(hzDMDetailChangeBeans);
+        int detialnum = hzDerivativeMaterielDetailChangeDao.insertList(hzDMDetailChangeBeans);
         if(detialnum<hzDMDetailChangeBeans.size()){
             result.put("status",false);
             result.put("msg","跟新变更从数据失败");
@@ -687,11 +687,11 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
         List<HzDerivativeMaterielDetail> hzDerivativeMaterielDetailsUpdate = new ArrayList<>();
         //根据主数据id查找最近一次有效数据
         List<HzDMBasicChangeBean> hzDMBasicChangeBeans = new ArrayList<>();
-        hzDMBasicChangeBeans = hzDMBasicChangeDao.selectLastById(delDtos);
+        hzDMBasicChangeBeans = hzDerivativeMaterielBasicChangeDao.selectLastById(delDtos);
         //根据主数据找到从数据
         List<HzDMDetailChangeBean> hzDMDetailChangeBeans = new ArrayList<>();
         if(hzDMBasicChangeBeans!=null&&hzDMBasicChangeBeans.size()!=0){
-            hzDMDetailChangeBeans = hzDMDetailChangeDao.selectByBasic(hzDMBasicChangeBeans);
+            hzDMDetailChangeBeans = hzDerivativeMaterielDetailChangeDao.selectByBasic(hzDMBasicChangeBeans);
             //根据变更主数据生成源主数据
             for(HzDMBasicChangeBean hzDMBasicChangeBean : hzDMBasicChangeBeans){
                 HzDerivativeMaterielBasic hzDerivativeMaterielBasic = hzDMBasicChangeBean.getHzDerivativeMaterielBasic();

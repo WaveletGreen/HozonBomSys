@@ -241,7 +241,7 @@ public class HzTasksService implements IHzTaskService {
                     default:
                         break;
                 }
-                //HzVwoInfo info = hzVwoInfoService.doSelectByPrimaryKey(task.getTaskTargetId());
+                //HzVwoInfo info = hzVwoInfoService.selectByPrimaryKey(task.getTaskTargetId());
                 //int count = hzWorkListDAO.count(user.getLogin(),info.getProjectUid());
 
                 dto.setReserve("");

@@ -42,8 +42,8 @@
 
         <!--配置-->
         <!--feature-->
-        <mapper resource="sql/mapper/cfg/cfg0/HzCfg0OptionFamilyMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/cfg0/HzCfg0RecordMapper.xml"/>
+        <!--<mapper resource="sql/mapper/cfg/cfg0/FeatureMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/cfg/cfg0/FeatureValueMapper.xml"/>-->
         <!--&lt;!&ndash;color&ndash;&gt;-->
         <!--<mapper resource="sql/mapper/cfg/color/HzCfg0ColorSetMapper.xml"/>-->
         <!--derivative-->
@@ -83,17 +83,17 @@
         <!--<mapper resource="cn/net/connor/hozon/dao/mapper/relevance/HzRelevanceBasicChangeMapper.xml"/>-->
         <!--流程-->
         <!--VWO-->
-        <mapper resource="sql/mapper/cfg/vwo/HzFeatureChangeMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/vwo/HzVwoInfluenceDeptMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/vwo/HzVwoInfluenceUserMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/vwo/HzVwoInfoMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/vwo/HzVwoInformChangesMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/vwo/HzVwoExecuteMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/vwo/HzVwoOpiBomMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/vwo/HzVwoOpiPmtMapper.xml"/>
-        <mapper resource="sql/mapper/cfg/vwo/HzVwoOpiProjMapper.xml"/>
+        <!--<mapper resource="sql/mapper/cfg/vwo/HzFeatureChangeMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoInfluenceDeptMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoInfluenceUserMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoInfoMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoInformChangesMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoExecuteMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoOpiBomMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoOpiPmtMapper.xml"/>-->
+        <!--<mapper resource="sql/mapper/cfg/vwo/HzVwoOpiProjMapper.xml"/>-->
         <!--CODPWO表单-->
-        <mapper resource="sql/mapper/change.xmapper/HzBreakPointMapper.xml"/>
+        <!--<mapper resource="sql/mapper/change.xmapper/HzBreakPointMapper.xml"/>-->
 
         <!--项目-->
         <mapper resource="sql/mapper/project.xmapper/HzMaterielMapper.xml"/>

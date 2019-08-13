@@ -20,7 +20,7 @@ import java.util.List;
  * @Modified By:
  */
 @Repository
-public interface HzDMDetailChangeDao extends BasicDao<HzDMDetailChangeBean> {
+public interface HzDerivativeMaterielDetailChangeDao extends BasicDao<HzDMDetailChangeBean> {
 
     int insertList(List<HzDMDetailChangeBean> hzDMDetailChangeBeans);
 

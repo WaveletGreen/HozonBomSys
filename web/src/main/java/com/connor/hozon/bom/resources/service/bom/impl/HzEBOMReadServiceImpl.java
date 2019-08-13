@@ -7,7 +7,7 @@ import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
+import com.connor.hozon.bom.bomSystem.service.fullCfg.HzConfigToBomLineServiceImpl;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
@@ -23,7 +23,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzConfigToBomLine;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
@@ -44,7 +44,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Autowired
-    private HzCfg0OfBomLineService hzCfg0OfBomLineService;
+    private HzConfigToBomLineServiceImpl hzConfigToBomLineServiceImpl;
 
     @Autowired
     private HzEPLManageRecordService hzEPLManageRecordService;
@@ -189,12 +189,12 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
             HzLouRespDTO respDTO = new HzLouRespDTO();
             HzEPLManageRecord hzBomLineRecord = findParentFor2Y(query.getProjectId(), query.getPuid());
             if (hzBomLineRecord != null) {
-                HzCfg0OfBomLineRecord record = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(query.getProjectId(), hzBomLineRecord.getPuid());
+                HzConfigToBomLine record = hzConfigToBomLineServiceImpl.selectByBLUidAndPrjUid(query.getProjectId(), hzBomLineRecord.getPuid());
                 if (record != null) {
-                    respDTO.setCfg0Desc(record.getCfg0Desc());
-                    respDTO.setCfg0FamilyDesc(record.getCfg0FamilyDesc());
-                    respDTO.setpCfg0name(record.getpCfg0name());
-                    respDTO.setpCfg0familyname(record.getpCfg0familyname());
+                    respDTO.setCfg0Desc(record.getFeatureValueDesc());
+                    respDTO.setCfg0FamilyDesc(record.getFeatureDesc());
+                    respDTO.setpCfg0name(record.getFeatureValueCode());
+                    respDTO.setpCfg0familyname(record.getFeatureCode());
                     return respDTO;
                 }
             }

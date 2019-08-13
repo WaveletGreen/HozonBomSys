@@ -22,7 +22,7 @@ import java.util.Map;
  * @Modified By:
  */
 @Repository
-public interface HzDMBasicChangeDao extends BasicDao<HzDMBasicChangeBean> {
+public interface HzDerivativeMaterielBasicChangeDao extends BasicDao<HzDMBasicChangeBean> {
 
     int insertList(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);
 

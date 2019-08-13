@@ -7,7 +7,7 @@
 
 package cn.net.connor.hozon.services.service.configuration.derivative.impl;
 
-import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDMBasicChangeDao;
+import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicChangeDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
 import cn.net.connor.hozon.services.service.configuration.derivative.HzDMBasicChangeService;
@@ -27,32 +27,32 @@ import java.util.Map;
 public class HzDMBasicChangeServiceImpl implements HzDMBasicChangeService {
 
     @Autowired
-    private HzDMBasicChangeDao hzDMBasicChangeDao;
+    private HzDerivativeMaterielBasicChangeDao hzDerivativeMaterielBasicChangeDao;
 
 
     @Override
     public int insertList(List<HzDMBasicChangeBean> hzDMBasicChangeBeans) {
-        return hzDMBasicChangeDao.insertList(hzDMBasicChangeBeans);
+        return hzDerivativeMaterielBasicChangeDao.insertList(hzDMBasicChangeBeans);
     }
 
     @Override
     public List<HzDMBasicChangeBean> selectByFormid(Long changeFromId) {
-        return hzDMBasicChangeDao.selectByFormid(changeFromId);
+        return hzDerivativeMaterielBasicChangeDao.selectByFormid(changeFromId);
     }
 
     @Override
     public HzDMBasicChangeBean selectBefor(HzDMBasicChangeBean hzDMBasicChangeBean) {
-        return hzDMBasicChangeDao.selectBefor(hzDMBasicChangeBean);
+        return hzDerivativeMaterielBasicChangeDao.selectBefor(hzDMBasicChangeBean);
     }
 
     @Override
     public List<HzDMBasicChangeBean> selectAfter(Long formId) {
-        return hzDMBasicChangeDao.selectAfter(formId);
+        return hzDerivativeMaterielBasicChangeDao.selectAfter(formId);
     }
 
     @Override
     public List<HzDMBasicChangeBean> selectLastByPuid(List<HzComposeDelDto> delDtos) {
-        return hzDMBasicChangeDao.selectLastById(delDtos);
+        return hzDerivativeMaterielBasicChangeDao.selectLastById(delDtos);
     }
 
     @Override
@@ -60,16 +60,16 @@ public class HzDMBasicChangeServiceImpl implements HzDMBasicChangeService {
         Map<String,Object> map = new HashMap<>();
         map.put("orderId",orderId);
         map.put("status",status);
-        return hzDMBasicChangeDao.updateStatusByOrderId(map);
+        return hzDerivativeMaterielBasicChangeDao.updateStatusByOrderId(map);
     }
 
     @Override
     public int deleteByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans) {
-        return hzDMBasicChangeDao.deleteByChangeIds(hzDMBasicChangeBeans);
+        return hzDerivativeMaterielBasicChangeDao.deleteByChangeIds(hzDMBasicChangeBeans);
     }
 
     @Override
     public List<HzDMBasicChangeBean> selectNotEffect(List<Long> changeMaterielFeatureIds) {
-        return hzDMBasicChangeDao.selectNotEffect(changeMaterielFeatureIds);
+        return hzDerivativeMaterielBasicChangeDao.selectNotEffect(changeMaterielFeatureIds);
     }
 }

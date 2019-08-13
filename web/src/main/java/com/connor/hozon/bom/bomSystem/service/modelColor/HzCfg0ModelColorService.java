@@ -159,7 +159,7 @@ public class HzCfg0ModelColorService {
 //                            _result.put("s" + index, entry.getValue());
 //                            index++;
 //                        }
-//                        if (hzColorModelService.doInsertByBatch(colorList) > 0) {
+//                        if (hzColorModelService.insertByBatch(colorList) > 0) {
 //                            logger.warn("批量新增配置颜色数据成功");
 //                            List<HzCfg0ModelColorDetail> cms = hzColorModelService.doSelectByModelUidWithColor(color.getPuid());
 //                            if (cms == null || cms.size() == 0) {

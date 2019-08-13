@@ -8,6 +8,8 @@ package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelGroup;
+import org.springframework.stereotype.Repository;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 衍生物料物料组，传ERP用到，但是BOM系统并没有进行维护该部分数据，老子也不知道
@@ -15,6 +17,7 @@ import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelGroup;
  * @Date: Created in 2018/8/27 21:17
  * @Modified By:
  */
+@Repository
 public interface HzCfg0ModelGroupDao extends BasicDao<HzCfg0ModelGroup> {
     /**
      * 主键删除
