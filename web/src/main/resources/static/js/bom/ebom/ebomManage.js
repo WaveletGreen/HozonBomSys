@@ -214,6 +214,39 @@ var update = function () {
         }
     })
 };
+
+var derive = function () {
+    var rows = $table.bootstrapTable('getSelections');
+    //只能选一条进行层级调整
+    if (rows.length != 1) {
+        window.Ewin.alert({message: '请选择一条需要派生的数据!'});
+        return false;
+    }
+    else if (rows[0].status == 5 || rows[0].status == 6) {
+        window.Ewin.alert({message: '对不起,审核中的数据不能派生!'});
+        return false;
+    }
+    var url = "ebom/derive/ebom";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "派生",
+                    url: "ebom/derive/ebom?projectId=" + projectId
+                    + "&puid=" + rows[0].puid,
+                    width: 500,
+                    height: 500
+                });
+            }
+        }
+    })
+};
 /**
  * 删除
  * @returns {boolean}
@@ -630,6 +663,11 @@ const toolbar = [
         handler:update
     },
     {
+        text: '派生',
+        iconCls: 'glyphicon glyphicon-hand-right',
+        handler:derive
+    },
+    {
         text: '删除',
         iconCls: 'glyphicon glyphicon-remove',
         handler:doDelete
@@ -681,6 +719,11 @@ const toolbar2 = [
         text: '修改',
         iconCls: 'glyphicon glyphicon-pencil',
         handler:update
+    },
+    {
+        text: '派生',
+        iconCls: 'glyphicon glyphicon-hand-right',
+        handler:derive
     },
     {
         text: '删除',
