@@ -273,6 +273,25 @@
   </select>
 
 
+    <!--找到一条bom的所有同父的子bom-->
+    <select id="HzEbomRecordDAOImpl_getSameHzBomLineByOne"  resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT <include refid="BASE_BOM_COLUMN"/>,<include refid="EPL_COLUMN"/>
+        from HZ_BOM_LINE_RECORD t
+        left join HZ_EPL_RECORD t10 on t.P_EPL_ID = t10.ID
+        where t.p_bom_digifax_id=(
+        select t3.puid from Hz_Bom_Main_Record t3 where t3.p_cfg0_of_which_project_puid=(
+        #{projectId,jdbcType=VARCHAR}))
+        and t.P_BOM_LINE_ID = (SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD WHERE PUID = #{puid,jdbcType=VARCHAR})
+        and t.P_PARENT_UID IN (
+        SELECT PUID FROM HZ_BOM_LINE_RECORD WHERE P_BOM_LINE_ID = (
+        SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD WHERE PUID =
+        (SELECT P_PARENT_UID FROM HZ_BOM_LINE_RECORD WHERE PUID = #{puid,jdbcType=VARCHAR})
+        ) and  P_BOM_DIGIFAX_ID = (SELECT  P_BOM_DIGIFAX_ID FROM HZ_BOM_LINE_RECORD  WHERE PUID = #{puid,jdbcType=VARCHAR})
+        )
+        and t.P_EBOM_STATUS <![CDATA[ <> ]]>0
+    </select>
+
+
   <!--查询bomLine的子bom 信息-->
   <select id="HzEbomRecordDAOImpl_getHzBomLineChildren"  resultMap="BaseResultMap" parameterType="java.util.HashMap">
     SELECT
@@ -480,7 +499,7 @@
         SELECT PUID FROM HZ_BOM_LINE_RECORD WHERE P_BOM_LINE_ID = (
         SELECT P_BOM_LINE_ID FROM HZ_BOM_LINE_RECORD WHERE PUID =
         (SELECT P_PARENT_UID FROM HZ_BOM_LINE_RECORD WHERE PUID = #{puid,jdbcType=VARCHAR})
-        )
+        ) and  P_BOM_DIGIFAX_ID = (SELECT  P_BOM_DIGIFAX_ID FROM HZ_BOM_LINE_RECORD  WHERE PUID = #{puid,jdbcType=VARCHAR})
         )
 
     </update>

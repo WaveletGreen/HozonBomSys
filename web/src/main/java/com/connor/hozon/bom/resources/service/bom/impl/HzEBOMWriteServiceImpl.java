@@ -478,7 +478,19 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
         }
         String puids = reqDTO.getPuids();
         String projectId = reqDTO.getProjectId();
-        List<String> puidList = Lists.newArrayList(puids.split(","));
+        List<String> puidList1 = Lists.newArrayList(puids.split(","));
+        List<String> puidList = new ArrayList<>();
+        for (String puid:puidList1  ) {
+            List<HzEPLManageRecord>  allsames= hzEbomRecordDAO.getSameHzBomLineByOne(puid,projectId);
+            if (ListUtil.isNotEmpty(allsames)){
+                for (HzEPLManageRecord sameEbom:allsames ) {
+                    if (!puidList.contains(sameEbom.getPuid())){
+                        puidList.add(sameEbom.getPuid());
+                    }
+                }
+            }
+
+        }
 
         try {
             //检查是否已关联特性
