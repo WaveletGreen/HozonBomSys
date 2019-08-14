@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.sys.service;
 
-import com.connor.hozon.bom.common.base.dao.GenericDao;
+import cn.net.connor.hozon.dao.dao.sys.GenericDao;
 import com.connor.hozon.bom.common.base.service.GenericService;
-import com.connor.hozon.bom.sys.dao.DictDao;
-import com.connor.hozon.bom.sys.entity.Dict;
-import com.connor.hozon.bom.sys.entity.QueryDict;
+import cn.net.connor.hozon.dao.dao.sys.DictDao;
+import cn.net.connor.hozon.dao.pojo.sys.Dict;
+import cn.net.connor.hozon.dao.pojo.sys.QueryDict;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

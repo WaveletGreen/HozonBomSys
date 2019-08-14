@@ -6,14 +6,14 @@
 
 package com.connor.hozon.bom.process.service;
 
-import com.connor.hozon.bom.bomSystem.iservice.task.IHzTaskService;
+import cn.net.connor.hozon.services.service.task.HzTaskService;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.process.iservice.IProcessStart;
 import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.connor.hozon.bom.sys.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +64,7 @@ public class ProcessStartEntity implements IProcessStart {
     @Autowired
     UserService userService;
     @Autowired
-    IHzTaskService iHzTaskService;
+    HzTaskService hzTaskService;
     @Autowired
     HzApplicantChangeDAO hzApplicantChangeDAO;
     /***是否需要保存执行者的名字**/
@@ -87,7 +87,7 @@ public class ProcessStartEntity implements IProcessStart {
 
     @Override
     public User checkOrderAuditor(Long orderId) {
-        List<HzTasks> tasks = iHzTaskService.doSelectUserTargetTask(TaskOptions.FORM_TYPE_CHANGE, TaskOptions.TASK_TARGET_TYPE_CHANE, orderId, null, 1);
+        List<HzTasks> tasks = hzTaskService.doSelectUserTargetTask(TaskOptions.FORM_TYPE_CHANGE, TaskOptions.TASK_TARGET_TYPE_CHANE, orderId, null, 1);
 
         if (null == tasks || tasks.size() < 1) {
             return null;
@@ -174,18 +174,18 @@ public class ProcessStartEntity implements IProcessStart {
         task.setTaskFormId(untreatedId/*Long.parseLong(_param[1].toString())*/);
         task.setTaskCreateDate(now);
         task.setTaskUpdateDate(now);
-        task.setTaskLauncher(user.getUserName());
+        task.setTaskLauncher(user.getUsername());
         task.setTaskLauncherId(Long.valueOf(user.getId()));
         /**可选，单独设置*/
         if (isSaveExecutorName) {
             User taskExecutor = userService.findByUserId((Long) _param[0], "1");
             if (taskExecutor != null) {
                 /***/
-                task.setTaskExecuteUserName(user.getUserName());
+                task.setTaskExecuteUserName(user.getUsername());
             }
         }
         boolean res;
-        if (res = iHzTaskService.doInsert(task)) {
+        if (res = hzTaskService.doInsert(task)) {
             LOGGER.info("保存任务成功");
         } else {
             LOGGER.error("保存任务失败");

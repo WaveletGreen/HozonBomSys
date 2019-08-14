@@ -1,13 +1,13 @@
 package com.connor.hozon.bom.sys.service;
 
 
-import com.connor.hozon.bom.common.base.dao.GenericDao;
+import cn.net.connor.hozon.dao.dao.sys.GenericDao;
 import com.connor.hozon.bom.common.base.service.GenericService;
-import com.connor.hozon.bom.sys.dao.UserAssociateRoleDao;
+import cn.net.connor.hozon.dao.dao.sys.UserAssociateRoleDao;
 
-import com.connor.hozon.bom.sys.entity.QueryUserAssociateRole;
-import com.connor.hozon.bom.sys.entity.User;
-import com.connor.hozon.bom.sys.entity.UserAssociateRole;
+import cn.net.connor.hozon.dao.query.sys.QueryUserAssociateRole;
+import cn.net.connor.hozon.dao.pojo.sys.User;
+import cn.net.connor.hozon.dao.pojo.sys.UserAssociateRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

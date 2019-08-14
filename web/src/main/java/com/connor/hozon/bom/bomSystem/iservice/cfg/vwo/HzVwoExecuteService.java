@@ -7,7 +7,6 @@
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
 import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoExecute;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,7 +16,6 @@ import java.util.List;
  * @Date: Created in 2018/9/6 13:19
  * @Modified By:
  */
-@Service
 public interface HzVwoExecuteService {
     /**
      * 根据VWO ID查询

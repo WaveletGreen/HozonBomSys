@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature">
+        <id column="PUID" jdbcType="VARCHAR" property="id"/>
+        <result column="P_OF_CFG0_MAIN" jdbcType="VARCHAR" property="mainConfigUid"/>
+        <result column="P_OPTIONFAMILY_NAME" jdbcType="VARCHAR" property="featureCode"/>
+        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="featureDesc"/>
+        <result column="OPTIONFAMILY_DIC_LIB_UID" jdbcType="VARCHAR" property="dicLibUid"/>
+    </resultMap>
+
+    <resultMap id="FamilyName" type="java.lang.String">
+        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="featureDesc"/>
+    </resultMap>
+
+    <!--基础信息-->
+    <sql id="Base_Column_List">
+        PUID,
+        P_OF_CFG0_MAIN,
+        P_OPTIONFAMILY_NAME,
+        P_OPTIONFAMILY_DESC,
+        OPTIONFAMILY_DIC_LIB_UID
+  </sql>
+    <!--**************************************select**************************************-->
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OPTIONFAMILY_RECORD
+        where PUID = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByCodeAndDescWithMain" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OPTIONFAMILY_RECORD
+        where P_OF_CFG0_MAIN=#{mainConfigUid,jdbcType=VARCHAR}
+        <if test="featureCode!=null">
+            and P_OPTIONFAMILY_NAME = #{featureCode,jdbcType=VARCHAR}
+        </if>
+        <if test="featureDesc!=null">
+            and P_OPTIONFAMILY_DESC=#{featureDesc,jdbcType=VARCHAR}
+        </if>
+    </select>
+    <select id="selectForColorBluePrint" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from Hz_Cfg0_Optionfamily_Record txx
+        where txx.puid in
+        (select distinct (t4.puid)
+        from HZ_FULL_CFG_WITHCFG_RECORD t
+        left join Hz_Bom_Line_Record t2
+        on t.cfg_bomline_uid = t2.puid
+        left join Hz_Cfg0_Record t3
+        on t3.puid = t.cfg_cfg0_uid
+        left join Hz_Cfg0_Optionfamily_Record t4
+        on t3.p_cfg0_family_puid = t4.puid
+        where t2.p_color_part = #{isColor,jdbcType=INTEGER}
+        and t.fl_cfg_version =
+        (select id
+        from Hz_Full_Cfg_Main_Record tm
+        where tm.project_uid =#{projectUid,jdbcType=VARCHAR}
+        )
+        )
+        order by txx.p_optionfamily_name asc
+
+    </select>
+    <select id="selectByProjectIdWithOrderMainId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OPTIONFAMILY_RECORD
+        where P_OF_CFG0_MAIN = (
+        select t2.puid
+        from hz_cfg0_main_record t2
+        where t2.p_cfg0_of_which_project_puid =#{mainId}
+        ) order by P_OF_CFG0_MAIN ASC/*by PUID*/
+    </select>
+    <select id="selectByProjectIdWithOrderPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OPTIONFAMILY_RECORD
+        where P_OF_CFG0_MAIN = (
+        select t2.puid
+        from hz_cfg0_main_record t2
+        where t2.p_cfg0_of_which_project_puid =#{projectId}
+        ) order by PUID ASC
+    </select>
+    <select id="selectNameByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_OPTIONFAMILY_RECORD t
+        where P_OF_CFG0_MAIN = (
+        select t2.puid
+        from hz_cfg0_main_record t2
+        where t2.p_cfg0_of_which_project_puid =#{projectUid,jdbcType=VARCHAR}
+        )
+        <if test="list!=null">
+            and t.p_optionfamily_desc
+            <if test="isIn==true">
+                in
+            </if>
+            <if test="isIn==false">
+                not in
+            </if>
+            <foreach collection="list" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by P_OPTIONFAMILY_NAME ASC
+    </select>
+    <!--**************************************update**************************************-->
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature">
+        UPDATE HZ_CFG0_OPTIONFAMILY_RECORD t
+        <set>
+            <if test="featureCode!=null">
+                P_OPTIONFAMILY_NAME=#{featureCode,jdbcType=VARCHAR},
+            </if>
+            <if test="featureDesc!=null">
+                P_OPTIONFAMILY_DESC=#{featureDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="dicLibUid!=null">
+                OPTIONFAMILY_DIC_LIB_UID=#{dicLibUid,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <where>
+            t.puid= #{id,jdbcType=VARCHAR}
+        </where>
+    </update>
+    <!--**************************************insert**************************************-->
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature">
+        insert into
+        HZ_CFG0_OPTIONFAMILY_RECORD
+        (<include refid="Base_Column_List"/>)
+        VALUES
+        (
+        #{id,jdbcType=VARCHAR},
+        #{mainConfigUid,jdbcType=VARCHAR},
+        #{featureCode,jdbcType=VARCHAR},
+        #{featureDesc,jdbcType=VARCHAR},
+        #{dicLibUid,jdbcType=VARCHAR}
+        )
+    </insert>
+    <!--**************************************delete**************************************-->
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature">
+        delete HZ_CFG0_OPTIONFAMILY_RECORD t where t.PUID=#{id,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectByDM" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CFG0_OPTIONFAMILY_RECORD
+        where
+        puid in
+        <foreach collection="list" index="index" item="hzDerivativeMaterielDetailChangeBean" open="(" separator="," close=")">
+            #{hzDerivativeMaterielDetailChangeBean.dmdCfg0FamilyUid,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+    <delete id="deleteByFamilyName" parameterType="java.util.Map">
+        delete HZ_CFG0_OPTIONFAMILY_RECORD t where t.P_OPTIONFAMILY_NAME in
+        <foreach collection="date" index="index" item="item" open="(" close=")" separator=",">
+            #{item.pCfg0FamilyName,jdbcType=VARCHAR}
+        </foreach>
+        and
+        t.P_OF_CFG0_MAIN = #{mainItemPuid,jdbcType=VARCHAR}
+    </delete>
+</mapper>

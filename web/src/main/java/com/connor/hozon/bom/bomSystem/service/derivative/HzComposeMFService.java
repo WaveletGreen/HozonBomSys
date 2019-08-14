@@ -20,8 +20,8 @@ import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServ
 import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMaterielServiceImpl;
 import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicDao;
 import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielDetailDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgModelDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgWithCfgDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgModelDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgWithCfgDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzMaterielFeatureBean;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
@@ -37,7 +37,7 @@ import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -83,7 +83,7 @@ public class HzComposeMFService {
      * 衍生物料基本信息
      */
     @Autowired
-    HzCfg0ModelFeatureService hzCfg0ModelFeatureService;
+    HzCfg0ModelFeatureServiceImpl hzCfg0ModelFeatureService;
     /**
      * 特性
      */

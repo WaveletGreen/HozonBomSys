@@ -2,15 +2,21 @@ package com.connor.hozon.bom.resources.service.bom.impl;
 
 import cn.net.connor.hozon.common.factory.SimpleResponseResultFactory;
 import cn.net.connor.hozon.common.setting.CommonSetting;
+import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzConfigToBomLine;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
 import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.iservice.interaction.IHzCraftService;
-import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzCfg0OfBomLineService;
-import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.HzConfigToBomLineService;
+import com.connor.hozon.bom.bomSystem.iservice.interaction.HzCraftService;
+import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftServiceImpl;
 import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
@@ -46,12 +52,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
-import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzCfg0OfBomLineRecord;
-import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
-import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -73,14 +73,14 @@ public class HzPbomServiceImpl implements HzPbomService {
     private HzMbomRecordDAO hzMbomRecordDAO;
 
     @Autowired
-    private HzCfg0OfBomLineService hzCfg0OfBomLineService;
+    private HzConfigToBomLineService hzConfigToBomLineService;
 
     //工艺辅料库
     @Autowired
     private HzAccessoriesLibsDAO hzAccessoriesLibsDAO;
 
     @Autowired
-    IHzCraftService iHzCraftService;
+    HzCraftService hzCraftService;
 
     @Autowired
     private HzCfg0ModelServiceImpl hzCfg0ModelServiceImpl;
@@ -108,7 +108,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 return WriteResultRespDTO.getFailResult();
             }
             HzPbomLineRecord hzPbomRecord = new HzPbomLineRecord();
-            hzPbomRecord.setUpdateName(UserInfo.getUser().getUserName());
+            hzPbomRecord.setUpdateName(UserInfo.getUser().getUsername());
             String buyUnit = recordReqDTO.getBuyUnit();//采购单元
             String type = recordReqDTO.getType();//焊接/装配
             hzPbomRecord.setBuyUnit(BOMTransConstants.constantStringToInteger(buyUnit));
@@ -296,7 +296,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             jsonObject.put("outerPart", record.getOuterPart());
             jsonObject.put("station", record.getStation());
             //            测试用
-            if (HzCraftService.CRAFT_DEBUG){
+            if (HzCraftServiceImpl.CRAFT_DEBUG){
                 jsonObject.put("lineIndex", record.getLineIndex());
                 jsonObject.put("sortNum", record.getSortNum());
             }
@@ -443,12 +443,12 @@ public class HzPbomServiceImpl implements HzPbomService {
             HzLouRespDTO respDTO = new HzLouRespDTO();
             HzPbomLineRecord hzBomLineRecord = findParentUtil2Y(query.getProjectId(), query.getPuid());
             if (hzBomLineRecord != null) {
-                HzCfg0OfBomLineRecord record = hzCfg0OfBomLineService.doSelectByBLUidAndPrjUid(query.getProjectId(), hzBomLineRecord.geteBomPuid());
+                HzConfigToBomLine record = hzConfigToBomLineService.selectByBLUidAndPrjUid(query.getProjectId(), hzBomLineRecord.geteBomPuid());
                 if (record != null) {
-                    respDTO.setCfg0Desc(record.getCfg0Desc());
-                    respDTO.setCfg0FamilyDesc(record.getCfg0FamilyDesc());
-                    respDTO.setpCfg0name(record.getpCfg0name());
-                    respDTO.setpCfg0familyname(record.getpCfg0familyname());
+                    respDTO.setCfg0Desc(record.getFeatureValueDesc());
+                    respDTO.setCfg0FamilyDesc(record.getFeatureDesc());
+                    respDTO.setpCfg0name(record.getFeatureValueCode());
+                    respDTO.setpCfg0familyname(record.getFeatureCode());
                     return respDTO;
                 }
             }
@@ -614,9 +614,9 @@ public class HzPbomServiceImpl implements HzPbomService {
         if (collectedDataObj instanceof LinkedHashMap) {
             collectedData = (Map<String, String>) collectedDataObj;
         }
-        if (iHzCraftService.autoCraft(projectUid, parentUids, childrenUids, targetUids, collectedData)) {
+        if (hzCraftService.autoCraft(projectUid, parentUids, childrenUids, targetUids, collectedData)) {
             result.put("status", true);
-            List<String> codes = iHzCraftService.getTargetPartCodes();
+            List<String> codes = hzCraftService.getTargetPartCodes();
             StringBuilder sb = null;
             if (codes != null && codes.size() > 0) {
                 sb = new StringBuilder();

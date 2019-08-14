@@ -7,10 +7,10 @@ import cn.net.connor.hozon.common.entity.Page;
 import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
 
-import com.connor.hozon.bom.sys.entity.OrgGroup;
-import com.connor.hozon.bom.sys.entity.QueryOrgGroup;
-import com.connor.hozon.bom.sys.entity.QueryUser;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.OrgGroup;
+import cn.net.connor.hozon.dao.query.sys.QueryOrgGroup;
+import cn.net.connor.hozon.dao.query.sys.QueryUser;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.connor.hozon.bom.sys.service.OrgGroupService;
 import com.connor.hozon.bom.sys.service.UserService;
 import org.springframework.http.MediaType;

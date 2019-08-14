@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.common.util.node;
 
 
-import com.connor.hozon.bom.sys.entity.Tree;
+import cn.net.connor.hozon.dao.pojo.sys.Tree;
 
 import java.util.ArrayList;
 import java.util.Collections;

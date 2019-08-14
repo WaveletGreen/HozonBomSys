@@ -30,8 +30,8 @@ public class HzFactoryDAOImpl extends BaseSQLUtil implements HzFactoryDAO {
             String puid = UUIDHelper.generateUid();
             factory.setPuid(puid);
             factory.setpFactoryCode("1001");
-            factory.setpCreateName(UserInfo.getUser().getUserName());
-            factory.setpUpdateName(UserInfo.getUser().getUserName());
+            factory.setpCreateName(UserInfo.getUser().getUsername());
+            factory.setpUpdateName(UserInfo.getUser().getUsername());
             int i =  super.insert("HzFactoryDAOImpl_insert",factory);
             return i>0?puid:"";
         }
@@ -44,8 +44,8 @@ public class HzFactoryDAOImpl extends BaseSQLUtil implements HzFactoryDAO {
         String puid = UUIDHelper.generateUid();
         factory.setPuid(puid);
         factory.setpFactoryCode(factoryCode);
-        factory.setpCreateName(UserInfo.getUser().getUserName());
-        factory.setpUpdateName(UserInfo.getUser().getUserName());
+        factory.setpCreateName(UserInfo.getUser().getUsername());
+        factory.setpUpdateName(UserInfo.getUser().getUsername());
         int i =  super.insert("HzFactoryDAOImpl_insert",factory);
         return i>0?puid:"";
     }

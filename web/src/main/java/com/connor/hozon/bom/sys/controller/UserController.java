@@ -10,10 +10,10 @@ import com.connor.hozon.bom.resources.domain.dto.request.UpdateUserPasswordReqDT
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.entity.QueryUser;
-import com.connor.hozon.bom.sys.entity.Tree;
-import com.connor.hozon.bom.sys.entity.User;
-import com.connor.hozon.bom.sys.entity.UserRole;
+import cn.net.connor.hozon.dao.query.sys.QueryUser;
+import cn.net.connor.hozon.dao.pojo.sys.Tree;
+import cn.net.connor.hozon.dao.pojo.sys.User;
+import cn.net.connor.hozon.dao.pojo.sys.UserRole;
 import com.connor.hozon.bom.sys.service.TreeService;
 import com.connor.hozon.bom.sys.service.UserAssociateRoleService;
 import com.connor.hozon.bom.sys.service.UserRoleService;
@@ -431,7 +431,7 @@ public class UserController extends GenericController<User,QueryUser> {
         public Map<String,Object> updateUserPassWord(@RequestBody UpdateUserPasswordReqDTO reqDTO){
         User user = UserInfo.getUser();
         Map<String,Object> map = new HashMap<>();
-        if(user ==null || user.getUserName() == null){
+        if(user ==null || user.getUsername() == null){
             map.put(SystemStaticConst.RESULT, SystemStaticConst.FAIL);
             map.put(SystemStaticConst.MSG,"当前账户不存在！");
             return map;

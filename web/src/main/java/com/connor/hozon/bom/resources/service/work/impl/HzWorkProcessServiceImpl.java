@@ -29,7 +29,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +116,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setControlCode(reqDTO.getControlCode());
             hzWorkProcedure.setpBurn(reqDTO.getpBurn());
             hzWorkProcedure.setpCount(reqDTO.getpCount());
-            hzWorkProcedure.setpCreateName(user.getUserName());
+            hzWorkProcedure.setpCreateName(user.getUsername());
             hzWorkProcedure.setpDirectLabor(reqDTO.getpDirectLabor());
             hzWorkProcedure.setpIndirectLabor(reqDTO.getpIndirectLabor());
             hzWorkProcedure.setpMachineLabor(reqDTO.getpMachineLabor());
@@ -125,7 +125,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setpProcedureDesc(reqDTO.getpProcedureDesc());
             hzWorkProcedure.setpProcedureCode(reqDTO.getpProcedureCode());
             hzWorkProcedure.setProjectId(reqDTO.getProjectId());
-            hzWorkProcedure.setpUpdateName(user.getUserName());
+            hzWorkProcedure.setpUpdateName(user.getUsername());
             hzWorkProcedure.setPurpose(reqDTO.getPurpose());
             hzWorkProcedure.setState(reqDTO.getState());
             hzWorkProcedure.setPuid(UUID.randomUUID().toString());
@@ -197,7 +197,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setControlCode(reqDTO.getControlCode());
             hzWorkProcedure.setpBurn(reqDTO.getpBurn());
             hzWorkProcedure.setpCount(reqDTO.getpCount());
-            hzWorkProcedure.setpCreateName(user.getUserName());
+            hzWorkProcedure.setpCreateName(user.getUsername());
             hzWorkProcedure.setpDirectLabor(reqDTO.getpDirectLabor());
             hzWorkProcedure.setpIndirectLabor(reqDTO.getpIndirectLabor());
             hzWorkProcedure.setpMachineLabor(reqDTO.getpMachineLabor());
@@ -206,7 +206,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setpProcedureDesc(reqDTO.getpProcedureDesc());
             hzWorkProcedure.setpProcedureCode(reqDTO.getpProcedureCode());
             hzWorkProcedure.setProjectId(reqDTO.getProjectId());
-            hzWorkProcedure.setpUpdateName(user.getUserName());
+            hzWorkProcedure.setpUpdateName(user.getUsername());
             hzWorkProcedure.setPurpose(reqDTO.getPurpose());
             hzWorkProcedure.setState(reqDTO.getState());
             hzWorkProcedure.setPuid(UUID.randomUUID().toString());
@@ -280,7 +280,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         hzWorkProcedure.setpOtherCost(reqDTO.getpOtherCost());
         hzWorkProcedure.setpProcedureDesc(reqDTO.getpProcedureDesc());
         hzWorkProcedure.setpProcedureCode(reqDTO.getpProcedureCode());
-        hzWorkProcedure.setpUpdateName(user.getUserName());
+        hzWorkProcedure.setpUpdateName(user.getUsername());
         hzWorkProcedure.setPurpose(reqDTO.getPurpose());
         hzWorkProcedure.setState(reqDTO.getState());
         List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
@@ -328,7 +328,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         hzWorkProcedure.setpOtherCost(reqDTO.getpOtherCost());
         hzWorkProcedure.setpProcedureDesc(reqDTO.getpProcedureDesc());
         hzWorkProcedure.setpProcedureCode(reqDTO.getpProcedureCode());
-        hzWorkProcedure.setpUpdateName(user.getUserName());
+        hzWorkProcedure.setpUpdateName(user.getUsername());
         hzWorkProcedure.setPurpose(reqDTO.getPurpose());
         hzWorkProcedure.setState(reqDTO.getState());
         hzWorkProcedure.setpStatus(2);

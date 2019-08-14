@@ -8,7 +8,7 @@ package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasicChangeBean;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasic;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -54,7 +54,7 @@ public interface HzDerivativeMaterielBasicDao extends BasicDao<HzDerivativeMater
 
     int updateStatusByOrderId(Long orderId, int status);
 
-    int updateByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans);
+    int updateByChangeIds(List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans);
 
     List<HzDerivativeMaterielBasic> selectByChangeOrderId(Long orderId);
 

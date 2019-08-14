@@ -12,7 +12,7 @@ import com.connor.hozon.bom.bomSystem.service.process.ReleaseContainer;
 import com.connor.hozon.bom.process.iservice.IProcessFinish;
 import com.connor.hozon.bom.process.iservice.IProcessManagerService;
 import com.connor.hozon.bom.process.iservice.IProcessStart;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.task.HzTasks;

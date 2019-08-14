@@ -1,17 +1,15 @@
 package com.connor.hozon.bom.sys.service;
 
 
-import com.connor.hozon.bom.common.base.dao.GenericDao;
+import cn.net.connor.hozon.dao.dao.sys.GenericDao;
 import com.connor.hozon.bom.common.base.service.GenericService;
-import com.connor.hozon.bom.sys.dao.OrgGroupDao;
+import cn.net.connor.hozon.dao.dao.sys.OrgGroupDao;
 
-import com.connor.hozon.bom.sys.entity.OrgGroup;
-import com.connor.hozon.bom.sys.entity.QueryOrgGroup;
+import cn.net.connor.hozon.dao.pojo.sys.OrgGroup;
+import cn.net.connor.hozon.dao.query.sys.QueryOrgGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * @author linzf

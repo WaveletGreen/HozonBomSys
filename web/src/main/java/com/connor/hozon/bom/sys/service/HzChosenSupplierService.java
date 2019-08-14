@@ -4,7 +4,7 @@ import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.model.HzChosenSupplier;
 import com.connor.hozon.bom.resources.mybatis.quotemsg.HzChosenSupplierDAO;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import net.sf.json.JSONObject;
 //import netscape.security.Privilege;
 import org.springframework.beans.factory.annotation.Autowired;

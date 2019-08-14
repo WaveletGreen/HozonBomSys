@@ -7,25 +7,33 @@
 package com.connor.hozon.bom.process.service;
 
 import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgMainChangeDao;
+import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgMainDao;
 import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicChangeDao;
 import cn.net.connor.hozon.dao.dao.configuration.relevance.HzRelevanceBasicDao;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleTask;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecordVO;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
+import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasicChange;
+import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
+import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgMainChangeQuery;
+import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgMainQuery;
 import cn.net.connor.hozon.services.service.configuration.derivative.HzDMBasicChangeService;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainChangeDao;
-import com.connor.hozon.bom.bomSystem.dao.fullCfg.HzFullCfgMainDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzFeatureChangeService;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.IHzVWOManagerService;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.ISynBomService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzFeatureChangeService;
+import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzVWOManagerService;
+import com.connor.hozon.bom.bomSystem.iservice.integrate.SynBomService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureService;
-import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielService;
-import com.connor.hozon.bom.bomSystem.service.integrate.SynProcessRouteService;
 import com.connor.hozon.bom.process.iservice.IDataModifier;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -46,24 +54,17 @@ import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
+import integration.service.integrate.SynMaterielServiceImpl;
+import integration.service.integrate.SynProcessRouteService;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzBOMScheduleTask;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecordVO;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
-import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
-import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
-import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -106,7 +107,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     private HzWorkProcedureDAO hzWorkProcedureDAO;
 
     @Autowired
-    private IHzFeatureChangeService iHzFeatureChangeService;
+    private HzFeatureChangeService hzFeatureChangeService;
     @Autowired
     private HzFeatureService hzFeatureService;
 
@@ -129,11 +130,10 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     private HzFullCfgMainChangeDao hzFullCfgMainChangeDao;
 
     @Autowired
-    @Qualifier("synBomService")
-    private ISynBomService synBomService;
+    private SynBomService synBomService;
 
     @Autowired
-    private SynMaterielService synMaterielService;
+    private SynMaterielServiceImpl synMaterielServiceImpl;
 
     @Autowired
     private HzRelevanceBasicDao hzRelevanceBasicDao;
@@ -145,7 +145,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
     private SynProcessRouteService synProcessRouteService;
 
     @Autowired
-    private IHzVWOManagerService hzVWOManagerService;
+    private HzVWOManagerService hzVWOManagerService;
 
     private String errMsg ="";
 
@@ -214,7 +214,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 //特性变更批准
                 if(ChangeTableNameEnum.HZ_CFG0_AFTER_CHANGE_RECORD.getTableName().equals(hzChangeDataRecord.getTableName())){
                     //将变更数据的状态修改为以生效
-                    if(!iHzFeatureChangeService.updateStatusByOrderId(orderId,1)){
+                    if(!hzFeatureChangeService.updateStatusByOrderId(orderId,1)){
                         return false;
                     }
                     //将源数据修改为已生效
@@ -226,10 +226,10 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
             }
             for(HzChangeDataRecord hzChangeDataRecord : list){
                 if(ChangeTableNameEnum.HZ_FULL_CFG_MAIN_RECORD_CHANGE.getTableName().equals(hzChangeDataRecord.getTableName())){
-                    if(hzFullCfgMainDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                    if(hzFullCfgMainDao.updateStatusByOrderId(new HzFullCfgMainQuery(orderId,1))<=0?true:false){
                         return false;
                     }
-                    if(hzFullCfgMainChangeDao.updateStatusByOrderId(orderId,1)<=0?true:false){
+                    if(hzFullCfgMainChangeDao.updateStatusByOrderId(new HzFullCfgMainChangeQuery(orderId,1))<=0?true:false){
                         return false;
                     }
                 }
@@ -898,18 +898,18 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
               //需要传输数据到SAP BOM端需要记录数据传输结果
               if (ListUtil.isNotEmpty(deleteList)) {
 //            synMaterielService.deleteByPuids();
-                  JSONObject object = synMaterielService.deleteByPuids(sapDeleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"puid");
+                  JSONObject object = synMaterielServiceImpl.deleteByPuids(sapDeleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"puid");
                   errorCount += sapTransDataErrMsg(stringBuffer,object);
                   hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
               }
               if (ListUtil.isNotEmpty(updateList)) {
                   hzMaterielDAO.updateList(updateList);
                   if(ListUtil.isNotEmpty(sapInsertList)){
-                      JSONObject object = synMaterielService.updateOrAddByUids(sapInsertList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
+                      JSONObject object = synMaterielServiceImpl.updateOrAddByUids(sapInsertList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
                       errorCount += sapTransDataErrMsg(stringBuffer,object);
                   }
                   if(ListUtil.isNotEmpty(sapUpdateList)){
-                      JSONObject object = synMaterielService.updateOrAddByUids(sapUpdateList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
+                      JSONObject object = synMaterielServiceImpl.updateOrAddByUids(sapUpdateList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
                       errorCount += sapTransDataErrMsg(stringBuffer,object);
                   }
               }

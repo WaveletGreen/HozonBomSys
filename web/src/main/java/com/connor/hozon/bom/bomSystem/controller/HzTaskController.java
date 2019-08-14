@@ -6,8 +6,8 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import com.connor.hozon.bom.bomSystem.dto.task.TaskReceivedDto;
-import com.connor.hozon.bom.bomSystem.iservice.task.IHzTaskService;
+import cn.net.connor.hozon.services.request.task.TaskRequestDTO;
+import cn.net.connor.hozon.services.service.task.HzTaskService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -34,7 +34,7 @@ public class HzTaskController {
      * 任务服务层
      */
     @Autowired
-    IHzTaskService iHzTaskService;
+    HzTaskService hzTaskService;
 
     /***
      * 保存任务，已废除，不再使用该独立方法作为保存任务的作用
@@ -43,8 +43,8 @@ public class HzTaskController {
      */
     @Deprecated
     @RequestMapping("saveTask")
-    public boolean saveTask(@RequestBody TaskReceivedDto dto) {
-        iHzTaskService.saveTask(dto);
+    public boolean saveTask(@RequestBody TaskRequestDTO dto) {
+        hzTaskService.saveTask(dto);
         return false;
     }
 
@@ -56,6 +56,6 @@ public class HzTaskController {
     @RequestMapping(value = "/loadTasks", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public JSONObject loadTasks() {
-        return iHzTaskService.loadUserTask();
+        return hzTaskService.loadUserTask();
     }
 }

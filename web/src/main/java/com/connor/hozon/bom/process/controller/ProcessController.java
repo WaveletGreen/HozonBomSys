@@ -9,7 +9,7 @@ package com.connor.hozon.bom.process.controller;
 import com.connor.hozon.bom.process.dto.ProcessReceiveDto;
 import com.connor.hozon.bom.process.iservice.IProcessManagerService;
 import com.connor.hozon.bom.process.service.ProcessManagerService;
-import com.connor.hozon.bom.sys.entity.User;
+import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +39,7 @@ public class ProcessController {
     public String getAuditorPage(@RequestParam Long orderId, Model model) {
         User user = null;
         if ((user = processManagerService.checkOrderAuditor(orderId)) != null) {
-            model.addAttribute("msg", "该表单已选择审核人:" + user.getUserName());
+            model.addAttribute("msg", "该表单已选择审核人:" + user.getUsername());
             return "errorWithEntity";
         } else {
             return "change/changeForm/changeSelectAuditor";

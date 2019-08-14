@@ -4,7 +4,7 @@ package com.connor.hozon.bom.common.util.dict;
 
 
 
-import com.connor.hozon.bom.sys.entity.Dict;
+import cn.net.connor.hozon.dao.pojo.sys.Dict;
 
 import java.util.Collection;
 import java.util.Hashtable;

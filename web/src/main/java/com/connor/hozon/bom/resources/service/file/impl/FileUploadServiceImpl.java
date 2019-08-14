@@ -306,7 +306,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 record.setBuyEngineer(pBuyEngineer);
                 record.setPartOfWhichDept(pBomOfWhichDept);
                 record.setBwgBoxPart(pBwgBoxPart);
-                record.setCreateName(UserInfo.getUser().getUserName());
+                record.setCreateName(UserInfo.getUser().getUsername());
                 record.setDataVersion(pDataVersion);
                 record.setDensity(pDensity);
                 record.setDevelopType(pDevelopType);
@@ -339,7 +339,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 record.setTextureColorNum(pTextureColorNum);
                 record.setTorque(pTorque);
                 record.setUnit(pUnit);
-                record.setUpdateName(UserInfo.getUser().getUserName());
+                record.setUpdateName(UserInfo.getUser().getUsername());
                 record.setProjectId(projectId);
                 record.setPartId(lineId);
                 eplRecords.add(record);
@@ -655,7 +655,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 //        record.setpBuyEngineer(pBuyEngineer);
         record.setpBomOfWhichDept(pBomOfWhichDept);
 //        record.setpBwgBoxPart(pBwgBoxPart);
-        record.setpCreateName(UserInfo.getUser().getUserName());
+        record.setpCreateName(UserInfo.getUser().getUsername());
 //        record.setpDataVersion(pDataVersion);
 //        record.setpDensity(pDensity);
 //        record.setpDevelopType(pDevelopType);
@@ -698,7 +698,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 //        record.setpTorque(pTorque);
 //        record.setpUnit(pUnit);
         record.setpUpc(pUpc);
-        record.setpUpdateName(UserInfo.getUser().getUserName());
+        record.setpUpdateName(UserInfo.getUser().getUsername());
         record.setSparePart(sparePart);
         record.setSparePartNum(sparePartNum);
         record.setColorPart(BOMTransConstants.constantStringToInteger(colorPart));

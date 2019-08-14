@@ -12,7 +12,7 @@ import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleBomRelation;
 import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleStatus;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.service.integrate.SynMaterielCfgService;
+import integration.service.integrate.SynMaterielCfgService;
 import com.connor.hozon.bom.interaction.bean.SingleVehicleCheckStatus;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;

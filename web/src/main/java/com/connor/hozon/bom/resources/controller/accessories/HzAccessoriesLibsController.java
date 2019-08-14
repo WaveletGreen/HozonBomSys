@@ -65,7 +65,7 @@ public class HzAccessoriesLibsController extends BaseController {
         }
         String puid = UUID.randomUUID().toString();
         hzAccessoriesLibs.setPuid(puid);
-        hzAccessoriesLibs.setpCreateName(UserInfo.getUser().getUserName());
+        hzAccessoriesLibs.setpCreateName(UserInfo.getUser().getUsername());
         int i = hzAccessoriesLibsDAO.insert(hzAccessoriesLibs);
         if (i > 0) {
             toJSONResponse(Result.build(true, "操作成功！"), response);
@@ -92,7 +92,7 @@ public class HzAccessoriesLibsController extends BaseController {
             toJSONResponse(Result.build(false, "对不起！您修改后的物料号已存在！"), response);
             return;
         }
-        hzAccessoriesLibs.setpUpdateName(UserInfo.getUser().getUserName());
+        hzAccessoriesLibs.setpUpdateName(UserInfo.getUser().getUsername());
         int i = hzAccessoriesLibsDAO.update(hzAccessoriesLibs);
         if (i > 0) {
             toJSONResponse(Result.build(true, "操作成功！"), response);

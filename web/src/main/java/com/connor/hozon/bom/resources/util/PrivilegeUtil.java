@@ -1,12 +1,8 @@
 package com.connor.hozon.bom.resources.util;
 
 import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.sys.entity.User;
-import com.connor.hozon.bom.sys.entity.UserRole;
-import com.connor.hozon.bom.sys.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.inject.Inject;
+import cn.net.connor.hozon.dao.pojo.sys.User;
+import cn.net.connor.hozon.dao.pojo.sys.UserRole;
 
 /**
  * @Author: haozt

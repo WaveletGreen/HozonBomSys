@@ -7,9 +7,9 @@
 
 package cn.net.connor.hozon.services.service.configuration.derivative.impl;
 
-import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDMBasicChangeDao;
+import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicChangeDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
-import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDMBasicChangeBean;
+import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielBasicChangeBean;
 import cn.net.connor.hozon.services.service.configuration.derivative.HzDMBasicChangeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,32 +27,32 @@ import java.util.Map;
 public class HzDMBasicChangeServiceImpl implements HzDMBasicChangeService {
 
     @Autowired
-    private HzDMBasicChangeDao hzDMBasicChangeDao;
+    private HzDerivativeMaterielBasicChangeDao hzDerivativeMaterielBasicChangeDao;
 
 
     @Override
-    public int insertList(List<HzDMBasicChangeBean> hzDMBasicChangeBeans) {
-        return hzDMBasicChangeDao.insertList(hzDMBasicChangeBeans);
+    public int insertList(List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans) {
+        return hzDerivativeMaterielBasicChangeDao.insertList(hzDerivativeMaterielBasicChangeBeans);
     }
 
     @Override
-    public List<HzDMBasicChangeBean> selectByFormid(Long changeFromId) {
-        return hzDMBasicChangeDao.selectByFormid(changeFromId);
+    public List<HzDerivativeMaterielBasicChangeBean> selectByFormid(Long changeFromId) {
+        return hzDerivativeMaterielBasicChangeDao.selectByFormid(changeFromId);
     }
 
     @Override
-    public HzDMBasicChangeBean selectBefor(HzDMBasicChangeBean hzDMBasicChangeBean) {
-        return hzDMBasicChangeDao.selectBefor(hzDMBasicChangeBean);
+    public HzDerivativeMaterielBasicChangeBean selectBefor(HzDerivativeMaterielBasicChangeBean hzDerivativeMaterielBasicChangeBean) {
+        return hzDerivativeMaterielBasicChangeDao.selectBefor(hzDerivativeMaterielBasicChangeBean);
     }
 
     @Override
-    public List<HzDMBasicChangeBean> selectAfter(Long formId) {
-        return hzDMBasicChangeDao.selectAfter(formId);
+    public List<HzDerivativeMaterielBasicChangeBean> selectAfter(Long formId) {
+        return hzDerivativeMaterielBasicChangeDao.selectAfter(formId);
     }
 
     @Override
-    public List<HzDMBasicChangeBean> selectLastByPuid(List<HzComposeDelDto> delDtos) {
-        return hzDMBasicChangeDao.selectLastById(delDtos);
+    public List<HzDerivativeMaterielBasicChangeBean> selectLastByPuid(List<HzComposeDelDto> delDtos) {
+        return hzDerivativeMaterielBasicChangeDao.selectLastById(delDtos);
     }
 
     @Override
@@ -60,16 +60,16 @@ public class HzDMBasicChangeServiceImpl implements HzDMBasicChangeService {
         Map<String,Object> map = new HashMap<>();
         map.put("orderId",orderId);
         map.put("status",status);
-        return hzDMBasicChangeDao.updateStatusByOrderId(map);
+        return hzDerivativeMaterielBasicChangeDao.updateStatusByOrderId(map);
     }
 
     @Override
-    public int deleteByChangeIds(List<HzDMBasicChangeBean> hzDMBasicChangeBeans) {
-        return hzDMBasicChangeDao.deleteByChangeIds(hzDMBasicChangeBeans);
+    public int deleteByChangeIds(List<HzDerivativeMaterielBasicChangeBean> hzDerivativeMaterielBasicChangeBeans) {
+        return hzDerivativeMaterielBasicChangeDao.deleteByChangeIds(hzDerivativeMaterielBasicChangeBeans);
     }
 
     @Override
-    public List<HzDMBasicChangeBean> selectNotEffect(List<Long> changeMaterielFeatureIds) {
-        return hzDMBasicChangeDao.selectNotEffect(changeMaterielFeatureIds);
+    public List<HzDerivativeMaterielBasicChangeBean> selectNotEffect(List<Long> changeMaterielFeatureIds) {
+        return hzDerivativeMaterielBasicChangeDao.selectNotEffect(changeMaterielFeatureIds);
     }
 }

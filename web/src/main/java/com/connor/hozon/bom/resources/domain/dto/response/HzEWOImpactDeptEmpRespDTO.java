@@ -60,7 +60,7 @@ public class HzEWOImpactDeptEmpRespDTO extends BaseDTO {
         this.userId = userId;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return userName;
     }
 

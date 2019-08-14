@@ -1,13 +1,17 @@
 package com.connor.hozon.bom.sys.service;
 
-import com.connor.hozon.bom.common.base.dao.GenericDao;
+import cn.net.connor.hozon.dao.dao.sys.GenericDao;
+import cn.net.connor.hozon.dao.pojo.sys.RoleAssociateTree;
+import cn.net.connor.hozon.dao.pojo.sys.RoleWriteAssociateTree;
+import cn.net.connor.hozon.dao.pojo.sys.Tree;
+import cn.net.connor.hozon.dao.pojo.sys.UserRole;
+import cn.net.connor.hozon.dao.query.sys.QueryUserRole;
 import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.sys.dao.RoleAssociateTreeDao;
-import com.connor.hozon.bom.sys.dao.RoleWriteAssociateTreeDao;
-import com.connor.hozon.bom.sys.dao.UserRoleDao;
+import cn.net.connor.hozon.dao.dao.sys.RoleAssociateTreeDao;
+import cn.net.connor.hozon.dao.dao.sys.RoleWriteAssociateTreeDao;
+import cn.net.connor.hozon.dao.dao.sys.UserRoleDao;
 
-import com.connor.hozon.bom.sys.entity.*;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

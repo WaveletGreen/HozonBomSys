@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 
-import com.connor.hozon.bom.sys.entity.Tree;
+import cn.net.connor.hozon.dao.pojo.sys.Tree;
 import org.springframework.stereotype.Component;
 
 @Generated(
