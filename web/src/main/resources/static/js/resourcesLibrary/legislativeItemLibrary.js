@@ -1,8 +1,8 @@
 /**
  * Created with IntelliJ IDEA.
- * User: xlf
- * Date: 2019/8/14
- * Time: 15:58
+ * User: xulf
+ * Date: 2019/8/15
+ * Time: 15:03
  */
 var $table;
 var projectId;
@@ -17,34 +17,29 @@ function doQuery() {
  */
 function createColumn() {
     let column = [];
-    var columnOne = [];
-    var columnTwo = [];
-    columnOne.push({field: 'ck', colspan: 1, rowspan: 2, align: 'center', valign: 'middle', checkbox: true})
-    columnOne.push({field: 'q', title: '序号',  align: 'center', valign: 'middle', width: 50, colspan: 1, rowspan: 2,
+    column.push({field: 'ck', align: 'center', valign: 'middle', checkbox: true})
+    column.push({field: 'q', title: '序号',  align: 'center', valign: 'middle', width: 50,
         formatter: function (value, row, index) {
-            var options = $('#legislativeBikeLibraryTable').bootstrapTable('getOptions');
+            var options = $('#legislativeItemLibraryTable').bootstrapTable('getOptions');
             if (options.pageSize = "ALL") {
                 return index + 1;
             }
             return options.pageSize * (options.pageNumber - 1) + index + 1;
         }
     })
-    columnOne.push({field: 'w', title: '公告号', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
-    columnOne.push({field: 'e', title: '车型', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
-    columnOne.push({field: 'r', title: 'VIN码前8位', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
-    columnOne.push({field: 't', title: '电池', align: 'center', valign: 'middle', colspan: 3, rowspan: 1,})
-    columnTwo.push({field: 'y', title: '电池厂家', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
-    columnTwo.push({field: 'u', title: '电池型号', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
-    columnTwo.push({field: 'i', title: '生产厂家', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
-    columnOne.push({field: 'o', title: '电机', align: 'center', valign: 'middle', colspan: 2, rowspan: 1,})
-    columnTwo.push({field: 'p', title: '电机厂家', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
-    columnTwo.push({field: 'a', title: '电机型号', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
-    columnOne.push({field: 's', title: '备注', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
-    column.push(columnOne);
-    column.push(columnTwo);
+    column.push({field: 'w', title: '法规件名称', align: 'center', valign: 'middle',})
+    column.push({field: 'e', title: '法规件型号', align: 'center', valign: 'middle',})
+    column.push({field: 'r', title: '零件号', align: 'center', valign: 'middle',})
+    column.push({field: 't', title: '零件名称', align: 'center', valign: 'middle',})
+    column.push({field: 'y', title: '供应商', align: 'center', valign: 'middle',})
+    column.push({field: 'u', title: '供应商代码', align: 'center', valign: 'middle',})
+    column.push({field: 'i', title: '技术特性描述', align: 'center', valign: 'middle',})
+    column.push({field: 'o', title: '适用车型', align: 'center', valign: 'middle',})
+    column.push({field: 'p', title: '申请部门', align: 'center', valign: 'middle',})
+    column.push({field: 'a', title: '是否需要强检报告', align: 'center', valign: 'middle',})
+    column.push({field: 's', title: '是否需要3C证书', align: 'center', valign: 'middle',})
     return column;
 }
-
 /**
  * 添加
  */
@@ -75,6 +70,13 @@ var doDelete = function () {
  */
 const toolbar = [
     {
+        text: '返回上一步',
+        iconCls: 'fa fa-arrow-left',
+        handler: function () {
+            window.location.href="javascript:history.go(-1);"
+        }
+    },
+    {
         text: '添加',
         iconCls: 'glyphicon glyphicon-plus',
         handler: add
@@ -95,7 +97,6 @@ const toolbar = [
         handler: doDelete
     },
 ]
-
 /**
  * table初始化
  * @param url
@@ -112,7 +113,7 @@ function initTable() {
         sidePagination: "server",                    //分页方式：client客户端分页，server服务端分页（*）
         height: $(window.parent.document).find("#wrapper").height() - 150,
         width: $(window).width(),
-        formId: "queryLegislativeBikeLibrary",
+        formId: "queryLegislativeItemLibrary",
         undefinedText: "",                           //当数据为 undefined 时显示的字符
         pagination: true,
         pageNumber: 1,                                //初始化加载第一页，默认第一页
@@ -127,18 +128,18 @@ function initTable() {
         showToggle: false,                        //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                        //是否显示刷新按钮
         columns: column,
-        // showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
-        // exportDataType: "selected",              //basic', 'all', 'selected'.
-        // exportTypes: ['xlsx'],	    //导出类型
-        // //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
-        // exportOptions: {
-        //     //ignoreColumn: [0,0],            //忽略某一列的索引
-        //     fileName: '法规件库导出',              //文件名称设置
-        //     worksheetName: 'Sheet1',          //表格工作区名称
-        //     tableName: '法规件库表',
-        //     excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
-        //     //onMsoNumberFormat: DoOnMsoNumberFormat
-        // },
+        showExport: phoneOrPc(),              //是否显示导出按钮(此方法是自己写的目的是判断终端是电脑还是手机,电脑则返回true,手机返回falsee,手机不显示按钮)
+        exportDataType: "selected",              //basic', 'all', 'selected'.
+        exportTypes: ['xlsx'],	    //导出类型
+        //exportButton: $('#btn_export'),     //为按钮btn_export  绑定导出事件  自定义导出按钮(可以不用)
+        exportOptions: {
+            //ignoreColumn: [0,0],            //忽略某一列的索引
+            fileName: '法规件库导出',              //文件名称设置
+            worksheetName: 'Sheet1',          //表格工作区名称
+            tableName: '法规件库表',
+            excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
+            //onMsoNumberFormat: DoOnMsoNumberFormat
+        },
         toolbars: toolbar
     })
 }
@@ -148,15 +149,14 @@ function initTable() {
  */
 $(document).ready((function () {
     projectId = getProjectUid();
-    $table = $("#legislativeBikeLibraryTable");
-    log($table)
+    $table = $("#legislativeItemLibraryTable");
     initTable();
 }))
 
 function toPage() {
     var pageNum = $("#pageNum").val();
     if (pageNum) {
-        $('#legislativeBikeLibraryTable').bootstrapTable('selectPage', parseInt(pageNum));
+        $('#legislativeItemLibraryTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
 
