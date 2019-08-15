@@ -16,6 +16,15 @@ public interface HzEBOMWriteService {
      */
     WriteResultRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO);
 
+
+    /**
+     * 派生EBOM
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO deriveHzEbomRecord(DeriveHzEbomReqDTO reqDTO);
+
+    
     /**
      * 更新EBOM
      * @param reqDTO
@@ -29,6 +38,9 @@ public interface HzEBOMWriteService {
      * @return
      */
     WriteResultRespDTO extendsBomStructureInNewParent(UpdateHzEbomLeveReqDTO reqDTO);
+
+
+
 
     /**
      * 删除EBOM

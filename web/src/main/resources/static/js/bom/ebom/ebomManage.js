@@ -214,7 +214,10 @@ var update = function () {
         }
     })
 };
-
+/**
+ * 派生
+ * @returns {boolean}
+ */
 var derive = function () {
     var rows = $table.bootstrapTable('getSelections');
     //只能选一条进行层级调整
@@ -226,7 +229,7 @@ var derive = function () {
         window.Ewin.alert({message: '对不起,审核中的数据不能派生!'});
         return false;
     }
-    var url = "ebom/derive/ebom";
+    var url = "ebom/deriveEbom";
     $.ajax({
         url: "privilege/write?url=" + url,
         type: "GET",
@@ -238,7 +241,7 @@ var derive = function () {
             else {
                 window.Ewin.dialog({
                     title: "派生",
-                    url: "ebom/derive/ebom?projectId=" + projectId
+                    url: "ebom/deriveEbom?projectId=" + projectId
                     + "&puid=" + rows[0].puid,
                     width: 500,
                     height: 500

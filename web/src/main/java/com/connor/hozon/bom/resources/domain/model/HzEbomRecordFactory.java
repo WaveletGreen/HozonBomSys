@@ -43,6 +43,39 @@ public class HzEbomRecordFactory {
         return record;
     }
 
+    /**
+     * 派生通过老零件生成新零件
+     * @param reqDTO
+     * @param eplId
+     * @param lineId
+     * @param is2Y
+     * @param hasChildren
+     * @param bomDigifaxId
+     * @return
+     */
+    public static HzEPLManageRecord oldEbomTONewEbomRecord(HzEPLManageRecord reqDTO,Long eplId,String lineId,Integer is2Y,
+                                                        Integer hasChildren,String bomDigifaxId ){
+        HzEPLManageRecord record = new HzEPLManageRecord();
+        record.setPuid(UUID.randomUUID().toString());
+        record.setLineID(lineId);
+        record.setpCreateName(UserInfo.getUser().getUsername());
+        record.setpUpdateName(UserInfo.getUser().getUsername());
+        record.setpFnaDesc(reqDTO.getpFnaDesc());
+        record.setpFnaInfo(reqDTO.getFna());
+        record.setpUpc(reqDTO.getpUpc());
+        record.setNumber(reqDTO.getNumber());
+        record.setEplId(eplId);
+        record.setIsHas(hasChildren);
+        record.setIs2Y(is2Y);
+        record.setBomDigifaxId(bomDigifaxId);
+        record.setColorPart(reqDTO.getColorPart());
+        record.setSparePartNum(reqDTO.getSparePartNum());
+        record.setSparePart(reqDTO.getSparePart());
+        record.setVehNum(reqDTO.getVehNum());
+        record.setStatus(2);
+        return record;
+    }
+
     public static HzEPLManageRecord updateEBOMReqTORecord(UpdateHzEbomReqDTO reqDTO){
         HzEPLManageRecord record = new HzEPLManageRecord();
         record.setColorPart(BOMTransConstants.constantStringToInteger(reqDTO.getColorPart()));
