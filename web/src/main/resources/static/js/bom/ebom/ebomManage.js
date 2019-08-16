@@ -783,7 +783,7 @@ function toPage() {
 
 function queryLoa(row) {
     var myData = JSON.stringify({
-        "projectId": $("#project", window.top.document).val(),
+        "projectId": projectId,
         "puid": row
     });
     $.ajax({
@@ -814,7 +814,6 @@ function queryLoa(row) {
 }
 
 function queryLou(row) {
-    var projectId = $("#project", window.top.document).val();
     $.ajax({
         type: "GET",
         //ajax需要添加打包名

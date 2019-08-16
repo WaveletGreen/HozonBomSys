@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2019/8/14 Time: 15:30-->
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>法规件库</title>
+</head>
+<body>
+<div class="panel-body" style="padding-bottom: 0;">
+    <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+          id="queryLegislativeBikeLibrary">
+        <div class="form-group">
+            <label for="">公告号</label>
+            <input class="form-control" id="" name="" type="text"
+                   placeholder="请输入公告号"/>
+        </div>
+        <div class="form-group">
+            <label for="">车型</label>
+            <input class="form-control" id="" name="" type="text"
+                   placeholder="请输入车型"/>
+        </div>
+        <div class="form-group">
+            <label for="">VIN码前8位</label>
+            <input class="form-control" id="" name="" type="text"
+                   placeholder="请输入VIN码前8位"/>
+        </div>
+        <div class="form-group">
+            <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+        </div>
+    </form>
+</div>
+<div class="content col-lg-12">
+    <table class="table table-striped tableNormalStyle" id="legislativeBikeLibraryTable"></table>
+</div>
+<script th:src="@{/js/resourcesLibrary/legislativeBikeLibrary.js}"></script>
+</body>
+</html>

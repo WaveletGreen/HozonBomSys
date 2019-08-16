@@ -1,0 +1,116 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2019/8/15 Time:16:13-->
+<body>
+<form id="legislativeItemLibraryForm" role="form" method="" action="">
+    <div class="form-group">
+        <label for="">法规件名称</label>
+        <input class="form-control" id="" name="" type="text" placeholder="请输入法规件名称"/>
+    </div>
+    <div class="form-group">
+        <label for="">法规件型号</label>
+        <input class="form-control" id="" name="" type="text" placeholder="请输入法规件型号"/>
+    </div>
+    <div class="form-group">
+        <label for="">供应商</label>
+        <input class="form-control" id="" name="" type="text" placeholder="请输入供应商"/>
+    </div>
+    <div class="form-group">
+        <label for="">供应商代码</label>
+        <input class="form-control" id="" name="" type="text" placeholder="请输入供应商代码"/>
+    </div>
+    <div class="form-group">
+        <label for="">技术特性描述</label>
+        <input class="form-control" id="" name="" type="text" placeholder="请输入技术特性描述"/>
+    </div>
+    <div class="form-group">
+        <label for="">适用车型</label>
+        <input class="form-control" id="" name="" type="text" placeholder="请输入适用车型"/>
+    </div>
+    <div class="form-group">
+        <label for="">申请部门</label>
+        <input class="form-control" id="" name="" type="text" placeholder="请输入申请部门"/>
+    </div>
+    <div class="form-group">
+        <label for="">是否需要强检报告</label>
+        <select class="form-control" name="" id="" placeholder="请选择是否需要强检报告">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="">是否需要3C证书</label>
+        <select class="form-control" name="" id="" placeholder="请选择是否需要3C证书">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>
+    </div>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#legislativeItemLibraryForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                vppsLevel: {
+                    message: 'VPPS层级验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: 'VPPS层级不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#legislativeItemLibraryForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#legislativeItemLibraryForm", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "id": $("#id").val(),
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            activeTabBodyRefresh();
+                            if (result.success) {
+                                layer.msg('快速添加成功', {icon: 1, time: 2000})
+                            }
+                            else if (!result.success) {
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':快速添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>
