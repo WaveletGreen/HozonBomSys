@@ -7,22 +7,24 @@ var $table;
  * 访问的url
  */
 var eBomUrl;
+
 /**\
  * 页面刷新
  * @param projectId
  */
 function doRefresh(projectPuid) {
     $('#ebomManageTable').bootstrapTable('destroy');
-    projectId=getProjectUid();
+    projectId = getProjectUid();
     var eBomUrl = "ebom/getEBom/list?projectId=" + projectId;
     initTable(eBomUrl);
 }
+
 /**
  * 自动查询调用
  */
 function doQuery() {
-    projectId=getProjectUid();
-     eBomUrl = "ebom/getEBom/list?projectId=" + projectId;
+    projectId = getProjectUid();
+    eBomUrl = "ebom/getEBom/list?projectId=" + projectId;
     var pBomLinePartClass = $("#pBomLinePartClass").val();
     if (pBomLinePartClass == "请选择零件分类") {
         eBomUrl += "&pBomLinePartClass=" + "";
@@ -135,12 +137,11 @@ function createColumn(result) {
 }
 
 
-
 /**
  * 添加
  * @returns {boolean}
  */
-var add = function(){
+var add = function () {
     var rows = $table.bootstrapTable('getSelections');
     if (rows.length > 1) {
         window.Ewin.alert({message: '只能选择一个父级!'});
@@ -179,6 +180,38 @@ var add = function(){
     })
 };
 /**
+ * 快速添加
+ * @returns {boolean}
+ */
+var quickAdd = function () {
+    var rows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (rows.length != 1) {
+        window.Ewin.alert({message: '请选择一条数据再进行快速添加!'});
+        return false;
+    }
+    var url = "ebom/QuickAddEbom";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "快速添加",
+                    url: "ebom/QuickAddEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
+                    gridId: "gridId",
+                    width: 500,
+                    height: 500
+                });
+            }
+        }
+    })
+}
+/**
  * 修改
  * @returns {boolean}
  */
@@ -205,7 +238,7 @@ var update = function () {
             else {
                 window.Ewin.dialog({
                     title: "修改",
-                    url: "ebom/updateEbom?projectId=" + projectId + "&puid=" + rows[0].puid+"&updateType="+2,
+                    url: "ebom/updateEbom?projectId=" + projectId + "&puid=" + rows[0].puid + "&updateType=" + 2,
                     gridId: "gridId",
                     width: 500,
                     height: 500
@@ -438,15 +471,15 @@ var setUpLou = function () {
         }
     })
 };
- /**
+/**
  * 关联变更单
  * @returns {boolean}
  */
 var attachChangeForm = function () {
     var rows = $table.bootstrapTable('getSelections');
-    var puidArray ="";
+    var puidArray = "";
     for (var i = 0; i < rows.length; i++) {
-        puidArray+=rows[i].puid+",";
+        puidArray += rows[i].puid + ",";
     }
     if (rows.length == 0) {
         window.Ewin.alert({message: '请选择需要变更的数据!'});
@@ -475,16 +508,16 @@ var attachChangeForm = function () {
                     "projectId": projectId
                 });
                 $.ajax({
-                    url:  "ebom/find/choose",
+                    url: "ebom/find/choose",
                     type: "POST",
                     gridId: "gridId",
                     contentType: "application/json",
-                    data:myData,
+                    data: myData,
                     success: function () {
                         window.Ewin.dialog({
                             title: "选择变更表单",
                             gridId: "gridId",
-                            url:url,
+                            url: url,
                             width: 450,
                             height: 450
                         });
@@ -658,57 +691,62 @@ const toolbar = [
     {
         text: '添加',
         iconCls: 'glyphicon glyphicon-plus',
-        handler:add
+        handler: add
+    },
+    {
+        text: '快速添加',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: quickAdd
     },
     {
         text: '修改',
         iconCls: 'glyphicon glyphicon-pencil',
-        handler:update
+        handler: update
     },
     {
         text: '派生',
         iconCls: 'glyphicon glyphicon-hand-right',
-        handler:derive
+        handler: derive
     },
     {
         text: '删除',
         iconCls: 'glyphicon glyphicon-remove',
-        handler:doDelete
+        handler: doDelete
     },
     {
         text: '撤销',
         iconCls: 'glyphicon glyphicon-share-alt',
-        handler:revoke
+        handler: revoke
     },
     {
         text: '设置为LOU/取消',
         iconCls: 'glyphicon glyphicon-cog',
-        handler:setUpLou
+        handler: setUpLou
     },
     {
         text: '关联变更单',
         iconCls: 'glyphicon glyphicon-log-out',
-        handler:attachChangeForm
+        handler: attachChangeForm
     },
     {
         text: '引用层级',
         iconCls: 'glyphicon glyphicon-copyright-mark',
-        handler:doRank
+        handler: doRank
     },
     {
         text: '显示子层',
         iconCls: 'glyphicon glyphicon-eye-open',
-        handler:showSublayer
+        handler: showSublayer
     },
     {
         text: '导入Excel',
         iconCls: 'glyphicon glyphicon-share',
-        handler:importExcel
+        handler: importExcel
     },
     {
         text: '导出Excel',
         iconCls: 'glyphicon glyphicon-export',
-        handler:exportExcel
+        handler: exportExcel
     }
 ]
 
@@ -716,62 +754,64 @@ const toolbar2 = [
     {
         text: '添加',
         iconCls: 'glyphicon glyphicon-plus',
-        handler:add
+        handler: add
+    },
+    {
+        text: '快速添加',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: quickAdd
     },
     {
         text: '修改',
         iconCls: 'glyphicon glyphicon-pencil',
-        handler:update
+        handler: update
     },
     {
         text: '派生',
         iconCls: 'glyphicon glyphicon-hand-right',
-        handler:derive
+        handler: derive
     },
     {
         text: '删除',
         iconCls: 'glyphicon glyphicon-remove',
-        handler:doDelete
+        handler: doDelete
     },
     {
         text: '撤销',
         iconCls: 'glyphicon glyphicon-share-alt',
-        handler:revoke
+        handler: revoke
     },
     {
         text: '设置为LOU/取消',
         iconCls: 'glyphicon glyphicon-cog',
-        handler:setUpLou
+        handler: setUpLou
     },
     {
         text: '关联变更单',
         iconCls: 'glyphicon glyphicon-log-out',
-        handler:attachChangeForm
+        handler: attachChangeForm
     },
     {
         text: '引用层级',
         iconCls: 'glyphicon glyphicon-copyright-mark',
-        handler:doRank
+        handler: doRank
     },
     {
         text: '取消显示子层',
         iconCls: 'glyphicon glyphicon-eye-open',
-        handler:cancelShowSublayer
+        handler: cancelShowSublayer
     },
     {
         text: '导入Excel',
         iconCls: 'glyphicon glyphicon-share',
-        handler:importExcel
+        handler: importExcel
     },
     {
         text: '导出Excel',
         iconCls: 'glyphicon glyphicon-export',
-        handler:exportExcel
+        handler: exportExcel
     }
 ]
-
-
-
 
 
 function toPage() {
@@ -947,7 +987,7 @@ function initTable1(eBomUrl, puids) {
 $(document).ready((function () {
     projectId = $("#project", window.top.document).val();
     $table = $("#ebomManageTable");
-    eBomUrl= "ebom/getEBom/list?projectId=" + projectId;
+    eBomUrl = "ebom/getEBom/list?projectId=" + projectId;
     log(eBomUrl);
     initTable(eBomUrl);
 }))
