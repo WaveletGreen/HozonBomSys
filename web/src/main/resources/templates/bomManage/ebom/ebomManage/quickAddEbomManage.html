@@ -3,8 +3,13 @@
 <!--User: xulf Date: 2019/7/8 Time: 15:10-->
 <link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
-<form id="ebomMainForm" role="form" method="post" action="ebom/add/ebom">
+<form id="ebomMainForm" role="form" method="post" action="ebom/add/quickAddEbom">
     <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/><!--th:value="${entity.eBomPuid}"-->
+    <div class="form-group">
+        <label for="parentId">FNA</label>
+        <input class="form-control" id="parentId" name="parentId" type="text"
+               placeholder="请输入父零件号" />
+    </div>
     <div class="form-group">
         <label for="lineId">零件号<span>*</span></label>
         <input class="form-control" id="lineId" name="lineId" type="text"
@@ -115,6 +120,7 @@
                 var projectPuid = $("#project", window.top.document).val();
                 var url = $("#ebomMainForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
+                    "parentId":$("#parentId").val(),
                     "puid": $("#puid").val(),
                     "lineId": $("#lineId").val(),
                     "lineNo": $("#lineNo").val(),

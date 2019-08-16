@@ -370,6 +370,20 @@ public class HzEbomController extends BaseController {
 
 
     /**
+     * 快速添加ebom信息
+     * @param quickReqDTO
+     * @param
+     * @param response
+     */
+    @RequestMapping(value = "add/quickAddEbom",method = RequestMethod.POST)
+    public void quickAddEbomToDB(@RequestBody QuickAddHzEbomReqDTO quickReqDTO, HttpServletResponse response){
+
+        WriteResultRespDTO respDTO = hzEBOMWriteService.quickAddHzEbomRecord(quickReqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+
+    /**
      * 添加ebom信息
      * @param reqDTO
      * @param
@@ -380,7 +394,6 @@ public class HzEbomController extends BaseController {
         WriteResultRespDTO respDTO = hzEBOMWriteService.addHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
-
 
     /**
      * 更新ebom信息
