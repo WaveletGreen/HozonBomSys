@@ -85,6 +85,14 @@ public interface HzEbomRecordDAO {
      */
     Page<HzEPLManageRecord> getHzEbomTreeByPage(HzEbomByPageQuery query);
 
+    /**
+     * 找到一条bom的所有同父的子bom
+     * @param puid
+     * @param projectId
+     * @return
+     */
+    List<HzEPLManageRecord> getSameHzBomLineByOne(String puid,String projectId);
+
 
     /**
      * 找出一条bomLine的全部子bom sql递归查找
