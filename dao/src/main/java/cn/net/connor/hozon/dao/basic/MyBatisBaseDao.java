@@ -1,9 +1,11 @@
 /*
- * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
- * ALL COPYRIGHT REVERSED.
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
  */
 
-package cn.net.connor.hozon.dao;
+package cn.net.connor.hozon.dao.basic;
 
 import java.io.Serializable;
 

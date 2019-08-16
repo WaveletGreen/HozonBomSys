@@ -27,5 +27,13 @@ public class SparePartOfProjectQuery extends QueryBase {
     /**
      * 层级
      */
-    private String level;
+    private String hierarchy;
+    /**
+     * 生产零件号
+     */
+    private String productivePartCode;
+    /**
+     * 备件零件号
+     */
+    private String sparePartCode;
 }

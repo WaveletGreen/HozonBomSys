@@ -11,7 +11,7 @@
   <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
     <id column="ID" jdbcType="DECIMAL" property="id" />
     <result column="SPARE_PART_ID" jdbcType="DECIMAL" property="sparePartId" />
-    <result column="SPARE_PART_CHIL_ID" jdbcType="DECIMAL" property="sparePartChildId" />
+    <result column="SPARE_PART_CHILD_ID" jdbcType="DECIMAL" property="sparePartChildId" />
     <result column="RESERVED1" jdbcType="VARCHAR" property="reserved1" />
     <result column="RESERVED2" jdbcType="VARCHAR" property="reserved2" />
     <result column="RESERVED3" jdbcType="VARCHAR" property="reserved3" />
@@ -20,7 +20,7 @@
   </resultMap>
 
   <sql id="Base_Column_List">
-    ID, SPARE_PART_ID, SPARE_PART_CHIL_ID, RESERVED1, RESERVED2, RESERVED3, RESERVED4,
+    ID, SPARE_PART_ID, SPARE_PART_CHILD_ID, RESERVED1, RESERVED2, RESERVED3, RESERVED4,
     RESERVED5
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -34,7 +34,11 @@
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
   <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
-    insert into SPARE_PART_BOM_STRUCTURE (ID, SPARE_PART_ID, SPARE_PART_CHIL_ID,
+    <selectKey order="BEFORE"
+               keyColumn="ID" keyProperty="id" resultType="java.lang.Long">
+      select SEQ_SPARE_PART_STRUCTURE_ID.Nextval from dual
+    </selectKey>
+    insert into SPARE_PART_BOM_STRUCTURE (ID, SPARE_PART_ID, SPARE_PART_CHILD_ID,
       RESERVED1, RESERVED2, RESERVED3, 
       RESERVED4, RESERVED5)
     values (#{id,jdbcType=DECIMAL}, #{sparePartId,jdbcType=DECIMAL}, #{sparePartChildId,jdbcType=DECIMAL},
@@ -51,7 +55,7 @@
         SPARE_PART_ID,
       </if>
       <if test="sparePartChildId != null">
-        SPARE_PART_CHIL_ID,
+        SPARE_PART_CHILD_ID,
       </if>
       <if test="reserved1 != null">
         RESERVED1,
@@ -103,7 +107,7 @@
         SPARE_PART_ID = #{sparePartId,jdbcType=DECIMAL},
       </if>
       <if test="sparePartChildId != null">
-        SPARE_PART_CHIL_ID = #{sparePartChildId,jdbcType=DECIMAL},
+        SPARE_PART_CHILD_ID = #{sparePartChildId,jdbcType=DECIMAL},
       </if>
       <if test="reserved1 != null">
         RESERVED1 = #{reserved1,jdbcType=VARCHAR},
@@ -126,7 +130,7 @@
   <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
     update SPARE_PART_BOM_STRUCTURE
     set SPARE_PART_ID = #{sparePartId,jdbcType=DECIMAL},
-      SPARE_PART_CHIL_ID = #{sparePartChildId,jdbcType=DECIMAL},
+      SPARE_PART_CHILD_ID = #{sparePartChildId,jdbcType=DECIMAL},
       RESERVED1 = #{reserved1,jdbcType=VARCHAR},
       RESERVED2 = #{reserved2,jdbcType=VARCHAR},
       RESERVED3 = #{reserved3,jdbcType=VARCHAR},
