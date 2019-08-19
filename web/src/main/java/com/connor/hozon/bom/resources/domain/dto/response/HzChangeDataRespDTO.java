@@ -1,13 +1,18 @@
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
 package com.connor.hozon.bom.resources.domain.dto.response;
 
 import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
-import com.connor.hozon.bom.resources.enumtype.TableNameToHyperLinkNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.TableNameToHyperLinkNameEnum;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @Author: haozt

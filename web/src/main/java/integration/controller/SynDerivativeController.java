@@ -8,7 +8,7 @@
 package integration.controller;
 
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
-import com.connor.hozon.bom.service.configuration.derivative.HzConfigModelFeatureService;
+import com.connor.hozon.service.configuration.derivative.HzConfigModelFeatureService;
 import integration.option.ActionFlagOption;
 import integration.service.integrate.impl.SynMaterielServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
