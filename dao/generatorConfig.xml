@@ -45,9 +45,14 @@
                              targetProject="D:\IdealWorkspace\HozonBomSys\dao\src\main\java">
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
-        <table tableName="SINGLE_VEHICLE_STATUS" domainObjectName="SingleVehicleStatus">
+        <table tableName="SPARE_PART_BOM_STRUCTURE" domainObjectName="SparePartBomStructure">
             <property name="useActualColumnNames" value="false"/>
         </table>
-
+        <table tableName="SPARE_PART_OF_PROJECT" domainObjectName="SparePartOfProject">
+            <property name="useActualColumnNames" value="false"/>
+        </table>
+        <table tableName="SPARE_PART_DATA" domainObjectName="SparePartData">
+            <property name="useActualColumnNames" value="false"/>
+        </table>
     </context>
 </generatorConfiguration>

@@ -162,6 +162,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
         //更新日志
         registry.addViewController("/updateLog").setViewName("/updateLog/updateLog");
+        //备件零件主页
+        registry.addViewController("/sparePartIndex").setViewName("/bomManage/sparePart/sparePartIndex");
+
     }
 
 

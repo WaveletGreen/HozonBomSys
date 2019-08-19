@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+
+<html xmlns:th="http://wwwthymeleaf.org">
+<!--User: xulf Date: 2018/6/1 Time: 9:34-->
+<!--<head th:include="include/includebase"></head>-->
+<head>
+    <meta charset="UTF-8">
+    <title>备件管理</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-table.css}" rel="stylesheet"/>
+    <link th:href="@{/font-awesome/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrapValidator.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/fileinput.css}" rel="stylesheet"/>
+    <link th:href="@{/css/fileinput-rtl.css}" rel="stylesheet"/>
+    <link th:href="@{/css/theme.css}" rel="stylesheet"/>
+    <link th:href="@{/css/zTreeStyle/metro.css}" rel="stylesheet"/>
+    <link th:href="@{/css/sweetalert2/sweetalert2.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/sweetalert2/animate.css}" rel="stylesheet"/>
+
+
+    <link th:href="@{/css/stage/bom-stage.css}" rel="stylesheet"/>
+    <link th:href="@{/css/vue/umd/umd.css}" rel="stylesheet"/>
+
+    <script th:src="@{/js/jquery.js}"></script>
+    <!--<script th:src="@{/js/sockjs.min.js}"></script>-->
+    <!--<script th:src="@{/js/stomp.min.js}"></script>-->
+    <script th:src="@{/js/distpicker/distpicker.data.js}"></script>
+    <script th:src="@{/js/distpicker/distpicker.js}"></script>
+    <script th:src="@{/js/websocket/socketUtil.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap/nav/nav.js}"></script>
+    <script th:src="@{/js/bootstrap/tab/bootstrap-tab.js}"></script>
+    <script th:src="@{/js/bootstrap/tree/tree.js}"></script>
+    <script th:src="@{/js/bootstrap/alert/alert.js}"></script>
+    <script th:src="@{/js/bootstrap/table/bootstrap-table.js}"></script>
+    <script th:src="@{/js/bootstrap/date/bootstrap-datetimepicker.js}"></script>
+    <script th:src="@{/js/bootstrap/validator/bootstrapValidator.min.js}"></script>
+    <script th:src="@{/js/bootstrap/upload/fileinput.min.js}"></script>
+    <script th:src="@{/js/bootstrap/upload/plugins/sortable.js}"></script>
+    <script th:src="@{/js/bootstrap/upload/locales/zh.js}"></script>
+    <script th:src="@{/js/bootstrap/upload/theme.js}"></script>
+    <script th:src="@{/js/bootstrap/ztree/jquery.ztree.all-3.5.min.js}"></script>
+    <script th:src="@{/js/bootstrap/checkbox/checkbox.js}"></script>
+    <script th:src="@{/js/ajaxutil/ajaxUtil.js}"></script>
+    <script th:src="@{/js/dict/dictUtil.js}"></script>
+    <script th:src="@{/layer/layer.js}"></script>
+    <script th:src="@{/js/bootstrap/date/bootstrap-datetimepicker.js}"></script>
+    <script th:src="@{/js/bootstrap3-typeahead.min.js}"></script>
+    <script th:src="@{/js/sweetalert2/sweetalert2.min.js}"></script>
+    <script th:src="@{/js/sweetalert2/core.js}"></script>
+    <script th:src="@{/js/helper/myLogHelper.js}"></script>
+    <script th:src="@{/js/helper/projectHelper.js}"></script>
+    <script th:src="@{/js/helper/tablePageJumper.js}"></script>
+    <script th:src="@{/js/helper/window-helper.js}"></script>
+    <!--<script th:src="@{/js/helper/rightMenuHelper.js}"></script>-->
+    <script th:src="@{/js/helper/tableUpdateHelper.js}"></script>
+    <!--导出excle-->
+    <script th:src="@{/js/helper/exportEnderPointHelper.js}"></script>
+    <script th:src="@{/js/bootstrap/tableExport/bootstrap-table-export.js}"></script>
+    <script th:src="@{/js/bootstrap/tableExport/tableExport.min.js}"></script>
+    <script th:src="@{/js/bootstrap/tableExport/FileSaver.min.js}"></script>
+    <script th:src="@{/js/bootstrap/tableExport/xlsx.core.min.js}"></script>
+    <!--辅助功能-->
+    <script th:src="@{/js/helper/disableEnterKey.js}"></script>
+
+</head>
+
+
+<body class="content-body">
+<div class="panel-body" style="padding-bottom: 0;">
+    <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+          id="sparePartForm">
+        <input class="form-control" id="projectId" name="projectId" type="hidden" value=""/>
+        <div class="form-group">
+            <label for="level">层级:</label>
+            <input type="text" style="width: 140px;" class="form-control" name="level" id="level" placeholder="请输入层级"/>
+        </div>
+    </form>
+</div>
+<div class="content col-lg-12">
+    <div>
+        <table class="table table-striped tableNormalStyle" id="sparePartTable"></table>
+    </div>
+    <div id="sparePartTableDiv">
+        <v-table
+                :is-horizontal-resize="true"
+                :columns="columns"
+                :table-data="tableData"
+                row-hover-color="#eee"
+                row-click-color="#edf7ff"
+                :select-all="selectALL"
+                :select-change="selectChange"
+                :select-group-change="selectGroupChange"
+                :height="800"
+                style="width:100%;"
+        >
+            <!--column-width-drag-->
+        </v-table>
+        <br>
+        <div class="mt20 mb20 bold">
+            <v-pagination @page-change="pageChange" @page-size-change="pageSizeChange"
+                          :total="total" :page-size="pageSize"
+                          :layout="['total', 'prev', 'pager', 'next', 'sizer', 'jumper']"
+                          :page-size-option="pageSizeOption"
+            >
+            </v-pagination>
+        </div>
+    </div>
+</div>
+</div>
+
+<script th:src="@{/js/helper/jsonHelper.js}"></script>
+<script th:src="@{/js/vue/vue.js}"></script>
+<script th:src="@{/js/vue/axios.min.js}"></script>
+<script th:src="@{/js/vue/umd/index.js}"></script>
+<script th:src="@{/js/bom/sparePart/sparePartIndex.js}"></script>
+</body>
+</html>
