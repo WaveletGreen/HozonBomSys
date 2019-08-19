@@ -146,7 +146,7 @@
 
 
     <update id="HzAuditorChangeDAOImpl_updateAuditorRecord"
-            parameterType="com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO">
+            parameterType="com.connor.hozon.resources.domain.dto.request.HzAuditorChangeDTO">
         update HZ_AUDITOR_CHANGE_RECORD
         <set>
             <if test="auditResult != null">

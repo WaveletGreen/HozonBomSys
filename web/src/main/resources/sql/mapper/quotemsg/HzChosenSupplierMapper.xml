@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.resources.mybatis.quotemsg.HzChosenSupplierDAO">
-  <resultMap id="BaseResultMap" type="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier">
+<mapper namespace="com.connor.hozon.resources.mybatis.quotemsg.HzChosenSupplierDAO">
+  <resultMap id="BaseResultMap" type="com.connor.hozon.resources.domain.model.HzChosenSupplier">
     <result column="ID" jdbcType="DECIMAL" property="id" />
     <result column="CS_CREATE_DATE" jdbcType="TIMESTAMP" property="csCreateDate" />
     <result column="CS_CREATOR" jdbcType="VARCHAR" property="csCreator" />
@@ -38,7 +38,7 @@
       REMARK, SPECIALTY,PROJECTPUID
   </sql>
 
-  <insert id="insert" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier">
+  <insert id="insert" parameterType="com.connor.hozon.resources.domain.model.HzChosenSupplier">
     <selectKey keyProperty="id" order="BEFORE" resultType="Long">
       select SEQ_HZ_CHOSEN_SUPPLIER.NEXTVAL from dual
     </selectKey>
@@ -59,7 +59,7 @@
       #{bSamplePiece,jdbcType=VARCHAR}, #{cSamplePiece,jdbcType=VARCHAR}, #{csLowerCostingoPlan,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{specialty,jdbcType=VARCHAR},#{projectPuid,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier">
+  <insert id="insertSelective" parameterType="com.connor.hozon.resources.domain.model.HzChosenSupplier">
     insert into HZ_CHOSEN_SUPPLIER
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -199,7 +199,7 @@
     </trim>
   </insert>
 
-  <select id="selectPage" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier" resultMap="BaseResultMap">
+  <select id="selectPage" parameterType="com.connor.hozon.resources.domain.model.HzChosenSupplier" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/> from (
       select
       <include refid="Base_Column_List"/>,ROWNUM as rowno
@@ -239,7 +239,7 @@
     </if>
   </select>
 
-  <select id="selectById" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier" resultMap="BaseResultMap">
+  <select id="selectById" parameterType="com.connor.hozon.resources.domain.model.HzChosenSupplier" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List"/>
     from
@@ -257,7 +257,7 @@
       PROJECTPUID = #{projectPuid,jdbcType=VARCHAR}
     </select>
 
-  <update id="update" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier">
+  <update id="update" parameterType="com.connor.hozon.resources.domain.model.HzChosenSupplier">
     update
       HZ_CHOSEN_SUPPLIER
     set
@@ -296,7 +296,7 @@
       </foreach>
   </delete>
 
-  <select id="selectCreator" parameterType="com.connor.hozon.bom.resources.domain.model.HzChosenSupplier" resultMap="BaseResultMap">
+  <select id="selectCreator" parameterType="com.connor.hozon.resources.domain.model.HzChosenSupplier" resultMap="BaseResultMap">
     select
       <include refid="Base_Column_List"/>
     from

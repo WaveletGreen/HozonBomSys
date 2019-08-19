@@ -9,10 +9,10 @@ package integration.service.integrate.impl;
 
 import cn.net.connor.hozon.services.response.integration.IntegrateMsgResponseDTO;
 import cn.net.connor.hozon.common.util.UUIDHelper;
-import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
-import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
-import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
-import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
+import com.connor.hozon.resources.domain.dto.request.EditHzMaterielReqDTO;
+import com.connor.hozon.resources.domain.query.HzMaterielQuery;
+import com.connor.hozon.resources.mybatis.factory.HzFactoryDAO;
+import com.connor.hozon.resources.mybatis.materiel.HzMaterielDAO;
 import cn.net.connor.hozon.common.util.ListUtils;
 import integration.base.masterMaterial.ZPPTCO001;
 import integration.logic.ReflectAddMasterMaterial;

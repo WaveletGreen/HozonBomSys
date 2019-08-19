@@ -1,6 +1,6 @@
 package integration.service.impl.processRoute6;
 
-import com.connor.hozon.bom.exception.HzBomException;
+import cn.net.connor.hozon.common.exception.HzBomException;
 import integration.service.i.IExecutor;
 
 import javax.xml.ws.Holder;

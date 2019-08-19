@@ -7,7 +7,7 @@
 
 package integration.service.integrate;
 
-import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
+import com.connor.hozon.resources.domain.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 
 import java.util.List;

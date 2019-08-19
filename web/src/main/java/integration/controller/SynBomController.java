@@ -7,8 +7,8 @@
 
 package integration.controller;
 
-import com.connor.hozon.bom.service.configuration.fullCfg.HzConfigToBomLineService;
-import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
+import com.connor.hozon.service.configuration.fullCfg.HzConfigToBomLineService;
+import com.connor.hozon.resources.domain.dto.request.EditHzMaterielReqDTO;
 import integration.service.integrate.SynBomService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

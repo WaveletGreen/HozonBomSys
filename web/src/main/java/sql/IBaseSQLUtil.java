@@ -1,7 +1,7 @@
 package sql;
 
-import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequestParam;
+import com.connor.hozon.resources.page.Page;
+import com.connor.hozon.resources.page.PageRequestParam;
 
 import java.util.List;
 

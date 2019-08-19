@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.connor.hozon.bom.resources.mybatis.change.HzAttachmentRecordDao">
+<mapper namespace="com.connor.hozon.resources.mybatis.change.HzAttachmentRecordDao">
   <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord">
     <id column="ID" jdbcType="DECIMAL" property="id" />
     <result column="FORM_ID" jdbcType="VARCHAR" property="formId" />

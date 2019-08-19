@@ -9,8 +9,8 @@ package integration.service.integrate.impl;
 
 import cn.net.connor.hozon.services.response.integration.IntegrateMsgResponseDTO;
 import cn.net.connor.hozon.common.util.UUIDHelper;
-import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
-import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
+import com.connor.hozon.resources.domain.dto.response.HzWorkProcessRespDTO;
+import com.connor.hozon.resources.service.work.HzWorkProcessService;
 import integration.base.processRoute.ZPPTCO006;
 import integration.logic.ProcessRoute;
 import integration.option.ActionFlagOption;

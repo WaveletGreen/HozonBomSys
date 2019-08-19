@@ -137,7 +137,7 @@
   </delete>
 
   <!--select-->
-  <select id="HzChangeDataRecordDAOImpl_getChangeDataTableName" parameterType="com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery" resultMap="BaseResultMap">
+  <select id="HzChangeDataRecordDAOImpl_getChangeDataTableName" parameterType="com.connor.hozon.resources.domain.query.HzChangeDataQuery" resultMap="BaseResultMap">
           SELECT
        DISTINCT(t.TABLE_NAME),
           T .ORDER_ID

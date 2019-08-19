@@ -1134,7 +1134,7 @@
       </foreach>
     </update>
 
-    <update id="HzEbomRecordDAOImpl_updateByDto" parameterType="com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO">
+    <update id="HzEbomRecordDAOImpl_updateByDto" parameterType="com.connor.hozon.resources.domain.dto.request.UpdateHzEbomReqDTO">
         update
           HZ_BOM_LINE_RECORD
         set
