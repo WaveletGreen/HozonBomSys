@@ -8,18 +8,17 @@
 package com.connor.hozon.bom.service.sys.impl;
 
 import cn.net.connor.hozon.common.util.ListUtils;
+import cn.net.connor.hozon.dao.dao.sys.UserRoleDao;
+import cn.net.connor.hozon.dao.pojo.sys.Tree;
+import cn.net.connor.hozon.dao.pojo.sys.User;
+import cn.net.connor.hozon.dao.pojo.sys.UserRole;
 import cn.net.connor.hozon.services.service.sys.UserInfo;
 import cn.net.connor.hozon.services.service.sys.UserService;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import cn.net.connor.hozon.dao.dao.sys.UserRoleDao;
-import cn.net.connor.hozon.dao.pojo.sys.Tree;
-import cn.net.connor.hozon.dao.pojo.sys.User;
-import cn.net.connor.hozon.dao.pojo.sys.UserRole;
 import com.connor.hozon.bom.service.sys.UserRolePrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,9 +31,8 @@ import java.util.Set;
  * @Date: 2018/11/7
  * @Description: 用户角色权限判断
  */
-@Service("userRolePrivilegeService")
+@Service
 @Transactional(rollbackFor={IllegalArgumentException.class})
-@Component
 public class UserRolePrivilegeServiceImpl implements UserRolePrivilegeService {
     @Autowired
     @SuppressWarnings("SpringJavaAutowiringInspection")
