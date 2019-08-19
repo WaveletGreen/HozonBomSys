@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.domain.model;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
 import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;

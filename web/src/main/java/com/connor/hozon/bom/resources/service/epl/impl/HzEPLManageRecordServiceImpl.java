@@ -2,7 +2,7 @@ package com.connor.hozon.bom.resources.service.epl.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.configuration.dao.bom.impl.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEPLRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEplMangeRecordDAO;
@@ -171,7 +171,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 //                jsonObject.put("change", record.getChange());
 //                jsonObject.put("changeNum", record.getChangeNum());
 ////                byte[] bomLineBlock = record.getBomLineBlock();
-////                Object obj = SerializeUtil.unserialize(bomLineBlock);
+////                Object obj = SerializeUtils.unserialize(bomLineBlock);
 ////                if (obj instanceof LinkedHashMap) {
 ////                    if (((LinkedHashMap) obj).size() > 0) {
 ////                        ((LinkedHashMap) obj).forEach((key, value) -> {
@@ -213,7 +213,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 //            setting.setBomMainRecordPuid(main.getId());
 //            setting = hzBomDataDao.loadSetting(setting);
 //            byte[] btOfSetting = setting.getPreferencesettingblock();
-//            Object objOfSetting = SerializeUtil.unserialize(btOfSetting);
+//            Object objOfSetting = SerializeUtils.unserialize(btOfSetting);
 //            if (objOfSetting instanceof PreferenceSetting) {
 //                String[] localName = ((PreferenceSetting) objOfSetting).getPreferenceLocal();
 //                String[] trueName = ((PreferenceSetting) objOfSetting).getPreferences();

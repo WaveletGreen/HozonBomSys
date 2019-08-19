@@ -9,7 +9,7 @@ import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzApplicationChangeService;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord;
@@ -33,7 +33,7 @@ public class HzApplicationChangeServiceImpl implements HzApplicationChangeServic
         List<HzChangeOrderRespDTO> auditorList = new ArrayList<>();
         try{
             List<HzApplicantChangeRecord> infos =  hzApplicantChangeDAO.findApplicantionList(record);
-            if(ListUtil.isNotEmpty(infos)){
+            if(ListUtils.isNotEmpty(infos)){
                 for(int i=0;i<infos.size();i++){
                     //根据返回的OrderId到ChangeOrder表中查数据
                     HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,infos.get(i).getOrderId());

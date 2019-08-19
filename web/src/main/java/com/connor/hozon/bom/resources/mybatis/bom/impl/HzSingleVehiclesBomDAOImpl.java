@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
@@ -7,9 +8,8 @@ import com.connor.hozon.bom.resources.executors.ExecutorServices;
 import com.connor.hozon.bom.resources.mybatis.bom.HzSingleVehiclesBomDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.exception.HzBomException;
+import com.connor.hozon.bom.exception.HzBomException;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
@@ -32,7 +32,7 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
     @Override
     public int insertList(List<HzSingleVehiclesBomRecord> records) {
         try {
-            if(ListUtil.isEmpty(records)){
+            if(ListUtils.isEmpty(records)){
                 return 0;
             }
             synchronized (this){
@@ -68,7 +68,7 @@ public class HzSingleVehiclesBomDAOImpl extends BaseSQLUtil implements HzSingleV
     public List<String> getAllPuidByProjectId(String projectId) throws HzDBException {
         List<String> puids = new ArrayList<>();
         List<HzSingleVehiclesBomRecord> list = super.findForList("HzSingleVehiclesBomDAOImpl_getAllPuidByProjectId",projectId);;
-        if(ListUtil.isNotEmpty(list)){
+        if(ListUtils.isNotEmpty(list)){
             list.forEach(record -> {
                 puids.add(record.getMBomPuid());
             });

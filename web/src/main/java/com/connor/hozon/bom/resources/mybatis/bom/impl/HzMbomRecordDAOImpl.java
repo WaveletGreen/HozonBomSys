@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
@@ -9,7 +10,6 @@ import com.connor.hozon.bom.resources.enumtype.MbomTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -72,7 +72,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
 
     @Override
     public int updateMBOMList(List<HzMbomLineRecord> records) {
-        if(ListUtil.isEmpty(records)){
+        if(ListUtils.isEmpty(records)){
             return 0;
         }
         int size = records.size();
@@ -404,7 +404,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("tableName",hzMbomLineRecordVO.getTableName());
         try {
-            if (ListUtil.isNotEmpty(hzMbomLineRecordVO.getRecordList())) {
+            if (ListUtils.isNotEmpty(hzMbomLineRecordVO.getRecordList())) {
                 List<HzMbomLineRecord> lineRecords = hzMbomLineRecordVO.getRecordList();
                 int size = lineRecords.size();
                 //分批插入数据 一次1000条
@@ -450,7 +450,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("tableName",hzMbomLineRecordVO.getTableName());
         try {
-            if (ListUtil.isNotEmpty(hzMbomLineRecordVO.getRecordList())) {
+            if (ListUtils.isNotEmpty(hzMbomLineRecordVO.getRecordList())) {
                 List<HzMbomLineRecord> lineRecords = hzMbomLineRecordVO.getRecordList();
                 int size = lineRecords.size();
                 //分批更新数据 一次1000条
@@ -537,7 +537,7 @@ public class HzMbomRecordDAOImpl extends BaseSQLUtil implements HzMbomRecordDAO 
         map.put("projectId",query.getProjectId());
         map.put("eBomPuids", Lists.newArrayList(query.geteBomPuids().split(",")));
         map.put("tableName",MbomTableNameEnum.tableName(query.getType()));
-        if(ListUtil.isNotEmpty(Lists.newArrayList(query.getColorIds().split(",")))){
+        if(ListUtils.isNotEmpty(Lists.newArrayList(query.getColorIds().split(",")))){
             map.put("colorIds",Lists.newArrayList(query.getColorIds().split(",")));
         }else {
             map.put("colorIds",null);

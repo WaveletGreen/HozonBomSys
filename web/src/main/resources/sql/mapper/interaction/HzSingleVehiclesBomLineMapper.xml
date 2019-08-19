@@ -22,7 +22,7 @@
     </sql>
     <!--查询带颜色的2Y层，一并带出颜色，颜色UID，跟随的特性，特性UID-->
     <select id="selectListByInquirer"
-            resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+            resultType="cn.net.connor.hozon.dao.query.interaction.HzSingleVehicleBLQuery"
             resultMap="BaseResultMap">
         select
         t20.puid as featureValueUid,
@@ -66,7 +66,7 @@
 
 
     <!--查询油漆车身的颜色件信息-->
-    <select id="selectPaintList" resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+    <select id="selectPaintList" resultType="cn.net.connor.hozon.dao.query.interaction.HzSingleVehicleBLQuery"
             resultMap="BaseResultMap">
             SELECT
             t10.PUID  as colorUid,
@@ -81,7 +81,7 @@
     </select>
 
     <!--查询其他2Y层信息 不包含油漆车身  油漆车身存储信息比较特殊 需要单独查询 -->
-    <select id="selectOthersList" resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+    <select id="selectOthersList" resultType="cn.net.connor.hozon.dao.query.interaction.HzSingleVehicleBLQuery"
             resultMap="BaseResultMap">
               SELECT
             t4.PUID as colorUid,
@@ -114,7 +114,7 @@
 
     <!--查询全部的实心打点图-->
     <select id="selectSolidPointGraphFromFullConfig"
-            resultType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer"
+            resultType="cn.net.connor.hozon.dao.query.interaction.HzSingleVehicleBLQuery"
             resultMap="BaseResultMap">
         SELECT
             t2.FL_MODEL_BOMLINE_UID as bomLineUid,

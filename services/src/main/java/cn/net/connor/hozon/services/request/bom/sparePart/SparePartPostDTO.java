@@ -20,12 +20,12 @@ import lombok.Data;
 @Data
 public class SparePartPostDTO extends SparePartData {
     /**
-     * 项目ID
+     * 项目ID，无论是新增单个备件BOM数据还是子件备件BOM数据，都会出现这个字段的数据
      */
     private String projectId;
 
     /**
-     * 父件ID
+     * 父件ID，只有添加到子件才会出现这个字段的数据
      */
     private Long parentId;
 }

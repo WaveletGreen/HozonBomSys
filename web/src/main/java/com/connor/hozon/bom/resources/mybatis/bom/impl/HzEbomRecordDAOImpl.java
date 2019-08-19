@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
@@ -8,8 +9,7 @@ import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
-import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.sys.exception.HzBomException;
+import com.connor.hozon.bom.exception.HzBomException;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
@@ -115,7 +115,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         if(StringUtils.isNotBlank(puids)){
             map.put("puids",Lists.newArrayList(puids.split(",")));
-        }else if(ListUtil.isNotEmpty(list)){
+        }else if(ListUtils.isNotEmpty(list)){
             map.put("puids",list);
         }
         return super.update("HzEbomRecordDAOImpl_deleteList",map);
@@ -147,7 +147,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
 
     @Override
     public int updateListByPuids(List<HzEPLManageRecord> records) {
-        if(ListUtil.isEmpty(records)){
+        if(ListUtils.isEmpty(records)){
             return 0;
         }
         try {
@@ -171,7 +171,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
 
     @Override
     public int updateListByEplId(List<HzEPLManageRecord> records) {
-        if(ListUtil.isEmpty(records)){
+        if(ListUtils.isEmpty(records)){
             return 0;
         }
         try {
@@ -195,7 +195,7 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
 
     @Override
     public int updateEBOMListByEplId(List<HzEPLManageRecord> records) {
-        if(ListUtil.isEmpty(records)){
+        if(ListUtils.isEmpty(records)){
             return 0;
         }
         try {

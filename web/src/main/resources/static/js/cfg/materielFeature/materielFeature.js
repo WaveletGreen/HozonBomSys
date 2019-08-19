@@ -450,7 +450,7 @@ function saveCompose() {
             else {
                 $.ajax({
                     type: "GET",
-                    url: "materielV2/saveCompose?projectPuid=" + projectUid,
+                    url: "materielV2/saveCompose?projectId=" + projectUid,
                     success: function (result) {
                         if (result.status != false) {
                             // window.Ewin.alert({message: '生成成功!'});

@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.util;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.common.util.ListUtils;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.dao.pojo.sys.UserRole;
 
@@ -25,7 +26,7 @@ public class PrivilegeUtil {
         if(null == user){
             return false;
         }
-        if(ListUtil.isEmpty(user.getRoles())){
+        if(ListUtils.isEmpty(user.getRoles())){
             return false;
         }
         if(user.getRoles().size() == 1 && user.getRoles().get(0).equals(ROLE_USER)){
@@ -49,7 +50,7 @@ public class PrivilegeUtil {
         if(null == user){
             return false;
         }
-        if(ListUtil.isEmpty(user.getRoles())){
+        if(ListUtils.isEmpty(user.getRoles())){
             return false;
         }
         for(UserRole role:user.getRoles()){

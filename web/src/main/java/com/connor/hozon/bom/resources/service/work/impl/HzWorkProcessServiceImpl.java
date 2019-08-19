@@ -7,8 +7,9 @@ import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkCenter;
 import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
 import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcess;
 import cn.net.connor.hozon.dao.pojo.main.HzFactory;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzWorkProcessRespDTO;
@@ -27,7 +28,6 @@ import com.connor.hozon.bom.resources.mybatis.work.HzWorkCenterDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.google.common.collect.Lists;
@@ -211,7 +211,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             hzWorkProcedure.setState(reqDTO.getState());
             hzWorkProcedure.setPuid(UUID.randomUUID().toString());
             List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
-            if (ListUtil.isNotEmpty(hzWorkCenterList)) {
+            if (ListUtils.isNotEmpty(hzWorkCenterList)) {
                 HzWorkCenter workCenter = hzWorkCenterList.get(0);
                 hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
                 HzWorkCenter hzWorkCenter = new HzWorkCenter();
@@ -284,7 +284,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         hzWorkProcedure.setPurpose(reqDTO.getPurpose());
         hzWorkProcedure.setState(reqDTO.getState());
         List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
-        if (ListUtil.isNotEmpty(hzWorkCenterList)) {
+        if (ListUtils.isNotEmpty(hzWorkCenterList)) {
             HzWorkCenter workCenter = hzWorkCenterList.get(0);
             hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
             HzWorkCenter hzWorkCenter = new HzWorkCenter();
@@ -333,7 +333,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         hzWorkProcedure.setState(reqDTO.getState());
         hzWorkProcedure.setpStatus(2);
         List<HzWorkCenter> hzWorkCenterList = hzWorkCenterDAO.findWorkCenter(reqDTO.getpWorkCode());
-        if (ListUtil.isNotEmpty(hzWorkCenterList)) {
+        if (ListUtils.isNotEmpty(hzWorkCenterList)) {
 //            HzWorkCenter workCenter = hzWorkCenterList.get(0);
             hzWorkProcedure.setpWorkPuid(hzWorkCenterList.get(0).getPuid());
 //            HzWorkCenter hzWorkCenter = new HzWorkCenter();
@@ -387,7 +387,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     public WriteResultRespDTO deleteHzWorkProcesses(Map<String, List<String>> datas) {
         List<String> materielIds = datas.get("materielIds");
         List<String> procedureDesc = datas.get("procedureDesc");
-        if (ListUtil.isEmpty(procedureDesc)) {
+        if (ListUtils.isEmpty(procedureDesc)) {
             return WriteResultRespDTO.cantDelete();
         }
         for (String pd : procedureDesc) {
@@ -404,7 +404,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
         try {
             int delNum = -1;
-            if (ListUtil.isNotEmpty(hzWorkProceduresDel)) {
+            if (ListUtils.isNotEmpty(hzWorkProceduresDel)) {
                 delNum = hzWorkProcedureDAO.deleteHzWorkProcesses(hzWorkProceduresDel);
             }
             if (delNum == hzWorkProceduresDel.size()) {
@@ -508,7 +508,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         try {
             List<HzWorkProcessRespDTO> respDTOs = new ArrayList<>();
             List<HzWorkProcess> hzWorkProcess = hzWorkProcedureDAO.getHzWorkProcess(materielId, projectId);
-            if (ListUtil.isNotEmpty(hzWorkProcess)) {
+            if (ListUtils.isNotEmpty(hzWorkProcess)) {
                 for (HzWorkProcess workProcess : hzWorkProcess) {
                     respDTOs.add(HzWorkProcedureFactory.workProcessToRespDTO(workProcess));
                 }
@@ -570,7 +570,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
         }
         try {
             List<HzMaterielRecord> materielRecords = new ArrayList<>();
-            if (ListUtil.isNotEmpty(respDTOList)) {
+            if (ListUtils.isNotEmpty(respDTOList)) {
                 for (HzMbomRecordRespDTO respDTO : respDTOList) {
                     Map<String, Object> map = new HashMap<>();
                     map.put("projectId", projectId);
@@ -731,7 +731,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             query.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
             List<HzWorkProcedure> records = hzWorkProcedureDAO.getHzWorkProcedureByPuids(query);
             List<HzWorkProcedure> afterRecords = new ArrayList<>();
-            if (ListUtil.isNotEmpty(records)) {//根据查询结果 记录数据
+            if (ListUtils.isNotEmpty(records)) {//根据查询结果 记录数据
                 //到 after表中查询看是否存在记录
                 //存在记录则过滤 不存在记录则插入
                 this.errorCount = 0;
@@ -749,7 +749,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 dataDetailQuery.setOrderId(orderId);
                 dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_WORK_PROCEDURE_AFTER.getTableName());
                 List<HzWorkProcedure> recordList = hzWorkProcedureDAO.getWorkProcedureByOrderId(dataDetailQuery);
-                if (ListUtil.isEmpty(recordList)) {
+                if (ListUtils.isEmpty(recordList)) {
                     records.forEach(record -> {
                         HzWorkProcedure manageRecord = HzWorkProcedureFactory.workProcedureToProcedure(record);
                         manageRecord.setOrderId(orderId);
@@ -838,7 +838,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
             List<HzWorkProcedure> updateList = new ArrayList<>();
             List<HzWorkProcedure> list = hzWorkProcedureDAO.getHzWorkProcedureByPuids(query);
             //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
-            if (ListUtil.isNotEmpty(list)) {
+            if (ListUtils.isNotEmpty(list)) {
                 list.forEach(record -> {
                     if (StringUtils.isBlank(record.getRevision())) {
                         deleteRecords.add(record.getPuid());
@@ -847,7 +847,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                     }
                 });
             }
-            if (ListUtil.isNotEmpty(updateRecords)) {
+            if (ListUtils.isNotEmpty(updateRecords)) {
                 HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
                 dataDetailQuery.setRevision(true);
                 dataDetailQuery.setProjectId(reqDTO.getProjectId());
@@ -863,10 +863,10 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
                 });
             }
 
-            if (ListUtil.isNotEmpty(updateList)) {
+            if (ListUtils.isNotEmpty(updateList)) {
                 hzWorkProcedureDAO.updateWorkProcedureList(updateList);
             }
-            if (ListUtil.isNotEmpty(deleteRecords)) {
+            if (ListUtils.isNotEmpty(deleteRecords)) {
                 hzWorkProcedureDAO.deleteByPuids(deleteRecords, ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
             }
             return WriteResultRespDTO.getSuccessResult();
@@ -975,7 +975,7 @@ public class HzWorkProcessServiceImpl implements HzWorkProcessService {
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     @Override
     public JSONObject updateList(List<HzWorkProcedure> list) {
-        if (ListUtil.isNotEmpty(list)) {
+        if (ListUtils.isNotEmpty(list)) {
             updateBatch(list);
             return SimpleResponseResultFactory.createSuccessResult("更新成功");
         }

@@ -1,18 +1,13 @@
 package com.connor.hozon.bom.resources.domain.model;
 
 
-import com.connor.hozon.bom.resources.controller.bom.HzSingleVehiclesController;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzPbomByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzSingleVehiclesBomByPageQuery;
-import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
-import com.connor.hozon.bom.resources.service.bom.impl.HzSingleVehiclesBomServicesImpl;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import org.apache.commons.lang.StringUtils;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -102,7 +97,7 @@ public class HzBomSysFactory {
 //            if(!matcher.find()){
 //                HzPbomRecordDAO hzPbomRecordDAO = new HzPbomRecordDAOImpl();
 //                List<HzPbomLineRecord> nameList = hzPbomRecordDAO.getSameNameLineId(lineId,projectId);
-//                if(ListUtil.isNotEmpty(nameList) && nameList.size()>1){
+//                if(ListUtils.isNotEmpty(nameList) && nameList.size()>1){
 //                   for(HzPbomLineRecord record:nameList){
 //                       String s1 = record.getLineId().substring(record.getLineId().length()-2,record.getLineId().length());
 //                       Matcher matcher1 = p.matcher(s1);

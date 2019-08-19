@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.materiel.impl;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
@@ -18,7 +18,7 @@ import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.google.common.collect.Lists;
@@ -141,10 +141,10 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             configTransactionTemplate.execute(new TransactionCallback<Void>() {
                 @Override
                 public Void doInTransaction(TransactionStatus status) {
-                    if(ListUtil.isNotEmpty(updateList)){
+                    if(ListUtils.isNotEmpty(updateList)){
                         hzMaterielDAO.deleteList(updateList);
                     }
-                    if(ListUtil.isNotEmpty(deleteList)){
+                    if(ListUtils.isNotEmpty(deleteList)){
                         hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
                     }
                     return null;
@@ -236,7 +236,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
             query.setTableName(ChangeTableNameEnum.HZ_MATERIEL.getTableName());
             List<HzMaterielRecord> records = hzMaterielDAO.getMaterialRecordsByPuids(query);
             List<HzMaterielRecord> afterRecords = new ArrayList<>();
-            if(ListUtil.isNotEmpty(records)){
+            if(ListUtils.isNotEmpty(records)){
                 //核查参数信息
                 this.errorCount = 0;
                 String errMsg = checkMaterielParamResult(records);
@@ -253,7 +253,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                 dataDetailQuery.setOrderId(orderId);
                 dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_MATERIEL_AFTER.getTableName());
                 List<HzMaterielRecord> recordList = hzMaterielDAO.getMaterielRecordsByOrderId(dataDetailQuery);
-                if(ListUtil.isEmpty(recordList)){
+                if(ListUtils.isEmpty(recordList)){
                     records.forEach(record -> {
                         HzMaterielRecord manageRecord = HzMaterielFactory.hzMaterielRecordToMaterielRecord(record);
                         manageRecord.setOrderId(orderId);
@@ -362,7 +362,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
 
             List<HzMaterielRecord> list = hzMaterielDAO.getMaterialRecordsByPuids(query);
             //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
-            if(ListUtil.isNotEmpty(list)){
+            if(ListUtils.isNotEmpty(list)){
                 list.forEach(record -> {
                     if(StringUtils.isBlank(record.getRevision())){
                         deleteRecords.add(record);
@@ -371,7 +371,7 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                     }
                 });
             }
-            if(ListUtil.isNotEmpty(updateRecords)){
+            if(ListUtils.isNotEmpty(updateRecords)){
                 HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
                 dataDetailQuery.setRevision(true);
                 dataDetailQuery.setProjectId(reqDTO.getProjectId());
@@ -386,10 +386,10 @@ public class HzMaterielServiceImpl implements HzMaterielService {
                     }
                 });
             }
-            if(ListUtil.isNotEmpty(updateList)){
+            if(ListUtils.isNotEmpty(updateList)){
                 hzMaterielDAO.updateMaterielList(updateList);
             }
-            if(ListUtil.isNotEmpty(deleteRecords)){
+            if(ListUtils.isNotEmpty(deleteRecords)){
                 hzMaterielDAO.deleteMaterielList(deleteRecords,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
             }
             return WriteResultRespDTO.getSuccessResult();

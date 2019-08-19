@@ -6,7 +6,7 @@ import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
@@ -168,7 +168,7 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
     @Override
     public int updateList(List<HzWorkProcedure> list) {
         try {
-            if (ListUtil.isNotEmpty(list)) {
+            if (ListUtils.isNotEmpty(list)) {
                 int size = list.size();
                 //分批更新数据 一次1000条
                 int i = 0;
@@ -207,7 +207,7 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
 
     @Override
     public int updateWorkProcedureList(List<HzWorkProcedure> records) {
-        if(ListUtil.isEmpty(records)){
+        if(ListUtils.isEmpty(records)){
             return 0;
         }
         int size = records.size();
@@ -235,7 +235,7 @@ public class HzWorkProcedureDAOImpl  extends BaseSQLUtil implements HzWorkProced
         Map<String,Object> map = new HashMap<>();
         map.put("tableName",tableName);
         try {
-            if (ListUtil.isNotEmpty(list)) {
+            if (ListUtils.isNotEmpty(list)) {
                 int size = list.size();
                 //分批更新数据 一次1000条
                 int i = 0;

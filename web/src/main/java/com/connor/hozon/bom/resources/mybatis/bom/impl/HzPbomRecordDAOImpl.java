@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.common.util.UUIDHelper;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
@@ -8,8 +9,7 @@ import com.connor.hozon.bom.resources.domain.query.*;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
-import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.sys.exception.HzBomException;
+import com.connor.hozon.bom.exception.HzBomException;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
@@ -129,7 +129,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public int updateList(List<HzPbomLineRecord> records) {
-        if(ListUtil.isEmpty(records)){
+        if(ListUtils.isEmpty(records)){
             return 0;
         }
         int size = records.size();
@@ -154,7 +154,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public int updatePBOMList(List<HzPbomLineRecord> records) {
-        if(ListUtil.isEmpty(records)){
+        if(ListUtils.isEmpty(records)){
             return 0;
         }
         int size = records.size();
@@ -179,7 +179,7 @@ public class HzPbomRecordDAOImpl extends BaseSQLUtil implements HzPbomRecordDAO 
 
     @Override
     public int updateListByPuids(List<HzPbomLineRecord> records) {
-        if(ListUtil.isEmpty(records)){
+        if(ListUtils.isEmpty(records)){
             return 0;
         }
         int size = records.size();

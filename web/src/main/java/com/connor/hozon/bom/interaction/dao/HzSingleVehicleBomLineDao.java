@@ -2,7 +2,7 @@ package com.connor.hozon.bom.interaction.dao;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @Date: Created in 2018/9/25 13:25
  * @Modified By:
  */
-@Configuration
+@Repository
 public interface HzSingleVehicleBomLineDao extends BasicDao<HzSingleVehicleBomLineBean> {
     /**
      * 查询一个单车的所有2Y

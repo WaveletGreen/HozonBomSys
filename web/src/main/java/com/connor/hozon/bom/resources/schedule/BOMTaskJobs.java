@@ -1,14 +1,14 @@
 package com.connor.hozon.bom.resources.schedule;
 
 import cn.net.connor.hozon.dao.dao.depository.project.HzProjectLibsDao;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzBOMScheduleResultDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzBOMScheduleTaskDAO;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
-import com.connor.hozon.bom.resources.util.ListUtil;
-import com.connor.hozon.bom.sys.exception.HzBomException;
+import com.connor.hozon.bom.exception.HzBomException;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +90,7 @@ public class BOMTaskJobs {
         //查询任务
         List<HzBOMScheduleTask> tasks = hzBOMScheduleTaskDAO.getNoSynchronizedBOMScheduleTask();
 
-        if(ListUtil.isNotEmpty(tasks)){
+        if(ListUtils.isNotEmpty(tasks)){
             for(HzBOMScheduleTask task : tasks){
                 Long orderId = task.getOrderId();
                 try {
@@ -99,7 +99,7 @@ public class BOMTaskJobs {
                     //PBOM发生变更 同步MBOM
                     //MBOM发生变更 同步单车清单数据
                     HzBOMScheduleResult  result = new HzBOMScheduleResult();// 记录解算结果
-                    if(ListUtil.isNotEmpty(bomScheduleTasks)){
+                    if(ListUtils.isNotEmpty(bomScheduleTasks)){
                         StringBuffer stringBuffer = new StringBuffer();
                         HzBOMScheduleTask scheduleTask = moreTasksTransOneTask(bomScheduleTasks);
                         HzProjectLibs projectLibs = hzProjectLibsDao.selectByPrimaryKey(scheduleTask.getProjectId());
@@ -169,7 +169,7 @@ public class BOMTaskJobs {
      */
     private HzBOMScheduleTask moreTasksTransOneTask(List<HzBOMScheduleTask> list){
         HzBOMScheduleTask task = new HzBOMScheduleTask();
-        if(ListUtil.isNotEmpty(list)){
+        if(ListUtils.isNotEmpty(list)){
             String projectId = list.get(0).getProjectId();
             for(HzBOMScheduleTask bomScheduleTask : list){
                 if(Integer.valueOf(1).equals(bomScheduleTask.getConfigFeatureChanged())){

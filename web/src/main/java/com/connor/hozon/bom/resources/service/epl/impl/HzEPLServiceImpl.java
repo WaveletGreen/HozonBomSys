@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.service.epl.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzEPLReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEplRespDTO;
@@ -14,7 +15,6 @@ import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.epl.HzEPLService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
@@ -122,7 +122,7 @@ public class HzEPLServiceImpl implements HzEPLService {
             configTransactionTemplate.execute(new TransactionCallback<Void>() {
                 @Override
                 public Void doInTransaction(TransactionStatus status) {
-                    if(ListUtil.isNotEmpty(pbomLineRecords)){
+                    if(ListUtils.isNotEmpty(pbomLineRecords)){
 //                        String partResource = reqDTO.getPartResource();
 //                        List<String> carParts = hzMbomService.loadingCarPartType();
                         List<HzPbomLineRecord> recordList = new ArrayList<>();
@@ -171,7 +171,7 @@ public class HzEPLServiceImpl implements HzEPLService {
                 HzBOMQuery hzBOMQuery = new HzBOMQuery();
                 hzBOMQuery.setEplId(Long.valueOf(id));
                 List<HzEPLManageRecord> records = hzEbomRecordDAO.findEBOMRecordsByEPLId(hzBOMQuery);
-                if(ListUtil.isNotEmpty(records)){
+                if(ListUtils.isNotEmpty(records)){
                     stringBuffer.append("零件号"+records.get(0).getLineID()+"在EBOM中存在引用关系,不允许删除!");
                     return WriteResultRespDTO.failResultRespDTO(stringBuffer.toString());
                 }
@@ -189,7 +189,7 @@ public class HzEPLServiceImpl implements HzEPLService {
                     Map<String,Object> map = new HashMap<>();
                     map.put("lineId",record.getPartId());
                     map.put("projectId",record.getProjectId());
-                    if(ListUtil.isNotEmpty(hzPbomRecordDAO.getPbomById(map))){
+                    if(ListUtils.isNotEmpty(hzPbomRecordDAO.getPbomById(map))){
                         stringBuffer.append("零件号"+record.getPartId()+"在PBOM中存在引用关系,不允许删除!");
                         return WriteResultRespDTO.failResultRespDTO(stringBuffer.toString());
                     }
@@ -203,17 +203,17 @@ public class HzEPLServiceImpl implements HzEPLService {
                     deleteList.add(eplId);
                 }
             }
-            if(ListUtil.isNotEmpty(deleteList)){
+            if(ListUtils.isNotEmpty(deleteList)){
                 hzEPLDAO.delete(null,deleteList);
             }
 
 //            configTransactionTemplate.execute(new TransactionCallback<Void>() {
 //                @Override
 //                public Void doInTransaction(TransactionStatus status) {
-//                    if(ListUtil.isNotEmpty(deleteList)){
+//                    if(ListUtils.isNotEmpty(deleteList)){
 //                        hzEPLDAO.delete(null,deleteList);
 //                    }
-//                    if(ListUtil.isNotEmpty(updateList)){
+//                    if(ListUtils.isNotEmpty(updateList)){
 //                        hzEPLDAO.deleteByIds(updateList);
 //                    }
 //                    return null;
@@ -231,16 +231,16 @@ public class HzEPLServiceImpl implements HzEPLService {
         try {
             //删除不用的数据 以WS和GDT结尾的数据 直接删除
             List<Long> eplIds = hzEPLDAO.getEPLIdsWherePartIdEndWithWSAndGDT(query.getProjectId());
-            if(ListUtil.isNotEmpty(eplIds)){
+            if(ListUtils.isNotEmpty(eplIds)){
                 hzEPLDAO.delete(null,eplIds);
             }
             //查询零件分类为Virtual Assembly 并将其转换为中文 虚拟总成
             List<Long> virtualEplIds = hzEPLDAO.getVirtualAssemblyEPLRecord(query.getProjectId());
-            if(ListUtil.isNotEmpty(virtualEplIds)){
+            if(ListUtils.isNotEmpty(virtualEplIds)){
                 hzEPLDAO.updateVirtualAssemblyEnToZh(virtualEplIds);
             }
             Page<HzEPLRecord> page  = hzEPLDAO.getEplRecordByPage(query);
-            if (page == null || ListUtil.isEmpty(page.getResult())) {
+            if (page == null || ListUtils.isEmpty(page.getResult())) {
                 return new Page<>(page.getPageNumber(), page.getPageSize(), 0);
             }
             int num = (query.getPage() - 1) * query.getPageSize()+1;

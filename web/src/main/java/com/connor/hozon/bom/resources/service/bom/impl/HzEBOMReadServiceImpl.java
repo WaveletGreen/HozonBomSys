@@ -1,19 +1,26 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgWithCfgQuery;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzExFullCfgWithCfg;
 import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgMainDao;
 import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgWithCfgDao;
-import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzConfigToBomLine;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzExFullCfgWithCfg;
+import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgWithCfgQuery;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
-import com.connor.hozon.bom.bomSystem.service.fullCfg.HzConfigToBomLineServiceImpl;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.connor.hozon.bom.configuration.dao.bom.impl.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.service.configuration.fullCfg.HzConfigToBomLineService;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomLevelRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
-import com.connor.hozon.bom.resources.domain.model.*;
-import com.connor.hozon.bom.resources.domain.query.*;
+import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
+import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
+import com.connor.hozon.bom.resources.domain.query.HzEbomByPageQuery;
+import com.connor.hozon.bom.resources.domain.query.HzEbomTreeQuery;
+import com.connor.hozon.bom.resources.domain.query.HzLouaQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
@@ -24,12 +31,9 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzConfigToBomLine;
-import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain;
-import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
-import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by haozt on 2018/06/06
@@ -45,7 +49,7 @@ public class HzEBOMReadServiceImpl implements HzEBOMReadService {
     private HzBomLineRecordDaoImpl hzBomLineRecordDao;
 
     @Autowired
-    private HzConfigToBomLineServiceImpl hzConfigToBomLineServiceImpl;
+    private HzConfigToBomLineService hzConfigToBomLineServiceImpl;
 
     @Autowired
     private HzEPLManageRecordService hzEPLManageRecordService;

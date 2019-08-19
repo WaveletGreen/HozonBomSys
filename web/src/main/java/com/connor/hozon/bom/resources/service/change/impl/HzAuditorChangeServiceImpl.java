@@ -8,7 +8,7 @@ import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.change.change.HzAuditorChangeRecord;
@@ -33,7 +33,7 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
             //从HZ_AUDITOR_CHANGE_RECORD表中查找任务条数:AUDIT_RESULT is null
             List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList(record);
 
-            if(ListUtil.isNotEmpty(infos)){
+            if(ListUtils.isNotEmpty(infos)){
                 for(int i=0;i<infos.size();i++){
                     HzChangeOrderRecord temp = hzChangeOrderDAO.findHzChangeOrderRecordById(infos.get(i).getOrderId());
 
@@ -93,7 +93,7 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
         try{
             List<HzAuditorChangeRecord> infos =  hzAuditorChangeDAO.findAuditorList2(record);
 
-            /*if(ListUtil.isNotEmpty(infos)){
+            /*if(ListUtils.isNotEmpty(infos)){
                 for(int i=0;i<infos.size();i++){
                     //根据返回的OrderId到ChangeOrder表中查数据
                     HzChangeOrderRecord rec = hzChangeOrderDAO.findHzChangeOrderRecordById(query,infos.get(i).getOrderId());
@@ -112,7 +112,7 @@ public class HzAuditorChangeServiceImpl implements HzAuditorChangeService {
                 }
                 return auditorList;
             }*/
-            if(ListUtil.isNotEmpty(infos)){
+            if(ListUtils.isNotEmpty(infos)){
                 for(int i=0;i<infos.size();i++){
                     HzChangeOrderRecord temp = hzChangeOrderDAO.findHzChangeOrderRecordById(infos.get(i).getOrderId());
 

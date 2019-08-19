@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.epl.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
@@ -7,7 +8,6 @@ import com.connor.hozon.bom.resources.domain.query.HzEPLQuery;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
@@ -42,7 +42,7 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
         if(StringUtils.isNotBlank(ids)){
             List<String> l = Lists.newArrayList(ids.split(","));
             return super.delete("HzEPLDAOImpl_delete",l);
-        }else if(ListUtil.isNotEmpty(list)){
+        }else if(ListUtils.isNotEmpty(list)){
             return super.delete("HzEPLDAOImpl_delete",list);
         }else {
             return 0;
@@ -122,7 +122,7 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
 
     @Override
     public int insertList(List<HzEPLRecord> hzEPLRecords) {
-        if(ListUtil.isEmpty(hzEPLRecords)){
+        if(ListUtils.isEmpty(hzEPLRecords)){
             return 0;
         }
         int size = hzEPLRecords.size();

@@ -4,7 +4,7 @@ import cn.net.connor.hozon.dao.dao.change.breakpoint.HzBreakPointDao;
 import cn.net.connor.hozon.dao.pojo.integration.HzBreakPoint;
 import cn.net.connor.hozon.dao.query.change.breakPoint.BreakPointQuery;
 import com.connor.hozon.bom.resources.service.change.HzBreakPointService;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,7 +27,7 @@ public class HzBreakPointServiceImpl implements HzBreakPointService {
         List<HzBreakPoint> list = new ArrayList<>();
         List<HzBreakPoint> breakPointList = breakPointDao.selectByQueryObject(queryBase);
 
-        if(ListUtil.isNotEmpty(breakPointList)){
+        if(ListUtils.isNotEmpty(breakPointList)){
             breakPointList.forEach(breakPoint -> {
                 HzBreakPoint point = breakPoint;
                 list.add(point);

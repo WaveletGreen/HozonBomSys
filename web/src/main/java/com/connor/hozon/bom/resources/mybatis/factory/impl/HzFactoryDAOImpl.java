@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.factory.impl;
 
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.common.util.UUIDHelper;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;

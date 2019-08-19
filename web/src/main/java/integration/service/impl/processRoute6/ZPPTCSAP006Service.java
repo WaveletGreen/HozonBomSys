@@ -1,9 +1,6 @@
 package integration.service.impl.processRoute6;
 
-import com.connor.hozon.bom.sys.exception.HzBomException;
-import integration.base.processRoute.TABLEOFZPPTCI006;
-import integration.base.processRoute.TABLEOFZPPTCO006;
-import integration.base.service.SAPForTCProxy;
+import com.connor.hozon.bom.exception.HzBomException;
 import integration.service.i.IExecutor;
 
 import javax.xml.ws.Holder;

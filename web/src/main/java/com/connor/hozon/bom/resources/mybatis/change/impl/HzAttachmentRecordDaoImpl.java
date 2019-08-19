@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
-import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
+import com.connor.hozon.bom.configuration.dao.BasicDaoImpl;
 import com.connor.hozon.bom.resources.mybatis.change.HzAttachmentRecordDao;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord;

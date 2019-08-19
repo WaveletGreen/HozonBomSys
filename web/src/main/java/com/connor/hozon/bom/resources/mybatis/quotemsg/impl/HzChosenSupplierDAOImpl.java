@@ -1,14 +1,12 @@
 package com.connor.hozon.bom.resources.mybatis.quotemsg.impl;
 
-import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
+import com.connor.hozon.bom.configuration.dao.BasicDaoImpl;
 import com.connor.hozon.bom.resources.domain.model.HzChosenSupplier;
 import com.connor.hozon.bom.resources.mybatis.quotemsg.HzChosenSupplierDAO;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Configuration

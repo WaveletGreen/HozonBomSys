@@ -5,7 +5,7 @@ import com.connor.hozon.bom.resources.domain.query.HzWorkListBasicInfoQuery;
 import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
 import com.connor.hozon.bom.resources.service.change.HzWorkListBasicInfoService;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord;
@@ -23,7 +23,7 @@ public class HzWorkListBasicInfoServiceImpl implements HzWorkListBasicInfoServic
         HzWorkListBasicInfoRespDTO respDTO = new HzWorkListBasicInfoRespDTO();
         try {
             List<HzWorkListRecord> hzWorkListBasicInfoList = hzWorkListDAO.findHzWorkListBasicInfoList(query);
-            if(ListUtil.isNotEmpty(hzWorkListBasicInfoList)){
+            if(ListUtils.isNotEmpty(hzWorkListBasicInfoList)){
                 HzWorkListRecord hzWorkListRecord = hzWorkListBasicInfoList.get(0);
                 respDTO.setId(hzWorkListRecord.getId());
                 respDTO.setChangeNum(hzWorkListRecord.getChangeNum());
@@ -63,7 +63,7 @@ public class HzWorkListBasicInfoServiceImpl implements HzWorkListBasicInfoServic
                 infos = hzWorkListDAO.findHzWorkListBasicInfoList3(query);
             }
 
-            if(ListUtil.isNotEmpty(infos)){
+            if(ListUtils.isNotEmpty(infos)){
                 infos.forEach(hzWorkListBasicInfo -> {
                     HzWorkListBasicInfoRespDTO respDTO = new HzWorkListBasicInfoRespDTO();
                     respDTO.setProjectId(hzWorkListBasicInfo.getProjectId());
