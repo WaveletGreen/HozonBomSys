@@ -7,7 +7,7 @@
 
 package cn.net.connor.hozon.dao.dao.interaction;
 
-import cn.net.connor.hozon.dao.MyBatisBaseDao;
+import cn.net.connor.hozon.dao.basic.MyBatisBaseDao;
 import cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory;
 import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleBomRelation;
 import org.apache.ibatis.annotations.Param;

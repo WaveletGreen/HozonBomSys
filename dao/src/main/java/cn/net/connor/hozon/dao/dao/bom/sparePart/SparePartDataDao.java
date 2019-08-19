@@ -7,7 +7,8 @@
 
 package cn.net.connor.hozon.dao.dao.bom.sparePart;
 
-import cn.net.connor.hozon.dao.MyBatisBaseDao;
+import cn.net.connor.hozon.dao.basic.DeleteListDao;
+import cn.net.connor.hozon.dao.basic.MyBatisBaseDao;
 import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData;
 import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
 import org.springframework.stereotype.Repository;
@@ -21,7 +22,7 @@ import java.util.List;
  * @Modified By:
  */
 @Repository
-public interface SparePartDataDao extends MyBatisBaseDao<SparePartData,Long,SparePartOfProjectQuery> {
+public interface SparePartDataDao extends MyBatisBaseDao<SparePartData,Long,SparePartOfProjectQuery> ,DeleteListDao<SparePartData> {
     /**
      * 分页查询
      * @param query

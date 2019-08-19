@@ -4,9 +4,6 @@
  *  * ALL COPYRIGHT REVERSED.
  *
  */
-
-/**53个属性+勾选框列和序号列*/
-var eBomTitleSet = 56;
 /**项目ID*/
 var projectId;
 var $table;
@@ -14,6 +11,9 @@ var $table;
  * 访问的url
  */
 var url = 'sparePartsBom/selectPageByProjectId';
+let selectedRows = null;
+
+const debug = false;
 
 /**
  * 自动查询调用
@@ -23,6 +23,10 @@ function doQuery() {
     initTable();
 }
 
+const smallWidth = 150;
+const midWidth = 250;
+const largeWidth = 350;
+
 /**
  * 创建table表头
  * @param result
@@ -30,125 +34,26 @@ function doQuery() {
 function createColumn() {
     let column = [];
     column.push({field: 'ck', checkbox: true});
-    column.push({field: 'ads', title: 'A/D/S', align: 'left', valign: 'middle', width: 80});
-    column.push({field: 'hierarchy', title: '层级', align: 'left', valign: 'middle', width: 80});
-    column.push({field: 'major', title: '专业', align: 'left', valign: 'middle', width: 80});
-    column.push({field: 'level', title: '级别', align: 'left', valign: 'middle', width: 80});
-    column.push({field: 'productivePartCode', title: '生产零件号', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'productivePartName', title: '生产零件名称', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'sparePartCode', title: '备件零件号', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'sparePartName', title: '备件零件名称', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'isSparePart', title: '是否备件', align: 'left', valign: 'middle', width: 80});
-    column.push({field: 'unit', title: '单位', align: 'left', valign: 'middle', width: 200});
-    column.push({field: 'department', title: '专业部门', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'responsibleEngineer', title: '责任工程师', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'supplier', title: '供应商', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'code', title: '代码', align: 'left', valign: 'middle', width: 100});
-    column.push({field: 'purchasingEngineer', title: '采购工程师', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'remark', title: '备注', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'partClass', title: '零件分类', align: 'left', valign: 'middle', width: 300});
-    column.push({field: 'workshop1', title: '车间1', align: 'left', valign: 'middle', width: 200});
-    column.push({field: 'workshop2', title: '车间2', align: 'left', valign: 'middle', width: 200});
-    return column;
-}
-
-function createColumnVue() {
-    let column = [];
-    column.push({width: 60, titleAlign: 'center', columnAlign: 'center', type: 'selection'}),
-        column.push({
-            field: 'ads',
-            title: 'A/D/S',
-            width: 100,
-            titleAlign: 'center',
-            columnAlign: 'center',
-            isResize: true
-        });
-    column.push({
-        field: 'hierarchy',
-        title: '层级',
-        width: 100,
-        titleAlign: 'center',
-        columnAlign: 'center',
-        isResize: true
-    });
-    column.push({field: 'major', title: '专业', width: 100, titleAlign: 'center', columnAlign: 'center', isResize: true});
-    column.push({field: 'level', title: '级别', width: 100, titleAlign: 'center', columnAlign: 'center', isResize: true});
-    column.push({
-        field: 'productivePartCode',
-        title: '生产零件号',
-        width: 200,
-        titleAlign: 'center',
-        columnAlign: 'center',
-        isResize: true
-    });
-    column.push({
-        field: 'productivePartName',
-        title: '生产零件名称',
-        width: 200,
-        titleAlign: 'center',
-        columnAlign: 'center',
-        isResize: true
-    });
-    column.push({
-        field: 'sparePartCode', title: '备件零件号',
-        width: 200, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'sparePartName', title: '备件零件名称',
-        width: 200, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'isSparePart', title: '是否备件',
-        width: 80, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'unit', title: '单位',
-        width: 100, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'department', title: '专业部门',
-        width: 100, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'responsibleEngineer',
-        title: '责任工程师',
-        width: 200,
-        titleAlign: 'center',
-        columnAlign: 'center',
-        isResize: true
-    });
-    column.push({
-        field: 'supplier', title: '供应商',
-        width: 200, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'code', title: '代码',
-        width: 60, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'purchasingEngineer',
-        title: '采购工程师',
-        width: 200,
-        titleAlign: 'center',
-        columnAlign: 'center',
-        isResize: true
-    });
-    column.push({
-        field: 'remark', title: '备注',
-        width: 200, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'partClass', title: '零件分类',
-        width: 100, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'workshop1', title: '车间1',
-        width: 60, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
-    column.push({
-        field: 'workshop2', title: '车间2',
-        width: 60, titleAlign: 'center', columnAlign: 'center', isResize: true
-    });
+    column.push({field: 'ads', title: 'A/D/S', align: 'left', valign: 'middle', width: smallWidth});
+    column.push({field: 'hierarchy', title: '层级', align: 'left', valign: 'middle', width: smallWidth});
+    column.push({field: 'major', title: '专业', align: 'left', valign: 'middle', width: smallWidth});
+    column.push({field: 'level', title: '级别', align: 'left', valign: 'middle', width: smallWidth});
+    column.push({field: 'productivePartCode', title: '生产零件号', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'productivePartName', title: '生产零件名称', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'sparePartCode', title: '备件零件号', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'sparePartName', title: '备件零件名称', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'isSparePart', title: '是否备件', align: 'left', valign: 'middle', width: smallWidth});
+    column.push({field: 'unit', title: '单位', align: 'left', valign: 'middle', width: midWidth});
+    column.push({field: 'department', title: '专业部门', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'responsibleEngineer', title: '责任工程师', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'supplier', title: '供应商', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'code', title: '代码', align: 'left', valign: 'middle', width: smallWidth});
+    column.push({field: 'purchasingEngineer', title: '采购工程师', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'remark', title: '备注', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'partClass', title: '零件分类', align: 'left', valign: 'middle', width: largeWidth});
+    column.push({field: 'workshop1', title: '车间1', align: 'left', valign: 'middle', width: midWidth});
+    column.push({field: 'workshop2', title: '车间2', align: 'left', valign: 'middle', width: midWidth});
+    log(column)
     return column;
 }
 
@@ -156,41 +61,68 @@ function createColumnVue() {
  * 添加
  * @returns {boolean}
  */
-var add = function () {
-    var rows = $table.bootstrapTable('getSelections');
-    if (rows.length > 1) {
-        window.Ewin.alert({message: '只能选择一个父级!'});
-        return false;
+const add = function () {
+    window.Ewin.dialog({
+        title: "添加单条备件零件",
+        url: "sparePartsBom/getPage?type=add",
+        width: 600,
+        height: 400
+    })
+};
+/**
+ * 添加子层
+ */
+const addChild = function () {
+    selectedRows = $table.bootstrapTable('getSelections');
+    if (selectedRows.length !== 1) {
+        window.Ewin.alert({message: '<span style="color: red">请只选择一条备件数据添加子层!</span>'});
+        return;
     }
-    var url = "ebom/addEbom";
-    $.ajax({
-        url: "privilege/write?url=" + url,
-        type: "GET",
-        success: function (result) {
-            if (!result.success) {
-                window.Ewin.alert({message: result.errMsg});
-                return false;
+    window.Ewin.dialog({
+        title: "添加单条备件零件",
+        url: "sparePartsBom/addChildPage",
+        width: 600,
+        height: 400
+    })
+};
+/**
+ * 删除
+ * @returns {boolean}
+ */
+const doDelete = function () {
+    let rows = $table.bootstrapTable('getSelections');
+    if (rows.length <= 0)
+        return false;
+    window.Ewin.confirm({
+        title: '提示',
+        message: '是否要删除您所选择的记录？',
+        width: 500
+    }).on(function (e) {
+        if (e) {
+            let data = [];
+            for (let i = 0; i < rows.length; i++) {
+                data.push({id: rows[i].id});
             }
-            else {
-                if (rows.length == 1) {
-                    window.Ewin.dialog({
-                        title: "添加",
-                        url: "ebom/addEbom?projectId=" + projectId + "&puid=" + rows[0].puid,
-                        gridId: "gridId",
-                        width: 500,
-                        height: 500
-                    })
-                }
-                else if (rows.length == 0) {
-                    window.Ewin.dialog({
-                        title: "添加",
-                        url: "ebom/addEbom?projectId=" + projectId,
-                        gridId: "gridId",
-                        width: 500,
-                        height: 500
-                    })
-                }
-            }
+            log(data);
+            if (!debug)
+                $.ajax({
+                    url: "sparePartsBom/deleteList",
+                    type: "POST",
+                    contentType:
+                        "application/json",
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        }
+                        else {
+                            layer.msg('删除成功', {icon: 1, time: 2000});
+                            initTable();
+                            // $table.bootstrapTable('remove',{field:"ck", values:true});
+                        }
+                    }
+                })
         }
     })
 };
@@ -198,114 +130,52 @@ var add = function () {
  * 修改
  * @returns {boolean}
  */
-var update = function () {
-    var rows = $table.bootstrapTable('getSelections');
+const update = function () {
+    selectedRows = $table.bootstrapTable('getSelections');
     //只能选一条
-    if (rows.length != 1) {
+    if (selectedRows.length !== 1) {
         window.Ewin.alert({message: '请选择一条需要修改的数据!'});
         return false;
     }
-    else if (rows[0].status == 5 || rows[0].status == 6) {
-        window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
-        return false;
-    }
-    var url = "ebom/updateEbom";
-    $.ajax({
-        url: "privilege/write?url=" + url,
-        type: "GET",
-        success: function (result) {
-            if (!result.success) {
-                window.Ewin.alert({message: result.errMsg});
-                return false;
-            }
-            else {
-                window.Ewin.dialog({
-                    title: "修改",
-                    url: "ebom/updateEbom?projectId=" + projectId + "&puid=" + rows[0].puid + "&updateType=" + 2,
-                    gridId: "gridId",
-                    width: 500,
-                    height: 500
-                });
-            }
-        }
+    window.Ewin.dialog({
+        title: "修改单条备件零件",
+        url: "sparePartsBom/getPage?type=update",
+        width: 600,
+        height: 400
     })
+
+    // else if (rows[0].status == 5 || rows[0].status == 6) {
+    //     window.Ewin.alert({message: '对不起,审核中的数据不能修改!'});
+    //     return false;
+    // }
+    // var url = "ebom/updateEbom";
+    // $.ajax({
+    //     url: "privilege/write?url=" + url,
+    //     type: "GET",
+    //     success: function (result) {
+    //         if (!result.success) {
+    //             window.Ewin.alert({message: result.errMsg});
+    //             return false;
+    //         }
+    //         else {
+    //             window.Ewin.dialog({
+    //                 title: "修改",
+    //                 url: "ebom/updateEbom?projectId=" + projectId + "&puid=" + rows[0].puid + "&updateType=" + 2,
+    //                 gridId: "gridId",
+    //                 width: 500,
+    //                 height: 500
+    //             });
+    //         }
+    //     }
+    // })
 };
-/**
- * 删除
- * @returns {boolean}
- */
-var doDelete = function () {
-    var rows = $table.bootstrapTable('getSelections');
-    var puids = "";
-    for (var i = 0; i < rows.length; i++) {
-        puids += rows[i].puid + ",";
-    }
-    var myData = JSON.stringify({
-        "projectId": $("#project", window.top.document).val(),
-        "puids": puids,
-    });
-    if (rows.length == 0) {
-        window.Ewin.alert({message: '请选择一条需要删除的数据!'});
-        return false;
-    }
-    else if (rows[0].status == 5 || rows[0].status == 6) {
-        window.Ewin.alert({message: '对不起,审核中的数据不能删除!'});
-        return false;
-    }
-    var url = "ebom/delete/ebom";
-    $.ajax({
-        url: "privilege/write?url=" + url,
-        type: "GET",
-        success: function (result) {
-            if (!result.success) {
-                window.Ewin.alert({message: result.errMsg});
-                return false;
-            }
-            else {
-                var _table = '<p>是否要删除您所选择的记录？</p>' +
-                    '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-                for (var index in rows) {
-                    _table += '<tr><td>' + rows[index].lineId + '</td></tr>';
-                }
-                _table += '</table></div>';
-                window.Ewin.confirm({
-                    title: '提示',
-                    message: _table,
-                    width: 500
-                }).on(function (e) {
-                    if (e) {
-                        $.ajax({
-                            type: "POST",
-                            //ajax需要添加打包名
-                            url: "ebom/delete/ebom",
-                            data: myData,
-                            contentType: "application/json",
-                            success: function (result) {
-                                if (typeof (result) == 'string') {
-                                    result = JSON.parse(result);
-                                }
-                                if (result.success) {
-                                    layer.msg('删除成功', {icon: 1, time: 2000})
-                                } else if (!result.success) {
-                                    window.Ewin.alert({message: result.errMsg});
-                                }
-                                $table.bootstrapTable("refresh");
-                            },
-                            error: function (info) {
-                                window.Ewin.alert({message: ":" + info.status});
-                            }
-                        })
-                    }
-                });
-            }
-        }
-    })
-};
+
+
 /**
  * 撤销
  * @returns {boolean}
  */
-var revoke = function () {
+const revoke = function () {
     var rows = $table.bootstrapTable('getSelections');
     var puids = "";
     for (var i = 0; i < rows.length; i++) {
@@ -371,7 +241,7 @@ var revoke = function () {
  * 设置LOU
  * @returns {boolean}
  */
-var setUpLou = function () {
+const setUpLou = function () {
     var rows = $table.bootstrapTable('getSelections');
     if (rows.length != 1) {
         window.Ewin.alert({message: '请选择一条需要设置LOU的数据!'});
@@ -422,7 +292,7 @@ var setUpLou = function () {
  * 关联变更单
  * @returns {boolean}
  */
-var attachChangeForm = function () {
+const attachChangeForm = function () {
     var rows = $table.bootstrapTable('getSelections');
     var puidArray = "";
     for (var i = 0; i < rows.length; i++) {
@@ -479,7 +349,7 @@ var attachChangeForm = function () {
  * 调整层级
  * @returns {boolean}
  */
-var doRank = function () {
+const doRank = function () {
     var rows = $table.bootstrapTable('getSelections');
     //只能选一条进行层级调整
     if (rows.length != 1) {
@@ -512,36 +382,15 @@ var doRank = function () {
     })
 };
 /**
- * 显示子层
- * @returns {boolean}
- */
-var showSublayer = function () {
-    var rows = $table.bootstrapTable('getSelections');
-    var puids = "";
-    if (rows.length <= 0) {
-        window.Ewin.alert({message: '请至少选择一条需要显示层级的数据!'});
-        return false;
-    }
-    for (var i = 0; i < rows.length; i++) {
-        puids += rows[i].puid + ",";
-    }
-    initTable1(url, puids)
-    // if (this.innerText == '显示子层') {
-    //
-    //
-    // }
-    // if (this.innerText == '显示子层') {
-    //     this.innerText = '取消显示子层'
-    // }
-    // else {
-    //     this.innerText = '显示子层'
-    // }
-};
-/**
  * 导入Excel
  */
-var importExcel = function () {
+const importExcel = function () {
     var url = "ebom/importExcel";
+    if (true) {
+        alert('开发中');
+        return;
+    }
+
     $.ajax({
         url: "privilege/write?url=" + url,
         type: "GET",
@@ -565,7 +414,7 @@ var importExcel = function () {
  * 导出Excel
  * @returns {boolean}
  */
-var exportExcel = function () {
+const exportExcel = function () {
     var rows = $table.bootstrapTable('getSelections');//选中行数据
     var length = -1;
     if (rows.length == 0) {
@@ -624,13 +473,6 @@ var exportExcel = function () {
 };
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /**
- * 取消显示子层
- * 只在initTable1中使用
- */
-const cancelShowSublayer = function () {
-    initTable(url);
-}
-/**
  * 工具条
  * @type {*[]}
  */
@@ -641,57 +483,9 @@ const toolbar = [
         handler: add
     },
     {
-        text: '修改',
-        iconCls: 'glyphicon glyphicon-pencil',
-        handler: update
-    },
-    {
-        text: '删除',
-        iconCls: 'glyphicon glyphicon-remove',
-        handler: doDelete
-    },
-    {
-        text: '撤销',
-        iconCls: 'glyphicon glyphicon-share-alt',
-        handler: revoke
-    },
-    {
-        text: '设置为LOU/取消',
-        iconCls: 'glyphicon glyphicon-cog',
-        handler: setUpLou
-    },
-    {
-        text: '关联变更单',
-        iconCls: 'glyphicon glyphicon-log-out',
-        handler: attachChangeForm
-    },
-    {
-        text: '引用层级',
-        iconCls: 'glyphicon glyphicon-copyright-mark',
-        handler: doRank
-    },
-    {
-        text: '显示子层',
-        iconCls: 'glyphicon glyphicon-eye-open',
-        handler: showSublayer
-    },
-    {
-        text: '导入Excel',
-        iconCls: 'glyphicon glyphicon-share',
-        handler: importExcel
-    },
-    {
-        text: '导出Excel',
-        iconCls: 'glyphicon glyphicon-export',
-        handler: exportExcel
-    }
-]
-
-const toolbar2 = [
-    {
-        text: '添加',
+        text: '添加子件',
         iconCls: 'glyphicon glyphicon-plus',
-        handler: add
+        handler: addChild
     },
     {
         text: '修改',
@@ -724,11 +518,6 @@ const toolbar2 = [
         handler: doRank
     },
     {
-        text: '取消显示子层',
-        iconCls: 'glyphicon glyphicon-eye-open',
-        handler: cancelShowSublayer
-    },
-    {
         text: '导入Excel',
         iconCls: 'glyphicon glyphicon-share',
         handler: importExcel
@@ -739,7 +528,6 @@ const toolbar2 = [
         handler: exportExcel
     }
 ]
-
 
 function toPage() {
     var pageNum = $("#pageNum").val();
@@ -747,83 +535,6 @@ function toPage() {
         $('#ebomManageTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
-
-function queryLoa(row) {
-    var myData = JSON.stringify({
-        "projectId": $("#project", window.top.document).val(),
-        "puid": row
-    });
-    $.ajax({
-        type: "POST",
-        //ajax需要添加打包名
-        url: "loa/ebom",
-        data: myData,
-        contentType: "application/json",
-        undefinedText: "",
-        success: function (result) {
-            var child = result.data.child;
-            var parent = result.data.parent;
-            var parentLevel = (parent.parentLevel == undefined ? "" : parent.parentLevel);
-            var parentLineId = (parent.parentLineId == undefined ? "" : parent.parentLineId);
-            var parentName = (parent.parentName == undefined ? "" : parent.parentName);
-            var _table = '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-            _table += '<tr><td>父层级</td><td>父零件号</td><td>父名称</td></tr>'
-            _table += '<tr><td>' + parentLevel + '</td><td>' + parentLineId + '</td><td>' + parentName + '</td></tr>';
-            _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-            _table += '<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
-            for (var i = 0; i < child.length; i++) {
-                _table += '<tr><td>' + child[i].childLevel + '</td><td>' + child[i].childLineId + '</td><td>' + child[i].childName + '</td></tr>';
-            }
-            _table += '</table></div>';
-            window.Ewin.confirm({title: '提示', message: _table, width: 500});
-        }
-    })
-}
-
-function queryLou(row) {
-    var projectId = $("#project", window.top.document).val();
-    $.ajax({
-        type: "GET",
-        //ajax需要添加打包名
-        url: "loa/getLou?projectId=" + projectId + "&puid=" + row,
-
-        undefinedText: "",
-        success: function (result) {
-            var data = result.data;
-            var parent = data.parent;
-            var config = data.config;
-            var child = data.child;
-            var parentLevel = (parent.parentLevel == undefined ? "" : parent.parentLevel);
-            var parentLineId = (parent.parentLineId == undefined ? "" : parent.parentLineId);
-            var parentName = (parent.parentName == undefined ? "" : parent.parentName);
-            var pCfg0name = (config.pCfg0name == undefined ? "" : config.pCfg0name);
-            var cfg0Desc = (config.cfg0Desc == undefined ? "" : config.cfg0Desc);
-            var pCfg0familyname = (config.pCfg0familyname == undefined ? "" : config.pCfg0familyname);
-            var cfg0FamilyDesc = (config.cfg0FamilyDesc == undefined ? "" : config.cfg0FamilyDesc);
-            var _table = '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-            _table += '<tr><td>父层级</td><td>父零件号</td><td>父名称</td></tr>'
-            _table += '<tr><td>' + parentLevel + '</td><td>' + parentLineId + '</td><td>' + parentName + '</td></tr>';
-            _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-            _table += '<tr><td>配置名</td><td>特性值描述</td><td>族名</td><td>特性描述</td></tr>'
-            _table += '<tr><td>' + pCfg0name + '</td><td>' + cfg0Desc + '</td><td>' + pCfg0familyname + '</td><td>' + cfg0FamilyDesc + '</td></tr>';
-            _table += '</table></div>' + '<div style="max-height: 400px;overflow:scroll;"><table class="table table-striped tableNormalStyle" >';
-            _table += '<tr><td>子层级</td><td>子零件号</td><td>子名称</td></tr>'
-            for (var i = 0; i < child.length; i++) {
-                _table += '<tr><td>' + child[i].childLevel + '</td><td>' + child[i].childLineId + '</td><td>' + child[i].childName + '</td></tr>';
-            }
-            _table += '</table></div>';
-            window.Ewin.confirm({title: '提示', message: _table, width: 500});
-        }
-    })
-}
-
-$(document).keydown(function (event) {
-    if (event.keyCode == 13) {
-        $('form').each(function () {
-            event.preventDefault();
-        });
-    }
-});
 
 /**
  * table初始化
@@ -841,7 +552,7 @@ function initTable() {
         method: 'GET',
         dataType: 'json',
         sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-        height: $(window.parent.document).find("#wrapper").height() - 500,
+        height: $(window.parent.document).find("#wrapper").height() - 150,
         width: $(window).width(),
         formId: "sparePartForm",
         undefinedText: "",//当数据为 undefined 时显示的字符
@@ -860,144 +571,6 @@ function initTable() {
     });
 }
 
-function initTable1(url, puids) {
-    if (!checkIsSelectProject(projectId)) {
-        return;
-    }
-    $table.bootstrapTable('destroy');
-    // $table = $("#ebomManageTable");
-    $.ajax({
-        url: "ebom/title?projectId=" + projectId,
-        type: "GET",
-        success: function (result) {
-            let column = createColumn(result);
-            $table.bootstrapTable({
-                url: url + "&puids=" + puids + "&showBomStructure=1",
-                method: 'GET',
-                dataType: 'json',
-                sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-                height: $(window.parent.document).find("#wrapper").height() - 400,
-                width: $(window).width(),
-                formId: "queryEbomManage",
-                undefinedText: "",//当数据为 undefined 时显示的字符
-                pagination: true,
-                pageNumber: 1,                       //初始化加载第一页，默认第一页
-                pageSize: 20,                       //每页的记录行数（*）
-                pageList: ['ALL', 10, 20, 50, 100, 200, 500, 1000],        //可供选择的每页的行数（*）
-                columns: column,
-                toolbar: "#toolbar",
-                sortOrder: "asc",                   //排序方式
-                clickToSelect: true,// 单击某一行的时候选中某一条记录
-                showColumns: true, //是否显示所有的列
-                showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
-                showRefresh: true,                  //是否显示刷新按钮
-                toolbars: toolbar2,
-            });
-            $table.bootstrapTable('hideColumn', 'groupNum');
-            $table.bootstrapTable('hideColumn', 'rank');
-        }
-    });
-}
-
-/**
- * 初始化VUE组件
- */
-function initVueTable() {
-    let vm = new Vue({
-        el: '#sparePartTableDiv',
-        data: function () {
-            return {
-                pageSize: 20,
-                pageIndex: 1,
-                total: 0,
-                pageSizeOption:[10,50,100,200,300,1000],
-                tableData: [
-                    // {
-                    //     "name": "ads",
-                    //     "hierarchy":
-                    //         "156*****1987",
-                    //     "major": "钢琴、书法、唱歌",
-                    //     "level": "上海市黄浦区金陵东路569号17楼",
-                    //     "productivePartCode": "productivePartCode",
-                    //     "productivePartName": "productivePartName",
-                    //     "sparePartCode": "sparePartCode",
-                    //     "sparePartName": "sparePartName",
-                    //     "isSparePart": "isSparePart",
-                    //     "unit": "unit",
-                    //     "department": "department",
-                    //     "responsibleEngineer": "responsibleEngineer",
-                    //     "supplier": "supplier",
-                    //     "code": "code",
-                    //     "purchasingEngineer": "purchasingEngineer",
-                    //     "remark": "remark",
-                    //     "partClass": "partClass",
-                    //     "workshop1": "workshop1",
-                    //     "workshop2": "workshop2",
-                    // },
-                ],
-                columns: createColumnVue()
-                //     [
-                //     {width: 60, titleAlign: 'center',columnAlign:'center',type: 'selection'},
-                //     {field: 'name', title:'姓名', width: 100, titleAlign: 'center',columnAlign:'center',isResize:true},
-                //     {field: 'tel', title: '手机号码', width: 260, titleAlign: 'center',columnAlign:'center',isResize:true},
-                //     {field: 'hobby', title: '爱好', width: 330, titleAlign: 'center',columnAlign:'center',isResize:true},
-                //     {field: 'address', title: '地址', width:330,titleAlign: 'center',columnAlign:'left',isResize:true}
-                // ]
-            }
-        },
-        methods: {
-            //
-            selectALL(selection) {
-                console.log('select-aLL', selection);
-            },
-
-            selectChange(selection, rowData) {
-                console.log('select-change', selection, rowData);
-            },
-
-            selectGroupChange(selection) {
-                console.log('select-group-change', selection);
-            },
-            pageChange(pageIndex) {
-
-                this.pageIndex = pageIndex;
-                this.getTableData();
-                console.log(pageIndex)
-            },
-            pageSizeChange(pageSize) {
-                this.pageIndex = 1;
-                this.pageSize = pageSize;
-                this.getTableData();
-            },
-            getTableData() {
-                console.log('getTableData');
-            },
-            loadServerData() {
-                axios.get(url, {
-                    params: {
-                        projectId: projectId
-                    }
-                })
-                    .then(function (response) {
-                        console.log(response.data);
-                        console.log(vm.$data.tableData)
-                        console.log(vm.$data.total)
-                        vm.$data.tableData = response.data.result;
-                        vm.$data.total = response.data.totalCount;
-                        console.log(vm.$data.tableData)
-                        console.log(vm.$data.total)
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            }
-        },
-        mounted() {
-            this.loadServerData();
-        },
-    })
-}
-
 /**
  * 页面初始化后自动生成table
  */
@@ -1005,5 +578,8 @@ $(document).ready((function () {
     projectId = getProjectUid();
     $table = $("#sparePartTable");
     initTable();
-    initVueTable();
 }));
+
+function getSelectedRows() {
+    return selectedRows;
+}

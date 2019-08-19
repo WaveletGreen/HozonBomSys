@@ -7,7 +7,7 @@
 
 package cn.net.connor.hozon.dao.dao;
 
-import cn.net.connor.hozon.dao.MyBatisBaseDao;
+import cn.net.connor.hozon.dao.basic.MyBatisBaseDao;
 import cn.net.connor.hozon.dao.pojo.Test;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

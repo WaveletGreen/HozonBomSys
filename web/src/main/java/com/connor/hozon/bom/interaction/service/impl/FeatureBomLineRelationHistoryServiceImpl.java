@@ -7,6 +7,7 @@
 
 package com.connor.hozon.bom.interaction.service.impl;
 
+import cn.net.connor.hozon.common.setting.CommonSetting;
 import cn.net.connor.hozon.dao.dao.interaction.FeatureBomLineRelationHistoryDao;
 import cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory;
 import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomLineBean;
@@ -47,7 +48,7 @@ public class FeatureBomLineRelationHistoryServiceImpl implements FeatureBomLineR
     @Transactional
     @Override
     public void insertList(List<FeatureBomLineRelationHistory> list) {
-        int max = 1000;
+        int max = CommonSetting.SQL_IN_PARAM_LIMIT;
         int total = list.size();
         if (total <= max) {
             featureBomLineRelationHistoryDao.insertList(list);
@@ -59,7 +60,7 @@ public class FeatureBomLineRelationHistoryServiceImpl implements FeatureBomLineR
                 index = i + 1;//下一个节点
                 currentIndex = index * max;//终末位置
                 currentIndex = currentIndex > total ? total : currentIndex;//如果大于最大长度，则取最大长度
-                list.subList(i * max, currentIndex);
+                featureBomLineRelationHistoryDao.insertList(list.subList(i * max, currentIndex));
             }
         }
     }

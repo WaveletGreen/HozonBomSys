@@ -8,6 +8,10 @@
 package com.connor.hozon.bom.service.sparePart;
 
 import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
+import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
+import com.alibaba.fastjson.JSONObject;
+
+import java.util.List;
 
 /**
  * @Author: Fancyears Milos Malvis
@@ -15,5 +19,23 @@ import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
  * @Modified By:
  */
 public interface SparePartsBomService {
+    /**
+     * 分页查询
+     * @param query
+     * @return
+     */
     SparePartBomQueryResponse selectPageByProjectId(SparePartOfProjectQuery query);
+
+    /**
+     * 保存单条备件数据
+     * @param data
+     * @return
+     */
+    JSONObject saveSparePart(SparePartPostDTO data);
+
+    JSONObject addSparePartChild(SparePartPostDTO data);
+
+    JSONObject deleteList(List<SparePartPostDTO> data);
+
+    JSONObject updateSparePart(SparePartPostDTO data);
 }

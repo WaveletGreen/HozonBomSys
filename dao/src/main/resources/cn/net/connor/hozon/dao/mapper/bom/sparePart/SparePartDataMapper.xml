@@ -25,7 +25,7 @@
         <result column="PART_CLASS" jdbcType="VARCHAR" property="partClass"/>
         <result column="WORKSHOP1" jdbcType="VARCHAR" property="workshop1"/>
         <result column="WORKSHOP2" jdbcType="VARCHAR" property="workshop2"/>
-        <result column="LEVEL" jdbcType="VARCHAR" property="level"/>
+        <result column="PART_LEVEL" jdbcType="VARCHAR" property="level"/>
         <result column="MAJOR" jdbcType="VARCHAR" property="major"/>
         <result column="HIERARCHY" jdbcType="VARCHAR" property="hierarchy"/>
         <result column="ADS" jdbcType="VARCHAR" property="ads"/>
@@ -39,7 +39,7 @@
     <sql id="Base_Column_List">
     ID, PRODUCTIVE_PART_CODE, PRODUCTIVE_PART_NAME, SPARE_PART_CODE, SPARE_PART_NAME, 
     IS_SPARE_PART, UNIT, DEPARTMENT, RESPONSIBLE_ENGINEER, SUPPLIER, CODE, PURCHASING_ENGINEER, 
-    REMARK, PART_CLASS, WORKSHOP1, WORKSHOP2, LEVEL, MAJOR, HIERARCHY, ADS, REL_EBOM_LINE_ID,
+    REMARK, PART_CLASS, WORKSHOP1, WORKSHOP2, PART_LEVEL, MAJOR, HIERARCHY, ADS, REL_EBOM_LINE_ID,
     RESERVED1, RESERVED2, RESERVED3, RESERVED4, RESERVED5
   </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -55,8 +55,20 @@
         from
         SPARE_PART_DATA t
         LEFT JOIN SPARE_PART_OF_PROJECT tx ON t.ID = tx.SPARE_PART_ID
-        WHERE
-        tx.PROJECT_ID = #{projectId}
+        <where>
+            tx.PROJECT_ID = #{projectId}
+            <if test="hierarchy!=null and hierarchy!=''">
+                and HIERARCHY=#{hierarchy}
+            </if>
+            <if test="productivePartCode!=null and productivePartCode!=''">
+                and PRODUCTIVE_PART_CODE=#{productivePartCode}
+            </if>
+            <if test="sparePartCode!=null and sparePartCode!=''">
+                and SPARE_PART_CODE=#{sparePartCode}
+            </if>
+        </where>
+
+
     </select>
     <select id="countByQuery" parameterType="cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery"
             resultType="java.lang.Integer">
@@ -71,26 +83,38 @@
     delete from SPARE_PART_DATA
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
+    <delete id="deleteList" parameterType="java.util.List">
+        delete from SPARE_PART_DATA
+        where ID in
+        <foreach collection="list" item="item" index="index"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=DECIMAL}
+        </foreach>
+    </delete>
     <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData">
-    insert into SPARE_PART_DATA (ID, PRODUCTIVE_PART_CODE, PRODUCTIVE_PART_NAME, 
-      SPARE_PART_CODE, SPARE_PART_NAME, IS_SPARE_PART, 
-      UNIT, DEPARTMENT, RESPONSIBLE_ENGINEER, 
-      SUPPLIER, CODE, PURCHASING_ENGINEER, 
-      REMARK, PART_CLASS, WORKSHOP1,
-      WORKSHOP2, LEVEL, MAJOR, 
-      HIERARCHY, ADS, REL_EBOM_LINE_ID, 
-      RESERVED1, RESERVED2, RESERVED3, 
-      RESERVED4, RESERVED5)
-    values (#{id,jdbcType=DECIMAL}, #{productivePartCode,jdbcType=VARCHAR}, #{productivePartName,jdbcType=VARCHAR}, 
-      #{sparePartCode,jdbcType=VARCHAR}, #{sparePartName,jdbcType=VARCHAR}, #{isSparePart,jdbcType=DECIMAL}, 
-      #{unit,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{responsibleEngineer,jdbcType=VARCHAR}, 
-      #{supplier,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{purchasingEngineer,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{partClass,jdbcType=VARCHAR}, #{workshop1,jdbcType=VARCHAR},
-      #{workshop2,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR}, 
-      #{hierarchy,jdbcType=VARCHAR}, #{ads,jdbcType=VARCHAR}, #{relEbomLineId,jdbcType=VARCHAR}, 
-      #{reserved1,jdbcType=VARCHAR}, #{reserved2,jdbcType=VARCHAR}, #{reserved3,jdbcType=VARCHAR}, 
-      #{reserved4,jdbcType=VARCHAR}, #{reserved5,jdbcType=VARCHAR})
-  </insert>
+        <selectKey order="BEFORE"
+                   keyColumn="ID" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_SPARE_PART_ID.Nextval from dual
+        </selectKey>
+        insert into SPARE_PART_DATA (ID, PRODUCTIVE_PART_CODE, PRODUCTIVE_PART_NAME,
+        SPARE_PART_CODE, SPARE_PART_NAME, IS_SPARE_PART,
+        UNIT, DEPARTMENT, RESPONSIBLE_ENGINEER,
+        SUPPLIER, CODE, PURCHASING_ENGINEER,
+        REMARK, PART_CLASS, WORKSHOP1,
+        WORKSHOP2, PART_LEVEL, MAJOR,
+        HIERARCHY, ADS, REL_EBOM_LINE_ID,
+        RESERVED1, RESERVED2, RESERVED3,
+        RESERVED4, RESERVED5)
+        values (#{id,jdbcType=DECIMAL}, #{productivePartCode,jdbcType=VARCHAR}, #{productivePartName,jdbcType=VARCHAR},
+        #{sparePartCode,jdbcType=VARCHAR}, #{sparePartName,jdbcType=VARCHAR}, #{isSparePart,jdbcType=DECIMAL},
+        #{unit,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{responsibleEngineer,jdbcType=VARCHAR},
+        #{supplier,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{purchasingEngineer,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR}, #{partClass,jdbcType=VARCHAR}, #{workshop1,jdbcType=VARCHAR},
+        #{workshop2,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR},
+        #{hierarchy,jdbcType=VARCHAR}, #{ads,jdbcType=VARCHAR}, #{relEbomLineId,jdbcType=VARCHAR},
+        #{reserved1,jdbcType=VARCHAR}, #{reserved2,jdbcType=VARCHAR}, #{reserved3,jdbcType=VARCHAR},
+        #{reserved4,jdbcType=VARCHAR}, #{reserved5,jdbcType=VARCHAR})
+    </insert>
     <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData">
         insert into SPARE_PART_DATA
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -143,7 +167,7 @@
                 WORKSHOP2,
             </if>
             <if test="level != null">
-                LEVEL,
+                PART_LEVEL,
             </if>
             <if test="major != null">
                 MAJOR,
@@ -303,7 +327,7 @@
                 WORKSHOP2 = #{workshop2,jdbcType=VARCHAR},
             </if>
             <if test="level != null">
-                LEVEL = #{level,jdbcType=VARCHAR},
+                PART_LEVEL= #{level,jdbcType=VARCHAR},
             </if>
             <if test="major != null">
                 MAJOR = #{major,jdbcType=VARCHAR},
@@ -352,7 +376,7 @@
       PART_CLASS = #{partClass,jdbcType=VARCHAR},
       WORKSHOP1 = #{workshop1,jdbcType=VARCHAR},
       WORKSHOP2 = #{workshop2,jdbcType=VARCHAR},
-      LEVEL = #{level,jdbcType=VARCHAR},
+      PART_LEVEL = #{level,jdbcType=VARCHAR},
       MAJOR = #{major,jdbcType=VARCHAR},
       HIERARCHY = #{hierarchy,jdbcType=VARCHAR},
       ADS = #{ads,jdbcType=VARCHAR},
