@@ -334,6 +334,56 @@ public class HzEbomController extends BaseController {
         return "bomManage/ebom/ebomManage/quickAddEbomManage";
 
     }
+
+
+    /**
+     * 跳转派生EBOM界面
+     * @param projectId 项目ID
+     * @param puid 已选零件号puid
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "deriveEbom",method = RequestMethod.GET)
+    public String deriveEbom(String projectId,String puid,Model model){
+        if(projectId == null || puid == null){
+            return "";
+        }
+        DeriveHzEbomReqDTO recordRespDTO=new DeriveHzEbomReqDTO();
+        recordRespDTO.setProjectId(projectId);
+        recordRespDTO.setPuid(puid);
+        model.addAttribute("data",recordRespDTO);
+        return "bomManage/ebom/ebomManage/deriveEbomManage";
+    }
+
+    /**
+     * 派生ebom信息
+     * @param reqDTO
+     * @param
+     * @param response
+     */
+    @RequestMapping(value = "derive/ebom",method = RequestMethod.POST)
+    public void deriveEbomToDB(@RequestBody DeriveHzEbomReqDTO reqDTO, HttpServletResponse response){
+
+        WriteResultRespDTO respDTO= hzEBOMWriteService.deriveHzEbomRecord(reqDTO);
+
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+
+    /**
+     * 快速添加ebom信息
+     * @param quickReqDTO
+     * @param
+     * @param response
+     */
+    @RequestMapping(value = "add/quickAddEbom",method = RequestMethod.POST)
+    public void quickAddEbomToDB(@RequestBody QuickAddHzEbomReqDTO quickReqDTO, HttpServletResponse response){
+
+        WriteResultRespDTO respDTO = hzEBOMWriteService.quickAddHzEbomRecord(quickReqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
+
     /**
      * 添加ebom信息
      * @param reqDTO
@@ -345,7 +395,6 @@ public class HzEbomController extends BaseController {
         WriteResultRespDTO respDTO = hzEBOMWriteService.addHzEbomRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
-
 
     /**
      * 更新ebom信息

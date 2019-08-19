@@ -114,6 +114,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/dictionaryLibrary").setViewName("/resourcesLibrary/dictionaryLibrary/dictionaryLibrary");
         //合众VPPS库
         registry.addViewController("/VPPSLibrary").setViewName("/resourcesLibrary/VPPSLibrary/VPPSLibrary");
+        //法规件库
+        registry.addViewController("/legislativeBikeLibrary").setViewName("/resourcesLibrary/legislativeLibrary/legislativeBikeLibrary/legislativeBikeLibrary");
         //单车BOM
         registry.addViewController("/bikeBom").setViewName("/bikeBom/bikeBom");
         //备忘录

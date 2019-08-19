@@ -81,6 +81,21 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         return super.findForList("HzEbomRecordDAOImpl_getHzBomLineParent",map);
     }
 
+
+    /**
+     * 找到一条bom的所有同父的子bom
+     * @param puid
+     * @param projectId
+     * @return
+     */
+    public List<HzEPLManageRecord> getSameHzBomLineByOne(String puid,String projectId){
+        Map<String,Object> map = new HashMap<>();
+        map.put("projectId",projectId);
+        map.put("puid",puid);
+        return super.findForList("HzEbomRecordDAOImpl_getSameHzBomLineByOne",map);
+    }
+
+
     /**
      * 找出一条bomLine的全部子bom
      * @param query

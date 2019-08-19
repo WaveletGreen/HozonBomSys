@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.domain.model;
 import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.DeriveHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzPbomLineRespDTO;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
@@ -56,6 +57,30 @@ public class HzPbomRecordFactory {
     }
 
 
+    /**
+     * ebom新增数据 同步至pbom
+     * @param record EPL 信息
+     * @param ebomRecord  ebom信息
+     * @return HzPbomLineRecord
+     */
+    public static HzPbomLineRecord editEbomToPbomRecord2(HzEPLRecord record, HzEPLManageRecord ebomRecord){
+        HzPbomLineRecord hzPbomLineRecord = new HzPbomLineRecord();
+        User user = UserInfo.getUser();
+        hzPbomLineRecord.setUpdateName(user.getUsername());
+        hzPbomLineRecord.setCreateName(user.getUsername());
+        hzPbomLineRecord.setpBomLinePartEnName(record.getPartEnName());
+        hzPbomLineRecord.setpBomOfWhichDept(record.getPartOfWhichDept());
+        hzPbomLineRecord.setpBomLinePartResource(record.getPartResource());
+        hzPbomLineRecord.setpBomLinePartName(record.getPartName());
+        hzPbomLineRecord.setpBomLinePartClass(record.getPartClass());
+        hzPbomLineRecord.setLineId(record.getPartId());
+        hzPbomLineRecord.setPuid(UUID.randomUUID().toString());
+        hzPbomLineRecord.setIsNewPart(0);
+        hzPbomLineRecord.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
+        hzPbomLineRecord.setColorPart(ebomRecord.getColorPart());
+        hzPbomLineRecord.setStatus(2);
+        return hzPbomLineRecord;
+    }
 
     /**
      * ebom新增数据 同步至pbom
