@@ -52,25 +52,21 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addViewController("/bom-all-cfg2").setViewName("/bom/bom-all-cfg2");
         //颜色库
         registry.addViewController("/colorSet").setViewName("/cfg/color/colorSet");
+
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
         //项目，应该作为首页
         registry.addViewController("/project").setViewName("project/project");
         registry.addViewController("/project2").setViewName("project/project2");
         //特性表
-        //这个特性 页面不在需要
-        //        registry.addViewController("/feature").setViewName("/feature/feature/feature");
         //原来的feature2.html页面修改名字为feature，但是数据库里的url映射还没有修改回feature，还是保留feature2
         registry.addViewController("/feature2").setViewName("/cfg/feature/feature");
 
-
         //相关性表
-        //不在需要
-//        registry.addViewController("/relevance").setViewName("/feature/relevance/relevance");
         //原来的relevance2.html页面修改名字为relevance，但是数据库里的url映射还没有修改回relevance，还是保留relevance2
         registry.addViewController("/relevance2").setViewName("/cfg/relevance/relevance");
         /**物料配置表*/
-        registry.addViewController("/materielFeature").setViewName("/cfg/materielFeature/materielFeature");
+        registry.addViewController("/materielFeature").setViewName("cfg/materielFeature/materielFeature");
         //配色方案
         registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
         //EPL页面

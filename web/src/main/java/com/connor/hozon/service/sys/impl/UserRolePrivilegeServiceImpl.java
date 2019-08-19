@@ -5,7 +5,7 @@
  *
  */
 
-package com.connor.hozon.service.sys.impl;
+package com.connor.hozon.bom.service.sys.impl;
 
 import cn.net.connor.hozon.common.util.ListUtils;
 import cn.net.connor.hozon.dao.dao.sys.UserRoleDao;
