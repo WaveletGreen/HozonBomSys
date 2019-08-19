@@ -53,10 +53,10 @@ public interface HzTaskService {
     /**
      * 根据表单的ID、用户ID、具体的表单类型和变更主键，查找一组当前用户的任务
      *
-     * @param taskFormType   表单类型,@see{com.connor.hozon.bom.bomSystem.option.TaskOptions}
+     * @param taskFormType   表单类型,@see{cn.net.connor.hozon.services.common.option.TaskOptions}
      * @param taskTargetId   目标表单ID，数据库主键，VWO/EWO/MWO主键
      * @param taskUserId     用户ID
-     * @param taskTargetType 表单类型，@see {com.connor.hozon.bom.bomSystem.option.TaskOptions}
+     * @param taskTargetType 表单类型，@see {cn.net.connor.hozon.services.common.option.TaskOptions}
      * @param status         任务状态
      * @return
      */

@@ -22,8 +22,8 @@ import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMater
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
 import cn.net.connor.hozon.services.response.integration.IntegrateMsgResponseDTO;
 import cn.net.connor.hozon.common.util.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
+import com.connor.hozon.bom.service.configuration.feature.impl.FeatureServiceImpl;
+import com.connor.hozon.bom.service.configuration.feature.impl.FeatureValueServiceImpl;
 import integration.base.classify.ZPPTCO003;
 import integration.logic.ConfigurableMaterialAllocation;
 import integration.option.ActionFlagOption;
@@ -50,9 +50,9 @@ public class SynConfigurableMaterialServiceImpl implements SynConfigurableMateri
     @Autowired
     private HzSuperMaterielServiceImpl hzSuperMaterielServiceImpl;
     @Autowired
-    private HzCfg0OptionFamilyService hzCfg0OptionFamilyService;
+    private FeatureServiceImpl hzCfg0OptionFamilyService;
     @Autowired
-    private HzFeatureServiceImpl hzFeatureServiceImpl;
+    private FeatureValueServiceImpl hzFeatureServiceImpl;
     @Autowired
     TransClassifyService transClassifyService;
     @Autowired
@@ -159,8 +159,8 @@ public class SynConfigurableMaterialServiceImpl implements SynConfigurableMateri
                 hzCfg0ToModelRecord.setpOfCfg0MainRecord(modeBasiceDetails[i]);
                 coach.put(packNumOfFeature.get(puids[i]), hzCfg0ToModelRecord);
             }
-            List<String> column = hzCfg0OptionFamilyService.doGetColumnDef(projectPuid, "<br/>");
-            List<HzMaterielFeatureBean> hzMaterielFeatureBeans = hzFeatureServiceImpl.doSelectMaterielFeatureByProjectPuid(projectPuid);
+            List<String> column = hzCfg0OptionFamilyService.getColumnDef(projectPuid, "<br/>");
+            List<HzMaterielFeatureBean> hzMaterielFeatureBeans = hzFeatureServiceImpl.selectMaterielFeatureByProjectPuid(projectPuid);
 
 
             Map<String, HzMaterielFeatureBean> sortedBean = new HashMap<>();

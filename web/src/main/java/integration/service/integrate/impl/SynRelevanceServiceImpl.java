@@ -13,7 +13,7 @@ import cn.net.connor.hozon.dao.pojo.configuration.relevance.HzRelevanceBasic;
 import cn.net.connor.hozon.services.response.configuration.relevance.HzRelevanceResponseDTO;
 import cn.net.connor.hozon.services.response.integration.IntegrateMsgResponseDTO;
 import cn.net.connor.hozon.common.util.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
+import com.connor.hozon.bom.service.configuration.feature.impl.FeatureValueServiceImpl;
 import integration.base.relevance.ZPPTCO004;
 import integration.logic.Correlate;
 import integration.option.ActionFlagOption;
@@ -40,7 +40,7 @@ public class SynRelevanceServiceImpl implements SynRelevanceService {
     TransOptionsService transOptionsService;
 
     @Autowired
-    HzFeatureServiceImpl hzFeatureServiceImpl;
+    FeatureValueServiceImpl hzFeatureServiceImpl;
     /**
      * 模型族dao层
      */
@@ -227,7 +227,7 @@ public class SynRelevanceServiceImpl implements SynRelevanceService {
 //        _map.put("isRelevanceSent", 1);
 //        _map.put("list", needToUpdateStatus);
 //        if (needToUpdateStatus != null && needToUpdateStatus.size() > 0)
-//            hzFeatureServiceImpl.doUpdateByBatch(_map);
+//            hzFeatureServiceImpl.updateByBatch(_map);
 //
 //        result.put("status", true);
 //        result.put("success", success);

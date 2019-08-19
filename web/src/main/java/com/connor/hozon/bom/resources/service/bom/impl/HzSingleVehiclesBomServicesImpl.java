@@ -11,7 +11,7 @@ import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
-import com.connor.hozon.bom.interaction.service.FeatureBomLineRelationHistoryService;
+import com.connor.hozon.bom.service.interaction.FeatureBomLineRelationHistoryService;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesBomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;

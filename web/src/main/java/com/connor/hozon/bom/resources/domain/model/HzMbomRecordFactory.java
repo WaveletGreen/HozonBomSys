@@ -4,7 +4,7 @@ import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.util.DateUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.exception.HzBomException;
+import com.connor.hozon.bom.exception.HzBomException;
 import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;

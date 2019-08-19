@@ -10,7 +10,7 @@ package integration.service.integrate.impl;
 import com.alibaba.fastjson.JSONObject;
 import cn.net.connor.hozon.services.response.integration.IntegrateMsgResponseDTO;
 import cn.net.connor.hozon.common.util.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.iservice.cfg.HzMaterielCfgService;
+import com.connor.hozon.bom.service.configuration.derivative.HzMaterielCfgService;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import integration.base.productAttributes.ZPPTCO007;
 import integration.logic.VehicleBom;

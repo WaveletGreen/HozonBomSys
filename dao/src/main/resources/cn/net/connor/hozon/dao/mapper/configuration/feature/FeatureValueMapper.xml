@@ -683,7 +683,7 @@
         P_CFG0_MAIN_ITEM_PUID = #{pCfg0MainItemPuid,jdbcType=VARCHAR}
     </select>
 
-    <select id="doSelectByDescAndProjectId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue" resultMap="BaseResultMap">
+    <select id="selectByDescAndProjectId" parameterType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from

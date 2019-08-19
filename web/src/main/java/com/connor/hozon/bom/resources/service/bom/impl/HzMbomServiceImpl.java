@@ -17,9 +17,9 @@ import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import cn.net.connor.hozon.common.util.ListUtils;
-import com.connor.hozon.bom.bomSystem.service.derivative.HzCfg0ModelFeatureServiceImpl;
+import com.connor.hozon.bom.service.configuration.derivative.impl.HzConfigModelFeatureServiceImpl;
 import cn.net.connor.hozon.services.service.sys.UserInfo;
-import com.connor.hozon.bom.interaction.service.HzConfigBomColorService;
+import com.connor.hozon.bom.service.interaction.HzConfigBomColorService;
 import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLouRespDTO;
@@ -46,7 +46,7 @@ import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
-import com.connor.hozon.bom.sys.exception.HzBomException;
+import com.connor.hozon.bom.exception.HzBomException;
 import com.google.common.collect.Lists;
 import integration.service.integrate.impl.SynBomServiceImpl;
 import org.apache.commons.lang.StringUtils;
@@ -88,7 +88,7 @@ public class HzMbomServiceImpl implements HzMbomService {
     private HzPbomRecordDAO hzPbomRecordDAO;
 
     @Autowired
-    private HzCfg0ModelFeatureServiceImpl hzCfg0ModelFeatureService;
+    private HzConfigModelFeatureServiceImpl hzCfg0ModelFeatureService;
 
     @Autowired
     private HzChangeDataRecordDAO hzChangeDataRecordDAO;

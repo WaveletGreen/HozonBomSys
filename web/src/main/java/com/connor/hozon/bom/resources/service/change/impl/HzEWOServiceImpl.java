@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
 import cn.net.connor.hozon.common.util.ListUtils;
-import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
+import com.connor.hozon.bom.configuration.dao.bom.impl.HzBomLineRecordDaoImpl;
 import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.InitiatingProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;

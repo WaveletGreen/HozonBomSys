@@ -48,32 +48,32 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         //bom的树型结构
         registry.addViewController("/bom-treegrid").setViewName("/stage/bom-treegrid");
         //一级配置表
-        registry.addViewController("/bom-all-cfg").setViewName("/bom/bom-all-cfg");
+        registry.addViewController("/bom-all-feature").setViewName("/bom/bom-all-feature");
         //一级配置表2
         registry.addViewController("/bom-all-cfg2").setViewName("/bom/bom-all-cfg2");
         //颜色库
-        registry.addViewController("/colorSet").setViewName("/cfg/color/colorSet");
-        //registry.addViewController("/colorUpdate").setViewName("/cfg/color/colorUpdate");
+        registry.addViewController("/colorSet").setViewName("/feature/color/colorSet");
+        //registry.addViewController("/colorUpdate").setViewName("/feature/color/colorUpdate");
         //配色方案
-        registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
+        registry.addViewController("/modelColorCfg").setViewName("/feature/modelColorCfg/modelColorCfg");
         //项目，应该作为首页
         registry.addViewController("/project").setViewName("project/project");
         registry.addViewController("/project2").setViewName("project/project2");
         //特性表
         //这个特性 页面不在需要
-        //        registry.addViewController("/feature").setViewName("/cfg/feature/feature");
+        //        registry.addViewController("/feature").setViewName("/feature/feature/feature");
         //原来的feature2.html页面修改名字为feature，但是数据库里的url映射还没有修改回feature，还是保留feature2
-        registry.addViewController("/feature2").setViewName("/cfg/feature/feature");
+        registry.addViewController("/feature2").setViewName("/feature/feature/feature");
 
         //相关性表
         //不在需要
-//        registry.addViewController("/relevance").setViewName("/cfg/relevance/relevance");
+//        registry.addViewController("/relevance").setViewName("/feature/relevance/relevance");
         //原来的relevance2.html页面修改名字为relevance，但是数据库里的url映射还没有修改回relevance，还是保留relevance2
-        registry.addViewController("/relevance2").setViewName("/cfg/relevance/relevance");
+        registry.addViewController("/relevance2").setViewName("/feature/relevance/relevance");
         /**物料配置表*/
-        registry.addViewController("/materielFeature").setViewName("cfg/materielFeature/materielFeature");
+        registry.addViewController("/materielFeature").setViewName("feature/materielFeature/materielFeature");
         //配色方案
-        registry.addViewController("/modelColorCfg").setViewName("/cfg/modelColorCfg/modelColorCfg");
+        registry.addViewController("/modelColorCfg").setViewName("/feature/modelColorCfg/modelColorCfg");
         //EPL页面
         registry.addViewController("/eplManage").setViewName("/bomManage/epl/eplManage");
         //EBOM页面

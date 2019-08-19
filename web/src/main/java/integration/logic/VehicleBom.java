@@ -1,6 +1,6 @@
 package integration.logic;
 
-import com.connor.hozon.bom.bomSystem.iservice.cfg.HzMaterielCfgService;
+import com.connor.hozon.bom.service.configuration.derivative.HzMaterielCfgService;
 import integration.base.productAttributes.ZPPTCI007;
 import integration.option.ActionFlagOption;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzMaterielCfgBean;

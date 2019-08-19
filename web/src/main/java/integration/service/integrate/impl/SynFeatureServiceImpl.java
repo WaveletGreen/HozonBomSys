@@ -10,7 +10,7 @@ package integration.service.integrate.impl;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.services.response.integration.IntegrateMsgResponseDTO;
 import cn.net.connor.hozon.common.util.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
+import com.connor.hozon.bom.service.configuration.feature.impl.FeatureValueServiceImpl;
 import integration.base.feature.ZPPTCO002;
 import integration.logic.Features;
 import integration.option.ActionFlagOption;
@@ -35,7 +35,7 @@ public class SynFeatureServiceImpl implements SynFeatureService {
     @Autowired
     TransCfgService transCfgService;
     @Autowired
-    HzFeatureServiceImpl hzFeatureServiceImpl;
+    FeatureValueServiceImpl hzFeatureServiceImpl;
     /**
      * 日志记录
      */
@@ -136,7 +136,7 @@ public class SynFeatureServiceImpl implements SynFeatureService {
         String packnum = UUIDHelper.generateUpperUid();
         records.forEach(_r -> {
             HzFeatureValue record;
-            if ((record = hzFeatureServiceImpl.doSelectOneByPuid(_r.getPuid())) != null
+            if ((record = hzFeatureServiceImpl.selectOneByPuid(_r.getPuid())) != null
 //                    || (record = hzFeatureServiceImpl.doSelectOneAddedCfgByPuid(_r.getId())) != null
                     ) {
                 toSend.add(record);
@@ -239,7 +239,7 @@ public class SynFeatureServiceImpl implements SynFeatureService {
                 _map.put("list", needToUpdateStatus);
                 //像这里就执行更新了，把某个字段更新,我记得字段都定义成了is_sent
                 if (needToUpdateStatus.size() > 0) {
-                    hzFeatureServiceImpl.doUpdateByBatch(_map);
+                    hzFeatureServiceImpl.updateByBatch(_map);
                 }
             }
         } catch (Exception e) {
