@@ -7,7 +7,7 @@
 
 package cn.net.connor.hozon.dao.dao.bom.sparePart;
 
-import cn.net.connor.hozon.dao.MyBatisBaseDao;
+import cn.net.connor.hozon.dao.basic.MyBatisBaseDao;
 import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartOfProject;
 import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
 import org.springframework.stereotype.Repository;

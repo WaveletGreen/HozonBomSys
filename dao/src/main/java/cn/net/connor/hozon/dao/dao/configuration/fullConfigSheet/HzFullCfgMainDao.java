@@ -7,7 +7,7 @@
 
 package cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet;
 
-import cn.net.connor.hozon.dao.MyBatisBaseDao;
+import cn.net.connor.hozon.dao.basic.MyBatisBaseDao;
 import cn.net.connor.hozon.dao.pojo.configuration.fullConfigSheet.HzFullCfgMain;
 import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgMainQuery;
 import org.springframework.stereotype.Repository;
