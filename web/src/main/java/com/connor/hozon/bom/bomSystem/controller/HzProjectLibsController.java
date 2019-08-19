@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import cn.net.connor.hozon.common.util.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringUtils;
 import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import cn.net.connor.hozon.dao.dao.main.HzMainConfigDao;
 import cn.net.connor.hozon.dao.pojo.depository.project.HzBrandRecord;
@@ -21,10 +21,10 @@ import cn.net.connor.hozon.services.service.depository.project.impl.HzBrandServi
 import cn.net.connor.hozon.services.service.depository.project.impl.HzPlatformServiceImpl;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzProjectLibsServiceImpl;
 import cn.net.connor.hozon.services.service.main.ProjectHelperService;
-import com.connor.hozon.bom.bomSystem.dto.HzProjectBean;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.response.main.project.HzProjectTreeResponseDTO;
+import cn.net.connor.hozon.common.util.UUIDHelper;
+import cn.net.connor.hozon.common.constant.SystemStaticConst;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -124,7 +124,7 @@ public class HzProjectLibsController {
     @ResponseBody
     public Map<String, Object> loadProjectTree() {
         Map<String, Object> result = new HashMap<>();
-        List<HzProjectBean> beans = new ArrayList<>();
+        List<HzProjectTreeResponseDTO> beans = new ArrayList<>();
 
         List<HzBrandRecord> brands = hzBrandServiceImpl.doGetAllBrand();
         List<HzPlatformRecord> platforms = hzPlatformServiceImpl.doGetAllPlatform();
@@ -132,7 +132,7 @@ public class HzProjectLibsController {
         List<HzProjectLibs> projects = hzProjectLibsServiceImpl.doLoadAllProjectLibs();
         //品牌
         brands.forEach(brand -> {
-            HzProjectBean bean = new HzProjectBean();
+            HzProjectTreeResponseDTO bean = new HzProjectTreeResponseDTO();
             bean.setpPuid("#");
             bean.setPuid(brand.getPuid());
             bean.setName(brand.getpBrandName());
@@ -140,7 +140,7 @@ public class HzProjectLibsController {
         });
         //平台
         platforms.forEach(platform -> {
-            HzProjectBean bean = new HzProjectBean();
+            HzProjectTreeResponseDTO bean = new HzProjectTreeResponseDTO();
             bean.setpPuid(platform.getpPertainToBrandPuid());
             bean.setPuid(platform.getPuid());
             bean.setName(platform.getpPlatformName());
@@ -148,7 +148,7 @@ public class HzProjectLibsController {
         });
         //车型
         vehicles.forEach(vehicle -> {
-            HzProjectBean bean = new HzProjectBean();
+            HzProjectTreeResponseDTO bean = new HzProjectTreeResponseDTO();
             bean.setpPuid(vehicle.getpVehiclePertainToPlatform());
             bean.setPuid(vehicle.getPuid());
             bean.setName(vehicle.getpVehicleName());
@@ -157,7 +157,7 @@ public class HzProjectLibsController {
 
         //项目
         projects.forEach(project -> {
-            HzProjectBean bean = new HzProjectBean();
+            HzProjectTreeResponseDTO bean = new HzProjectTreeResponseDTO();
             bean.setpPuid(project.getpProjectPertainToVehicle());
             bean.setPuid(project.getPuid());
             bean.setName(project.getpProjectName());
@@ -368,7 +368,7 @@ public class HzProjectLibsController {
             project.setpProjectOwningUser(user.getUsername());
             project.setpProjectLastModifier(user.getUsername());
             //设置失效年份为9999年12月31日23时59分59秒
-            project.setpProjectDiscontinuationDate(DateStringHelper.forever());
+            project.setpProjectDiscontinuationDate(DateStringUtils.forever());
             if (hzProjectLibsServiceImpl.doInsertOne(project)) {
 
                 int status1 = 0;

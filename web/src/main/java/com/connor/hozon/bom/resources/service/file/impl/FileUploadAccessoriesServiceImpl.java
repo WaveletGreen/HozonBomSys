@@ -1,10 +1,10 @@
 package com.connor.hozon.bom.resources.service.file.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.resources.service.file.FileUploadAccessoriesService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -100,7 +100,7 @@ public class FileUploadAccessoriesServiceImpl implements FileUploadAccessoriesSe
 
                     libs.setpNote(ExcelUtil.getCell(sheet.getRow(rowNum), 7).getStringCellValue());
                     List<HzAccessoriesLibs> hzAccessoriesLibs = hzAccessoriesLibsDAO.queryAccessoriesByCode(materielId);
-                    if (ListUtil.isEmpty(hzAccessoriesLibs)){
+                    if (ListUtils.isEmpty(hzAccessoriesLibs)){
                         insertAccessoriesLibs.add(libs);
                     }else {
                         updateAccessoriesLibs.add(libs);
@@ -108,10 +108,10 @@ public class FileUploadAccessoriesServiceImpl implements FileUploadAccessoriesSe
                 }
 //            }
 
-            if(ListUtil.isNotEmpty(insertAccessoriesLibs)){
+            if(ListUtils.isNotEmpty(insertAccessoriesLibs)){
                 hzAccessoriesLibsDAO.importList(insertAccessoriesLibs);
             }
-            if(ListUtil.isNotEmpty(updateAccessoriesLibs)){
+            if(ListUtils.isNotEmpty(updateAccessoriesLibs)){
                 hzAccessoriesLibsDAO.updateList(updateAccessoriesLibs);
             }
             //把上传到服务器的文件删除

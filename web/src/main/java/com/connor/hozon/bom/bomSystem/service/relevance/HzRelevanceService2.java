@@ -22,7 +22,7 @@ import cn.net.connor.hozon.dao.query.configuration.relevance.HzRelevanceQueryRes
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;

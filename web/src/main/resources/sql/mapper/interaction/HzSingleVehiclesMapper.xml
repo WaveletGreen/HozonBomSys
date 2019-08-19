@@ -148,7 +148,7 @@
   </select>
 
     <!--查询器查询，可以加多个条件，甚至加分页查询都可以-->
-    <select id="selectListByInquirer" parameterType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer"
+    <select id="selectListByInquirer" parameterType="cn.net.connor.hozon.dao.query.interaction.HzSingleVehiclesQuery"
             resultMap="ExWithProjectBaseResult">
         select
         <include refid="Base_Column_List"/>
@@ -188,7 +188,7 @@
         </where>
     </select>
     <!--查询器查询，可以加多个条件，甚至加分页查询都可以-->
-    <select id="selectOrgByInquirer" parameterType="com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer"
+    <select id="selectOrgByInquirer" parameterType="cn.net.connor.hozon.dao.query.interaction.HzSingleVehiclesQuery"
             resultMap="ExWithProjectBaseResult">
         select
         t.p_feature_single_vehicle_code as svl_Material_Code,

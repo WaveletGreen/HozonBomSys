@@ -8,7 +8,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +101,7 @@ public class HzChangeController extends BaseController {
             return new JSONObject();
         }
         Page<HzChangeOrderRespDTO> page = hzChangeOrderService.getHzChangeOrderPage(query);
-        if(ListUtil.isEmpty(page.getResult())){
+        if(ListUtils.isEmpty(page.getResult())){
             return new JSONObject();
         }
         List<HzChangeOrderRespDTO> respDTOS = page.getResult();

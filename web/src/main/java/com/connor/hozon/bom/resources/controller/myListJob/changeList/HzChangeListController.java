@@ -1,11 +1,10 @@
 package com.connor.hozon.bom.resources.controller.myListJob.changeList;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeListRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeListByPageQuery;
-import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeListService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +32,7 @@ public class HzChangeListController {
 
         List<HzChangeListRespDTO> respDTOs = hzChangeListService.findChangeList(query);
 
-        if(ListUtil.isEmpty(respDTOs)){
+        if(ListUtils.isEmpty(respDTOs)){
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();

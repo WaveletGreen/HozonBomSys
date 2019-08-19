@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;
 import cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 /**
  * 映射物料主数据

@@ -2,7 +2,7 @@ package com.connor.hozon.bom.resources.controller.bom;
 
 import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
+import com.connor.hozon.bom.bomSystem.service.derivative.HzDerivativeService;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
@@ -44,7 +44,7 @@ public class HzMbomController extends BaseController {
     private HzMbomService hzMbomService;
 
     @Autowired
-    HzComposeMFService hzComposeMFService;
+    HzDerivativeService hzDerivativeService;
     @Autowired
     HzSingleVehiclesServices hzSingleVehiclesServices;
     @Autowired

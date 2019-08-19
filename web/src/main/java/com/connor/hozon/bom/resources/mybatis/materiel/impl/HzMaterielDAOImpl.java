@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.materiel.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.bom.resources.domain.query.HzMaterielByPageQuery;
@@ -7,7 +8,6 @@ import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
@@ -39,7 +39,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
 
     @Override
     public int deleteList(List<String> puids) {
-        if(ListUtil.isEmpty(puids)){
+        if(ListUtils.isEmpty(puids)){
             return 0;
         }
         return  super.update("HzMaterialDAOImpl_deleteList",puids);
@@ -51,7 +51,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
             Map<String,Object> map = new HashMap<>();
             map.put("tableName",tableName);
         try {
-            if (ListUtil.isNotEmpty(hzMaterielRecords)) {
+            if (ListUtils.isNotEmpty(hzMaterielRecords)) {
                 int size = hzMaterielRecords.size();
                 //分批更新数据 一次1000条
                 int i = 0;
@@ -208,7 +208,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
     @Override
     public int updateList(List<HzMaterielRecord> list) {
         try {
-            if (ListUtil.isNotEmpty(list)) {
+            if (ListUtils.isNotEmpty(list)) {
                 int size = list.size();
                 //分批更新数据 一次1000条
                 int i = 0;
@@ -247,7 +247,7 @@ public class HzMaterielDAOImpl extends BaseSQLUtil implements HzMaterielDAO {
 
     @Override
     public int updateMaterielList(List<HzMaterielRecord> records) {
-        if(ListUtil.isEmpty(records)){
+        if(ListUtils.isEmpty(records)){
             return 0;
         }
         int size = records.size();

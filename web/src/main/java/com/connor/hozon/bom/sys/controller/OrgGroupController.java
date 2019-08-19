@@ -1,18 +1,18 @@
 package com.connor.hozon.bom.sys.controller;
 
 
-import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
+import cn.net.connor.hozon.common.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
 import cn.net.connor.hozon.common.entity.Page;
-import com.connor.hozon.bom.common.base.service.GenericService;
+import cn.net.connor.hozon.services.service.sys.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
 
 import cn.net.connor.hozon.dao.pojo.sys.OrgGroup;
 import cn.net.connor.hozon.dao.query.sys.QueryOrgGroup;
 import cn.net.connor.hozon.dao.query.sys.QueryUser;
 import cn.net.connor.hozon.dao.pojo.sys.User;
-import com.connor.hozon.bom.sys.service.OrgGroupService;
-import com.connor.hozon.bom.sys.service.UserService;
+import cn.net.connor.hozon.services.service.sys.OrgGroupService;
+import cn.net.connor.hozon.services.service.sys.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

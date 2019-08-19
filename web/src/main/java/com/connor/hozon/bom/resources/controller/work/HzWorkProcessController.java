@@ -2,8 +2,8 @@ package com.connor.hozon.bom.resources.controller.work;
 
 import cn.net.connor.hozon.dao.pojo.change.change.HzChangeOrderRecord;
 import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
-import cn.net.connor.hozon.services.DTOMapper.WorkProcessDTO;
-import cn.net.connor.hozon.services.DTOMapper.WorkProcessDTOMapper;
+import cn.net.connor.hozon.services.request.bom.workProcess.WorkProcessDTO;
+import cn.net.connor.hozon.services.beanMapper.bom.workProcess.WorkProcessDTOMapper;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
@@ -14,7 +14,7 @@ import com.connor.hozon.bom.resources.domain.query.HzWorkProcessByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.work.HzWorkProcessService;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.util.Result;
 import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +79,7 @@ public class HzWorkProcessController extends BaseController {
     @RequestMapping(value = "addWorkProcess",method = RequestMethod.GET)
     public String addWorkProcessToPage(String materielId, String projectId, Model model){
         List<HzWorkProcessRespDTO> respDTOs = hzWorkProcessService.findHzWorkProcess(materielId,projectId);
-        if(ListUtil.isNotEmpty(respDTOs)){
+        if(ListUtils.isNotEmpty(respDTOs)){
             model.addAttribute("data",respDTOs.get(0));
         }
         return  "bomManage/mbom/routingData/addRoutingData";
@@ -91,7 +91,7 @@ public class HzWorkProcessController extends BaseController {
     @RequestMapping(value = "updateWorkProcess",method = RequestMethod.GET)
     public String updateWorkProcessToPage(String materielId, String projectId, Model model){
         List<HzWorkProcessRespDTO> respDTOs = hzWorkProcessService.findHzWorkProcess(materielId,projectId);
-        if(ListUtil.isNotEmpty(respDTOs)){
+        if(ListUtils.isNotEmpty(respDTOs)){
             model.addAttribute("data",respDTOs.get(0));
         }
       return  "bomManage/mbom/routingData/updateRoutingData";
@@ -406,7 +406,7 @@ public class HzWorkProcessController extends BaseController {
     @RequestMapping(value = "order/choose",method = RequestMethod.GET)
     public String getOrderChooseToPage(String projectId,Model model){
         List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
-        if(ListUtil.isNotEmpty(records)){
+        if(ListUtils.isNotEmpty(records)){
             model.addAttribute("data",records);
         }
         return "bomManage/mbom/routingData/routingSetChangeForm";

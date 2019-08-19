@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.myListJob.myApplication;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
@@ -9,7 +10,6 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzApplicationChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -104,7 +104,7 @@ public class HzMyApplicationController {
         }
 
         Page<HzChangeOrderRespDTO> page = hzApplicationChangeService.getHzChangeOrderPage(pageQuery,record);
-        if(ListUtil.isEmpty(page.getResult())){
+        if(ListUtils.isEmpty(page.getResult())){
             return new JSONObject();
         }
 
@@ -140,7 +140,7 @@ public class HzMyApplicationController {
         return jsonObject;
 
         /*List<HzChangeOrderRespDTO> respDTOs = hzApplicationChangeService.findChangeOrderList(query,record);
-        if(ListUtil.isEmpty(respDTOs)){
+        if(ListUtils.isEmpty(respDTOs)){
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();

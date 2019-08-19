@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
+import cn.net.connor.hozon.common.util.DateStringUtils;
 import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao;
 import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureValueDao;
 import cn.net.connor.hozon.dao.dao.main.HzMainConfigDao;
@@ -16,15 +17,14 @@ import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
 import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.HzFullCfgWithCfgDao;
-import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
-import cn.net.connor.hozon.common.util.DateStringHelper;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.services.response.configuration.relevance.HzRelevanceResponseDTO;
+import cn.net.connor.hozon.common.util.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzFeatureChangeService;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.SynFeatureService;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.SynRelevanceService;
+import integration.service.integrate.SynFeatureService;
+import integration.service.integrate.SynRelevanceService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureService;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryService;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import integration.Author;
@@ -39,7 +39,7 @@ import cn.net.connor.hozon.dao.pojo.depository.dictionaryLibrary.HzDictionaryLib
 
 import java.util.*;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 
 /**
@@ -151,7 +151,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
         //创建人和修改人
         record.setCreator(user.getUsername());
         record.setLastModifier(user.getUsername());
-        record.setCfgAbolishDate(DateStringHelper.forever());
+        record.setCfgAbolishDate(DateStringUtils.forever());
         //基本信息
         record.setpCfg0FamilyDesc(hzDictionaryLibrary.getFamillyCh());
         record.setpCfg0Desc(hzDictionaryLibrary.getValueDescCh());
@@ -416,10 +416,10 @@ public class HzCfg0Controller extends ExtraIntegrate {
 
             JSONObject resultFromSapOfRelevance;
             //整理数据
-            List<HzRelevanceBean> myBeans = new ArrayList<>();
+            List<HzRelevanceResponseDTO> myBeans = new ArrayList<>();
 //            synRelevanceService.sortData(records, myBeans);
 
-            for (HzRelevanceBean myBean : myBeans) {
+            for (HzRelevanceResponseDTO myBean : myBeans) {
                 log.warn("---------------同步在SAP中标记像关系状态为3:" + (myBean.getRelevanceCode()));
             }
 //            resultFromSapOfRelevance = synRelevanceService.deleteRelevance(myBeans);
@@ -563,7 +563,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
         //创建人和修改人
         record.setCreator(user.getUsername());
         record.setLastModifier(user.getUsername());
-        record.setCfgAbolishDate(DateStringHelper.forever());
+        record.setCfgAbolishDate(DateStringUtils.forever());
         if (!hzFeatureService.preCheck(record)) {
             result.put("status", false);
             result.put("msg", "<p style='color:red;'>特性值已存在</p>");
@@ -732,7 +732,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @Deprecated
     public Map<String, Object> loadRelevance(@RequestParam("projectPuid") String projectPuid) {
         Map<String, Object> result = new HashMap<>();
-        List<HzRelevanceBean> _list = new ArrayList<>();
+        List<HzRelevanceResponseDTO> _list = new ArrayList<>();
         int _index = 0;
         _index = hzFeatureService.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
 //        hzFeatureService.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
@@ -752,7 +752,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @Deprecated
     public Map<String, Object> loadRelevance2(@RequestParam("projectPuid") String projectPuid) {
         Map<String, Object> result = new HashMap<>();
-        List<HzRelevanceBean> _list = new ArrayList<>();
+        List<HzRelevanceResponseDTO> _list = new ArrayList<>();
         int _index = 0;
         _index = hzFeatureService.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_RECORD");
 //        hzFeatureService.doLoadRelevance(projectPuid, _list, _index, "HZ_CFG0_ADD_CFG_RECORD");
@@ -770,7 +770,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @RequestMapping(value = "/relModify", method = RequestMethod.POST)
     @ResponseBody
     @Deprecated
-    public boolean relOption(@RequestBody HzRelevanceBean bean) {
+    public boolean relOption(@RequestBody HzRelevanceResponseDTO bean) {
         if (bean == null || "".equalsIgnoreCase(bean.getPuid()) || null == bean.getPuid()) {
             return false;
         }
@@ -803,7 +803,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
     @Deprecated
     @RequestMapping("/relModifyPage")
     public String relPage(@RequestParam("uid") String uid, @RequestParam("page") String page, Model model) {
-        HzRelevanceBean bean = new HzRelevanceBean();
+        HzRelevanceResponseDTO bean = new HzRelevanceResponseDTO();
         //其实没有添加的页面
         if ("addPage".equals(page)) {
             HzMainConfig mainRecord = hzMainConfigDao.selectByProjectId(uid);
@@ -843,7 +843,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //     */
 //    @Deprecated
 //    @RequestMapping(value = "/sendRelToERP", method = RequestMethod.POST)
-//    public String sendRelToERP(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
+//    public String sendRelToERP(@RequestBody List<HzRelevanceResponseDTO> beans, Model model) throws Exception {
 //        //清空上次传输的内容
 //        JSONObject result;
 //        List<String> puids = new ArrayList<>();
@@ -853,7 +853,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //        //从根本根本上查找数据
 //        records = hzFeatureService.doLoadListByPuids(puids);
 //        //整理数据
-//        List<HzRelevanceBean> myBeans = new ArrayList<>();
+//        List<HzRelevanceResponseDTO> myBeans = new ArrayList<>();
 //        synRelevanceService.sortData(records, myBeans);
 //        result = synRelevanceService.addRelevance(myBeans);
 //        addToModel(result, model);
@@ -867,7 +867,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //     */
 //    @Deprecated
 //    @RequestMapping(value = "/sendRelToERPDelete", method = RequestMethod.POST)
-//    public String sendRelToERPDelete(@RequestBody List<HzRelevanceBean> beans, Model model) throws Exception {
+//    public String sendRelToERPDelete(@RequestBody List<HzRelevanceResponseDTO> beans, Model model) throws Exception {
 //        //清空上次传输的内容
 //        JSONObject result;
 //        List<String> puids = new ArrayList<>();
@@ -877,7 +877,7 @@ public class HzCfg0Controller extends ExtraIntegrate {
 //        //从根本根本上查找数据
 //        records = hzFeatureService.doLoadListByPuids(puids);
 //        //整理数据
-//        List<HzRelevanceBean> myBeans = new ArrayList<>();
+//        List<HzRelevanceResponseDTO> myBeans = new ArrayList<>();
 //        synRelevanceService.sortData(records, myBeans);
 //        result = synRelevanceService.deleteRelevance(myBeans);
 //        addToModel(result, model);

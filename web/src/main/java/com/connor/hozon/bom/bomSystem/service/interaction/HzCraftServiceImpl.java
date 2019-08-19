@@ -6,33 +6,32 @@
 
 package com.connor.hozon.bom.bomSystem.service.interaction;
 
-import com.connor.hozon.bom.bomSystem.helper.PropertiesHelper;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
-import com.connor.hozon.bom.bomSystem.iservice.interaction.HzCraftService;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
+import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
+import cn.net.connor.hozon.dao.pojo.sys.User;
+import cn.net.connor.hozon.common.util.PropertiesHelper;
+import cn.net.connor.hozon.common.util.UUIDHelper;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzPbomTreeQuery;
 import com.connor.hozon.bom.resources.mybatis.bom.HzPbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
-import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
-import cn.net.connor.hozon.dao.pojo.bom.bom.HzPbomLineRecord;
-import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord;
 
 import java.io.IOException;
 import java.util.*;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -43,15 +42,15 @@ import static cn.net.connor.hozon.common.util.StringHelper.checkString;
  * @Date: Created in 2018/9/28 14:45
  * @Modified By:
  */
-@Configuration
+@Service
 public class HzCraftServiceImpl implements HzCraftService {
-
+    @Autowired
     private HzPbomRecordDAO hzPbomRecordDAO;
-
+    @Autowired
     private HzEPLDAO hzEPLDAO;
-
+    @Autowired
     private TransactionTemplate configTransactionTemplate;
-
+    @Autowired
     private HzPbomService hzPbomService;
     /**
      * 预设随机数产生的精度后移位
@@ -143,25 +142,9 @@ public class HzCraftServiceImpl implements HzCraftService {
      */
     private final static int ACCURACY_LVL3 = 10000;
 
-    @Autowired
-    public void setHzPbomRecordDAO(HzPbomRecordDAO hzPbomRecordDAO) {
-        this.hzPbomRecordDAO = hzPbomRecordDAO;
-    }
-    @Autowired
-    public void setHzEPLDAO(HzEPLDAO hzEPLDAO) {
-        this.hzEPLDAO = hzEPLDAO;
-    }
-    @Autowired
-    public void setConfigTransactionTemplate(TransactionTemplate configTransactionTemplate) {
-        this.configTransactionTemplate = configTransactionTemplate;
-    }
-    @Autowired
-    public void setHzPbomService(HzPbomService hzPbomService) {
-        this.hzPbomService = hzPbomService;
-    }
-
     /**
      * 自动生成工艺合件，执行过程有可能产生异常
+     *
      * @param projectUid    项目UID
      * @param parentUids    合成源父层
      * @param childrenUids  合成源子层
@@ -218,7 +201,7 @@ public class HzCraftServiceImpl implements HzCraftService {
                     hzEPLDAO.insert(hzEPLRecord);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    throw new HzBomException("工艺合件合成失败！"+ e);
+                    throw new HzBomException("工艺合件合成失败！" + e);
                 } finally {
                     //清除缓存
                     clearCoach();
@@ -542,7 +525,7 @@ public class HzCraftServiceImpl implements HzCraftService {
         dto.setProjectId(projectUid);
         for (int i = 0; i < theChildrenNeedToDelete.size(); i++) {
             HzPbomLineRecord record = theChildrenNeedToDelete.get(i);
-            stringBuffer.append(record.geteBomPuid()+",");
+            stringBuffer.append(record.geteBomPuid() + ",");
 //            dto.setEBomPuid(record.getEBomPuid());
 //            dto.setProjectId(projectUid);
 //            dto.setPuids(record.getId());
@@ -552,8 +535,8 @@ public class HzCraftServiceImpl implements HzCraftService {
         //执行删除
         if (craftIsInfluenceToDB) {// 已生效的进行状态标记 未生效的直接删除
             WriteResultRespDTO respDTO = hzPbomService.deleteHzPbomRecordByForeignId(dto);
-            if(!WriteResultRespDTO.isSuccess(respDTO)){
-                logger.error(respDTO.getErrMsg()+"->删除合成源数据失败");
+            if (!WriteResultRespDTO.isSuccess(respDTO)) {
+                logger.error(respDTO.getErrMsg() + "->删除合成源数据失败");
             }
 
 //            if (hzPbomRecordDAO.deleteList(listOfDto) <= 0) {
@@ -907,7 +890,7 @@ public class HzCraftServiceImpl implements HzCraftService {
                                 }
                             }
                             //克隆一份出来
-                            HzPbomLineRecord record1=record.clone();
+                            HzPbomLineRecord record1 = record.clone();
                             record1.setStatus(1);
                             target.getChildrenTree().add(record1);
                         }

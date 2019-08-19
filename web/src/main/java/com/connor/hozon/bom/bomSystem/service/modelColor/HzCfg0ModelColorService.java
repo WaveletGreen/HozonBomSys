@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.service.modelColor;
 
+import cn.net.connor.hozon.common.util.SerializeUtils;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
@@ -17,12 +18,12 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.common.util.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoManagerService;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -31,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail;
-import cn.net.connor.hozon.common.util.SerializeUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -131,7 +131,7 @@ public class HzCfg0ModelColorService {
 //            //把历史数据取出来，进行分步存储
 //            if (null == color.getUpdateDefault() || 0 == color.getUpdateDefault()) {
 //                if (null != color.getpColorfulMapBlock()) {
-//                    Object o = SerializeUtil.unserialize(color.getpColorfulMapBlock());
+//                    Object o = SerializeUtils.unserialize(color.getpColorfulMapBlock());
 //                    //旧数据需要进行插入，然后判断是否有历史数据，如果有历史数据，删除历史数据，插入，更新当前颜色车型的状态值为1
 //                    if (o instanceof HashMap) {
 //                        HashMap<String, String> _map = (HashMap) o;
@@ -264,7 +264,7 @@ public class HzCfg0ModelColorService {
             //把历史数据取出来，进行分步存储
             if (null == color.getUpdateDefault() || 0 == color.getUpdateDefault()) {
                 if (null != color.getpColorfulMapBlock()) {
-                    Object o = SerializeUtil.unserialize(color.getpColorfulMapBlock());
+                    Object o = SerializeUtils.unserialize(color.getpColorfulMapBlock());
                     //旧数据需要进行插入，然后判断是否有历史数据，如果有历史数据，删除历史数据，插入，更新当前颜色车型的状态值为1
                     if (o instanceof HashMap) {
                         HashMap<String, String> _map = (HashMap) o;

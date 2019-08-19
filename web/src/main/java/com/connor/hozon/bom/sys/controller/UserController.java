@@ -1,23 +1,18 @@
 package com.connor.hozon.bom.sys.controller;
 
 
-import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
+import cn.net.connor.hozon.common.constant.SystemStaticConst;
+import cn.net.connor.hozon.services.service.sys.*;
 import com.connor.hozon.bom.common.base.controller.GenericController;
-import com.connor.hozon.bom.common.base.service.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
-import com.connor.hozon.bom.common.util.user.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateUserPasswordReqDTO;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import cn.net.connor.hozon.dao.query.sys.QueryUser;
 import cn.net.connor.hozon.dao.pojo.sys.Tree;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.dao.pojo.sys.UserRole;
-import com.connor.hozon.bom.sys.service.TreeService;
-import com.connor.hozon.bom.sys.service.UserAssociateRoleService;
-import com.connor.hozon.bom.sys.service.UserRoleService;
-import com.connor.hozon.bom.sys.service.UserService;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.http.MediaType;
@@ -278,12 +273,12 @@ public class UserController extends GenericController<User,QueryUser> {
             String ids = entity.getRoleArray();
             boolean write = true;
             if(!PrivilegeUtil.administrator()) {
-                 if (StringUtil.isEmpty(ids) && ListUtil.isNotEmpty(userRoles)) {
+                 if (StringUtil.isEmpty(ids) && ListUtils.isNotEmpty(userRoles)) {
                     write = false;
-                }else if(!StringUtil.isEmpty(ids) && ListUtil.isEmpty(userRoles)){
+                }else if(!StringUtil.isEmpty(ids) && ListUtils.isEmpty(userRoles)){
                     write = false;
                 }
-                else if (ListUtil.isNotEmpty(userRoles) && !StringUtil.isEmpty(ids)) {
+                else if (ListUtils.isNotEmpty(userRoles) && !StringUtil.isEmpty(ids)) {
                     List<String> list = Lists.newArrayList(ids.split(","));
                     if(list.size() != userRoles.size()){
                         write = false;
@@ -313,7 +308,7 @@ public class UserController extends GenericController<User,QueryUser> {
             }
             List<String> list = Lists.newArrayList(ids.split(","));
             List<UserRole> userRoleList = userRoleService.findUserRoleAndUserByRoleName("变更接口人");
-            if(ListUtil.isNotEmpty(userRoleList) && ListUtil.isNotEmpty(list)){//系统中只能存在一个变更接口人
+            if(ListUtils.isNotEmpty(userRoleList) && ListUtils.isNotEmpty(list)){//系统中只能存在一个变更接口人
                 for(UserRole userRole : userRoleList){
                     String id = String.valueOf(userRole.getId());
                     if(list.contains(id)){
@@ -358,7 +353,7 @@ public class UserController extends GenericController<User,QueryUser> {
         Map<String,Object> result = new HashMap<>();
         List<String> list = Lists.newArrayList(entity.getRoleArray().split(","));
         List<UserRole> userRoleList = userRoleService.findUserRoleAndUserByRoleName("变更接口人");
-        if(ListUtil.isNotEmpty(userRoleList) && ListUtil.isNotEmpty(list)){//系统中只能存在一个变更接口人
+        if(ListUtils.isNotEmpty(userRoleList) && ListUtils.isNotEmpty(list)){//系统中只能存在一个变更接口人
             for(UserRole userRole : userRoleList){
                 String id = String.valueOf(userRole.getId());
                 if(list.contains(id)){

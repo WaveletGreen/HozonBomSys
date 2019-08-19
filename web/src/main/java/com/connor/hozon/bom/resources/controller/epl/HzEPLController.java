@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.epl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzEPLReqDTO;
@@ -9,7 +10,6 @@ import com.connor.hozon.bom.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.epl.HzEPLService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +87,7 @@ public class HzEPLController extends BaseController {
     public Map<String, Object> getHzEplRecord(HzEPLByPageQuery query){
         Page<HzEplRespDTO> recordRespDTOPage = hzEPLService.getEPLRecordByPage(query);
         Map<String, Object> ret = new HashMap<>();
-        if(recordRespDTOPage == null || ListUtil.isEmpty(recordRespDTOPage.getResult())){
+        if(recordRespDTOPage == null || ListUtils.isEmpty(recordRespDTOPage.getResult())){
             return  ret;
         }
         List<HzEplRespDTO> list =  recordRespDTOPage.getResult();
@@ -176,7 +176,7 @@ public class HzEPLController extends BaseController {
     @RequestMapping(value = "order/choose",method = RequestMethod.GET)
     public String getOrderChooseToPage(String projectId,String puids,Model model){
         List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
-        if(ListUtil.isNotEmpty(records)){
+        if(ListUtils.isNotEmpty(records)){
             model.addAttribute("data",records);
             model.addAttribute("puids",puids);
         }

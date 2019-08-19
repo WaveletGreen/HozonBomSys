@@ -12,7 +12,7 @@ import cn.net.connor.hozon.dao.dao.interaction.FeatureBomLineRelationHistoryDao;
 import cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory;
 import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomLineBean;
 import cn.net.connor.hozon.dao.dao.interaction.HzConfigBomColorDao;
-import com.connor.hozon.bom.interaction.service.FeatureBomLineMapper;
+import cn.net.connor.hozon.services.beanMapper.interaction.FeatureBomLineBeanMapper;
 import com.connor.hozon.bom.interaction.service.FeatureBomLineRelationHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class FeatureBomLineRelationHistoryServiceImpl implements FeatureBomLineR
     public void saveHistoryRelation(String projectId) {
         //查询出当前发布过的正式进行结算的bomline对应的特性值数据，保留一份数据
         List<HzConfigBomLineBean> cache = hzConfigBomColorDao.selectAllConfigToBomline(projectId);
-        List<FeatureBomLineRelationHistory> list = FeatureBomLineMapper.INSTANCE.mapToList(cache);
+        List<FeatureBomLineRelationHistory> list = FeatureBomLineBeanMapper.INSTANCE.mapToList(cache);
         featureBomLineRelationHistoryDao.deleteByProjectId(projectId);
         //批量插入数据
         featureBomLineRelationHistoryDao.insertList(list);

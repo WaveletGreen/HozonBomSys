@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

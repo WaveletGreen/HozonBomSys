@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import cn.net.connor.hozon.dao.pojo.sys.User;

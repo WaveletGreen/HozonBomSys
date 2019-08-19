@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.service.fullCfg;
 
-import cn.net.connor.hozon.common.util.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringUtils;
 import cn.net.connor.hozon.dao.dao.configuration.fullConfigSheet.*;
 import cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelDetailDao;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
@@ -32,13 +32,13 @@ import cn.net.connor.hozon.services.service.depository.project.impl.HzVehicleSer
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
 import cn.net.connor.hozon.services.service.main.ProjectHelperService;
 import com.alibaba.fastjson.JSON;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.common.util.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.service.bom.HzBomDataService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
@@ -60,7 +60,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -878,7 +878,7 @@ public class HzBomAllCfgService {
                     result.put("status", true);
                     result.put("msg", "升小版本成功");
                     result.put("version", hzFullCfgMain.getVersion());
-                    result.put("releaseDate", DateStringHelper.dateToString(hzFullCfgMain.getEffectiveDate()));
+                    result.put("releaseDate", DateStringUtils.dateToString(hzFullCfgMain.getEffectiveDate()));
                 }
             }
         } else {

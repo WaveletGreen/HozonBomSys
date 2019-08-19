@@ -6,7 +6,7 @@
 
 package cn.net.connor.hozon.dao.pojo.change.vwo;
 
-import cn.net.connor.hozon.common.util.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringUtils;
 import lombok.Data;
 
 import java.util.Date;
@@ -286,13 +286,13 @@ public class HzVwoInfo {
 
     public void setVwoStartEffectiveTime(Date vwoStartEffectiveTime) {
         this.vwoStartEffectiveTime = vwoStartEffectiveTime;
-        setStrVwoStartEffectiveTime(DateStringHelper.dateToString2(vwoStartEffectiveTime));
+        setStrVwoStartEffectiveTime(DateStringUtils.dateToString2(vwoStartEffectiveTime));
     }
 
 
     public void setVwoEndEffectiveTime(Date vwoEndEffectiveTime) {
         this.vwoEndEffectiveTime = vwoEndEffectiveTime;
-        setStrVwoEndEffectiveTime(DateStringHelper.dateToString2(vwoEndEffectiveTime));
+        setStrVwoEndEffectiveTime(DateStringUtils.dateToString2(vwoEndEffectiveTime));
     }
 
 }

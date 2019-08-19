@@ -1,12 +1,12 @@
 package com.connor.hozon.bom.resources.controller.accessories;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.common.util.ListUtils;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesLibsDTO;
 import com.connor.hozon.bom.resources.domain.query.HzAccessoriesLibsPageQuery;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -147,7 +147,7 @@ public class HzAccessoriesLibsController extends BaseController {
         }
         Page<HzAccessoriesLibs> page = hzAccessoriesLibsDAO.getHzAccessoriesByPage(query);
         int i = 0;
-        if (ListUtil.isEmpty(page.getResult())) {
+        if (ListUtils.isEmpty(page.getResult())) {
             return new HashMap<>();
         }
         List<HzAccessoriesLibs> libs = page.getResult();
@@ -192,7 +192,7 @@ public class HzAccessoriesLibsController extends BaseController {
     @RequestMapping(value = "updateAccessories", method = RequestMethod.GET)
     public String updateMbomToPage(String puid, Model model) {
         List<HzAccessoriesLibs> libs = hzAccessoriesLibsDAO.getHzAccessoriesLibs(puid);
-        if (ListUtil.isEmpty(libs)) {
+        if (ListUtils.isEmpty(libs)) {
             return "";
         }
         model.addAttribute("data", libs.get(0));

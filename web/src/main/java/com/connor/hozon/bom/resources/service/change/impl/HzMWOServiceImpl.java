@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.InitiatingProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOBasicInfoDAO;
@@ -91,7 +91,7 @@ public class HzMWOServiceImpl implements HzMWOService {
 //                        hzEbomTreeQuery.setId(bomLineRecord.getId());
 //                        hzEbomTreeQuery.setProjectId(reqDTO.getProjectId());
 //                        List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
-//                        if(ListUtil.isNotEmpty(records)){
+//                        if(ListUtils.isNotEmpty(records)){
 //                            records.forEach(record -> {
 //                                HzBomLineRecord srcBomLineRecord = new HzBomLineRecord();
 //                                srcBomLineRecord.setId(record.getId());

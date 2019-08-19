@@ -3,7 +3,7 @@ package com.connor.hozon.bom.resources.service.bom;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.interaction.bean.SingleVehicleCheckStatus;
+import cn.net.connor.hozon.services.bean.SingleVehicleCheckStatus;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;

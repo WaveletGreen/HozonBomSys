@@ -11,7 +11,7 @@ import com.connor.hozon.bom.bomSystem.iservice.process.IInterruptionCallBack;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
 import com.connor.hozon.bom.bomSystem.service.vwo.HzVwoInfoServiceImpl;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

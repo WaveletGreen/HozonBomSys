@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.change.worklist;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
@@ -8,7 +9,6 @@ import com.connor.hozon.bom.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.bom.resources.domain.query.HzWorkListBasicInfoQuery;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzWorkListBasicInfoService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,7 +64,7 @@ public class HzWorkListBaseInfoController extends BaseController {
 
 
         //List<HzWorkListBasicInfoRespDTO> respDTOs = hzWorkListBasicInfoService.findHzWorkList(query);
-        if(ListUtil.isEmpty(respDTOs)){
+        if(ListUtils.isEmpty(respDTOs)){
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();

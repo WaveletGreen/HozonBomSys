@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
+import cn.net.connor.hozon.common.constant.SystemStaticConst;
 import cn.net.connor.hozon.common.entity.Page;
 import cn.net.connor.hozon.common.entity.QueryBase;
-import com.connor.hozon.bom.common.base.service.GenericService;
+import cn.net.connor.hozon.services.service.sys.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;

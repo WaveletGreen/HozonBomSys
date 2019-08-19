@@ -1,12 +1,12 @@
 package com.connor.hozon.bom.sys.controller;
 
-import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
+import cn.net.connor.hozon.common.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
-import com.connor.hozon.bom.common.base.service.GenericService;
+import cn.net.connor.hozon.services.service.sys.GenericService;
 import com.connor.hozon.bom.common.util.dict.DictCache;
 import cn.net.connor.hozon.dao.pojo.sys.Dict;
 import cn.net.connor.hozon.dao.pojo.sys.QueryDict;
-import com.connor.hozon.bom.sys.service.DictService;
+import cn.net.connor.hozon.services.service.sys.DictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;

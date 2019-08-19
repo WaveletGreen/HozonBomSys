@@ -4,7 +4,7 @@ import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactReferenceDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactReference;
@@ -28,7 +28,7 @@ public class HzEWOImpactReferenceServiceImpl implements HzEWOImpactReferenceServ
         try {
             List<HzEWOImpactReference> references = new ArrayList<>();
             List<HzEWOImpactReference> list = hzEWOImpactReferenceDAO.findImpactReferences(query);
-            if(ListUtil.isNotEmpty(list)){
+            if(ListUtils.isNotEmpty(list)){
                 list.forEach(hzEWOImpactReference -> {
                     HzEWOImpactReference reference = hzEWOImpactReference;
                     if(reference.getChecked() == null){
@@ -56,7 +56,7 @@ public class HzEWOImpactReferenceServiceImpl implements HzEWOImpactReferenceServ
             List<HzEWOImpactReference> list = hzEWOImpactReferenceDAO.findImpactReferences(query);
 
             Set<HzEWOImpactReference> set = new HashSet<>();
-            if(ListUtil.isNotEmpty(list)){
+            if(ListUtils.isNotEmpty(list)){
                 list.forEach(reference1 -> {
                     if(reference1.getId()!=null){
                         set.add(reference1);
@@ -96,10 +96,10 @@ public class HzEWOImpactReferenceServiceImpl implements HzEWOImpactReferenceServ
 
                 }
             }
-            if(ListUtil.isNotEmpty(insertList)){
+            if(ListUtils.isNotEmpty(insertList)){
                 hzEWOImpactReferenceDAO.insertList(insertList);
             }
-            if(ListUtil.isNotEmpty(updateList)){
+            if(ListUtils.isNotEmpty(updateList)){
                 hzEWOImpactReferenceDAO.updateList(updateList);
             }
 

@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.dto.request.EditEWOImpactDeptReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.EditImpactDeptEmpReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOImpactDeptEmpRespDTO;
@@ -10,11 +11,10 @@ import com.connor.hozon.bom.resources.domain.query.HzEWOImpactDeptQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptEmpDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactDeptService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import cn.net.connor.hozon.dao.dao.sys.OrgGroupDao;
 import cn.net.connor.hozon.dao.pojo.sys.OrgGroup;
 import cn.net.connor.hozon.dao.pojo.sys.User;
-import com.connor.hozon.bom.sys.service.UserService;
+import cn.net.connor.hozon.services.service.sys.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.change.change.HzEWOAllImpactDept;
@@ -53,7 +53,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
             query.setProjectId(reqDTO.getProjectId());
             List<HzEWOImpactDept> depts = hzEWOImpactDeptDAO.findEWOImpactDeptList(query);
             Set<HzEWOImpactDept> set = new HashSet<>();
-            if(ListUtil.isNotEmpty(depts)){
+            if(ListUtils.isNotEmpty(depts)){
              set = new HashSet<>(depts);
             }
             List<HzEWOImpactDept> insertList = new ArrayList<>();
@@ -74,7 +74,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
                 dept.setCheckFlag(1);
                 dept.setProjectId(reqDTO.getProjectId());
                 dept.setDeptId(Long.valueOf(deptId));
-                if(ListUtil.isEmpty(deptList)){
+                if(ListUtils.isEmpty(deptList)){
                     insertList.add(dept);
                 }else {
                     HzEWOImpactDept dept1 = deptList.get(0);
@@ -90,10 +90,10 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
                 }
             }
 
-            if(ListUtil.isNotEmpty(insertList)){
+            if(ListUtils.isNotEmpty(insertList)){
                 hzEWOImpactDeptDAO.insertList(insertList);
             }
-            if(ListUtil.isNotEmpty(updateList)){
+            if(ListUtils.isNotEmpty(updateList)){
                 hzEWOImpactDeptDAO.updateList(updateList);
             }
 
@@ -108,7 +108,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
         try{
             List<String> deptIds = Arrays.asList(reqDTO.getDeptIds().split(","));
             List<String> userIds = Arrays.asList(reqDTO.getUserIds().split(","));
-            if(ListUtil.isEmpty(userIds) || ListUtil.isEmpty(deptIds) || deptIds.size() != userIds.size()){
+            if(ListUtils.isEmpty(userIds) || ListUtils.isEmpty(deptIds) || deptIds.size() != userIds.size()){
                 return WriteResultRespDTO.IllgalArgument();
             }
             HzEWOImpactDeptQuery query = new HzEWOImpactDeptQuery();
@@ -118,7 +118,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
             List<HzEWOImpactDeptEmp> updateList = new ArrayList<>();
             List<HzEWOImpactDeptEmp> list = hzEWOImpactDeptEmpDAO.findImpactDeptList(query);
             for(int i= 0 ;i<userIds.size();i++){
-                if(ListUtil.isNotEmpty(list)){
+                if(ListUtils.isNotEmpty(list)){
                     for(HzEWOImpactDeptEmp ewoImpactDeptEmp :list){
                         if(ewoImpactDeptEmp.getImpactDeptId().equals(deptIds.get(i))){
                             list.remove(ewoImpactDeptEmp);
@@ -133,7 +133,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
                 emp.setValidFlag(1);
                 emp.setUserId(Long.valueOf(userIds.get(i)));
                 List<HzEWOImpactDeptEmp> impactDeptList = hzEWOImpactDeptEmpDAO.findImpactDeptList(query);
-                if(ListUtil.isEmpty(impactDeptList)){
+                if(ListUtils.isEmpty(impactDeptList)){
                     insertList.add(emp);
                 }else {
                     if(impactDeptList.get(0).getValidFlag().equals(0)){
@@ -143,10 +143,10 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
                 }
             }
 
-            if(ListUtil.isNotEmpty(insertList)){
+            if(ListUtils.isNotEmpty(insertList)){
                 hzEWOImpactDeptEmpDAO.insertList(insertList);
             }
-            if(ListUtil.isNotEmpty(updateList)){
+            if(ListUtils.isNotEmpty(updateList)){
                 hzEWOImpactDeptEmpDAO.updateList(updateList);
             }
         }catch (Exception e){
@@ -166,7 +166,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
             respDTO.setDeptId(l.getGroupId());
             respDTO.setDeptName(l.getName());
             respDTO.setChecked(0);
-            if(ListUtil.isNotEmpty(depts)){
+            if(ListUtils.isNotEmpty(depts)){
               for(HzEWOImpactDept dept:depts){
                   if(dept.getDeptId().equals(l.getGroupId())){
                       if(dept.getCheckFlag().equals(1)){
@@ -197,7 +197,7 @@ public class HzEWOImpactDeptServiceImpl implements HzEWOImpactDeptService {
                 respDTO.setDeptId(hzEWOAllImpactDept.getId());
                 respDTO.setDeptName(hzEWOAllImpactDept.getDeptName());
                 respDTO.setChecked(0);
-                if(ListUtil.isNotEmpty(list)){
+                if(ListUtils.isNotEmpty(list)){
                     for(HzEWOImpactDeptEmp emp:list){
                         if(emp.getImpactDeptId().equals(hzEWOAllImpactDept.getId())){
                             respDTO.setUserId(emp.getUserId());

@@ -13,7 +13,7 @@
 //import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
 //import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 //import com.connor.hozon.bom.resources.service.bom.HzPbomService;
-//import com.connor.hozon.bom.resources.util.ListUtil;
+//import cn.net.connor.hozon.common.util.ListUtils;
 //import com.connor.hozon.bom.resources.util.Result;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Controller;
@@ -63,7 +63,7 @@
 //                return ret;
 //            }
 //            List<HzEbomRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
-//            if (ListUtil.isEmpty(recordRespDTOS)) {
+//            if (ListUtils.isEmpty(recordRespDTOS)) {
 //                return ret;
 //            }
 //            List<Map<String,Object>> list = new ArrayList<>();

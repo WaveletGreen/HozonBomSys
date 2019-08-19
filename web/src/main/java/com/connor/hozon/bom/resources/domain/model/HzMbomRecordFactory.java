@@ -1,8 +1,8 @@
 package com.connor.hozon.bom.resources.domain.model;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMbomRecordRespDTO;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
@@ -144,7 +144,7 @@ public class HzMbomRecordFactory {
     public List<HzMbomLineRecord> movePartBomStructureToThis(HzMbomLineRecord record, List<HzPbomLineRecord> records, int n) {
         List<HzMbomLineRecord> recordList = new ArrayList<>();
         String lindIndex = record.getLineIndex();
-        if (ListUtil.isNotEmpty(records)) {
+        if (ListUtils.isNotEmpty(records)) {
             int length = records.get(0).getLineIndex().split("\\.").length;
             for (int i = 1; i < records.size(); i++) {
 
@@ -275,7 +275,7 @@ public class HzMbomRecordFactory {
     public static List<HzMbomLineRecord> generateMaterielPaint(HzPbomLineRecord pbomLineRecord, int size, String lineIndex, List<HzAccessoriesLibs> libs,
                                                                int i, String colorId, String factoryId) {
         List<HzMbomLineRecord> list = new ArrayList<>();
-        if (ListUtil.isNotEmpty(libs)) {
+        if (ListUtils.isNotEmpty(libs)) {
             for (int j = 0; j < libs.size(); j++) {
                 HzMbomLineRecord record = new HzMbomLineRecord();
                 record.setParentUid(pbomLineRecord.geteBomPuid());

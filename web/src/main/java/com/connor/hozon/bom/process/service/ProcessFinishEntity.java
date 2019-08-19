@@ -12,7 +12,7 @@ import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.dao.pojo.task.HzTasks;
 import cn.net.connor.hozon.services.service.task.HzTaskService;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.process.iservice.IProcessFinish;
 import com.connor.hozon.bom.process.iservice.IProcessManagerService;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;

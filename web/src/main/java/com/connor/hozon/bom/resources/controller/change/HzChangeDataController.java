@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.change;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.*;
@@ -8,7 +9,6 @@ import com.connor.hozon.bom.resources.mybatis.change.HzAttachmentRecordDao;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.service.change.HzChangeDataService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -384,7 +384,7 @@ public class HzChangeDataController extends BaseController {
     public Map<String, Object> getEBOMChangeDataDetail(HzChangeDataQuery query){
         List<HzEbomRespDTO> list = hzChangeDataService.getChangeDataRecordForEBOM(query);
         Map<String, Object> ret = new HashMap<>();
-        if(ListUtil.isNotEmpty(list)){
+        if(ListUtils.isNotEmpty(list)){
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
@@ -455,7 +455,7 @@ public class HzChangeDataController extends BaseController {
     public Map<String, Object> getPBOMChangeDataDetail(HzChangeDataQuery query){
         List<HzPbomLineRespDTO> list = hzChangeDataService.getChangeDataRecordForPBOM(query);
         Map<String, Object> ret = new HashMap<>();
-        if(ListUtil.isNotEmpty(list)){
+        if(ListUtils.isNotEmpty(list)){
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
@@ -493,7 +493,7 @@ public class HzChangeDataController extends BaseController {
     public Map<String, Object> getMBOMChangeDataDetail(HzChangeDataQuery query){
         List<HzMbomRecordRespDTO> list = hzChangeDataService.getChangeDataRecordForMBOM(query);
         Map<String, Object> ret = new HashMap<>();
-        if(ListUtil.isNotEmpty(list)){
+        if(ListUtils.isNotEmpty(list)){
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
@@ -537,7 +537,7 @@ public class HzChangeDataController extends BaseController {
     public Map<String, Object> getMaterielChangeDataDetail(HzChangeDataQuery query){
         List<HzMaterielRespDTO> list = hzChangeDataService.getChangeDataRecordForMateriel(query);
         Map<String, Object> ret = new HashMap<>();
-        if(ListUtil.isNotEmpty(list)){
+        if(ListUtils.isNotEmpty(list)){
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
@@ -575,7 +575,7 @@ public class HzChangeDataController extends BaseController {
     public Map<String, Object> getWorkProcedureChangeDataDetail(HzChangeDataQuery query){
         List<HzWorkProcessRespDTO> list = hzChangeDataService.getChangeDataRecordForWorkProcedure(query);
         Map<String, Object> ret = new HashMap<>();
-        if(ListUtil.isNotEmpty(list)){
+        if(ListUtils.isNotEmpty(list)){
             List<Map<String, Object>> _list = new ArrayList<>();
             list.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();

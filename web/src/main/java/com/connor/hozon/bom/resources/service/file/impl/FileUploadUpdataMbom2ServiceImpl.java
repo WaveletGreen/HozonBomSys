@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.service.file.impl;
 
 import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;

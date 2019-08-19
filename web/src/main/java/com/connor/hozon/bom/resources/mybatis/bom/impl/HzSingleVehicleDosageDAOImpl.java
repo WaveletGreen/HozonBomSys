@@ -1,7 +1,7 @@
 package com.connor.hozon.bom.resources.mybatis.bom.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.mybatis.bom.HzSingleVehicleDosageDAO;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzSingleVehicleDosage;
@@ -23,7 +23,7 @@ public class HzSingleVehicleDosageDAOImpl extends BaseSQLUtil implements HzSingl
     @Override
     public int insertList(List<HzSingleVehicleDosage> list) {
         try {
-            if (ListUtil.isNotEmpty(list)) {
+            if (ListUtils.isNotEmpty(list)) {
                 int size = list.size();
                 //分批更新数据 一次1000条
                 int i = 0;

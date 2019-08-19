@@ -6,10 +6,10 @@
 
 package com.connor.hozon.bom.bomSystem.service.vwo;
 
-import cn.net.connor.hozon.common.util.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringUtils;
 import cn.net.connor.hozon.dao.dao.change.vwo.HzVwoInfoDao;
 import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
+import cn.net.connor.hozon.dao.query.change.vwo.HzVwoFormListQuery;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzVwoInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,7 +91,7 @@ public class HzVwoInfoServiceImpl implements HzVwoInfoService {
      * @param queryBase
      */
     @Override
-    public List<HzVwoInfo> doSelectListByProjectUid(HzVwoFormListQueryBase queryBase, String projectUid) {
+    public List<HzVwoInfo> doSelectListByProjectUid(HzVwoFormListQuery queryBase, String projectUid) {
         Map<String, Object> params = new HashMap<>();
         params.put("param", queryBase);
         params.put("projectUid", projectUid);
@@ -119,7 +119,7 @@ public class HzVwoInfoServiceImpl implements HzVwoInfoService {
         if (hzVwoInfo == null || hzVwoInfo.getVwoNum() == null) {
             hzVwoInfo = new HzVwoInfo();
             //当月第一位vwo号
-            hzVwoInfo.setVwoNum("VC" + DateStringHelper.dateToString4(now) + "0001");
+            hzVwoInfo.setVwoNum("VC" + DateStringUtils.dateToString4(now) + "0001");
         } else {
             hzVwoInfo.setVwoNum("VC" + String.valueOf(Long.parseLong(hzVwoInfo.getVwoNum().substring(2)) + 1));
         }

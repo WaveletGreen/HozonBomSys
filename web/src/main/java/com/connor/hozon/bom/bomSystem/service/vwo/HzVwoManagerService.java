@@ -61,14 +61,14 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFeatureTableDto;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
-import com.connor.hozon.bom.bomSystem.helper.IntegrateMsgDTO;
+import cn.net.connor.hozon.services.response.change.vwo.HzVwoFeatureTableResponseDTO;
+import cn.net.connor.hozon.dao.query.change.vwo.HzVwoFormListQuery;
+import cn.net.connor.hozon.services.request.change.HzVwoOptionUserRequestDTO;
+import cn.net.connor.hozon.services.response.integration.IntegrateMsgResponseDTO;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.*;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.SynFeatureService;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.SynRelevanceService;
+import integration.service.integrate.SynFeatureService;
+import integration.service.integrate.SynRelevanceService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IProcess;
 import cn.net.connor.hozon.services.service.task.HzTaskService;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
@@ -78,16 +78,16 @@ import com.connor.hozon.bom.bomSystem.service.process.FeatureProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.InterruptionContainer;
 import com.connor.hozon.bom.bomSystem.service.process.ModelColorProcessManager;
 import com.connor.hozon.bom.bomSystem.service.process.ReleaseContainer;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.factory.HzFactoryDAO;
-import com.connor.hozon.bom.sys.service.OrgGroupService;
-import com.connor.hozon.bom.sys.service.UserService;
-import integration.service.integrate.SynConfigurableMaterialServiceImpl;
+import cn.net.connor.hozon.services.service.sys.OrgGroupService;
+import cn.net.connor.hozon.services.service.sys.UserService;
+import integration.service.integrate.impl.SynConfigurableMaterialServiceImpl;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,7 +98,7 @@ import org.springframework.ui.Model;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Malvis
@@ -1620,23 +1620,23 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     }
 
     @Override
-    public JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto) {
+    public JSONObject saveOptionUser(HzVwoOptionUserRequestDTO hzVwoOptionUserRequestDTO) {
         String name = "";
         JSONObject result = new JSONObject();
         result.put("status", true);
         result.put("msg", "指派成功");
-        result.put("type", hzVwoOptionUserDto.getSelectId());
+        result.put("type", hzVwoOptionUserRequestDTO.getSelectId());
 
-        if (hzVwoOptionUserDto == null) {
+        if (hzVwoOptionUserRequestDTO == null) {
             result.put("status", false);
         } else {
 
-            switch (hzVwoOptionUserDto.getSelectId()) {
+            switch (hzVwoOptionUserRequestDTO.getSelectId()) {
                 case 1:
                     HzVwoOpiBom hzVwoOpiBom = new HzVwoOpiBom();
-                    hzVwoOpiBom.setOpiBomMngUserId(hzVwoOptionUserDto.getSelectedUserId());
-                    hzVwoOpiBom.setOpiVwoId(hzVwoOptionUserDto.getVwoId());
-                    hzVwoOpiBom.setOpiBomMngUserName(hzVwoOptionUserDto.getOpiBomName());
+                    hzVwoOpiBom.setOpiBomMngUserId(hzVwoOptionUserRequestDTO.getSelectedUserId());
+                    hzVwoOpiBom.setOpiVwoId(hzVwoOptionUserRequestDTO.getVwoId());
+                    hzVwoOpiBom.setOpiBomMngUserName(hzVwoOptionUserRequestDTO.getOpiBomName());
                     if (hzVwoOpiBomDao.updateUserByVwoId(hzVwoOpiBom) <= 0) {
                         result.put("status", false);
                         result.put("msg", "指派成员失败");
@@ -1646,9 +1646,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     break;
                 case 2:
                     HzVwoOpiPmt hzVwoOpiPmt = new HzVwoOpiPmt();
-                    hzVwoOpiPmt.setOpiPmtMngUserId(hzVwoOptionUserDto.getSelectedUserId());
-                    hzVwoOpiPmt.setOpiVwoId(hzVwoOptionUserDto.getVwoId());
-                    hzVwoOpiPmt.setOpiPmtMngUserName(hzVwoOptionUserDto.getOpiPmtName());
+                    hzVwoOpiPmt.setOpiPmtMngUserId(hzVwoOptionUserRequestDTO.getSelectedUserId());
+                    hzVwoOpiPmt.setOpiVwoId(hzVwoOptionUserRequestDTO.getVwoId());
+                    hzVwoOpiPmt.setOpiPmtMngUserName(hzVwoOptionUserRequestDTO.getOpiPmtName());
                     if (hzVwoOpiPmtDao.updateUserByVwoId(hzVwoOpiPmt) <= 0) {
                         result.put("status", false);
                         result.put("msg", "指派成员失败");
@@ -1658,9 +1658,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     break;
                 case 3:
                     HzVwoOpiProj hzVwoOpiProj = new HzVwoOpiProj();
-                    hzVwoOpiProj.setOpiProjMngUserId(hzVwoOptionUserDto.getSelectedUserId());
-                    hzVwoOpiProj.setOpiVwoId(hzVwoOptionUserDto.getVwoId());
-                    hzVwoOpiProj.setOpiProjMngUserName(hzVwoOptionUserDto.getOpiProjName());
+                    hzVwoOpiProj.setOpiProjMngUserId(hzVwoOptionUserRequestDTO.getSelectedUserId());
+                    hzVwoOpiProj.setOpiVwoId(hzVwoOptionUserRequestDTO.getVwoId());
+                    hzVwoOpiProj.setOpiProjMngUserName(hzVwoOptionUserRequestDTO.getOpiProjName());
                     if (hzVwoOpiProjDao.updateUserByVwoId(hzVwoOpiProj) <= 0) {
                         result.put("status", false);
                         result.put("msg", "指派成员失败");
@@ -1904,7 +1904,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
      * @return
      */
     @Override
-    public Map<String, Object> queryByBase(String projectUid, HzVwoFormListQueryBase queryBase) {
+    public Map<String, Object> queryByBase(String projectUid, HzVwoFormListQuery queryBase) {
         Map<String, Object> result = new HashMap<>();
         queryBase.setSort(HzVwoInfo.reflectToDBField(queryBase.getSort()));
         result.put("totalCount", hzVwoInfoServiceImpl.count(projectUid));
@@ -2083,7 +2083,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
     public Map<String, Object> getFeatureTable(Long vwoId) {
         Map<String, Object> result = new HashMap<>();
         List<HzFeatureChangeBean> beans = hzFeatureChangeService.doSelectCfgUidsByVwoId(vwoId);
-        List<HzVwoFeatureTableDto> list = new ArrayList<>();
+        List<HzVwoFeatureTableResponseDTO> list = new ArrayList<>();
 
         //临近的两个，前一个为变更前数据，后一个为变更后数据
         if (beans != null && !beans.isEmpty()) {
@@ -2094,17 +2094,17 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 }
                 if(bs.get(0)==null){
                     bs.get(1).setHeadDesc("新增<br>"+bs.get(1).getFeatureValueName());
-                    HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
+                    HzVwoFeatureTableResponseDTO after = new HzVwoFeatureTableResponseDTO(bs.get(1));
                     list.add(after);
                 }else if(bs.get(1).getCfgStatus()!=null&&bs.get(1).getCfgStatus()==2){
                     bs.get(1).setHeadDesc("删除<br>"+bs.get(1).getFeatureValueName());
-                    HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(1));
+                    HzVwoFeatureTableResponseDTO before = new HzVwoFeatureTableResponseDTO(bs.get(1));
                     list.add(before);
                 }else {
                     bs.get(0).setHeadDesc("变更前<br>"+ bs.get(1).getFeatureValueName());
                     bs.get(1).setHeadDesc("变更后<br>"+ bs.get(1).getFeatureValueName());
-                    HzVwoFeatureTableDto before = new HzVwoFeatureTableDto(bs.get(0));
-                    HzVwoFeatureTableDto after = new HzVwoFeatureTableDto(bs.get(1));
+                    HzVwoFeatureTableResponseDTO before = new HzVwoFeatureTableResponseDTO(bs.get(0));
+                    HzVwoFeatureTableResponseDTO after = new HzVwoFeatureTableResponseDTO(bs.get(1));
                     list.add(before);
                     list.add(after);
                 }
@@ -2134,15 +2134,15 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                 }
             }
 
-            List<IntegrateMsgDTO> addFail = null;
-            List<IntegrateMsgDTO> deleteFail = null;
+            List<IntegrateMsgResponseDTO> addFail = null;
+            List<IntegrateMsgResponseDTO> deleteFail = null;
             if(hzFeatureChangeBeansAdd!=null&&hzFeatureChangeBeansAdd.size()>0) {
                 JSONObject addResult = synFeatureService.addFeature(hzFeatureChangeBeansAdd);
-                addFail = (List<IntegrateMsgDTO>) addResult.get("fail");
+                addFail = (List<IntegrateMsgResponseDTO>) addResult.get("fail");
             }
             if(hzFeatureChangeBeansDelete!=null&&hzFeatureChangeBeansDelete.size()>0){
                 JSONObject deleteResult = synFeatureService.deleteFeature(hzFeatureChangeBeansDelete);
-                deleteFail = (List<IntegrateMsgDTO>) deleteResult.get("fail");
+                deleteFail = (List<IntegrateMsgResponseDTO>) deleteResult.get("fail");
             }
             if(addFail!=null&&addFail.size()>0){
                 return false;
@@ -2172,15 +2172,15 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         }
 
         try {
-            List<IntegrateMsgDTO> addFail = null;
-            List<IntegrateMsgDTO> deleteFail = null;
+            List<IntegrateMsgResponseDTO> addFail = null;
+            List<IntegrateMsgResponseDTO> deleteFail = null;
             if(hzDerivativeMaterielBasicAdd!=null&&hzDerivativeMaterielBasicAdd.size()>0) {
                 JSONObject addResult = synConfigurableMaterialService.add(hzDerivativeMaterielBasicAdd);
-                addFail = (List<IntegrateMsgDTO>) addResult.get("fail");
+                addFail = (List<IntegrateMsgResponseDTO>) addResult.get("fail");
             }
             if (hzDerivativeMaterielBasicDelete!=null&&hzDerivativeMaterielBasicDelete.size()>0) {
                 JSONObject deleteResult = synConfigurableMaterialService.delete(hzDerivativeMaterielBasicDelete);
-                deleteFail = (List<IntegrateMsgDTO>) deleteResult.get("fail");
+                deleteFail = (List<IntegrateMsgResponseDTO>) deleteResult.get("fail");
             }
             if(addFail!=null&&addFail.size()>0){
                 return false;
@@ -2250,9 +2250,9 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
         List<HzRelevanceBasic> hzRelevanceBasicsUpdate = null;
         List<HzRelevanceBasic> hzRelevanceBasicsDelete = null;
 
-        List<IntegrateMsgDTO> addFail = new ArrayList<>();
-        List<IntegrateMsgDTO> updateFail = new ArrayList<>();
-        List<IntegrateMsgDTO> deleteFail = new ArrayList<>();
+        List<IntegrateMsgResponseDTO> addFail = new ArrayList<>();
+        List<IntegrateMsgResponseDTO> updateFail = new ArrayList<>();
+        List<IntegrateMsgResponseDTO> deleteFail = new ArrayList<>();
         try {
 
             if(hzRelevanceBasicChangesAdd!=null&&hzRelevanceBasicChangesAdd.size()>0){
@@ -2264,7 +2264,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     }
                     hzRelevanceBasics.add(hzRelevanceBasic);
                     JSONObject resultAdd = synRelevanceService.addRelevance(hzRelevanceBasics);
-                    if(((List<IntegrateMsgDTO>) resultAdd.get("fail")).size()>0){
+                    if(((List<IntegrateMsgResponseDTO>) resultAdd.get("fail")).size()>0){
                         return false;
                     };
                 }
@@ -2275,7 +2275,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     List<HzRelevanceBasic> hzRelevanceBasics = new ArrayList<>();
                     hzRelevanceBasics.add(hzRelevanceBasic);
                     JSONObject resultUpdate = synRelevanceService.addRelevance(hzRelevanceBasics);
-                    if(((List<IntegrateMsgDTO>) resultUpdate.get("fail")).size()>0){
+                    if(((List<IntegrateMsgResponseDTO>) resultUpdate.get("fail")).size()>0){
                         return false;
                     };
                 }
@@ -2286,7 +2286,7 @@ public JSONObject getVWO(List<HzCfg0ModelColor> colors, String projectPuid, Arra
                     List<HzRelevanceBasic> hzRelevanceBasics = new ArrayList<>();
                     hzRelevanceBasics.add(hzRelevanceBasic);
                     JSONObject resultDelete = synRelevanceService.deleteRelevance(hzRelevanceBasics);
-                    if(((List<IntegrateMsgDTO>) resultDelete.get("fail")).size()>0){
+                    if(((List<IntegrateMsgResponseDTO>) resultDelete.get("fail")).size()>0){
                         return false;
                     };
                 }

@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.iservice.cfg.vwo;
 
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
+import cn.net.connor.hozon.dao.query.change.vwo.HzVwoFormListQuery;
 import cn.net.connor.hozon.dao.pojo.change.vwo.HzVwoInfo;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public interface HzVwoInfoService {
     /**
      * 根据分页进行查询
      */
-    List<HzVwoInfo> doSelectListByProjectUid(HzVwoFormListQueryBase queryBase, String projectUid);
+    List<HzVwoInfo> doSelectListByProjectUid(HzVwoFormListQuery queryBase, String projectUid);
 
     /**
      * 当前项目下的总数

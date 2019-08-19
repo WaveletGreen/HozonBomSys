@@ -3,10 +3,10 @@ package com.connor.hozon.bom.interaction.impl;
 import cn.net.connor.hozon.dao.dao.interaction.HzConfigBomColorDao;
 import cn.net.connor.hozon.dao.pojo.interaction.HzConfigBomColorBean;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicleBomLineBean;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehicleBomLineDao;
-import com.connor.hozon.bom.interaction.inquirer.HzSingleVehicleBLInquirer;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.dao.query.interaction.HzSingleVehicleBLQuery;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +37,7 @@ public class HzSingleVehicleBomLineDaoImpl extends BasicDaoImpl<HzSingleVehicleB
         clzName = clz.getCanonicalName();
     }
 
-    private List<HzSingleVehicleBomLineBean> selectListByInquirer(HzSingleVehicleBLInquirer inquirer) {
+    private List<HzSingleVehicleBomLineBean> selectListByInquirer(HzSingleVehicleBLQuery inquirer) {
         return baseSQLUtil.executeQueryByPass(BEAN, inquirer, clzName + ".selectListByInquirer");
     }
 
@@ -47,7 +47,7 @@ public class HzSingleVehicleBomLineDaoImpl extends BasicDaoImpl<HzSingleVehicleB
      * @param inquirer
      * @return
      */
-    private List<HzSingleVehicleBomLineBean> selectPaintList(HzSingleVehicleBLInquirer inquirer) {
+    private List<HzSingleVehicleBomLineBean> selectPaintList(HzSingleVehicleBLQuery inquirer) {
         return baseSQLUtil.executeQueryByPass(BEAN, inquirer, clzName + ".selectPaintList");
     }
 
@@ -56,7 +56,7 @@ public class HzSingleVehicleBomLineDaoImpl extends BasicDaoImpl<HzSingleVehicleB
      * @param inquirer
      * @return
      */
-    private List<HzSingleVehicleBomLineBean> selectOthersList(HzSingleVehicleBLInquirer inquirer) {
+    private List<HzSingleVehicleBomLineBean> selectOthersList(HzSingleVehicleBLQuery inquirer) {
 
         return baseSQLUtil.executeQueryByPass(BEAN, inquirer, clzName + ".selectOthersList");
     }
@@ -67,7 +67,7 @@ public class HzSingleVehicleBomLineDaoImpl extends BasicDaoImpl<HzSingleVehicleB
      * @param inquirer
      * @return
      */
-    private List<HzSingleVehicleBomLineBean> selectSolidPointGraphFromFullConfig(HzSingleVehicleBLInquirer inquirer){
+    private List<HzSingleVehicleBomLineBean> selectSolidPointGraphFromFullConfig(HzSingleVehicleBLQuery inquirer){
         return baseSQLUtil.executeQueryByPass(BEAN, inquirer, clzName + ".selectSolidPointGraphFromFullConfig");
     }
 
@@ -84,7 +84,7 @@ public class HzSingleVehicleBomLineDaoImpl extends BasicDaoImpl<HzSingleVehicleB
      */
     @Override
     public List<HzSingleVehicleBomLineBean> selectByProjectUidWithSv(String projectUid, Long dmbId) {
-        HzSingleVehicleBLInquirer inquirer = new HzSingleVehicleBLInquirer();
+        HzSingleVehicleBLQuery inquirer = new HzSingleVehicleBLQuery();
         inquirer.setDmbId(dmbId);
         inquirer.setProjectUid(projectUid);
         inquirer.setIsNotNull(true);
@@ -100,15 +100,15 @@ public class HzSingleVehicleBomLineDaoImpl extends BasicDaoImpl<HzSingleVehicleB
     @Override
     public List<HzSingleVehicleBomLineBean> selectFullConfigColorSet(String projectId, Long dmbId) {
         //查询油漆车身颜色件信息
-        HzSingleVehicleBLInquirer inquirer = new HzSingleVehicleBLInquirer();
+        HzSingleVehicleBLQuery inquirer = new HzSingleVehicleBLQuery();
         inquirer.setDmbId(dmbId);
         inquirer.setProjectUid(projectId);
         inquirer.setIsNotNull(true);
 
         List<HzSingleVehicleBomLineBean> paintBeans = selectPaintList(inquirer);
-        if(ListUtil.isNotEmpty(paintBeans)){
+        if(ListUtils.isNotEmpty(paintBeans)){
             List<HzConfigBomColorBean> list = hzConfigBomColorDao.selectPaintBomLinePuidFormConfig(projectId);//查询油漆车身BOM行主键
-            if(ListUtil.isNotEmpty(list)){
+            if(ListUtils.isNotEmpty(list)){
                 String  bomPuid = list.get(0).getBomLineUid();
                 paintBeans.forEach(paintBean->{
                     paintBean.setBomLineUid(bomPuid);
@@ -120,15 +120,15 @@ public class HzSingleVehicleBomLineDaoImpl extends BasicDaoImpl<HzSingleVehicleB
 
         //查询其他2Y层颜色件信息
         List<HzSingleVehicleBomLineBean> otherBeans = selectOthersList(inquirer);
-        if(ListUtil.isNotEmpty(paintBeans)){
+        if(ListUtils.isNotEmpty(paintBeans)){
             otherBeans.addAll(paintBeans);
         }
         //查询全部的实心打点图
         List<HzSingleVehicleBomLineBean> solidPoints = selectSolidPointGraphFromFullConfig(inquirer);
         //将以上的查询信息进行整合
-        if(ListUtil.isNotEmpty(solidPoints)){
+        if(ListUtils.isNotEmpty(solidPoints)){
             List<HzSingleVehicleBomLineBean> resultList = new ArrayList<>();
-            if(ListUtil.isEmpty(otherBeans)){
+            if(ListUtils.isEmpty(otherBeans)){
                 return solidPoints;
             }
             solidPoints.forEach(solidPoint ->{

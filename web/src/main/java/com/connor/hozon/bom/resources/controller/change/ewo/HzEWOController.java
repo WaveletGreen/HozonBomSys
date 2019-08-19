@@ -9,7 +9,7 @@ import com.connor.hozon.bom.resources.domain.query.HzEWOChangeRecordQuery;
 import com.connor.hozon.bom.resources.domain.query.HzEWOImpactReferenceQuery;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +66,7 @@ public class HzEWOController extends BaseController {
             return new JSONObject();
         }
         List<HzEbomRespDTO> respDTOList = hzEWOService.getEWOChangeFormRecord(query);
-        if(ListUtil.isEmpty(respDTOList)){
+        if(ListUtils.isEmpty(respDTOList)){
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();
@@ -154,7 +154,7 @@ public class HzEWOController extends BaseController {
             return ;
         }
         List<HzEWOImpactReference> respDTOList = hzEWOImpactReferenceService.getHzEWOImpactReferences(query);
-        if(ListUtil.isEmpty(respDTOList)){
+        if(ListUtils.isEmpty(respDTOList)){
             toJSONResponse(Result.build(false,"暂无数据！"),response);
             return ;
         }

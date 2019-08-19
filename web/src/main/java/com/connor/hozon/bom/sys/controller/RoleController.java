@@ -1,20 +1,20 @@
 package com.connor.hozon.bom.sys.controller;
 
 
-import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
+import cn.net.connor.hozon.common.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
-import com.connor.hozon.bom.common.base.service.GenericService;
+import cn.net.connor.hozon.services.service.sys.GenericService;
 import com.connor.hozon.bom.common.util.json.JsonHelper;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import cn.net.connor.hozon.dao.query.sys.QueryUserRole;
 import cn.net.connor.hozon.dao.pojo.sys.Tree;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.dao.pojo.sys.UserRole;
-import com.connor.hozon.bom.sys.mapper.TreeMapper;
-import com.connor.hozon.bom.sys.service.TreeService;
-import com.connor.hozon.bom.sys.service.UserRoleService;
+import cn.net.connor.hozon.services.beanMapper.sys.TreeMapper;
+import cn.net.connor.hozon.services.service.sys.TreeService;
+import cn.net.connor.hozon.services.service.sys.UserRoleService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

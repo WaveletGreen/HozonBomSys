@@ -8,13 +8,13 @@ package com.connor.hozon.bom.process.service;
 
 import cn.net.connor.hozon.services.service.task.HzTaskService;
 import com.connor.hozon.bom.bomSystem.option.TaskOptions;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.process.iservice.IProcessStart;
 import com.connor.hozon.bom.resources.mybatis.change.HzApplicantChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzAuditorChangeDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import cn.net.connor.hozon.dao.pojo.sys.User;
-import com.connor.hozon.bom.sys.service.UserService;
+import cn.net.connor.hozon.services.service.sys.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

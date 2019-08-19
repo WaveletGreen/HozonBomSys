@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
@@ -124,7 +125,7 @@ public class HzEbomController extends BaseController {
             return object;
         }
         List<HzEbomRespDTO> recordRespDTOS =  recordRespDTOPage.getResult();
-        if (ListUtil.isEmpty(recordRespDTOS)) {
+        if (ListUtils.isEmpty(recordRespDTOS)) {
             return object;
         }
         List<JSONObject> list = new ArrayList<>();

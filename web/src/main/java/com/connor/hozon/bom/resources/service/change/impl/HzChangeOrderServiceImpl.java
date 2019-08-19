@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.common.util.ListUtils;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -11,7 +12,6 @@ import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import cn.net.connor.hozon.dao.pojo.sys.User;
@@ -101,7 +101,7 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
             HzChangeDataQuery query = new HzChangeDataQuery();
             query.setOrderId(id);
             List<HzChangeDataRecord> records = hzChangeDataRecordDAO.getChangeDataTableName(query);
-            if(ListUtil.isNotEmpty(records)){
+            if(ListUtils.isNotEmpty(records)){
                 WriteResultRespDTO respDTO = new WriteResultRespDTO();
                 respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 respDTO.setErrMsg("表单中已存在关联数据,不允许删除!");
@@ -193,7 +193,7 @@ public class HzChangeOrderServiceImpl implements HzChangeOrderService {
         HzChangeDataQuery query = new HzChangeDataQuery();
         query.setOrderId(orderId);
         List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(query);
-        if(ListUtil.isNotEmpty(list)){
+        if(ListUtils.isNotEmpty(list)){
             return true;
         }
         return false;

@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller;
 
-import cn.net.connor.hozon.common.util.DateStringHelper;
+import cn.net.connor.hozon.common.util.DateStringUtils;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
 import net.sf.json.JSONObject;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 
 /**
@@ -140,7 +140,7 @@ public class HzBomAllCfgController {
             model.addAttribute("msg", "该项目下没有全配置BOM一级清单表，请先添加2Y层和特性值再进行操作");
             return "errorWithEntity";
         }
-        String releaseDate = fullCfgMain.getEffectiveDate() == null ? "" : DateStringHelper.dateToString(fullCfgMain.getEffectiveDate());
+        String releaseDate = fullCfgMain.getEffectiveDate() == null ? "" : DateStringUtils.dateToString(fullCfgMain.getEffectiveDate());
         model.addAttribute("releaseDate", releaseDate);
         if (setName != null && "version".equals(setName)) {
             Integer stage = fullCfgMain.getStage();

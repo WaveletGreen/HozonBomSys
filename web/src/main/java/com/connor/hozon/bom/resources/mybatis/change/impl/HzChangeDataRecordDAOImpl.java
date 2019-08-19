@@ -1,8 +1,8 @@
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import cn.net.connor.hozon.dao.pojo.change.change.HzChangeDataRecord;
@@ -27,7 +27,7 @@ public class HzChangeDataRecordDAOImpl extends BaseSQLUtil implements HzChangeDa
     @Override
     public int insertList(List<HzChangeDataRecord> records) {
         try {
-            if (ListUtil.isNotEmpty(records)) {
+            if (ListUtils.isNotEmpty(records)) {
                 int size = records.size();
                 //分批更新数据 一次1000条
                 int i = 0;

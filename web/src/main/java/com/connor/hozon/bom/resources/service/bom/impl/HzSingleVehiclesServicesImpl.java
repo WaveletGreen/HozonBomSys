@@ -1,6 +1,6 @@
 package com.connor.hozon.bom.resources.service.bom.impl;
 
-import cn.net.connor.hozon.common.util.SerializeUtil;
+import cn.net.connor.hozon.common.util.SerializeUtils;
 import cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielBasicDao;
 import cn.net.connor.hozon.dao.dao.interaction.FeatureBomLineRelationHistoryDao;
 import cn.net.connor.hozon.dao.dao.interaction.SingleVehicleStatusDao;
@@ -11,21 +11,20 @@ import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleBomRelation;
 import cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleStatus;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONObject;
-import integration.service.integrate.SynMaterielCfgService;
-import com.connor.hozon.bom.interaction.bean.SingleVehicleCheckStatus;
+import integration.service.integrate.impl.SynMaterielCfgService;
+import cn.net.connor.hozon.services.bean.SingleVehicleCheckStatus;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzSingleVehiclesReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzSingleVehiclesRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzSingleVehiclesFactory;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.util.ListUtils;
 
 import java.util.*;
 
@@ -62,7 +61,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                 return vehiclesRespDTOS;
             }
             List<HzSingleVehicles> hzSingleVehicles = hzSingleVehiclesDao.selectByProjectUid(projectId);
-            if (ListUtil.isNotEmpty(hzSingleVehicles)) {
+            if (ListUtils.isNotEmpty(hzSingleVehicles)) {
                 for (HzSingleVehicles vehicles : hzSingleVehicles) {
                     HzSingleVehiclesRespDTO respDTO = HzSingleVehiclesFactory.singleVehiclesToRespDTO(vehicles);
                     vehiclesRespDTOS.add(respDTO);
@@ -105,7 +104,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
             List<HzSingleVehicles> vehicles = hzSingleVehiclesDao.selectOrgByProjectUid(projectId);
             List<HzSingleVehicles> singleVehicles = new ArrayList<>();
             List<HzDerivativeMaterielBasic> basics = hzDerivativeMaterielBasicDao.selectByProjectUid(params);
-            if (ListUtil.isNotEmpty(basics) && ListUtil.isNotEmpty(vehicles)) {
+            if (ListUtils.isNotEmpty(basics) && ListUtils.isNotEmpty(vehicles)) {
                 for (HzSingleVehicles vehicles1 : vehicles) {
                     HzSingleVehicles hzSingleVehicles = new HzSingleVehicles();
                     for (HzDerivativeMaterielBasic materielBasic : basics) {
@@ -134,7 +133,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                         }
                     }
                 }
-                if (ListUtil.isNotEmpty(singleVehicles)) {
+                if (ListUtils.isNotEmpty(singleVehicles)) {
                     int i = hzSingleVehiclesDao.insertList(singleVehicles);
                     if (i > 0) {
                         return WriteResultRespDTO.getSuccessResult();
@@ -169,7 +168,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
         //获取该项目下的所有车型模型
         List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelServiceImpl.doSelectByProjectPuid(projectId);
         LinkedHashMap<String, String> map = new LinkedHashMap();
-        if (ListUtil.isNotEmpty(hzCfg0ModelRecords)) {
+        if (ListUtils.isNotEmpty(hzCfg0ModelRecords)) {
             Set<HzCfg0ModelRecord> set = new HashSet<>(hzCfg0ModelRecords);
             Iterator iterator = set.iterator();
             for (int i = 0; i < set.size(); i++) {
@@ -188,8 +187,8 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
         if (null == bytes) {
             return object;
         }
-        Object obj = SerializeUtil.unserialize(bytes);
-        if (ListUtil.isNotEmpty(list)) {
+        Object obj = SerializeUtils.unserialize(bytes);
+        if (ListUtils.isNotEmpty(list)) {
             if (obj instanceof Map) {
                 Map<String, Object> map = (Map) obj;
                 if (map.size() > 0) {
@@ -209,7 +208,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
 
     @Override
     public JSONObject singleVehNum(String vehNum, List<HzCfg0ModelRecord> list, JSONObject object) {
-        if (ListUtil.isEmpty(list)) {
+        if (ListUtils.isEmpty(list)) {
             return object;
         }
         Set<HzCfg0ModelRecord> set = new HashSet<>(list);
@@ -246,7 +245,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
     @Override
     public JSONObject singleVehNum(String vehNum, List<HzCfg0ModelRecord> list) {
         JSONObject object = new JSONObject();
-        if (ListUtil.isEmpty(list)) {
+        if (ListUtils.isEmpty(list)) {
             return object;
         }
         Set<HzCfg0ModelRecord> set = new HashSet<>(list);
@@ -377,7 +376,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
             statusList.add(vehicleStatus);
         }
 
-        if (!ListUtils.isEmpty(statusList)) {
+        if (!org.thymeleaf.util.ListUtils.isEmpty(statusList)) {
             //先删除以前的数据
             singleVehicleStatusDao.deleteByProjectId(projectId);
             singleVehicleStatusDao.insertList(statusList);

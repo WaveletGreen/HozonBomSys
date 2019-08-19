@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.materiel;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.BomBackReqDTO;
@@ -11,7 +12,6 @@ import com.connor.hozon.bom.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.materiel.HzMaterielService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -204,7 +204,7 @@ public class HzMaterielController  extends BaseController {
     @RequestMapping(value = "order/choose",method = RequestMethod.GET)
     public String getOrderChooseToPage(String projectId,Model model){
         List<HzChangeOrderRecord> records = hzChangeOrderDAO.findHzChangeOrderRecordByProjectId(projectId);
-        if(ListUtil.isNotEmpty(records)){
+        if(ListUtils.isNotEmpty(records)){
             model.addAttribute("data",records);
         }
         return "bomManage/mbom/materialData/materialSetChangeForm";

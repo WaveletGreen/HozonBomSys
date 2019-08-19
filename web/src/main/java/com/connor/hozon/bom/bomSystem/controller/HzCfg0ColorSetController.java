@@ -7,12 +7,12 @@
 package com.connor.hozon.bom.bomSystem.controller;
 
 
+import cn.net.connor.hozon.common.util.DateStringUtils;
 import cn.net.connor.hozon.dao.pojo.depository.color.HzColorSetQuery;
-import cn.net.connor.hozon.common.util.DateStringHelper;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.common.util.UUIDHelper;
 import cn.net.connor.hozon.services.service.depository.color.impl.HzColorSetServiceImpl;
 import cn.net.connor.hozon.common.entity.QueryBase;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesLibsDAO;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import net.sf.json.JSONObject;
@@ -36,7 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 
 /**
@@ -96,8 +96,8 @@ public class HzCfg0ColorSetController {
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     public String update(HzCfg0ColorSet entity, Model model) {
         if ((entity = colorSerService.getById(entity)) != null) {
-           /* entity.setStrColorAbolishDate(DateStringHelper.dateToString2(entity.getpColorAbolishDate()));
-            entity.setStrColorEffectedDate(DateStringHelper.dateToString2(entity.getpColorEffectedDate()));*/
+           /* entity.setStrColorAbolishDate(DateStringUtils.dateToString2(entity.getpColorAbolishDate()));
+            entity.setStrColorEffectedDate(DateStringUtils.dateToString2(entity.getpColorEffectedDate()));*/
             model.addAttribute("entity", entity);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             model.addAttribute("pColorEffectedDate",entity.getpColorEffectedDate()==null?"":sdf.format(entity.getpColorEffectedDate()));
@@ -134,8 +134,8 @@ public class HzCfg0ColorSetController {
         User user = UserInfo.getUser();
         /*try
         {
-            set.setpColorAbolishDate(DateStringHelper.stringToDate2(set.getStrColorAbolishDate()));
-            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
+            set.setpColorAbolishDate(DateStringUtils.stringToDate2(set.getStrColorAbolishDate()));
+            set.setpColorEffectedDate(DateStringUtils.stringToDate2(set.getStrColorEffectedDate()));
         } catch (ParseException e) {
             e.printStackTrace();
             logger.error("从字符串解析时间失败", e);
@@ -256,7 +256,7 @@ public class HzCfg0ColorSetController {
         //生效时间由审核完成只有更新
         set.setpColorModifyDate(now);
         //失效时间设置为9999
-        set.setpColorAbolishDate(DateStringHelper.forever());
+        set.setpColorAbolishDate(DateStringUtils.forever());
         //创建时间由数据库默认值定义
         //  set.setpColorCreateDate(now);
         set.setpColorModifier(user.getUsername());
@@ -367,8 +367,8 @@ public class HzCfg0ColorSetController {
         User user = UserInfo.getUser();
         /*try
         {
-            set.setpColorAbolishDate(DateStringHelper.stringToDate2(set.getStrColorAbolishDate()));
-            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
+            set.setpColorAbolishDate(DateStringUtils.stringToDate2(set.getStrColorAbolishDate()));
+            set.setpColorEffectedDate(DateStringUtils.stringToDate2(set.getStrColorEffectedDate()));
         } catch (ParseException e) {
             e.printStackTrace();
             logger.error("从字符串解析时间失败", e);
@@ -402,7 +402,7 @@ public class HzCfg0ColorSetController {
         }
         /*try {
 
-            set.setpColorEffectedDate(DateStringHelper.stringToDate2(set.getStrColorEffectedDate()));
+            set.setpColorEffectedDate(DateStringUtils.stringToDate2(set.getStrColorEffectedDate()));
             if (set.getpColorAbolishDate() == null) {
                 set.setpColorAbolishDate(new Date());
             }
@@ -418,7 +418,7 @@ public class HzCfg0ColorSetController {
         //生效时间由审核完成只有更新
         set.setpColorModifyDate(now);
         //失效时间设置为9999
-        set.setpColorAbolishDate(DateStringHelper.forever());
+        set.setpColorAbolishDate(DateStringUtils.forever());
         //创建时间由数据库默认值定义
         //  set.setpColorCreateDate(now);
         set.setpColorModifier(user.getUsername());

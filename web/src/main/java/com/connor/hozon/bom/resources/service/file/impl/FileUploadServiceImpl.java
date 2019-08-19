@@ -3,7 +3,8 @@ package com.connor.hozon.bom.resources.service.file.impl;
 import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
 import cn.net.connor.hozon.dao.dao.main.HzMainBomDao;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.common.util.ListUtils;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.model.HzEbomRecordFactory;
@@ -16,7 +17,6 @@ import com.connor.hozon.bom.resources.mybatis.epl.HzEPLDAO;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.file.FileUploadService;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
 import org.apache.commons.lang.StringUtils;
@@ -344,7 +344,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 record.setPartId(lineId);
                 eplRecords.add(record);
             }
-            if(ListUtil.isNotEmpty(eplRecords)){
+            if(ListUtils.isNotEmpty(eplRecords)){
                 hzEPLDAO.insertList(new ArrayList<>(eplRecords));
             }
 
@@ -430,7 +430,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
             List<HzPbomLineRecord> hzPbomLineRecords = new ArrayList<>();
             List<String> carParts = hzMbomService.loadingCarPartType();
-            if(ListUtil.isNotEmpty(records)){
+            if(ListUtils.isNotEmpty(records)){
                 records.forEach(record -> {
                     if(carParts.contains(record.getpBomLinePartResource())){
                         HzPbomLineRecord pbomLineRecord = HzPbomRecordFactory.ImportEbomRecordToPbomRecord(record);
@@ -459,7 +459,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                       public Void doInTransaction(TransactionStatus status) {
                           try {
                           hzEbomRecordDAO.importList(records);
-                          if(ListUtil.isNotEmpty(hzPbomLineRecords)){
+                          if(ListUtils.isNotEmpty(hzPbomLineRecords)){
                               hzPbomRecordDAO.insertList(hzPbomLineRecords);
                           }
                           }catch (Exception e){
@@ -993,7 +993,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             stringBuffer.append("未找到相关BOM信息，导入单车用量信息前，应先存在相关BOM记录!</br>");
             this.errorCount++;
         }
-        if(ListUtil.isEmpty(hzCfg0ModelRecords)){
+        if(ListUtils.isEmpty(hzCfg0ModelRecords)){
             stringBuffer.append("未找到相关版型信息，导入单车用量信息前，应先在全配置表中添加当前项目的版型信息!</br>");
             this.errorCount++;
         }
@@ -1012,7 +1012,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             Row title = sheet.getRow(0);
             short lastCellNum = title.getLastCellNum();
             List<String> titleName = new ArrayList<>();
-            if(ListUtil.isNotEmpty(hzCfg0ModelRecords)){
+            if(ListUtils.isNotEmpty(hzCfg0ModelRecords)){
                 if(lastCellNum > 52){
                     for(int i = 53;i<lastCellNum;i++){//第50列以后为要导入的版型信息
                         boolean find = false;

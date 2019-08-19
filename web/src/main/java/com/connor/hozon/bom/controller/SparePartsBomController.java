@@ -10,7 +10,7 @@ package com.connor.hozon.bom.controller;
 import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.service.sparePart.SparePartBomQueryResponse;
+import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryResponse;
 import com.connor.hozon.bom.service.sparePart.SparePartsBomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

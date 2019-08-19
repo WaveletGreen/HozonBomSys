@@ -14,7 +14,7 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.ExcelUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.thymeleaf.util.ListUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -111,7 +110,7 @@ public class HzSingleVehiclesController extends BaseController {
         List<HzSingleVehiclesRespDTO> respDTOS = hzSingleVehiclesServices.singleVehiclesList(projectId);
         Map<String, Object> ret = new HashMap<>();
         List<Map<String, Object>> _list = new ArrayList<>();
-        if (ListUtil.isNotEmpty(respDTOS)) {
+        if (ListUtils.isNotEmpty(respDTOS)) {
             respDTOS.forEach(dto -> {
                 Map<String, Object> _res = new HashMap<>();
                 _res.put("id", dto.getId());
@@ -384,7 +383,7 @@ public class HzSingleVehiclesController extends BaseController {
     @RequestMapping("checkStatus")
     public String checkStatus(String projectId, Long vehiclesId, Model model) {
         List<SingleVehicleBomRelation> list = hzSingleVehiclesServices.checkStatus(projectId, vehiclesId).getRel();
-        if (ListUtils.isEmpty(list)) {
+        if (org.thymeleaf.util.ListUtils.isEmpty(list)) {
             model.addAttribute(CommonSetting.STATUS_FIELD, false);
             model.addAttribute(CommonSetting.ERROR_FIELD, "查询不到单车配置信息，需要重新生成单车数据");
         } else {

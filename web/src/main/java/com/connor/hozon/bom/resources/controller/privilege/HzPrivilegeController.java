@@ -1,8 +1,8 @@
 package com.connor.hozon.bom.resources.controller.privilege;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import cn.net.connor.hozon.config.filter.HzFilter;
 import com.connor.hozon.bom.sys.service.UserRolePrivilegeService;
@@ -34,7 +34,7 @@ public class HzPrivilegeController extends BaseController {
             uri= uri.split("\\?")[0];
         }
         List<String> urls = HzFilter.getUrlList();
-        if(ListUtil.isNotEmpty(urls)){
+        if(ListUtils.isNotEmpty(urls)){
             if(urls.contains(uri)){
                 WriteResultRespDTO resultRespDTO = userRolePrivilegeService.hasPrivilege(uri,urls);
                 if(WriteResultRespDTO.isSuccess(resultRespDTO)){

@@ -2,7 +2,7 @@ package com.connor.hozon.bom.common.config.websocket;
 
 
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import com.xiaoleilu.hutool.date.DatePattern;
 import com.xiaoleilu.hutool.date.DateUtil;

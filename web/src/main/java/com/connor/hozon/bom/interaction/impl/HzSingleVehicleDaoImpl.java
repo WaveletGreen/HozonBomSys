@@ -2,7 +2,7 @@ package com.connor.hozon.bom.interaction.impl;
 
 import com.connor.hozon.bom.bomSystem.impl.BasicDaoImpl;
 import com.connor.hozon.bom.interaction.dao.HzSingleVehiclesDao;
-import com.connor.hozon.bom.interaction.inquirer.HzSingleVehiclesInquirer;
+import cn.net.connor.hozon.dao.query.interaction.HzSingleVehiclesQuery;
 import org.springframework.context.annotation.Configuration;
 import cn.net.connor.hozon.dao.pojo.interaction.HzSingleVehicles;
 
@@ -33,7 +33,7 @@ public class HzSingleVehicleDaoImpl extends BasicDaoImpl<HzSingleVehicles> imple
      * @param inquirer
      * @return
      */
-    private List<HzSingleVehicles> selectListByInquirer(HzSingleVehiclesInquirer inquirer) {
+    private List<HzSingleVehicles> selectListByInquirer(HzSingleVehiclesQuery inquirer) {
         return baseSQLUtil.executeQueryByPass(VEHICLES, inquirer, clzName + ".selectListByInquirer");
     }
 
@@ -43,7 +43,7 @@ public class HzSingleVehicleDaoImpl extends BasicDaoImpl<HzSingleVehicles> imple
      * @param inquirer
      * @return
      */
-    private List<HzSingleVehicles> selectOrgByInquirer(HzSingleVehiclesInquirer inquirer) {
+    private List<HzSingleVehicles> selectOrgByInquirer(HzSingleVehiclesQuery inquirer) {
         return baseSQLUtil.executeQueryByPass(VEHICLES, inquirer, clzName + ".selectOrgByInquirer");
     }
 
@@ -55,7 +55,7 @@ public class HzSingleVehicleDaoImpl extends BasicDaoImpl<HzSingleVehicles> imple
      */
     @Override
     public List<HzSingleVehicles> selectByProjectUid(String projectUid) {
-        HzSingleVehiclesInquirer inquirer = new HzSingleVehiclesInquirer();
+        HzSingleVehiclesQuery inquirer = new HzSingleVehiclesQuery();
         inquirer.setSvlProjectUid(projectUid);
         return selectListByInquirer(inquirer);
     }
@@ -68,7 +68,7 @@ public class HzSingleVehicleDaoImpl extends BasicDaoImpl<HzSingleVehicles> imple
      */
     @Override
     public List<HzSingleVehicles> selectOrgByProjectUid(String projectUid) {
-        HzSingleVehiclesInquirer inquirer = new HzSingleVehiclesInquirer();
+        HzSingleVehiclesQuery inquirer = new HzSingleVehiclesQuery();
         inquirer.setSvlProjectUid(projectUid);
         return selectOrgByInquirer(inquirer);
     }
@@ -82,7 +82,7 @@ public class HzSingleVehicleDaoImpl extends BasicDaoImpl<HzSingleVehicles> imple
      */
     @Override
     public HzSingleVehicles selectByDmbIdWithProjectUid(Long svlDmbId, String projectUid) {
-        HzSingleVehiclesInquirer inquirer = new HzSingleVehiclesInquirer();
+        HzSingleVehiclesQuery inquirer = new HzSingleVehiclesQuery();
         inquirer.setSvlDmbId(svlDmbId);
         inquirer.setSvlProjectUid(projectUid);
         List<HzSingleVehicles> vehicles = selectListByInquirer(inquirer);

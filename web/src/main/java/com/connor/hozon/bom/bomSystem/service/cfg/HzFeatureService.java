@@ -10,7 +10,7 @@ package com.connor.hozon.bom.bomSystem.service.cfg;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzMaterielFeatureBean;
 import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
-import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
+import cn.net.connor.hozon.services.response.configuration.relevance.HzRelevanceResponseDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -90,7 +90,7 @@ public interface HzFeatureService {
      * @param _table 取数据的表：HZ_CFG0_RECORD是原数据，HZ_CFG0_ADD_CFG_RECORD是添加的数据
      * @return 返回当前最后一个筛选结果的的正序顺序
      */
-    public int doLoadRelevance(String projectPuid, List<HzRelevanceBean> _list, int index, String _table) ;
+    public int doLoadRelevance(String projectPuid, List<HzRelevanceResponseDTO> _list, int index, String _table) ;
 
     public List<HzFeatureValue> doLoadListByPuids(List<String> list) ;
 

@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.bom;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.SetLouReqDTO;
@@ -13,7 +14,6 @@ import com.connor.hozon.bom.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.bom.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.bom.resources.service.bom.HzMbomService;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,7 +153,7 @@ public class LouaContorller extends BaseController {
         hzBOMQuery.setProjectId(query.getProjectId());
         List<HzLoaRespDTO> loaRespDTOS = new ArrayList<>();
         List<HzEPLManageRecord> recordList = hzEbomRecordDAO.findNextLevelRecordByParentId(hzBOMQuery);//只获取子一层记录
-        if(ListUtil.isNotEmpty(recordList)){
+        if(ListUtils.isNotEmpty(recordList)){
             recordList.forEach(record -> {
                 HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
                 Integer is2Y = record.getIs2Y();
@@ -203,7 +203,7 @@ public class LouaContorller extends BaseController {
         if(StringUtils.isNotEmpty(hzPbomLineRecord.getParentUid())){
             respDTO = hzPbomService.getHzPbomByPuid(query.getProjectId(),hzPbomLineRecord.getParentUid());//父
         }
-        if(ListUtil.isNotEmpty(recordList)){
+        if(ListUtils.isNotEmpty(recordList)){
             recordList.forEach(record -> {
                 HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
                 Integer is2Y = record.getIs2Y();
@@ -245,7 +245,7 @@ public class LouaContorller extends BaseController {
         hzBOMQuery.setPuid(query.getPuid());
         hzBOMQuery.setTableName(MbomTableNameEnum.tableName(query.getType()));
         List<HzMbomLineRecord> hzMbomLineRecords = hzMbomRecordDAO.getHzMbomByBomQuery(hzBOMQuery);
-        if(ListUtil.isEmpty(hzMbomLineRecords)){
+        if(ListUtils.isEmpty(hzMbomLineRecords)){
             return jsonObject;
         }
         HzMbomLineRecord hzMbomLineRecord = hzMbomLineRecords.get(0);
@@ -255,7 +255,7 @@ public class LouaContorller extends BaseController {
         query1.setPuid(hzMbomLineRecord.geteBomPuid());
         query1.setColorId(hzMbomLineRecord.getColorId());
         List<HzMbomLineRecord> recordList =  hzMbomRecordDAO.getNextBomStructure(query1);//子一层
-        if(ListUtil.isNotEmpty(recordList)){
+        if(ListUtils.isNotEmpty(recordList)){
             recordList.forEach(record -> {
                 HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
                 Integer is2Y = record.getIs2Y();
@@ -275,7 +275,7 @@ public class LouaContorller extends BaseController {
         bomQuery.setColorId(hzMbomLineRecord.getColorId());
         bomQuery.setProjectId(query.getProjectId());
         List<HzMbomLineRecord> parentRecords = hzMbomRecordDAO.getHzMbomByBomQuery(hzBOMQuery);
-        if(ListUtil.isNotEmpty(parentRecords)){
+        if(ListUtils.isNotEmpty(parentRecords)){
             HzLoaRespDTO hzLoaRespDTO = new HzLoaRespDTO();
             HzMbomLineRecord record = parentRecords.get(0);
             Integer is2Y = record.getIs2Y();

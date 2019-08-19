@@ -1,8 +1,9 @@
 package com.connor.hozon.bom.resources.controller.myListJob.untreated;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONObject;
 import cn.net.connor.hozon.dao.dao.task.HzTasksDao;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.HzAuditorChangeDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzChangeOrderRespDTO;
@@ -13,7 +14,6 @@ import com.connor.hozon.bom.resources.mybatis.change.HzChangeListDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.change.HzAuditorChangeService;
 import com.connor.hozon.bom.resources.service.change.HzChangeOrderService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +110,7 @@ public class HzUntreatedController extends BaseController {
         }
 
         Page<HzChangeOrderRespDTO> page = hzAuditorChangeService.getHzChangeOrderPageUn(pageQuery,record);
-        if(ListUtil.isEmpty(page.getResult())){
+        if(ListUtils.isEmpty(page.getResult())){
             return new JSONObject();
         }
 
@@ -147,7 +147,7 @@ public class HzUntreatedController extends BaseController {
         return jsonObject;
 
         /*List<HzChangeOrderRespDTO> respDTOs = hzAuditorChangeService.findChangeOrderList(query,record);
-        if(ListUtil.isEmpty(respDTOs)){
+        if(ListUtils.isEmpty(respDTOs)){
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();

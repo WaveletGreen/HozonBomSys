@@ -11,13 +11,14 @@ import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.dao.pojo.depository.accessories.HzAccessoriesLibs;
 import cn.net.connor.hozon.dao.pojo.main.HzMainBom;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.common.util.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.HzConfigToBomLineService;
-import com.connor.hozon.bom.bomSystem.iservice.interaction.HzCraftService;
+import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftService;
 import com.connor.hozon.bom.bomSystem.service.interaction.HzCraftServiceImpl;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.constant.ChangeConstants;
 import com.connor.hozon.bom.resources.domain.dto.request.*;
@@ -42,7 +43,6 @@ import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.bom.HzPbomService;
 import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
@@ -164,7 +164,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                         hzPbomTreeQuery.setPuid(puid);
                         hzPbomTreeQuery.setProjectId(projectId);
                         List<HzPbomLineRecord> list = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
-                        if(ListUtil.isNotEmpty(list)){
+                        if(ListUtils.isNotEmpty(list)){
                             if(deleteFlag){
                                 for(HzPbomLineRecord record : list){
                                     deletePuids.append(record.getPuid()+",");
@@ -196,13 +196,13 @@ public class HzPbomServiceImpl implements HzPbomService {
                         hzPbomRecordDAO.deleteByPuids(updatePuids.toString());
                     }
                     // 如果删除后 元素的父没有子 需要更改isHas 属性为0 2Y 层除外
-                    if(ListUtil.isNotEmpty(pbomHasChildren)){
+                    if(ListUtils.isNotEmpty(pbomHasChildren)){
                         pbomHasChildren.forEach(puid->{
                             HzPbomTreeQuery hzPbomTreeQuery = new HzPbomTreeQuery();
                             hzPbomTreeQuery.setProjectId(projectId);
                             hzPbomTreeQuery.setPuid(puid);
                             List<HzPbomLineRecord> list = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
-                            if(ListUtil.isNotEmpty(list) && list.size() ==1){
+                            if(ListUtils.isNotEmpty(list) && list.size() ==1){
                                 HzPbomLineRecord record = new HzPbomLineRecord();
                                 record.setPuid(list.get(0).getPuid());
                                 if(!Integer.valueOf(1).equals(list.get(0).getIs2Y())){
@@ -212,7 +212,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                             }
                         });
                     }
-                    if(ListUtil.isNotEmpty(updatePbomList)){
+                    if(ListUtils.isNotEmpty(updatePbomList)){
                         hzPbomRecordDAO.updateListByPuids(updatePbomList);
                     }
                     return null;
@@ -232,7 +232,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         map.put("projectId", reqDTO.getProjectId());
         map.put("lineId", null == reqDTO.getLineId() ? null : reqDTO.getLineId().trim());
         List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
-        if (ListUtil.isEmpty(records)) {
+        if (ListUtils.isEmpty(records)) {
             return null;
         }
 
@@ -265,7 +265,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         map.put("lineId", reqDTO.getLineId());
         map.put("pPuid", reqDTO.getPuid());
         List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
-        if (ListUtil.isEmpty(records)) {
+        if (ListUtils.isEmpty(records)) {
             return null;
         }
         try {
@@ -347,7 +347,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             map.put("projectId", projectId);
             map.put("pPuid", puid);
             List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
-            if (ListUtil.isNotEmpty(records)) {
+            if (ListUtils.isNotEmpty(records)) {
                 HzPbomLineRecord record = records.get(0);
                 records = new ArrayList<>();
                 records.add(record);
@@ -381,7 +381,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         hzPbomTreeQuery.setPuid(puid);
         List<HzPbomLineRecord> hzPbomLineRecords = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
         List<HzPbomLineRecord> recordList = new ArrayList<>();
-        if(ListUtil.isNotEmpty(hzPbomLineRecords)){
+        if(ListUtils.isNotEmpty(hzPbomLineRecords)){
             HzPbomLineRecord record = hzPbomLineRecords.get(0);
             if(Integer.valueOf(1).equals(record.getpLouaFlag())){//已设置为LOU 执行取消操作
                 hzPbomLineRecords.forEach(hzPbomLineRecord -> {
@@ -407,7 +407,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         }
 
         try {
-            if(ListUtil.isNotEmpty(recordList)){
+            if(ListUtils.isNotEmpty(recordList)){
                 hzPbomRecordDAO.updateListByPuids(recordList);
             }
             return WriteResultRespDTO.getSuccessResult();
@@ -423,7 +423,7 @@ public class HzPbomServiceImpl implements HzPbomService {
         map.put("projectId", projectId);
         map.put("pPuid", puid);
         List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomById(map);
-        if (ListUtil.isNotEmpty(records)) {
+        if (ListUtils.isNotEmpty(records)) {
             if (records.get(0).getIs2Y().equals(1)) {
                 return records.get(0);
             } else if (records.get(0).getParentUid() == null) {
@@ -670,7 +670,7 @@ public class HzPbomServiceImpl implements HzPbomService {
             query.setTableName(ChangeTableNameEnum.HZ_PBOM.getTableName());
             List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecordsByPuids(query);
             List<HzPbomLineRecord> afterRecords = new ArrayList<>();
-            if(ListUtil.isNotEmpty(records)){
+            if(ListUtils.isNotEmpty(records)){
                 //到 after表中查询看是否存在记录
                 //存在记录则过滤 不存在记录则插入
                 HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
@@ -678,7 +678,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 dataDetailQuery.setOrderId(orderId);
                 dataDetailQuery.setTableName(ChangeTableNameEnum.HZ_PBOM_AFTER.getTableName());
                 List<HzPbomLineRecord> recordList = hzPbomRecordDAO.getPbomRecordsByOrderId(dataDetailQuery);
-                if(ListUtil.isEmpty(recordList)){
+                if(ListUtils.isEmpty(recordList)){
                     records.forEach(record -> {
                         HzPbomLineRecord manageRecord = HzPbomRecordFactory.bomLineRecordToBomRecord(record);
                         manageRecord.setOrderId(orderId);
@@ -785,21 +785,21 @@ public class HzPbomServiceImpl implements HzPbomService {
             Set<HzPbomLineRecord> set = new HashSet<>();
                 List<HzPbomLineRecord> list = hzPbomRecordDAO.getPbomRecordsByPuids(query);
                 //撤销 1找不存在版本记录的--删除    2找存在记录-直接更新数据为上个版本生效数据
-                if(ListUtil.isNotEmpty(list)){
+                if(ListUtils.isNotEmpty(list)){
                     list.forEach(r->{
                         if(1==r.getIsHas()){
                             HzPbomTreeQuery ebomTreeQuery = new HzPbomTreeQuery();
                             ebomTreeQuery.setProjectId(reqDTO.getProjectId());
                             ebomTreeQuery.setPuid(r.geteBomPuid());
                             List<HzPbomLineRecord> l = hzPbomRecordDAO.getHzPbomTree(ebomTreeQuery);
-                            if(ListUtil.isNotEmpty(l))
+                            if(ListUtils.isNotEmpty(l))
                                 set.addAll(l);
                         }else {
                             set.add(r);
                         }
                     });
                 }
-                if(ListUtil.isNotEmpty(set)){
+                if(ListUtils.isNotEmpty(set)){
                     set.forEach(record -> {
                         if(StringUtils.isBlank(record.getRevision())){
                             deletePuids.append(record.getPuid()+",");
@@ -808,7 +808,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                         }
                     });
                 }
-                if(ListUtil.isNotEmpty(updateRecords)){
+                if(ListUtils.isNotEmpty(updateRecords)){
                     HzChangeDataDetailQuery dataDetailQuery = new HzChangeDataDetailQuery();
                     dataDetailQuery.setRevision(true);
                     dataDetailQuery.setProjectId(reqDTO.getProjectId());
@@ -823,7 +823,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                         }
                     });
                 }
-                if(ListUtil.isNotEmpty(updateList)){
+                if(ListUtils.isNotEmpty(updateList)){
                     hzPbomRecordDAO.updatePBOMList(updateList);
                 }
                 if(StringUtils.isNotBlank(deletePuids.toString())){
@@ -957,7 +957,7 @@ public class HzPbomServiceImpl implements HzPbomService {
                 hzPbomRecordDAO.update(hzPbomLineRecord);
             }
         }
-        if (ListUtil.isNotEmpty(hzPbomLineRecordsAddSons) ) {
+        if (ListUtils.isNotEmpty(hzPbomLineRecordsAddSons) ) {
             int insertFlag = hzPbomRecordDAO.insertList(hzPbomLineRecordsAddSons);
             if (insertFlag == 1) {
                 result.put("success", true);

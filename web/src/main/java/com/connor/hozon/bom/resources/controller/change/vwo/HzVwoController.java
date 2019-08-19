@@ -7,13 +7,13 @@
 package com.connor.hozon.bom.resources.controller.change.vwo;
 
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoProcessDto;
+import cn.net.connor.hozon.dao.query.change.vwo.HzVwoFormListQuery;
+import cn.net.connor.hozon.services.request.change.HzVwoOptionUserRequestDTO;
+import cn.net.connor.hozon.services.request.change.HzVwoProcessRequestDTO;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzVWOManagerService;
-import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
+import cn.net.connor.hozon.common.constant.SystemStaticConst;
 import cn.net.connor.hozon.common.entity.QueryBase;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
@@ -157,7 +157,7 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/queryByBase", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> queryByBase(@RequestParam String projectUid, HzVwoFormListQueryBase queryBase) {
+    public Map<String, Object> queryByBase(@RequestParam String projectUid, HzVwoFormListQuery queryBase) {
         return iHzVWOManagerService.queryByBase(null, queryBase);
     }
 
@@ -274,8 +274,8 @@ public class HzVwoController {
 
     @RequestMapping(value = "saveOptionUser", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject saveOptionUser(@RequestBody HzVwoOptionUserDto hzVwoOptionUserDto) {
-        return iHzVWOManagerService.saveOptionUser(hzVwoOptionUserDto);
+    public JSONObject saveOptionUser(@RequestBody HzVwoOptionUserRequestDTO hzVwoOptionUserRequestDTO) {
+        return iHzVWOManagerService.saveOptionUser(hzVwoOptionUserRequestDTO);
     }
 
     /**
@@ -333,7 +333,7 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/release", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject release(@RequestBody HzVwoProcessDto dto) {
+    public JSONObject release(@RequestBody HzVwoProcessRequestDTO dto) {
         return iHzVWOManagerService.release(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
     }
 
@@ -345,7 +345,7 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/interrupt", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject interrupt(@RequestBody HzVwoProcessDto dto) {
+    public JSONObject interrupt(@RequestBody HzVwoProcessRequestDTO dto) {
         return iHzVWOManagerService.interrupt(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId());
     }
 
@@ -357,7 +357,7 @@ public class HzVwoController {
      */
     @RequestMapping(value = "/launch", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject launch(@RequestBody HzVwoProcessDto dto) {
+    public JSONObject launch(@RequestBody HzVwoProcessRequestDTO dto) {
         return iHzVWOManagerService.launch(dto.getVwoType(), dto.getProjectUid(), dto.getVwoId(), dto.getFormId());
     }
 

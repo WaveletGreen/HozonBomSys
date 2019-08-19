@@ -25,12 +25,13 @@ import cn.net.connor.hozon.dao.pojo.depository.work.HzWorkProcedure;
 import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgMainChangeQuery;
 import cn.net.connor.hozon.dao.query.configuration.fullConfigSheet.HzFullCfgMainQuery;
 import cn.net.connor.hozon.services.service.configuration.derivative.HzDMBasicChangeService;
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzFeatureChangeService;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.vwo.HzVWOManagerService;
-import com.connor.hozon.bom.bomSystem.iservice.integrate.SynBomService;
+import integration.service.integrate.SynBomService;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IReleaseCallBack;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureService;
@@ -52,10 +53,9 @@ import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.sys.exception.HzBomException;
-import integration.service.integrate.SynMaterielServiceImpl;
-import integration.service.integrate.SynProcessRouteService;
+import integration.service.integrate.impl.SynMaterielServiceImpl;
+import integration.service.integrate.impl.SynProcessRouteService;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -316,7 +316,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
 
         List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(hzChangeDataQuery);
         //EBOM  PBOM  MBOM  物料  工艺路线 BOM端 目前就这5种类型
-        if (ListUtil.isNotEmpty(list)) {
+        if (ListUtils.isNotEmpty(list)) {
             ExecutorServices executorServices = new ExecutorServices(list.size());
             ExecutorService service = executorServices.getPool();
             try {
@@ -396,7 +396,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 List<HzEPLManageRecord> addList = new ArrayList<>();
 
                 try {
-                    if (ListUtil.isNotEmpty(records)) {
+                    if (ListUtils.isNotEmpty(records)) {
                         Date date = new Date();
                         records.forEach(record -> {
                             if (Integer.valueOf(4).equals(record.getStatus())) {
@@ -420,7 +420,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                     }
 
 
-                    if (ListUtil.isNotEmpty(deletePuids)) {
+                    if (ListUtils.isNotEmpty(deletePuids)) {
                         //父层删除 子层一起删除
                         List<String> deleteList = new ArrayList<>();//直接进行删除操作
                         List<String> ebomHasChildrenPuids = new ArrayList<>();
@@ -433,7 +433,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                         hzEbomTreeQuery.setPuid(puid);
                                         hzEbomTreeQuery.setProjectId(projectId);
                                         List<HzEPLManageRecord> list = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
-                                        if (ListUtil.isNotEmpty(list)) {
+                                        if (ListUtils.isNotEmpty(list)) {
                                             list.forEach(l -> {
                                                 deleteList.add(l.getPuid());
                                             });
@@ -447,13 +447,13 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         hzEbomRecordDAO.deleteByPuids(deleteList,ChangeTableNameEnum.HZ_EBOM.getTableName());
 
                         List<HzEPLManageRecord> ebomUpdateRecords  = new ArrayList<>();
-                        if(ListUtil.isNotEmpty(ebomHasChildrenPuids)){
+                        if(ListUtils.isNotEmpty(ebomHasChildrenPuids)){
                             ebomHasChildrenPuids.forEach(puid->{
                                 HzEbomTreeQuery hzEbomTreeQuery = new HzEbomTreeQuery();
                                 hzEbomTreeQuery.setPuid(puid);
                                 hzEbomTreeQuery.setProjectId(projectId);
                                 List<HzEPLManageRecord> list = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
-                                if(ListUtil.isNotEmpty(list) && list.size() ==1){
+                                if(ListUtils.isNotEmpty(list) && list.size() ==1){
                                     HzEPLManageRecord record = new HzEPLManageRecord();
                                     record.setPuid(list.get(0).getPuid());
                                     record.setIs2Y(list.get(0).getIs2Y());
@@ -464,15 +464,15 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                 }
                             });
                         }
-                        if(ListUtil.isNotEmpty(ebomUpdateRecords)){
+                        if(ListUtils.isNotEmpty(ebomUpdateRecords)){
                             hzEbomRecordDAO.updateListByPuids(ebomUpdateRecords);
                         }
                     }
 
-                    if (ListUtil.isNotEmpty(updateList)) {
+                    if (ListUtils.isNotEmpty(updateList)) {
                         hzEbomRecordDAO.updateListByEplId(updateList);
                     }
-                    if (ListUtil.isNotEmpty(addList)) {
+                    if (ListUtils.isNotEmpty(addList)) {
                         hzEbomRecordDAO.insertList(addList, ChangeTableNameEnum.HZ_EBOM_BEFORE.getTableName());
                     }
                 }catch (Exception  e){
@@ -506,7 +506,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 //要新增的数据
                 List<HzPbomLineRecord> addList = new ArrayList<>();
                 try {
-                    if (ListUtil.isNotEmpty(records)) {
+                    if (ListUtils.isNotEmpty(records)) {
                         Date date = new Date();
                         records.forEach(record -> {
                             if (Integer.valueOf(4).equals(record.getStatus())) {
@@ -542,7 +542,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                     hzPbomTreeQuery.setPuid(puid);
                                     hzPbomTreeQuery.setProjectId(projectId);
                                     List<HzPbomLineRecord> list = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
-                                    if (ListUtil.isNotEmpty(list)) {
+                                    if (ListUtils.isNotEmpty(list)) {
                                         list.forEach(l -> {
                                             deleteList.add(l.getPuid());
                                         });
@@ -555,13 +555,13 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         hzPbomRecordDAO.deleteListByPuids(deleteList,ChangeTableNameEnum.HZ_PBOM.getTableName());
 
                         List<HzPbomLineRecord> pbomUpdateRecords  = new ArrayList<>();
-                        if(ListUtil.isNotEmpty(pbomHasChildrenPuids)){
+                        if(ListUtils.isNotEmpty(pbomHasChildrenPuids)){
                             pbomHasChildrenPuids.forEach(puid->{
                                 HzPbomTreeQuery hzPbomTreeQuery = new HzPbomTreeQuery();
                                 hzPbomTreeQuery.setPuid(puid);
                                 hzPbomTreeQuery.setProjectId(projectId);
                                 List<HzPbomLineRecord> list = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
-                                if(ListUtil.isNotEmpty(list) && list.size() ==1){
+                                if(ListUtils.isNotEmpty(list) && list.size() ==1){
                                     HzPbomLineRecord record = new HzPbomLineRecord();
                                     record.setPuid(list.get(0).getPuid());
                                     record.setIs2Y(list.get(0).getIs2Y());
@@ -572,14 +572,14 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                                 }
                             });
                         }
-                        if(ListUtil.isNotEmpty(pbomUpdateRecords)){
+                        if(ListUtils.isNotEmpty(pbomUpdateRecords)){
                             hzPbomRecordDAO.updateListByPuids(pbomUpdateRecords);
                         }
                     }
-                    if (ListUtil.isNotEmpty(updateList)) {
+                    if (ListUtils.isNotEmpty(updateList)) {
                         hzPbomRecordDAO.updateList(updateList);
                     }
-                    if (ListUtil.isNotEmpty(addList)) {
+                    if (ListUtils.isNotEmpty(addList)) {
                         hzPbomRecordDAO.insertListForChange(addList, ChangeTableNameEnum.HZ_PBOM_BEFORE.getTableName());
                     }
                     //2019.1.2 记录PBOM变更后定时任务
@@ -627,7 +627,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 List<HzMbomLineRecord> addList = new ArrayList<>();
 
                 try {
-                    if (ListUtil.isNotEmpty(records)) {
+                    if (ListUtils.isNotEmpty(records)) {
                         Date date = new Date();
                         records.forEach(record -> {
                             if (Integer.valueOf(4).equals(record.getStatus())) {
@@ -650,16 +650,16 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         });
                     }
 
-                    if (ListUtil.isNotEmpty(deleteMbom)) {
+                    if (ListUtils.isNotEmpty(deleteMbom)) {
                         HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
                         vo.setTableName(ChangeTableNameEnum.HZ_MBOM.getTableName());
                         vo.setRecordList(deleteMbom);
                         hzMbomRecordDAO.deleteMbomList(vo);
                     }
-                    if (ListUtil.isNotEmpty(updateList)) {
+                    if (ListUtils.isNotEmpty(updateList)) {
                         hzMbomRecordDAO.updateList(updateList);
                     }
-                    if (ListUtil.isNotEmpty(addList)) {
+                    if (ListUtils.isNotEmpty(addList)) {
                         HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
                         vo.setTableName(ChangeTableNameEnum.HZ_MBOM_BEFORE.getTableName());
                         vo.setRecordList(addList);
@@ -710,7 +710,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 List<HzMbomLineRecord> addList = new ArrayList<>();
 
                 try {
-                    if (ListUtil.isNotEmpty(records)) {
+                    if (ListUtils.isNotEmpty(records)) {
                         Date date = new Date();
                         records.forEach(record -> {
                             if (Integer.valueOf(4).equals(record.getStatus())) {
@@ -733,16 +733,16 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         });
                     }
 
-                    if (ListUtil.isNotEmpty(deleteMbom)) {
+                    if (ListUtils.isNotEmpty(deleteMbom)) {
                         HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
                         vo.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE.getTableName());
                         vo.setRecordList(deleteMbom);
                         hzMbomRecordDAO.deleteMbomList(vo);
                     }
-                    if (ListUtil.isNotEmpty(updateList)) {
+                    if (ListUtils.isNotEmpty(updateList)) {
                         hzMbomRecordDAO.updateList(updateList);
                     }
-                    if (ListUtil.isNotEmpty(addList)) {
+                    if (ListUtils.isNotEmpty(addList)) {
                         HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
                         vo.setTableName(ChangeTableNameEnum.HZ_MBOM_FINANCE_BRFORE.getTableName());
                         vo.setRecordList(addList);
@@ -781,7 +781,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                 List<HzMbomLineRecord> addList = new ArrayList<>();
 
                 try {
-                    if (ListUtil.isNotEmpty(records)) {
+                    if (ListUtils.isNotEmpty(records)) {
                         Date date = new Date();
                         records.forEach(record -> {
                             if (Integer.valueOf(4).equals(record.getStatus())) {
@@ -804,16 +804,16 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                         });
                     }
 
-                    if (ListUtil.isNotEmpty(deleteMbom)) {
+                    if (ListUtils.isNotEmpty(deleteMbom)) {
                         HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
                         vo.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT.getTableName());
                         vo.setRecordList(deleteMbom);
                         hzMbomRecordDAO.deleteMbomList(vo);
                     }
-                    if (ListUtil.isNotEmpty(updateList)) {
+                    if (ListUtils.isNotEmpty(updateList)) {
                         hzMbomRecordDAO.updateList(updateList);
                     }
-                    if (ListUtil.isNotEmpty(addList)) {
+                    if (ListUtils.isNotEmpty(addList)) {
                         HzMbomLineRecordVO vo = new HzMbomLineRecordVO();
                         vo.setTableName(ChangeTableNameEnum.HZ_MBOM_PRODUCT_BEFORE.getTableName());
                         vo.setRecordList(addList);
@@ -863,7 +863,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
 
               Integer errorCount = 0;
 
-              if (ListUtil.isNotEmpty(records)) {
+              if (ListUtils.isNotEmpty(records)) {
                   Date date = new Date();
                   records.forEach(record -> {
                       if (Integer.valueOf(4) .equals(record.getpValidFlag())) {
@@ -896,24 +896,24 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
               }
               stringBuffer.append("审核中的物料数据传输到SAP系统失败，请核实后重试!<br>");
               //需要传输数据到SAP BOM端需要记录数据传输结果
-              if (ListUtil.isNotEmpty(deleteList)) {
+              if (ListUtils.isNotEmpty(deleteList)) {
 //            synMaterielService.deleteByPuids();
                   JSONObject object = synMaterielServiceImpl.deleteByPuids(sapDeleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"puid");
                   errorCount += sapTransDataErrMsg(stringBuffer,object);
                   hzMaterielDAO.deleteMaterielList(deleteList,ChangeTableNameEnum.HZ_MATERIEL.getTableName());
               }
-              if (ListUtil.isNotEmpty(updateList)) {
+              if (ListUtils.isNotEmpty(updateList)) {
                   hzMaterielDAO.updateList(updateList);
-                  if(ListUtil.isNotEmpty(sapInsertList)){
+                  if(ListUtils.isNotEmpty(sapInsertList)){
                       JSONObject object = synMaterielServiceImpl.updateOrAddByUids(sapInsertList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
                       errorCount += sapTransDataErrMsg(stringBuffer,object);
                   }
-                  if(ListUtil.isNotEmpty(sapUpdateList)){
+                  if(ListUtils.isNotEmpty(sapUpdateList)){
                       JSONObject object = synMaterielServiceImpl.updateOrAddByUids(sapUpdateList,ChangeTableNameEnum.HZ_MATERIEL.getTableName(),"P_MATERIEL_CODE");
                       errorCount += sapTransDataErrMsg(stringBuffer,object);
                   }
               }
-              if (ListUtil.isNotEmpty(addList)) {
+              if (ListUtils.isNotEmpty(addList)) {
                   hzMaterielDAO.insertList(addList, ChangeTableNameEnum.HZ_MATERIEL_BEFORE.getTableName());
               }
               if(errorCount >0){
@@ -950,7 +950,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
               Set<String> addSapSet = new HashSet<>();//传SAP 新增
 
               try {
-                  if (ListUtil.isNotEmpty(records)) {
+                  if (ListUtils.isNotEmpty(records)) {
                       Date date = new Date();
                       records.forEach(record -> {
                           if (Integer.valueOf(4).equals(record.getpStatus())) {
@@ -976,7 +976,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
 
                   //传数据到SAP
                   // todo  工艺路线 SAP的接口目前有问题 待和SAP方沟通
-                  if (ListUtil.isNotEmpty(deleteList)) {
+                  if (ListUtils.isNotEmpty(deleteList)) {
                       try {
                           String[] strings = materielIds.toArray(new String[materielIds.size()]);
                           synProcessRouteService.deleteRouting(strings,projectId);
@@ -985,7 +985,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                       }
                       hzWorkProcedureDAO.deleteByPuids(deleteList,ChangeTableNameEnum.HZ_WORK_PROCEDURE.getTableName());
                   }
-                  if (ListUtil.isNotEmpty(updateList)) {
+                  if (ListUtils.isNotEmpty(updateList)) {
                       try {
                           String[] strings = addSapSet.toArray(new String[addSapSet.size()]);
                           synProcessRouteService.addRouting(strings,projectId);
@@ -994,7 +994,7 @@ public class ReleaseEntity implements IReleaseCallBack, IFunctionDesc, IDataModi
                       }
                       hzWorkProcedureDAO.updateList(updateList);
                   }
-                  if (ListUtil.isNotEmpty(addList)) {
+                  if (ListUtils.isNotEmpty(addList)) {
                       hzWorkProcedureDAO.insertList(addList, ChangeTableNameEnum.HZ_WORK_PROCEDURE_BEFORE.getTableName());
                   }
               }catch (Exception e){

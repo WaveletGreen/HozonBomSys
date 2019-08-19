@@ -1,5 +1,6 @@
 package com.connor.hozon.bom.resources.controller.change.ewo;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.bom.resources.controller.BaseController;
@@ -14,7 +15,6 @@ import com.connor.hozon.bom.resources.mybatis.change.HzEWOImpactDeptDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOBasicInfoService;
 import com.connor.hozon.bom.resources.service.change.HzEWOImpactReferenceService;
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.Result;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import cn.net.connor.hozon.dao.dao.sys.OrgGroupDao;
@@ -99,7 +99,7 @@ public class HzEWOBaseInfoController extends BaseController {
             return new JSONObject();
         }
         List<HzEWOBasicInfoRespDTO> respDTOs = hzEWOBasicInfoService.findHzEWOList(query);
-        if(ListUtil.isEmpty(respDTOs)){
+        if(ListUtils.isEmpty(respDTOs)){
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();
@@ -190,7 +190,7 @@ public class HzEWOBaseInfoController extends BaseController {
             return new JSONObject();
         }
         List<HzEbomRespDTO> respDTOList = hzEWOService.getEWOChangeFormRecord(query);
-        if(ListUtil.isEmpty(respDTOList)){
+        if(ListUtils.isEmpty(respDTOList)){
             return new JSONObject();
         }
         JSONObject jsonObject = new JSONObject();
@@ -276,7 +276,7 @@ public class HzEWOBaseInfoController extends BaseController {
             return ;
         }
         List<HzEWOImpactReference> respDTOList = hzEWOImpactReferenceService.getHzEWOImpactReferences(query);
-        if(ListUtil.isEmpty(respDTOList)){
+        if(ListUtils.isEmpty(respDTOList)){
             toJSONResponse(Result.build(false,"暂无数据！"),response);
             return ;
         }

@@ -1,7 +1,8 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.InitiatingProcessReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -11,7 +12,6 @@ import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOBasicInfoDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOService;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import cn.net.connor.hozon.dao.dao.sys.OrgGroupDao;
 import cn.net.connor.hozon.dao.pojo.sys.OrgGroup;
@@ -116,7 +116,7 @@ public class HzEWOServiceImpl implements HzEWOService {
                         hzEbomTreeQuery.setPuid(bomLineRecord.getPuid());
                         hzEbomTreeQuery.setProjectId(reqDTO.getProjectId());
                         List<HzEPLManageRecord> records = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
-                        if(ListUtil.isNotEmpty(records)){
+                        if(ListUtils.isNotEmpty(records)){
                             records.forEach(record -> {
                                 HzBomLineRecord srcBomLineRecord = new HzBomLineRecord();
                                 srcBomLineRecord.setPuid(record.getPuid());

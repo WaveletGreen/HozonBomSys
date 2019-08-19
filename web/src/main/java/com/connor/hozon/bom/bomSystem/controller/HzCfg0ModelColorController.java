@@ -16,7 +16,7 @@ import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCmcrDetailChangeDao;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzColorModelDao;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.common.util.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.impl.bom.HzBomLineRecordDaoImpl;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.HzColorModelService;
 import com.connor.hozon.bom.bomSystem.option.SpecialFeatureOptions;
@@ -24,7 +24,7 @@ import com.connor.hozon.bom.bomSystem.option.SpecialSettingOptions;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzColorLvl2ModelServiceImpl;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import cn.net.connor.hozon.dao.pojo.sys.User;
@@ -42,7 +42,7 @@ import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 /**
  * @Author: Fancyears·Maylos·Malvis

@@ -1,8 +1,9 @@
 package com.connor.hozon.bom.sys.service;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.common.util.ListUtils;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserService;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import com.connor.hozon.bom.resources.util.PrivilegeUtil;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import cn.net.connor.hozon.dao.dao.sys.UserRoleDao;
@@ -55,7 +56,7 @@ public class UserRolePrivilegeService {
                 respDTO.setErrMsg("当前登录用户不存在!");
                 return respDTO;
             }
-            if(ListUtil.isEmpty(u.getRoles())){
+            if(ListUtils.isEmpty(u.getRoles())){
                 respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 respDTO.setErrMsg(WriteResultRespDTO.NOT_PRIVILEGE);
                 return respDTO;
@@ -88,7 +89,7 @@ public class UserRolePrivilegeService {
                 respDTO.setErrCode(WriteResultRespDTO.FAILED_CODE);
                 return respDTO;
             }
-            if(ListUtil.isNotEmpty(trees)){
+            if(ListUtils.isNotEmpty(trees)){
                 //写文件来判断
                 for(Tree t:trees){
                     if(t.getName().equals(treeName)){

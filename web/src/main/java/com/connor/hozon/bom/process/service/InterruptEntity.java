@@ -6,6 +6,7 @@
 
 package com.connor.hozon.bom.process.service;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import com.connor.hozon.bom.bomSystem.iservice.process.IFunctionDesc;
 import com.connor.hozon.bom.bomSystem.iservice.process.IInterruptionCallBack;
 import com.connor.hozon.bom.process.iservice.IDataModifier;
@@ -19,7 +20,6 @@ import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.bom.resources.mybatis.materiel.HzMaterielDAO;
 import com.connor.hozon.bom.resources.mybatis.work.HzWorkProcedureDAO;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -127,7 +127,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
 //
 //        List<HzChangeDataRecord> list = hzChangeDataRecordDAO.getChangeDataTableName(hzChangeDataQuery);
 //        //EBOM  PBOM  MBOM  物料  工艺路线 BOM端 目前就这5种类型
-//        if (ListUtil.isNotEmpty(list)) {
+//        if (ListUtils.isNotEmpty(list)) {
 //            ExecutorServices executorServices = new ExecutorServices(list.size());
 //            ExecutorService service = executorServices.getPool();
 //            try {
@@ -189,7 +189,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
 //
 //        List<HzEPLManageRecord> records = hzEbomRecordDAO.getEbomRecordsByOrderId(dataDetailQuery);
 //        List<HzEPLManageRecord> bomLineRecords = new ArrayList<>();
-//        if(ListUtil.isNotEmpty(records)){
+//        if(ListUtils.isNotEmpty(records)){
 //            records.forEach(record -> {
 //                HzEPLManageRecord bomLineRecord = HzEbomRecordFactory.ebomRecordToEBOMRecord(record);
 //                bomLineRecord.setStatus(record.getStatus());
@@ -197,7 +197,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
 //                bomLineRecords.add(bomLineRecord);
 //            });
 //        }
-//        if(ListUtil.isNotEmpty(bomLineRecords)){
+//        if(ListUtils.isNotEmpty(bomLineRecords)){
 //            hzEbomRecordDAO.updateListByEplId(bomLineRecords);
 //        }
     }
@@ -213,7 +213,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
         dataDetailQuery.setTableName(tableName);
         dataDetailQuery.setProjectId(projectId);
         List<HzPbomLineRecord> records = hzPbomRecordDAO.getPbomRecordsByOrderId(dataDetailQuery);
-        if(ListUtil.isNotEmpty(records)){
+        if(ListUtils.isNotEmpty(records)){
             hzPbomRecordDAO.updateList(records);
         }
 
@@ -233,7 +233,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
 
         List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
         List<HzMbomLineRecord> bomLineRecords = new ArrayList<>();
-        if(ListUtil.isNotEmpty(records)){
+        if(ListUtils.isNotEmpty(records)){
             records.forEach(record -> {
                 HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
                 bomLineRecord.setStatus(record.getStatus());
@@ -241,7 +241,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
                 bomLineRecords.add(bomLineRecord);
             });
         }
-        if(ListUtil.isNotEmpty(bomLineRecords)){
+        if(ListUtils.isNotEmpty(bomLineRecords)){
             hzMbomRecordDAO.updateList(bomLineRecords);
         }
     }
@@ -259,7 +259,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
 
         List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
         List<HzMbomLineRecord> bomLineRecords = new ArrayList<>();
-        if(ListUtil.isNotEmpty(records)){
+        if(ListUtils.isNotEmpty(records)){
             records.forEach(record -> {
                 HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
                 bomLineRecord.setStatus(record.getStatus());
@@ -267,7 +267,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
                 bomLineRecords.add(bomLineRecord);
             });
         }
-        if(ListUtil.isNotEmpty(bomLineRecords)){
+        if(ListUtils.isNotEmpty(bomLineRecords)){
             hzMbomRecordDAO.updateList(bomLineRecords);
         }
     }
@@ -285,7 +285,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
 
         List<HzMbomLineRecord> records = hzMbomRecordDAO.getMbomRecordsByOrderId(dataDetailQuery);
         List<HzMbomLineRecord> bomLineRecords = new ArrayList<>();
-        if(ListUtil.isNotEmpty(records)){
+        if(ListUtils.isNotEmpty(records)){
             records.forEach(record -> {
                 HzMbomLineRecord bomLineRecord = HzMbomRecordFactory.mbomLineRecordToMbomLineRecord(record);
                 bomLineRecord.setStatus(record.getStatus());
@@ -293,7 +293,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
                 bomLineRecords.add(bomLineRecord);
             });
         }
-        if(ListUtil.isNotEmpty(bomLineRecords)){
+        if(ListUtils.isNotEmpty(bomLineRecords)){
             hzMbomRecordDAO.updateList(bomLineRecords);
         }
     }
@@ -310,7 +310,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
         dataDetailQuery.setProjectId(projectId);
 
         List<HzMaterielRecord> records = hzMaterielDAO.getMaterielRecordsByOrderId(dataDetailQuery);
-        if(ListUtil.isNotEmpty(records)){
+        if(ListUtils.isNotEmpty(records)){
             hzMaterielDAO.updateList(records);
         }
 
@@ -328,7 +328,7 @@ public class InterruptEntity implements IInterruptionCallBack, IFunctionDesc, ID
         dataDetailQuery.setProjectId(projectId);
 
         List<HzWorkProcedure> records = hzWorkProcedureDAO.getWorkProcedureByOrderId(dataDetailQuery);
-        if (ListUtil.isNotEmpty(records)) {
+        if (ListUtils.isNotEmpty(records)) {
             hzWorkProcedureDAO.updateList(records);
         }
     }

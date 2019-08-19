@@ -8,7 +8,7 @@ package com.connor.hozon.bom.bomSystem.impl.bom;
 
 import com.connor.hozon.bom.bomSystem.dao.bom.HzBomLineRecordDao;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
-import com.connor.hozon.bom.resources.util.ListUtil;
+import cn.net.connor.hozon.common.util.ListUtils;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
@@ -72,7 +72,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil implements HzBomLineReco
      */
     public int updateList(List<HzBomLineRecord> records) {
         try {
-            if (ListUtil.isNotEmpty(records)) {
+            if (ListUtils.isNotEmpty(records)) {
                 int size = records.size();
                 //分批更新数据 一次1000条
                 int i = 0;
@@ -113,7 +113,7 @@ public class HzBomLineRecordDaoImpl extends BaseSQLUtil implements HzBomLineReco
     @Deprecated
     public int updateBatch(List<HzBomLineRecord> records) {
         try {
-            if (ListUtil.isNotEmpty(records)) {
+            if (ListUtils.isNotEmpty(records)) {
                 int size = records.size();
                 //分批更新数据 一次1000条
                 int i = 0;

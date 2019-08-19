@@ -9,6 +9,7 @@ package com.connor.hozon.bom.service.sparePart;
 
 import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
+import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryResponse;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;

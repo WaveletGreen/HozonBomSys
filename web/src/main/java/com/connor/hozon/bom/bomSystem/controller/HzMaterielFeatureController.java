@@ -13,6 +13,7 @@ import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeature;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
+import cn.net.connor.hozon.services.request.configuration.derivative.HzDerivativeRequestDTO;
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
 import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMaterielServiceImpl;
 import com.connor.hozon.bom.bomSystem.controller.integrate.ExtraIntegrate;
@@ -20,17 +21,16 @@ import cn.net.connor.hozon.dao.dao.configuration.feature.HzFeatureDao;
 import cn.net.connor.hozon.dao.dao.configuration.derivative.*;
 import com.connor.hozon.bom.bomSystem.dao.modelColor.HzCfg0ModelColorDao;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzComposeDelDto;
-import com.connor.hozon.bom.bomSystem.dto.cfg.compose.HzComposeMFDTO;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.common.util.UUIDHelper;
 import com.connor.hozon.bom.bomSystem.iservice.cfg.HzCfg0ModelFeatureService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzCfg0OptionFamilyService;
 import com.connor.hozon.bom.bomSystem.service.cfg.HzFeatureServiceImpl;
-import com.connor.hozon.bom.bomSystem.service.derivative.HzComposeMFService;
+import com.connor.hozon.bom.bomSystem.service.derivative.HzDerivativeService;
 import com.connor.hozon.bom.bomSystem.service.fullCfg.HzBomAllCfgService;
-import integration.service.integrate.SynMaterielServiceImpl;
+import integration.service.integrate.impl.SynMaterielServiceImpl;
 import com.connor.hozon.bom.bomSystem.service.model.HzCfg0ModelRecordService;
 import com.connor.hozon.bom.bomSystem.service.modelColor.HzCfg0ModelColorService;
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.bom.resources.mybatis.change.HzChangeOrderDAO;
@@ -51,7 +51,7 @@ import cn.net.connor.hozon.dao.pojo.main.HzFactory;
 
 import java.util.*;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 
 /**
@@ -99,7 +99,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     HzCfg0ToModelRecordDao hzCfg0ToModelRecordDao;
     /***配置物料特性服务层，已集成在一个新的服务上*/
     @Autowired
-    HzComposeMFService hzComposeMFService;
+    HzDerivativeService hzDerivativeService;
     /*** 同步物料接口服务*/
     @Autowired
     private SynMaterielServiceImpl synMaterielServiceImpl;
@@ -272,29 +272,29 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     /**
      * 保存1条衍生物料数据
      *
-     * @param hzComposeMFDTO 前端接收的衍生物料数据
+     * @param hzDerivativeRequestDTO 前端接收的衍生物料数据
      * @return
      */
     @RequestMapping(value = "/saveCompose", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject saveCompose(@RequestBody HzComposeMFDTO hzComposeMFDTO) {
+    public JSONObject saveCompose(@RequestBody HzDerivativeRequestDTO hzDerivativeRequestDTO) {
         JSONObject result = new JSONObject();
         result.put("status", true);
         result.put("msg", "新增衍生物料成功");
-        if (hzComposeMFDTO == null) {
+        if (hzDerivativeRequestDTO == null) {
             result.put("status", false);
             return result;
         }
 
-        hzComposeMFService.saveCompose2(hzComposeMFDTO, result);
+        hzDerivativeService.saveCompose2(hzDerivativeRequestDTO, result);
         //获取项目主数据
-        HzMainConfig hzMainConfig = hzMainConfigService.selectByProjectId(hzComposeMFDTO.getProjectUid());
+        HzMainConfig hzMainConfig = hzMainConfigService.selectByProjectId(hzDerivativeRequestDTO.getProjectUid());
         //获取族
         String groupName = hzCfg0ModelGroupDao.selectGroupNameByMainUid(hzMainConfig.getId());
         if(groupName==null){
             HzCfg0ModelGroup hzCfg0ModelGroup = new HzCfg0ModelGroup();
-            hzCfg0ModelGroup.setGroupDesc(hzComposeMFDTO.getModelGroup());
-            hzCfg0ModelGroup.setGroupName(hzComposeMFDTO.getModelGroup());
+            hzCfg0ModelGroup.setGroupDesc(hzDerivativeRequestDTO.getModelGroup());
+            hzCfg0ModelGroup.setGroupName(hzDerivativeRequestDTO.getModelGroup());
             hzCfg0ModelGroup.setMainUid(hzMainConfig.getId());
             hzCfg0ModelGroup.setId(UUIDHelper.generateUpperUid());
             int insertNum = hzCfg0ModelGroupDao.insert(hzCfg0ModelGroup);
@@ -325,7 +325,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             result.put("status", false);
             return result;
         }
-        hzComposeMFService.deleteCompose(delDtos, result);
+        hzDerivativeService.deleteCompose(delDtos, result);
         return result;
     }
 
@@ -360,7 +360,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
             }
             if(hzComposeDelDtosUpdate!=null&&hzComposeDelDtosUpdate.size()>0){
                 try {
-                    hzComposeMFService.deleteVehicleFake(hzComposeDelDtosUpdate);
+                    hzDerivativeService.deleteVehicleFake(hzComposeDelDtosUpdate);
                 }catch (Exception e){
                     result.put("status", false);
                     result.put("msg", "删除失败");
@@ -398,7 +398,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     @RequestMapping(value = "/loadComposes", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> loadComposes(@RequestParam String projectPuid) {
-        return hzComposeMFService.loadComposes(projectPuid, new QueryBase());
+        return hzDerivativeService.loadComposes(projectPuid, new QueryBase());
     }
 
     /**
@@ -411,7 +411,7 @@ public class HzMaterielFeatureController extends ExtraIntegrate {
     @RequestMapping("/saveCompose")
     @ResponseBody
     public JSONObject saveCompose(String projectPuid) {
-        return hzComposeMFService.saveCompose3(projectPuid);
+        return hzDerivativeService.saveCompose3(projectPuid);
     }
 
     /**

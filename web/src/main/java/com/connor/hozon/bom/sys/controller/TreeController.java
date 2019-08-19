@@ -1,13 +1,13 @@
 package com.connor.hozon.bom.sys.controller;
 
 
-import com.connor.hozon.bom.common.base.constant.SystemStaticConst;
+import cn.net.connor.hozon.common.constant.SystemStaticConst;
 import com.connor.hozon.bom.common.base.controller.GenericController;
-import com.connor.hozon.bom.common.base.service.GenericService;
+import cn.net.connor.hozon.services.service.sys.GenericService;
 import cn.net.connor.hozon.dao.query.sys.QueryTree;
 import cn.net.connor.hozon.dao.pojo.sys.Tree;
-import com.connor.hozon.bom.sys.mapper.TreeMapper;
-import com.connor.hozon.bom.sys.service.TreeService;
+import cn.net.connor.hozon.services.beanMapper.sys.TreeMapper;
+import cn.net.connor.hozon.services.service.sys.TreeService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

@@ -155,7 +155,7 @@ public class ReflectBom {
         //数量，也默认1条条传
         setNumber(bomToERPBean.getNumber() == null ? "1" : bomToERPBean.getNumber().toString());
         //单位，如果没有则默认设为EA
-//        Object obj = SerializeUtil.unserialize(bomToERPBean.getBomLineBlock());
+//        Object obj = SerializeUtils.unserialize(bomToERPBean.getBomLineBlock());
         String unit =  bomToERPBean.getUnit();/*(String) ((LinkedHashMap) obj).get("h9_Gross_Unit");*/
         setUnit((unit == null || "".equals(unit) ? "EA" : unit));
 //        if (obj instanceof LinkedHashMap) {

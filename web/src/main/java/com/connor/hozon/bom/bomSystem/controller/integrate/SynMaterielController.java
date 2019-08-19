@@ -6,7 +6,7 @@
 
 package com.connor.hozon.bom.bomSystem.controller.integrate;
 
-import com.connor.hozon.bom.bomSystem.iservice.integrate.SynMaterielService;
+import integration.service.integrate.SynMaterielService;
 import com.connor.hozon.bom.resources.domain.dto.request.EditHzMaterielReqDTO;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static cn.net.connor.hozon.common.util.StringHelper.checkString;
+import static cn.net.connor.hozon.common.util.StringUtils.checkString;
 
 /**
  * 同步物料主数据 x

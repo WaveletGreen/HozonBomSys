@@ -13,8 +13,8 @@ import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange;
 import cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange;
 import cn.net.connor.hozon.dao.pojo.sys.User;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoFormListQueryBase;
-import com.connor.hozon.bom.bomSystem.dto.vwo.HzVwoOptionUserDto;
+import cn.net.connor.hozon.dao.query.change.vwo.HzVwoFormListQuery;
+import cn.net.connor.hozon.services.request.change.HzVwoOptionUserRequestDTO;
 import com.connor.hozon.bom.resources.controller.change.vwo.VWOUserGroupDTO;
 import net.sf.json.JSONObject;
 import org.springframework.ui.Model;
@@ -113,7 +113,7 @@ public interface HzVWOManagerService {
      * @param queryBase
      * @return
      */
-    Map<String, Object> queryByBase(String projectUid, HzVwoFormListQueryBase queryBase);
+    Map<String, Object> queryByBase(String projectUid, HzVwoFormListQuery queryBase);
 
     /**
      * 获取用户详情
@@ -251,7 +251,7 @@ public interface HzVWOManagerService {
 
     JSONObject launch(Integer type, String projectUid, Long vwoId,Long formId);
 
-    JSONObject saveOptionUser(HzVwoOptionUserDto hzVwoOptionUserDto);
+    JSONObject saveOptionUser(HzVwoOptionUserRequestDTO hzVwoOptionUserRequestDTO);
 
     Map<String, Object> getFeatureTable(Long vwoId);
 

@@ -1,6 +1,7 @@
 package com.connor.hozon.bom.resources.service.change.impl;
 
-import com.connor.hozon.bom.common.util.user.UserInfo;
+import cn.net.connor.hozon.common.util.ListUtils;
+import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzEWOBasicInfoReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzEWOBasicInfoRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
@@ -8,7 +9,6 @@ import com.connor.hozon.bom.resources.domain.query.HzEWOBasicInfoQuery;
 import com.connor.hozon.bom.resources.mybatis.change.HzEWOBasicInfoDAO;
 import com.connor.hozon.bom.resources.service.change.HzEWOBasicInfoService;
 import com.connor.hozon.bom.resources.util.DateUtil;
-import com.connor.hozon.bom.resources.util.ListUtil;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
             HzEWOBasicInfoQuery hzEWOBasicInfoQuery = new HzEWOBasicInfoQuery();
             hzEWOBasicInfoQuery.setId(reqDTO.getId());
             List<HzEWOBasicInfo> infos = hzEWOBasicInfoDAO.findHzEWOBasicInfoList(hzEWOBasicInfoQuery);
-            if(ListUtil.isNotEmpty(infos)){
+            if(ListUtils.isNotEmpty(infos)){
                 HzEWOBasicInfo info = infos.get(0);
                 if(info == null || !Long.valueOf(user.getId()).equals(info.getOriginatorId())){
                     WriteResultRespDTO writeResultRespDTO = new WriteResultRespDTO();
@@ -81,7 +81,7 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
         HzEWOBasicInfoRespDTO respDTO = new HzEWOBasicInfoRespDTO();
         try {
             List<HzEWOBasicInfo> hzEWOBasicInfoList = hzEWOBasicInfoDAO.findHzEWOBasicInfoList(query);
-            if(ListUtil.isNotEmpty(hzEWOBasicInfoList)){
+            if(ListUtils.isNotEmpty(hzEWOBasicInfoList)){
                 HzEWOBasicInfo hzEWOBasicInfo = hzEWOBasicInfoList.get(0);
                 respDTO.setChangeDesc(hzEWOBasicInfo.getChangeDesc());
                 respDTO.setChangeType(hzEWOBasicInfo.getChangeType());
@@ -121,7 +121,7 @@ public class HzEWOBasicInfoServiceImpl implements HzEWOBasicInfoService {
         List<HzEWOBasicInfoRespDTO> ewoBasicInfoList = new ArrayList<>();
         try{
             List<HzEWOBasicInfo> infos = hzEWOBasicInfoDAO.findHzEWOBasicInfoList(query);
-            if(ListUtil.isNotEmpty(infos)){
+            if(ListUtils.isNotEmpty(infos)){
                 infos.forEach(hzEWOBasicInfo -> {
                     HzEWOBasicInfoRespDTO respDTO = new HzEWOBasicInfoRespDTO();
                     respDTO.setProjectId(hzEWOBasicInfo.getProjectId());

@@ -13,10 +13,10 @@ import cn.net.connor.hozon.dao.pojo.configuration.feature.HzMaterielFeatureBean;
 import cn.net.connor.hozon.dao.pojo.main.HzMainConfig;
 import cn.net.connor.hozon.dao.query.configuration.feature.HzFeatureQuery;
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
-import com.connor.hozon.bom.bomSystem.dto.HzRelevanceBean;
-import cn.net.connor.hozon.common.util.DateStringHelper;
-import cn.net.connor.hozon.common.util.StringHelper;
-import com.connor.hozon.bom.bomSystem.helper.UUIDHelper;
+import cn.net.connor.hozon.services.response.configuration.relevance.HzRelevanceResponseDTO;
+import cn.net.connor.hozon.common.util.DateStringUtils;
+import cn.net.connor.hozon.common.util.StringUtils;
+import cn.net.connor.hozon.common.util.UUIDHelper;
 import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.dictionaryLibrary.HzDictionaryLibraryDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,7 +163,7 @@ public class HzFeatureServiceImpl implements HzFeatureService {
      * @param _table 取数据的表：HZ_CFG0_RECORD是原数据，HZ_CFG0_ADD_CFG_RECORD是添加的数据
      * @return 返回当前最后一个筛选结果的的正序顺序
      */
-    public int doLoadRelevance(String projectPuid, List<HzRelevanceBean> _list, int index, String _table) {
+    public int doLoadRelevance(String projectPuid, List<HzRelevanceResponseDTO> _list, int index, String _table) {
         List<HzFeatureValue> records = null;
         List<HzFeatureValue> needToUpdate = new ArrayList<>();
         if ("HZ_CFG0_RECORD".equals(_table)) {
@@ -173,7 +173,7 @@ public class HzFeatureServiceImpl implements HzFeatureService {
 //            records = doLoadAddedCfgListByProjectPuid(projectId);
 //        }
         for (HzFeatureValue record : records) {
-            HzRelevanceBean bean = new HzRelevanceBean();
+            HzRelevanceResponseDTO bean = new HzRelevanceResponseDTO();
             bean.set_table(_table);
             bean.setIndex(++index);
             bean.setPuid(record.getPuid());
@@ -210,7 +210,7 @@ public class HzFeatureServiceImpl implements HzFeatureService {
 
     public boolean preCheck(HzFeatureValue record) {
         //存在puid的可以同名更新
-        if (StringHelper.checkString(record.getPuid())) {
+        if (StringUtils.checkString(record.getPuid())) {
             return true;
         }
         record.setWhichTable("HZ_CFG0_RECORD");
@@ -307,7 +307,7 @@ public class HzFeatureServiceImpl implements HzFeatureService {
                     library = new HzDictionaryLibrary();
                     library.setPuid(UUIDHelper.generateUpperUid());
                     library.setEffectTime(now);
-                    library.setFailureTime(DateStringHelper.forever());
+                    library.setFailureTime(DateStringUtils.forever());
                     library.setFamillyCode(local.getpCfg0FamilyName());
                     library.setFamillyCh(local.getpCfg0FamilyDesc());
                     library.setEigenValue(local.getFeatureValueCode());
