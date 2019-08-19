@@ -32,9 +32,8 @@ import java.util.Set;
  * @Date: 2018/11/7
  * @Description: 用户角色权限判断
  */
-@Service("userRolePrivilegeService")
 @Transactional(rollbackFor={IllegalArgumentException.class})
-@Component
+@Service
 public class UserRolePrivilegeServiceImpl implements UserRolePrivilegeService {
     @Autowired
     @SuppressWarnings("SpringJavaAutowiringInspection")
