@@ -93,14 +93,14 @@
                                 function (result) {
                                     activeTabBodyRefresh();
                                     if (result.success) {
-                                        layer.msg('修改成功', {icon: 1, time: 3000})
+                                        layer.msg('派生成功', {icon: 1, time: 3000})
                                     }
                                     else if (!result.success) {
                                         window.Ewin.alert({message: result.errMsg})
                                     }
                                 },
                             error: function (status) {
-                                window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                                window.Ewin.alert({message: status.status + ':派生失败!'});
                             }
                         });
                     }

@@ -202,7 +202,7 @@ var quickAdd = function () {
             else {
                 window.Ewin.dialog({
                     title: "快速添加",
-                    url: "ebom/QuickAddEbom?projectId=" + projectPuid + "&puid=" + rows[0].puid,
+                    url: "ebom/QuickAddEbom?projectId=" + projectId + "&puid=" + rows[0].puid,
                     gridId: "gridId",
                     width: 500,
                     height: 500

@@ -18,6 +18,13 @@ public interface HzEBOMWriteService {
 
 
     /**
+     * 快速新增EBOM
+     * @param reqDTO
+     * @return
+     */
+    WriteResultRespDTO quickAddHzEbomRecord(QuickAddHzEbomReqDTO reqDTO);
+
+    /**
      * 派生EBOM
      * @param reqDTO
      * @return

@@ -124,6 +124,8 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
     }
 
 
+
+
     @Override
     @Transactional(rollbackFor = {RuntimeException.class,HzBomException.class})
     public WriteResultRespDTO addHzEbomRecord(AddHzEbomReqDTO reqDTO) {
@@ -174,6 +176,43 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
         }
+    }
+
+    /**
+     * 快速添加EBOM
+     * @param quickReqDTO
+     * @return
+     */
+    @Override
+    public WriteResultRespDTO quickAddHzEbomRecord(QuickAddHzEbomReqDTO quickReqDTO) {
+        AddHzEbomReqDTO reqDTO=new AddHzEbomReqDTO();
+        String parentId = quickReqDTO.getParentId();
+        String projectId = quickReqDTO.getProjectId();
+        if(StringUtils.isBlank(projectId)){
+            return WriteResultRespDTO.failResultRespDTO("请选择项目！");
+        }
+        if (StringUtils.isNotBlank(parentId)){
+            List<HzEPLManageRecord> list = hzEbomRecordDAO.findBaseEbomById(parentId, projectId);
+            if(ListUtil.isEmpty(list)){
+                return WriteResultRespDTO.failResultRespDTO("未找到父项记录！");
+            }
+            reqDTO.setPuid(list.get(0).getPuid());
+        }
+
+        reqDTO.setColorPart(quickReqDTO.getColorPart());
+        reqDTO.setEplId(quickReqDTO.getEplId());
+        reqDTO.setFna(quickReqDTO.getFna());
+        reqDTO.setLineId(quickReqDTO.getLineId());
+        reqDTO.setLineNo(quickReqDTO.getLineNo());
+        reqDTO.setMap(quickReqDTO.getMap());
+        reqDTO.setNumber(quickReqDTO.getNumber());
+        reqDTO.setpFnaDesc(quickReqDTO.getpFnaDesc());
+        reqDTO.setProjectId(quickReqDTO.getProjectId());
+        reqDTO.setpUpc(quickReqDTO.getpUpc());
+        reqDTO.setSparePart(quickReqDTO.getSparePart());
+        reqDTO.setSparePartNum(quickReqDTO.getSparePartNum());
+        return addHzEbomRecord(reqDTO);
+
     }
 
     /**
