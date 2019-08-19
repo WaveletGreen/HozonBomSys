@@ -1,6 +1,13 @@
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
 package com.connor.hozon.bom.resources.mybatis.change.impl;
 
-import com.connor.hozon.bom.configuration.dao.BasicDaoImpl;
+import com.connor.hozon.dao.BasicDaoImpl;
 import com.connor.hozon.bom.resources.mybatis.change.HzAttachmentRecordDao;
 import org.springframework.stereotype.Service;
 import cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord;

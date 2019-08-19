@@ -1,14 +1,21 @@
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
 package com.connor.hozon.bom.resources.schedule;
 
 import cn.net.connor.hozon.dao.dao.depository.project.HzProjectLibsDao;
 import cn.net.connor.hozon.common.util.ListUtils;
+import com.connor.hozon.exception.HzBomException;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzBOMScheduleResultDAO;
 import com.connor.hozon.bom.resources.mybatis.bom.HzBOMScheduleTaskDAO;
-import com.connor.hozon.bom.resources.service.bom.HzMbomService;
-import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesBomServices;
-import com.connor.hozon.bom.resources.service.bom.HzSingleVehiclesServices;
-import com.connor.hozon.bom.exception.HzBomException;
+import com.connor.hozon.service.bom.bom.HzMbomService;
+import com.connor.hozon.service.bom.bom.HzSingleVehiclesBomServices;
+import com.connor.hozon.service.bom.bom.HzSingleVehiclesServices;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

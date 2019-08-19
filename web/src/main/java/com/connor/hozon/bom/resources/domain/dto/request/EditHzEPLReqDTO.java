@@ -1,6 +1,13 @@
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
 package com.connor.hozon.bom.resources.domain.dto.request;
 
-import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
 import lombok.Data;
 

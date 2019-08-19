@@ -10,7 +10,7 @@ package integration.service.integrate.impl;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue;
 import cn.net.connor.hozon.services.response.integration.IntegrateMsgResponseDTO;
 import cn.net.connor.hozon.common.util.UUIDHelper;
-import com.connor.hozon.bom.service.configuration.feature.impl.FeatureValueServiceImpl;
+import com.connor.hozon.service.configuration.feature.impl.FeatureValueServiceImpl;
 import integration.base.feature.ZPPTCO002;
 import integration.logic.Features;
 import integration.option.ActionFlagOption;

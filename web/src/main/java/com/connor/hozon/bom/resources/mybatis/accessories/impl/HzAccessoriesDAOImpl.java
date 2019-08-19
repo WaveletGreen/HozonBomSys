@@ -1,8 +1,15 @@
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
 package com.connor.hozon.bom.resources.mybatis.accessories.impl;
 
+import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesDAO;
 import com.connor.hozon.bom.resources.domain.dto.request.DeleteHzAccessoriesDTO;
 import com.connor.hozon.bom.resources.domain.query.HzAccessoriesPageQuery;
-import com.connor.hozon.bom.resources.mybatis.accessories.HzAccessoriesDAO;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;

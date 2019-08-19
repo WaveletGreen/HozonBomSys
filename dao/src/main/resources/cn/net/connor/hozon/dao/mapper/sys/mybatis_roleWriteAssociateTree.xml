@@ -26,7 +26,7 @@
 
 
 	<!--&lt;!&ndash;分页查询&ndash;&gt;-->
-	<!--<select id="findByPage" parameterType="com.connor.hozon.bom.controller.sys.entity.QueryRoleWriteAssociateTree" resultMap="RoleWriteAssociateTreeMap">-->
+	<!--<select id="findByPage" parameterType="com.connor.hozon.controller.sys.entity.QueryRoleWriteAssociateTree" resultMap="RoleWriteAssociateTreeMap">-->
 		<!--SELECT role_id,tree_id FROM role_write_associate_tree-->
 		<!--WHERE 1=1-->
 		<!--<if test="roleId!=null and roleId!='' "  >-->
@@ -42,7 +42,7 @@
 	<!--</select>-->
 
 	<!--&lt;!&ndash;统计&ndash;&gt;-->
-	<!--<select id="count" parameterType="com.connor.hozon.bom.controller.sys.entity.QueryRoleWriteAssociateTree" resultType="int">-->
+	<!--<select id="count" parameterType="com.connor.hozon.controller.sys.entity.QueryRoleWriteAssociateTree" resultType="int">-->
 		<!--SELECT count(*) FROM role_write_associate_tree-->
 		<!--WHERE 1=1-->
 		<!--<if test="roleId!=null and roleId!='' ">-->
@@ -54,7 +54,7 @@
 	<!--</select>-->
 
 	<!--&lt;!&ndash;查询&ndash;&gt;-->
-	<!--<select id="query" parameterType="com.connor.hozon.bom.controller.sys.entity.QueryRoleWriteAssociateTree" resultMap="RoleWriteAssociateTreeMap">-->
+	<!--<select id="query" parameterType="com.connor.hozon.controller.sys.entity.QueryRoleWriteAssociateTree" resultMap="RoleWriteAssociateTreeMap">-->
 		<!--SELECT role_id,tree_id FROM role_write_associate_tree-->
 		<!--WHERE 1=1-->
 		<!--<if test="roleId!=null and roleId!='' ">-->

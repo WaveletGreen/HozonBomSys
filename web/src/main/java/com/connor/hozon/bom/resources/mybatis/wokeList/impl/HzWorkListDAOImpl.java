@@ -1,8 +1,15 @@
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
 package com.connor.hozon.bom.resources.mybatis.wokeList.impl;
 
+import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
 import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.bom.resources.domain.query.HzWorkListBasicInfoQuery;
-import com.connor.hozon.bom.resources.mybatis.wokeList.HzWorkListDAO;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
