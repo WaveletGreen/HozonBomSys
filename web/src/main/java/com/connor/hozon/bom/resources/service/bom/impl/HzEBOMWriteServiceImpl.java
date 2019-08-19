@@ -193,7 +193,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
         }
         if (StringUtils.isNotBlank(parentId)){
             List<HzEPLManageRecord> list = hzEbomRecordDAO.findBaseEbomById(parentId, projectId);
-            if(ListUtil.isEmpty(list)){
+            if(ListUtils.isEmpty(list)){
                 return WriteResultRespDTO.failResultRespDTO("未找到父项记录！");
             }
             reqDTO.setPuid(list.get(0).getPuid());
@@ -256,7 +256,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 return WriteResultRespDTO.failResultRespDTO("当前项目不存在！");
             }
             List<HzEPLManageRecord>  ebomRecords= hzEbomRecordDAO.findBaseEbomById(newlineId, projectId);
-            if (ListUtil.isNotEmpty(ebomRecords)){
+            if (ListUtils.isNotEmpty(ebomRecords)){
                 if (ebomRecords.size()>0){
                     return WriteResultRespDTO.failResultRespDTO("派生零件号已在EBOM中存在结构！");
                 }
@@ -580,7 +580,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
         for (String puid:puidList1  ) {
             puidList.add(puid);
             List<HzEPLManageRecord>  allsames= hzEbomRecordDAO.getSameHzBomLineByOne(puid,projectId);
-            if (ListUtil.isNotEmpty(allsames)){
+            if (ListUtils.isNotEmpty(allsames)){
                 for (HzEPLManageRecord sameEbom:allsames ) {
                     if (!puidList.contains(sameEbom.getPuid())){
                         puidList.add(sameEbom.getPuid());
@@ -1718,7 +1718,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                         hzEbomTreeQuery.setPuid(maxRecord.getPuid());
                         hzEbomTreeQuery.setProjectId(projectId);
                         List<HzEPLManageRecord> recordList = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
-                        if(ListUtil.isEmpty(recordList)){
+                        if(ListUtils.isEmpty(recordList)){
                             return WriteResultRespDTO.failResultRespDTO("BOM数据发生错误或者服务器异常，请核对BOM数据后重试！");
                         }
                         String min = recordList.get(recordList.size()-1).getSortNum();
@@ -1764,12 +1764,12 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 public Void doInTransaction(TransactionStatus status) {
 
                     hzEbomRecordDAO.insert(record);
-                    if (ListUtil.isNotEmpty(addChildEBOMList)){
+                    if (ListUtils.isNotEmpty(addChildEBOMList)){
                         hzEbomRecordDAO.insertList(addChildEBOMList,ChangeTableNameEnum.HZ_EBOM.getTableName());
                     }
-                    if( ListUtil.isNotEmpty(addPBOMList)){
+                    if( ListUtils.isNotEmpty(addPBOMList)){
                         hzPbomRecordDAO.insert(addPBOMList.get(0));
-                        if (ListUtil.isNotEmpty(addChildPBOMList)){
+                        if (ListUtils.isNotEmpty(addChildPBOMList)){
                             hzPbomRecordDAO.insertList(addChildPBOMList);
                         }
                     }
@@ -1804,7 +1804,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             }
             String bomDigifaxId =projectRecord.getPuid();
             List<HzEPLManageRecord> list = hzEbomRecordDAO.findBaseEbomById(parentId,projectId);//所有EBOM父
-            if(ListUtil.isEmpty(list)){
+            if(ListUtils.isEmpty(list)){
                 return WriteResultRespDTO.failResultRespDTO("未找到父项记录！");
             }
             HzBOMQuery query = new HzBOMQuery();
@@ -1856,7 +1856,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                 ebomTreeQuery.setProjectId(projectId);
                 ebomTreeQuery.setPuid(parent.getPuid());
                 List<HzEPLManageRecord> eBomTree = hzEbomRecordDAO.getHzBomLineChildren(ebomTreeQuery);
-                if(ListUtil.isEmpty(eBomTree)){
+                if(ListUtils.isEmpty(eBomTree)){
                     return WriteResultRespDTO.failResultRespDTO("未找到父项记录！");
                 }
 
@@ -1881,7 +1881,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                         hzBOMQuery.setParentId(parent.getPuid());
                         hzBOMQuery.setProjectId(projectId);
                         List<HzEPLManageRecord> nextRecords = hzEbomRecordDAO.findNextLevelRecordByParentId(hzBOMQuery);
-                        if(ListUtil.isEmpty(nextRecords)){
+                        if(ListUtils.isEmpty(nextRecords)){
                             return WriteResultRespDTO.failResultRespDTO("未找到父项记录！");
                         }
                         String maxLineIndex = nextRecords.get(nextRecords.size()-1).getLineIndex();
@@ -1943,7 +1943,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                             hzEbomTreeQuery.setPuid(maxRecord.getPuid());
                             hzEbomTreeQuery.setProjectId(projectId);
                             List<HzEPLManageRecord> recordList = hzEbomRecordDAO.getHzBomLineChildren(hzEbomTreeQuery);
-                            if(ListUtil.isEmpty(recordList)){
+                            if(ListUtils.isEmpty(recordList)){
                                 return WriteResultRespDTO.failResultRespDTO("BOM数据发生错误或者服务器异常，请核对BOM数据后重试！");
                             }
                             String min = recordList.get(recordList.size()-1).getSortNum();
@@ -1973,13 +1973,13 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             }
             List carParts = hzMbomService.loadingCarPartType();
             //PBOM 插入
-            if(carParts.contains(hzEPLRecord.getPartResource()) && ListUtil.isNotEmpty(pbomLineRecords)){
+            if(carParts.contains(hzEPLRecord.getPartResource()) && ListUtils.isNotEmpty(pbomLineRecords)){
                 for(HzPbomLineRecord  parent : pbomLineRecords){
                     HzPbomTreeQuery pbomTreeQuery = new HzPbomTreeQuery();
                     pbomTreeQuery.setProjectId(projectId);
                     pbomTreeQuery.setPuid(parent.geteBomPuid());
                     List<HzPbomLineRecord> pBomTree = hzPbomRecordDAO.getHzPbomTree(pbomTreeQuery);
-                    if(ListUtil.isEmpty(pBomTree)){
+                    if(ListUtils.isEmpty(pBomTree)){
                         return WriteResultRespDTO.failResultRespDTO("未找到父项记录！");
                     }
 
@@ -2000,7 +2000,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                         if(pBomTree.size() >1){
                             //查询当前父层的子一层记录
                             List<HzPbomLineRecord> nextRecords = hzPbomRecordDAO.getFirstLevelBomByParentId(parent.geteBomPuid(),projectId);
-                            if(ListUtil.isEmpty(nextRecords)){
+                            if(ListUtils.isEmpty(nextRecords)){
                                 return WriteResultRespDTO.failResultRespDTO("未找到父项记录！");
                             }
                             String maxLineIndex = nextRecords.get(nextRecords.size()-1).getLineIndex();
@@ -2057,7 +2057,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                                 hzPbomTreeQuery.setPuid(maxRecord.geteBomPuid());
                                 hzPbomTreeQuery.setProjectId(projectId);
                                 List<HzPbomLineRecord> recordList = hzPbomRecordDAO.getHzPbomTree(hzPbomTreeQuery);
-                                if(ListUtil.isEmpty(recordList)){
+                                if(ListUtils.isEmpty(recordList)){
                                     return WriteResultRespDTO.failResultRespDTO("BOM数据发生错误或者服务器异常，请核对BOM数据后重试！");
                                 }
                                 String min = recordList.get(recordList.size()-1).getSortNum();
@@ -2076,7 +2076,7 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
                     addPBOMList.add(insertRecord);
 
                     List<HzPbomLineRecord> hzPbomLineRecords = pbomMap.get(parent.geteBomPuid());
-                    if (ListUtil.isNotEmpty(hzPbomLineRecords)){
+                    if (ListUtils.isNotEmpty(hzPbomLineRecords)){
                         HzPbomLineRecord thisPbom=insertRecord;
                         insertRecord.setIsHas(1);
                         for (HzPbomLineRecord pbomline :hzPbomLineRecords){
@@ -2102,23 +2102,23 @@ public class HzEBOMWriteServiceImpl implements HzEBOMWriteService {
             configTransactionTemplate.execute(new TransactionCallback<Void>() {
                 @Override
                 public Void doInTransaction(TransactionStatus status) {
-                    if(ListUtil.isNotEmpty(addEBOMList)){
+                    if(ListUtils.isNotEmpty(addEBOMList)){
                         hzEbomRecordDAO.insertList(addEBOMList,ChangeTableNameEnum.HZ_EBOM.getTableName());
-                        if (ListUtil.isNotEmpty(addChildEBOMList)){
+                        if (ListUtils.isNotEmpty(addChildEBOMList)){
                             hzEbomRecordDAO.insertList(addChildEBOMList,ChangeTableNameEnum.HZ_EBOM.getTableName());
                         }
                     }
 
-                    if(ListUtil.isNotEmpty(updateEBOMList)){
+                    if(ListUtils.isNotEmpty(updateEBOMList)){
                         hzEbomRecordDAO.updateListByPuids(updateEBOMList);
                     }
-                    if(ListUtil.isNotEmpty(addPBOMList)){
+                    if(ListUtils.isNotEmpty(addPBOMList)){
                         hzPbomRecordDAO.insertList(addPBOMList);
-                        if (ListUtil.isNotEmpty(addChildPBOMList)){
+                        if (ListUtils.isNotEmpty(addChildPBOMList)){
                             hzPbomRecordDAO.insertList(addChildPBOMList);
                         }
                     }
-                    if(ListUtil.isNotEmpty(updatePBOMList)){
+                    if(ListUtils.isNotEmpty(updatePBOMList)){
                         hzPbomRecordDAO.updateListByPuids(updatePBOMList);
                     }
                     return null;
