@@ -1,9 +1,16 @@
+/*
+ *
+ *  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+ *  * ALL COPYRIGHT REVERSED.
+ *
+ */
+
 package com.connor.hozon.bom.resources.domain.model;
 
 import cn.net.connor.hozon.services.service.sys.UserInfo;
-import com.connor.hozon.bom.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.bom.resources.domain.dto.response.HzMaterielRespDTO;
-import com.connor.hozon.bom.resources.enumtype.BomResourceEnum;
+import cn.net.connor.hozon.services.common.enumtype.BomResourceEnum;
 import com.connor.hozon.bom.resources.util.StringUtil;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;

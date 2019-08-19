@@ -22,8 +22,8 @@ import cn.net.connor.hozon.services.service.depository.project.impl.HzSuperMater
 import cn.net.connor.hozon.services.service.main.HzMainConfigService;
 import cn.net.connor.hozon.services.response.integration.IntegrateMsgResponseDTO;
 import cn.net.connor.hozon.common.util.UUIDHelper;
-import com.connor.hozon.bom.service.configuration.feature.impl.FeatureServiceImpl;
-import com.connor.hozon.bom.service.configuration.feature.impl.FeatureValueServiceImpl;
+import com.connor.hozon.service.configuration.feature.impl.FeatureServiceImpl;
+import com.connor.hozon.service.configuration.feature.impl.FeatureValueServiceImpl;
 import integration.base.classify.ZPPTCO003;
 import integration.logic.ConfigurableMaterialAllocation;
 import integration.option.ActionFlagOption;
