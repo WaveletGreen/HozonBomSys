@@ -20,26 +20,28 @@ function createColumn() {
     var columnOne = [];
     var columnTwo = [];
     columnOne.push({field: 'ck', colspan: 1, rowspan: 2, align: 'center', valign: 'middle', checkbox: true})
-    columnOne.push({field: 'q', title: '序号',  align: 'center', valign: 'middle', width: 50, colspan: 1, rowspan: 2,
-        formatter: function (value, row, index) {
-            var options = $('#legislativeBikeLibraryTable').bootstrapTable('getOptions');
-            if (options.pageSize = "ALL") {
-                return index + 1;
-            }
-            return options.pageSize * (options.pageNumber - 1) + index + 1;
-        }
-    })
-    columnOne.push({field: 'w', title: '公告号', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
-    columnOne.push({field: 'e', title: '车型', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
-    columnOne.push({field: 'r', title: 'VIN码前8位', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
+    // columnOne.push({field: 'q', title: '序号',  align: 'center', valign: 'middle', width: 50, colspan: 1, rowspan: 2,
+    //     formatter: function (value, row, index) {
+    //         var options = $('#legislativeBikeLibraryTable').bootstrapTable('getOptions');
+    //         if (options.pageSize = "ALL") {
+    //             return index + 1;
+    //         }
+    //         return options.pageSize * (options.pageNumber - 1) + index + 1;
+    //     }
+    // })
+   // columnOne.push({field: 'no', colspan: 1, rowspan: 2, align: 'center', valign: 'middle', checkbox: true})
+    columnOne.push({field: 'no', title: '序号', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
+    columnOne.push({field: 'noticeNo', title: '公告号', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
+    columnOne.push({field: 'autoType', title: '车型', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
+    columnOne.push({field: 'vinNo', title: 'VIN码前8位', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
     columnOne.push({field: 't', title: '电池', align: 'center', valign: 'middle', colspan: 3, rowspan: 1,})
-    columnTwo.push({field: 'y', title: '电池厂家', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
-    columnTwo.push({field: 'u', title: '电池型号', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
-    columnTwo.push({field: 'i', title: '生产厂家', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
+    columnTwo.push({field: 'batteryManufacturers', title: '电池厂家', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
+    columnTwo.push({field: 'batteryModel', title: '电池型号', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
+    columnTwo.push({field: 'productionMode', title: '生产厂家', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
     columnOne.push({field: 'o', title: '电机', align: 'center', valign: 'middle', colspan: 2, rowspan: 1,})
-    columnTwo.push({field: 'p', title: '电机厂家', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
-    columnTwo.push({field: 'a', title: '电机型号', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
-    columnOne.push({field: 's', title: '备注', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
+    columnTwo.push({field: 'motorManufacturers', title: '电机厂家', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
+    columnTwo.push({field: 'motorModel', title: '电机型号', align: 'center', valign: 'middle', colspan: 1, rowspan: 1,})
+    columnOne.push({field: 'remarks', title: '备注', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
     column.push(columnOne);
     column.push(columnTwo);
     return column;
@@ -104,7 +106,7 @@ function initTable() {
     $table.bootstrapTable('destroy');
     let column = createColumn();
     $table.bootstrapTable({
-        url: "",
+        url: "legislative/list",
         method: 'GET',
         dataType: 'json',
         cache: false,
