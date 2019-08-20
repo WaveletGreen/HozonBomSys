@@ -7,18 +7,22 @@
 
 package com.connor.hozon.controller.bom.bom;
 
-import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
+import cn.net.connor.hozon.services.request.bom.sparePart.SparePartOfProjectRequestQueryDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
+import cn.net.connor.hozon.services.request.bom.sparePart.SparePartQuoteEbomLinesPostDTO;
 import com.alibaba.fastjson.JSONObject;
 import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryResponse;
+import com.connor.hozon.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.service.bom.bomData.sparePart.SparePartsBomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -34,6 +38,8 @@ public class SparePartsBomController {
     @Autowired
     private SparePartsBomService sparePartsBomService;
 
+
+
     /**
      * 获取到增加页面
      *
@@ -41,13 +47,12 @@ public class SparePartsBomController {
      */
     @RequestMapping("getPage")
     public String getPage(String type, Model model) {
-        if("add".equals(type)){
-            model.addAttribute("type","add");
-            model.addAttribute("url","./sparePartsBom/addSparePart");
-        }
-        else if("update".equals(type)){
-            model.addAttribute("type","update");
-            model.addAttribute("url","./sparePartsBom/updateSparePart");
+        if ("add".equals(type)) {
+            model.addAttribute("type", "add");
+            model.addAttribute("url", "./sparePartsBom/addSparePart");
+        } else if ("update".equals(type)) {
+            model.addAttribute("type", "update");
+            model.addAttribute("url", "./sparePartsBom/updateSparePart");
         }
         return "bomManage/sparePart/addOrUpdate";
     }
@@ -59,25 +64,45 @@ public class SparePartsBomController {
      * @return
      */
     @RequestMapping("addChildPage")
-    public String addChildPage() {
+    public String addChildPage(Integer type, Model model) {
+        if (type != null) {
+            switch (type) {
+                case 1:
+                    model.addAttribute("isAddChild", true);
+                    break;
+                case 2:
+                    model.addAttribute("isAddChild", false);
+                    break;
+                default:
+                    model.addAttribute("isAddChild", false);
+                    break;
+            }
+        } else {
+            model.addAttribute("isAddChild", false);
+        }
         return "bomManage/sparePart/addChild";
     }
 
+    @RequestMapping("jumpToEbom")
+    public String jumpToEbom() {
+        return "bomManage/sparePart/sparePartRelEbomIndex";
+    }
 
     /**
      * 分页查询出项目中的备件
      *
-     * @param query
+     * @param query 查询的对象，差不多和dao层对象的属性字段一样
      * @return
      */
     @RequestMapping("selectPageByProjectId")
     @ResponseBody
-    public SparePartBomQueryResponse selectPageByProjectId(SparePartOfProjectQuery query) {
+
+    public SparePartBomQueryResponse selectPageByProjectId(SparePartOfProjectRequestQueryDTO query) {
         return sparePartsBomService.selectPageByProjectId(query);
     }
 
     /**
-     * 获取到增加页面
+     * 添加单个备件零件对象
      *
      * @return
      */
@@ -120,4 +145,25 @@ public class SparePartsBomController {
     public JSONObject deleteList(@RequestBody List<SparePartPostDTO> data) {
         return sparePartsBomService.deleteList(data);
     }
+
+    /*****************************************与EBOM有关联********************************************/
+
+    @RequestMapping(value = "ebom/title", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedHashMap<String, String> getEbomTitle(String projectId) {
+        return sparePartsBomService.createRelEbomTitle();
+    }
+
+    @RequestMapping(value = "ebom/getEBom/list", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject getEbomList(HzEbomByPageQuery query) {
+        return sparePartsBomService.getEbomList(query);
+    }
+
+    @RequestMapping(value = "quoteEbomLines", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject quoteEbomLines(@RequestBody SparePartQuoteEbomLinesPostDTO dto) {
+        return sparePartsBomService.quoteEbomLines(dto);
+    }
+
 }

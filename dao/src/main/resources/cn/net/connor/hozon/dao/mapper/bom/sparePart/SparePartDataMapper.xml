@@ -67,7 +67,7 @@
                 and SPARE_PART_CODE=#{sparePartCode}
             </if>
         </where>
-
+        order by t.ID
 
     </select>
     <select id="countByQuery" parameterType="cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery"
@@ -277,6 +277,37 @@
                 #{reserved5,jdbcType=VARCHAR},
             </if>
         </trim>
+    </insert>
+    <insert id="insertList" parameterType="java.util.List">
+        insert into SPARE_PART_DATA
+        (ID, PRODUCTIVE_PART_CODE, PRODUCTIVE_PART_NAME,
+        SPARE_PART_CODE, SPARE_PART_NAME, IS_SPARE_PART,
+        UNIT, DEPARTMENT, RESPONSIBLE_ENGINEER,
+        SUPPLIER, CODE, PURCHASING_ENGINEER,
+        REMARK, PART_CLASS, WORKSHOP1,
+        WORKSHOP2, PART_LEVEL, MAJOR,
+        HIERARCHY, ADS, REL_EBOM_LINE_ID,
+        RESERVED1, RESERVED2, RESERVED3,
+        RESERVED4, RESERVED5)
+        select SEQ_SPARE_PART_ID.Nextval, A.* from(
+        <foreach collection="list" index="index" item="bean" separator="union all">
+            select
+            #{bean.productivePartCode,jdbcType=VARCHAR}, #{bean.productivePartName,jdbcType=VARCHAR},
+            #{bean.sparePartCode,jdbcType=VARCHAR}, #{bean.sparePartName,jdbcType=VARCHAR},
+            #{bean.isSparePart,jdbcType=DECIMAL},
+            #{bean.unit,jdbcType=VARCHAR}, #{bean.department,jdbcType=VARCHAR},
+            #{bean.responsibleEngineer,jdbcType=VARCHAR},
+            #{bean.supplier,jdbcType=VARCHAR}, #{bean.code,jdbcType=VARCHAR},
+            #{bean.purchasingEngineer,jdbcType=VARCHAR},
+            #{bean.remark,jdbcType=VARCHAR}, #{bean.partClass,jdbcType=VARCHAR}, #{bean.workshop1,jdbcType=VARCHAR},
+            #{bean.workshop2,jdbcType=VARCHAR}, #{bean.level,jdbcType=VARCHAR}, #{bean.major,jdbcType=VARCHAR},
+            #{bean.hierarchy,jdbcType=VARCHAR}, #{bean.ads,jdbcType=VARCHAR}, #{bean.relEbomLineId,jdbcType=VARCHAR},
+            #{bean.reserved1,jdbcType=VARCHAR}, #{bean.reserved2,jdbcType=VARCHAR}, #{bean.reserved3,jdbcType=VARCHAR},
+            #{bean.reserved4,jdbcType=VARCHAR}, #{bean.reserved5,jdbcType=VARCHAR}
+            from
+            dual
+        </foreach>
+        )A
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData">
         update SPARE_PART_DATA

@@ -7,6 +7,7 @@
 
 package cn.net.connor.hozon.dao.dao.bom.sparePart;
 
+import cn.net.connor.hozon.dao.basic.InsertListDao;
 import cn.net.connor.hozon.dao.basic.MyBatisBaseDao;
 import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartOfProject;
 import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
@@ -22,7 +23,7 @@ import java.util.List;
  * @Modified By:
  */
 @Repository
-public interface SparePartOfProjectDao extends MyBatisBaseDao<SparePartOfProject, Long, SparePartOfProjectQuery> {
+public interface SparePartOfProjectDao extends MyBatisBaseDao<SparePartOfProject, Long, SparePartOfProjectQuery>,InsertListDao<SparePartOfProject> {
     /**
      * 根据项目ID查询出当前项目下的所有备件零件
      *

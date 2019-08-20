@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/6/1 Time: 9:34-->
+<head th:include="include/basicHead"></head>
+<title>EBOM管理</title>
+<body class="content-body">
+        <div class="panel-body" style="padding-bottom: 0;">
+            <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+                  id="queryEbomManage">
+                <div class="form-group">
+                    <label for="level">层级</label>
+                    <input type="text"style="width: 140px;" class="form-control" name="level" id="level" placeholder="请输入层级"/>
+                </div>
+                <div class="form-group">
+                    <label for="lineId">零件号</label>
+                    <input type="text"style="width: 140px;" class="form-control" name="lineId" id="lineId" placeholder="请输入零件号"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="sparePart">是否显示备件</label>
+                    <select class="form-control"style="width: 140px;" name="sparePart" id="sparePart">
+                        <option value="-1"></option>
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+        </div>
+<div class="content col-lg-12">
+    <table class="table table-striped tableNormalStyle" id="ebomManageTable"></table>
+</div>
+<script th:src="@{/js/helper/projectHelper.js}"></script>
+<script th:src="@{/js/helper/jsonHelper.js}"></script>
+<script th:src="@{/js/bom/sparePart/sparePartRelEbom.js}"></script>
+</body>
+</html>

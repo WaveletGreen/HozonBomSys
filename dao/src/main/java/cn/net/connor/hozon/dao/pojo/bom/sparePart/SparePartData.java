@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * 备件零件对象
+ * 备件零件对象，dao层对象
  * @Author: Fancyears Milos Malvis
  * @Date: Created in  2019/8/15 14:04
  * @Modified By:
@@ -58,7 +58,7 @@ public class SparePartData {
     /**
      * 是否备件
      */
-    private Short isSparePart;
+    private Integer isSparePart;
     /**
      * 单位
      */
