@@ -170,7 +170,6 @@ $(document).ready((function () {
     var eplUrl = "epl/record?projectId=" + projectId;
     initTable(eplUrl);
 }))
-
 /**
  * 页面刷新
  * @param projectId
@@ -180,7 +179,6 @@ function doRefresh(projectId) {
     var eplUrl = "epl/record?projectId=" + projectId;
     initTable(eplUrl);
 }
-
 /**
  * 自动查询调用
  */
@@ -197,7 +195,6 @@ function doQuery() {
     initTable(eplUrl);
     $('#eplTable').bootstrapTable('destroy');
 }
-
 /**
  * 创建table表头
  * @param result
@@ -223,7 +220,6 @@ function createColumn(result) {
     }
     return column;
 }
-
 /**
  * table初始化
  * @param eplUrl
@@ -286,14 +282,12 @@ function initTable(eplUrl) {
         }
     })
 }
-
 function toPage() {
     var pageNum = $("#pageNum").val();
     if (pageNum) {
         $('#eplTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
-
 $(document).keydown(function (event) {
     if (event.keyCode == 13) {
         $('form').each(function () {
