@@ -254,6 +254,7 @@
         on t4.puid = t3.p_vehicle_pertain_to_platform
         left join Hz_Brand_Record t5
         on t5.puid = t4.p_pertain_to_brand_puid
+        left join SINGLE_VEHICLE_STATUS svs on svs.SVG_ID=t.ID
         <where>
             <if test="projectId!=null">
                 t.svl_project_uid=#{projectId,jdbcType=VARCHAR}
