@@ -169,7 +169,7 @@
 
     $(function () {
         log(type)
-        if (type === 'update') {
+        if (type === 'update'||type==="clonePartData") {
             fillInput();
         }
         $('#addSparePartForm').bootstrapValidator({
@@ -253,6 +253,10 @@
                 if (type === 'update') {
                     data.id = getActiveTab().getSelectedRows()[0].id;
                 }
+                else if(type==='clonePartData'){
+                    data.relEbomLineId=getActiveTab().getSelectedRows()[0].relEbomLineId;
+                }
+
                 $.ajax({
                     contentType:
                         "application/json",

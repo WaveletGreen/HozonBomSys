@@ -55,6 +55,10 @@ public class SparePartsBomController {
             model.addAttribute("type", "update");
             model.addAttribute("url", "./sparePartsBom/updateSparePart");
         }
+        else if("clonePartData".equals(type)){
+            model.addAttribute("type", "clonePartData");
+            model.addAttribute("url", "./sparePartsBom/addSparePart");
+        }
         return "bomManage/sparePart/addOrUpdate";
     }
 
@@ -88,6 +92,12 @@ public class SparePartsBomController {
     public String jumpToEbom() {
         return "bomManage/sparePart/sparePartRelEbomIndex";
     }
+
+    @RequestMapping("getQuoteTypePage")
+    public String getQuoteTypePage() {
+        return "bomManage/sparePart/quoteType";
+    }
+
 
     /**
      * 分页查询出项目中的备件

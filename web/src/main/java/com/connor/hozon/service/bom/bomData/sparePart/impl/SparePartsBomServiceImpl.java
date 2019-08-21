@@ -70,17 +70,17 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
      * 备件零件对象dao
      */
     @Autowired
-    SparePartDataDao sparePartDataDao;
+    private SparePartDataDao sparePartDataDao;
     /**
      * 备件结构dao
      */
     @Autowired
-    SparePartBomStructureDao sparePartBomStructureDao;
+    private SparePartBomStructureDao sparePartBomStructureDao;
     /**
      * 批量操作工具类
      */
     @Autowired
-    DaoListExecutor daoListExecutor;
+    private DaoListExecutor daoListExecutor;
     /**
      * 添加子层的同时是否添加到项目下
      */
@@ -184,8 +184,8 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                     updateList.add(record);
                 }
             }
-            //执行批量更新
-            hzEbomRecordDAO.updateListByPuids(updateList);
+            //执行批量更新，不再进行同步更新数据，因为备件BOM和EBOM由不同人员维护，允许产生2套不同的数据
+            //hzEbomRecordDAO.updateListByPuids(updateList);
             log.info("删除:" + data.size() + "\t条备件信息成功，同步清空关联的EBOM备件信息:\t" + updateList.size());
             return SimpleResponseResultFactory.createSuccessResult("删除备件数据成功!");
         }
@@ -282,8 +282,8 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         List<SparePartData> parts;
         //结构map
         Map<String, SparePartStructureCache> structureMap = new LinkedHashMap<>();
-        //EBOM对象需要更新备件信息
-        List<HzEPLManageRecord> eplUpdateSparePartList = new LinkedList<>();
+        //EBOM对象需要更新备件信息，不再需要更新EBOM的信息，备件BOM和EBOM是否备件分人员维护数据
+        List<HzEPLManageRecord> eplUpdateSparePartList = null/*new LinkedList<>()*/;
         if (null != dto && null != dto.getIds() && dto.getIds().size() > 0) {
             String projectId = dto.getProjectId();//项目ID
             for (String id : dto.getIds()) {
@@ -307,17 +307,21 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 }
             }
             parts = new ArrayList<>(queryMap.size() + 8);
+            //备件代码和备件名称根据引用类型判断
+            String[] pair = generateQuoteTypeToPartNumAndName(dto.getQuoteType());
+            String sparePartAppendCode = pair[0];
+            String sparePartAppendName = pair[1];
             //构建结构并存储结构
             //进行汇总
             for (Map.Entry<String, HzEPLManageRecord> entry : queryMap.entrySet()) {
                 HzEPLManageRecord record = entry.getValue();
                 String ebomId = record.getPuid();
                 //产生备件零件对象，有子层也可能是自身也是子层
-                SparePartData part = createPart(record);
+                SparePartData part = createPart(record, sparePartAppendCode, sparePartAppendName);
                 //添加到批量插入记录中
                 parts.add(part);
                 //添加到更新记录中
-                eplUpdateSparePartList.add(record);
+                // eplUpdateSparePartList.add(record);
                 //有子层，一定不是最后一层
                 if (null != record.getIsHas() && 1 == record.getIsHas()) {
                     structureMap.put(ebomId, new SparePartStructureCache(new LinkedList<>(), new LinkedList<>(), part));
@@ -379,8 +383,8 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 sparePartBomStructureDao.insertList(structureList);
             }
         }
-        //更新数据
-        hzEbomRecordDAO.updateListByPuids(eplUpdateSparePartList);
+        //更新数据，不再进行同步更新数据，因为备件BOM和EBOM由不同人员维护，允许产生2套不同的数据
+        //hzEbomRecordDAO.updateListByPuids(eplUpdateSparePartList);
         //是否保存到当前项目下
         if (addChildAllowPutToProject) {
             sparePartOfProjectDao.insertList(projectParts);
@@ -390,10 +394,12 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
     /**
      * 根据EBOM对象创建备件对象对象
      *
-     * @param record EBOM对象
+     * @param record              EBOM对象
+     * @param sparePartAppendCode 追加的备件代码
+     * @param sparePartAppendName 追加的备件名称
      * @return
      */
-    private SparePartData createPart(HzEPLManageRecord record) {
+    private SparePartData createPart(HzEPLManageRecord record, String sparePartAppendCode, String sparePartAppendName) {
 
         SparePartData part = new SparePartData();
         //关联EBOM的主键
@@ -407,15 +413,14 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
 
 
         //生产零件编号
-        part.setProductivePartCode(record.getLineID());
+        part.setProductivePartCode(record.getLineID().trim());
         //生产零件名称
-        part.setProductivePartName(record.getpBomLinePartName());
+        part.setProductivePartName(record.getpBomLinePartName().trim());
+
         //备件代码
-        part.setSparePartCode(record.getLineID());
+        part.setSparePartCode((record.getLineID() + sparePartAppendCode).trim());
         //备件名称
-        part.setSparePartName(record.getpBomLinePartName());
-
-
+        part.setSparePartName((record.getpBomLinePartName() + sparePartAppendName).trim());
         //层级
         part.setHierarchy(strings[0]);
         //级别
@@ -425,7 +430,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         //供应商
         part.setSupplier(record.getpSupply());
         //是否备件
-        part.setIsSparePart(1);//强制设为是备件
+        part.setIsSparePart("Y".equals(record.getSparePart()) ? 1 : "N".equals(record.getSparePart()) ? 0 : -1);//根据生成零件号判断是否是备件
         //采购工程师
         part.setPurchasingEngineer(record.getpBuyEngineer());
         //责任工程师
@@ -443,9 +448,30 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         //车间2
         //图号
         part.setDrawingNum(record.getpPictureNo());
-        //然后将备件数据反向存储到EBOM身上
-        record.setSparePart("Y");//是否备件
-        record.setSparePartNum(part.getSparePartCode());//备件编号
+        //然后将备件数据反向存储到EBOM身上，也不需要反向写数据到EBOM上了
+        //        record.setSparePart("Y");//是否备件
+        //        record.setSparePartNum(part.getSparePartCode());//备件编号
         return part;
+    }
+
+    public String[] generateQuoteTypeToPartNumAndName(String quoteType) {
+        String[] pair = new String[2];
+        if (StringUtils.isNotEmpty(quoteType)) {
+            switch (quoteType) {
+                case "DQ":
+                    pair[0] = "-DQ";
+                    pair[1] = "-底漆";
+                    break;
+                case "DY":
+                    pair[0] = "-DY";
+                    pair[1] = "-电泳";
+                    break;
+                default:
+                    pair[0] = pair[1] = "";//全部置空字符串
+            }
+        } else {
+            pair[0] = pair[1] = "";//全部置空字符串
+        }
+        return pair;
     }
 }

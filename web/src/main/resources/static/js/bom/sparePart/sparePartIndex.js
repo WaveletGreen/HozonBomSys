@@ -13,6 +13,7 @@ var $table;
 var url = 'sparePartsBom/selectPageByProjectId';
 let selectedRows = null;
 
+
 const debug = false;
 
 /**
@@ -492,7 +493,23 @@ const exportExcel = function () {
 const remarkInEbom=function(){
     window.location.href = "sparePartsBom/jumpToEbom";
 }
+//克隆数据
+const clonePartData=function () {
+    selectedRows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (selectedRows.length !== 1) {
+        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+        return false;
+    }
+    window.Ewin.dialog({
+        title: "修改单条备件零件",
+        url: "sparePartsBom/getPage?type=clonePartData",
+        width: 600,
+        height: 400
+    })
+};
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 /**
  * 工具条
  * @type {*[]}
@@ -504,10 +521,15 @@ const toolbar = [
         handler: add
     },
     {
-        text: '添加子件',
+        text: '新增',
         iconCls: 'glyphicon glyphicon-plus',
-        handler: addChild
+        handler: clonePartData
     },
+    // {
+    //     text: '添加子件',
+    //     iconCls: 'glyphicon glyphicon-plus',
+    //     handler: addChild
+    // },
     {
         text: '修改',
         iconCls: 'glyphicon glyphicon-pencil',

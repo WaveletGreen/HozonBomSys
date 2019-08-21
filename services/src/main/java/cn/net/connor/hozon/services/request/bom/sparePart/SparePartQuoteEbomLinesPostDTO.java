@@ -21,4 +21,8 @@ public class SparePartQuoteEbomLinesPostDTO implements Serializable {
      * 项目ID
      */
     private String projectId;
+    /**
+     * 引用生成类型，有空数据，DQ-底漆，DY-电泳三种数据类型
+     */
+    private String quoteType;
 }

@@ -7,9 +7,14 @@ var $table;
  * 访问的url
  */
 var eBomUrl;
-
+/*** 选择的行数*/
 let selectedRows;
 
+/**
+ * 引用类型，引用时进行传递
+ * @type {null}
+ */
+let quoteType=null;
 
 /**
  * 创建table表头
@@ -23,7 +28,7 @@ function createColumn(result) {
         let json = {
             field: key,
             title: data[key],
-            // align: 'center',
+            align: 'right',
             valign: 'middle',
         };
         column.push(json);
@@ -31,7 +36,7 @@ function createColumn(result) {
     column.push({
         field: 'status',
         title: '状态',
-        align: 'center',
+        align: 'right',
         valign: 'middle',
 
         formatter: function (value, row, index) {
@@ -67,12 +72,24 @@ const quote = function () {
     if (selectedRows.length <= 0) {
         return false;
     }
+    window.Ewin.dialog({
+        title: "请选择引用类型",
+        url: "getQuoteTypePage",
+        width: 600,
+        height: 400
+    })
+
+
+};
+
+function doQuote(){
     let data = {};
     data.projectId = projectId;
     data.ids = [];
     for (let i in selectedRows) {
         data.ids[i] = selectedRows[i].puid
     }
+    data.quoteType=quoteType;
     $.ajax({
         url: "quoteEbomLines",
         type: "POST",
@@ -90,18 +107,7 @@ const quote = function () {
             }
         }
     })
-};
-/**
- * 新增
- */
-const newlyAdd = function () {
-    selectedRows = $table.bootstrapTable('getSelections');
-    if (selectedRows.length !== 1) {
-        window.Ewin.alert({message: '<span style="color: red">请只选择一条备件数据添加子层!</span>'});
-        return;
-    }
-    log(selectedRows)
-};
+}
 /**
  * 合成
  */
@@ -122,14 +128,9 @@ const toolbar = [
         handler: quote
     },
     {
-        text: '新增',
-        iconCls: 'glyphicon glyphicon-plus',
-        handler: quote
-    },
-    {
         text: '合成',
         iconCls: 'glyphicon glyphicon-plus',
-        handler: quote
+        handler: synthesize
     }
 ]
 
@@ -210,3 +211,12 @@ $(document).ready((function () {
     eBomUrl = "ebom/getEBom/list?projectId=" + projectId;
     initTable(eBomUrl);
 }))
+
+
+/**
+ * 设置引用类型
+ * @param type
+ */
+function setQuoteType(type){
+    quoteType=type;
+}
