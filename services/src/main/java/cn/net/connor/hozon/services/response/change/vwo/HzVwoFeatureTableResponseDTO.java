@@ -10,6 +10,7 @@ package cn.net.connor.hozon.services.response.change.vwo;
 import lombok.Data;
 import cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureChangeBean;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -19,9 +20,10 @@ import java.util.Date;
  * @Modified By:
  */
 @Data
-public class HzVwoFeatureTableResponseDTO {
+public class HzVwoFeatureTableResponseDTO implements Serializable {
+    private static final long serialVersionUID = -6298190769543816506L;
     /**
-     *变更ID
+     * 变更ID
      */
     private Long id;
     /**

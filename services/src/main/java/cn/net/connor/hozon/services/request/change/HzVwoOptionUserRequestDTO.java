@@ -9,6 +9,8 @@ package cn.net.connor.hozon.services.request.change;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 忘了
@@ -16,7 +18,8 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
-public class HzVwoOptionUserRequestDTO {
+public class HzVwoOptionUserRequestDTO implements Serializable {
+    private static final long serialVersionUID = -2596745147912179037L;
     private Long selectedUserId;
 
     private String opiBomName;

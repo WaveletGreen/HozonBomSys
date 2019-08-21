@@ -12,6 +12,8 @@ import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * 项目的备件前端需求的查询对象，直接与{@link SparePartOfProjectQuery}对象有关系
  *
@@ -21,5 +23,6 @@ import lombok.ToString;
  */
 @Data
 @ToString
-public class SparePartOfProjectRequestQueryDTO extends SparePartOfProjectQuery {
+public class SparePartOfProjectRequestQueryDTO extends SparePartOfProjectQuery implements Serializable {
+    private static final long serialVersionUID = 8191422732535080161L;
 }

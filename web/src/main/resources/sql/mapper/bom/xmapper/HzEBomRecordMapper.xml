@@ -219,6 +219,9 @@
             <if test="isHas != null and isHas==1">
                 and t.P_BOM_LINE_IS_HAS = 1
             </if>
+            <if test="sparePart != null and sparePart!=''">
+                and t.P_SPARE_PART = #{sparePart,jdbcType=VARCHAR}
+            </if>
             <if test="lineId != null and lineId!=''" >
                 and t10.PART_ID like CONCAT(CONCAT('%',#{lineId,jdbcType=VARCHAR}),'%')
             </if>
@@ -650,11 +653,21 @@
                 <if test="item.status != null">
                     P_EBOM_STATUS = #{item.status,jdbcType=VARCHAR},
                 </if>
+                <if test="item.fna != null">
                     P_FNA_INFO = #{item.fna,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pUpc != null">
                     P_UPC = #{item.pUpc,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pFnaDesc != null">
                     P_FNA_DESC = #{item.pFnaDesc,jdbcType=VARCHAR},
+                </if>
+                <if test="item.pUpdateName != null">
                     P_UPDATE_NAME = #{item.pUpdateName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.number != null">
                     P_NUMBER = #{item.number,jdbcType=VARCHAR},
+                </if>
                 <if test="item.orderId != null">
                     P_ORDER_ID = #{item.orderId,jdbcType=DOUBLE},
                 </if>
@@ -664,9 +677,15 @@
                 <if test="item.revision != null">
                     P_REVISION = #{item.revision,jdbcType=VARCHAR},
                 </if>
+                <if test="item.vehNum != null">
                     P_VEH_NUM = #{item.vehNum,jdbcType=VARCHAR},
+                </if>
+                <if test="item.sparePart != null">
                     P_SPARE_PART = #{item.sparePart,jdbcType=VARCHAR},
+                </if>
+                <if test="item.sparePartNum != null">
                     P_SPARE_PART_NUM = #{item.sparePartNum,jdbcType=VARCHAR}
+                </if>
             </set>
             where P_EPL_ID = #{item.eplId,jdbcType=VARCHAR}
             and P_BOM_DIGIFAX_ID=#{item.bomDigifaxId,jdbcType=VARCHAR}

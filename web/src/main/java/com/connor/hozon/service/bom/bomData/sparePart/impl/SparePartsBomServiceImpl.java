@@ -24,9 +24,10 @@ import cn.net.connor.hozon.services.request.bom.sparePart.SparePartOfProjectRequ
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartQuoteEbomLinesPostDTO;
 import cn.net.connor.hozon.services.response.bom.sparePart.SparePartDataResponseDTO;
+import cn.net.connor.hozon.services.response.bom.sparePart.SparePartQueryEbomPageResponseDTO;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryResponse;
+import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryPageResponse;
 import com.connor.hozon.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.resources.domain.query.HzEbomByPageQuery;
@@ -37,6 +38,8 @@ import com.connor.hozon.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.service.bom.bomData.sparePart.SparePartStructureCache;
 import com.connor.hozon.service.bom.bomData.sparePart.SparePartsBomService;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
@@ -56,6 +59,7 @@ import java.util.*;
 @Service
 @ConfigurationProperties(prefix = "sparePart")
 @Transactional
+@Slf4j
 public class SparePartsBomServiceImpl implements SparePartsBomService {
     /**
      * 项目下的备件零件对象dao
@@ -82,6 +86,8 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
      */
     @Setter
     private boolean addChildAllowPutToProject;
+    @Setter
+    private boolean createWithChildren;
 
     /**
      * EBOM service
@@ -101,13 +107,13 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
      * @param query controller和service连接对象
      * @return
      */
-    public SparePartBomQueryResponse selectPageByProjectId(SparePartOfProjectRequestQueryDTO query) {
+    public SparePartBomQueryPageResponse selectPageByProjectId(SparePartOfProjectRequestQueryDTO query) {
         SparePartDTOMapper mapper = SparePartDTOMapper.INSTANCE;
         SparePartOfProjectQuery queryBean = mapper.DTOToQueryBean(query);//转成dao层对象进行查询，从这里就需要拆分，不同的层级对象工作职责不一样
-        int count = sparePartOfProjectDao.count(queryBean);
+        int count = sparePartOfProjectDao.countByQuery(queryBean);
         List<SparePartData> queryResult = sparePartDataDao.selectPageByQuery(queryBean);
         List<SparePartDataResponseDTO> result = mapper.BeanToDTO(queryResult);//再转成service层的对象
-        return new SparePartBomQueryResponse(count, result);
+        return new SparePartBomQueryPageResponse(count, result);
     }
 
 
@@ -118,9 +124,10 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         boolean success = sparePartDataDao.insert(bean) > 0 ? true : false;
         if (success) {
             SparePartOfProject partOfProject = new SparePartOfProject();
-            partOfProject.setProjectId(data.getProjectId());
-            partOfProject.setSparePartId(bean.getId());
+            partOfProject.setProjectId(data.getProjectId());//设置项目ID
+            partOfProject.setSparePartId(bean.getId());//设置零件ID
             sparePartOfProjectDao.insert(partOfProject);
+            log.info("保存单条备件信息成功:" + bean.getSparePartCode());
             return SimpleResponseResultFactory.createSuccessResult("添加备件数据成功!");
         }
         return SimpleResponseResultFactory.createErrorResult("添加备件数据失败");
@@ -133,15 +140,16 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         boolean success = sparePartDataDao.insert(bean) > 0 ? true : false;
         if (success) {
             SparePartBomStructure structure = new SparePartBomStructure();
-            structure.setSparePartId(data.getParentId());
-            structure.setSparePartChildId(bean.getId());
+            structure.setSparePartId(data.getParentId());//设置父层ID
+            structure.setSparePartChildId(bean.getId());//设置子层ID
             sparePartBomStructureDao.insert(structure);
             if (addChildAllowPutToProject) {//追加到当前项目下形成平铺结构
                 SparePartOfProject partOfProject = new SparePartOfProject();
-                partOfProject.setProjectId(data.getProjectId());
-                partOfProject.setSparePartId(bean.getId());
+                partOfProject.setProjectId(data.getProjectId());//设置项目ID
+                partOfProject.setSparePartId(bean.getId());//设置零件ID
                 sparePartOfProjectDao.insert(partOfProject);
             }
+            log.info("添加单条子备件信息成功:" + bean.getSparePartCode());
             return SimpleResponseResultFactory.createSuccessResult("添加备件数据成功!");
         }
         return SimpleResponseResultFactory.createErrorResult("添加备件数据失败");
@@ -153,9 +161,10 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         SparePartData bean = mapper.DTOToBean(data);//post请求提交的对象转成dao层对象
         boolean success = sparePartDataDao.updateByPrimaryKeySelective(bean) > 0 ? true : false;
         if (success) {
-            return SimpleResponseResultFactory.createSuccessResult("添加备件数据成功!");
+            log.info("更新单条子备件信息成功:" + bean.getSparePartCode());
+            return SimpleResponseResultFactory.createSuccessResult("更新备件数据成功!");
         }
-        return SimpleResponseResultFactory.createErrorResult("添加备件数据失败");
+        return SimpleResponseResultFactory.createErrorResult("更新备件数据失败");
     }
 
     @Override
@@ -163,7 +172,21 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         SparePartDTOMapper mapper = SparePartDTOMapper.INSTANCE;
         List<SparePartData> beans = mapper.DTOToBean(data);//post请求提交的对象转成dao层对象
         boolean success = daoListExecutor.deleteList(beans.size(), CommonSetting.SQL_IN_PARAM_LIMIT, beans, sparePartDataDao) > 0 ? true : false;
+        List<HzEPLManageRecord> updateList = new LinkedList<>();
         if (success) {
+            for (SparePartData _d : beans) {
+                //过滤没有关联的EBOM信息
+                if (StringUtils.isNotEmpty(_d.getRelEbomLineId())) {
+                    HzEPLManageRecord record = new HzEPLManageRecord();
+                    record.setPuid(_d.getRelEbomLineId());
+                    record.setSparePart("");//清空备件信息
+                    record.setSparePartNum("");//清空备件信息
+                    updateList.add(record);
+                }
+            }
+            //执行批量更新
+            hzEbomRecordDAO.updateListByPuids(updateList);
+            log.info("删除:" + data.size() + "\t条备件信息成功，同步清空关联的EBOM备件信息:\t" + updateList.size());
             return SimpleResponseResultFactory.createSuccessResult("删除备件数据成功!");
         }
         return SimpleResponseResultFactory.createErrorResult("删除备件数据失败");
@@ -229,15 +252,15 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
     }
 
     @Override
-    public JSONObject getEbomList(HzEbomByPageQuery query) {
+    public SparePartQueryEbomPageResponseDTO getEbomList(HzEbomByPageQuery query) {
         Page<HzEbomRespDTO> recordRespDTOPage = hzEBOMReadService.getHzEbomPage(query);
-        JSONObject object = new JSONObject();
+        SparePartQueryEbomPageResponseDTO response = new SparePartQueryEbomPageResponseDTO();
         if (recordRespDTOPage == null) {
-            return object;
+            return response;
         }
         List<HzEbomRespDTO> recordRespDTOS = recordRespDTOPage.getResult();
         if (ListUtils.isEmpty(recordRespDTOS)) {
-            return object;
+            return response;
         }
         List<JSONObject> list = new ArrayList<>();
         JSONArray array = recordRespDTOS.get(0).getJsonArray();
@@ -245,9 +268,9 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
             JSONObject o = array.getJSONObject(i);
             list.add(o);
         }
-        object.put("totalCount", recordRespDTOPage.getTotalCount());
-        object.put("result", list);
-        return object;
+        response.setTotalCount(recordRespDTOPage.getTotalCount());
+        response.setResult(list);
+        return response;
     }
 
     @Override
@@ -259,7 +282,8 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         List<SparePartData> parts;
         //结构map
         Map<String, SparePartStructureCache> structureMap = new LinkedHashMap<>();
-
+        //EBOM对象需要更新备件信息
+        List<HzEPLManageRecord> eplUpdateSparePartList = new LinkedList<>();
         if (null != dto && null != dto.getIds() && dto.getIds().size() > 0) {
             String projectId = dto.getProjectId();//项目ID
             for (String id : dto.getIds()) {
@@ -268,7 +292,12 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 query.setPuid(id);
                 query.setProjectId(projectId);
                 //查找当前BOM结构树
-                List<HzEPLManageRecord> queryList = hzEbomRecordDAO.getHzBomLineChildren(query);
+                List<HzEPLManageRecord> queryList = null;
+                if (createWithChildren) {
+                    queryList = hzEbomRecordDAO.getHzBomLineChildren(query);
+                } else {
+                    queryList = Collections.singletonList(hzEbomRecordDAO.findEbomById(id, projectId));
+                }
                 for (HzEPLManageRecord epl : queryList) {
                     if (queryMap.containsKey(epl.getPuid())) {
                         continue;//过滤掉重复的数据
@@ -287,6 +316,8 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 SparePartData part = createPart(record);
                 //添加到批量插入记录中
                 parts.add(part);
+                //添加到更新记录中
+                eplUpdateSparePartList.add(record);
                 //有子层，一定不是最后一层
                 if (null != record.getIsHas() && 1 == record.getIsHas()) {
                     structureMap.put(ebomId, new SparePartStructureCache(new LinkedList<>(), new LinkedList<>(), part));
@@ -303,9 +334,9 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                     cache.getParts().add(part);
                 }
             }
-            savePartAndStructure(parts, structureMap, dto.getProjectId());
-            System.out.println(parts);
-            System.out.println(structureMap);
+            //保存数据
+            savePartAndStructure(parts, structureMap, eplUpdateSparePartList, dto.getProjectId());
+            return SimpleResponseResultFactory.createSuccessResult("引用EBOM数据成功");
         }
         return SimpleResponseResultFactory.createErrorResult("引用EBOM数据失败");
     }
@@ -315,16 +346,18 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
      *
      * @param parts
      * @param structureMap
+     * @param eplUpdateSparePartList
      * @param projectId
      */
     @Transactional(rollbackFor = {Exception.class, SQLException.class})
-    void savePartAndStructure(List<SparePartData> parts, Map<String, SparePartStructureCache> structureMap, String projectId) {
+    void savePartAndStructure(List<SparePartData> parts, Map<String, SparePartStructureCache> structureMap, List<HzEPLManageRecord> eplUpdateSparePartList, String projectId) {
         //批量插入不返回主键，所以需要一个个插入
         List<SparePartOfProject> projectParts = null;
         if (addChildAllowPutToProject) {
             projectParts = new LinkedList<>();
         }
         for (SparePartData part : parts) {
+            //TODO 可以考虑先生成UUID，然后将备件零件数据批量插入，最后根据UUID批量查询出来获得所有的主键
             sparePartDataDao.insert(part);
             if (addChildAllowPutToProject) {
                 SparePartOfProject partOfProject = new SparePartOfProject();
@@ -333,8 +366,6 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 projectParts.add(partOfProject);
             }
         }
-        long mockStructure = 0;
-        long mockPart = 0;
         for (Map.Entry<String, SparePartStructureCache> entry : structureMap.entrySet()) {
             SparePartData parent = entry.getValue().getSelf();
             List<SparePartData> partList = entry.getValue().getParts();
@@ -348,12 +379,20 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 sparePartBomStructureDao.insertList(structureList);
             }
         }
+        //更新数据
+        hzEbomRecordDAO.updateListByPuids(eplUpdateSparePartList);
+        //是否保存到当前项目下
         if (addChildAllowPutToProject) {
             sparePartOfProjectDao.insertList(projectParts);
         }
     }
 
-
+    /**
+     * 根据EBOM对象创建备件对象对象
+     *
+     * @param record EBOM对象
+     * @return
+     */
     private SparePartData createPart(HzEPLManageRecord record) {
 
         SparePartData part = new SparePartData();
@@ -386,7 +425,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         //供应商
         part.setSupplier(record.getpSupply());
         //是否备件
-        part.setIsSparePart(record.getIsPart());
+        part.setIsSparePart(1);//强制设为是备件
         //采购工程师
         part.setPurchasingEngineer(record.getpBuyEngineer());
         //责任工程师
@@ -402,7 +441,11 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         //车间1
 
         //车间2
-
+        //图号
+        part.setDrawingNum(record.getpPictureNo());
+        //然后将备件数据反向存储到EBOM身上
+        record.setSparePart("Y");//是否备件
+        record.setSparePartNum(part.getSparePartCode());//备件编号
         return part;
     }
 }

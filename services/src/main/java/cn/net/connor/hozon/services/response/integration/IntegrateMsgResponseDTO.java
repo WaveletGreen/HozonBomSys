@@ -9,6 +9,8 @@ package cn.net.connor.hozon.services.response.integration;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description:
@@ -16,7 +18,8 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
-public class IntegrateMsgResponseDTO {
+public class IntegrateMsgResponseDTO implements Serializable {
+    private static final long serialVersionUID = -666971277914055001L;
     /**
      * 从SAP传回的消息
      */

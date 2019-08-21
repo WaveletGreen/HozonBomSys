@@ -9,6 +9,8 @@ package cn.net.connor.hozon.services.response.task;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 任务传输对象
@@ -16,7 +18,8 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
-public class HzTaskResponseDTO {
+public class HzTaskResponseDTO implements Serializable {
+    private static final long serialVersionUID = 8384886595075000636L;
     /**
      * 跳转tab的url
      */

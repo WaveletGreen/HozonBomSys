@@ -10,8 +10,9 @@ package com.connor.hozon.controller.bom.bom;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartOfProjectRequestQueryDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartQuoteEbomLinesPostDTO;
+import cn.net.connor.hozon.services.response.bom.sparePart.SparePartQueryEbomPageResponseDTO;
 import com.alibaba.fastjson.JSONObject;
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryResponse;
+import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryPageResponse;
 import com.connor.hozon.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.service.bom.bomData.sparePart.SparePartsBomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,7 @@ public class SparePartsBomController {
     @RequestMapping("selectPageByProjectId")
     @ResponseBody
 
-    public SparePartBomQueryResponse selectPageByProjectId(SparePartOfProjectRequestQueryDTO query) {
+    public SparePartBomQueryPageResponse selectPageByProjectId(SparePartOfProjectRequestQueryDTO query) {
         return sparePartsBomService.selectPageByProjectId(query);
     }
 
@@ -156,7 +157,7 @@ public class SparePartsBomController {
 
     @RequestMapping(value = "ebom/getEBom/list", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject getEbomList(HzEbomByPageQuery query) {
+    public SparePartQueryEbomPageResponseDTO getEbomList(HzEbomByPageQuery query) {
         return sparePartsBomService.getEbomList(query);
     }
 

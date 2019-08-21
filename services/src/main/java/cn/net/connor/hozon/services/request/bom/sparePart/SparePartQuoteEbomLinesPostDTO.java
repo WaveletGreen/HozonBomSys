@@ -2,6 +2,7 @@ package cn.net.connor.hozon.services.request.bom.sparePart;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,8 @@ import java.util.List;
  * @Modified By:
  */
 @Data
-public class SparePartQuoteEbomLinesPostDTO {
+public class SparePartQuoteEbomLinesPostDTO implements Serializable {
+    private static final long serialVersionUID = 3137014969775931910L;
     /**
      * EBOM的主键
      */

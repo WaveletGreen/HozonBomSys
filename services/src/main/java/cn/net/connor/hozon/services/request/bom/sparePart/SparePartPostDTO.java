@@ -10,6 +10,8 @@ package cn.net.connor.hozon.services.request.bom.sparePart;
 import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 备件post提交的对象，增加一个项目ID，其余和备件SparePartData对象一致
  * @Author: Fancyears Milos Malvis
@@ -18,7 +20,8 @@ import lombok.Data;
  */
 
 @Data
-public class SparePartPostDTO extends SparePartData {
+public class SparePartPostDTO extends SparePartData implements Serializable {
+    private static final long serialVersionUID = -5792100886089200372L;
     /**
      * 项目ID，无论是新增单个备件BOM数据还是子件备件BOM数据，都会出现这个字段的数据
      */

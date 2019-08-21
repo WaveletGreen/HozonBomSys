@@ -9,6 +9,8 @@ package cn.net.connor.hozon.services.response.main.project;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 项目详情传输对象
@@ -16,7 +18,8 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
-public class HzProjectDetailResponseDTO {
+public class HzProjectDetailResponseDTO implements Serializable {
+    private static final long serialVersionUID = 3696046024666686697L;
     /**
      * 项目代码
      */

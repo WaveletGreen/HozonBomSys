@@ -57,6 +57,7 @@ function createColumn() {
         }
     });
     column.push({field: 'unit', title: '单位', align: 'left', valign: 'middle', width: midWidth});
+    column.push({field: 'drawingNum', title: '图号', align: 'left', valign: 'middle', width: midWidth});
     column.push({field: 'department', title: '专业部门', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'responsibleEngineer', title: '责任工程师', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'supplier', title: '供应商', align: 'left', valign: 'middle', width: largeWidth});
@@ -114,7 +115,7 @@ const doDelete = function () {
         if (e) {
             let data = [];
             for (let i = 0; i < rows.length; i++) {
-                data.push({id: rows[i].id});
+                data.push({id: rows[i].id,relEbomLineId:rows[i].relEbomLineId});
             }
             log(data);
             if (!debug)
@@ -589,6 +590,7 @@ function initTable() {
         columns: column,
         toolbar: "#toolbar",
         sortOrder: "asc",                   //排序方式
+        sortName: 't.ID',
         clickToSelect: true,// 单击某一行的时候选中某一条记录
         showColumns: true, //是否显示所有的列
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮

@@ -12,6 +12,7 @@ import lombok.ToString;
 
 /**
  * 备件零件对象，dao层对象
+ *
  * @Author: Fancyears Milos Malvis
  * @Date: Created in  2019/8/15 14:04
  * @Modified By:
@@ -105,9 +106,9 @@ public class SparePartData {
      */
     private String relEbomLineId;
     /**
-     * 预留字段
+     * 图号
      */
-    private String reserved1;
+    private String drawingNum;
     /**
      * 预留字段
      */

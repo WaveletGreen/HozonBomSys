@@ -9,6 +9,8 @@ package cn.net.connor.hozon.services.request.configuration.derivative;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 配置物料特性传输对象，用于接收前端回传的配置物料 x
@@ -16,7 +18,8 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
-public class HzDerivativeRequestDTO {
+public class HzDerivativeRequestDTO implements Serializable {
+    private static final long serialVersionUID = 7975318172255659078L;
     /**
      * 项目ID
      */

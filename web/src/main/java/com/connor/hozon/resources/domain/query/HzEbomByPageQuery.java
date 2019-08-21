@@ -1,5 +1,9 @@
 package com.connor.hozon.resources.domain.query;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @Author: haozt
  * @Date: 2018/6/27
@@ -48,6 +52,12 @@ public class HzEbomByPageQuery extends DefaultPageQuery {
      * 是否展示层级（1展示层级结构  0不展示层级结构）
      */
     private Integer showBomStructure;
+    /**
+     * 是否显示备件
+     */
+    @Setter
+    @Getter
+    private String sparePart;
 
     public String getPuids() {
         return puids;

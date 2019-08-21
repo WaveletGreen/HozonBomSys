@@ -7,8 +7,10 @@
 
 package cn.net.connor.hozon.services.response.bom.sparePart;
 
+import cn.net.connor.hozon.services.response.BasePageResponseDTO;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -18,17 +20,11 @@ import java.util.List;
  * @Modified By:
  */
 @Data
-public class SparePartBomQueryResponse {
-    /**
-     * 查询满足结果的总数
-     */
-    int totalCount;
-    /**
-     * 查询结果
-     */
-    List<SparePartDataResponseDTO> result;
+public class SparePartBomQueryPageResponse extends BasePageResponseDTO<SparePartDataResponseDTO> implements Serializable {
 
-    public SparePartBomQueryResponse(int totalCount, List<SparePartDataResponseDTO> result) {
+    private static final long serialVersionUID = -7105193470122152107L;
+
+    public SparePartBomQueryPageResponse(int totalCount, List<SparePartDataResponseDTO> result) {
         this.totalCount = totalCount;
         this.result = result;
     }

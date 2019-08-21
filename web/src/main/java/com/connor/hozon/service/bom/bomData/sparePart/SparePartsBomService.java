@@ -10,7 +10,8 @@ package com.connor.hozon.service.bom.bomData.sparePart;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartOfProjectRequestQueryDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartQuoteEbomLinesPostDTO;
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryResponse;
+import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryPageResponse;
+import cn.net.connor.hozon.services.response.bom.sparePart.SparePartQueryEbomPageResponseDTO;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.resources.domain.query.HzEbomByPageQuery;
 
@@ -32,7 +33,7 @@ public interface SparePartsBomService {
      * @param query controller和service连接对象
      * @return
      */
-    SparePartBomQueryResponse selectPageByProjectId(SparePartOfProjectRequestQueryDTO query);
+    SparePartBomQueryPageResponse selectPageByProjectId(SparePartOfProjectRequestQueryDTO query);
 
     /**
      * 保存单条备件数据
@@ -79,7 +80,12 @@ public interface SparePartsBomService {
      * @param query
      * @return
      */
-    JSONObject getEbomList(HzEbomByPageQuery query);
+    SparePartQueryEbomPageResponseDTO getEbomList(HzEbomByPageQuery query);
 
+    /**
+     * 引用EBOM的数据
+     * @param lines
+     * @return
+     */
     JSONObject quoteEbomLines(SparePartQuoteEbomLinesPostDTO lines);
 }

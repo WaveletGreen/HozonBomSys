@@ -37,5 +37,5 @@ public interface SparePartOfProjectDao extends MyBatisBaseDao<SparePartOfProject
      * @param query
      * @return
      */
-    int count(SparePartOfProjectQuery query);
+    int countByQuery(SparePartOfProjectQuery query);
 }

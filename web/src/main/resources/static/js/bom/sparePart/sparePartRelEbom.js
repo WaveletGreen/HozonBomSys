@@ -18,64 +18,15 @@ let selectedRows;
 function createColumn(result) {
     let column = [];
     column.push({field: 'ck', checkbox: true});
-    var data = result;
-    for (var key in data) {
-        log(key);
-        log(data[key]);
-        if (data.hasOwnProperty(key)) {
-            if ('pLouaFlag' === key) {
-                var json = {
-                    field: key,
-                    title: data[key],
-                    // align: 'center',
-                    valign: 'middle',
-
-                    formatter: function (value, row, index) {
-                        if (value == "LOA") {
-                            return [
-                                '<a href="javascript:void(0)" onclick="queryLoa(\'' + row.puid + '\')">' + value + '</a>'
-                            ].join("");
-                        } else if (value == "LOU") {
-                            return [
-                                '<a href="javascript:void(0)" onclick="queryLou(\'' + row.puid + '\')">' + value + '</a>'
-                            ].join("");
-                        }
-                        else {
-                            return [
-                                value
-                            ].join("");
-                        }
-                    }
-                };
-                column.push(json);
-            }
-            else {
-                var json = {
-                    field: key,
-                    title: data[key],
-                    // align: 'center',
-                    valign: 'middle',
-
-                    formatter: function (value, row, index) {
-                        if (value == "LOA") {
-                            return [
-                                '<a href="javascript:void(0)" onclick="queryLoa(' + row.puid + ')">' + value + '</a>'
-                            ].join("");
-                        } else if (value == "LOU") {
-                            return [
-                                '<a href="javascript:void(0)" onclick="queryLou(' + row.puid + ')">' + value + '</a>'
-                            ].join("");
-                        }
-                        else {
-                            return [
-                                value
-                            ].join("");
-                        }
-                    }
-                };
-                column.push(json);
-            }
-        }
+    let data = result;
+    for (let key in data) {
+        let json = {
+            field: key,
+            title: data[key],
+            // align: 'center',
+            valign: 'middle',
+        };
+        column.push(json);
     }
     column.push({
         field: 'status',
@@ -104,7 +55,6 @@ function createColumn(result) {
             }
         }
     })
-    log(column)
     return column;
 }
 
@@ -136,6 +86,7 @@ const quote = function () {
             }
             else {
                 layer.msg('引用成功', {icon: 1, time: 2000});
+                doQuery();
             }
         }
     })
@@ -246,21 +197,8 @@ function doRefresh(projectPuid) {
 function doQuery() {
     projectId = getProjectUid();
     eBomUrl = "ebom/getEBom/list?projectId=" + projectId;
-    var pBomLinePartClass = $("#pBomLinePartClass").val();
-    if (pBomLinePartClass == "请选择零件分类") {
-        eBomUrl += "&pBomLinePartClass=" + "";
-    } else {
-        eBomUrl += "&pBomLinePartClass=" + pBomLinePartClass;
-    }
-    var pBomLinePartResource = $("#pBomLinePartResource").val();
-    if (pBomLinePartResource == "请选择零件来源") {
-        eBomUrl += "&pBomLinePartResource=" + "";
-    }
-    else {
-        eBomUrl += "&pBomLinePartResource=" + pBomLinePartResource;
-    }
+    eBomUrl+="&sparePart="+$("#sparePart").val();
     initTable(eBomUrl);
-    // $('#ebomManageTable').bootstrapTable('destroy');
 }
 
 /**

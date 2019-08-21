@@ -124,7 +124,7 @@ public class SynRelevanceServiceImpl implements SynRelevanceService {
 //            //修改时间
 //            bean.setModifyDate(cfg0Record.getLastModifyDate());
 //            //相关性是否已发送
-//            bean.setIsRelevanceSended(cfg0Record.getIsRelevanceSent());
+//            bean.setIsRelevanceSent(cfg0Record.getIsRelevanceSent());
 //            //存入puid
 //            bean.setId(cfg0Record.getId());
 //            //添加进缓存
@@ -170,7 +170,7 @@ public class SynRelevanceServiceImpl implements SynRelevanceService {
 //            correlate.setPackNo(packnum);
 //            //动作描述代码
 //            if (option == ActionFlagOption.ADD) {
-//                if (null == bean.getIsRelevanceSended() || 0 == bean.getIsRelevanceSended()) {
+//                if (null == bean.getIsRelevanceSent() || 0 == bean.getIsRelevanceSent()) {
 //                    correlate.setActionFlag(option);
 //                } else {
 //                    //更新
@@ -180,7 +180,7 @@ public class SynRelevanceServiceImpl implements SynRelevanceService {
 //            //不排除删除状态
 //            else {
 //                //没有发送过，则不执行更新状态
-//                if (null == bean.getIsRelevanceSended() || 0 == bean.getIsRelevanceSended()) {
+//                if (null == bean.getIsRelevanceSent() || 0 == bean.getIsRelevanceSent()) {
 //                    continue;
 //                } else {
 //                    correlate.setActionFlag(option);

@@ -35,11 +35,26 @@
     from SPARE_PART_OF_PROJECT
     where PROJECT_ID = #{projectId,jdbcType=VARCHAR}
   </select>
-  <select id="count" parameterType="cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery" resultType="java.lang.Integer">
-    select count(*) from SPARE_PART_OF_PROJECT where PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+  <!--好像功能都跟备件零件的一样-->
+  <select id="countByQuery" parameterType="cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery" resultType="java.lang.Integer">
+    select count(*)
+    from
+    SPARE_PART_DATA t
+    LEFT JOIN SPARE_PART_OF_PROJECT tx ON t.ID = tx.SPARE_PART_ID
+    <where>
+      tx.PROJECT_ID = #{projectId}
+      <if test="hierarchy!=null and hierarchy!=''">
+        and HIERARCHY=#{hierarchy}
+      </if>
+      <if test="productivePartCode!=null and productivePartCode!=''">
+        and PRODUCTIVE_PART_CODE=#{productivePartCode}
+      </if>
+      <if test="sparePartCode!=null and sparePartCode!=''">
+        and SPARE_PART_CODE=#{sparePartCode}
+      </if>
+    </where>
   </select>
-
-
+  <!--根据主键删除-->
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from SPARE_PART_OF_PROJECT
     where ID = #{id,jdbcType=DECIMAL}
