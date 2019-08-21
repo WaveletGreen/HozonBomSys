@@ -8,6 +8,9 @@
 package cn.net.connor.hozon.services.request.process;
 
 import lombok.Data;
+
+import java.io.Serializable;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description:  前端回传的审核表单和审核人员数据
@@ -15,7 +18,8 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
-public class ProcessRequestDTO {
+public class ProcessRequestDTO implements Serializable {
+    private static final long serialVersionUID = -8059932114340896509L;
     /***
      * 审核人ID
      */

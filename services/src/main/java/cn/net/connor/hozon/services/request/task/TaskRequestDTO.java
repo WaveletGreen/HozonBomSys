@@ -8,6 +8,8 @@ package cn.net.connor.hozon.services.request.task;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Author: Fancyears·Maylos·Malvis
  * @Description: 任务接收对象
@@ -15,7 +17,8 @@ import lombok.Data;
  * @Modified By:
  */
 @Data
-public class TaskRequestDTO {
+public class TaskRequestDTO implements Serializable {
+    private static final long serialVersionUID = 4935746670406522078L;
     /**
      * 表单的ID，div中存了一个真实的表单ID，需要从当前的表单中获取div的id，然后后台获取到该div对应的url和id等信息，
      * 每次都可能需要进行查询该div的url，供前端自动跳转到具体的表单中

@@ -7,12 +7,15 @@
 
 package cn.net.connor.hozon.services.request.bom.workProcess;
 
+import java.io.Serializable;
+
 /**
  * @Author: Fancyears Milos Malvis
  * @Date: Created in  2019/8/6 15:44
  * @Modified By:
  */
-public class WorkProcessDTO {
+public class WorkProcessDTO implements Serializable {
+    private static final long serialVersionUID = 2037851798868253016L;
     private String puid;
     private String purpose;
     private String state;

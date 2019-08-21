@@ -9,6 +9,7 @@ package cn.net.connor.hozon.services.response.configuration.relevance;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +19,9 @@ import java.util.Date;
  * @Modified By:
  */
 @Data
-public class HzRelevanceResponseDTO {
+public class HzRelevanceResponseDTO implements Serializable {
+
+    private static final long serialVersionUID = -3447017316167485865L;
     /**
      * 序号
      */
@@ -54,6 +57,6 @@ public class HzRelevanceResponseDTO {
     /**
      * 相关性是否已发送过
      */
-    private Integer isRelevanceSended;
+    private Integer isRelevanceSent;
 
 }

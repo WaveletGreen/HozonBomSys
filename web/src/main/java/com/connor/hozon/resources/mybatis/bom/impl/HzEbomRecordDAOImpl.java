@@ -40,11 +40,12 @@ public class HzEbomRecordDAOImpl extends BaseSQLUtil implements HzEbomRecordDAO 
         Map<String,Object> map = new HashMap<>();
         map.put("projectId",query.getProjectId());
         map.put("isHas",query.getIsHas());
-        map.put("pBomOfWhichDept",query.getpBomOfWhichDept().trim());
+        map.put("pBomOfWhichDept",query.getpBomOfWhichDept()!=null?query.getpBomOfWhichDept().trim():query.getpBomOfWhichDept());
         map.put("lineIndex",query.getLineIndex());
-        map.put("lineId",query.getLineId().trim());
+        map.put("lineId",query.getLineId()!=null?query.getLineId().trim():query.getLineId());
         map.put("pBomLinePartClass",query.getpBomLinePartClass());
         map.put("pBomLinePartResource",query.getpBomLinePartResource());
+        map.put("sparePart",query.getSparePart());//增加一个备件过滤
         request.setFilters(map);
         return super.findPage("HzEbomRecordDAOImpl_getHzEbomList","HzEbomRecordDAOImpl_findTotalCount",request);
 

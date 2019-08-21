@@ -8,126 +8,143 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.net.connor.hozon.dao.dao.bom.sparePart.SparePartBomStructureDao">
-  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
-    <id column="ID" jdbcType="DECIMAL" property="id" />
-    <result column="SPARE_PART_ID" jdbcType="DECIMAL" property="sparePartId" />
-    <result column="SPARE_PART_CHILD_ID" jdbcType="DECIMAL" property="sparePartChildId" />
-    <result column="RESERVED1" jdbcType="VARCHAR" property="reserved1" />
-    <result column="RESERVED2" jdbcType="VARCHAR" property="reserved2" />
-    <result column="RESERVED3" jdbcType="VARCHAR" property="reserved3" />
-    <result column="RESERVED4" jdbcType="VARCHAR" property="reserved4" />
-    <result column="RESERVED5" jdbcType="VARCHAR" property="reserved5" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="SPARE_PART_ID" jdbcType="DECIMAL" property="sparePartId"/>
+        <result column="SPARE_PART_CHILD_ID" jdbcType="DECIMAL" property="sparePartChildId"/>
+        <result column="RESERVED1" jdbcType="VARCHAR" property="reserved1"/>
+        <result column="RESERVED2" jdbcType="VARCHAR" property="reserved2"/>
+        <result column="RESERVED3" jdbcType="VARCHAR" property="reserved3"/>
+        <result column="RESERVED4" jdbcType="VARCHAR" property="reserved4"/>
+        <result column="RESERVED5" jdbcType="VARCHAR" property="reserved5"/>
+    </resultMap>
 
-  <sql id="Base_Column_List">
+    <sql id="Base_Column_List">
     ID, SPARE_PART_ID, SPARE_PART_CHILD_ID, RESERVED1, RESERVED2, RESERVED3, RESERVED4,
     RESERVED5
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from SPARE_PART_BOM_STRUCTURE
-    where ID = #{id,jdbcType=DECIMAL}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from SPARE_PART_BOM_STRUCTURE
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from SPARE_PART_BOM_STRUCTURE
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
-  <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
-    <selectKey order="BEFORE"
-               keyColumn="ID" keyProperty="id" resultType="java.lang.Long">
-      select SEQ_SPARE_PART_STRUCTURE_ID.Nextval from dual
-    </selectKey>
-    insert into SPARE_PART_BOM_STRUCTURE (ID, SPARE_PART_ID, SPARE_PART_CHILD_ID,
-      RESERVED1, RESERVED2, RESERVED3, 
-      RESERVED4, RESERVED5)
-    values (#{id,jdbcType=DECIMAL}, #{sparePartId,jdbcType=DECIMAL}, #{sparePartChildId,jdbcType=DECIMAL},
-      #{reserved1,jdbcType=VARCHAR}, #{reserved2,jdbcType=VARCHAR}, #{reserved3,jdbcType=VARCHAR}, 
-      #{reserved4,jdbcType=VARCHAR}, #{reserved5,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
-    insert into SPARE_PART_BOM_STRUCTURE
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        ID,
-      </if>
-      <if test="sparePartId != null">
-        SPARE_PART_ID,
-      </if>
-      <if test="sparePartChildId != null">
-        SPARE_PART_CHILD_ID,
-      </if>
-      <if test="reserved1 != null">
-        RESERVED1,
-      </if>
-      <if test="reserved2 != null">
-        RESERVED2,
-      </if>
-      <if test="reserved3 != null">
-        RESERVED3,
-      </if>
-      <if test="reserved4 != null">
-        RESERVED4,
-      </if>
-      <if test="reserved5 != null">
-        RESERVED5,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=DECIMAL},
-      </if>
-      <if test="sparePartId != null">
-        #{sparePartId,jdbcType=DECIMAL},
-      </if>
-      <if test="sparePartChildId != null">
-        #{sparePartChildId,jdbcType=DECIMAL},
-      </if>
-      <if test="reserved1 != null">
-        #{reserved1,jdbcType=VARCHAR},
-      </if>
-      <if test="reserved2 != null">
-        #{reserved2,jdbcType=VARCHAR},
-      </if>
-      <if test="reserved3 != null">
-        #{reserved3,jdbcType=VARCHAR},
-      </if>
-      <if test="reserved4 != null">
-        #{reserved4,jdbcType=VARCHAR},
-      </if>
-      <if test="reserved5 != null">
-        #{reserved5,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
-    update SPARE_PART_BOM_STRUCTURE
-    <set>
-      <if test="sparePartId != null">
-        SPARE_PART_ID = #{sparePartId,jdbcType=DECIMAL},
-      </if>
-      <if test="sparePartChildId != null">
-        SPARE_PART_CHILD_ID = #{sparePartChildId,jdbcType=DECIMAL},
-      </if>
-      <if test="reserved1 != null">
-        RESERVED1 = #{reserved1,jdbcType=VARCHAR},
-      </if>
-      <if test="reserved2 != null">
-        RESERVED2 = #{reserved2,jdbcType=VARCHAR},
-      </if>
-      <if test="reserved3 != null">
-        RESERVED3 = #{reserved3,jdbcType=VARCHAR},
-      </if>
-      <if test="reserved4 != null">
-        RESERVED4 = #{reserved4,jdbcType=VARCHAR},
-      </if>
-      <if test="reserved5 != null">
-        RESERVED5 = #{reserved5,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where ID = #{id,jdbcType=DECIMAL}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+        <selectKey order="BEFORE"
+                   keyColumn="ID" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_SPARE_PART_STRUCTURE_ID.Nextval from dual
+        </selectKey>
+        insert into SPARE_PART_BOM_STRUCTURE (ID, SPARE_PART_ID, SPARE_PART_CHILD_ID,
+        RESERVED1, RESERVED2, RESERVED3,
+        RESERVED4, RESERVED5)
+        values (#{id,jdbcType=DECIMAL}, #{sparePartId,jdbcType=DECIMAL}, #{sparePartChildId,jdbcType=DECIMAL},
+        #{reserved1,jdbcType=VARCHAR}, #{reserved2,jdbcType=VARCHAR}, #{reserved3,jdbcType=VARCHAR},
+        #{reserved4,jdbcType=VARCHAR}, #{reserved5,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+        insert into SPARE_PART_BOM_STRUCTURE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="sparePartId != null">
+                SPARE_PART_ID,
+            </if>
+            <if test="sparePartChildId != null">
+                SPARE_PART_CHILD_ID,
+            </if>
+            <if test="reserved1 != null">
+                RESERVED1,
+            </if>
+            <if test="reserved2 != null">
+                RESERVED2,
+            </if>
+            <if test="reserved3 != null">
+                RESERVED3,
+            </if>
+            <if test="reserved4 != null">
+                RESERVED4,
+            </if>
+            <if test="reserved5 != null">
+                RESERVED5,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="sparePartId != null">
+                #{sparePartId,jdbcType=DECIMAL},
+            </if>
+            <if test="sparePartChildId != null">
+                #{sparePartChildId,jdbcType=DECIMAL},
+            </if>
+            <if test="reserved1 != null">
+                #{reserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved2 != null">
+                #{reserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved3 != null">
+                #{reserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved4 != null">
+                #{reserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved5 != null">
+                #{reserved5,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertList" parameterType="java.util.List">
+        insert into SPARE_PART_BOM_STRUCTURE
+        (ID, SPARE_PART_ID, SPARE_PART_CHILD_ID,
+        RESERVED1, RESERVED2, RESERVED3,
+        RESERVED4, RESERVED5)
+        select SEQ_SPARE_PART_STRUCTURE_ID.Nextval, A.* from(
+        <foreach collection="list" index="index" item="bean" separator="union all">
+            select
+            #{bean.sparePartId,jdbcType=DECIMAL}, #{bean.sparePartChildId,jdbcType=DECIMAL},
+            #{bean.reserved1,jdbcType=VARCHAR}, #{bean.reserved2,jdbcType=VARCHAR}, #{bean.reserved3,jdbcType=VARCHAR},
+            #{bean.reserved4,jdbcType=VARCHAR}, #{bean.reserved5,jdbcType=VARCHAR}
+            from
+            dual
+        </foreach>
+        )A
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+        update SPARE_PART_BOM_STRUCTURE
+        <set>
+            <if test="sparePartId != null">
+                SPARE_PART_ID = #{sparePartId,jdbcType=DECIMAL},
+            </if>
+            <if test="sparePartChildId != null">
+                SPARE_PART_CHILD_ID = #{sparePartChildId,jdbcType=DECIMAL},
+            </if>
+            <if test="reserved1 != null">
+                RESERVED1 = #{reserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved2 != null">
+                RESERVED2 = #{reserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved3 != null">
+                RESERVED3 = #{reserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved4 != null">
+                RESERVED4 = #{reserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved5 != null">
+                RESERVED5 = #{reserved5,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
     update SPARE_PART_BOM_STRUCTURE
     set SPARE_PART_ID = #{sparePartId,jdbcType=DECIMAL},
       SPARE_PART_CHILD_ID = #{sparePartChildId,jdbcType=DECIMAL},

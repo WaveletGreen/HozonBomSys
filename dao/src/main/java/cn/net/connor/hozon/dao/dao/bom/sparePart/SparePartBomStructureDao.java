@@ -7,6 +7,7 @@
 
 package cn.net.connor.hozon.dao.dao.bom.sparePart;
 
+import cn.net.connor.hozon.dao.basic.InsertListDao;
 import cn.net.connor.hozon.dao.basic.MyBatisBaseDao;
 import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure;
 import org.springframework.stereotype.Repository;
@@ -18,5 +19,5 @@ import org.springframework.stereotype.Repository;
  * @Modified By:
  */
 @Repository
-public interface SparePartBomStructureDao extends MyBatisBaseDao<SparePartBomStructure,Long,SparePartBomStructure> {
+public interface SparePartBomStructureDao extends MyBatisBaseDao<SparePartBomStructure,Long,SparePartBomStructure>,InsertListDao<SparePartBomStructure> {
 }

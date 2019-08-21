@@ -42,8 +42,22 @@ function createColumn() {
     column.push({field: 'productivePartName', title: '生产零件名称', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'sparePartCode', title: '备件零件号', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'sparePartName', title: '备件零件名称', align: 'left', valign: 'middle', width: largeWidth});
-    column.push({field: 'isSparePart', title: '是否备件', align: 'left', valign: 'middle', width: smallWidth});
+    column.push({
+        field: 'isSparePart', title: '是否备件', align: 'left', valign: 'middle', width: smallWidth,
+        formatter: function (value, row, index) {
+            if (1 === value || "1" === value) {
+                return "<span>是</span>";
+            }
+            else if (0 === value || "0" === value) {
+                return "<span >否</span>";
+            }
+            else {
+                return "<span ></span>";
+            }
+        }
+    });
     column.push({field: 'unit', title: '单位', align: 'left', valign: 'middle', width: midWidth});
+    column.push({field: 'drawingNum', title: '图号', align: 'left', valign: 'middle', width: midWidth});
     column.push({field: 'department', title: '专业部门', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'responsibleEngineer', title: '责任工程师', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'supplier', title: '供应商', align: 'left', valign: 'middle', width: largeWidth});
@@ -80,7 +94,7 @@ const addChild = function () {
     }
     window.Ewin.dialog({
         title: "添加单条备件零件",
-        url: "sparePartsBom/addChildPage",
+        url: "sparePartsBom/addChildPage?type=1",
         width: 600,
         height: 400
     })
@@ -101,7 +115,7 @@ const doDelete = function () {
         if (e) {
             let data = [];
             for (let i = 0; i < rows.length; i++) {
-                data.push({id: rows[i].id});
+                data.push({id: rows[i].id,relEbomLineId:rows[i].relEbomLineId});
             }
             log(data);
             if (!debug)
@@ -471,6 +485,13 @@ const exportExcel = function () {
         }
     })
 };
+
+/**
+ * EBOM中标记跳转
+ */
+const remarkInEbom=function(){
+    window.location.href = "sparePartsBom/jumpToEbom";
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 /**
  * 工具条
@@ -498,35 +519,41 @@ const toolbar = [
         handler: doDelete
     },
     {
-        text: '撤销',
-        iconCls: 'glyphicon glyphicon-share-alt',
-        handler: revoke
+        text: 'EBOM中标记',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: remarkInEbom
     },
-    {
-        text: '设置为LOU/取消',
-        iconCls: 'glyphicon glyphicon-cog',
-        handler: setUpLou
-    },
-    {
-        text: '关联变更单',
-        iconCls: 'glyphicon glyphicon-log-out',
-        handler: attachChangeForm
-    },
-    {
-        text: '引用层级',
-        iconCls: 'glyphicon glyphicon-copyright-mark',
-        handler: doRank
-    },
-    {
-        text: '导入Excel',
-        iconCls: 'glyphicon glyphicon-share',
-        handler: importExcel
-    },
-    {
-        text: '导出Excel',
-        iconCls: 'glyphicon glyphicon-export',
-        handler: exportExcel
-    }
+    //先去掉下面的多余功能
+    // {
+    //     text: '撤销',
+    //     iconCls: 'glyphicon glyphicon-share-alt',
+    //     handler: revoke
+    // },
+    // {
+    //     text: '设置为LOU/取消',
+    //     iconCls: 'glyphicon glyphicon-cog',
+    //     handler: setUpLou
+    // },
+    // {
+    //     text: '关联变更单',
+    //     iconCls: 'glyphicon glyphicon-log-out',
+    //     handler: attachChangeForm
+    // },
+    // {
+    //     text: '引用层级',
+    //     iconCls: 'glyphicon glyphicon-copyright-mark',
+    //     handler: doRank
+    // },
+    // {
+    //     text: '导入Excel',
+    //     iconCls: 'glyphicon glyphicon-share',
+    //     handler: importExcel
+    // },
+    // {
+    //     text: '导出Excel',
+    //     iconCls: 'glyphicon glyphicon-export',
+    //     handler: exportExcel
+    // }
 ]
 
 function toPage() {
@@ -563,6 +590,7 @@ function initTable() {
         columns: column,
         toolbar: "#toolbar",
         sortOrder: "asc",                   //排序方式
+        sortName: 't.ID',
         clickToSelect: true,// 单击某一行的时候选中某一条记录
         showColumns: true, //是否显示所有的列
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
