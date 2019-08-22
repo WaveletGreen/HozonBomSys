@@ -5,10 +5,9 @@ import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeAutoTypeR
 import com.connor.hozon.bom.resources.domain.query.HzLegislativeAutoTypeQuery;
 import com.connor.hozon.bom.resources.page.Page;
 import com.connor.hozon.bom.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeAutoTypeService;
-import com.connor.hozon.bom.resources.util.Result;
-import com.sun.tools.internal.ws.processor.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -91,7 +90,7 @@ public class LegislativeLibraryController extends BaseController {
 
 
 
-    @RequestMapping(value = "addMotorcycleType",method = RequestMethod.GET)
+    @RequestMapping(value = "addAutoType",method = RequestMethod.GET)
     public String addAutoType(String puid,Model model) {
 
         return "resourcesLibrary/legislativeLibrary/legislativeItemLibrary/addLegislativeItemLibrary";

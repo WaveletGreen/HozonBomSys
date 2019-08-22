@@ -31,7 +31,13 @@ function createColumn() {
     // })
    // columnOne.push({field: 'no', colspan: 1, rowspan: 2, align: 'center', valign: 'middle', checkbox: true})
     columnOne.push({field: 'no', title: '序号', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
-    columnOne.push({field: 'noticeNo', title: '公告号', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
+    columnOne.push({field: 'noticeNo', title: '公告号', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,
+        formatter: function (value, row, index) {
+            return [
+                '<a href="javascript:void(0)" onclick="selectItem(' + row.puid + ')">' + value + '</a>'
+            ].join("");
+        }
+    })
     columnOne.push({field: 'autoType', title: '车型', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
     columnOne.push({field: 'vinNo', title: 'VIN码前8位', align: 'center', valign: 'middle', colspan: 1, rowspan: 2,})
     columnOne.push({field: 't', title: '电池', align: 'center', valign: 'middle', colspan: 3, rowspan: 1,})
@@ -169,3 +175,7 @@ $(document).keydown(function (event) {
         });
     }
 });
+
+function selectItem(row) {
+    window.location.href = "legislativeItem/getDetail?id=" + row;
+}

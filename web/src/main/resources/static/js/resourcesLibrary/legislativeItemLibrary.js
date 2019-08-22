@@ -18,33 +18,57 @@ function doQuery() {
 function createColumn() {
     let column = [];
     column.push({field: 'ck', align: 'center', valign: 'middle', checkbox: true})
-    column.push({field: 'q', title: '序号',  align: 'center', valign: 'middle', width: 50,
-        formatter: function (value, row, index) {
-            var options = $('#legislativeItemLibraryTable').bootstrapTable('getOptions');
-            if (options.pageSize = "ALL") {
-                return index + 1;
-            }
-            return options.pageSize * (options.pageNumber - 1) + index + 1;
-        }
-    })
-    column.push({field: 'w', title: '法规件名称', align: 'center', valign: 'middle',})
-    column.push({field: 'e', title: '法规件型号', align: 'center', valign: 'middle',})
-    column.push({field: 'r', title: '零件号', align: 'center', valign: 'middle',})
-    column.push({field: 't', title: '零件名称', align: 'center', valign: 'middle',})
-    column.push({field: 'y', title: '供应商', align: 'center', valign: 'middle',})
-    column.push({field: 'u', title: '供应商代码', align: 'center', valign: 'middle',})
-    column.push({field: 'i', title: '技术特性描述', align: 'center', valign: 'middle',})
-    column.push({field: 'o', title: '适用车型', align: 'center', valign: 'middle',})
-    column.push({field: 'p', title: '申请部门', align: 'center', valign: 'middle',})
-    column.push({field: 'a', title: '是否需要强检报告', align: 'center', valign: 'middle',})
-    column.push({field: 's', title: '是否需要3C证书', align: 'center', valign: 'middle',})
+    // column.push({field: 'q', title: '序号',  align: 'center', valign: 'middle', width: 50,
+    //     formatter: function (value, row, index) {
+    //         var options = $('#legislativeItemLibraryTable').bootstrapTable('getOptions');
+    //         if (options.pageSize = "ALL") {
+    //             return index + 1;
+    //         }
+    //         return options.pageSize * (options.pageNumber - 1) + index + 1;
+    //     }
+    // })
+    column.push({field: 'no', title: '序号', align: 'center', valign: 'middle',})
+    column.push({field: 'legislativeName', title: '法规件名称', align: 'center', valign: 'middle',})
+    column.push({field: 'legislativeNo', title: '法规件型号', align: 'center', valign: 'middle',})
+    column.push({field: 'noticeNo', title: '公告号', align: 'center', valign: 'middle',})
+    column.push({field: 'applicableModels', title: '适用车型', align: 'center', valign: 'middle',})
+    column.push({field: 'partId', title: '零件号', align: 'center', valign: 'middle',})
+    column.push({field: 'partName', title: '零件名称', align: 'center', valign: 'middle',})
+    column.push({field: 'supplier', title: '供应商', align: 'center', valign: 'middle',})
+    column.push({field: 'supplierNo', title: '供应商代码', align: 'center', valign: 'middle',})
+    column.push({field: 'technologyDesc', title: '技术特性描述', align: 'center', valign: 'middle',})
+    column.push({field: 'applyDepa', title: '申请部门', align: 'center', valign: 'middle',})
+    column.push({field: 'isHaveTest', title: '是否需要强检报告', align: 'center', valign: 'middle',})
+    column.push({field: 'isHaveCcc', title: '是否需要3C证书', align: 'center', valign: 'middle',})
+    column.push({field: 'dutyEngineer', title: '责任工程师', align: 'center', valign: 'middle',})
+    column.push({field: 'remarks', title: '备注', align: 'center', valign: 'middle',})
     return column;
 }
+
 /**
  * 添加
  */
 var add = function () {
-
+    var url = "legislativeItem/addLegislative";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "添加",
+                    url: "legislativeItem/addLegislative",
+                    gridId: "gridId",
+                    width: 500,
+                    height: 500
+                });
+            }
+        }
+    })
 }
 /**
  * 快速添加
@@ -69,13 +93,13 @@ var doDelete = function () {
  * @type {*[]}
  */
 const toolbar = [
-    {
-        text: '返回上一步',
-        iconCls: 'fa fa-arrow-left',
-        handler: function () {
-            window.location.href="javascript:history.go(-1);"
-        }
-    },
+    // {
+    //     text: '返回上一步',
+    //     iconCls: 'fa fa-arrow-left',
+    //     handler: function () {
+    //         window.location.href="javascript:history.go(-1);"
+    //     }
+    // },
     {
         text: '添加',
         iconCls: 'glyphicon glyphicon-plus',
@@ -105,7 +129,7 @@ function initTable() {
     $table.bootstrapTable('destroy');
     let column = createColumn();
     $table.bootstrapTable({
-        url: "",
+        url: "legislativeItem/list",
         method: 'GET',
         dataType: 'json',
         cache: false,
