@@ -47,7 +47,7 @@ public class SparePartsBomController {
      * @return
      */
     @RequestMapping("getPage")
-    public String getPage(String type, Model model) {
+    public String getPage(String type, String projectId,Model model) {
         if ("add".equals(type)) {
             model.addAttribute("type", "add");
             model.addAttribute("url", "./sparePartsBom/addSparePart");
@@ -59,6 +59,12 @@ public class SparePartsBomController {
             model.addAttribute("type", "clonePartData");
             model.addAttribute("url", "./sparePartsBom/addSparePart");
         }
+        else if("selectRecursionByTopLayerId".equals(type)){
+            model.addAttribute("type", type);
+            model.addAttribute("url", "./sparePartsBom/"+type);
+        }
+        LinkedHashMap<String,String> title=sparePartsBomService.getVehicleUsageTitle(projectId,"&emsp;");
+        model.addAttribute("vehicleUsageTitle",title);
         return "bomManage/sparePart/addOrUpdate";
     }
 
@@ -145,6 +151,11 @@ public class SparePartsBomController {
     public JSONObject updateSparePart(@RequestBody SparePartPostDTO data) {
         return sparePartsBomService.updateSparePart(data);
     }
+    @RequestMapping("selectRecursionByTopLayerId")
+    @ResponseBody
+    public JSONObject selectRecursionByTopLayerId(@RequestBody SparePartPostDTO data) {
+        return sparePartsBomService.selectRecursionByTopLayerId(data);
+    }
 
     /**
      * 批量删除
@@ -162,7 +173,12 @@ public class SparePartsBomController {
     @RequestMapping(value = "ebom/title", method = RequestMethod.GET)
     @ResponseBody
     public LinkedHashMap<String, String> getEbomTitle(String projectId) {
-        return sparePartsBomService.createRelEbomTitle();
+        return sparePartsBomService.createRelEbomTitle(projectId);
+    }
+    @RequestMapping(value = "vehicleUsageTitle", method = RequestMethod.GET)
+    @ResponseBody
+    public LinkedHashMap<String, String> vehicleUsageTitle(String projectId) {
+        return sparePartsBomService.getVehicleUsageTitle(projectId,"(单车用量)<br>" );
     }
 
     @RequestMapping(value = "ebom/getEBom/list", method = RequestMethod.GET)

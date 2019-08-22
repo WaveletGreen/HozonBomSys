@@ -486,7 +486,7 @@ public class HzDerivativeServiceImpl implements HzDerivativeService {
             _result.put("modeBasicDetail", feature.getpFeatureSingleVehicleCode());
             //重新运算一遍基本信息
             remarkBaseInfo(feature, _result, modelRecord, inner);
-            _result.put("cfg0MainPuid", modelRecord.getpCfg0ModelOfMainRecord());
+            _result.put("cfg0MainPuid", modelRecord.getModelMainRecord());
 //            if(basics.get(i).getDmbStatus()==null||basics.get(i).getDmbStatus()==0){
 //                _result.put("status","草稿状态");
 //            }else if(basics.get(i).getDmbStatus()==10){

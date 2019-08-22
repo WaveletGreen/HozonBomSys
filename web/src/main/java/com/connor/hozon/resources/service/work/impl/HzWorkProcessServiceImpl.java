@@ -18,7 +18,7 @@ import com.connor.hozon.resources.domain.model.HzWorkProcedureFactory;
 import com.connor.hozon.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.resources.domain.query.HzMaterielQuery;
 import com.connor.hozon.resources.domain.query.HzWorkProcessByPageQuery;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.resources.executors.ExecutorServices;
 import com.connor.hozon.resources.mybatis.change.HzApplicantChangeDAO;
 import com.connor.hozon.resources.mybatis.change.HzChangeDataRecordDAO;

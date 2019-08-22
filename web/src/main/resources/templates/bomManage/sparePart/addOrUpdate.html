@@ -16,6 +16,9 @@
             width: 100%;
 
         }
+        .vehicleNumClass{
+
+        }
     </style>
 </head>
 <body>
@@ -125,6 +128,14 @@
                 <input id="partClass" class="form-control inputSize" name="partClass" type="text"/>
             </div>
         </div>
+        <div class="col-md-12" th:each="_data,c:${vehicleUsageTitle.keySet()}">
+            <div class="form-group col-md-12">
+                <label th:text="${_data}"></label>
+                <input class="form-control inputSize vehicleNumClass" th:id="${_data}" th:name="${_data}" type="text"
+                       th:placeholder="${'请输入单车用量'}"/>
+                <!--th:value="${vehicleUsageTitle.get(_data)}"-->
+            </div>
+        </div>
     </form>
 </div>
 <script th:inline="javascript">
@@ -143,7 +154,6 @@
      */
     function fillInput() {
         let row = getActiveTab().getSelectedRows()[0];
-        log(row)
         const _d = $("#addSparePartForm").serializeArray();
         log(_d)
         for (let p in _d) {
@@ -169,7 +179,7 @@
 
     $(function () {
         log(type)
-        if (type === 'update'||type==="clonePartData") {
+        if (type === 'update' || type === "clonePartData"||type==="selectRecursionByTopLayerId") {
             fillInput();
         }
         $('#addSparePartForm').bootstrapValidator({
@@ -250,13 +260,31 @@
                 }
                 log(data)
                 data.projectId = getProjectUid();
-                if (type === 'update') {
+                if (type === 'update'||type==="selectRecursionByTopLayerId") {
                     data.id = getActiveTab().getSelectedRows()[0].id;
                 }
-                else if(type==='clonePartData'){
-                    data.relEbomLineId=getActiveTab().getSelectedRows()[0].relEbomLineId;
+                else if (type === 'clonePartData') {
+                    data.relEbomLineId = getActiveTab().getSelectedRows()[0].relEbomLineId;
                 }
-
+                let reserved2=getActiveTab().getSelectedRows()[0].reserved2;
+                let _data=reserved2.split(",");//根据逗号进行拆分字符串
+                let resultReserved2="";
+                //所有的字段都已经在后台去除所有的**
+                log(_data)
+                for (let field in _data){
+                    if(_data[field].indexOf("#")!=-1){//需要判断是否存在#，有些是没有的
+                        let value=_data[field].split("#");//拆解字符串
+                        let f=value[0];
+                        log($("#"+f).val())
+                        resultReserved2+=f+"#"+$("#"+f).val()+",";//这里没有去掉最后的一个,，因为EBOM里面没有去掉
+                    }
+                }
+                data.reserved2=resultReserved2;
+                data.type=type;
+                // log(data)
+                // if (true) {
+                //     return;
+                // }
                 $.ajax({
                     contentType:
                         "application/json",

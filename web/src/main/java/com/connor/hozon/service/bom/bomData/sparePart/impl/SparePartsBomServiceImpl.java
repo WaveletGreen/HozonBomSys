@@ -18,6 +18,8 @@ import cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLManageRecord;
 import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure;
 import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData;
 import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartOfProject;
+import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartStructureRecursion;
+import cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord;
 import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
 import cn.net.connor.hozon.services.beanMapper.bom.sparePart.SparePartDTOMapper;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartOfProjectRequestQueryDTO;
@@ -25,6 +27,8 @@ import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartQuoteEbomLinesPostDTO;
 import cn.net.connor.hozon.services.response.bom.sparePart.SparePartDataResponseDTO;
 import cn.net.connor.hozon.services.response.bom.sparePart.SparePartQueryEbomPageResponseDTO;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.HzCfg0ModelService;
+import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryPageResponse;
@@ -35,6 +39,7 @@ import com.connor.hozon.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.resources.page.Page;
 import com.connor.hozon.resources.service.bom.HzEBOMReadService;
+import com.connor.hozon.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.service.bom.bomData.sparePart.SparePartStructureCache;
 import com.connor.hozon.service.bom.bomData.sparePart.SparePartsBomService;
 import lombok.Setter;
@@ -42,9 +47,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -58,6 +65,7 @@ import java.util.*;
  */
 @Service
 @ConfigurationProperties(prefix = "sparePart")
+@PropertySource("classpath:sparePartSetting.properties")//指定属性文件路径
 @Transactional
 @Slf4j
 public class SparePartsBomServiceImpl implements SparePartsBomService {
@@ -97,6 +105,14 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
 
     @Autowired
     private HzEbomRecordDAO hzEbomRecordDAO;
+    /**
+     * 单车service层
+     */
+    @Autowired
+    private HzSingleVehiclesServices hzSingleVehiclesServices;
+
+    @Autowired
+    private HzCfg0ModelService hzCfg0ModelService;
 
     /**
      * 分页查询出项目
@@ -168,6 +184,18 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
     }
 
     @Override
+    public JSONObject selectRecursionByTopLayerId(SparePartPostDTO data) {
+        SparePartDTOMapper mapper = SparePartDTOMapper.INSTANCE;
+        SparePartData bean = mapper.DTOToBean(data);//post请求提交的对象转成dao层对象
+        List<SparePartStructureRecursion> recu = sparePartBomStructureDao.selectRecursionByTopLayerId(bean.getId());
+        if (recu!=null&&recu.size()>0) {
+            log.info("更新单条子备件信息成功:" + bean.getSparePartCode());
+            return SimpleResponseResultFactory.createSuccessResult("更新备件数据成功!");
+        }
+        return SimpleResponseResultFactory.createErrorResult("更新备件数据失败");
+    }
+
+    @Override
     public JSONObject deleteList(List<SparePartPostDTO> data) {
         SparePartDTOMapper mapper = SparePartDTOMapper.INSTANCE;
         List<SparePartData> beans = mapper.DTOToBean(data);//post请求提交的对象转成dao层对象
@@ -193,7 +221,28 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
     }
 
     @Override
-    public LinkedHashMap<String, String> createRelEbomTitle() {
+    public LinkedHashMap<String, String> getVehicleUsageTitle(String projectId, String breakType) {
+        //获取该项目下的所有车型模型
+        List<HzCfg0ModelRecord> hzCfg0ModelRecords = hzCfg0ModelService.doSelectByProjectPuid(projectId);
+        LinkedHashMap<String, String> map = new LinkedHashMap();
+        //根据车型模型下
+        if (ListUtils.isNotEmpty(hzCfg0ModelRecords)) {
+            for (HzCfg0ModelRecord rec : hzCfg0ModelRecords) {
+                String name = rec.getObjectName();
+                String mng = rec.getModelBasicDetail();
+                if (null == name || mng == null) {
+                    continue;
+                }
+                String field = name + mng.replaceAll("[**]", "");//前端的字段
+                String title = name + breakType + mng;//显示出来的title
+                map.put(field, title);
+            }
+        }
+        return map;
+    }
+
+    @Override
+    public LinkedHashMap<String, String> createRelEbomTitle(String projectId) {
         LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
         tableTitle.put("No", "序号");
         tableTitle.put("lineId", "零件号");
@@ -247,6 +296,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         tableTitle.put("sparePart", "备件");
         tableTitle.put("sparePartNum", "备件编号");
         tableTitle.put("colorPart", "是否颜色件");
+        tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
 //        tableTitle.put("effectTime", "生效时间");
         return tableTitle;
     }
@@ -451,6 +501,14 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         //然后将备件数据反向存储到EBOM身上，也不需要反向写数据到EBOM上了
         //        record.setSparePart("Y");//是否备件
         //        record.setSparePartNum(part.getSparePartCode());//备件编号
+
+
+        //单车用量
+        String vehNum = record.getVehNum();
+        if (null != vehNum && vehNum.contains("**")) {
+            part.setReserved2(vehNum.replaceAll("[**]", ""));//去除所有的**，这里如果不去除，则只能在前端进行去除
+        }
+
         return part;
     }
 

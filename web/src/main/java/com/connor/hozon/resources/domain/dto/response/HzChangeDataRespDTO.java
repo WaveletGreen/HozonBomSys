@@ -1,7 +1,7 @@
 package com.connor.hozon.resources.domain.dto.response;
 
 import cn.net.connor.hozon.common.entity.BaseDTO;
-import com.connor.hozon.resources.enumtype.TableNameToHyperLinkNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.TableNameToHyperLinkNameEnum;
 import lombok.Data;
 
 import java.util.ArrayList;

@@ -1,8 +1,7 @@
-package com.connor.hozon.resources.enumtype;
+package cn.net.connor.hozon.services.common.enumtype;
 
-import com.connor.hozon.resources.domain.constant.ChangeConstants;
+import cn.net.connor.hozon.common.constant.ChangeConstants;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.security.access.method.P;
 
 /**
  * @Author: haozt

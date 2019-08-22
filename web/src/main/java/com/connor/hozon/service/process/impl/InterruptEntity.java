@@ -13,7 +13,7 @@ import com.connor.hozon.service.process.IInterruptionCallBack;
 import com.connor.hozon.service.process.IDataModifier;
 import com.connor.hozon.resources.domain.model.*;
 import com.connor.hozon.resources.domain.query.HzChangeDataDetailQuery;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.resources.mybatis.bom.HzPbomRecordDAO;

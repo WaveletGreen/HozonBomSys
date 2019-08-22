@@ -1,7 +1,7 @@
 package com.connor.hozon.resources.mybatis.epl.impl;
 
 import cn.net.connor.hozon.common.util.ListUtils;
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.resources.domain.query.HzEPLQuery;

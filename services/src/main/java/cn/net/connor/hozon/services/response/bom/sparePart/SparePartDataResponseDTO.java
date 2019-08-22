@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 备件零件响应对象
@@ -24,4 +25,5 @@ import java.io.Serializable;
 @ToString
 public class SparePartDataResponseDTO extends SparePartData implements Serializable {
     private static final long serialVersionUID = 4235560016359300566L;
+    private Map<String,String> vehicleUsage;
 }

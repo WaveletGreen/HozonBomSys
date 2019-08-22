@@ -16,6 +16,7 @@ import com.connor.hozon.resources.service.bom.HzEBOMWriteService;
 import com.connor.hozon.resources.service.bom.HzSingleVehiclesServices;
 import com.connor.hozon.resources.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,7 @@ import static org.hibernate.jpa.internal.QueryImpl.LOG;
  */
 @Controller
 @RequestMapping(value = "/ebom")
+@Scope("session")//因为controller里使用了全局变量，并发的时候会造成全局变量的异常
 public class HzEbomController extends BaseController {
 
     @Autowired

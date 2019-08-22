@@ -1,6 +1,6 @@
 package com.connor.hozon.resources.domain.dto.request;
 
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import cn.net.connor.hozon.common.entity.BaseDTO;
 import lombok.Data;
 

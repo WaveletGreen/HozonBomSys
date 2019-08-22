@@ -31,7 +31,7 @@ import com.connor.hozon.service.configuration.derivative.HzDerivativeService;
 import com.connor.hozon.service.configuration.feature.impl.FeatureServiceImpl;
 import com.connor.hozon.service.configuration.feature.impl.FeatureValueServiceImpl;
 import com.connor.hozon.service.configuration.model.impl.HzCfg0ModelRecordServiceImpl;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.resources.mybatis.factory.HzFactoryDAO;
@@ -783,7 +783,7 @@ public class HzMaterielFeatureController extends ExtraIntegrateController {
 //                    String value = params.get(key);
 //                    if ("pCfg0ModelOfMainRecord".equals(key)) {
 //                        //设置归属主配置
-//                        modelRecord.setpCfg0ModelOfMainRecord(params.get("pCfg0ModelOfMainRecord"));
+//                        modelRecord.setModelMainRecord(params.get("pCfg0ModelOfMainRecord"));
 //                    } else if ("objectName".equals(key)) {
 //                        //设置车型名
 //                        modelRecord.setObjectName(params.get("objectName"));
@@ -792,7 +792,7 @@ public class HzMaterielFeatureController extends ExtraIntegrateController {
 //                        modelRecord.setObjectDesc(params.get("objectDesc"));
 //                    } else if ("pCfg0ModelBasicDetail".equals(key)) {
 //                        //设置基本信息代码
-//                        modelRecord.setpCfg0ModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
+//                        modelRecord.setModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
 //                    } else if ("pFeatureCnDesc".equals(key)) {
 //                        //中文描述
 //                        modelDetail.setpFeatureCnDesc(params.get("pFeatureCnDesc"));
@@ -814,7 +814,7 @@ public class HzMaterielFeatureController extends ExtraIntegrateController {
 //                            hzCfg0ToModelRecord.setpCfg0IdRecord(addedRecord.getPuid());
 //                            hzCfg0ToModelRecord.setpCfg0ModelRecord(modelRecord.getPuid());
 //                            hzCfg0ToModelRecord.setpCfg0OptionValue(addedRecord.getFeatureValueCode());
-//                            hzCfg0ToModelRecord.setpOfCfg0MainRecord(modelRecord.getpCfg0ModelOfMainRecord());
+//                            hzCfg0ToModelRecord.setpOfCfg0MainRecord(modelRecord.getModelMainRecord());
 //                            hzCfg0ToModelRecord.setPuid(UUIDHelper.generateUpperUid());
 //                            hzCfg0ToModelRecord.setpParseLogicValue(1);
 //                            //插入数据

@@ -1,7 +1,7 @@
 package com.connor.hozon.resources.mybatis.change.impl;
 
 import cn.net.connor.hozon.services.service.sys.UserInfo;
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.resources.domain.query.HzChangeOrderByPageQuery;
 import com.connor.hozon.resources.mybatis.change.HzChangeOrderDAO;
 import com.connor.hozon.resources.page.Page;

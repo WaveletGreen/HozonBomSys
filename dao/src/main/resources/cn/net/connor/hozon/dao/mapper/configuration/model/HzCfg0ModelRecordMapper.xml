@@ -15,15 +15,19 @@
         <result column="OBJECT_DESC" jdbcType="VARCHAR"
                 property="objectDesc"/>
         <result column="P_CFG0_MODEL_OF_MAIN_RECORD" jdbcType="VARCHAR"
-                property="pCfg0ModelOfMainRecord"/>
+                property="modelMainRecord"/>
         <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR"
-                property="pCfg0ModelBasicDetail"/>
+                property="modelBasicDetail"/>
         <result column="IS_SENT" jdbcType="INTEGER"
                 property="isSent"/>
         <result column="MODEL_CREATE_DATE" jdbcType="TIMESTAMP"
                 property="modelCreateDate"/>
         <result column="MODEL_UPDATE_DATE" jdbcType="TIMESTAMP"
                 property="modelUpdateDate"/>
+    </resultMap>
+    <resultMap id="JoinResultMap" extends="BaseResultMap"
+               type="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord">
+
     </resultMap>
     <sql id="Base_Column_List">
 		PUID,
@@ -48,9 +52,8 @@
     <select id="selectByProjectPuid" parameterType="java.lang.String"
             resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"
-        />
-        from HZ_CFG0_MODEL_RECORD
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_RECORD t
         where P_CFG0_MODEL_OF_MAIN_RECORD=
         (
         select t.puid
@@ -59,12 +62,21 @@
         )
 
     </select>
+    <!--根据项目puid获取所有车型，只不过是用链接查询的而已-->
+    <select id="selectByProjectIdWithJoin" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select t.* from HZ_CFG0_MODEL_RECORD t
+        LEFT JOIN HZ_CFG0_MODEL_DETAIL t2 on t.PUID=t2.P_MODEL_PUID
+        left JOIN HZ_CFG0_MAIN_RECORD t3 on t.P_CFG0_MODEL_OF_MAIN_RECORD=t3.puid
+        LEFT JOIN HZ_PROJECT_LIBS t4 on t3.P_CFG0_OF_WHICH_PROJECT_PUID=t4.PUID
+        where t4.PUID=#{projectId,jdbcType=VARCHAR}
+    </select>
     <sql id="values_by_batch">
 		#{item.puid,jdbcType=VARCHAR},
 		#{item.objectName,jdbcType=VARCHAR},
 		#{item.objectDesc,jdbcType=VARCHAR},
-		#{item.pCfg0ModelOfMainRecord,jdbcType=VARCHAR},
-		#{item.pCfg0ModelBasicDetail,jdbcType=VARCHAR},
+		#{item.modelMainRecord,jdbcType=VARCHAR},
+		#{item.modelBasicDetail,jdbcType=VARCHAR},
 		0,
 		sysdate,
 		sysdate
@@ -85,7 +97,7 @@
     <!--更新基本信息-->
     <update id="updateBasicByPuid">
         update HZ_CFG0_MODEL_RECORD t
-          set t.P_CFG0_MODEL_BASIC_DETAIL=#{pCfg0ModelBasicDetail,jdbcType=VARCHAR},
+          set t.P_CFG0_MODEL_BASIC_DETAIL=#{modelBasicDetail,jdbcType=VARCHAR},
               t.MODEL_UPDATE_DATE=sysdate
         where t.PUID=#{puid,jdbcType=VARCHAR}
     </update>
@@ -94,7 +106,7 @@
         update HZ_CFG0_MODEL_RECORD t
           set t.OBJECT_NAME=#{objectName,jdbcType=VARCHAR},
               t.OBJECT_DESC=#{objectDesc,jdbcType=VARCHAR},
-              t.P_CFG0_MODEL_BASIC_DETAIL=#{pCfg0ModelBasicDetail,jdbcType=VARCHAR},
+              t.P_CFG0_MODEL_BASIC_DETAIL=#{modelBasicDetail,jdbcType=VARCHAR},
               t.MODEL_UPDATE_DATE=sysdate
         where t.PUID=#{puid,jdbcType=VARCHAR}
     </update>

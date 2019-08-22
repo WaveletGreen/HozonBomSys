@@ -31,4 +31,8 @@ public class SparePartPostDTO extends SparePartData implements Serializable {
      * 父件ID，只有添加到子件才会出现这个字段的数据
      */
     private Long parentId;
+    /**
+     * 是添加、新增还是修改，新增需要将所有对应的结构带出来
+     */
+    private String type;
 }

@@ -1,7 +1,6 @@
 package com.connor.hozon.resources.domain.dto.response;
 
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
-import com.connor.hozon.resources.domain.model.HzBomSysFactory;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import lombok.Data;
 
 /**

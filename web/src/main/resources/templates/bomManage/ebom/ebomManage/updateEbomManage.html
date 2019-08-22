@@ -330,9 +330,9 @@
     </div>
 
     <div class="form-group" th:each="_data,c:${data.getMap().keySet()}">
-        <label class="control-label" th:text="${_data}+'(用量)'"></label>
-        <input class="form-control" th:id="${_data}" th:name="${_data}" type="text"
-               th:value="${data.getMap().get(_data)}" th:placeholder="${'请输入'+_data+'的单车用量'}"/>
+        <label class="control-label" th:text="${_data.substring(0,_data.indexOf('_')+1)}+'(用量)'"></label>
+        <input class="form-control" th:id="${_data.split('_')[1]}" th:name="${_data.split('_')[1]}" type="text"
+               th:value="${data.getMap().get(_data)}" th:placeholder="${'请输入单车用量'}"/>
     </div>
 </form>
 <script th:inline="javascript">
@@ -397,8 +397,10 @@
                     }
                     let mapOfLocalData={};
                     for (let i in keys) {
-                        mapOfLocalData[keys[i]]=$("#"+keys[i]).val();
+                        log(keys[i].split('_')[1]);
+                        mapOfLocalData[keys[i]]=$("#"+keys[i].split('_')[1]).val();
                     }
+                    log(mapOfLocalData)
                     localData.updateDosage=mapOfLocalData;
                     localData.projectId = $("#project", window.top.document).val();
                     $.ajax({
