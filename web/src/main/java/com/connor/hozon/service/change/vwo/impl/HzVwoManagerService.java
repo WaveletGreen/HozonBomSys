@@ -81,7 +81,7 @@ import com.connor.hozon.service.process.impl.ModelColorProcessManager;
 import com.connor.hozon.service.process.impl.ReleaseContainer;
 import cn.net.connor.hozon.services.service.sys.UserInfo;
 import com.connor.hozon.controller.bom.change.vwo.VWOUserGroupDTO;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.resources.mybatis.change.HzChangeOrderDAO;

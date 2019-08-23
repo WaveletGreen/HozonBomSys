@@ -8,7 +8,7 @@
 package com.connor.hozon.dao.bom.bom.impl;
 
 import com.connor.hozon.dao.bom.bom.HzBomLineRecordDao;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
 import cn.net.connor.hozon.common.util.ListUtils;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;

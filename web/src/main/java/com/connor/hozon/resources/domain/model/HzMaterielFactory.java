@@ -1,9 +1,9 @@
 package com.connor.hozon.resources.domain.model;
 
 import cn.net.connor.hozon.services.service.sys.UserInfo;
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.resources.domain.dto.response.HzMaterielRespDTO;
-import com.connor.hozon.resources.enumtype.BomResourceEnum;
+import cn.net.connor.hozon.services.common.enumtype.BomResourceEnum;
 import com.connor.hozon.resources.util.StringUtil;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzMbomLineRecord;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ModelFeature;

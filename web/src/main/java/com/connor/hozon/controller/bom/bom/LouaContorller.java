@@ -7,7 +7,7 @@ import com.connor.hozon.controller.bom.BaseController;
 import com.connor.hozon.resources.domain.dto.request.SetLouReqDTO;
 import com.connor.hozon.resources.domain.dto.response.*;
 import com.connor.hozon.resources.domain.query.*;
-import com.connor.hozon.resources.enumtype.MbomTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.MbomTableNameEnum;
 import com.connor.hozon.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.resources.mybatis.bom.HzPbomRecordDAO;

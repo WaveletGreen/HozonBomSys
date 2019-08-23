@@ -2,7 +2,7 @@ package com.connor.hozon.resources.mybatis.bom.impl;
 
 import cn.net.connor.hozon.common.util.UUIDHelper;
 import cn.net.connor.hozon.common.util.ListUtils;
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.resources.domain.dto.request.DeleteHzPbomReqDTO;
 import com.connor.hozon.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.resources.domain.query.*;

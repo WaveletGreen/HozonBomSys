@@ -3,7 +3,7 @@ package com.connor.hozon.resources.domain.model;
 
 import com.alibaba.fastjson.JSONObject;
 import cn.net.connor.hozon.services.service.sys.UserInfo;
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.resources.domain.dto.response.HzEbomRespDTO;
@@ -92,8 +92,8 @@ public class HzEbomRecordFactory {
         StringBuilder stringBuilder = new StringBuilder();
         for(String key : map.keySet()){
             String value = (String)map.get(key);
-            if(key.contains("title")){
-                int charAt = key.indexOf("title");
+            if(key.contains("_")){
+                int charAt = key.indexOf("_");
                 key = key.substring(0,charAt);
             }
             if(StringUtils.isNotBlank(value) ){

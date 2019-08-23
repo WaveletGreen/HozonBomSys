@@ -1,7 +1,7 @@
 package com.connor.hozon.resources.domain.model;
 
 
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.resources.domain.query.HzMbomByPageQuery;
 import com.connor.hozon.resources.domain.query.HzPbomByPageQuery;

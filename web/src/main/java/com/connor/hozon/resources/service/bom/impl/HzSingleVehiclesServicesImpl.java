@@ -176,7 +176,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                 if (null == record.getObjectName()) {
                     continue;
                 }
-                map.put(record.getObjectName() + "title" + i, record.getObjectName() + "(单车用量)");
+                map.put(record.getObjectName() + record.getModelBasicDetail() + "title" + i, record.getObjectName() + "(单车用量)" + "<br>" + record.getModelBasicDetail());
             }
         }
         return map;
@@ -216,6 +216,7 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
 
         for (int i = 0; i < set.size(); i++) {
             HzCfg0ModelRecord record = iterator.next();
+            String targetStr = record.getObjectName() + record.getModelBasicDetail();//原来用objectName作为关键字是错的，要么用PUID，要么用关键字+管理编号偶成唯一标识
             if (null == record.getObjectName()) {
                 continue;
             }
@@ -224,19 +225,19 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                 String[] strings = vehNum.split(",");
                 boolean find = false;
                 for (String veh : strings) {
-                    String vehName = veh.split("#")[0];
+                    String vehName = veh.split("#")[0].split("_")[0];//把车型模型的PUID去除，因为更新的时候会自动加上基础车型的PUID作为唯一标识
                     String vehNumber = veh.split("#")[1];
-                    if (record.getObjectName().equals(vehName)) {
-                        object.put(vehName + "title" + i, vehNumber);
+                    if (targetStr.equals(vehName)) {
+                        object.put(targetStr + "title" + i, vehNumber);
                         find = true;
                         break;
                     }
                 }
                 if (!find) {
-                    object.put(record.getObjectName() + "title" + i, "");
+                    object.put(targetStr + "title" + i, "");
                 }
             } else {
-                object.put(record.getObjectName() + "title" + i, "");
+                object.put(targetStr + "title" + i, "");
             }
         }
         return object;
@@ -256,6 +257,8 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
             if (null == record.getObjectName()) {
                 continue;
             }
+            String targetStr = record.getObjectName() + record.getModelBasicDetail()+"_"+record.getPuid();//原来用objectName作为关键字是错的，要么用PUID，要么用关键字+管理编号偶成唯一标识
+            String targetVehicle = record.getObjectName() + record.getModelBasicDetail();//原来用objectName作为关键字是错的，要么用PUID，要么用关键字+管理编号偶成唯一标识
             if (StringUtils.isNotBlank(vehNum)) {
                 //智时版#12,360e#14,380pro#16   key:名字  value:value
                 String[] strings = vehNum.split(",");
@@ -263,17 +266,17 @@ public class HzSingleVehiclesServicesImpl implements HzSingleVehiclesServices {
                 for (String veh : strings) {
                     String vehName = veh.split("#")[0];
                     String vehNumber = veh.split("#")[1];
-                    if (record.getObjectName().equals(vehName)) {
-                        object.put(vehName, vehNumber);
+                    if (targetVehicle.equals(vehName)) {
+                        object.put(targetStr, vehNumber);
                         find = true;
                         break;
                     }
                 }
                 if (!find) {
-                    object.put(record.getObjectName(), "");
+                    object.put(targetStr, "");
                 }
             } else {
-                object.put(record.getObjectName(), "");
+                object.put(targetStr, "");
             }
         }
         return object;

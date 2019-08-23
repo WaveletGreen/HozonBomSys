@@ -85,7 +85,7 @@ public class HzConfigModelController {
             HzCfg0ModelRecord modelRecord = hzCfg0modelRecordService.doGetById(detail.getpModelPuid());
             //更新车型模型名，如果有修改
             modelRecord.setObjectDesc(detail.getObjectDesc());
-            modelRecord.setpCfg0ModelBasicDetail(detail.getpModelCfgMng());
+            modelRecord.setModelBasicDetail(detail.getpModelCfgMng());
             if (!checkString(detail.getObjectName()) || !detail.getpModelVersion().equals(detail.getObjectName())) {
                 modelRecord.setObjectName(detail.getpModelVersion());
             } else {
@@ -116,7 +116,7 @@ public class HzConfigModelController {
         fromDBDetail.setpModelPuid(pModelPuid);
         fromDBDetail = hzCfg0ModelServiceImpl.getOneByModelId2(fromDBDetail);
         HzCfg0ModelRecord hzCfg0ModelRecord = hzCfg0modelRecordService.doGetById(pModelPuid);
-        HzMainConfig hzMainConfig = hzMainConfigService.doGetByPrimaryKey(hzCfg0ModelRecord.getpCfg0ModelOfMainRecord());
+        HzMainConfig hzMainConfig = hzMainConfigService.doGetByPrimaryKey(hzCfg0ModelRecord.getModelMainRecord());
 
         projectHelperService.doGetProjectTreeByProjectId(hzMainConfig.getProjectId());
         if (projectHelperService.getProject() == null ||

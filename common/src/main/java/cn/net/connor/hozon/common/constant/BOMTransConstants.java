@@ -1,4 +1,4 @@
-package com.connor.hozon.resources.domain.constant;
+package cn.net.connor.hozon.common.constant;
 
 import org.apache.commons.lang.StringUtils;
 

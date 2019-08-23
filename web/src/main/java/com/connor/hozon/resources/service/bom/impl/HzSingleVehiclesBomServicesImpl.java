@@ -18,7 +18,7 @@ import com.connor.hozon.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.resources.domain.model.HzSingleVehiclesFactory;
 import com.connor.hozon.resources.domain.query.HzMbomTreeQuery;
 import com.connor.hozon.resources.domain.query.HzSingleVehiclesBomByPageQuery;
-import com.connor.hozon.resources.enumtype.MbomTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.MbomTableNameEnum;
 import com.connor.hozon.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.resources.mybatis.bom.HzSingleVehiclesBomDAO;
 import com.connor.hozon.resources.page.Page;

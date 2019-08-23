@@ -44,7 +44,7 @@ import com.connor.hozon.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.resources.domain.query.HzChangeDataQuery;
 import com.connor.hozon.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.resources.domain.query.HzPbomTreeQuery;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.resources.executors.ExecutorServices;
 import com.connor.hozon.resources.mybatis.bom.HzBOMScheduleTaskDAO;
 import com.connor.hozon.resources.mybatis.bom.HzEbomRecordDAO;

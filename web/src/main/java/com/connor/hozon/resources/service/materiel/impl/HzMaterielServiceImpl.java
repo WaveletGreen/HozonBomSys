@@ -1,7 +1,7 @@
 package com.connor.hozon.resources.service.materiel.impl;
 
 import cn.net.connor.hozon.services.service.sys.UserInfo;
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.resources.domain.dto.request.AddDataToChangeOrderReqDTO;
 import com.connor.hozon.resources.domain.dto.request.BomBackReqDTO;
 import com.connor.hozon.resources.domain.dto.request.EditHzMaterielReqDTO;
@@ -11,7 +11,7 @@ import com.connor.hozon.resources.domain.model.HzMaterielFactory;
 import com.connor.hozon.resources.domain.query.HzChangeDataDetailQuery;
 import com.connor.hozon.resources.domain.query.HzMaterielByPageQuery;
 import com.connor.hozon.resources.domain.query.HzMaterielQuery;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.resources.executors.ExecutorServices;
 import com.connor.hozon.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.resources.mybatis.factory.HzFactoryDAO;

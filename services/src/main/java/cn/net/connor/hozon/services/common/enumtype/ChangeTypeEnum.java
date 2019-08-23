@@ -1,4 +1,4 @@
-package com.connor.hozon.resources.enumtype;
+package cn.net.connor.hozon.services.common.enumtype;
 
 /**
  * @Author: haozt

@@ -1,12 +1,11 @@
 package com.connor.hozon.resources.domain.model;
 
 import cn.net.connor.hozon.services.service.sys.UserInfo;
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.resources.domain.dto.request.AddHzEbomReqDTO;
-import com.connor.hozon.resources.domain.dto.request.DeriveHzEbomReqDTO;
 import com.connor.hozon.resources.domain.dto.request.UpdateHzEbomReqDTO;
 import com.connor.hozon.resources.domain.dto.response.HzPbomLineRespDTO;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
 import cn.net.connor.hozon.dao.pojo.sys.User;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzBomLineRecord;
 import cn.net.connor.hozon.dao.pojo.bom.bom.HzImportEbomRecord;

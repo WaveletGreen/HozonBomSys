@@ -41,7 +41,7 @@ import com.connor.hozon.service.configuration.feature.FeatureValueService;
 import com.connor.hozon.service.configuration.feature.impl.FeatureValueServiceImpl;
 import com.connor.hozon.service.configuration.fullCfg.HzBomAllCfgService;
 import com.connor.hozon.service.configuration.model.impl.HzCfg0ModelRecordServiceImpl;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
 import com.connor.hozon.resources.mybatis.change.HzChangeDataRecordDAO;
 import com.connor.hozon.resources.mybatis.change.HzChangeOrderDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -943,10 +943,10 @@ public class HzBomAllCfgServiceImpl implements HzBomAllCfgService {
             //模型描述
             modelRecord.setObjectDesc(checkString(params.get("objectDesc")) ? params.get("objectDesc") : params.get("pModelVersion"));
             //模型基本信息
-            modelRecord.setpCfg0ModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
+            modelRecord.setModelBasicDetail(params.get("pCfg0ModelBasicDetail"));
             //归属主配置
-            modelRecord.setpCfg0ModelOfMainRecord(mainRecord.getId());
-            modelRecord.setpCfg0ModelBasicDetail(params.get("pModelCfgMng"));
+            modelRecord.setModelMainRecord(mainRecord.getId());
+            modelRecord.setModelBasicDetail(params.get("pModelCfgMng"));
             //没有设置归属的颜色车型
             if (hzCfg0ModelRecordService.insert(Collections.singletonList(modelRecord))) {
                 if (hzCfg0ModelDetailDao.insert(modelDetail) > 0) {

@@ -1,12 +1,12 @@
 package com.connor.hozon.resources.mybatis.bom.impl;
 
 import cn.net.connor.hozon.common.util.ListUtils;
-import com.connor.hozon.resources.domain.constant.BOMTransConstants;
+import cn.net.connor.hozon.common.constant.BOMTransConstants;
 import com.connor.hozon.resources.domain.dto.request.DeleteHzMbomReqDTO;
 import com.connor.hozon.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.resources.domain.query.*;
-import com.connor.hozon.resources.enumtype.ChangeTableNameEnum;
-import com.connor.hozon.resources.enumtype.MbomTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.ChangeTableNameEnum;
+import cn.net.connor.hozon.services.common.enumtype.MbomTableNameEnum;
 import com.connor.hozon.resources.mybatis.bom.HzMbomRecordDAO;
 import com.connor.hozon.resources.page.Page;
 import com.connor.hozon.resources.page.PageRequestParam;
