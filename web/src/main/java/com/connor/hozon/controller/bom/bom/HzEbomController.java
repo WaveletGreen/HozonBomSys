@@ -477,7 +477,7 @@ public class HzEbomController extends BaseController {
     }
 
     /**
-     * MBOM跳转到EBOM的方法
+     * MBOM跳转到EBOM的方法查询底层零部件
      * @return
      */
     @RequestMapping("selectEbom")
