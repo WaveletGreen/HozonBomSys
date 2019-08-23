@@ -85,6 +85,10 @@ public class HzLegislativeItem {
      * 备注
      */
     private String  remarks;
+    /**
+     * 关联法规件puid
+     */
+    private String legislativeUid;
 
     public String getPuid() {
         return puid;
@@ -236,5 +240,13 @@ public class HzLegislativeItem {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getLegislativeUid() {
+        return legislativeUid;
+    }
+
+    public void setLegislativeUid(String legislativeUid) {
+        this.legislativeUid = legislativeUid;
     }
 }

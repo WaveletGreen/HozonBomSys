@@ -80,7 +80,32 @@ var quickAdd = function () {
  * 修改
  */
 var update = function () {
-
+    var rows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (rows.length != 1) {
+        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+        return false;
+    }
+    var url = "legislativeItem/updateLegislative";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "修改",
+                    url: "legislativeItem/updateLegislative?&puid=" + rows[0].puid,
+                    gridId: "gridId",
+                    width: 500,
+                    height: 500
+                });
+            }
+        }
+    })
 }
 /**
  * 删除

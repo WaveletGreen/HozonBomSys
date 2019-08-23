@@ -18,11 +18,18 @@ public interface HzLegislativeItemDao {
     int deleteByPrimaryKey(String puid);
 
     /**
+     * 插入一条法规件Item
+     * @param record
+     * @return
+     */
+    int insertItem(HzLegislativeItem record);
+
+    /**
      * 插入一条法规件
      * @param record
      * @return
      */
-    int insert(HzLegislativeItem record);
+    int insertLeg(HzLegislativeItem record);
 
     int insertSelective(HzLegislativeItem record);
 
@@ -40,9 +47,14 @@ public interface HzLegislativeItemDao {
      */
     int selectCountBylegislativeNo(String legislativeNo);
 
-    HzLegislativeItem selectByPrimaryKey(String puid);
+    HzLegislativeItem selectByPuid(String puid);
 
-    int updateByPrimaryKeySelective(HzLegislativeItem record);
+    /**
+     * 修改一条数据
+     * @param record
+     * @return
+     */
+    int updateHzLegislative(HzLegislativeItem record);
 
     int updateByPrimaryKey(HzLegislativeItem record);
 }

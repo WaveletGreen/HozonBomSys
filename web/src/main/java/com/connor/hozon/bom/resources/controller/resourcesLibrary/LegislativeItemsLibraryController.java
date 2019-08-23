@@ -3,6 +3,7 @@ package com.connor.hozon.bom.resources.controller.resourcesLibrary;
 import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.request.AddHzLegislativeReqDTO;
+import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeItemResDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.query.HzLegislativeItemQuery;
@@ -34,25 +35,6 @@ public class LegislativeItemsLibraryController extends BaseController {
     @Autowired
     private HzLegislativeItemService hzLegislativeItemService;
 
-//    /**
-//     * 获取法规件库整车级的标题
-//     * @param response
-//     */
-//    @RequestMapping(value = "title",method = RequestMethod.GET)
-//    public void getAutoType(HttpServletResponse response){
-//        LinkedHashMap<String, String> tableTitle = new LinkedHashMap<>();
-//        tableTitle.put("no","序号");
-//        tableTitle.put("noticeNo","公告号");
-//        tableTitle.put("autoType","车型");
-//        tableTitle.put("vinNo","VIN码前8位");
-//        tableTitle.put("batteryManufacturers","电池厂家");
-//        tableTitle.put("batteryModel","储能装置电池包(箱)型号");
-//        tableTitle.put("productionMode","生产方式(厂家)");
-//        tableTitle.put("motorManufacturers","电机厂家");
-//        tableTitle.put("motorModel","电机型号");
-//        tableTitle.put("remarks","备注");
-//        toJSONResponse(Result.build(tableTitle), response);
-//    }
 
     @RequestMapping(value = "getDetail", method = RequestMethod.GET)
     public String getDetailItemToPage(String id, Model model) {
@@ -101,6 +83,7 @@ public class LegislativeItemsLibraryController extends BaseController {
             map.put("isHaveCcc",dto.getIsHaveCcc());
             map.put("dutyEngineer",dto.getDutyEngineer());
             map.put("remarks",dto.getRemarks());
+            map.put("legislativeUid",dto.getLegislativeUid());
             _list.add(map);
         });
         ret.put("totalCount", page.getTotalCount());
@@ -116,7 +99,7 @@ public class LegislativeItemsLibraryController extends BaseController {
     }
 
     /**
-     * 添加ebom信息
+     * 添加法规件信息
      * @param reqDTO
      * @param
      * @param response
@@ -126,5 +109,29 @@ public class LegislativeItemsLibraryController extends BaseController {
         WriteResultRespDTO respDTO = hzLegislativeItemService.addHzLegislativeRecord(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
+
+
+    @RequestMapping(value = "updateLegislative",method = RequestMethod.GET)
+    public String updateItem(String puid ,Model model) {
+        HzLegislativeItemResDTO respDTO = hzLegislativeItemService.findHzLegislativeItemById(puid);
+        if (respDTO == null){
+            return null;
+        }
+        model.addAttribute("data",respDTO);
+        return "resourcesLibrary/legislativeLibrary/legislativeItemLibrary/updateLegislativeItemLibrary";
+    }
+
+    /**
+     * 修改法规件信息
+     * @param reqDTO
+     * @param
+     * @param response
+     */
+    @RequestMapping(value = "update/Legislative",method = RequestMethod.POST)
+    public void updateEbomToDB(@RequestBody UpdateHzLegislativeReqDTO reqDTO, HttpServletResponse response){
+        WriteResultRespDTO respDTO = hzLegislativeItemService.updateHzLegislativeRecord(reqDTO);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
+    }
+
 
 }

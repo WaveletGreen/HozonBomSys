@@ -84,6 +84,11 @@ public class HzLegislativeItemResDTO {
      */
     private String  remarks;
 
+    /**
+     * 关联法规件puid
+     */
+    private String legislativeUid;
+
     public Integer getNo() {
         return no;
     }
@@ -242,5 +247,13 @@ public class HzLegislativeItemResDTO {
 
     public void setDutyEngineer(String dutyEngineer) {
         this.dutyEngineer = dutyEngineer;
+    }
+
+    public String getLegislativeUid() {
+        return legislativeUid;
+    }
+
+    public void setLegislativeUid(String legislativeUid) {
+        this.legislativeUid = legislativeUid;
     }
 }

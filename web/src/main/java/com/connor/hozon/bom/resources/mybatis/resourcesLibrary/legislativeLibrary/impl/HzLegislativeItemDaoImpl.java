@@ -38,13 +38,23 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
     }
 
     /**
+     * 插入一条法规件Item
+     * @param record
+     * @return
+     */
+    @Override
+    public int insertItem(HzLegislativeItem record) {
+        return super.insert("HzLegislativeItem_insert",record);
+    }
+
+    /**
      * 插入一条法规件
      * @param record
      * @return
      */
     @Override
-    public int insert(HzLegislativeItem record) {
-        return super.insert("HzLegislativeItem_insert",record);
+    public int insertLeg(HzLegislativeItem record) {
+        return super.insert("HzLegislativeRecord_insert",record);
     }
 
     @Override
@@ -72,19 +82,29 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
      */
     @Override
     public int selectCountBylegislativeNo(String legislativeNo) {
-
         return (int)super.findForObject("HzLegislativeItemDaoImpl_selectByLegislativeNo_count",legislativeNo);
     }
 
-
+    /**
+     * 根据puid查询法规件信息
+     * @param puid
+     * @return
+     */
     @Override
-    public HzLegislativeItem selectByPrimaryKey(String puid) {
-        return null;
+    public HzLegislativeItem selectByPuid(String puid) {
+        return (HzLegislativeItem)super.findForObject("HzLegislativeItemDaoImpl_selectByPuid",puid);
+
     }
 
+
+    /**
+     * 修改一条数据
+     * @param record
+     * @return
+     */
     @Override
-    public int updateByPrimaryKeySelective(HzLegislativeItem record) {
-        return 0;
+    public int updateHzLegislative(HzLegislativeItem record) {
+        return super.insert("HzLegislativeItem_update",record);
     }
 
     @Override
