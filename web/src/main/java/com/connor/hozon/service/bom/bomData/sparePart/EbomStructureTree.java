@@ -1,5 +1,6 @@
 package com.connor.hozon.service.bom.bomData.sparePart;
 
+import cn.net.connor.hozon.dao.pojo.bom.epl.EbomWithPbomData;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -13,9 +14,23 @@ import java.util.List;
  */
 @Data
 public class EbomStructureTree {
-    private String puid;//当前节点puid
-    private TreeNode parent;//父节点
-    private List<TreeNode> children = new ArrayList<>();//子节点
+    /**
+     * 当前节点puid
+     */
+    private String puid;
+    /**
+     * 当前bomline
+     */
+    private EbomWithPbomData bomline;
+    /**
+     * 父节点
+     */
+    private TreeNode parent;
+    /**
+     * 节点
+     */
+    private List<TreeNode> children = new ArrayList<>();
+
     /**
      * 不允许使用setter设置子节点集合
      *

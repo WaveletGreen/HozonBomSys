@@ -437,7 +437,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
             String sparePartAppendCode = pair[0];
             String sparePartAppendName = pair[1];
             //构建结构并存储结构
-            //进行汇总
+            //进行汇总,绝对从2Y层进行遍历
             ArrayList<EbomWithPbomData> sourceList=new ArrayList<>(queryMap.values());
             /**
              *从后往前排,遇到不是备件的数据不记录，如果是备件的数据，先记录
@@ -448,12 +448,8 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 EbomWithPbomData record = sourceList.get(i);//当前数据
                 EbomWithPbomData pre = i==0?null:sourceList.get(i-1);//上一个数据
 
-                //还原原来的EBOM结构树
-                EbomStructureTree tree=new EbomStructureTree();
-                tree.setPuid(record.getPuid());
 
-
-
+                //当前EBOM的主键
                 String ebomId = record.getPuid();
                 //产生备件零件对象，有子层也可能是自身也是子层
                 SparePartData part = createPart(record, sparePartAppendCode, sparePartAppendName);
@@ -464,18 +460,11 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 //不是叶子节点
                 if (null != record.getIsHas() && 1 == record.getIsHas()) {
                     structureMap.put(ebomId, new SparePartStructureCache(new LinkedList<>(), new LinkedList<>(), part));
-
-
-
-
                 }
-                //是叶子节点
-                else{
-
-                }
-
                 String parentId = record.getParentUid();
+                //获取到父层的索引map
                 SparePartStructureCache cache = structureMap.get(parentId);
+                //没有存储叶子
                 if (cache != null) {
                     SparePartBomStructure structure = new SparePartBomStructure();
                     structure.setReserved1(parentId);//设置父层的ID
@@ -483,6 +472,13 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                     cache.getStructures().add(structure);//记录结构数据
                     //然后将零件记录上去
                     cache.getParts().add(part);
+                }
+                //2Y层没有结构，则开始构建2Y层的tree
+                else if(null!=record.getIs2Y()&&1==record.getIs2Y()){
+                    //还原原来的EBOM结构树
+                    EbomStructureTree tree=new EbomStructureTree();
+                    tree.setPuid(record.getPuid());
+
                 }
             }
             if(spDebug){
