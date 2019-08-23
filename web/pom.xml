@@ -40,6 +40,10 @@
             <artifactId>controller</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
         <!--添加自定义的子模块-->
     </dependencies>
     <build>
@@ -50,7 +54,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!-- 增加mapstruct自动编译实现生成impkl文件 -->
+            <!-- 增加mapstruct自动编译实现生成impl文件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

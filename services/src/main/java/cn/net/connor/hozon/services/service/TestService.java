@@ -9,7 +9,7 @@ package cn.net.connor.hozon.services.service;
 
 import cn.net.connor.hozon.dao.dao.TestDao;
 import cn.net.connor.hozon.dao.pojo.Test;
-import cn.net.connor.hozon.services.DTOMapper.TestDTOMapper;
+import cn.net.connor.hozon.services.beanMapper.TestDTOMapper;
 import cn.net.connor.hozon.services.request.TestRequestDTO;
 import cn.net.connor.hozon.services.response.TestResponseDTO;
 import net.sf.json.JSONObject;

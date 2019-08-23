@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * 项目的备件查询对象
+ * 项目的备件查询对象，这一层对象属于dao层
  * @Author: Fancyears Milos Malvis
  * @Date: Created in  2019/8/15 14:08
  * @Modified By:
@@ -23,17 +23,17 @@ public class SparePartOfProjectQuery extends QueryBase {
     /**
      * 项目ID
      */
-    private String projectId;
+    protected String projectId;
     /**
      * 层级
      */
-    private String hierarchy;
+    protected String hierarchy;
     /**
      * 生产零件号
      */
-    private String productivePartCode;
+    protected String productivePartCode;
     /**
      * 备件零件号
      */
-    private String sparePartCode;
+    protected String sparePartCode;
 }

@@ -79,7 +79,7 @@ public class TransMasterMaterialService extends Author implements ITransmitServi
             outputContainer.value = out;
             //执行服务
 
-//            if (ListUtil.isNotEmpty(input.getItem())) {
+//            if (ListUtils.isNotEmpty(input.getItem())) {
 //                List<ZPPTCI001> lineRecords = input.getItem();
 //                int size = lineRecords.size();
 //                // mlgb 的 老资 50条 50条的传输

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        .filedNotNull {
+            color: red
+        }
+
+        .inputSize {
+            width: 100% !important;
+
+        }
+    </style>
+</head>
+<body>
+<div class="content-body panel-body col-md-12">
+    <form id="quoteTypeForm" class="form-horizontal" role="form">
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="quoteType">引用类型<span class="filedNotNull">*</span></label>
+                <select id="quoteType" class="form-control inputSize" name="quoteType">
+                    <option value=""></option>
+                    <option value="DY">电泳-DY</option>
+                    <option value="DQ">底漆-DQ</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</div>
+<script th:inline="javascript">
+    <![CDATA[
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    $(function () {
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            getActiveTab().setQuoteType($("#quoteType").val())
+            getActiveTab().doQuote();
+            $("#btnCancel").click();
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

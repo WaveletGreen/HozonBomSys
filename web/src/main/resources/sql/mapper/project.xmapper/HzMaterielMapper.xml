@@ -54,8 +54,8 @@
         <id column="PUID" jdbcType="VARCHAR" property="puid"/>
         <result column="OBJECT_NAME" jdbcType="VARCHAR" property="objectName"/>
         <result column="OBJECT_DESC" jdbcType="VARCHAR" property="objectDesc"/>
-        <result column="P_CFG0_MODEL_OF_MAIN_RECORD" jdbcType="VARCHAR" property="pCfg0ModelOfMainRecord"/>
-        <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="pCfg0ModelBasicDetail"/>
+        <result column="P_CFG0_MODEL_OF_MAIN_RECORD" jdbcType="VARCHAR" property="modelMainRecord"/>
+        <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR" property="modelBasicDetail"/>
     </resultMap>
 
     <sql id="Base_Column_List">

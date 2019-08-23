@@ -10,6 +10,7 @@ package cn.net.connor.hozon.services.service.depository.color;
 import cn.net.connor.hozon.common.entity.QueryBase;
 import cn.net.connor.hozon.dao.pojo.depository.color.HzCfg0ColorSet;
 import cn.net.connor.hozon.dao.pojo.depository.color.HzColorSetQuery;
+import net.sf.json.JSONObject;
 
 import java.util.*;
 
@@ -19,7 +20,7 @@ import java.util.*;
  * @Modified By:
  */
 public interface HzColorSetService {
-    public Map<String, Object> selectAll(HzColorSetQuery query) ;
+    Map<String, Object> selectAll(HzColorSetQuery query) ;
 
     /**
      * 根据分页条件获取颜色
@@ -27,14 +28,14 @@ public interface HzColorSetService {
      * @param queryBase
      * @return
      */
-    public List<HzCfg0ColorSet> doGetAll(QueryBase queryBase) ;
+    List<HzCfg0ColorSet> doGetAll(QueryBase queryBase) ;
 
     /**
      * 获取全部颜色
      *
      * @return
      */
-    public List<HzCfg0ColorSet> doGetAll() ;
+    List<HzCfg0ColorSet> doGetAll() ;
 
     /**
      * @param entity 颜色
@@ -42,14 +43,14 @@ public interface HzColorSetService {
      * Description: 根据puid检查是否有颜色信息
      * Date: 2018/5/21 17:08
      */
-    public HzCfg0ColorSet getById(HzCfg0ColorSet entity);
+    HzCfg0ColorSet getById(HzCfg0ColorSet entity);
     /**
      * @param entity 颜色对象
      * @return boolean 只更新1个
      * Description: 执行更细颜色信息，只更新1个
      * Date: 2018/5/21 17:08
      */
-    public boolean doUpdate(HzCfg0ColorSet entity) ;
+    boolean doUpdate(HzCfg0ColorSet entity) ;
 
     /**
      * @param entity 颜色信息的集合
@@ -57,7 +58,7 @@ public interface HzColorSetService {
      * Description: 执行批量删除颜色信息
      * Date: 2018/5/21 17:07
      */
-    public boolean doDeleteByList(List<HzCfg0ColorSet> entity) ;
+    boolean doDeleteByList(List<HzCfg0ColorSet> entity) ;
 
     /**
      * @param entity 颜色对象
@@ -65,14 +66,14 @@ public interface HzColorSetService {
      * Description: 添加一个颜色信息
      * Date: 2018/5/21 17:07
      */
-    public boolean doAddOne(HzCfg0ColorSet entity);
+    boolean doAddOne(HzCfg0ColorSet entity);
     /**
      * 根据代码获取1个颜色对象
      *
      * @param entity
      * @return
      */
-    public HzCfg0ColorSet doGetByColorCode(HzCfg0ColorSet entity);
+    HzCfg0ColorSet doGetByColorCode(HzCfg0ColorSet entity);
 
     /**
      * 根据主键更新状态
@@ -80,7 +81,7 @@ public interface HzColorSetService {
      * @param entity
      * @return
      */
-    public boolean doUpdateStatusByPk(HzCfg0ColorSet entity) ;
+    boolean doUpdateStatusByPk(HzCfg0ColorSet entity) ;
 
     /**
      * 批量逻辑删除
@@ -88,5 +89,11 @@ public interface HzColorSetService {
      * @param entity
      * @return
      */
-    public boolean doLogicDeleteByBatch(List<HzCfg0ColorSet> entity);
+    boolean doLogicDeleteByBatch(List<HzCfg0ColorSet> entity);
+
+    JSONObject delete(List<HzCfg0ColorSet> set);
+
+    JSONObject validateCodeWithId(HzCfg0ColorSet set);
+
+    JSONObject add(HzCfg0ColorSet set);
 }

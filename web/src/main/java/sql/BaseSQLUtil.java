@@ -1,7 +1,7 @@
 package sql;
 
-import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequestParam;
+import com.connor.hozon.resources.page.Page;
+import com.connor.hozon.resources.page.PageRequestParam;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

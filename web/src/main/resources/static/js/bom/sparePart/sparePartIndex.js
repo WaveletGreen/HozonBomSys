@@ -5,13 +5,14 @@
  *
  */
 /**项目ID*/
-var projectId;
-var $table;
+let projectId;
+let $table;
 /**
  * 访问的url
  */
-var url = 'sparePartsBom/selectPageByProjectId';
+let url = 'sparePartsBom/selectPageByProjectId';
 let selectedRows = null;
+
 
 const debug = false;
 
@@ -31,7 +32,7 @@ const largeWidth = 350;
  * 创建table表头
  * @param result
  */
-function createColumn() {
+function createColumn(vehicleUsageTitle) {
     let column = [];
     column.push({field: 'ck', checkbox: true});
     column.push({field: 'ads', title: 'A/D/S', align: 'left', valign: 'middle', width: smallWidth});
@@ -42,8 +43,22 @@ function createColumn() {
     column.push({field: 'productivePartName', title: '生产零件名称', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'sparePartCode', title: '备件零件号', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'sparePartName', title: '备件零件名称', align: 'left', valign: 'middle', width: largeWidth});
-    column.push({field: 'isSparePart', title: '是否备件', align: 'left', valign: 'middle', width: smallWidth});
+    column.push({
+        field: 'isSparePart', title: '是否备件', align: 'left', valign: 'middle', width: smallWidth,
+        formatter: function (value, row, index) {
+            if (1 === value || "1" === value) {
+                return "<span>是</span>";
+            }
+            else if (0 === value || "0" === value) {
+                return "<span >否</span>";
+            }
+            else {
+                return "<span ></span>";
+            }
+        }
+    });
     column.push({field: 'unit', title: '单位', align: 'left', valign: 'middle', width: midWidth});
+    column.push({field: 'drawingNum', title: '图号', align: 'left', valign: 'middle', width: midWidth});
     column.push({field: 'department', title: '专业部门', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'responsibleEngineer', title: '责任工程师', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'supplier', title: '供应商', align: 'left', valign: 'middle', width: largeWidth});
@@ -53,6 +68,18 @@ function createColumn() {
     column.push({field: 'partClass', title: '零件分类', align: 'left', valign: 'middle', width: largeWidth});
     column.push({field: 'workshop1', title: '车间1', align: 'left', valign: 'middle', width: midWidth});
     column.push({field: 'workshop2', title: '车间2', align: 'left', valign: 'middle', width: midWidth});
+
+
+    for (let key in vehicleUsageTitle) {
+        let json = {
+            field: key,
+            title: vehicleUsageTitle[key],
+            align: 'left',
+            valign: 'middle',
+        };
+        column.push(json);
+    }
+
     log(column)
     return column;
 }
@@ -64,7 +91,7 @@ function createColumn() {
 const add = function () {
     window.Ewin.dialog({
         title: "添加单条备件零件",
-        url: "sparePartsBom/getPage?type=add",
+        url: "sparePartsBom/getPage?type=add&projectId=" + projectId,
         width: 600,
         height: 400
     })
@@ -80,7 +107,7 @@ const addChild = function () {
     }
     window.Ewin.dialog({
         title: "添加单条备件零件",
-        url: "sparePartsBom/addChildPage",
+        url: "sparePartsBom/addChildPage?type=1",
         width: 600,
         height: 400
     })
@@ -91,6 +118,7 @@ const addChild = function () {
  */
 const doDelete = function () {
     let rows = $table.bootstrapTable('getSelections');
+    log(rows)
     if (rows.length <= 0)
         return false;
     window.Ewin.confirm({
@@ -101,7 +129,7 @@ const doDelete = function () {
         if (e) {
             let data = [];
             for (let i = 0; i < rows.length; i++) {
-                data.push({id: rows[i].id});
+                data.push({id: rows[i].id, relEbomLineId: rows[i].relEbomLineId});
             }
             log(data);
             if (!debug)
@@ -139,7 +167,7 @@ const update = function () {
     }
     window.Ewin.dialog({
         title: "修改单条备件零件",
-        url: "sparePartsBom/getPage?type=update",
+        url: "sparePartsBom/getPage?type=update&projectId=" + projectId,
         width: 600,
         height: 400
     })
@@ -169,7 +197,24 @@ const update = function () {
     //     }
     // })
 };
-
+/**
+ * 递归查询测试
+ * @returns {boolean}
+ */
+const selectRecursionByTopLayerId = function () {
+    selectedRows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (selectedRows.length !== 1) {
+        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+        return false;
+    }
+    window.Ewin.dialog({
+        title: "修改单条备件零件",
+        url: "sparePartsBom/getPage?type=selectRecursionByTopLayerId&projectId=" + projectId,
+        width: 600,
+        height: 400
+    })
+};
 
 /**
  * 撤销
@@ -471,7 +516,30 @@ const exportExcel = function () {
         }
     })
 };
+
+/**
+ * EBOM中标记跳转
+ */
+const remarkInEbom = function () {
+    window.location.href = "sparePartsBom/jumpToEbom";
+}
+/**克隆数据*/
+const clonePartData = function () {
+    selectedRows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (selectedRows.length !== 1) {
+        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+        return false;
+    }
+    window.Ewin.dialog({
+        title: "修改单条备件零件",
+        url: "sparePartsBom/getPage?type=clonePartData&projectId=" + projectId,
+        width: 600,
+        height: 400
+    })
+};
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 /**
  * 工具条
  * @type {*[]}
@@ -482,11 +550,21 @@ const toolbar = [
         iconCls: 'glyphicon glyphicon-plus',
         handler: add
     },
+    // {
+    //     text: '新增',
+    //     iconCls: 'glyphicon glyphicon-plus',
+    //     handler: clonePartData
+    // },
     {
-        text: '添加子件',
+        text: '递归测试',
         iconCls: 'glyphicon glyphicon-plus',
-        handler: addChild
+        handler: selectRecursionByTopLayerId
     },
+    // {
+    //     text: '添加子件',
+    //     iconCls: 'glyphicon glyphicon-plus',
+    //     handler: addChild
+    // },
     {
         text: '修改',
         iconCls: 'glyphicon glyphicon-pencil',
@@ -498,35 +576,41 @@ const toolbar = [
         handler: doDelete
     },
     {
-        text: '撤销',
-        iconCls: 'glyphicon glyphicon-share-alt',
-        handler: revoke
+        text: 'EBOM中标记',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: remarkInEbom
     },
-    {
-        text: '设置为LOU/取消',
-        iconCls: 'glyphicon glyphicon-cog',
-        handler: setUpLou
-    },
-    {
-        text: '关联变更单',
-        iconCls: 'glyphicon glyphicon-log-out',
-        handler: attachChangeForm
-    },
-    {
-        text: '引用层级',
-        iconCls: 'glyphicon glyphicon-copyright-mark',
-        handler: doRank
-    },
-    {
-        text: '导入Excel',
-        iconCls: 'glyphicon glyphicon-share',
-        handler: importExcel
-    },
-    {
-        text: '导出Excel',
-        iconCls: 'glyphicon glyphicon-export',
-        handler: exportExcel
-    }
+    //先去掉下面的多余功能
+    // {
+    //     text: '撤销',
+    //     iconCls: 'glyphicon glyphicon-share-alt',
+    //     handler: revoke
+    // },
+    // {
+    //     text: '设置为LOU/取消',
+    //     iconCls: 'glyphicon glyphicon-cog',
+    //     handler: setUpLou
+    // },
+    // {
+    //     text: '关联变更单',
+    //     iconCls: 'glyphicon glyphicon-log-out',
+    //     handler: attachChangeForm
+    // },
+    // {
+    //     text: '引用层级',
+    //     iconCls: 'glyphicon glyphicon-copyright-mark',
+    //     handler: doRank
+    // },
+    // {
+    //     text: '导入Excel',
+    //     iconCls: 'glyphicon glyphicon-share',
+    //     handler: importExcel
+    // },
+    // {
+    //     text: '导出Excel',
+    //     iconCls: 'glyphicon glyphicon-export',
+    //     handler: exportExcel
+    // }
 ]
 
 function toPage() {
@@ -536,17 +620,8 @@ function toPage() {
     }
 }
 
-/**
- * table初始化
- * @param url
- */
-function initTable() {
-    if (!checkIsSelectProject(projectId)) {
-        return;
-    }
-    $("#projectId").val(projectId);
-    $table.bootstrapTable('destroy');
-    let column = createColumn();
+function loadDataWithHead(vehicleUsageTitle) {
+    let column = createColumn(vehicleUsageTitle);
     $table.bootstrapTable({
         url: url,
         method: 'GET',
@@ -563,12 +638,54 @@ function initTable() {
         columns: column,
         toolbar: "#toolbar",
         sortOrder: "asc",                   //排序方式
+        sortName: 't.ID',
         clickToSelect: true,// 单击某一行的时候选中某一条记录
         showColumns: true, //是否显示所有的列
         showToggle: false,                   //是否显示详细视图和列表视图的切换按钮
         showRefresh: true,                  //是否显示刷新按钮
         toolbars: toolbar,
+        responseHandler: function (res) {  //后操作
+            //如果后台返回的json格式不是{rows:[{...},{...}],total:100},可以在这块处理成这样的格式
+            let rows={};
+            for (let i in res.result){
+                let vehicleNum=res.result[i].reserved2;
+                if(vehicleNum==null||vehicleNum.indexOf(",")==-1){
+                    continue;
+                }
+                let _data=vehicleNum.split(",");//根据逗号进行拆分字符串
+                //所有的字段都已经在后台去除所有的**
+                for (let field in _data){
+                    if(_data[field].indexOf("#")!=-1){//需要判断是否存在#，有些是没有的
+                        let value=_data[field].split("#");//拆解字符串
+                        let f=value[0];
+                        let v=value[1];
+                        res.result[i][f]=v;//填充遗漏的数据，本身也是一个JSON对象，可以进行无脑填充
+                    }
+                }
+            }
+            rows.rows=res.result;
+            rows.total=res.totalCount;
+            return rows;
+        },
     });
+}
+
+/**
+ * table初始化
+ */
+function initTable() {
+    if (!checkIsSelectProject(projectId)) {
+        return;
+    }
+    $("#projectId").val(projectId);
+    $table.bootstrapTable('destroy');
+    $.ajax({
+        url: "sparePartsBom/vehicleUsageTitle?projectId=" + projectId,
+        type: "GET",
+        success: function (vehicleUsage) {
+            loadDataWithHead(vehicleUsage);
+        }
+    })
 }
 
 /**

@@ -5,42 +5,225 @@
  * Time: 16:58
  */
 
+/**
+ * 添加
+ */
+var add = function(){
+    var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
+    //只能选一条
+    var url = "dict/getAdd";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "添加",
+                    url: "dict/getAdd",
+                    gridId: "gridId",
+                    width: 500,
+                    height: 500
+                })
+            }
+        }
+    })
+}
+/**
+ * 快速添加
+ * @returns {boolean}
+ */
+var quickAdd = function(){
+    var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
+    //只能选一条
+    if (rows.length != 1) {
+        window.Ewin.alert({message: '请选择一条数据再进行快速添加!'});
+        return false;
+    }
+    var url = "dict/getQuickAdd";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "快速添加",
+                    url: "dict/getQuickAdd?puid=" + rows[0].puid,
+                    gridId: "gridId",
+                    width: 500,
+                    height: 500
+                });
+            }
+        }
+    })
+}
+/**
+ * 修改
+ * @returns {boolean}
+ */
+var update = function(){
+    var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
+    //只能选一条
+    if (rows.length != 1) {
+        window.Ewin.alert({message: '请选择一条需要修改的数据!'});
+        return false;
+    }
+    var url = "dict/getUpdate";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "修改",
+                    url: "dict/getUpdate?puid=" + rows[0].puid,
+                    gridId: "gridId",
+                    width: 500,
+                    height: 500
+                });
+            }
+        }
+    })
+}
+/**
+ * 删除
+ * @returns {boolean}
+ */
+var doDelete = function(){
+    var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
+    if (rows.length == 0) {
+        window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+        return false;
+    }
+    var url = "dict/delete";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.confirm({title: '提示', message: '是否要删除您选择的记录', width: 500}).on(function (e) {
+                    if (e) {
+                        $.ajax({
+                            type: "POST",
+                            //ajax需要添加打包名
+                            url: "dict/delete?puid=" + rows[0].puid,
+                            // data: JSON.stringify(rows),
+                            contentType: "application/json",
+                            success: function (result) {
+                                /*if (result.status) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                    //刷新，会重新申请数据库数据
+                                }
+                                else {
+                                    window.Ewin.alert({message: ":" + result.errMsg});
+                                }*/
+                                if (result.success) {
+                                    layer.msg('删除成功', {icon: 1, time: 2000})
+                                }
+                                else if (!result.success) {
+                                    window.Ewin.alert({message: result.errMsg});
+                                }
+                                $('#dictionaryLibraryTable').bootstrapTable("refresh");
+                            },
+                            error: function (info) {
+                                window.Ewin.alert({message: "操作删除:" + info.status});
+                            }
+                        })
+                    }
+                });
+            }
+        }
+    })
+}
+const toolbar =[
+    {
+        text: '添加',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: add
+    },
+    {
+        text: '快速添加',
+        iconCls: 'glyphicon glyphicon-plus',
+        handler: quickAdd,
+    },
+    {
+        text: '修改',
+        iconCls: 'glyphicon glyphicon-pencil',
+        handler: update,
+    },
+    {
+        text: '删除',
+        iconCls: 'glyphicon glyphicon-remove',
+        handler: doDelete,
+    },
+]
+/**
+ * 页面初始化后自动生成table
+ */
 $(document).ready((function () {
-    var projectId = $("#project", window.top.document).val();
     var url = "dict/list";
     initTable(url);
 }))
-
+/**
+ * 自动查询调用
+ */
 function doQuery() {
     var url = "dict/list";
     initTable(url);
     $('#dictionaryLibraryTable').bootstrapTable('destroy');
 }
 
+/**
+ * 创建表头
+ * @param result
+ * @returns {Array}
+ */
+function createColumn(result) {
+    let column = [];
+    column.push({field: 'ck', checkbox: true, Width: 50});
+    var data = result.data;
+    var keys = [];
+    var values;
+    for (var key in data) {
+        if (data.hasOwnProperty(key)) {
+            var json = {
+                field: key,
+                title: data[key],
+                // align:
+                //     'center',
+                valign:
+                    'middle'
+            };
+            column.push(json);
+        }
+    }
+    return column;
+}
+/**
+ * table初始化
+ * @param url
+ */
 function initTable(url) {
-    var column = [];
     $.ajax({
         url: "dict/title",
         type: "GET",
         success: function (result) {
-            var column = [];
-            column.push({field: 'ck', checkbox: true, Width: 50});
-            var data = result.data;
-            var keys = [];
-            var values;
-            for (var key in data) {
-                if (data.hasOwnProperty(key)) {
-                    var json = {
-                        field: key,
-                        title: data[key],
-                        // align:
-                        //     'center',
-                        valign:
-                            'middle'
-                    };
-                    column.push(json);
-                }
-            }
+            let column = createColumn(result);
             $('#dictionaryLibraryTable').bootstrapTable({
                 url: url,
                 method: 'GET',
@@ -77,166 +260,17 @@ function initTable(url) {
                     excelstyles: ['background-color', 'color', 'font-size', 'font-weight'],
                     //onMsoNumberFormat: DoOnMsoNumberFormat
                 },
-                toolbars: [
-                    {
-                        text: '添加',
-                        iconCls: 'glyphicon glyphicon-plus',
-                        handler: function () {
-                            var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
-                            //只能选一条
-                            var url = "dict/getAdd";
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        window.Ewin.dialog({
-                                            title: "添加",
-                                            url: "dict/getAdd",
-                                            gridId: "gridId",
-                                            width: 500,
-                                            height: 500
-                                        })
-                                    }
-                                }
-                            })
-                        }
-                    },
-                    {
-                        text: '快速添加',
-                        iconCls: 'glyphicon glyphicon-plus',
-                        handler: function () {
-                            var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条数据再进行快速添加!'});
-                                return false;
-                            }
-                            var url = "dict/getQuickAdd";
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        window.Ewin.dialog({
-                                            title: "快速添加",
-                                            url: "dict/getQuickAdd?puid=" + rows[0].puid,
-                                            gridId: "gridId",
-                                            width: 500,
-                                            height: 500
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    },
-                    {
-                        text: '修改',
-                        iconCls: 'glyphicon glyphicon-pencil',
-                        handler: function () {
-                            var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
-                            //只能选一条
-                            if (rows.length != 1) {
-                                window.Ewin.alert({message: '请选择一条需要修改的数据!'});
-                                return false;
-                            }
-                            var url = "dict/getUpdate";
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        window.Ewin.dialog({
-                                            title: "修改",
-                                            url: "dict/getUpdate?puid=" + rows[0].puid,
-                                            gridId: "gridId",
-                                            width: 500,
-                                            height: 500
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    },
-                    {
-                        text: '删除',
-                        iconCls: 'glyphicon glyphicon-remove',
-                        handler: function () {
-                            var rows = $('#dictionaryLibraryTable').bootstrapTable('getSelections');
-                            if (rows.length == 0) {
-                                window.Ewin.alert({message: '请选择一条需要删除的数据!'});
-                                return false;
-                            }
-                            var url = "dict/delete";
-                            $.ajax({
-                                url: "privilege/write?url=" + url,
-                                type: "GET",
-                                success: function (result) {
-                                    if (!result.success) {
-                                        window.Ewin.alert({message: result.errMsg});
-                                        return false;
-                                    }
-                                    else {
-                                        window.Ewin.confirm({title: '提示', message: '是否要删除您选择的记录', width: 500}).on(function (e) {
-                                            if (e) {
-                                                $.ajax({
-                                                    type: "POST",
-                                                    //ajax需要添加打包名
-                                                    url: "dict/delete?puid=" + rows[0].puid,
-                                                    // data: JSON.stringify(rows),
-                                                    contentType: "application/json",
-                                                    success: function (result) {
-                                                        /*if (result.status) {
-                                                            window.Ewin.alert({message: result.errMsg});
-                                                            //刷新，会重新申请数据库数据
-                                                        }
-                                                        else {
-                                                            window.Ewin.alert({message: ":" + result.errMsg});
-                                                        }*/
-                                                        if (result.success) {
-                                                            layer.msg('删除成功', {icon: 1, time: 2000})
-                                                        }
-                                                        else if (!result.success) {
-                                                            window.Ewin.alert({message: result.errMsg});
-                                                        }
-                                                        $('#dictionaryLibraryTable').bootstrapTable("refresh");
-                                                    },
-                                                    error: function (info) {
-                                                        window.Ewin.alert({message: "操作删除:" + info.status});
-                                                    }
-                                                })
-                                            }
-                                        });
-                                    }
-                                }
-                            })
-                        }
-                    },
-                ],
+                toolbars: toolbar,
             })
         }
     })
 }
-
 function toPage() {
     var pageNum = $("#pageNum").val();
     if (pageNum) {
         $('#dictionaryLibraryTable').bootstrapTable('selectPage', parseInt(pageNum));
     }
 }
-
 $(document).keydown(function(event) {
     if (event.keyCode == 13) {
         $('form').each(function() {

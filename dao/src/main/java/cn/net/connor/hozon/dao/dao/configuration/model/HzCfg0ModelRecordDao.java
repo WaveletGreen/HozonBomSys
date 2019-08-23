@@ -56,6 +56,13 @@ public interface HzCfg0ModelRecordDao extends BasicDao<HzCfg0ModelRecord> {
      */
     List<HzCfg0ModelRecord> selectByProjectPuid(@Param("projectPuid") String projectPuid);
 
+    /**
+     * 链接查询出所有的基本车型
+     * @param projectId
+     * @return
+     */
+    List<HzCfg0ModelRecord> selectByProjectIdWithJoin(@Param("projectId") String projectId);
+
     int deleteModelById(@Param("puid") String puid);
 
     List<HzCfg0ModelRecord> selectByFullCfgModel(@Param("orderChangeId") Integer orderChangeId);

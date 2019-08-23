@@ -1049,7 +1049,7 @@
 
   <!--找出大于当前查找编号的最小记录-->
   <select id="HzPbomRecordDAOImpl_findMinPBOMRecordWhichLineNoGreaterCurrentLineNo"
-          parameterType="com.connor.hozon.bom.resources.domain.query.HzBOMQuery"
+          parameterType="com.connor.hozon.resources.domain.query.HzBOMQuery"
           resultMap="HzPbomLineRecord">
     SELECT m.* from (SELECT
     <include refid="Pbom_List"/>
@@ -1089,7 +1089,7 @@
 
   <!--找出小于当前查找编号的最大记录-->
   <select id="HzPbomRecordDAOImpl_findMaxPBOMRecordWhichLineNoLessCurrentNo"
-          parameterType="com.connor.hozon.bom.resources.domain.query.HzBOMQuery"
+          parameterType="com.connor.hozon.resources.domain.query.HzBOMQuery"
           resultMap="HzPbomLineRecord">
     SELECT m.* from (SELECT
     <include refid="Pbom_List"/>
@@ -1129,7 +1129,7 @@
 
   <!--找出相同零件号的PBOM-->
   <select id="HzPbomRecordDAOImpl_findPbomByLineId"
-          parameterType="com.connor.hozon.bom.resources.domain.query.HzBOMQuery"
+          parameterType="com.connor.hozon.resources.domain.query.HzBOMQuery"
           resultMap="HzPbomLineRecord">
     SELECT
     <include refid="Pbom_List"/>

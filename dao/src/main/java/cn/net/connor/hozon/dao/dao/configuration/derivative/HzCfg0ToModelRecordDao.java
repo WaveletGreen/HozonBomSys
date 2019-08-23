@@ -7,8 +7,9 @@
 package cn.net.connor.hozon.dao.dao.configuration.derivative;
 
 import cn.net.connor.hozon.dao.dao.configuration.BasicDao;
-import org.apache.ibatis.annotations.Param;
 import cn.net.connor.hozon.dao.pojo.configuration.derivative.HzCfg0ToModelRecord;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 /**
@@ -18,14 +19,13 @@ import java.util.List;
  * @Modified By:
  */
 @Deprecated
-//@Configuration
+@Repository
 public interface HzCfg0ToModelRecordDao  extends BasicDao<HzCfg0ToModelRecord>{
 
     int deleteByPrimaryKey(String puid);
 
 
     HzCfg0ToModelRecord selectByPrimaryKey(String puid);
-
     /**
      * 批量更新发送到SAP的状态
      *

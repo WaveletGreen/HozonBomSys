@@ -15,5 +15,10 @@ import java.util.List;
  * @Modified By:
  */
 public interface InsertListDao<T> {
+    /**
+     * 批量插入数据，注意，批量插入不会返回主键
+     * @param list
+     * @return
+     */
     int insertList(List<T> list);
 }
