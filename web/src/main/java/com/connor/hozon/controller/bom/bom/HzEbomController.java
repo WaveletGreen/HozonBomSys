@@ -475,4 +475,14 @@ public class HzEbomController extends BaseController {
         WriteResultRespDTO respDTO = hzEBOMWriteService.backBomUtilLastValidState(reqDTO);
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
+
+    /**
+     * MBOM跳转到EBOM的方法
+     * @return
+     */
+    @RequestMapping("selectEbom")
+    public String selectEbom (String puid,Model model){
+        model.addAttribute("puid",puid);
+        return "bomManage/mbom/mbomMaintenance/selectEbom";
+    }
 }
