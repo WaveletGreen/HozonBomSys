@@ -42,6 +42,7 @@ import com.connor.hozon.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.resources.page.Page;
 import com.connor.hozon.resources.service.bom.HzEBOMReadService;
 import com.connor.hozon.resources.service.bom.HzSingleVehiclesServices;
+import com.connor.hozon.service.bom.bomData.sparePart.EbomStructureTree;
 import com.connor.hozon.service.bom.bomData.sparePart.SparePartStructureCache;
 import com.connor.hozon.service.bom.bomData.sparePart.SparePartsBomService;
 import lombok.Setter;
@@ -331,6 +332,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
+    @Deprecated
     public JSONObject quoteEbomLines(SparePartQuoteEbomLinesPostDTO dto) {
         //过滤的EBOM数据
         Map<String, EbomWithPbomData> queryMap = new LinkedHashMap<>();
@@ -404,7 +406,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
 
     @Override
     public JSONObject quoteEbomLinesUpAndDown(SparePartQuoteEbomLinesPostDTO dto) {
-        //过滤的EBOM数据
+        //过滤的EBOM数据record.getSparePart();
         Map<String, EbomWithPbomData> queryMap = new LinkedHashMap<>();
         //批量插入记录
         List<SparePartData> parts;
@@ -423,7 +425,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 List<EbomWithPbomData> tree = hzEbomRecordDAO.getCurrentTreeNodePathUpAndDown(query);
                 for (EbomWithPbomData epl : tree) {
                     if (queryMap.containsKey(epl.getPuid())) {
-                        continue;//过滤掉重复的数据
+                        continue;//过滤掉重复的数据，要么就放在tree里面
                     } else {
                         queryMap.put(epl.getPuid(), epl);//存储当前EBOM对象数据
                     }
@@ -436,8 +438,22 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
             String sparePartAppendName = pair[1];
             //构建结构并存储结构
             //进行汇总
-            for (Map.Entry<String, EbomWithPbomData> entry : queryMap.entrySet()) {
-                EbomWithPbomData record = entry.getValue();
+            ArrayList<EbomWithPbomData> sourceList=new ArrayList<>(queryMap.values());
+            /**
+             *从后往前排,遇到不是备件的数据不记录，如果是备件的数据，先记录
+             */
+
+            for (int i=0;i<sourceList.size();i++) {
+
+                EbomWithPbomData record = sourceList.get(i);//当前数据
+                EbomWithPbomData pre = i==0?null:sourceList.get(i-1);//上一个数据
+
+                //还原原来的EBOM结构树
+                EbomStructureTree tree=new EbomStructureTree();
+                tree.setPuid(record.getPuid());
+
+
+
                 String ebomId = record.getPuid();
                 //产生备件零件对象，有子层也可能是自身也是子层
                 SparePartData part = createPart(record, sparePartAppendCode, sparePartAppendName);
@@ -445,11 +461,19 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                 parts.add(part);
                 //添加到更新记录中
                 // eplUpdateSparePartList.add(record);
-                //有子层，一定不是最后一层
+                //不是叶子节点
                 if (null != record.getIsHas() && 1 == record.getIsHas()) {
                     structureMap.put(ebomId, new SparePartStructureCache(new LinkedList<>(), new LinkedList<>(), part));
+
+
+
+
                 }
-                //没有子层，或者是子层的最后一层
+                //是叶子节点
+                else{
+
+                }
+
                 String parentId = record.getParentUid();
                 SparePartStructureCache cache = structureMap.get(parentId);
                 if (cache != null) {

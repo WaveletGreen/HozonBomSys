@@ -96,6 +96,7 @@ public interface SparePartsBomService {
      * @param lines
      * @return
      */
+    @Deprecated
     JSONObject quoteEbomLines(SparePartQuoteEbomLinesPostDTO lines);
 
     /**

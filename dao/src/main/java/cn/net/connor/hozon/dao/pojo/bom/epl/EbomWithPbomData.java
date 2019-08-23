@@ -9,6 +9,7 @@ import lombok.Data;
  */
 @Data
 public class EbomWithPbomData extends HzEPLManageRecord{
+    private static final long serialVersionUID = -6579194561355186191L;
     /**
      * 车间1
      */

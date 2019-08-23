@@ -6,6 +6,7 @@ package com.connor.hozon.resources.domain.query;
  * @Modified By:
  */
 public class HzEbomRecursionQuery extends HzEbomTreeQuery{
+    private static final long serialVersionUID = -5879442668572556324L;
     /**
      * 向上递归，默认不会向上递归查
      */
