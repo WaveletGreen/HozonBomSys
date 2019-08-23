@@ -1,10 +1,10 @@
-package com.connor.hozon.bom.resources.controller.resourcesLibrary;
+package com.connor.hozon.controller.bom.resourcesLibrary;
 
-import com.connor.hozon.bom.resources.controller.BaseController;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
-import com.connor.hozon.bom.resources.domain.query.HzLegislativeAutoTypeQuery;
-import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeAutoTypeService;
+import com.connor.hozon.controller.bom.BaseController;
+import com.connor.hozon.resources.domain.query.HzLegislativeAutoTypeQuery;
+import com.connor.hozon.resources.page.Page;
+import com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeAutoTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**

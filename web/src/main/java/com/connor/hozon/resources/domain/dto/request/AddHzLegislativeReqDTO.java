@@ -1,18 +1,14 @@
-package com.connor.hozon.bom.resources.domain.dto.request;
+package com.connor.hozon.resources.domain.dto.request;
 
-import com.connor.hozon.bom.resources.domain.dto.BaseDTO;
+
+import cn.net.connor.hozon.common.entity.BaseDTO;
 
 /**
  * @Author: zhangl
- * @Date: 2019/8/23
- * @Description: 修改一条法规件
+ * @Date: 2019/8/22
+ * @Description: 新增一条法规件
  */
-public class UpdateHzLegislativeReqDTO extends BaseDTO {
-
-    /**
-     * 主键
-     */
-    private String puid;
+public class AddHzLegislativeReqDTO extends BaseDTO {
     /**
      * 法规件名称
      */
@@ -45,14 +41,6 @@ public class UpdateHzLegislativeReqDTO extends BaseDTO {
      * 备注
      */
     private String  remarks;
-
-    public String getPuid() {
-        return puid;
-    }
-
-    public void setPuid(String puid) {
-        this.puid = puid;
-    }
 
     public String getLegislativeName() {
         return legislativeName;

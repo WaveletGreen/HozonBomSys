@@ -1,11 +1,11 @@
-package com.connor.hozon.bom.resources.service.resourcesLibrary.legislativeLibrary.impl;
+package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.impl;
 
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeAutoType;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
-import com.connor.hozon.bom.resources.domain.query.HzLegislativeAutoTypeQuery;
-import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeAutoTypeDao;
-import com.connor.hozon.bom.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeAutoTypeService;
-import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.resources.domain.query.HzLegislativeAutoTypeQuery;
+import com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeAutoTypeDao;
+import com.connor.hozon.resources.page.Page;
+import com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeAutoTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

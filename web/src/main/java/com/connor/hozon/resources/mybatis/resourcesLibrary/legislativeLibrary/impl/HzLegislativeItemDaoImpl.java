@@ -1,10 +1,10 @@
-package com.connor.hozon.bom.resources.mybatis.resourcesLibrary.legislativeLibrary.impl;
+package com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.impl;
 
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
-import com.connor.hozon.bom.resources.domain.query.HzLegislativeItemQuery;
-import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeItemDao;
-import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.page.PageRequestParam;
+import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
+import com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeItemDao;
+import com.connor.hozon.resources.page.Page;
+import com.connor.hozon.resources.page.PageRequestParam;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 

@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.resources.domain.query;
+package com.connor.hozon.resources.domain.query;
 
 public class HzLegislativeItemQuery extends DefaultPageQuery {
 

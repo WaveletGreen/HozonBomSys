@@ -1,10 +1,8 @@
-package com.connor.hozon.bom.resources.domain.model;
+package com.connor.hozon.resources.domain.model;
 
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
-import cn.net.connor.hozon.dao.pojo.sys.User;
-import com.connor.hozon.bom.common.util.user.UserInfo;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzLegislativeReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.dto.request.AddHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
 
 import java.util.Date;
 import java.util.UUID;

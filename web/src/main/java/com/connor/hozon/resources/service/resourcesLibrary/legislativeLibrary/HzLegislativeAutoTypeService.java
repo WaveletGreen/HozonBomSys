@@ -1,8 +1,8 @@
-package com.connor.hozon.bom.resources.service.resourcesLibrary.legislativeLibrary;
+package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary;
 
 import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
-import com.connor.hozon.bom.resources.domain.query.HzLegislativeAutoTypeQuery;
-import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.resources.domain.query.HzLegislativeAutoTypeQuery;
+import com.connor.hozon.resources.page.Page;
 
 public interface HzLegislativeAutoTypeService {
     /**

@@ -1,10 +1,8 @@
-package com.connor.hozon.bom.resources.mybatis.resourcesLibrary.legislativeLibrary;
-
-import java.util.List;
+package com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary;
 
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
-import com.connor.hozon.bom.resources.domain.query.HzLegislativeItemQuery;
-import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
+import com.connor.hozon.resources.page.Page;
 
 public interface HzLegislativeItemDao {
 

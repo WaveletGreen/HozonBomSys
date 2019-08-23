@@ -1,15 +1,15 @@
-package com.connor.hozon.bom.resources.service.resourcesLibrary.legislativeLibrary.impl;
+package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.impl;
 
+import cn.net.connor.hozon.common.entity.WriteResultRespDTO;
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzLegislativeReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeItemResDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.domain.model.HzLegislativeFactory;
-import com.connor.hozon.bom.resources.domain.query.HzLegislativeItemQuery;
-import com.connor.hozon.bom.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeItemDao;
-import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeItemService;
+import com.connor.hozon.resources.domain.dto.request.AddHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.model.HzLegislativeFactory;
+import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
+import com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeItemDao;
+import com.connor.hozon.resources.page.Page;
+import com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeItemService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

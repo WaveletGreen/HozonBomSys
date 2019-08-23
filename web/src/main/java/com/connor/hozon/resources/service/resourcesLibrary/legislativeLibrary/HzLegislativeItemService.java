@@ -1,11 +1,11 @@
-package com.connor.hozon.bom.resources.service.resourcesLibrary.legislativeLibrary;
+package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary;
 
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzLegislativeReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
+import cn.net.connor.hozon.common.entity.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeItemResDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.domain.query.HzLegislativeItemQuery;
-import com.connor.hozon.bom.resources.page.Page;
+import com.connor.hozon.resources.domain.dto.request.AddHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
+import com.connor.hozon.resources.page.Page;
 
 public interface HzLegislativeItemService {
     /**

@@ -1,15 +1,14 @@
-package com.connor.hozon.bom.resources.controller.resourcesLibrary;
+package com.connor.hozon.controller.bom.resourcesLibrary;
 
-import com.connor.hozon.bom.resources.controller.BaseController;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzEbomReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.AddHzLegislativeReqDTO;
-import com.connor.hozon.bom.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
+import cn.net.connor.hozon.common.entity.WriteResultRespDTO;
 import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeItemResDTO;
-import com.connor.hozon.bom.resources.domain.dto.response.WriteResultRespDTO;
-import com.connor.hozon.bom.resources.domain.query.HzLegislativeItemQuery;
-import com.connor.hozon.bom.resources.page.Page;
-import com.connor.hozon.bom.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeItemService;
-import com.connor.hozon.bom.resources.util.Result;
+import com.connor.hozon.controller.bom.BaseController;
+import com.connor.hozon.resources.domain.dto.request.AddHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
+import com.connor.hozon.resources.page.Page;
+import com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.impl.HzLegislativeItemServiceImpl;
+import com.connor.hozon.resources.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +32,7 @@ import java.util.Map;
 public class LegislativeItemsLibraryController extends BaseController {
 
     @Autowired
-    private HzLegislativeItemService hzLegislativeItemService;
+    private HzLegislativeItemServiceImpl hzLegislativeItemService;
 
 
     @RequestMapping(value = "getDetail", method = RequestMethod.GET)
