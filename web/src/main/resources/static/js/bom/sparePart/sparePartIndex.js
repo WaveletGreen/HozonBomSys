@@ -550,11 +550,11 @@ const toolbar = [
         iconCls: 'glyphicon glyphicon-plus',
         handler: add
     },
-    {
-        text: '新增',
-        iconCls: 'glyphicon glyphicon-plus',
-        handler: clonePartData
-    },
+    // {
+    //     text: '新增',
+    //     iconCls: 'glyphicon glyphicon-plus',
+    //     handler: clonePartData
+    // },
     {
         text: '递归测试',
         iconCls: 'glyphicon glyphicon-plus',

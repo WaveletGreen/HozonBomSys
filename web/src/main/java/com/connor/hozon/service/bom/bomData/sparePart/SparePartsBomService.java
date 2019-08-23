@@ -99,9 +99,23 @@ public interface SparePartsBomService {
     JSONObject quoteEbomLines(SparePartQuoteEbomLinesPostDTO lines);
 
     /**
+     * 向上引用父层数据，直到2Y，向下引用到最终的子层是备件的所有沿路结构
+     *
+     * 当前选中的结构数据，向上查找所有的父层结构，直到2Y为止。
+     *
+     * 向下查找所有子层结构，只要有1层的数据是备件，则沿路的数据都要带出来，可以进行从后往前找，找到第一个数据时备件的数据，然后将这个数据往前找直到当前的数据位置的一层
+     *
+     * @param dto
+     * @return
+     */
+    JSONObject quoteEbomLinesUpAndDown(SparePartQuoteEbomLinesPostDTO dto);
+
+    /**
      * 递归查询测试
      * @param data
      * @return
      */
     JSONObject selectRecursionByTopLayerId(SparePartPostDTO data);
+
+
 }

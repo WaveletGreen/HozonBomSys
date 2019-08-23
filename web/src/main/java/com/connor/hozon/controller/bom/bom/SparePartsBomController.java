@@ -190,7 +190,7 @@ public class SparePartsBomController {
     @RequestMapping(value = "quoteEbomLines", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject quoteEbomLines(@RequestBody SparePartQuoteEbomLinesPostDTO dto) {
-        return sparePartsBomService.quoteEbomLines(dto);
+        return sparePartsBomService.quoteEbomLinesUpAndDown(dto);
     }
 
 }

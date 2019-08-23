@@ -40,6 +40,10 @@
             <artifactId>controller</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
         <!--添加自定义的子模块-->
     </dependencies>
     <build>
