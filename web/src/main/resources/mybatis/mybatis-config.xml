@@ -78,6 +78,9 @@
         <mapper resource="sql/mapper/resourcesLibrary/dictionaryLibrary.xmapper/HzDictionaryLibraryMapper.xml"/>
         <!--VPPS库-->
         <mapper resource="sql/mapper/resourcesLibrary/VPPSLibrary.xmapper/HzVPPSLibraryMapper.xml"/>
+        <!--法规件库-->
+        <mapper resource="sql/mapper/resourcesLibrary/legislativeLibrary.xmapper/HzLegislativeAotoTypeMapper.xml"/>
+        <mapper resource="sql/mapper/resourcesLibrary/legislativeLibrary.xmapper/HzLegislativeItemMapper.xml"/>
 
         <!--配置和BOM进行交互的映射文件-->
         <mapper resource="sql/mapper/interaction/HzConfigBomColorMapper.xml"/>
