@@ -1,7 +1,7 @@
 package cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary;
 
 import java.util.Date;
-
+@Deprecated
 public class HzLegislativeAutoType {
     /**
      * 主键

@@ -1,7 +1,7 @@
 package com.connor.hozon.controller.bom.resourcesLibrary;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
 import com.connor.hozon.controller.bom.BaseController;
+import com.connor.hozon.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
 import com.connor.hozon.resources.domain.query.HzLegislativeAutoTypeQuery;
 import com.connor.hozon.resources.page.Page;
 import com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeAutoTypeService;
@@ -18,6 +18,7 @@ import java.util.*;
  * @User zhangl
  * @Date 2019/8/19
  */
+@Deprecated
 @Controller
 @RequestMapping(value = "legislative")
 public class LegislativeLibraryController extends BaseController {

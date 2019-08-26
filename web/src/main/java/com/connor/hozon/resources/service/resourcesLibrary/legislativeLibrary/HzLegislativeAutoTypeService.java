@@ -1,9 +1,9 @@
 package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
+import com.connor.hozon.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
 import com.connor.hozon.resources.domain.query.HzLegislativeAutoTypeQuery;
 import com.connor.hozon.resources.page.Page;
-
+@Deprecated
 public interface HzLegislativeAutoTypeService {
     /**
      * 分页获取法规件库整车级的数据

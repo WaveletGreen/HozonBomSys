@@ -10,7 +10,7 @@ import sql.BaseSQLUtil;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@Deprecated
 @Service("HzLegislativeAutoTypeDao")
 public class HzLegislativeAutoTypeDaoImpl extends BaseSQLUtil implements HzLegislativeAutoTypeDao {
     @Override

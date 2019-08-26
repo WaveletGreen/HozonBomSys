@@ -3,7 +3,7 @@ package com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary;
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeAutoType;
 import com.connor.hozon.resources.domain.query.HzLegislativeAutoTypeQuery;
 import com.connor.hozon.resources.page.Page;
-
+@Deprecated
 public interface HzLegislativeAutoTypeDao {
 
     Page<HzLegislativeAutoType> findAutoTypeToPage(HzLegislativeAutoTypeQuery query);

@@ -1,7 +1,7 @@
-package com.connor.hozon.bom.resources.domain.dto.response;
+package com.connor.hozon.resources.domain.dto.response;
 
 import java.util.Date;
-
+@Deprecated
 public class HzLegislativeAutoTypeResDTO {
     /**
      * 序号
