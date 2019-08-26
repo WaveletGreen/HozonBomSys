@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: Fancyears Milos Malvis
@@ -17,6 +18,11 @@ public class SparePartQuoteEbomLinesPostDTO implements Serializable {
      * EBOM的主键
      */
     private List<String> ids;
+
+    /**
+     * EBOM的零件号
+     */
+    private Set<String> partNames;
     /**
      * 项目ID
      */
