@@ -1217,7 +1217,7 @@
             <!--#{item.pBomLinePartName,jdbcType=VARCHAR}, #{item.pBomLinePartClass,jdbcType=VARCHAR}, #{item.pBomLinePartEnName,jdbcType=VARCHAR},-->
             <!--#{item.pBomLinePartResource,jdbcType=VARCHAR},#{item.sortNum,jdbcType=VARCHAR},#{item.status,jdbcType=INTEGER},-->
             <!--sysdate, sysdate, #{item.createName,jdbcType=VARCHAR},#{item.pFactoryId,jdbcType=VARCHAR},#{item.pLouaFlag,jdbcType=INTEGER},-->
-            <!--#{item.sparePart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR}, #{item.processRoute,jdbcType=VARCHAR},-->
+            <!--#{item.sparepart,jdbcType=VARCHAR}, #{item.sparePartNum,jdbcType=VARCHAR}, #{item.processRoute,jdbcType=VARCHAR},-->
             <!--#{item.laborHour,jdbcType=VARCHAR}, #{item.rhythm,jdbcType=VARCHAR}, #{item.solderJoint,jdbcType=VARCHAR},-->
             <!--#{item.machineMaterial,jdbcType=VARCHAR}, #{item.standardPart,jdbcType=VARCHAR}, #{item.tools,jdbcType=VARCHAR},-->
             <!--#{item.wasterProduct,jdbcType=VARCHAR},#{item.change,jdbcType=VARCHAR},#{item.changeNum,jdbcType=VARCHAR},-->

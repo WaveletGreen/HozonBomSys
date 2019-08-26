@@ -168,7 +168,7 @@ public class HzEbomRecordFactory {
         jsonObject.put("pRegulationCode", record.getpRegulationCode());
         jsonObject.put("number",record.getNumber());
         jsonObject.put("pBuyEngineer",record.getpBuyEngineer());
-        jsonObject.put("sparePart",record.getSparePart());
+        jsonObject.put("sparepart",record.getSparePart());
         jsonObject.put("sparePartNum",record.getSparePartNum());
         jsonObject.put("status",record.getStatus());
         jsonObject.put("colorPart", BOMTransConstants.integerToYNString(record.getColorPart()));

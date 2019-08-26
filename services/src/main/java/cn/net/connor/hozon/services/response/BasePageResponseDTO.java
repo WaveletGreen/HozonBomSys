@@ -1,8 +1,6 @@
 package cn.net.connor.hozon.services.response;
 
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartDataResponseDTO;
 import lombok.Data;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.connor.hozon.bom.resources.domain.dto.response;
+package cn.net.connor.hozon.services.response.dipository.legislativeLibrary;
 
 import java.util.Date;
 

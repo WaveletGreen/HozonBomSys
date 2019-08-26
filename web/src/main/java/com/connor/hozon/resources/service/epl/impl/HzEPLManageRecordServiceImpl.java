@@ -158,7 +158,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 //                jsonObject.put("outerPart", record.getOuterPart());
 //                jsonObject.put("colorPart", record.getColorPart());
 //
-//                jsonObject.put("sparePart", record.getSparePart());
+//                jsonObject.put("sparepart", record.getSparePart());
 //                jsonObject.put("sparePartNum", record.getSparePartNum());
 //                jsonObject.put("processRoute", record.getProcessRoute());
 //                jsonObject.put("laborHour", record.getLaborHour());
@@ -274,7 +274,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
 //                appendLastLocalName[++i] = "人工工时";
 //
 //                appendLastTrueName[++j] = "station";
-//                appendLastTrueName[++j] = "sparePart";
+//                appendLastTrueName[++j] = "sparepart";
 //                appendLastTrueName[++j] = "sparePartNum";
 //                appendLastTrueName[++j] = "processRoute";
 //                appendLastTrueName[++j] = "laborHour";
@@ -436,7 +436,7 @@ public class HzEPLManageRecordServiceImpl implements HzEPLManageRecordService {
                     jsonObject.put("colorPart", "");
                 }
 
-//                jsonObject.put("sparePart", record.getSparePart());
+//                jsonObject.put("sparepart", record.getSparePart());
 //                jsonObject.put("sparePartNum", record.getSparePartNum());
 //                jsonObject.put("processRoute", record.getProcessRoute());
 //                jsonObject.put("laborHour", record.getLaborHour());

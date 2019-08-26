@@ -200,7 +200,7 @@ function doRefresh(projectPuid) {
 function doQuery() {
     projectId = getProjectUid();
     eBomUrl = "ebom/getEBom/list?projectId=" + projectId;
-    eBomUrl+="&sparePart="+$("#sparePart").val();
+    eBomUrl+="&sparepart="+$("#sparepart").val();
     initTable(eBomUrl);
 }
 

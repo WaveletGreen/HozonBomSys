@@ -129,7 +129,7 @@
 //                _res.put("pBomOfWhichDept", dto.getpBomOfWhichDept());
 //                _res.put("lineId", dto.getLineId());
 //                _res.put("pBomLinePartName", dto.getpBomLinePartName());
-//                _res.put("sparePart", dto.getSparePart());
+//                _res.put("sparepart", dto.getSparePart());
 //                _res.put("sparePartNum", dto.getSparePartNum());
 //                _res.put("processRoute", dto.getProcessRoute());
 //                _res.put("laborHour", dto.getLaborHour());

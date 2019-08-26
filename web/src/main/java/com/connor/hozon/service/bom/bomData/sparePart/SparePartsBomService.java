@@ -10,11 +10,10 @@ package com.connor.hozon.service.bom.bomData.sparePart;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartOfProjectRequestQueryDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartQuoteEbomLinesPostDTO;
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryPageResponse;
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartQueryEbomPageResponseDTO;
+import cn.net.connor.hozon.services.response.bom.sparepart.SparePartBomQueryPageResponseVO;
+import cn.net.connor.hozon.services.response.bom.sparepart.SparePartQueryEbomPageResponseVO;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.resources.domain.query.HzEbomByPageQuery;
-import org.springframework.ui.Model;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -34,7 +33,7 @@ public interface SparePartsBomService {
      * @param query controller和service连接对象
      * @return
      */
-    SparePartBomQueryPageResponse selectPageByProjectId(SparePartOfProjectRequestQueryDTO query);
+    SparePartBomQueryPageResponseVO selectPageByProjectId(SparePartOfProjectRequestQueryDTO query);
 
     /**
      * 保存单条备件数据
@@ -89,7 +88,7 @@ public interface SparePartsBomService {
      * @param query
      * @return
      */
-    SparePartQueryEbomPageResponseDTO getEbomList(HzEbomByPageQuery query);
+    SparePartQueryEbomPageResponseVO getEbomList(HzEbomByPageQuery query);
 
     /**
      * 引用EBOM的数据

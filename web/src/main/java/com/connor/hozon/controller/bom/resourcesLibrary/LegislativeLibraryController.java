@@ -1,6 +1,6 @@
 package com.connor.hozon.controller.bom.resourcesLibrary;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
+import cn.net.connor.hozon.services.response.dipository.legislativeLibrary.HzLegislativeAutoTypeResDTO;
 import com.connor.hozon.controller.bom.BaseController;
 import com.connor.hozon.resources.domain.query.HzLegislativeAutoTypeQuery;
 import com.connor.hozon.resources.page.Page;

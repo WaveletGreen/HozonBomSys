@@ -2,7 +2,7 @@ package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.i
 
 import cn.net.connor.hozon.common.entity.WriteResultRespDTO;
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
-import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeItemResDTO;
+import cn.net.connor.hozon.services.response.dipository.legislativeLibrary.HzLegislativeItemResDTO;
 import com.connor.hozon.resources.domain.dto.request.AddHzLegislativeReqDTO;
 import com.connor.hozon.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
 import com.connor.hozon.resources.domain.model.HzLegislativeFactory;

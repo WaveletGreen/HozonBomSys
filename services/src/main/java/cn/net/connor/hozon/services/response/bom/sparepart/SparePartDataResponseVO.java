@@ -5,7 +5,7 @@
  *
  */
 
-package cn.net.connor.hozon.services.response.bom.sparePart;
+package cn.net.connor.hozon.services.response.bom.sparepart;
 
 import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData;
 import lombok.Data;
@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Data
 @ToString
-public class SparePartDataResponseDTO extends SparePartData implements Serializable {
+public class SparePartDataResponseVO extends SparePartData implements Serializable {
     private static final long serialVersionUID = 4235560016359300566L;
     private Map<String,String> vehicleUsage;
 }

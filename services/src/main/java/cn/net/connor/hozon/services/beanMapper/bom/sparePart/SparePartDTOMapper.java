@@ -11,7 +11,7 @@ import cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData;
 import cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartOfProjectRequestQueryDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartDataResponseDTO;
+import cn.net.connor.hozon.services.response.bom.sparepart.SparePartDataResponseVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -43,7 +43,7 @@ public interface SparePartDTOMapper {
      * @param list
      * @return
      */
-    List<SparePartDataResponseDTO> BeanToDTO(List<SparePartData> list);
+    List<SparePartDataResponseVO> BeanToDTO(List<SparePartData> list);
 
     /**
      * controller层传过来的对象转成dao层对象

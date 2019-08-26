@@ -98,7 +98,7 @@ public class HzChangeDataController extends BaseController {
         tableTitle.put("fna","FNA");
         tableTitle.put("pFnaDesc","FNA描述" );
         tableTitle.put("number","数量" );
-        tableTitle.put("sparePart","备件");
+        tableTitle.put("sparepart","备件");
         tableTitle.put("sparePartNum","备件编号");
         tableTitle.put("colorPart","是否颜色件");
 
@@ -148,7 +148,7 @@ public class HzChangeDataController extends BaseController {
         tableTitle.put("pBomOfWhichDept", "专业");
         tableTitle.put("pBomLinePartClass", "零件分类");
         tableTitle.put("pBomLinePartResource", "零部件来源");
-        tableTitle.put("sparePart", "备件");
+        tableTitle.put("sparepart", "备件");
         tableTitle.put("sparePartNum", "备件编号");
         tableTitle.put("processRoute", "工艺路线");
         tableTitle.put("laborHour", "人工工时");

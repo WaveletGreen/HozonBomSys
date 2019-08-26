@@ -156,7 +156,7 @@ public class HzSingleVehiclesController extends BaseController {
         tableTitle.put("pBomOfWhichDept", "专业");
         tableTitle.put("pBomLinePartClass", "零件分类");
         tableTitle.put("pBomLinePartResource", "零部件来源");
-        tableTitle.put("sparePart", "备件");
+        tableTitle.put("sparepart", "备件");
         tableTitle.put("sparePartNum", "备件编号");
         tableTitle.put("processRoute", "工艺路线");
         tableTitle.put("laborHour", "人工工时");

@@ -1,7 +1,7 @@
 package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.impl;
 
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeAutoType;
-import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
+import cn.net.connor.hozon.services.response.dipository.legislativeLibrary.HzLegislativeAutoTypeResDTO;
 import com.connor.hozon.resources.domain.query.HzLegislativeAutoTypeQuery;
 import com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeAutoTypeDao;
 import com.connor.hozon.resources.page.Page;

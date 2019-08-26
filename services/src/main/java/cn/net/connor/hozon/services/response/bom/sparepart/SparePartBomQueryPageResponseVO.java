@@ -5,7 +5,7 @@
  *
  */
 
-package cn.net.connor.hozon.services.response.bom.sparePart;
+package cn.net.connor.hozon.services.response.bom.sparepart;
 
 import cn.net.connor.hozon.services.response.BasePageResponseDTO;
 import lombok.Data;
@@ -20,11 +20,11 @@ import java.util.List;
  * @Modified By:
  */
 @Data
-public class SparePartBomQueryPageResponse extends BasePageResponseDTO<SparePartDataResponseDTO> implements Serializable {
+public class SparePartBomQueryPageResponseVO extends BasePageResponseDTO<SparePartDataResponseVO> implements Serializable {
 
     private static final long serialVersionUID = -7105193470122152107L;
 
-    public SparePartBomQueryPageResponse(int totalCount, List<SparePartDataResponseDTO> result) {
+    public SparePartBomQueryPageResponseVO(int totalCount, List<SparePartDataResponseVO> result) {
         this.totalCount = totalCount;
         this.result = result;
     }

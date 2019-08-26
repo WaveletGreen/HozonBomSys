@@ -19,7 +19,9 @@ WFI
 WFI
 
 #### 参与贡献
-1.haozt<br>
-2.zhuan<br>
-3.zhudb<br>
-4.xulf
+* haozt 郝志涛
+* zhudb 朱东波
+* xulf 许林飞
+* zhuan 朱安亮
+* zhuangl 张乐
+* duanyf 段云峰

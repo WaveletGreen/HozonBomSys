@@ -26,12 +26,12 @@ import cn.net.connor.hozon.services.beanMapper.bom.sparePart.SparePartDTOMapper;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartOfProjectRequestQueryDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartPostDTO;
 import cn.net.connor.hozon.services.request.bom.sparePart.SparePartQuoteEbomLinesPostDTO;
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartDataResponseDTO;
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartQueryEbomPageResponseDTO;
+import cn.net.connor.hozon.services.response.bom.sparepart.SparePartDataResponseVO;
+import cn.net.connor.hozon.services.response.bom.sparepart.SparePartQueryEbomPageResponseVO;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.HzCfg0ModelService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryPageResponse;
+import cn.net.connor.hozon.services.response.bom.sparepart.SparePartBomQueryPageResponseVO;
 import com.connor.hozon.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.resources.domain.query.HzEbomByPageQuery;
@@ -64,7 +64,7 @@ import java.util.*;
  * @Modified By:
  */
 @Service
-@ConfigurationProperties(prefix = "sparePart")
+@ConfigurationProperties(prefix = "sparepart")
 @PropertySource("classpath:sparePartSetting.properties")//指定属性文件路径
 @Transactional
 @Slf4j
@@ -127,13 +127,14 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
      * @param query controller和service连接对象
      * @return
      */
-    public SparePartBomQueryPageResponse selectPageByProjectId(SparePartOfProjectRequestQueryDTO query) {
+    @Override
+    public SparePartBomQueryPageResponseVO selectPageByProjectId(SparePartOfProjectRequestQueryDTO query) {
         SparePartDTOMapper mapper = SparePartDTOMapper.INSTANCE;
         SparePartOfProjectQuery queryBean = mapper.DTOToQueryBean(query);//转成dao层对象进行查询，从这里就需要拆分，不同的层级对象工作职责不一样
         int count = sparePartOfProjectDao.countByQuery(queryBean);
         List<SparePartData> queryResult = sparePartDataDao.selectPageByQuery(queryBean);
-        List<SparePartDataResponseDTO> result = mapper.BeanToDTO(queryResult);//再转成service层的对象
-        return new SparePartBomQueryPageResponse(count, result);
+        List<SparePartDataResponseVO> result = mapper.BeanToDTO(queryResult);//再转成service层的对象
+        return new SparePartBomQueryPageResponseVO(count, result);
     }
 
 
@@ -297,7 +298,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
 //        tableTitle.put("fna", "FNA");
 //        tableTitle.put("pFnaDesc", "FNA描述");
 //        tableTitle.put("number", "数量");
-        tableTitle.put("sparePart", "备件");
+        tableTitle.put("sparepart", "备件");
         tableTitle.put("sparePartNum", "备件编号");
         tableTitle.put("colorPart", "是否颜色件");
         tableTitle.putAll(hzSingleVehiclesServices.singleVehDosageTitle(projectId));
@@ -306,9 +307,9 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
     }
 
     @Override
-    public SparePartQueryEbomPageResponseDTO getEbomList(HzEbomByPageQuery query) {
+    public SparePartQueryEbomPageResponseVO getEbomList(HzEbomByPageQuery query) {
         Page<HzEbomRespDTO> recordRespDTOPage = hzEBOMReadService.getHzEbomPage(query);
-        SparePartQueryEbomPageResponseDTO response = new SparePartQueryEbomPageResponseDTO();
+        SparePartQueryEbomPageResponseVO response = new SparePartQueryEbomPageResponseVO();
         if (recordRespDTOPage == null) {
             return response;
         }
