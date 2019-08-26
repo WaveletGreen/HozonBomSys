@@ -127,7 +127,7 @@
     p_platform_code,
     p_platform_name,
     p_vehicle_code,
-    p_vehicle_name,
+    p_vehicle_name
   </sql>
     <sql id="withSingleVehicleStatus">
             svs.STATUS as SVS_STATUS
