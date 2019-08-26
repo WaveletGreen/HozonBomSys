@@ -1,14 +1,18 @@
 package com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
 import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
 import com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeItemDao;
 import com.connor.hozon.resources.page.Page;
 import com.connor.hozon.resources.page.PageRequestParam;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service("HzLegislativeItemDao")
@@ -33,8 +37,13 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
     }
 
     @Override
-    public int deleteByPrimaryKey(String puid) {
-        return 0;
+    public int delete(String puids) {
+        if(StringUtils.isNotBlank(puids)){
+            List<String> list = Lists.newArrayList(puids.split(","));
+            return super.delete("HzLegislativeItem_delete",list);
+        }else {
+            return 0;
+        }
     }
 
     /**

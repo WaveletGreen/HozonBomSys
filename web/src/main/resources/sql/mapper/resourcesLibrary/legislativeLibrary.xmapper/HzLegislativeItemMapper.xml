@@ -133,13 +133,17 @@
     and t1.STATUS =1
   </select>
 
-
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from HZ_LEGISLATIVE_ITEMS
-    where PUID = #{puid,jdbcType=VARCHAR}
+  <!--根据法规件ItemPuids设置为删除状态-->
+  <delete id="HzLegislativeItem_delete" parameterType="java.util.List">
+    <!--delete ${tableName}-->
+    update HZ_LEGISLATIVE_ITEMS
+    set STATUS = 0
+    where PUID
+    in
+    <foreach collection="list" index="index" item="item"  open="(" separator="," close=")">
+      #{list[${index}]}
+    </foreach>
   </delete>
-
-
 
 
   <!--插入一条ITEM-->

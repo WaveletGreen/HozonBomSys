@@ -1,6 +1,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2019/8/15 Time:16:13-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
 <form id="legislativeItemLibraryForm1" role="form" method="post" action="legislativeItem/update/Legislative">
     <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/>

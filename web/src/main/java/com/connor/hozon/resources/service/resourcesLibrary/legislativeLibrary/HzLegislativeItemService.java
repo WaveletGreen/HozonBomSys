@@ -38,4 +38,11 @@ public interface HzLegislativeItemService {
      */
     WriteResultRespDTO updateHzLegislativeRecord(UpdateHzLegislativeReqDTO reqDTO);
 
+
+    /**
+     * 删除法规件
+     * @param puids
+     * @return
+     */
+    WriteResultRespDTO   deleteHzLegislativeLibrary(String puids);
 }

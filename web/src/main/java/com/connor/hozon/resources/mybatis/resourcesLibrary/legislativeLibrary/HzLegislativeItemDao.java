@@ -4,6 +4,8 @@ import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeI
 import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
 import com.connor.hozon.resources.page.Page;
 
+import java.util.List;
+
 public interface HzLegislativeItemDao {
 
     /**
@@ -13,7 +15,7 @@ public interface HzLegislativeItemDao {
      */
     Page<HzLegislativeItem> findItemToPage(HzLegislativeItemQuery query);
 
-    int deleteByPrimaryKey(String puid);
+    int delete(String puids);
 
     /**
      * 插入一条法规件Item

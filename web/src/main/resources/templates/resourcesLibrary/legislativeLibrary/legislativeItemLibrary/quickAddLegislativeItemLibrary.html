@@ -1,51 +1,45 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <!--User: xulf Date: 2019/8/15 Time:16:08-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
 <body>
-<form id="legislativeItemLibraryForm" role="form" method="" action="">
+<form id="legislativeItemLibraryForm" role="form" method="POST" action="legislativeItem/add/Legislative">
     <div class="form-group">
-        <label for="">法规件名称</label>
-        <input class="form-control" id="" name="" type="text" placeholder="请输入法规件名称"/>
+        <label for="legislativeName">法规件名称<span>*</span></label>
+        <input class="form-control" id="legislativeName" name="legislativeName" type="text" placeholder="请输入法规件名称" th:value="${data.legislativeName}"/>
     </div>
     <div class="form-group">
-        <label for="">法规件型号</label>
-        <input class="form-control" id="" name="" type="text" placeholder="请输入法规件型号"/>
+        <label for="legislativeNo">法规件型号<span>*</span></label>
+        <input class="form-control" id="legislativeNo" name="legislativeNo" type="text" placeholder="请输入法规件型号" th:value="${data.legislativeNo}"/>
     </div>
     <div class="form-group">
-        <label for="">供应商</label>
-        <input class="form-control" id="" name="" type="text" placeholder="请输入供应商"/>
+        <label for="applicableModels">适用车型</label>
+        <input class="form-control" id="applicableModels" name="applicableModels" type="text" placeholder="请输入适用车型" th:value="${data.applicableModels}"/>
     </div>
     <div class="form-group">
-        <label for="">供应商代码</label>
-        <input class="form-control" id="" name="" type="text" placeholder="请输入供应商代码"/>
+        <label for="noticeNo">公告号</label>
+        <input class="form-control" id="noticeNo" name="noticeNo" type="text" placeholder="请输入公告号" th:value="${data.noticeNo}"/>
     </div>
     <div class="form-group">
-        <label for="">技术特性描述</label>
-        <input class="form-control" id="" name="" type="text" placeholder="请输入技术特性描述"/>
+        <label for="technologyDesc">技术特性描述</label>
+        <input class="form-control" id="technologyDesc" name="technologyDesc" type="text" placeholder="请输入技术特性描述" th:value="${data.technologyDesc}"/>
+    </div>
+
+    <div class="form-group">
+        <label for="applyDepa">申请部门</label>
+        <input class="form-control" id="applyDepa" name="applyDepa" type="text" placeholder="请输入申请部门" th:value="${data.applyDepa}"/>
     </div>
     <div class="form-group">
-        <label for="">适用车型</label>
-        <input class="form-control" id="" name="" type="text" placeholder="请输入适用车型"/>
-    </div>
-    <div class="form-group">
-        <label for="">申请部门</label>
-        <input class="form-control" id="" name="" type="text" placeholder="请输入申请部门"/>
-    </div>
-    <div class="form-group">
-        <label for="">是否需要强检报告</label>
-        <select class="form-control" name="" id="" placeholder="请选择是否需要强检报告">
+        <label for="isHaveTest">是否需要强检报告</label>
+        <select class="form-control" name="isHaveTest" id="isHaveTest" placeholder="请选择是否需要强检报告" >
             <option></option>
-            <option>Y</option>
-            <option>N</option>
+            <option th:selected="${data.isHaveTest=='Y'?true:false}">Y</option>
+            <option th:selected="${data.isHaveTest=='N'?true:false}">N</option>
         </select>
     </div>
     <div class="form-group">
-        <label for="">是否需要3C证书</label>
-        <select class="form-control" name="" id="" placeholder="请选择是否需要3C证书">
-            <option></option>
-            <option>Y</option>
-            <option>N</option>
-        </select>
+        <label for="remarks">备注</label>
+        <input class="form-control" id="remarks" name="remarks" type="text" placeholder="请输入备注" th:value="${data.remarks}"/>
     </div>
 </form>
 <script th:inline="javascript">
@@ -59,11 +53,19 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                vppsLevel: {
-                    message: 'VPPS层级验证失败',
+                legislativeNo: {
+                    message: '法规件型号验证失败',
                     validators: {
                         notEmpty: {
-                            message: 'VPPS层级不能为空'
+                            message: '法规件型号不能为空'
+                        }
+                    }
+                },
+                legislativeName: {
+                    message: '法规件名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '法规件名称不能为空'
                         }
                     }
                 },
@@ -76,7 +78,14 @@
             if (bootstrapValidator.isValid()) {
                 var url = $("#legislativeItemLibraryForm", window.top.document).attr('action');
                 var myData = JSON.stringify({
-                    "id": $("#id").val(),
+                    "legislativeName": $("#legislativeName").val(),
+                    "legislativeNo": $("#legislativeNo").val(),
+                    "applicableModels": $("#applicableModels").val(),
+                    "noticeNo": $("#noticeNo").val(),
+                    "technologyDesc": $("#technologyDesc").val(),
+                    "applyDepa": $("#applyDepa").val(),
+                    "isHaveTest": $("#isHaveTest").val(),
+                    "remarks": $("#remarks").val(),
                 });
                 $.ajax({
                     contentType:

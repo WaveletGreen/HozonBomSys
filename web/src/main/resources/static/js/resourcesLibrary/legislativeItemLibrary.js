@@ -74,7 +74,32 @@ var add = function () {
  * 快速添加
  */
 var quickAdd = function () {
-
+    var rows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (rows.length != 1) {
+        window.Ewin.alert({message: '请选择一条数据再进行快速添加!'});
+        return false;
+    }
+    var url = "legislativeItem/getQuickAdd";
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            }
+            else {
+                window.Ewin.dialog({
+                    title: "快速添加",
+                    url: "legislativeItem/getQuickAdd?puid=" + rows[0].puid,
+                    gridId: "gridId",
+                    width: 500,
+                    height: 500
+                });
+            }
+        }
+    })
 }
 /**
  * 修改
@@ -111,7 +136,49 @@ var update = function () {
  * 删除
  */
 var doDelete = function () {
-
+    var rows = $table.bootstrapTable('getSelections');
+    //只能选一条
+    if (rows.length <= 0) {
+        window.Ewin.alert({message: '请选择一条需要删除的数据!'});
+        return false;
+    }
+    var puids = "";
+    for (let i in rows) {
+        if (rows[i].partId!=null && rows[i].partId!=""){
+            window.Ewin.alert({message: '法规件已在EPL中引用,无法删除!'});
+            return false;
+        }
+        puids += rows[i].puid;
+        if (i < rows.length - 1) {
+            puids += ",";
+        }
+    }
+    var url = "legislativeItem/delete/Legislative?puids=" + puids;
+    $.ajax({
+        url: "privilege/write?url=" + url,
+        type: "GET",
+        success: function (result) {
+            if (!result.success) {
+                window.Ewin.alert({message: result.errMsg});
+                return false;
+            } else {
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    success: function (result) {
+                        if (!result.success) {
+                            window.Ewin.alert({message: result.errMsg});
+                            return false;
+                        } else {
+                            layer.msg("删除成功", {icon: 1, time: 2000});
+                            $table.bootstrapTable("refresh");
+                            // window.location.reload();
+                        }
+                    }
+                })
+            }
+        }
+    })
 }
 /**
  * 工具条

@@ -93,7 +93,6 @@ public class LegislativeItemsLibraryController extends BaseController {
 
     @RequestMapping(value = "addLegislative",method = RequestMethod.GET)
     public String addItem(Model model) {
-
         return "resourcesLibrary/legislativeLibrary/legislativeItemLibrary/addLegislativeItemLibrary";
     }
 
@@ -132,5 +131,32 @@ public class LegislativeItemsLibraryController extends BaseController {
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
+    /**
+     * 删除一条数据
+     * @param puids
+     * @param response
+     */
+    @RequestMapping(value = "delete/Legislative",method = RequestMethod.POST)
+    public void deleteLegislativeLibrary(String puids,HttpServletResponse response){
+        WriteResultRespDTO respDTO =hzLegislativeItemService.deleteHzLegislativeLibrary(puids);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
 
+
+
+    /**
+     * 跳转到快速添加的页面
+     * @param puid
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "getQuickAdd",method = RequestMethod.GET)
+    public String getQuickAddVPPSLibraryToPage(String puid, Model model){
+        HzLegislativeItemResDTO respDTO = hzLegislativeItemService.findHzLegislativeItemById(puid);
+        if (respDTO == null){
+            return null;
+        }
+        model.addAttribute("data",respDTO);
+        return "resourcesLibrary/legislativeLibrary/legislativeItemLibrary/quickAddLegislativeItemLibrary";
+    }
 }
