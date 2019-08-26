@@ -29,7 +29,6 @@ import cn.net.connor.hozon.services.request.bom.sparePart.SparePartQuoteEbomLine
 import cn.net.connor.hozon.services.response.bom.sparePart.SparePartDataResponseDTO;
 import cn.net.connor.hozon.services.response.bom.sparePart.SparePartQueryEbomPageResponseDTO;
 import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.HzCfg0ModelService;
-import cn.net.connor.hozon.services.service.configuration.fullConfigSheet.impl.HzCfg0ModelServiceImpl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import cn.net.connor.hozon.services.response.bom.sparePart.SparePartBomQueryPageResponse;
@@ -37,7 +36,6 @@ import com.connor.hozon.resources.domain.dto.response.HzEbomRespDTO;
 import com.connor.hozon.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.resources.domain.query.HzEbomByPageQuery;
 import com.connor.hozon.resources.domain.query.HzEbomRecursionQuery;
-import com.connor.hozon.resources.domain.query.HzEbomTreeQuery;
 import com.connor.hozon.resources.mybatis.bom.HzEbomRecordDAO;
 import com.connor.hozon.resources.page.Page;
 import com.connor.hozon.resources.service.bom.HzEBOMReadService;
@@ -54,7 +52,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -195,7 +192,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         SparePartDTOMapper mapper = SparePartDTOMapper.INSTANCE;
         SparePartData bean = mapper.DTOToBean(data);//post请求提交的对象转成dao层对象
         List<SparePartStructureRecursion> recu = sparePartBomStructureDao.selectRecursionByTopLayerId(bean.getId());
-        if (recu!=null&&recu.size()>0) {
+        if (recu != null && recu.size() > 0) {
             log.info("更新单条子备件信息成功:" + bean.getSparePartCode());
             return SimpleResponseResultFactory.createSuccessResult("更新备件数据成功!");
         }
@@ -355,7 +352,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                     queryList = hzEbomRecordDAO.getEbomRecursionWithPbom(query);
                 } else {
                     //强转就不会带上车间信息了也是头疼
-                    queryList = Collections.singletonList((EbomWithPbomData)hzEbomRecordDAO.findEbomById(id, projectId));
+                    queryList = Collections.singletonList((EbomWithPbomData) hzEbomRecordDAO.findEbomById(id, projectId));
                 }
                 for (EbomWithPbomData epl : queryList) {
                     if (queryMap.containsKey(epl.getPuid())) {
@@ -438,15 +435,17 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
             String sparePartAppendName = pair[1];
             //构建结构并存储结构
             //进行汇总,绝对从2Y层进行遍历
-            ArrayList<EbomWithPbomData> sourceList=new ArrayList<>(queryMap.values());
+            ArrayList<EbomWithPbomData> sourceList = new ArrayList<>(queryMap.values());
             /**
              *从后往前排,遇到不是备件的数据不记录，如果是备件的数据，先记录
              */
 
-            for (int i=0;i<sourceList.size();i++) {
+            Map<String, EbomStructureTree> treeCache = new HashMap<>();
+            List<EbomStructureTree> level2 = new ArrayList<>();
+            for (int i = 0; i < sourceList.size(); i++) {
 
                 EbomWithPbomData record = sourceList.get(i);//当前数据
-                EbomWithPbomData pre = i==0?null:sourceList.get(i-1);//上一个数据
+                EbomWithPbomData pre = i == 0 ? null : sourceList.get(i - 1);//上一个数据,有可能是当前的父层数据
 
 
                 //当前EBOM的主键
@@ -474,14 +473,35 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                     cache.getParts().add(part);
                 }
                 //2Y层没有结构，则开始构建2Y层的tree
-                else if(null!=record.getIs2Y()&&1==record.getIs2Y()){
+                if (null != record.getIs2Y() && 1 == record.getIs2Y()) {
                     //还原原来的EBOM结构树
-                    EbomStructureTree tree=new EbomStructureTree();
-                    tree.setPuid(record.getPuid());
-
+                    EbomStructureTree tree = new EbomStructureTree();
+                    tree.setBomline(record);//设置当前的bomline节点
+                    treeCache.put(record.getPuid(), tree);//缓存当前2Y节点
+                    level2.add(tree);
+                }
+                //不是2Y，有可能是叶子子节点也可能是3Y等
+                else if (null == record.getIs2Y() || 0 == record.getIs2Y()) {
+                    String parentPuid = record.getParentUid();
+                    EbomStructureTree parentNode = treeCache.get(parentId);
+                    //父层节点有缓存过
+                    if (parentNode != null) {
+                        EbomStructureTree tree = new EbomStructureTree();
+                        tree.setBomline(record);
+                        parentNode.getChildren().add(tree);
+                        treeCache.put(record.getPuid(), tree);//缓存当前2Y节点
+                    }
                 }
             }
-            if(spDebug){
+            //反向进行遍历是不是备件
+            for (int i = 0; i < level2.size(); i++) {
+                EbomStructureTree tree = level2.get(i);//从2Y开始算起
+                if (tree.getChildren().size() > 0) {
+                    loopTree(tree,dto.getPartNames());
+                }
+            }
+
+            if (spDebug) {
                 return null;
             }
             //保存数据
@@ -489,6 +509,58 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
             return SimpleResponseResultFactory.createSuccessResult("引用EBOM数据成功");
         }
         return SimpleResponseResultFactory.createErrorResult("引用EBOM数据失败");
+    }
+
+    /**
+     * 递归树，只要有下层子节点，都将查看下层子节点是否是备件，如果所有的子都不是备件，则将该节点移除掉
+     *
+     * @param tree
+     * @param partNames
+     */
+    private void loopTree(EbomStructureTree tree, Set<String> partNames) {
+        List<EbomStructureTree> children = tree.getChildren();//获取到子
+        for (int i = 0; i < children.size(); i++) {//遍历子节点数量
+            EbomStructureTree node = children.get(i);//子节点
+            EbomWithPbomData data = node.getBomline();
+            List<EbomStructureTree> grandson = node.getChildren();//孙子节点集合
+            if (grandson.size() == 0) {//没有子节点，当然带有Y的都有子节点
+                if (null == data.getSparePart() || "N".equals(data.getSparePart())) {//不是备件，设为null
+                    children.set(i, null);
+                }
+            } else {//有子节点
+                if (null == data.getSparePart() || "N".equals(data.getSparePart())) {//不是备件，需要看其下面的所有子节点是否有备件，有备件，则这个节点不应该被消除掉
+                    loopTree(node, partNames);
+                    if (checkAllElementIsNull(node.getChildren())) {
+                        if(!partNames.contains(data.getLineID())){
+                            children.set(i, null);
+                        }
+                        else{
+                            //TODO 这里不知道要做什么
+                            //node.setChildren(null);
+                        }
+
+                    }
+                } else {
+                    loopTree(node, partNames);
+                }
+            }
+        }
+    }
+
+    /**
+     * 检查所有元素是否都是null，如果有任何一个不是null，则父层元素就不用设置为null
+     *
+     * @param children
+     * @return
+     */
+    private boolean checkAllElementIsNull(List<EbomStructureTree> children) {
+        boolean allElementIsNull = true;
+        for (int i = 0; i < children.size(); i++) {
+            if (children.get(i) != null) {
+                allElementIsNull = false;
+            }
+        }
+        return allElementIsNull;
     }
 
     /**
@@ -609,6 +681,12 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
         return part;
     }
 
+    /**
+     * 生成引用类型数据
+     *
+     * @param quoteType 引用类型，默认是空字符串
+     * @return
+     */
     public String[] generateQuoteTypeToPartNumAndName(String quoteType) {
         String[] pair = new String[2];
         if (StringUtils.isNotEmpty(quoteType)) {

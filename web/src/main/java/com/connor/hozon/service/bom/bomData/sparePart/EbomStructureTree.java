@@ -3,8 +3,8 @@ package com.connor.hozon.service.bom.bomData.sparePart;
 import cn.net.connor.hozon.dao.pojo.bom.epl.EbomWithPbomData;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -15,27 +15,24 @@ import java.util.List;
 @Data
 public class EbomStructureTree {
     /**
-     * 当前节点puid
+     * 当前节点的bomline
      */
-    private String puid;
+    private @NotNull EbomWithPbomData bomline;
     /**
-     * 当前bomline
+     * 子节点树形结构
      */
-    private EbomWithPbomData bomline;
-    /**
-     * 父节点
-     */
-    private TreeNode parent;
-    /**
-     * 节点
-     */
-    private List<TreeNode> children = new ArrayList<>();
+    private List<EbomStructureTree> children = new ArrayList<>();
 
     /**
      * 不允许使用setter设置子节点集合
      *
      * @param children
      */
-    private void setChildren(List<TreeNode> children) {
+    private void setChildren(List<EbomStructureTree> children) {
+    }
+
+    @Override
+    public String toString() {
+        return bomline.getLineID();
     }
 }

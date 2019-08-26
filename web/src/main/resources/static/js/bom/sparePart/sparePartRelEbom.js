@@ -86,8 +86,10 @@ function doQuote(){
     let data = {};
     data.projectId = projectId;
     data.ids = [];
+    data.partNames = [];
     for (let i in selectedRows) {
         data.ids[i] = selectedRows[i].puid
+        data.partNames[i] = selectedRows[i].lineId
     }
     data.quoteType=quoteType;
     $.ajax({
