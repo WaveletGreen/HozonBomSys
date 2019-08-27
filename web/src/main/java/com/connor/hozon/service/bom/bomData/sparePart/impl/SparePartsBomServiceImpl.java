@@ -65,7 +65,7 @@ import java.util.*;
  */
 @Service
 @ConfigurationProperties(prefix = "sparepart")
-@PropertySource("classpath:sparePartSetting.properties")//指定属性文件路径
+@PropertySource("classpath:sparepart-setting.properties")//指定属性文件路径
 @Transactional
 @Slf4j
 public class SparePartsBomServiceImpl implements SparePartsBomService {
@@ -537,7 +537,7 @@ public class SparePartsBomServiceImpl implements SparePartsBomService {
                         }
                         else{
                             //TODO 这里不知道要做什么
-                            //node.setChildren(null);
+                            //  node.setChildren(null);
                         }
 
                     }
