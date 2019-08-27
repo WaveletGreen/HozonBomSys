@@ -3,7 +3,6 @@ package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.i
 import cn.net.connor.hozon.common.entity.WriteResultRespDTO;
 import cn.net.connor.hozon.common.util.ListUtils;
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
-import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeItemResDTO;
 import com.connor.hozon.resources.domain.dto.request.AddHzLegislativeReqDTO;
 import com.connor.hozon.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
 import com.connor.hozon.resources.domain.dto.response.HzLegislativeItemResDTO;
@@ -92,7 +91,7 @@ public class HzLegislativeItemServiceImpl implements HzLegislativeItemService {
     @Override
     public HzLegislativeItemResDTO findHzLegislativeItemById(String puid) {
         HzLegislativeItem hzLegislativeItem = hzLegislativeItemDao.selectByPuid(puid);
-        if (hzLegislativeItem!=null){
+        if (hzLegislativeItem != null) {
             HzLegislativeItemResDTO respDTO = new HzLegislativeItemResDTO();
             respDTO.setPuid(hzLegislativeItem.getPuid());
             respDTO.setLegislativeName(hzLegislativeItem.getLegislativeName());
@@ -122,7 +121,7 @@ public class HzLegislativeItemServiceImpl implements HzLegislativeItemService {
             respDTO.setUpdateTime(hzLegislativeItem.getUpdateTime());
             respDTO.setStatus(hzLegislativeItem.getStatus());
             respDTO.setLegislativeUid(hzLegislativeItem.getLegislativeUid());
-            return  respDTO;
+            return respDTO;
         }
         return null;
     }
@@ -161,17 +160,18 @@ public class HzLegislativeItemServiceImpl implements HzLegislativeItemService {
 
     /**
      * 修改一条法规件
+     *
      * @param reqDTO
      * @return
      */
     @Override
     public WriteResultRespDTO updateHzLegislativeRecord(UpdateHzLegislativeReqDTO reqDTO) {
 
-        if(reqDTO == null || reqDTO.getPuid() == null){
+        if (reqDTO == null || reqDTO.getPuid() == null) {
             return WriteResultRespDTO.IllgalArgument();
         }
         HzLegislativeItem hzLegislativeItem = hzLegislativeItemDao.selectByPuid(reqDTO.getPuid());
-        if (hzLegislativeItem==null){
+        if (hzLegislativeItem == null) {
             return WriteResultRespDTO.failResultRespDTO("当前要修改的法规件不存在！");
         }
 
@@ -185,30 +185,31 @@ public class HzLegislativeItemServiceImpl implements HzLegislativeItemService {
 
     /**
      * 删除法规件
+     *
      * @param puids
      * @return
      */
-    public WriteResultRespDTO   deleteHzLegislativeLibrary(String puids){
+    public WriteResultRespDTO deleteHzLegislativeLibrary(String puids) {
         //进行引用判断
         List<String> list = Lists.newArrayList(puids.split(","));
         StringBuffer stringBuffer = new StringBuffer();
-        for(String puid : list){
+        for (String puid : list) {
             HzLegislativeItem hzLegislativeItem = hzLegislativeItemDao.selectByPuid(puid);
-            if (hzLegislativeItem==null){
+            if (hzLegislativeItem == null) {
                 return WriteResultRespDTO.failResultRespDTO("当前法规件不存在！");
-            }else{
-                if (StringUtils.isNotBlank(hzLegislativeItem.getEplId())){
-                    stringBuffer.append("法规件"+hzLegislativeItem.getLegislativeNo()+"在EPL中存在引用关系,不允许删除!");
+            } else {
+                if (StringUtils.isNotBlank(hzLegislativeItem.getEplId())) {
+                    stringBuffer.append("法规件" + hzLegislativeItem.getLegislativeNo() + "在EPL中存在引用关系,不允许删除!");
                     return WriteResultRespDTO.failResultRespDTO(stringBuffer.toString());
                 }
             }
         }
         int delCou2 = hzLegislativeItemDao.deleteLegislative(puids);
-        if (delCou2<=0){
+        if (delCou2 <= 0) {
             return WriteResultRespDTO.getFailResult();
         }
-        int delCou =  hzLegislativeItemDao.delete(puids);
-        if (delCou<=0){
+        int delCou = hzLegislativeItemDao.delete(puids);
+        if (delCou <= 0) {
             return WriteResultRespDTO.getFailResult();
         }
 

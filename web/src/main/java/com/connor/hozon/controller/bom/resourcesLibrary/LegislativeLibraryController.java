@@ -1,6 +1,5 @@
 package com.connor.hozon.controller.bom.resourcesLibrary;
 
-import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
 import com.connor.hozon.controller.bom.BaseController;
 import com.connor.hozon.resources.domain.dto.response.HzLegislativeAutoTypeResDTO;
 import com.connor.hozon.resources.domain.query.HzLegislativeAutoTypeQuery;
@@ -13,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @User zhangl
