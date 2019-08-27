@@ -17,6 +17,7 @@ public interface HzLegislativeItemDao {
 
     int delete(String puids);
 
+
     /**
      * 插入一条法规件Item
      * @param record
@@ -35,10 +36,10 @@ public interface HzLegislativeItemDao {
 
     /**
      * 根据legislativeNo查询法规件信息
-     * @param query
+     * @param legislativeNo
      * @return
      */
-    HzLegislativeItem selectBylegislativeNo(HzLegislativeItemQuery query);
+    List<HzLegislativeItem> selectBylegislativeNo(String legislativeNo);
 
     /**
      * 根据legislativeNo查询数量

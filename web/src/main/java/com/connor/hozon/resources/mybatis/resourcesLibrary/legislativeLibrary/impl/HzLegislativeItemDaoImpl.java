@@ -74,14 +74,14 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
 
     /**
      * 根据legislativeNo查询法规件信息
-     * @param query
+     * @param legislativeNo
      * @return
      */
     @Override
-    public HzLegislativeItem selectBylegislativeNo(HzLegislativeItemQuery query) {
+    public List<HzLegislativeItem> selectBylegislativeNo(String legislativeNo) {
         Map<String,Object> map = new HashMap<>();
-        map.put("legislativeNo",query.getLegislativeNo());
-        return (HzLegislativeItem)super.findForObject("HzLegislativeItemDaoImpl_selectByLegislativeNo",map);
+        map.put("legislativeNo",legislativeNo);
+        return super.findForList("HzLegislativeItemDaoImpl_selectByLegislativeNo",map);
     }
 
     /**

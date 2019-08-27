@@ -1,5 +1,6 @@
 package com.connor.hozon.resources.service.epl;
 
+import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeCode;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.resources.domain.dto.request.EditHzEPLReqDTO;
 import com.connor.hozon.resources.domain.dto.response.HzEplRespDTO;
@@ -7,6 +8,8 @@ import cn.net.connor.hozon.common.entity.WriteResultRespDTO;
 import com.connor.hozon.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.resources.page.Page;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @Author: haozt
@@ -48,6 +51,12 @@ public interface HzEPLService {
      * @return
      */
     HzEplRespDTO getEplById(Long id);
+
+    /**
+     * 获取法规件库编号
+     * @return
+     */
+    List<HzLegislativeCode> getLegislativeCode();
 
     boolean partIdIsRepeat(Long id,String partId,String projectId);
 

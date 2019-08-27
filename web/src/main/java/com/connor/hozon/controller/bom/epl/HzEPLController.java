@@ -1,6 +1,7 @@
 package com.connor.hozon.controller.bom.epl;
 
 import cn.net.connor.hozon.common.util.ListUtils;
+import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeCode;
 import com.alibaba.fastjson.JSONObject;
 import com.connor.hozon.controller.bom.BaseController;
 import com.connor.hozon.resources.domain.dto.request.EditHzEPLReqDTO;
@@ -151,7 +152,11 @@ public class HzEPLController extends BaseController {
      * @return
      */
     @RequestMapping(value = "add/page",method = RequestMethod.GET)
-    public String toAddEplPage(){
+    public String toAddEplPage(Model model){
+        List<HzLegislativeCode> recordList = hzEPLService.getLegislativeCode();
+        if (recordList!=null){
+            model.addAttribute("legislativeCode", recordList);
+        }
         return "bomManage/epl/addEpl";
     }
 
@@ -162,6 +167,10 @@ public class HzEPLController extends BaseController {
     @RequestMapping(value = "update/page",method = RequestMethod.GET)
     public String toUpdatePage(Long id,Model model){
         HzEplRespDTO  respDTO = hzEPLService.getEplById(id);
+        List<HzLegislativeCode> recordList = hzEPLService.getLegislativeCode();
+        if (recordList!=null){
+            model.addAttribute("legislativeCode", recordList);
+        }
         if(respDTO != null){
             model.addAttribute("data",respDTO);
             model.addAttribute("id",id);

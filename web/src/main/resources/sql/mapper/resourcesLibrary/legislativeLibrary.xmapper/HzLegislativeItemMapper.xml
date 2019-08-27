@@ -36,10 +36,11 @@
     PART_ID, PART_NAME, SUPPLIER, SUPPLIER_NO ,IS_HAVE_CCC, DUTY_ENGINEER
   </sql>
 
-  <!--法规字段-->
+  <!--法规字段1-->
   <sql id="Leg_Column_List">
       t0.LEGISLATIVE_NAME as LEGISLATIVE_NAME, t0.LEGISLATIVE_NO as LEGISLATIVE_NO
   </sql>
+
 
   <!--法规件ITEM字段-->
   <sql id="Legis_Column_List">
@@ -52,6 +53,9 @@
     t2.PART_ID as PART_ID, t2.PART_NAME as PART_NAME, t2.SUPPLY as SUPPLIER,
     t2.SUPPLY_CODE as SUPPLIER_NO,t2.IS_3CPART as IS_HAVE_CCC , t2.DUTY_ENGINEER as DUTY_ENGINEER
   </sql>
+
+
+
 
   <!--分页获取当前整车所有法规件的数据-->
   <select id="HzLegislativeItemDaoImpl_select" parameterType="java.util.HashMap" resultMap="BaseResultMap">
@@ -133,17 +137,41 @@
     and t1.STATUS =1
   </select>
 
-  <!--根据法规件ItemPuids设置为删除状态-->
-  <delete id="HzLegislativeItem_delete" parameterType="java.util.List">
-    <!--delete ${tableName}-->
-    update HZ_LEGISLATIVE_ITEMS
-    set STATUS = 0
-    where PUID
-    in
-    <foreach collection="list" index="index" item="item"  open="(" separator="," close=")">
-      #{list[${index}]}
-    </foreach>
-  </delete>
+  <!--&lt;!&ndash;根据法规件ItemPuids设置为删除状态&ndash;&gt;-->
+  <!--<delete id="HzLegislativeItem_delete" parameterType="java.util.List">-->
+    <!--&lt;!&ndash;delete ${tableName}&ndash;&gt;-->
+    <!--update HZ_LEGISLATIVE_ITEMS-->
+    <!--set STATUS = 0-->
+    <!--where PUID-->
+    <!--in-->
+    <!--<foreach collection="list" index="index" item="item"  open="(" separator="," close=")">-->
+      <!--#{list[${index}]}-->
+    <!--</foreach>-->
+  <!--</delete>-->
+
+    <!--根据法规件ItemPuids删除-->
+    <delete id="HzLegislativeItem_delete" parameterType="java.util.List">
+        <!--delete ${tableName}-->
+        delete HZ_LEGISLATIVE_ITEMS
+        where PUID
+        in
+        <foreach collection="list" index="index" item="item"  open="(" separator="," close=")">
+            #{list[${index}]}
+        </foreach>
+    </delete>
+
+
+    <!--根据法规件ItemPuids删除编码-->
+    <delete id="HzLegislativeItemRecord_delete" parameterType="java.util.List">
+        <!--delete ${tableName}-->
+        delete HZ_LEGISLATIVE_RECORD
+        where PUID
+        in
+        <foreach collection="list" index="index" item="item"  open="(" separator="," close=")">
+            select LEGISLATIVE_UID from HZ_LEGISLATIVE_ITEMS where PUID =
+            #{list[${index}]}
+        </foreach>
+    </delete>
 
 
   <!--插入一条ITEM-->

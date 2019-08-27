@@ -138,8 +138,14 @@
     </div>
     <div class="form-group">
         <label for="regulationCode">法规件型号</label>
-        <input class="form-control" id="regulationCode" name="regulationCode" type="text"
-               placeholder="请输入法规件型号"/>
+        <select class="form-control" name="regulationCode" id="regulationCode" placeholder="请选择法规件型号">
+            <option>/</option>
+            <option th:each="model:${legislativeCode}"
+                    th:value="${model.getLegislativeNo()}"
+                    th:text="${model.getLegislativeNo()==null?'':model.getLegislativeNo()}"
+            >
+            </option>
+        </select>
     </div>
     <div class="form-group">
         <label for="bwgBoxPart">黑白灰匣子件</label>

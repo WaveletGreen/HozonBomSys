@@ -1,5 +1,7 @@
 package com.connor.hozon.resources.mybatis.epl;
 
+import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeCode;
+import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
 import com.connor.hozon.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.resources.domain.query.HzEPLQuery;
 import com.connor.hozon.resources.page.Page;
@@ -95,4 +97,13 @@ public interface HzEPLDAO {
      * @return
      */
     int updateVirtualAssemblyEnToZh(List<Long> longs);
+
+    /**
+     * 获取法规件库编号
+     * @return
+     */
+    List<HzLegislativeCode> getLegislativeCode();
+
+
+
 }
