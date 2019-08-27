@@ -48,14 +48,14 @@ public abstract class GenericController<T, Q extends QueryBase> {
 	public String getPageBaseRoot() throws Exception{
 		if(basePath==null){
 			basePath = this.getClass().getName();
-			Pattern p=Pattern.compile(".[a-z|A-z]+.controller.[a-z|A-z]+Controller");
+			Pattern p=Pattern.compile(".[a-z|A-z]+.controller.sys.[a-z|A-z]+Controller");
 			Matcher m=p.matcher(basePath);
 			if(m.find()){
 				basePath = m.group();
 				basePath = basePath.substring(1, basePath.length()-10);
 				basePath = basePath.replace(".", "/");
 				basePath = basePath.replace("/controller/", "/");
-				basePath = basePath.substring(0,basePath.lastIndexOf("/")+1)+ toFirstCharLowerCase(basePath.substring(basePath.lastIndexOf("/")+1));
+				basePath = "sys/"+toFirstCharLowerCase(basePath.substring(basePath.lastIndexOf("/")+1));
 			}
 			else{
 				throw new Exception("获取页面基路径失败");
