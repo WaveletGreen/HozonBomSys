@@ -1,14 +1,18 @@
 package com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.impl;
 
+import cn.net.connor.hozon.common.util.ListUtils;
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
 import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
 import com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeItemDao;
 import com.connor.hozon.resources.page.Page;
 import com.connor.hozon.resources.page.PageRequestParam;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import sql.BaseSQLUtil;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service("HzLegislativeItemDao")
@@ -32,9 +36,34 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
         return super.findPage("HzLegislativeItemDaoImpl_select","HzLegislativeItemDaoImpl_count", pageRequestParam);
     }
 
+    /**
+     * 批量删除
+     * @param puids
+     * @return
+     */
     @Override
-    public int deleteByPrimaryKey(String puid) {
-        return 0;
+    public int delete(String puids) {
+        if(StringUtils.isNotBlank(puids)){
+            List<String> list = Lists.newArrayList(puids.split(","));
+            return super.delete("HzLegislativeItem_delete",list);
+        }else {
+            return 0;
+        }
+    }
+
+    /**
+     * 批量删除法规件型号
+     * @param puids
+     * @return
+     */
+    @Override
+    public int deleteLegislative(String puids) {
+        if(StringUtils.isNotBlank(puids)){
+            List<String> list = Lists.newArrayList(puids.split(","));
+            return super.delete("HzLegislativeItemRecord_delete",list);
+        }else {
+            return 0;
+        }
     }
 
     /**
@@ -65,14 +94,14 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
 
     /**
      * 根据legislativeNo查询法规件信息
-     * @param query
+     * @param legislativeNo
      * @return
      */
     @Override
-    public HzLegislativeItem selectBylegislativeNo(HzLegislativeItemQuery query) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("legislativeNo",query.getLegislativeNo());
-        return (HzLegislativeItem)super.findForObject("HzLegislativeItemDaoImpl_selectByLegislativeNo",map);
+    public List<HzLegislativeItem> selectBylegislativeNo(String legislativeNo) {
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("legislativeNo",legislativeNo);
+        return super.findForList("HzLegislativeItemDaoImpl_selectByLegislativeNo",legislativeNo);
     }
 
     /**
@@ -93,6 +122,17 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
     @Override
     public HzLegislativeItem selectByPuid(String puid) {
         return (HzLegislativeItem)super.findForObject("HzLegislativeItemDaoImpl_selectByPuid",puid);
+
+    }
+
+    /**
+     * 根据eplId查询法规件信息
+     * @param eplId
+     * @return
+     */
+    @Override
+    public List<HzLegislativeItem> selectByEplId(String eplId) {
+        return super.findForList("HzLegislativeItemDaoImpl_selectByEplId",eplId);
 
     }
 

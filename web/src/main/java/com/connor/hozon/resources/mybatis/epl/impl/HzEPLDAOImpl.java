@@ -2,6 +2,7 @@ package com.connor.hozon.resources.mybatis.epl.impl;
 
 import cn.net.connor.hozon.common.util.ListUtils;
 import cn.net.connor.hozon.common.constant.BOMTransConstants;
+import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeCode;
 import com.connor.hozon.resources.domain.model.HzBomSysFactory;
 import com.connor.hozon.resources.domain.query.HzEPLByPageQuery;
 import com.connor.hozon.resources.domain.query.HzEPLQuery;
@@ -153,4 +154,11 @@ public class HzEPLDAOImpl extends BaseSQLUtil implements HzEPLDAO {
     public int updateVirtualAssemblyEnToZh(List<Long> longs) {
         return super.update("HzEPLDAOImpl_updateVirtualAssemblyEnToZh",longs);
     }
+
+    @Override
+    public List<HzLegislativeCode> getLegislativeCode() {
+        return (List<HzLegislativeCode>)super.findForList("HzEPLDAOImpl_selectLegislative",null);
+    }
+
+
 }

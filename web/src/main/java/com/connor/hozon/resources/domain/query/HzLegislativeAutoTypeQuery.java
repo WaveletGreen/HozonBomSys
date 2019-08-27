@@ -1,5 +1,6 @@
 package com.connor.hozon.resources.domain.query;
 
+@Deprecated
 public class HzLegislativeAutoTypeQuery extends DefaultPageQuery {
     /**
      * 公告号

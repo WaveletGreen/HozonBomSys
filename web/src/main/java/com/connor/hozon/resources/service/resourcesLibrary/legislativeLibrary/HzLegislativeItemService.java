@@ -1,9 +1,10 @@
 package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary;
 
 import cn.net.connor.hozon.common.entity.WriteResultRespDTO;
-import cn.net.connor.hozon.services.response.dipository.legislativeLibrary.HzLegislativeItemResDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeItemResDTO;
 import com.connor.hozon.resources.domain.dto.request.AddHzLegislativeReqDTO;
 import com.connor.hozon.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.dto.response.HzLegislativeItemResDTO;
 import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
 import com.connor.hozon.resources.page.Page;
 
@@ -38,4 +39,11 @@ public interface HzLegislativeItemService {
      */
     WriteResultRespDTO updateHzLegislativeRecord(UpdateHzLegislativeReqDTO reqDTO);
 
+
+    /**
+     * 删除法规件
+     * @param puids
+     * @return
+     */
+    WriteResultRespDTO   deleteHzLegislativeLibrary(String puids);
 }

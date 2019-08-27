@@ -4,6 +4,8 @@ import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeI
 import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
 import com.connor.hozon.resources.page.Page;
 
+import java.util.List;
+
 public interface HzLegislativeItemDao {
 
     /**
@@ -13,7 +15,19 @@ public interface HzLegislativeItemDao {
      */
     Page<HzLegislativeItem> findItemToPage(HzLegislativeItemQuery query);
 
-    int deleteByPrimaryKey(String puid);
+    /**
+     * 批量删除
+     * @param puids
+     * @return
+     */
+    int delete(String puids);
+
+    /**
+     * 批量删除法规件型号
+     * @param puids
+     * @return
+     */
+    int deleteLegislative(String puids);
 
     /**
      * 插入一条法规件Item
@@ -33,10 +47,10 @@ public interface HzLegislativeItemDao {
 
     /**
      * 根据legislativeNo查询法规件信息
-     * @param query
+     * @param legislativeNo
      * @return
      */
-    HzLegislativeItem selectBylegislativeNo(HzLegislativeItemQuery query);
+    List<HzLegislativeItem> selectBylegislativeNo(String legislativeNo);
 
     /**
      * 根据legislativeNo查询数量
@@ -47,6 +61,12 @@ public interface HzLegislativeItemDao {
 
     HzLegislativeItem selectByPuid(String puid);
 
+    /**
+     * 根据eplId查询法规件信息
+     * @param eplId
+     * @return
+     */
+    List<HzLegislativeItem> selectByEplId(String eplId);
     /**
      * 修改一条数据
      * @param record

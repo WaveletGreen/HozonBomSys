@@ -1,15 +1,19 @@
 package com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.impl;
 
 import cn.net.connor.hozon.common.entity.WriteResultRespDTO;
+import cn.net.connor.hozon.common.util.ListUtils;
 import cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem;
-import cn.net.connor.hozon.services.response.dipository.legislativeLibrary.HzLegislativeItemResDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeItemResDTO;
 import com.connor.hozon.resources.domain.dto.request.AddHzLegislativeReqDTO;
 import com.connor.hozon.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.dto.response.HzLegislativeItemResDTO;
 import com.connor.hozon.resources.domain.model.HzLegislativeFactory;
+import com.connor.hozon.resources.domain.query.HzBOMQuery;
 import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
 import com.connor.hozon.resources.mybatis.resourcesLibrary.legislativeLibrary.HzLegislativeItemDao;
 import com.connor.hozon.resources.page.Page;
 import com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.HzLegislativeItemService;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -155,6 +159,11 @@ public class HzLegislativeItemServiceImpl implements HzLegislativeItemService {
         return WriteResultRespDTO.getSuccessResult();
     }
 
+    /**
+     * 修改一条法规件
+     * @param reqDTO
+     * @return
+     */
     @Override
     public WriteResultRespDTO updateHzLegislativeRecord(UpdateHzLegislativeReqDTO reqDTO) {
 
@@ -171,6 +180,39 @@ public class HzLegislativeItemServiceImpl implements HzLegislativeItemService {
         if (upReqCou <= 0) {
             return WriteResultRespDTO.getFailResult();
         }
+        return WriteResultRespDTO.getSuccessResult();
+    }
+
+    /**
+     * 删除法规件
+     * @param puids
+     * @return
+     */
+    public WriteResultRespDTO   deleteHzLegislativeLibrary(String puids){
+        //进行引用判断
+        List<String> list = Lists.newArrayList(puids.split(","));
+        StringBuffer stringBuffer = new StringBuffer();
+        for(String puid : list){
+            HzLegislativeItem hzLegislativeItem = hzLegislativeItemDao.selectByPuid(puid);
+            if (hzLegislativeItem==null){
+                return WriteResultRespDTO.failResultRespDTO("当前法规件不存在！");
+            }else{
+                if (StringUtils.isNotBlank(hzLegislativeItem.getEplId())){
+                    stringBuffer.append("法规件"+hzLegislativeItem.getLegislativeNo()+"在EPL中存在引用关系,不允许删除!");
+                    return WriteResultRespDTO.failResultRespDTO(stringBuffer.toString());
+                }
+            }
+        }
+        int delCou2 = hzLegislativeItemDao.deleteLegislative(puids);
+        if (delCou2<=0){
+            return WriteResultRespDTO.getFailResult();
+        }
+        int delCou =  hzLegislativeItemDao.delete(puids);
+        if (delCou<=0){
+            return WriteResultRespDTO.getFailResult();
+        }
+
+
         return WriteResultRespDTO.getSuccessResult();
     }
 }

@@ -58,6 +58,13 @@
         <id column="ID" jdbcType="DOUBLE" property="id" />
     </resultMap>
 
+    <!-- 返回法规件编码-->
+    <resultMap id="LegislativeCodeMap" type="cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeCode">
+        <id column="PUID" jdbcType="VARCHAR" property="puid" />
+        <result column="LEGISLATIVE_NAME" jdbcType="VARCHAR" property="legislativeName" />
+        <result column="LEGISLATIVE_NO" jdbcType="VARCHAR" property="legislativeNo" />
+    </resultMap>
+
 
     <sql id="Base_Column_List">
     ID, PROJECT_ID, PART_ID, PART_OF_WHICH_DEPT, PART_NAME, PART_CLASS, PART_EN_NAME,
@@ -69,6 +76,13 @@
     TORQUE, DUTY_ENGINEER, SUPPLY, SUPPLY_CODE, REMARK, REGULATION_CODE, BUY_ENGINEER,
     ORDER_ID, REVISION, EFFECT_TIME
   </sql>
+
+
+    <!--法规字段-->
+    <sql id="EPL_Leg_Column_List">
+     PUID, LEGISLATIVE_NAME, LEGISLATIVE_NO
+    </sql>
+
 
     <!--insert-->
     <insert id="HzEPLDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.epl.HzEPLRecord">
@@ -606,4 +620,10 @@
           </foreach>
           )A
     </insert>
+
+
+    <!--获得所有法规件型号-->
+    <select id="HzEPLDAOImpl_selectLegislative"  parameterType="java.lang.String" resultMap="LegislativeCodeMap">
+        select <include refid="EPL_Leg_Column_List"/>  FROM HZ_LEGISLATIVE_RECORD where  STATUS=1
+    </select>
 </mapper>

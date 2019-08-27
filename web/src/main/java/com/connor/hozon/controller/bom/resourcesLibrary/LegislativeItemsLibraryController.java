@@ -1,10 +1,11 @@
 package com.connor.hozon.controller.bom.resourcesLibrary;
 
 import cn.net.connor.hozon.common.entity.WriteResultRespDTO;
-import cn.net.connor.hozon.services.response.dipository.legislativeLibrary.HzLegislativeItemResDTO;
+import com.connor.hozon.bom.resources.domain.dto.response.HzLegislativeItemResDTO;
 import com.connor.hozon.controller.bom.BaseController;
 import com.connor.hozon.resources.domain.dto.request.AddHzLegislativeReqDTO;
 import com.connor.hozon.resources.domain.dto.request.UpdateHzLegislativeReqDTO;
+import com.connor.hozon.resources.domain.dto.response.HzLegislativeItemResDTO;
 import com.connor.hozon.resources.domain.query.HzLegislativeItemQuery;
 import com.connor.hozon.resources.page.Page;
 import com.connor.hozon.resources.service.resourcesLibrary.legislativeLibrary.impl.HzLegislativeItemServiceImpl;
@@ -93,7 +94,6 @@ public class LegislativeItemsLibraryController extends BaseController {
 
     @RequestMapping(value = "addLegislative",method = RequestMethod.GET)
     public String addItem(Model model) {
-
         return "resourcesLibrary/legislativeLibrary/legislativeItemLibrary/addLegislativeItemLibrary";
     }
 
@@ -132,5 +132,32 @@ public class LegislativeItemsLibraryController extends BaseController {
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
+    /**
+     * 删除一条数据
+     * @param puids
+     * @param response
+     */
+    @RequestMapping(value = "delete/Legislative",method = RequestMethod.POST)
+    public void deleteLegislativeLibrary(String puids,HttpServletResponse response){
+        WriteResultRespDTO respDTO =hzLegislativeItemService.deleteHzLegislativeLibrary(puids);
+        toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO),respDTO.getErrMsg()),response);
+    }
 
+
+
+    /**
+     * 跳转到快速添加的页面
+     * @param puid
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "getQuickAdd",method = RequestMethod.GET)
+    public String getQuickAddVPPSLibraryToPage(String puid, Model model){
+        HzLegislativeItemResDTO respDTO = hzLegislativeItemService.findHzLegislativeItemById(puid);
+        if (respDTO == null){
+            return null;
+        }
+        model.addAttribute("data",respDTO);
+        return "resourcesLibrary/legislativeLibrary/legislativeItemLibrary/quickAddLegislativeItemLibrary";
+    }
 }
