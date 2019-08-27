@@ -72,14 +72,14 @@
         and t1.NOTICE_NO like CONCAT(CONCAT('%',#{noticeNo,jdbcType=VARCHAR}),'%')
       </if>
       <if test="legislativeNo != null and legislativeNo != ''">
-        and t1.LEGISLATIVE_NO like CONCAT(CONCAT('%',#{legislativeNo,jdbcType=VARCHAR}),'%')
+        and t0.LEGISLATIVE_NO like CONCAT(CONCAT('%',#{legislativeNo,jdbcType=VARCHAR}),'%')
       </if>
       <if test="applicableModels != null and applicableModels != ''">
         and t1.APPLICABLE_MODELS like CONCAT(CONCAT('%',#{applicableModels,jdbcType=VARCHAR}),'%')
       </if>
-      and t1.STATUS = 1
+      and t1.STATUS = 1 and t0.STATUS=1
     </where>
-    order by t1.LEGISLATIVE_NO ,t2.PART_ID asc
+    order by t1.NOTICE_NO ,t0.LEGISLATIVE_NO ,t2.PART_ID asc
     ) t
     where ROWNUM &lt;=#{limit,jdbcType=INTEGER})
     where rn &gt;#{offset,jdbcType=INTEGER}
@@ -101,7 +101,7 @@
       <if test="applicableModels != null and applicableModels != ''">
         and t1.APPLICABLE_MODELS like CONCAT(CONCAT('%',#{applicableModels,jdbcType=VARCHAR}),'%')
       </if>
-      and t1.STATUS =1
+      and t1.STATUS =1 and t0.STATUS=1
     </where>
   </select>
 
@@ -109,9 +109,10 @@
   <select id="HzLegislativeItemDaoImpl_selectByLegislativeNo" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Legis_Column_List" />
-    from HZ_LEGISLATIVE_ITEMS t1
-    where LEGISLATIVE_NO = #{noticeNo,jdbcType=VARCHAR}
-    and t1.STATUS =1
+    from HZ_LEGISLATIVE_RECORD t0
+    LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
+    where t0.LEGISLATIVE_NO = #{legislativeNo,jdbcType=VARCHAR}
+    and t1.STATUS =1 and t0.STATUS=1
   </select>
 
   <!--根据法规件编码获取法规件数量-->
@@ -120,10 +121,22 @@
     count(*)
     from HZ_LEGISLATIVE_RECORD t0
     LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
-    where t0.LEGISLATIVE_NO = #{noticeNo,jdbcType=VARCHAR}
-    and t1.STATUS =1
+    where t0.LEGISLATIVE_NO = #{legislativeNo,jdbcType=VARCHAR}
+    and t1.STATUS =1 and t0.STATUS=1
   </select>
 
+
+
+  <!--根据法规件EPLID获取法规件信息-->
+  <select id="HzLegislativeItemDaoImpl_selectByEplId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Legis_Column_List" />,<include refid="EPL_Column_List"/>,<include refid="Leg_Column_List"/>
+    from  HZ_LEGISLATIVE_RECORD t0
+    LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
+    LEFT JOIN HZ_EPL_RECORD t2 on  t2.ID = t1.EPL_ID
+    where t1.EPL_ID = #{eplId,jdbcType=VARCHAR}
+    and t1.STATUS =1 and t0.STATUS=1
+  </select>
 
 
   <!--根据法规件ItemPuid获取法规件信息-->
@@ -134,14 +147,13 @@
     LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
     LEFT JOIN HZ_EPL_RECORD t2 on  t2.ID = t1.EPL_ID
     where t1.PUID = #{puid,jdbcType=VARCHAR}
-    and t1.STATUS =1
+    and t1.STATUS =1 and t0.STATUS=1
   </select>
 
-  <!--&lt;!&ndash;根据法规件ItemPuids设置为删除状态&ndash;&gt;-->
+  <!--&lt;!&ndash;根据法规件ItemPuids删除&ndash;&gt;-->
   <!--<delete id="HzLegislativeItem_delete" parameterType="java.util.List">-->
     <!--&lt;!&ndash;delete ${tableName}&ndash;&gt;-->
-    <!--update HZ_LEGISLATIVE_ITEMS-->
-    <!--set STATUS = 0-->
+    <!--delete HZ_LEGISLATIVE_ITEMS-->
     <!--where PUID-->
     <!--in-->
     <!--<foreach collection="list" index="index" item="item"  open="(" separator="," close=")">-->
@@ -150,28 +162,30 @@
   <!--</delete>-->
 
     <!--根据法规件ItemPuids删除-->
-    <delete id="HzLegislativeItem_delete" parameterType="java.util.List">
+    <update id="HzLegislativeItem_delete" parameterType="java.util.List">
         <!--delete ${tableName}-->
-        delete HZ_LEGISLATIVE_ITEMS
+      update HZ_LEGISLATIVE_ITEMS
+      set STATUS = 0
         where PUID
         in
         <foreach collection="list" index="index" item="item"  open="(" separator="," close=")">
             #{list[${index}]}
         </foreach>
-    </delete>
+    </update>
 
 
     <!--根据法规件ItemPuids删除编码-->
-    <delete id="HzLegislativeItemRecord_delete" parameterType="java.util.List">
+    <update id="HzLegislativeItemRecord_delete" parameterType="java.util.List">
         <!--delete ${tableName}-->
-        delete HZ_LEGISLATIVE_RECORD
+      update HZ_LEGISLATIVE_RECORD
+        set STATUS = 0
         where PUID
         in
         <foreach collection="list" index="index" item="item"  open="(" separator="," close=")">
             select LEGISLATIVE_UID from HZ_LEGISLATIVE_ITEMS where PUID =
             #{list[${index}]}
         </foreach>
-    </delete>
+    </update>
 
 
   <!--插入一条ITEM-->
@@ -270,6 +284,9 @@
       <if test="legislativeNo != null">
         LEGISLATIVE_NO,
       </if>
+      <if test="status != null">
+        STATUS,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="legislativeUid != null">
@@ -280,6 +297,9 @@
       </if>
       <if test="legislativeNo != null">
         #{legislativeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>

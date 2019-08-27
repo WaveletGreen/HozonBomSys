@@ -28,9 +28,9 @@ function createColumn() {
     //     }
     // })
     column.push({field: 'no', title: '序号', align: 'center', valign: 'middle',})
+    column.push({field: 'noticeNo', title: '公告号', align: 'center', valign: 'middle',})
     column.push({field: 'legislativeName', title: '法规件名称', align: 'center', valign: 'middle',})
     column.push({field: 'legislativeNo', title: '法规件型号', align: 'center', valign: 'middle',})
-    column.push({field: 'noticeNo', title: '公告号', align: 'center', valign: 'middle',})
     column.push({field: 'applicableModels', title: '适用车型', align: 'center', valign: 'middle',})
     column.push({field: 'partId', title: '零件号', align: 'center', valign: 'middle',})
     column.push({field: 'partName', title: '零件名称', align: 'center', valign: 'middle',})

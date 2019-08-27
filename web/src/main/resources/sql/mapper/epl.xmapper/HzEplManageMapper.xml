@@ -624,6 +624,6 @@
 
     <!--获得所有法规件型号-->
     <select id="HzEPLDAOImpl_selectLegislative"  parameterType="java.lang.String" resultMap="LegislativeCodeMap">
-        select <include refid="EPL_Leg_Column_List"/>  FROM HZ_LEGISLATIVE_RECORD
+        select <include refid="EPL_Leg_Column_List"/>  FROM HZ_LEGISLATIVE_RECORD where  STATUS=1
     </select>
 </mapper>

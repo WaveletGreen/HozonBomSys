@@ -202,10 +202,15 @@ public class HzLegislativeItemServiceImpl implements HzLegislativeItemService {
                 }
             }
         }
-        int delCou = hzLegislativeItemDao.delete(puids);
+        int delCou2 = hzLegislativeItemDao.deleteLegislative(puids);
+        if (delCou2<=0){
+            return WriteResultRespDTO.getFailResult();
+        }
+        int delCou =  hzLegislativeItemDao.delete(puids);
         if (delCou<=0){
             return WriteResultRespDTO.getFailResult();
         }
+
 
         return WriteResultRespDTO.getSuccessResult();
     }

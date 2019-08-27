@@ -36,11 +36,31 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
         return super.findPage("HzLegislativeItemDaoImpl_select","HzLegislativeItemDaoImpl_count", pageRequestParam);
     }
 
+    /**
+     * 批量删除
+     * @param puids
+     * @return
+     */
     @Override
     public int delete(String puids) {
         if(StringUtils.isNotBlank(puids)){
             List<String> list = Lists.newArrayList(puids.split(","));
             return super.delete("HzLegislativeItem_delete",list);
+        }else {
+            return 0;
+        }
+    }
+
+    /**
+     * 批量删除法规件型号
+     * @param puids
+     * @return
+     */
+    @Override
+    public int deleteLegislative(String puids) {
+        if(StringUtils.isNotBlank(puids)){
+            List<String> list = Lists.newArrayList(puids.split(","));
+            return super.delete("HzLegislativeItemRecord_delete",list);
         }else {
             return 0;
         }
@@ -79,9 +99,9 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
      */
     @Override
     public List<HzLegislativeItem> selectBylegislativeNo(String legislativeNo) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("legislativeNo",legislativeNo);
-        return super.findForList("HzLegislativeItemDaoImpl_selectByLegislativeNo",map);
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("legislativeNo",legislativeNo);
+        return super.findForList("HzLegislativeItemDaoImpl_selectByLegislativeNo",legislativeNo);
     }
 
     /**
@@ -102,6 +122,17 @@ public class HzLegislativeItemDaoImpl extends BaseSQLUtil implements HzLegislati
     @Override
     public HzLegislativeItem selectByPuid(String puid) {
         return (HzLegislativeItem)super.findForObject("HzLegislativeItemDaoImpl_selectByPuid",puid);
+
+    }
+
+    /**
+     * 根据eplId查询法规件信息
+     * @param eplId
+     * @return
+     */
+    @Override
+    public List<HzLegislativeItem> selectByEplId(String eplId) {
+        return super.findForList("HzLegislativeItemDaoImpl_selectByEplId",eplId);
 
     }
 

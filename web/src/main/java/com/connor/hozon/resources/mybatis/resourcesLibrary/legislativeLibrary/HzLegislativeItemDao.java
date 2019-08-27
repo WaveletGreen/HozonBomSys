@@ -15,8 +15,19 @@ public interface HzLegislativeItemDao {
      */
     Page<HzLegislativeItem> findItemToPage(HzLegislativeItemQuery query);
 
+    /**
+     * 批量删除
+     * @param puids
+     * @return
+     */
     int delete(String puids);
 
+    /**
+     * 批量删除法规件型号
+     * @param puids
+     * @return
+     */
+    int deleteLegislative(String puids);
 
     /**
      * 插入一条法规件Item
@@ -50,6 +61,12 @@ public interface HzLegislativeItemDao {
 
     HzLegislativeItem selectByPuid(String puid);
 
+    /**
+     * 根据eplId查询法规件信息
+     * @param eplId
+     * @return
+     */
+    List<HzLegislativeItem> selectByEplId(String eplId);
     /**
      * 修改一条数据
      * @param record

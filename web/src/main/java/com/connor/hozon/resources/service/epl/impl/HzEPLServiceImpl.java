@@ -95,28 +95,15 @@ public class HzEPLServiceImpl implements HzEPLService {
             if (i <= 0) {
                 return WriteResultRespDTO.getFailResult();
             }
-//            //新增法规件归档
-//            if (Integer.valueOf("1").equals(hzEPLRecord.getRegulationFlag()) &&
-//                    hzEPLRecord.getRegulationCode()!=null &&hzEPLRecord.getRegulationCode().equals("/")) {
-//                List<HzLegislativeItem> hzLegislativeItems=hzLegislativeItemDao.selectBylegislativeNo(hzEPLRecord.getRegulationCode());
-//
-//                if (ListUtils.isNotEmpty(hzLegislativeItems)){
-//                    HzLegislativeItem hzLegislative=hzLegislativeItems.get(0);
-//                    String eplId = hzLegislative.getEplId();
-//                    int ii=0;
-//                    hzLegislative.setUpdateTime(new Date());
-//                    if (StringUtil.isEmpty(eplId)){
-//                        hzLegislative.setEplId(hzEPLRecord.getId()+"");
-//                        ii=  hzLegislativeItemDao.updateHzLegislative(hzLegislative);
-//                    }else {
-//                        hzLegislative.setEplId(hzEPLRecord.getId()+"");
-//                        hzLegislative.setPuid(UUID.randomUUID().toString());
-//                        hzLegislative.setInsertTime(new Date());
-//                        ii=  hzLegislativeItemDao.insertItem(hzLegislative);
-//                    }
-//
-//                }
-//            }
+
+            //新增法规件归档
+            //由于要获得序列生成的id重新获得一遍这条数据
+            HzEPLRecord newHzEPLRecord = hzEPLDAO.selectByPartId(hzEPLRecord.getPartId());
+            if (Integer.valueOf("1").equals(newHzEPLRecord.getRegulationFlag()) &&
+                    newHzEPLRecord.getRegulationCode()!=null && !(newHzEPLRecord.getRegulationCode().equals("/"))) {
+                addLegislativeItem(String.valueOf(newHzEPLRecord.getId()),hzEPLRecord.getRegulationCode());
+
+            }
             return WriteResultRespDTO.getSuccessResult();
         } catch (Exception e) {
             e.printStackTrace();
@@ -180,27 +167,28 @@ public class HzEPLServiceImpl implements HzEPLService {
                     }
                     HzEPLRecord hzEPLRecord = HzEPLFactory.eplReqDTOToRecord(reqDTO);
                     hzEPLDAO.update(hzEPLRecord);
-//                    //新增法规件归档
-//                    if (Integer.valueOf("1").equals(hzEPLRecord.getRegulationFlag()) &&
-//                            hzEPLRecord.getRegulationCode()!=null &&hzEPLRecord.getRegulationCode().equals("/")) {
-//                        List<HzLegislativeItem> hzLegislativeItems=hzLegislativeItemDao.selectBylegislativeNo(hzEPLRecord.getRegulationCode());
-//                        if (ListUtils.isNotEmpty(hzLegislativeItems)){
-//                            HzLegislativeItem hzLegislative=hzLegislativeItems.get(0);
-//                            String eplId = hzLegislative.getEplId();
-//                            int ii=0;
-//                            hzLegislative.setUpdateTime(new Date());
-//                            if (StringUtil.isEmpty(eplId)){
-//                                hzLegislative.setEplId(hzEPLRecord.getId()+"");
-//                                ii=  hzLegislativeItemDao.updateHzLegislative(hzLegislative);
-//                            }else {
-//                                hzLegislative.setEplId(hzEPLRecord.getId()+"");
-//                                hzLegislative.setPuid(UUID.randomUUID().toString());
-//                                hzLegislative.setInsertTime(new Date());
-//                                ii=  hzLegislativeItemDao.insertItem(hzLegislative);
-//                            }
-//
-//                        }
-//                    }
+                    //新增法规件归档
+                    HzEPLRecord newHzEPLRecord = hzEPLRecord;
+                    if (Integer.valueOf("1").equals(newHzEPLRecord.getRegulationFlag()) &&
+                            newHzEPLRecord.getRegulationCode()!=null && !(newHzEPLRecord.getRegulationCode().equals("/"))) {
+                        //List<HzLegislativeItem> hzLegislativeItems=hzLegislativeItemDao.selectBylegislativeNo(hzEPLRecord.getRegulationCode());
+                        String eplId=String.valueOf(newHzEPLRecord.getId());
+                        List<HzLegislativeItem> hzLegislativeItems = hzLegislativeItemDao.selectByEplId(eplId);
+                        if (ListUtils.isNotEmpty(hzLegislativeItems)){
+                            HzLegislativeItem hzLegislative=hzLegislativeItems.get(0);
+                            //新旧不相等,先删再加
+                            if (!hzLegislative.getLegislativeNo().equals(newHzEPLRecord.getRegulationCode())){
+                                deleteLegislativeItem(eplId);// 删
+                                addLegislativeItem(eplId,newHzEPLRecord.getRegulationCode());//加
+                            }
+
+                        }else{
+                            addLegislativeItem(eplId,newHzEPLRecord.getRegulationCode());//加
+                        }
+                    }else{
+                        String eplId=String.valueOf(newHzEPLRecord.getId());
+                        deleteLegislativeItem(eplId);
+                    }
                     return null;
                 }
             });
@@ -208,6 +196,54 @@ public class HzEPLServiceImpl implements HzEPLService {
         } catch (Exception e) {
             e.printStackTrace();
             return WriteResultRespDTO.getFailResult();
+        }
+    }
+
+
+    /**
+     *
+     * @param newEplId
+     * @param legislativeNo
+     */
+    public void addLegislativeItem(String newEplId,String legislativeNo){
+        List<HzLegislativeItem> hzLegislativeItems=hzLegislativeItemDao.selectBylegislativeNo(legislativeNo);
+        if (ListUtils.isNotEmpty(hzLegislativeItems)){
+            HzLegislativeItem hzLegislative=hzLegislativeItems.get(0);
+            String eplId = hzLegislative.getEplId();
+            int ii=0;
+            hzLegislative.setUpdateTime(new Date());
+            if (StringUtil.isEmpty(eplId)){
+                hzLegislative.setEplId(newEplId);
+                ii=  hzLegislativeItemDao.updateHzLegislative(hzLegislative);
+            }else {
+                hzLegislative.setEplId(newEplId);
+                hzLegislative.setPuid(UUID.randomUUID().toString());
+                hzLegislative.setInsertTime(new Date());
+                ii=  hzLegislativeItemDao.insertItem(hzLegislative);
+            }
+
+        }
+    }
+
+
+    /**
+     * 删除法规件引用
+     * @param eplId
+     */
+    public void deleteLegislativeItem(String eplId){
+        //找到这个EPLID的引用法规件(最多只有一个)
+        List<HzLegislativeItem> hzLegislativeItems = hzLegislativeItemDao.selectByEplId(eplId);
+        if (ListUtils.isNotEmpty(hzLegislativeItems)){
+            HzLegislativeItem item=hzLegislativeItems.get(0);
+            String legislativeNo = item.getLegislativeNo();
+            //找这个法规件对应的号有几个,大于一个直接删除,等于一个修改引用关系
+            List<HzLegislativeItem> hzLegListByLegNo = hzLegislativeItemDao.selectBylegislativeNo(legislativeNo);
+            if (hzLegListByLegNo!=null&&hzLegListByLegNo.size()==1){
+                item.setEplId("");
+                int ii=  hzLegislativeItemDao.updateHzLegislative(item);
+            }else {
+                int ii= hzLegislativeItemDao.delete(item.getPuid());
+            }
         }
     }
 
@@ -259,6 +295,14 @@ public class HzEPLServiceImpl implements HzEPLService {
             }
             if (ListUtils.isNotEmpty(deleteList)) {
                 hzEPLDAO.delete(null, deleteList);
+
+                //对应法规件删除
+                for (Long id :deleteList){
+                    String eplId=String.valueOf(id);
+                    deleteLegislativeItem(eplId);
+
+                }
+
             }
 
 //            configTransactionTemplate.execute(new TransactionCallback<Void>() {
