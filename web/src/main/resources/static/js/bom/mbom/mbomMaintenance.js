@@ -2040,19 +2040,19 @@ function initTable2(productionUrl) {
                             })
                         }
                     },
-                    {
-                        text: '查询零部件',
-                        iconCls: 'glyphicon glyphicon-search',
-                        handler: function () {
-                            var rows = $productionTable.bootstrapTable('getSelections');
-                            if(rows.length !=1){
-                                window.Ewin.alert({message: '请选择一条数据再进行查看所有零部件!'});
-                                return false;
-                            }
-                            var puid = rows[0].eBomPuid
-                            window.location.href = "ebom/selectEbom?puid="+puid;
-                        }
-                    },
+                    // {
+                    //     text: '查询零部件',
+                    //     iconCls: 'glyphicon glyphicon-search',
+                    //     handler: function () {
+                    //         var rows = $productionTable.bootstrapTable('getSelections');
+                    //         if(rows.length !=1){
+                    //             window.Ewin.alert({message: '请选择一条数据再进行查看所有零部件!'});
+                    //             return false;
+                    //         }
+                    //         var puid = rows[0].eBomPuid
+                    //         window.location.href = "ebom/selectEbom?puid="+puid;
+                    //     }
+                    // },
                 ],
             });
             $productionTable.bootstrapTable('hideColumn', 'level');
@@ -2501,19 +2501,19 @@ function initTable22(productionUrl, lineIds, colorIds) {
                             })
                         }
                     },
-                    {
-                        text: '查询零部件',
-                        iconCls: 'glyphicon glyphicon-search',
-                        handler: function () {
-                            var rows = $productionTable.bootstrapTable('getSelections');
-                            if(rows.length !=1){
-                                window.Ewin.alert({message: '请选择一条数据再进行查看所有零部件!'});
-                                return false;
-                            }
-                            var puid = rows[0].eBomPuid
-                            window.location.href = "ebom/selectEbom?puid="+puid;
-                        }
-                    },
+                    // {
+                    //     text: '查询零部件',
+                    //     iconCls: 'glyphicon glyphicon-search',
+                    //     handler: function () {
+                    //         var rows = $productionTable.bootstrapTable('getSelections');
+                    //         if(rows.length !=1){
+                    //             window.Ewin.alert({message: '请选择一条数据再进行查看所有零部件!'});
+                    //             return false;
+                    //         }
+                    //         var puid = rows[0].eBomPuid
+                    //         window.location.href = "ebom/selectEbom?puid="+puid;
+                    //     }
+                    // },
                 ],
             });
             $productionTable.bootstrapTable('hideColumn', 'level');
@@ -2994,16 +2994,19 @@ function initTable3(financialUrl) {
                         }
                     },
                     {
-                        text: '查询零部件',
+                        text: '查询子层',
                         iconCls: 'glyphicon glyphicon-search',
                         handler: function () {
                             var rows = $financialTable.bootstrapTable('getSelections');
-                            if(rows.length !=1){
-                                window.Ewin.alert({message: '请选择一条数据再进行查看所有零部件!'});
+                            if(rows.length < 1){
+                                window.Ewin.alert({message: '请至少选择一条数据再进行查看所有零部件!'});
                                 return false;
                             }
-                            var puid = rows[0].eBomPuid
-                            window.location.href = "ebom/selectEbom?puid="+puid;
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].eBomPuid + ",";
+                            };
+                            window.location.href = "pbom/selectPBom?puids="+puids;
                         }
                     },
                 ],
@@ -3460,16 +3463,19 @@ function initTable33(financialUrl, lineIds, colorIds) {
                         }
                     },
                     {
-                        text: '查询零部件',
+                        text: '查询子层',
                         iconCls: 'glyphicon glyphicon-search',
                         handler: function () {
                             var rows = $financialTable.bootstrapTable('getSelections');
-                            if(rows.length !=1){
-                                window.Ewin.alert({message: '请选择一条数据再进行查看所有零部件!'});
+                            if(rows.length < 1){
+                                window.Ewin.alert({message: '请至少选择一条数据再进行查看所有零部件!'});
                                 return false;
                             }
-                            var puid = rows[0].eBomPuid
-                            window.location.href = "ebom/selectEbom?puid="+puid;
+                            var puids = "";
+                            for (var i = 0; i < rows.length; i++) {
+                                puids += rows[i].eBomPuid + ",";
+                            };
+                            window.location.href = "pbom/selectPBom?puids="+puids;
                         }
                     },
                 ],

@@ -141,7 +141,7 @@ function initTable(url) {
 
                     {
                         text: '返回上一步',
-                        iconCls: 'fa fa-arrow-left',
+                        iconCls: 'fa fa-mail-reply',
                         handler: function () {
                             window.location.href="javascript:history.go(-1);"
                         }

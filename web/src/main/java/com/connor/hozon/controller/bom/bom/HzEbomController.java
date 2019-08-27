@@ -476,13 +476,13 @@ public class HzEbomController extends BaseController {
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
-    /**
-     * MBOM跳转到EBOM的方法查询底层零部件
-     * @return
-     */
-    @RequestMapping("selectEbom")
-    public String selectEbom (String puid,Model model){
-        model.addAttribute("puid",puid);
-        return "bomManage/mbom/mbomMaintenance/selectEbom";
-    }
+//    /**  已废除
+//     * MBOM跳转到EBOM的方法查询底层零部件
+//     * @return
+//     */
+//    @RequestMapping("selectEbom")
+//    public String selectEbom (String puid,Model model){
+//        model.addAttribute("puid",puid);
+//        return "bomManage/mbom/mbomMaintenance/selectEbom";
+//    }
 }
