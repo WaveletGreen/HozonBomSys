@@ -414,4 +414,16 @@ public class HzPbomController extends BaseController {
         toJSONResponse(Result.build(WriteResultRespDTO.isSuccess(respDTO), respDTO.getErrMsg()), response);
     }
 
+    /**
+     * 跳转到PBOM查询零部件（不包括供货级以下）
+     * @param puids
+     * @param model
+     * @return
+     */
+    @RequestMapping("selectPBom")
+    public String selectPBom (String puids,Model model){
+        model.addAttribute("puids",puids);
+        return "bomManage/mbom/mbomMaintenance/selectPbom";
+    }
+
 }
