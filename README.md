@@ -1,5 +1,5 @@
 # HozonBomSys BOM系统
-
+#### 公司网址 http://www.connor.net.cn/
 #### 项目介绍
 Bom系统，作为整车BOM(物料清单)管理工具，应用于整车厂的BOM设计与管理，依附配置的管理，提供EBOM->PBOM->MBOM->单车BOM的最终演算过程
 
@@ -14,8 +14,10 @@ Bom系统，作为整车BOM(物料清单)管理工具，应用于整车厂的BOM
 - BOM数据管理模块作为整个项目数据的基础
 - 配置模块中的全配置BOM一级清单为整合整车BOM的主心骨数据模型
 
-#####数据库
-- oracle数据库
+#####需求软件
+- oracle 11g
+- Java 8
+- Tomcat 9
 
 #####后台设计模块说明
 - common模块 用于构建通用的基础类和工具类
@@ -31,11 +33,18 @@ ideal下载项目，构建maven项目，maven->package web模块即可得到hozo
 
 如果需要访问数据库资源，请参照v1.0.0版本的附件backup.pde文件和seq_out.sql，导入到oracle数据库即可
 
+####使用说明
+keystore.p12为RSA秘钥，实际上线运行请自行更换自己的私钥
 
 #### 参与贡献
-* haozt 郝志涛
-* zhudb 朱东波
-* xulf 许林飞
-* zhuan 朱安亮
-* zhuangl 张乐
-* duanyf 段云峰
+* xulf 许林飞 https://gitee.com/xu_linfei
+* zhuangl 张乐 https://gitee.com/zhanglemy
+* duanyf 段云峰 https://gitee.com/duanyunfeng
+* zhudb 朱东波 https://gitee.com/zhudongbo
+* haozt 郝志涛 https://gitee.com/notlowb
+* zhuan 朱安亮 https://gitee.com/zhual
+
+####测试地址
+https://47.97.154.144:8444/hozon/main
+
+
