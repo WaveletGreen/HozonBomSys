@@ -5,19 +5,20 @@
  * Time: 17:22
  */
 /////////////////////////////////////////////////////////已废除/////////////////////////////////////////////////////////////////////////
-/**53个属性+勾选框列和序号列*/
+/*
+/!**53个属性+勾选框列和序号列*!/
 var eBomTitleSet = 56;
-/**项目ID*/
+/!**项目ID*!/
 var projectId;
 var $table;
-/**
+/!**
  * 访问的url
- */
+ *!/
 var eBomUrl;
-/**\
+/!**\
  * 页面刷新
  * @param projectId
- */
+ *!/
 function doRefresh(projectPuid) {
     $('#selectEbomTable').bootstrapTable('destroy');
     projectId = getProjectUid();
@@ -25,9 +26,9 @@ function doRefresh(projectPuid) {
     var puid = $("#puid").val();
     initTable(eBomUrl,puid);
 }
-/**
+/!**
  * 自动查询调用
- */
+ *!/
 function doQuery() {
     projectId = getProjectUid();
     eBomUrl = "getEBom/list?projectId=" + projectId;
@@ -47,10 +48,10 @@ function doQuery() {
     var puid = $("#puid").val();
     initTable(eBomUrl,puid);
 }
-/**
+/!**
  * 创建table表头
  * @param result
- */
+ *!/
 function createColumn(result) {
     let column = [];
     column.push({field: 'ck', checkbox: true});
@@ -141,10 +142,10 @@ function createColumn(result) {
     return column;
 }
 
-/**
+/!**
  * table初始化
  * @param eBomUrl
- */
+ *!/
 function initTable(eBomUrl,puid) {
     if (!checkIsSelectProject(projectId)) {
         return;
@@ -265,13 +266,13 @@ $(document).keydown(function (event) {
     }
 });
 
-/**
+/!**
  * 页面初始化后自动生成table
- */
+ *!/
 $(document).ready((function () {
     projectId = $("#project", window.top.document).val();
     $table = $("#selectEbomTable");
     eBomUrl = "getEBom/list?projectId=" + projectId;
     var puid = $("#puid").val();
     initTable(eBomUrl,puid);
-}))
+}))*/
