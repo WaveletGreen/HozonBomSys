@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.bom.sparePart.SparePartDataDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="PRODUCTIVE_PART_CODE" jdbcType="VARCHAR" property="productivePartCode"/>
+        <result column="PRODUCTIVE_PART_NAME" jdbcType="VARCHAR" property="productivePartName"/>
+        <result column="SPARE_PART_CODE" jdbcType="VARCHAR" property="sparePartCode"/>
+        <result column="SPARE_PART_NAME" jdbcType="VARCHAR" property="sparePartName"/>
+        <result column="IS_SPARE_PART" jdbcType="DECIMAL" property="isSparePart"/>
+        <result column="UNIT" jdbcType="VARCHAR" property="unit"/>
+        <result column="DEPARTMENT" jdbcType="VARCHAR" property="department"/>
+        <result column="RESPONSIBLE_ENGINEER" jdbcType="VARCHAR" property="responsibleEngineer"/>
+        <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+        <result column="CODE" jdbcType="VARCHAR" property="code"/>
+        <result column="PURCHASING_ENGINEER" jdbcType="VARCHAR" property="purchasingEngineer"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        <result column="PART_CLASS" jdbcType="VARCHAR" property="partClass"/>
+        <result column="WORKSHOP1" jdbcType="VARCHAR" property="workshop1"/>
+        <result column="WORKSHOP2" jdbcType="VARCHAR" property="workshop2"/>
+        <result column="PART_LEVEL" jdbcType="VARCHAR" property="level"/>
+        <result column="MAJOR" jdbcType="VARCHAR" property="major"/>
+        <result column="HIERARCHY" jdbcType="VARCHAR" property="hierarchy"/>
+        <result column="ADS" jdbcType="VARCHAR" property="ads"/>
+        <result column="REL_EBOM_LINE_ID" jdbcType="VARCHAR" property="relEbomLineId"/>
+        <result column="DRAWING_NUM" jdbcType="VARCHAR" property="drawingNum"/>
+        <result column="RESERVED2" jdbcType="VARCHAR" property="reserved2"/>
+        <result column="RESERVED3" jdbcType="VARCHAR" property="reserved3"/>
+        <result column="RESERVED4" jdbcType="VARCHAR" property="reserved4"/>
+        <result column="RESERVED5" jdbcType="VARCHAR" property="reserved5"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, PRODUCTIVE_PART_CODE, PRODUCTIVE_PART_NAME, SPARE_PART_CODE, SPARE_PART_NAME, 
+    IS_SPARE_PART, UNIT, DEPARTMENT, RESPONSIBLE_ENGINEER, SUPPLIER, CODE, PURCHASING_ENGINEER, 
+    REMARK, PART_CLASS, WORKSHOP1, WORKSHOP2, PART_LEVEL, MAJOR, HIERARCHY, ADS, REL_EBOM_LINE_ID,
+    DRAWING_NUM, RESERVED2, RESERVED3, RESERVED4, RESERVED5
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from SPARE_PART_DATA
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <select id="selectPageByQuery" parameterType="cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery"
+            resultMap="BaseResultMap">
+
+        select * FROM (
+            select
+            t.*,ROWNUM AS rowno
+            from
+            SPARE_PART_DATA t
+            LEFT JOIN SPARE_PART_OF_PROJECT tx ON t.ID = tx.SPARE_PART_ID
+            <where>
+                tx.PROJECT_ID = #{projectId}
+                <if test="hierarchy!=null and hierarchy!=''">
+                    and HIERARCHY=#{hierarchy}
+                </if>
+                <if test="productivePartCode!=null and productivePartCode!=''">
+                    and PRODUCTIVE_PART_CODE=#{productivePartCode}
+                </if>
+                <if test="sparePartCode!=null and sparePartCode!=''">
+                    and SPARE_PART_CODE=#{sparePartCode}
+                </if>
+            </where>
+            <if test="sort!=null">
+                order by ${sort}
+            </if>
+            )
+        where 1=1
+        <if test="offset!=null">
+            and rowno &gt;= ${offset}+1
+        </if>
+        <if test="limit!=null and  page!=null">
+            and rowno &lt;= ${page}*${limit}
+        </if>
+
+    </select>
+    <select id="countByQuery" parameterType="cn.net.connor.hozon.dao.query.bom.sparePart.SparePartOfProjectQuery"
+            resultType="java.lang.Integer">
+        select count(*)
+        from
+        SPARE_PART_DATA t
+        LEFT JOIN SPARE_PART_OF_PROJECT tx ON t.ID = tx.SPARE_PART_ID
+        <where>
+            tx.PROJECT_ID = #{projectId}
+            <if test="hierarchy!=null and hierarchy!=''">
+                and HIERARCHY=#{hierarchy}
+            </if>
+            <if test="productivePartCode!=null and productivePartCode!=''">
+                and PRODUCTIVE_PART_CODE=#{productivePartCode}
+            </if>
+            <if test="sparePartCode!=null and sparePartCode!=''">
+                and SPARE_PART_CODE=#{sparePartCode}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from SPARE_PART_DATA
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <delete id="deleteList" parameterType="java.util.List">
+        delete from SPARE_PART_DATA
+        where ID in
+        <foreach collection="list" item="item" index="index"
+                 separator="," open="(" close=")">
+            #{item.id,jdbcType=DECIMAL}
+        </foreach>
+    </delete>
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData">
+        <selectKey order="BEFORE"
+                   keyColumn="ID" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_SPARE_PART_ID.Nextval from dual
+        </selectKey>
+        insert into SPARE_PART_DATA (ID, PRODUCTIVE_PART_CODE, PRODUCTIVE_PART_NAME,
+        SPARE_PART_CODE, SPARE_PART_NAME, IS_SPARE_PART,
+        UNIT, DEPARTMENT, RESPONSIBLE_ENGINEER,
+        SUPPLIER, CODE, PURCHASING_ENGINEER,
+        REMARK, PART_CLASS, WORKSHOP1,
+        WORKSHOP2, PART_LEVEL, MAJOR,
+        HIERARCHY, ADS, REL_EBOM_LINE_ID,
+        DRAWING_NUM, RESERVED2, RESERVED3,
+        RESERVED4, RESERVED5)
+        values (#{id,jdbcType=DECIMAL}, #{productivePartCode,jdbcType=VARCHAR}, #{productivePartName,jdbcType=VARCHAR},
+        #{sparePartCode,jdbcType=VARCHAR}, #{sparePartName,jdbcType=VARCHAR}, #{isSparePart,jdbcType=DECIMAL},
+        #{unit,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{responsibleEngineer,jdbcType=VARCHAR},
+        #{supplier,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{purchasingEngineer,jdbcType=VARCHAR},
+        #{remark,jdbcType=VARCHAR}, #{partClass,jdbcType=VARCHAR}, #{workshop1,jdbcType=VARCHAR},
+        #{workshop2,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{major,jdbcType=VARCHAR},
+        #{hierarchy,jdbcType=VARCHAR}, #{ads,jdbcType=VARCHAR}, #{relEbomLineId,jdbcType=VARCHAR},
+        #{drawingNum,jdbcType=VARCHAR}, #{reserved2,jdbcType=VARCHAR}, #{reserved3,jdbcType=VARCHAR},
+        #{reserved4,jdbcType=VARCHAR}, #{reserved5,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData">
+        insert into SPARE_PART_DATA
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="productivePartCode != null">
+                PRODUCTIVE_PART_CODE,
+            </if>
+            <if test="productivePartName != null">
+                PRODUCTIVE_PART_NAME,
+            </if>
+            <if test="sparePartCode != null">
+                SPARE_PART_CODE,
+            </if>
+            <if test="sparePartName != null">
+                SPARE_PART_NAME,
+            </if>
+            <if test="isSparePart != null">
+                IS_SPARE_PART,
+            </if>
+            <if test="unit != null">
+                UNIT,
+            </if>
+            <if test="department != null">
+                DEPARTMENT,
+            </if>
+            <if test="responsibleEngineer != null">
+                RESPONSIBLE_ENGINEER,
+            </if>
+            <if test="supplier != null">
+                SUPPLIER,
+            </if>
+            <if test="code != null">
+                CODE,
+            </if>
+            <if test="purchasingEngineer != null">
+                PURCHASING_ENGINEER,
+            </if>
+            <if test="remark != null">
+                REMARK,
+            </if>
+            <if test="partClass != null">
+                PART_CLASS,
+            </if>
+            <if test="workshop1 != null">
+                WORKSHOP1,
+            </if>
+            <if test="workshop2 != null">
+                WORKSHOP2,
+            </if>
+            <if test="level != null">
+                PART_LEVEL,
+            </if>
+            <if test="major != null">
+                MAJOR,
+            </if>
+            <if test="hierarchy != null">
+                HIERARCHY,
+            </if>
+            <if test="ads != null">
+                ADS,
+            </if>
+            <if test="relEbomLineId != null">
+                REL_EBOM_LINE_ID,
+            </if>
+            <if test="drawingNum != null">
+                DRAWING_NUM,
+            </if>
+            <if test="reserved2 != null">
+                RESERVED2,
+            </if>
+            <if test="reserved3 != null">
+                RESERVED3,
+            </if>
+            <if test="reserved4 != null">
+                RESERVED4,
+            </if>
+            <if test="reserved5 != null">
+                RESERVED5,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="productivePartCode != null">
+                #{productivePartCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productivePartName != null">
+                #{productivePartName,jdbcType=VARCHAR},
+            </if>
+            <if test="sparePartCode != null">
+                #{sparePartCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sparePartName != null">
+                #{sparePartName,jdbcType=VARCHAR},
+            </if>
+            <if test="isSparePart != null">
+                #{isSparePart,jdbcType=DECIMAL},
+            </if>
+            <if test="unit != null">
+                #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="responsibleEngineer != null">
+                #{responsibleEngineer,jdbcType=VARCHAR},
+            </if>
+            <if test="supplier != null">
+                #{supplier,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="purchasingEngineer != null">
+                #{purchasingEngineer,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="partClass != null">
+                #{partClass,jdbcType=VARCHAR},
+            </if>
+            <if test="workshop1 != null">
+                #{workshop1,jdbcType=VARCHAR},
+            </if>
+            <if test="workshop2 != null">
+                #{workshop2,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=VARCHAR},
+            </if>
+            <if test="major != null">
+                #{major,jdbcType=VARCHAR},
+            </if>
+            <if test="hierarchy != null">
+                #{hierarchy,jdbcType=VARCHAR},
+            </if>
+            <if test="ads != null">
+                #{ads,jdbcType=VARCHAR},
+            </if>
+            <if test="relEbomLineId != null">
+                #{relEbomLineId,jdbcType=VARCHAR},
+            </if>
+            <if test="drawingNum != null">
+                #{drawingNum,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved2 != null">
+                #{reserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved3 != null">
+                #{reserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved4 != null">
+                #{reserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved5 != null">
+                #{reserved5,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertList" parameterType="java.util.List">
+        insert into SPARE_PART_DATA
+        (ID, PRODUCTIVE_PART_CODE, PRODUCTIVE_PART_NAME,
+        SPARE_PART_CODE, SPARE_PART_NAME, IS_SPARE_PART,
+        UNIT, DEPARTMENT, RESPONSIBLE_ENGINEER,
+        SUPPLIER, CODE, PURCHASING_ENGINEER,
+        REMARK, PART_CLASS, WORKSHOP1,
+        WORKSHOP2, PART_LEVEL, MAJOR,
+        HIERARCHY, ADS, REL_EBOM_LINE_ID,
+        DRAWING_NUM, RESERVED2, RESERVED3,
+        RESERVED4, RESERVED5)
+        select SEQ_SPARE_PART_ID.Nextval, A.* from(
+        <foreach collection="list" index="index" item="bean" separator="union all">
+            select
+            #{bean.productivePartCode,jdbcType=VARCHAR}, #{bean.productivePartName,jdbcType=VARCHAR},
+            #{bean.sparePartCode,jdbcType=VARCHAR}, #{bean.sparePartName,jdbcType=VARCHAR},
+            #{bean.isSparePart,jdbcType=DECIMAL},
+            #{bean.unit,jdbcType=VARCHAR}, #{bean.department,jdbcType=VARCHAR},
+            #{bean.responsibleEngineer,jdbcType=VARCHAR},
+            #{bean.supplier,jdbcType=VARCHAR}, #{bean.code,jdbcType=VARCHAR},
+            #{bean.purchasingEngineer,jdbcType=VARCHAR},
+            #{bean.remark,jdbcType=VARCHAR}, #{bean.partClass,jdbcType=VARCHAR}, #{bean.workshop1,jdbcType=VARCHAR},
+            #{bean.workshop2,jdbcType=VARCHAR}, #{bean.level,jdbcType=VARCHAR}, #{bean.major,jdbcType=VARCHAR},
+            #{bean.hierarchy,jdbcType=VARCHAR}, #{bean.ads,jdbcType=VARCHAR}, #{bean.relEbomLineId,jdbcType=VARCHAR},
+            #{bean.drawingNum,jdbcType=VARCHAR}, #{bean.reserved2,jdbcType=VARCHAR}, #{bean.reserved3,jdbcType=VARCHAR},
+            #{bean.reserved4,jdbcType=VARCHAR}, #{bean.reserved5,jdbcType=VARCHAR}
+            from
+            dual
+        </foreach>
+        )A
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData">
+        update SPARE_PART_DATA
+        <set>
+            <if test="productivePartCode != null">
+                PRODUCTIVE_PART_CODE = #{productivePartCode,jdbcType=VARCHAR},
+            </if>
+            <if test="productivePartName != null">
+                PRODUCTIVE_PART_NAME = #{productivePartName,jdbcType=VARCHAR},
+            </if>
+            <if test="sparePartCode != null">
+                SPARE_PART_CODE = #{sparePartCode,jdbcType=VARCHAR},
+            </if>
+            <if test="sparePartName != null">
+                SPARE_PART_NAME = #{sparePartName,jdbcType=VARCHAR},
+            </if>
+            <if test="isSparePart != null">
+                IS_SPARE_PART = #{isSparePart,jdbcType=DECIMAL},
+            </if>
+            <if test="unit != null">
+                UNIT = #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                DEPARTMENT = #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="responsibleEngineer != null">
+                RESPONSIBLE_ENGINEER = #{responsibleEngineer,jdbcType=VARCHAR},
+            </if>
+            <if test="supplier != null">
+                SUPPLIER = #{supplier,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                CODE = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="purchasingEngineer != null">
+                PURCHASING_ENGINEER = #{purchasingEngineer,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                REMARK = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="partClass != null">
+                PART_CLASS = #{partClass,jdbcType=VARCHAR},
+            </if>
+            <if test="workshop1 != null">
+                WORKSHOP1 = #{workshop1,jdbcType=VARCHAR},
+            </if>
+            <if test="workshop2 != null">
+                WORKSHOP2 = #{workshop2,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                PART_LEVEL= #{level,jdbcType=VARCHAR},
+            </if>
+            <if test="major != null">
+                MAJOR = #{major,jdbcType=VARCHAR},
+            </if>
+            <if test="hierarchy != null">
+                HIERARCHY = #{hierarchy,jdbcType=VARCHAR},
+            </if>
+            <if test="ads != null">
+                ADS = #{ads,jdbcType=VARCHAR},
+            </if>
+            <if test="relEbomLineId != null">
+                REL_EBOM_LINE_ID = #{relEbomLineId,jdbcType=VARCHAR},
+            </if>
+            <if test="drawingNum != null">
+                DRAWING_NUM = #{drawingNum,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved2 != null">
+                RESERVED2 = #{reserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved3 != null">
+                RESERVED3 = #{reserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved4 != null">
+                RESERVED4 = #{reserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved5 != null">
+                RESERVED5 = #{reserved5,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData">
+    update SPARE_PART_DATA
+    set PRODUCTIVE_PART_CODE = #{productivePartCode,jdbcType=VARCHAR},
+      PRODUCTIVE_PART_NAME = #{productivePartName,jdbcType=VARCHAR},
+      SPARE_PART_CODE = #{sparePartCode,jdbcType=VARCHAR},
+      SPARE_PART_NAME = #{sparePartName,jdbcType=VARCHAR},
+      IS_SPARE_PART = #{isSparePart,jdbcType=DECIMAL},
+      UNIT = #{unit,jdbcType=VARCHAR},
+      DEPARTMENT = #{department,jdbcType=VARCHAR},
+      RESPONSIBLE_ENGINEER = #{responsibleEngineer,jdbcType=VARCHAR},
+      SUPPLIER = #{supplier,jdbcType=VARCHAR},
+      CODE = #{code,jdbcType=VARCHAR},
+      PURCHASING_ENGINEER = #{purchasingEngineer,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      PART_CLASS = #{partClass,jdbcType=VARCHAR},
+      WORKSHOP1 = #{workshop1,jdbcType=VARCHAR},
+      WORKSHOP2 = #{workshop2,jdbcType=VARCHAR},
+      PART_LEVEL = #{level,jdbcType=VARCHAR},
+      MAJOR = #{major,jdbcType=VARCHAR},
+      HIERARCHY = #{hierarchy,jdbcType=VARCHAR},
+      ADS = #{ads,jdbcType=VARCHAR},
+      REL_EBOM_LINE_ID = #{relEbomLineId,jdbcType=VARCHAR},
+      DRAWING_NUM = #{drawingNum,jdbcType=VARCHAR},
+      RESERVED2 = #{reserved2,jdbcType=VARCHAR},
+      RESERVED3 = #{reserved3,jdbcType=VARCHAR},
+      RESERVED4 = #{reserved4,jdbcType=VARCHAR},
+      RESERVED5 = #{reserved5,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

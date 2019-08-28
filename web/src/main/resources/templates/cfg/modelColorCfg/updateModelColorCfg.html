@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<link th:href="@{/css/jquery-ui.min.css}" rel="stylesheet"/>
+<meta charset=utf-8/>
+<div class="col-lg-7">
+    <form class="form-horizontal" id="form" role="form" method="post" action="./modelColor/updateColorModel">
+        <fieldset>
+            <input id="puid" name="puid" type="hidden" th:value="${entity.puid}"/>
+            <div id="legend" class="">
+                <legend class="">更新颜色车型</legend>
+            </div>
+
+            <div class="form-group col-lg-12">
+                <label for="pCodeOfColorfulModel">车型颜色代码</label>
+                <input class="form-control" id="pCodeOfColorfulModel" name="pCodeOfColorfulModel" type="text"
+                       disabled="disabled" th:value="${entity.pCodeOfColorfulModel}"/>
+            </div>
+            <div class="form-group col-lg-12">
+                <label for="pDescOfColorfulModel">描述</label>
+                <input class="form-control" id="pDescOfColorfulModel" name="pDescOfColorfulModel" type="text"
+                       placeholder="请输入描述" th:value="${entity.pDescOfColorfulModel}"/>
+            </div>
+            <div class="form-group col-lg-12">
+                <label for="modelShell">油漆车身总成</label>
+                <input class="form-control" id="modelShell" name="modelShell" type="text"
+                       disabled="disabled" th:value="${entity.pModelShellOfColorfulModel}"/>
+            </div>
+            <!--循环放入数据 th:id="${column.getFeatureCode()}"-->
+            <div class="form-group col-lg-12" th:each="column,c:${columnList}">
+                <label class="control-label"
+                       th:text="${column.getFeatureCode()+'-'+column.getFeatureDesc()}"
+                       th:for="${column.getId()}"
+                       th:id="${column.getFeatureCode()}"
+
+                ></label>
+                <select class="form-control input-small" th:name="${column.getId()}" data-style="btn-info"
+                        th:id="${column.getId()}"
+                >
+                    <option th:each="color:${colorList}" th:value="${color.getPuid()}"
+                            th:text="${color.getpColorCode()+'&emsp;&emsp;'+color.getpColorName()+'&emsp;&emsp;'+color.getpColorOfSet()}"
+                            th:selected="${orgValue.get((c.index))==color.getpColorCode()? true :false}"
+                    >
+                    </option>
+                </select>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="col-lg-5" style="position: fixed;margin-left:65%;margin-top: 100px;z-index:99999;">
+    <div class="col-lg-12">
+        <label for="feature">特性代码:</label>
+        <input class="typeahead form-control" style="width: 200px;" id="feature" name="feature"
+               data-provide="typeahead"
+               type="text"
+               placeholder="请输入查找的特性"
+        />
+        <a id="search" href="javascript:void(0)" onclick="xsearch2()"><span>搜索</span></a>
+    </div>
+</div>
+<script th:src="@{/js/helper/modelColorFastOption.js}"></script>
+<script th:inline="javascript">
+    <![CDATA[
+    var availableTags = [];
+    var message = null;
+    $(function () {
+            message = [[${columnList}]];
+            for (let index in message) {
+                availableTags.push(message[index].pOptionfamilyName);
+            }
+            // console.log(availableTags);
+            $('#form').bootstrapValidator({
+                message: 'This value is not valid',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    pCodeOfColorfulModel: {
+                        message: '车型颜色代码验证失败',
+                        validators: {
+                            notEmpty: {
+                                message: '车型颜色代码不能为空'
+                            }
+                        }
+                    }
+                }
+            });
+            // 绑定dialog的确定按钮的监听事件
+            $("#btnOk", window.top.document).click(function () {
+                var bootstrapValidator = $("#form", window.top.document).data('bootstrapValidator');
+                bootstrapValidator.validate();
+                if (bootstrapValidator.isValid()) {
+                    var url = $("#form", window.top.document).attr('action');
+                    var data = {};
+                    var _d = $("#form").serializeArray();
+                    for (var p in _d) {
+                        data[_d[p].name] = _d[p].value;
+                    }
+                    data.pCodeOfColorfulModel = $("#pCodeOfColorfulModel").val();
+                    $.ajax({
+                        contentType:
+                            "application/json",
+                        type:
+                            'POST',
+                        url: url,
+                        data: JSON.stringify(data),
+                        success:
+                            function (result) {
+                                // $('.modal-dialog', window.top.document).parent('div').remove()
+                                // $('body', window.top.document).find('.modal-backdrop').remove();
+                                // jquery 调用刷新当前操作的table页面的refresh方法
+                                // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                                activeTabBodyRefresh();
+                                if (result) {
+                                    layer.msg('修改数据成功!!', {icon: 1, time: 2000});
+                                    // window.Ewin.alert({message: '修改数据成功!'});
+                                }
+                                else {
+                                    window.Ewin.alert({message: '修改数据失败!'});
+                                }
+                            },
+                        error: function (status) {
+                            window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                        }
+                    });
+                }
+            })
+        },
+        $('#feature').typeahead({
+            source: availableTags
+        }),
+        $("#search").attr("onclick", "xsearch2();")
+    );
+    var temp = null;
+
+    function xsearch2() {
+        let el = $('#feature').val();
+        if ($("#" + el)) {
+            document.getElementById(el).scrollIntoView(true);
+            if (temp != null || temp != undefined || temp != "") {
+                if (temp != el) {
+                    $('#' + el).css("color", "red");
+                    $('#' + temp).css("color", "black");
+                    temp = el;
+                }
+            }
+            else {
+                temp = el;
+                $('#' + el).css("color", "red");
+            }
+        }
+    }
+
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzWorkListRecordMapper">
+	<resultMap type="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord" id="BaseResultMap">
+        <id column="ID" jdbcType="INTEGER" property="id" />
+		<result column="CHANGE_NUM" jdbcType="VARCHAR" property="changeNum" />
+		<result column="LAUNCHER" jdbcType="VARCHAR" property="launcher" />
+		<result column="LAUNCHER_ID" jdbcType="VARCHAR" property="launcherId" />
+		<result column="LAUNCHER_DEP" jdbcType="VARCHAR" property="launcherDep" />
+		<result column="LAUNCHER_CONTACT" jdbcType="VARCHAR" property="launcherContact" />
+		<result column="AUDITER" jdbcType="VARCHAR" property="auditer" />
+		<result column="AUDITER_ID" jdbcType="VARCHAR" property="auditerId" />
+		<result column="LAUNCH_TIME" jdbcType="TIMESTAMP" property="launchTime" />
+		<result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+		<result column="STATUS" jdbcType="INTEGER" property="status" />
+		<result column="CHANGE_TYPE" jdbcType="VARCHAR" property="changeType" />
+		<result column="IS_RELEVANCE_CHANGE" jdbcType="VARCHAR" property="isRelevanceChange" />
+		<result column="MARKET_TYPE" jdbcType="VARCHAR" property="marketType" />
+		<result column="PROJECT_STAGE" jdbcType="VARCHAR" property="projectStage" />
+		<result column="NOTE" jdbcType="VARCHAR" property="note" />
+		<result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
+        <result column="RESERVE2" jdbcType="VARCHAR" property="reserve2" />
+        <result column="RESERVE3" jdbcType="VARCHAR" property="reserve3" />
+        <result column="RESERVE4" jdbcType="VARCHAR" property="reserve4" />
+        <result column="RESERVE5" jdbcType="VARCHAR" property="reserve5" />
+        <result column="RESERVE6" jdbcType="VARCHAR" property="reserve6" />
+        <result column="RESERVE7" jdbcType="VARCHAR" property="reserve7" />
+        <result column="RESERVE8" jdbcType="VARCHAR" property="reserve8" />
+        <result column="RESERVE9" jdbcType="VARCHAR" property="reserve9" />
+        <result column="RESERVE10" jdbcType="VARCHAR" property="reserve10" />
+	</resultMap>
+
+	<!-- 增加 -->
+	<insert id="HzWorkListDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord">
+        insert into HZ_WORK_LIST
+        (
+        CHANGE_NUM,LAUNCHER,LAUNCHER_ID,LAUNCHER_DEP,LAUNCHER_CONTACT,AUDITER,
+		AUDITER_ID,LAUNCH_TIME,UPDATE_TIME,STATUS,CHANGE_TYPE,IS_RELEVANCE_CHANGE,
+		MARKET_TYPE,PROJECT_STAGE,NOTE,PROJECT_ID
+        )values(
+        #{changeNum,jdbcType=VARCHAR},#{launcher,jdbcType=VARCHAR},
+        #{launcherId,jdbcType=VARCHAR},#{launcherDep,jdbcType=VARCHAR},
+        #{launcherContact,jdbcType=VARCHAR},#{auditer,jdbcType=VARCHAR},
+        #{auditerId,jdbcType=VARCHAR},sysdate,sysdate,
+        #{status,jdbcType=INTEGER},#{changeType,jdbcType=VARCHAR},
+        #{isRelevanceChange,jdbcType=VARCHAR},#{marketType,jdbcType=VARCHAR},
+        #{projectStage,jdbcType=VARCHAR},#{note,jdbcType=VARCHAR},
+        #{projectId,jdbcType=VARCHAR}
+      )
+    </insert>
+
+	<!-- 更新 -->
+	<update id="HzWorkListDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord">
+		update HZ_WORK_LIST
+		<set>
+			<if test="changeNum != null">
+				CHANGE_NUM = #{changeNum,jdbcType=VARCHAR},
+			</if>
+			<if test="launcher != null">
+				LAUNCHER = #{launcher,jdbcType=VARCHAR},
+			</if>
+			<if test="launcherId != null">
+				LAUNCHER_ID = #{launcherId,jdbcType=VARCHAR},
+			</if>
+			<if test="launcherDep != null">
+				LAUNCHER_DEP = #{launcherDep,jdbcType=VARCHAR},
+			</if>
+			<if test="launcherContact != null">
+				LAUNCHER_CONTACT = #{launcherContact,jdbcType=VARCHAR},
+			</if>
+			<if test="auditer != null">
+				AUDITER = #{auditer,jdbcType=VARCHAR},
+			</if>
+			<if test="auditerId != null">
+				AUDITER_ID = #{auditerId,jdbcType=VARCHAR},
+			</if>
+			<if test="launchTime != null">
+				LAUNCH_TIME = #{launchTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				STATUS = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="changeType != null">
+				CHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+			</if>
+			<if test="isRelevanceChange != null">
+				IS_RELEVANCE_CHANGE = #{isRelevanceChange,jdbcType=VARCHAR},
+			</if>
+			<if test="marketType != null">
+				MARKET_TYPE = #{marketType,jdbcType=VARCHAR},
+			</if>
+			<if test="projectStage != null">
+				PROJECT_STAGE = #{projectStage,jdbcType=VARCHAR},
+			</if>
+			<if test="note != null">
+				NOTE = #{note,jdbcType=VARCHAR},
+			</if>
+			<if test="projectId != null">
+				PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查找所有 -->
+	<select id="HzWorkListDAOImpl_findWorkListAll" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		select  * FROM HZ_WORK_LIST
+	</select>
+
+	<!-- 条件查询 -->
+	<select id="HzWorkListDAOImpl_findWorkList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		SELECT * from HZ_WORK_LIST
+		where 1=1
+		<if test="changeNum != null and changeNum!=''">
+			and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
+		</if>
+		<if test="launcher != null and launcher!=''">
+			and LAUNCHER = #{launcher,jdbcType=VARCHAR}
+		</if>
+		<!--发起时间比较-->
+		<if test="launchTime != null and launchTime!=''">
+			<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+			and (LAUNCH_TIME between to_date(#{time1,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+							  and to_date(#{time2,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+		</if>
+		and STATUS <![CDATA[ <> ]]>0
+		order by CAST(ID as FLOAT)
+	</select>
+
+	<!---->
+	<select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+		select * from HZ_WORK_LIST
+		<where>
+			1=1
+			<if test="id != null">
+				and ID = #{id,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<!--待办事项列表-->
+	<select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList1" parameterType="java.util.Map" resultMap="BaseResultMap">
+		select *
+		from HZ_WORK_LIST
+		<where>
+			1=1
+			<if test="id != null">
+				and ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="changeNum != null and changeNum!=''">
+				and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
+			</if>
+			<if test="launcher != null and launcher!=''">
+				and LAUNCHER = #{launcher,jdbcType=VARCHAR}
+			</if>
+			<if test="projectId != null and projectId !='' ">
+				and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+			</if>
+			<!--发起时间比较-->
+			<if test="launchTimeStart != null and launchTimeStart !=''">
+				<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+				and (LAUNCH_TIME between to_date(#{launchTimeStart,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+				and to_date(#{launchTimeEnd,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+			</if>
+			<!--接口人是自己-->
+			and AUDITER = #{auditer,jdbcType=VARCHAR}
+			<!--状态：进行中的变更单-->
+
+		</where>
+	</select>
+
+	<!--已处理事项列表-->
+    <select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList2" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select *
+        from HZ_WORK_LIST
+        <where>
+            1=1
+            <if test="id != null">
+                and ID = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="changeNum != null and changeNum!=''">
+                and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
+            </if>
+			<if test="launcher != null and launcher!=''">
+				and LAUNCHER = #{launcher,jdbcType=VARCHAR}
+			</if>
+            <if test="projectId != null and projectId !='' ">
+                and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+			<!--发起时间比较-->
+			<if test="launchTimeStart != null and launchTimeStart!=''">
+				<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+				and (LAUNCH_TIME between to_date(#{launchTimeStart,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+				and to_date(#{launchTimeEnd,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+			</if>
+			<!--接口人是自己-->
+			and AUDITER = #{auditer,jdbcType=VARCHAR}
+			<!--状态：已完成的变更单-->
+
+        </where>
+    </select>
+
+	<!--我的申请列表-->
+    <select id="HzWorkListDAOImpl_findHzWorkListBasicInfoList3" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+        select *
+        from HZ_WORK_LIST
+        <where>
+            1=1
+            <if test="id != null">
+                and ID = #{id,jdbcType=INTEGER}
+            </if>
+            <if test="changeNum != null and changeNum!=''">
+                and CHANGE_NUM = #{changeNum,jdbcType=VARCHAR}
+            </if>
+
+            <if test="projectId != null and projectId !='' ">
+                and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+            </if>
+			<!--发起时间比较-->
+			<if test="launchTimeStart != null and launchTimeStart!=''">
+				<!--and (LAUNCH_TIME between to_date('2018-11-07 18:24:17','yyyy-mm-dd hh24:mi:ss') and to_date('2018-11-09 18:24:17','yyyy-mm-dd hh24:mi:ss'))-->
+				and (LAUNCH_TIME between to_date(#{launchTimeStart,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss')
+				and to_date(#{launchTimeEnd,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'))
+			</if>
+			<!--所有发起人是自己-->
+			and LAUNCHER = #{launcher,jdbcType=VARCHAR}
+
+        </where>
+    </select>
+
+	<insert id="save" parameterType="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord">
+		<!--oracle插入数据返回主键到外键-->
+		<selectKey resultType="java.lang.Integer" order="BEFORE" keyProperty="id">
+			SELECT SEQ_HZ_USERRECORD.Nextval as ID from DUAL
+		</selectKey>
+		insert into USERRECORD
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID,
+			<if test="login != null">
+				LOGIN,
+			</if>
+			<if test="password != null">
+				PASSWORD,
+			</if>
+			<if test="userName != null">
+				USER_NAME,
+			</if>
+			<if test="address != null">
+				ADDRESS,
+			</if>
+			<if test="job != null">
+				JOB,
+			</if>
+			<if test="groupId != null">
+				GROUP_ID,
+			</if>
+			<if test="state != null">
+				STATE,
+			</if>
+			<if test="type != null">
+				TYPE,
+			</if>
+			LAST_LOGIN_DATE,
+			<if test="email != null">
+				EMAIL,
+			</if>
+			<if test="userNo != null">
+				USER_NO,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<!--SEQ_HZ_USERRECORD.nextval,-->
+			#{id,jdbcType=OTHER},
+			<if test="login != null">
+				#{login,jdbcType=OTHER},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=OTHER},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=OTHER},
+			</if>
+			<if test="address != null">
+				#{address,jdbcType=OTHER},
+			</if>
+			<if test="job != null">
+				#{job,jdbcType=OTHER},
+			</if>
+			<if test="groupId != null">
+				#{groupId,jdbcType=DECIMAL},
+			</if>
+			<if test="state != null">
+				#{state,jdbcType=OTHER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=OTHER},
+			</if>
+			sysdate,
+			<if test="email != null">
+				#{email,jdbcType=OTHER},
+			</if>
+			<if test="userNo != null">
+				#{userNo,jdbcType=OTHER}
+			</if>
+		</trim>
+	</insert>
+
+	<!--删除-->
+	<delete id="delete" parameterType="cn.net.connor.hozon.dao.pojo.workList.HzWorkListRecord">
+		 DELETE FROM userRecord WHERE id=#{id}
+	</delete>
+
+	<!--统计待办事项-->
+	<select id="HzWorkListDAOImpl_count" parameterType="java.util.Map" resultType="int">
+		SELECT count(*) FROM HZ_WORK_LIST
+		WHERE 1=1
+		<!--接口（审批）人是自己（登录角色）-->
+		and AUDITER = #{auditer,jdbcType=VARCHAR}
+		<if test="projectId != null and projectId !='' ">
+			and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+		</if>
+
+	</select>
+
+</mapper>

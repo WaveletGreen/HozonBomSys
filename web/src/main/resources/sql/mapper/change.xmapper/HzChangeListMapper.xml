@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sql.mapper.imapper.HZ_CHANGE_LIST_RECORDMapper">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzChangeListRecord">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="FORM_ID" jdbcType="VARCHAR" property="formId" />
+    <result column="ITEM_ID" jdbcType="VARCHAR" property="itemId" />
+    <result column="ITEM_REVISION" jdbcType="VARCHAR" property="itemRevision" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, FORM_ID, ITEM_ID, ITEM_REVISION
+  </sql>
+
+  <select id="HzChangeListDAOImpl_findItemListByFormId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_CHANGE_LIST_RECORD
+    where FORM_ID = #{formId,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

@@ -1,0 +1,396 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/12/7 Time: 13:31-->
+<link th:href="@{/css/labelColor.css}" rel="stylesheet">
+<body>
+<form id="updateEPLForm" role="form" method="post" action="epl/update">
+    <input id="id" name="id" type="hidden" th:value="${data.id}"/>
+    <div class="form-group">
+        <label for="partId">零件号<span>*</span></label>
+        <input class="form-control" id="partId" name="partId" type="text" th:value="${data.partId}"
+               placeholder="请输入零件号"/>
+    </div>
+    <div class="form-group">
+        <label for="partName">名称<span>*</span></label>
+        <input class="form-control" id="partName" name="partName" type="text"th:value="${data.partName}"
+               placeholder="请输入名称"/>
+    </div>
+    <div class="form-group">
+        <label for="partOfWhichDept">专业</label>
+        <input class="form-control" id="partOfWhichDept" name="partOfWhichDept" type="text"th:value="${data.partOfWhichDept}"
+               placeholder="请输入专业"/>
+    </div>
+    <div class="form-group">
+        <label for="partEnName">英文名称</label>
+        <input class="form-control" id="partEnName" name="partEnName" type="text"th:value="${data.partEnName}"
+               placeholder="请输入英文名称"/>
+    </div>
+    <div class="form-group">
+        <label for="unitList">单位</label>
+        <select class="form-control" name="unit" id="unitList" placeholder="请选择单位">
+            <option></option>
+            <option th:selected="${data.getUnit()=='EA'?true:false}">EA</option>
+            <option th:selected="${data.getUnit()=='KG'?true:false}">KG</option>
+            <option th:selected="${data.getUnit()=='G'?true:false}">G</option>
+            <option th:selected="${data.getUnit()=='L'?true:false}">L</option>
+            <option th:selected="${data.getUnit()=='ml'?true:false}">ml</option>
+            <option th:selected="${data.getUnit()=='m'?true:false}">m</option>
+            <option th:selected="${data.getUnit()=='cm'?true:false}">cm</option>
+            <option th:selected="${data.getUnit()=='mm'?true:false}">mm</option>
+            <option th:selected="${data.getUnit()=='PC'?true:false}">PC</option>
+            <option th:selected="${data.getUnit()=='CAR'?true:false}">CAR</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="pictureNo">图号</label>
+        <input class="form-control" id="pictureNo" name="pictureNo" type="text"th:value="${data.pictureNo}"
+               placeholder="请输入图号"/>
+    </div>
+    <div class="form-group">
+        <label for="pictureSheet">图幅</label>
+        <select class="form-control" name="pictureSheet" id="pictureSheet" placeholder="请选择图幅">
+            <option></option>
+            <option th:selected="${data.getPictureSheet()=='A0+'?true:false}">A0+</option>
+            <option th:selected="${data.getPictureSheet()=='A0'?true:false}">A0</option>
+            <option th:selected="${data.getPictureSheet()=='A1'?true:false}">A1</option>
+            <option th:selected="${data.getPictureSheet()=='A2'?true:false}">A2</option>
+            <option th:selected="${data.getPictureSheet()=='A3'?true:false}">A3</option>
+            <option th:selected="${data.getPictureSheet()=='A4'?true:false}">A4</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="materialHigh">料厚</label>
+        <input class="form-control" id="materialHigh" name="materialHigh" type="text"th:value="${data.materialHigh}"
+               placeholder="请输入料厚"/>
+    </div>
+    <div class="form-group">
+        <label for="material1">材料1</label>
+        <input class="form-control" id="material1" name="material1" type="text"th:value="${data.material1}"
+               placeholder="请输入材料1"/>
+    </div>
+    <div class="form-group">
+        <label for="material2">材料2</label>
+        <input class="form-control" id="material2" name="material2" type="text"th:value="${data.material2}"
+               placeholder="请输入材料2"/>
+    </div>
+    <div class="form-group">
+        <label for="material3">材料3</label>
+        <input class="form-control" id="material3" name="material3" type="text"th:value="${data.material3}"
+               placeholder="请输入材料3"/>
+    </div>
+    <div class="form-group">
+        <label for="density">密度</label>
+        <input class="form-control" id="density" name="density" type="text"th:value="${data.density}"
+               placeholder="请输入密度"/>
+    </div>
+    <div class="form-group">
+        <label for="materialStandard">材料标准</label>
+        <input class="form-control" id="materialStandard" name="materialStandard" type="text"th:value="${data.materialStandard}"
+               placeholder="请输入材料标准"/>
+    </div>
+    <div class="form-group">
+        <label for="surfaceTreat">表面处理</label>
+        <input class="form-control" id="surfaceTreat" name="surfaceTreat" type="text"th:value="${data.surfaceTreat}"
+               placeholder="请输入表面处理"/>
+    </div>
+    <div class="form-group">
+        <label for="textureColorNum">纹理编号/色彩编号</label>
+        <input class="form-control" id="textureColorNum" name="textureColorNum" type="text"th:value="${data.textureColorNum}"
+               placeholder="请输入纹理编号/色彩编号"/>
+    </div>
+    <div class="form-group">
+        <label for="manuProcess">制造工艺</label>
+        <input class="form-control" id="manuProcess" name="manuProcess" type="text"th:value="${data.manuProcess}"
+               placeholder="请输入制造工艺"/>
+    </div>
+    <div class="form-group">
+        <label for="symmetry">对称</label>
+        <select class="form-control" name="symmetry" id="symmetry" placeholder="请选择对称">
+            <option></option>
+            <option th:selected="${data.getSymmetry()=='左件'?true:false}">左件</option>
+            <option th:selected="${data.getSymmetry()=='右件'?true:false}">右件</option>
+            <option th:selected="${data.getSymmetry()=='通用'?true:false}">通用</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="importance">重要度</label>
+        <select class="form-control" name="importance" id="importance" placeholder="请选择重要度">
+            <option></option>
+            <option th:selected="${data.getImportance()=='D'?true:false}">D</option>
+            <option th:selected="${data.getImportance()=='P'?true:false}">P</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="regulationFlag">是否法规件</label>
+        <select class="form-control" name="regulationFlag" id="regulationFlag" placeholder="请选择是否法规件">
+            <option></option>
+            <option th:selected="${data.getRegulationFlag()=='Y'?true:false}">Y</option>
+            <option th:selected="${data.getRegulationFlag()=='N'?true:false}">N</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="is3cpart">是否3C件</label>
+        <select class="form-control" name="is3cpart" id="is3cpart" placeholder="请选择是否3C件">
+            <option></option>
+            <option th:selected="${data.getIs3cpart()=='Y'?true:false}">Y</option>
+            <option th:selected="${data.getIs3cpart()=='N'?true:false}">N</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="regulationCode">法规件型号</label>
+        <select class="form-control" name="regulationCode" id="regulationCode" placeholder="请选择法规件型号">
+            <option>/</option>
+            <option th:each="model:${legislativeCode}"
+                    th:value="${model.getLegislativeNo()}"
+                    th:selected="${data.getRegulationCode()==model.getLegislativeNo()? true:false}"
+                    th:text="${model.getLegislativeNo()==null?'':model.getLegislativeNo()}"
+            >
+            </option>
+        </select>
+
+    </div>
+    <div class="form-group">
+        <label for="bwgBoxPart">黑白灰匣子件</label>
+        <select class="form-control" name="bwgBoxPart" id="bwgBoxPart" placeholder="请选择黑白灰匣子件">
+            <option></option>
+            <option th:selected="${data.getBwgBoxPart()=='B'?true:false}">B</option>
+            <option th:selected="${data.getBwgBoxPart()=='W'?true:false}">W</option>
+            <option th:selected="${data.getBwgBoxPart()=='G'?true:false}">G</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="inOutSideFlag">内外饰标识</label>
+        <select class="form-control" name="inOutSideFlag" id="inOutSideFlag" placeholder="请选择内外饰标识">
+            <option></option>
+            <option th:selected="${data.getInOutSideFlag()=='内饰件'?true:false}">内饰件</option>
+            <option th:selected="${data.getInOutSideFlag()=='外饰件'?true:false}">外饰件</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="developType">开发类别</label>
+        <input class="form-control" id="developType" name="developType" type="text"th:value="${data.developType}"
+               placeholder="请输入开发类别"/>
+    </div>
+    <div class="form-group">
+        <label for="dataVersion">数据版本</label>
+        <input class="form-control" id="dataVersion" name="dataVersion" type="text"th:value="${data.dataVersion}"
+               placeholder="请输入数据版本"/>
+    </div>
+    <div class="form-group">
+        <label for="targetWeight">目标重量(kg)</label>
+        <input class="form-control" id="targetWeight" name="targetWeight" type="text"th:value="${data.targetWeight}"
+               placeholder="请输入目标重量(kg)"/>
+    </div>
+    <div class="form-group">
+        <label for="featureWeight">预估重量(kg)</label>
+        <input class="form-control" id="featureWeight" name="featureWeight" type="text"th:value="${data.featureWeight}"
+               placeholder="请输入预估重量(kg)"/>
+    </div>
+    <div class="form-group">
+        <label for="actualWeight">实际重量(kg)</label>
+        <input class="form-control" id="actualWeight" name="actualWeight" type="text"th:value="${data.actualWeight}"
+               placeholder="请输入实际重量(kg)"/>
+    </div>
+    <div class="form-group">
+        <label for="fastener">紧固件</label>
+        <select class="form-control" name="fastener" id="fastener" placeholder="请选择紧固件">
+            <option></option>
+            <option th:selected="${data.getFastener()=='标准件'?true:false}">标准件</option>
+            <option th:selected="${data.getFastener()=='非标件'?true:false}">非标件</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="fastenerStandard">紧固件规格</label>
+        <input class="form-control" id="fastenerStandard" name="fastenerStandard" type="text"th:value="${data.fastenerStandard}"
+               placeholder="请输入紧固件规格"/>
+    </div>
+    <div class="form-group">
+        <label for="fastenerLevel">紧固件性能等级</label>
+        <input class="form-control" id="fastenerLevel" name="fastenerLevel" type="text"th:value="${data.fastenerLevel}"
+               placeholder="请输入紧固件性能等级"/>
+    </div>
+    <div class="form-group">
+        <label for="torque">扭矩</label>
+        <input class="form-control" id="torque" name="torque" type="text"th:value="${data.torque}"
+               placeholder="请输入扭矩"/>
+    </div>
+    <div class="form-group">
+        <label for="dutyEngineer">责任工程师</label>
+        <input class="form-control" id="dutyEngineer" name="dutyEngineer" type="text"th:value="${data.dutyEngineer}"
+               placeholder="请输入责任工程师"/>
+    </div>
+    <div class="form-group">
+        <label for="supply">供应商</label>
+        <input class="form-control" id="supply" name="supply" type="text"th:value="${data.supply}"
+               placeholder="请输入供应商"/>
+    </div>
+    <div class="form-group">
+        <label for="supplyCode">供应商代码</label>
+        <input class="form-control" id="supplyCode" name="supplyCode" type="text"th:value="${data.supplyCode}"
+               placeholder="请输入供应商代码"/>
+    </div>
+    <div class="form-group">
+        <label for="buyEngineer">采购工程师</label>
+        <input class="form-control" id="buyEngineer" name="buyEngineer" type="text"th:value="${data.buyEngineer}"
+               placeholder="请输入采购工程师"/>
+    </div>
+    <div class="form-group">
+        <label for="remark">备注</label>
+        <input class="form-control" id="remark" name="remark" type="text"th:value="${data.remark}"
+               placeholder="请输入备注"/>
+    </div>
+    <div class="form-group">
+        <label for="partClass">零件分类</label>
+        <select class="form-control" name="partClass" id="partClass" placeholder="请选择零件分类">
+            <option></option>
+            <option th:selected="${data.getPartClass()=='自制'?true:false}">自制</option>
+            <option th:selected="${data.getPartClass()=='外协'?true:false}">外协</option>
+            <option th:selected="${data.getPartClass()=='虚拟总成'?true:false}">虚拟总成</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="partResource">零件来源</label>
+        <select class="form-control" name="partResource" id="partResource" placeholder="请选择零件来源">
+            <option></option>
+            <option th:selected="${data.getPartResource()=='采购件'?true:false}">采购件</option>
+            <option th:selected="${data.getPartResource()=='采购拆分单件'?true:false}">采购拆分单件</option>
+            <option th:selected="${data.getPartResource()=='采购拆分总成件'?true:false}">采购拆分总成件</option>
+            <option th:selected="${data.getPartResource()=='采购拆分标准件'?true:false}">采购拆分标准件</option>
+            <option th:selected="${data.getPartResource()=='采购拆分非标件'?true:false}">采购拆分非标件</option>
+            <option th:selected="${data.getPartResource()=='自制总成'?true:false}">自制总成</option>
+            <option th:selected="${data.getPartResource()=='自制单件'?true:false}">自制单件</option>
+            <option th:selected="${data.getPartResource()=='自用标准件'?true:false}">自用标准件</option>
+            <option th:selected="${data.getPartResource()=='自用非标件'?true:false}">自用非标件</option>
+            <option th:selected="${data.getPartResource()=='虚拟总成'?true:false}">虚拟总成</option>
+        </select>
+    </div>
+
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#updateEPLForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                partId: {
+                    message: '零件号不能为空',
+                    validators: {
+                        notEmpty: {
+                            message: '零件号不能为空'
+                        },
+                        remote: {//ajax验证。server result:{"valid",true or false} 向服务发送当前input name值，获得一个json数据。例表示正确：{"valid",true}
+                            url: "epl/exist",//验证地址
+                            data: function (validator) {// 获取需要传送到后台的验证的数据
+                                return {
+                                    id:$('#id').val(),
+                                    partId: $('#partId').val(),
+                                    projectId:$("#project", window.top.document).val()
+                                }
+                            },
+                            message: '零件号已存在',//提示消息
+                            // delay :  500,
+                            type: 'POST'//请求方式，
+                        },
+                    }
+                },
+                partName: {
+                    message: '零件名称不能为空',
+                    validators: {
+                        notEmpty: {
+                            message: '零件名称不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#updateEPLForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#updateEPLForm ", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "id": $("#id").val(),
+                    "partId": $("#partId").val(),
+                    "partName": $("#partName").val(),
+                    "partOfWhichDept": $("#partOfWhichDept").val(),
+                    "partEnName": $("#partEnName").val(),
+                    "unit": $("#unitList").val(),
+                    "pictureNo": $("#pictureNo").val(),
+                    "pictureSheet": $("#pictureSheet").val(),
+                    "materialHigh": $("#materialHigh").val(),
+                    "material1": $("#material1").val(),
+                    "material2": $("#material2").val(),
+                    "material3": $("#material3").val(),
+                    "density": $("#density").val(),
+                    "materialStandard": $("#materialStandard").val(),
+                    "surfaceTreat": $("#surfaceTreat").val(),
+                    "textureColorNum": $("#textureColorNum").val(),
+                    "manuProcess": $("#manuProcess").val(),
+                    "symmetry": $("#symmetry").val(),
+                    "importance": $("#importance").val(),
+                    "regulationFlag": $("#regulationFlag").val(),
+                    "is3cpart": $("#is3cpart").val(),
+                    "regulationCode": $("#regulationCode").val(),
+                    "bwgBoxPart": $("#bwgBoxPart").val(),
+                    "developType": $("#developType").val(),
+                    "dataVersion": $("#dataVersion").val(),
+                    "targetWeight": $("#targetWeight").val(),
+                    "featureWeight": $("#featureWeight").val(),
+                    "actualWeight": $("#actualWeight").val(),
+                    "fastener": $("#fastener").val(),
+                    "fastenerStandard": $("#fastenerStandard").val(),
+                    "fastenerLevel": $("#fastenerLevel").val(),
+                    "torque": $("#torque").val(),
+                    "dutyEngineer": $("#dutyEngineer").val(),
+                    "supply": $("#supply").val(),
+                    "supplyCode": $("#supplyCode").val(),
+                    "buyEngineer": $("#buyEngineer").val(),
+                    "remark": $("#remark").val(),
+                    "partClass": $("#partClass").val(),
+                    "partResource": $("#partResource").val(),
+                    "inOutSideFlag": $("#inOutSideFlag").val(),
+                    "projectId": $("#project", window.top.document).val()
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            activeTabBodyRefresh();
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+</body>
+</html>

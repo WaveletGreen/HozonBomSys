@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.dao.configuration.modelColor.HzColorModelDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
+        <!--主键-->
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <!--模型外键-->
+        <result column="MODEL_UID" jdbcType="VARCHAR" property="modelUid"/>
+        <!--配置外键-->
+        <result column="P_CFG_UID" jdbcType="VARCHAR" property="cfgUid"/>
+        <!--颜色外键-->
+        <result column="P_COLOR_UID" jdbcType="VARCHAR" property="colorUid"/>
+        <!--项目ID外键-->
+        <result column="P_CFG_MAIN_UID" jdbcType="VARCHAR" property="cfgMainUid"/>
+        <!--创建时间-->
+        <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <!--修改时间-->
+        <result column="MODIFY_DATE" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <!--创建者-->
+        <result column="CREATOR" jdbcType="VARCHAR" property="creator"/>
+        <!--修改者-->
+        <result column="MODIFIER" jdbcType="VARCHAR" property="modifier"/>
+    </resultMap>
+    <resultMap id="ResultMapWithColor" extends="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
+        <!--色集-->
+        <result column="P_COLOR_OF_SET" jdbcType="VARCHAR" property="pColorOfSet"/>
+        <!--颜色名称-->
+        <result column="P_COLOR_NAME" jdbcType="VARCHAR" property="pColorName"/>
+        <!--颜色代号-->
+        <result column="P_COLOR_CODE" jdbcType="VARCHAR" property="pColorCode"/>
+        <!--色板-->
+        <result column="P_COLOR_PLATE" jdbcType="VARCHAR" property="pColorPlate"/>
+        <!--是否多色-->
+        <result column="P_COLOR_IS_MULTIPLY" jdbcType="VARCHAR" property="pColorIsMultiply"/>
+        <!--&lt;!&ndash;备注&ndash;&gt;-->
+        <!--<result column="P_COLOR_COMMENT" jdbcType="VARCHAR" property="pColorComment"/>-->
+        <!--&lt;!&ndash;创建时间&ndash;&gt;-->
+        <!--<result column="P_COLOR_CREATE_DATE" jdbcType="TIMESTAMP" property="pColorCreateDate"/>-->
+        <!--&lt;!&ndash;生效时间&ndash;&gt;-->
+        <!--<result column="P_COLOR_EFFECTED_DATE" jdbcType="TIMESTAMP" property="pColorEffectedDate"/>-->
+        <!--&lt;!&ndash;废止时间&ndash;&gt;-->
+        <!--<result column="P_COLOR_ABOLISH_DATE" jdbcType="TIMESTAMP" property="pColorAbolishDate"/>-->
+        <!--&lt;!&ndash;修改时间&ndash;&gt;-->
+        <!--<result column="P_COLOR_MODIFY_DATE" jdbcType="TIMESTAMP" property="pColorModifyDate"/>-->
+        <!--&lt;!&ndash;修改人&ndash;&gt;-->
+        <!--<result column="P_COLOR_MODIFIER" jdbcType="VARCHAR" property="pColorModifier"/>-->
+        <!--&lt;!&ndash;可用状态&ndash;&gt;-->
+        <!--<result column="P_COLOR_STATUS" jdbcType="INTEGER" property="pColorStatus"/>-->
+        <!--&lt;!&ndash;可用状态&ndash;&gt;-->
+        <!--<result column="P_COLOR_IS_DELETED" jdbcType="INTEGER" property="pColorIsDeleted"/>-->
+    </resultMap>
+
+    <resultMap id="BaseResultMap2" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzColorModel2">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="MODEL_UID" jdbcType="VARCHAR" property="modelUid"/>
+        <result column="P_CFG_UID" jdbcType="VARCHAR" property="pCfgUid"/>
+        <result column="P_COLOR_UID" jdbcType="VARCHAR" property="pColorUid"/>
+        <result column="P_CFG_MAIN_UID" jdbcType="VARCHAR" property="pCfgMainUid"/>
+        <result column="CREATE_DATE" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="MODIFY_DATE" jdbcType="TIMESTAMP" property="modifyDate"/>
+        <result column="CREATOR" jdbcType="VARCHAR" property="creator"/>
+        <result column="MODIFIER" jdbcType="VARCHAR" property="modifier"/>
+        <result column="P_OPTIONFAMILY_NAME" jdbcType="VARCHAR" property="pOptionfamilyName"/>
+        <result column="P_OPTIONFAMILY_DESC" jdbcType="VARCHAR" property="pOptionfamilyDesc"/>
+        <result column="P_MODEL_SHELL" jdbcType="VARCHAR" property="pModelShell"/>
+        <result column="P_COLOR_NAME" jdbcType="VARCHAR" property="colorName"/>
+        <result column="P_COLOR_CODE" jdbcType="VARCHAR" property="colorCode"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        PUID,
+        MODEL_UID,
+        P_CFG_UID,
+        P_COLOR_UID,
+        P_CFG_MAIN_UID,
+        CREATE_DATE,
+        MODIFY_DATE,
+        CREATOR,
+        MODIFIER
+    </sql>
+    <sql id="Base_Column_List2">
+        t3.PUID,
+        t3.MODEL_UID,
+        t3.P_CFG_UID,
+        t3.P_COLOR_UID,
+        t3.P_CFG_MAIN_UID,
+        t3.CREATE_DATE,
+        t3.MODIFY_DATE,
+        t3.CREATOR,
+        t3.MODIFIER,
+        t4.P_OPTIONFAMILY_NAME,
+        t4.P_OPTIONFAMILY_DESC,
+        t2.P_MODEL_SHELL,
+        t5.P_COLOR_NAME,
+        t5.P_COLOR_CODE
+    </sql>
+    <sql id="Base_Column_List_With_Color">
+        P_COLOR_OF_SET,
+        P_COLOR_NAME,
+        P_COLOR_CODE,
+        P_COLOR_PLATE,
+        P_COLOR_IS_MULTIPLY
+    </sql>
+    <sql id="values_by_batch">
+        #{item.puid,jdbcType=VARCHAR},
+        #{item.modelUid,jdbcType=VARCHAR},
+        #{item.cfgUid,jdbcType=VARCHAR},
+        #{item.colorUid,jdbcType=VARCHAR},
+        #{item.cfgMainUid,jdbcType=VARCHAR},
+        #{item.createDate,jdbcType=TIMESTAMP},
+        #{item.modifyDate,jdbcType=TIMESTAMP},
+        #{item.creator,jdbcType=VARCHAR},
+        #{item.modifier,jdbcType=VARCHAR}
+    </sql>
+    <!--主键筛选-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_COLOR_DETAIL
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <!--根据颜色模型-->
+    <select id="selectByModelUid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_COLOR_DETAIL
+        where MODEL_UID = #{modelUid,jdbcType=VARCHAR}
+    </select>
+    <!--连接查询颜色-->
+    <select id="selectByModelUidWithColor" parameterType="java.lang.String" resultMap="ResultMapWithColor">
+        select
+        t.<include refid="Base_Column_List"/>,
+        <include refid="Base_Column_List_With_Color"/>
+        from HZ_CFG0_MODEL_COLOR_DETAIL t
+        left join Hz_Cfg0_Colorset t2 on t.p_color_uid=t2.puid
+        where t.MODEL_UID = #{modelUid,jdbcType=VARCHAR} order by P_CFG_UID
+    </select>
+    <select id="selectByModelUidWithColor2" parameterType="java.lang.String" resultMap="ResultMapWithColor">
+        select
+        t.<include refid="Base_Column_List"/>,
+        <include refid="Base_Column_List_With_Color"/>
+        from HZ_CFG0_MODEL_COLOR_DETAIL t
+        left join Hz_Cfg0_Colorset t2 on t.p_color_uid=t2.puid
+        left join Hz_Cfg0_Optionfamily_Record t3 on t.p_cfg_uid=t3.puid
+        where t.MODEL_UID = #{modelUid,jdbcType=VARCHAR} order by t3.p_optionfamily_name
+    </select>
+    <!--根据主配置ID查找-->
+    <select id="selectByCfgMainUid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_COLOR_DETAIL
+        where P_CFG_MAIN_UID = #{cfgMainUid,jdbcType=VARCHAR}
+    </select>
+    <!--主键删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_CFG0_MODEL_COLOR_DETAIL
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+    <!--插入-->
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
+        insert into HZ_CFG0_MODEL_COLOR_DETAIL (
+        <include refid="Base_Column_List"/>
+        )
+        values (
+        #{puid,jdbcType=VARCHAR},
+        #{modelUid,jdbcType=VARCHAR},
+        #{cfgUid,jdbcType=VARCHAR},
+        #{colorUid,jdbcType=VARCHAR},
+        #{cfgMainUid,jdbcType=VARCHAR},
+        #{createDate,jdbcType=TIMESTAMP},
+        #{modifyDate,jdbcType=TIMESTAMP},
+        #{creator,jdbcType=VARCHAR},
+        #{modifier,jdbcType=VARCHAR}
+        )
+    </insert>
+    <!--批量插入-->
+    <insert id="insertByBatch" parameterType="java.util.List">
+        insert all
+        <foreach collection="list" item="item" index="index"
+                 separator=" ">
+            into HZ_CFG0_MODEL_COLOR_DETAIL (
+            <include refid="Base_Column_List"/>
+            ) values (
+            <include refid="values_by_batch"/>
+            )
+        </foreach>
+        select 1 from dual
+    </insert>
+    <!--主键更新-->
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
+    update HZ_CFG0_MODEL_COLOR_DETAIL
+    set MODEL_PUID = #{modelUid,jdbcType=VARCHAR},
+      P_CFG_PUID = #{cfgUid,jdbcType=VARCHAR},
+      P_COLOR_PUID = #{colorUid,jdbcType=VARCHAR}
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+    <!--按车型和配置更新颜色，进行单点更新-->
+    <update id="updateColorModelWithCfg" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColorDetail">
+    update HZ_CFG0_MODEL_COLOR_DETAIL
+    set
+      P_COLOR_UID = #{colorUid,jdbcType=VARCHAR},
+      MODIFY_DATE=#{modifyDate,jdbcType=TIMESTAMP},
+      MODIFIER=#{modifier,jdbcType=VARCHAR}
+    where MODEL_UID = #{modelUid,jdbcType=VARCHAR} and P_CFG_UID = #{cfgUid,jdbcType=VARCHAR}
+  </update>
+
+    <select id="selectByProjectId" parameterType="java.lang.String" resultMap="BaseResultMap2">
+        select
+        <include refid="Base_Column_List2"/>
+        from
+        HZ_CFG0_MAIN_RECORD t join Hz_Cfg0_Model_Color_Record t2 on t.PUID = t2.P_CFG0_MAIN_RECORD_OF_MC
+        join HZ_CFG0_MODEL_COLOR_DETAIL t3 on t2.puid = t3.model_uid
+        join Hz_Cfg0_Optionfamily_Record t4 on t3.p_cfg_uid = t4.puid
+        join Hz_Cfg0_Colorset t5 on t5.puid = t3.p_color_uid
+        where t.P_CFG0_OF_WHICH_PROJECT_PUID = #{projectPuid}
+
+    </select>
+
+    <select id="selectByModelColors" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCfg0ModelColor" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        HZ_CFG0_MODEL_COLOR_DETAIL t
+        where
+        t.MODEL_UID in
+        <foreach collection="list" index="index" item="hzCfg0ModelColor" open="(" separator="," close=")">
+            #{hzCfg0ModelColor.puid}
+        </foreach>
+    </select>
+
+    <update id="updateListAll" parameterType="java.util.List">
+      <foreach collection="list" index="index" item="hzCfg0ModelColorDetails" open="begin" close=";end;" separator=";">
+          update HZ_CFG0_MODEL_COLOR_DETAIL
+          set MODEL_UID = #{hzCfg0ModelColorDetails.modelUid,jdbcType=VARCHAR},
+          P_CFG_UID = #{hzCfg0ModelColorDetails.cfgUid,jdbcType=VARCHAR},
+          P_COLOR_UID = #{hzCfg0ModelColorDetails.colorUid,jdbcType=VARCHAR}
+          where
+          PUID = #{hzCfg0ModelColorDetails.puid,jdbcType=VARCHAR}
+      </foreach>
+    </update>
+</mapper>

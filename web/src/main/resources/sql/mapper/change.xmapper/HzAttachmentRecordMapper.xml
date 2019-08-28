@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.resources.mybatis.change.HzAttachmentRecordDao">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="FORM_ID" jdbcType="VARCHAR" property="formId" />
+    <result column="ATTACHMENT_URL" jdbcType="VARCHAR" property="attachmentUrl" />
+    <result column="SHOW_NAME" jdbcType="VARCHAR" property="showName" />
+    <result column="REAL_NAME" jdbcType="VARCHAR" property="realName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, FORM_ID, ATTACHMENT_URL, SHOW_NAME, REAL_NAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_ATTACHMENT_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from HZ_ATTACHMENT_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord">
+    insert into HZ_ATTACHMENT_RECORD (ID, FORM_ID, ATTACHMENT_URL, 
+      SHOW_NAME, REAL_NAME)
+    values (#{id,jdbcType=DECIMAL}, #{formId,jdbcType=VARCHAR}, #{attachmentUrl,jdbcType=VARCHAR}, 
+      #{showName,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord">
+    insert into HZ_ATTACHMENT_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="formId != null">
+        FORM_ID,
+      </if>
+      <if test="attachmentUrl != null">
+        ATTACHMENT_URL,
+      </if>
+      <if test="showName != null">
+        SHOW_NAME,
+      </if>
+      <if test="realName != null">
+        REAL_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="attachmentUrl != null">
+        #{attachmentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="showName != null">
+        #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord">
+    update HZ_ATTACHMENT_RECORD
+    <set>
+      <if test="formId != null">
+        FORM_ID = #{formId,jdbcType=VARCHAR},
+      </if>
+      <if test="attachmentUrl != null">
+        ATTACHMENT_URL = #{attachmentUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="showName != null">
+        SHOW_NAME = #{showName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        REAL_NAME = #{realName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzAttachmentRecord">
+    update HZ_ATTACHMENT_RECORD
+    set FORM_ID = #{formId,jdbcType=VARCHAR},
+      ATTACHMENT_URL = #{attachmentUrl,jdbcType=VARCHAR},
+      SHOW_NAME = #{showName,jdbcType=VARCHAR},
+      REAL_NAME = #{realName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <select id="selectByChangeNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List"/>
+    from
+      HZ_ATTACHMENT_RECORD
+    where
+      FORM_ID = #{changeNo,jdbcType=VARCHAR}
+  </select>
+</mapper>

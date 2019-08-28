@@ -1,0 +1,79 @@
+<!--主容器不能使用<!DOCTYPE html>-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="include/includebase"></head>
+<!--<script th:src="@{user.js}"></script>-->
+<title>合众BOM管理系统</title>
+<body id="mainBody">
+<!--<link rel="shortcut icon" href="http://www.weather.com.cn/favicon.ico" type="image/x-icon"/>-->
+<link th:href="@{css/sb-admin.css}" rel="stylesheet"/>
+<div id="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top nav_custom" role="navigation">
+        <div class="navbar-header" id="navbar_header">
+            <a class="navbar-brand"  href="main"><img th:src="@{/img/logo.png}"><!--<span style="color: #FFFFFF">BOM管理系统</span>--></a>
+        </div>
+        <!-- Top Menu Items -->
+        <ul class="nav navbar-right top-nav">
+            <li>
+                <a href="" class="dropdown-toggle"style="color: #ffffff" data-toggle="dropdown">
+                    <i class="fa fa-star-half-o bar-task"></i>
+                    <font>待办事项:</font>
+                    <!--<mark class="caret">：</mark>-->
+                    <font id="myCurrentTask"></font>
+                </a>
+                <ul class="dropdown-menu" id="myTasks" style="max-height: 300px;overflow-y:scroll;">
+                </ul>
+            </li>
+            <li>
+                <a href="" class="dropdown-toggle"style="color: #ffffff" data-toggle="dropdown">
+                    <i class="fa fa-list-alt bar-project"></i>
+                    <font>当前工作项目:</font>
+                    <!--<mark class="caret">：</mark>-->
+                    <font id="currentProjectHead"></font>
+
+                </a>
+                <ul class="dropdown-menu" id="projectList" style="max-height: 300px;overflow-y:scroll;"></ul>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle"style="color: #ffffff" data-toggle="dropdown">
+                    <i class="fa fa-user bar-user"></i>
+                    <font th:text="${#authentication.name}"></font> <b class="caret"></b>
+                    <!--<font th:text="${#authentication.principal.userName}"></font> <b class="caret"></b>-->
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="divider"></li>
+                    <li>
+                        <a href="javascript:void(0)" onclick="updatePassword()"> <i class="fa fa-fw fa-gear"></i> 修改密码
+                        </a>
+                    </li>
+
+
+                    <li class="divider"></li>
+                    <li>
+                        <a href="/hozon/login"><i class="fa fa-fw fa-power-off"></i>退 出</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav" id="menu_tree"></ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+    <div id="page-wrapper" style="border-radius:5px 5px 0 0;">
+        <input type="hidden" id="project"/>
+        <input type="hidden" id="currentTask"/>
+        <div id="tabContainer"></div>
+    </div>
+</div>
+</body>
+<script th:src="@{/js/task/task.js}"></script>
+<script th:src="@{/js/main/main.js}"></script>
+<script th:src="@{/js/change/changeForm/orgTreeHelper.js}"></script>
+<script th:inline="javascript">
+    var authName = [[${#authentication.name}]];
+    var user = [[${#authentication}]]
+</script>
+</html>

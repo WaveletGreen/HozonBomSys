@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.dao.configuration.modelColor.HzCmcrDetailChangeDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
+        <!--主键-->
+        <id column="CMCR_DETAIL_CG_ID" jdbcType="DECIMAL" property="cmcrDetailCgId"/>
+        <!--源数据PUID，从源数据中继承过来，外键，级联删除-->
+        <result column="CMCR_DETAIL_SRC_PUID" jdbcType="VARCHAR" property="cmcrDetailSrcPuid"/>
+        <!--特性，从源数据中继承过来，外键，不是特性值外键，删除时set null-->
+        <result column="CMCR_DETAIL_SRC_CFG_UID" jdbcType="VARCHAR" property="cmcrDetailSrcCfgUid"/>
+        <!--颜色外键，从源数据中继承过来，外键，删除时set null-->
+        <result column="CMCR_DETAIL_SRC_COLOR_UID" jdbcType="VARCHAR" property="cmcrDetailSrcColorUid"/>
+        <!--主配置UID，从源数据中继承过来，外键，级联删除-->
+        <result column="CMCR_DETAIL_SRC_CFG_MAIN_UID" jdbcType="VARCHAR" property="cmcrDetailSrcCfgMainUid"/>
+        <!--vwo主键，外键，级联删除-->
+        <result column="CMCR_CHANGE_ORDER_UID" jdbcType="DECIMAL" property="cmcrDetailCgVwoId"/>
+        <!--源数据的创建时间-->
+        <result column="CMCR_DETAIL_SRC_CREATE_DATE" jdbcType="TIMESTAMP" property="cmcrDetailSrcCreateDate"/>
+        <!--源数据的修改时间-->
+        <result column="CMCR_DETAIL_SRC__MODIFY_DATE" jdbcType="TIMESTAMP" property="cmcrDetailSrcModifyDate"/>
+        <!--源数据的创建者-->
+        <result column="CMCR_DETAIL_SRC_CREATOR" jdbcType="VARCHAR" property="cmcrDetailSrcCreator"/>
+        <!--源数据的修改者-->
+        <result column="CMCR_DETAIL_SRC_MODIFIER" jdbcType="VARCHAR" property="cmcrDetailSrcModifier"/>
+        <!--配色方案主数据PUID，从源数据中继承过来，外键，级联删除-->
+        <result column="CMCR_DETAIL_SRC_MODEL_PUID" jdbcType="VARCHAR" property="cmcrDetailSrcModelPuid"/>
+        <!--特性代码，万一特性删除了，还能知道是哪个特性-->
+        <result column="CMCR_DETAIL_CG_FEATURE_CODE" jdbcType="VARCHAR" property="cmcrDetailCgFeatureCode"/>
+        <!--特性名，意外同上-->
+        <result column="CMCR_DETAIL_CG_FEATURE_NAME" jdbcType="VARCHAR" property="cmcrDetailCgFeatureName"/>
+        <!--颜色代码，意外同上-->
+        <result column="CMCR_DETAIL_CG_COLOR_CODE" jdbcType="VARCHAR" property="cmcrDetailCgColorCode"/>
+        <!--颜色名称，意外同上-->
+        <result column="CMCR_DETAIL_CG_COLOR_NAME" jdbcType="VARCHAR" property="cmcrDetailCgColorName"/>
+        <!--创建时间-->
+        <result column="CMCR_DETAIL_CG_CREATE_DATE" jdbcType="TIMESTAMP" property="cmcrDetailCgCreateDate"/>
+        <!--创建者，即为操作者-->
+        <result column="CMCR_DETAIL_CG_CREATOR" jdbcType="VARCHAR" property="cmcrDetailCgCreator"/>
+        <!--修改时间-->
+        <result column="CMCR_DETAIL_CG_UPDATE_DATE" jdbcType="TIMESTAMP" property="cmcrDetailCgUpdateDate"/>
+        <!--修改者-->
+        <result column="CMCR_DETAIL_CG_UPDATER" jdbcType="VARCHAR" property="cmcrDetailCgUpdater"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_TITLE" jdbcType="VARCHAR" property="cmcrDetailCgTitle"/>
+        <!--对应的2Y层是否为颜色件，因为颜色件是动态回传到后台，因此需要该字段标记变更前后的颜色变化，理想情况下的变更不影响表头的变化，则该字段一直是1，否则根据动态变化会将其设置为1/0-->
+        <result column="CMCR_DETAIL_CG_IS_COLORFUL" jdbcType="INTEGER" property="cmcrDetailCgIsColorful"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE3" jdbcType="VARCHAR" property="cmcrDetailCgReverse3"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE4" jdbcType="VARCHAR" property="cmcrDetailCgReverse4"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE5" jdbcType="VARCHAR" property="cmcrDetailCgReverse5"/>
+        <!--保留字段-->
+        <result column="CMCR_DETAIL_CG_REVERSE6" jdbcType="VARCHAR" property="cmcrDetailCgReverse6"/>
+        <!--变更主表ID-->
+        <result column="CMCR_CG_CHANGE_ID" jdbcType="DECIMAL" property="cmcrCgChangeId"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="VWO_Result_map" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
+        <result column="colorCode" jdbcType="VARCHAR" property="colorCode"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        CMCR_DETAIL_CG_ID,
+        CMCR_DETAIL_SRC_PUID,
+        CMCR_DETAIL_SRC_CFG_UID,
+        CMCR_DETAIL_SRC_COLOR_UID,
+        CMCR_DETAIL_SRC_CFG_MAIN_UID,
+        CMCR_CHANGE_ORDER_UID,
+        CMCR_DETAIL_SRC_CREATE_DATE,
+        CMCR_DETAIL_SRC__MODIFY_DATE,
+        CMCR_DETAIL_SRC_CREATOR,
+        CMCR_DETAIL_SRC_MODIFIER,
+        CMCR_DETAIL_SRC_MODEL_PUID,
+        CMCR_DETAIL_CG_FEATURE_CODE,
+        CMCR_DETAIL_CG_FEATURE_NAME,
+        CMCR_DETAIL_CG_COLOR_CODE,
+        CMCR_DETAIL_CG_COLOR_NAME,
+        CMCR_DETAIL_CG_CREATE_DATE,
+        CMCR_DETAIL_CG_CREATOR,
+        CMCR_DETAIL_CG_UPDATE_DATE,
+        CMCR_DETAIL_CG_UPDATER,
+        CMCR_DETAIL_CG_TITLE,
+        CMCR_DETAIL_CG_IS_COLORFUL,
+        CMCR_DETAIL_CG_REVERSE3,
+        CMCR_DETAIL_CG_REVERSE4,
+        CMCR_DETAIL_CG_REVERSE5,
+        CMCR_DETAIL_CG_REVERSE6,
+        CMCR_CG_CHANGE_ID
+  </sql>
+    <sql id="Base_Column_List2">
+        CMCR_DETAIL_CG_ID,
+        CMCR_DETAIL_SRC_PUID,
+        CMCR_DETAIL_SRC_CFG_UID,
+        CMCR_DETAIL_SRC_COLOR_UID,
+        CMCR_DETAIL_SRC_CFG_MAIN_UID,
+        CMCR_CHANGE_ORDER_UID,
+        CMCR_DETAIL_SRC_CREATE_DATE,
+        CMCR_DETAIL_SRC__MODIFY_DATE,
+        CMCR_DETAIL_SRC_CREATOR,
+        CMCR_DETAIL_SRC_MODIFIER,
+        CMCR_DETAIL_SRC_MODEL_PUID,
+        CMCR_DETAIL_CG_FEATURE_CODE,
+        CMCR_DETAIL_CG_FEATURE_NAME,
+        CMCR_DETAIL_CG_COLOR_CODE,
+        CMCR_DETAIL_CG_COLOR_NAME,
+
+        CMCR_DETAIL_CG_CREATOR,
+
+        CMCR_DETAIL_CG_UPDATER,
+        CMCR_DETAIL_CG_TITLE,
+        CMCR_DETAIL_CG_IS_COLORFUL,
+        CMCR_DETAIL_CG_REVERSE3,
+        CMCR_DETAIL_CG_REVERSE4,
+        CMCR_DETAIL_CG_REVERSE5,
+        CMCR_DETAIL_CG_REVERSE6,
+        CMCR_CG_CHANGE_ID,
+        CMCR_DETAIL_CG_CREATE_DATE,
+        CMCR_DETAIL_CG_UPDATE_DATE
+  </sql>
+    <!--**************************************select**************************************-->
+    <!--主键查询-->
+    <select id="selectByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from ${whichTable}
+        where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
+    </select>
+    <!--**************************************delete**************************************-->
+    <!--主键删除-->
+    <delete id="deleteByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
+    delete from ${whichTable}
+    where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
+  </delete>
+    <!--**************************************insert**************************************-->
+    <!--全数据插入-->
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
+        insert into ${whichTable} (
+        <include refid="Base_Column_List"/>
+        )
+        values (#{cmcrDetailCgId,jdbcType=DECIMAL}, #{cmcrDetailSrcPuid,jdbcType=VARCHAR},
+        #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR}, #{cmcrDetailSrcColorUid,jdbcType=VARCHAR},
+        #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR}, #{cmcrDetailCgVwoId,jdbcType=DECIMAL},
+        #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP}, #{cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
+        #{cmcrDetailSrcCreator,jdbcType=VARCHAR}, #{cmcrDetailSrcModifier,jdbcType=VARCHAR},
+        #{cmcrDetailSrcModelPuid,jdbcType=VARCHAR}, #{cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
+        #{cmcrDetailCgFeatureName,jdbcType=VARCHAR}, #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
+        #{cmcrDetailCgColorName,jdbcType=VARCHAR}, #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
+        #{cmcrDetailCgCreator,jdbcType=VARCHAR}, #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
+        #{cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{cmcrDetailCgTitle,jdbcType=VARCHAR},
+        #{cmcrDetailCgIsColorful,jdbcType=INTEGER}, #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+        #{cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+        #{cmcrDetailCgReverse6,jdbcType=VARCHAR},#{cmcrCgChangeId,jdbcType=DECIMAL}
+        )
+    </insert>
+    <!--批量插入-->
+    <insert id="insertList" parameterType="java.util.List">
+        insert into ${whichTable} (
+        <include refid="Base_Column_List2"/>
+        )
+        select ${seqName}.Nextval, A.* ,sysdate,sysdate from (
+        <foreach collection="hzCmcrDetailChangeList" index="index" item="hzCmcrDetailChange" separator="union all">
+            select
+                #{hzCmcrDetailChange.cmcrDetailSrcPuid,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailSrcCfgUid,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailSrcColorUid,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgVwoId,jdbcType=DECIMAL},
+                #{hzCmcrDetailChange.cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP}, #{hzCmcrDetailChange.cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
+                #{hzCmcrDetailChange.cmcrDetailSrcCreator,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailSrcModifier,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailSrcModelPuid,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgFeatureName,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgColorCode,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgColorName,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgCreator,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgUpdater,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgTitle,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgIsColorful,jdbcType=INTEGER}, #{hzCmcrDetailChange.cmcrDetailCgReverse3,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgReverse4,jdbcType=VARCHAR}, #{hzCmcrDetailChange.cmcrDetailCgReverse5,jdbcType=VARCHAR},
+                #{hzCmcrDetailChange.cmcrDetailCgReverse6,jdbcType=VARCHAR},#{hzCmcrDetailChange.cmcrCgChangeId,jdbcType=DECIMAL}
+            from
+                dual
+        </foreach>
+        )A
+    </insert>
+    <!--选择插入-->
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
+        insert into ${whichTable}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cmcrDetailCgId != null">
+                CMCR_DETAIL_CG_ID,
+            </if>
+            <if test="cmcrDetailSrcPuid != null">
+                CMCR_DETAIL_SRC_PUID,
+            </if>
+            <if test="cmcrDetailSrcCfgUid != null">
+                CMCR_DETAIL_SRC_CFG_UID,
+            </if>
+            <if test="cmcrDetailSrcColorUid != null">
+                CMCR_DETAIL_SRC_COLOR_UID,
+            </if>
+            <if test="cmcrDetailSrcCfgMainUid != null">
+                CMCR_DETAIL_SRC_CFG_MAIN_UID,
+            </if>
+            <if test="cmcrDetailCgVwoId != null">
+                CMCR_CHANGE_ORDER_UID,
+            </if>
+            <if test="cmcrDetailSrcCreateDate != null">
+                CMCR_DETAIL_SRC_CREATE_DATE,
+            </if>
+            <if test="cmcrDetailSrcModifyDate != null">
+                CMCR_DETAIL_SRC__MODIFY_DATE,
+            </if>
+            <if test="cmcrDetailSrcCreator != null">
+                CMCR_DETAIL_SRC_CREATOR,
+            </if>
+            <if test="cmcrDetailSrcModifier != null">
+                CMCR_DETAIL_SRC_MODIFIER,
+            </if>
+            <if test="cmcrDetailSrcModelPuid != null">
+                CMCR_DETAIL_SRC_MODEL_PUID,
+            </if>
+            <if test="cmcrDetailCgFeatureCode != null">
+                CMCR_DETAIL_CG_FEATURE_CODE,
+            </if>
+            <if test="cmcrDetailCgFeatureName != null">
+                CMCR_DETAIL_CG_FEATURE_NAME,
+            </if>
+            <if test="cmcrDetailCgColorCode != null">
+                CMCR_DETAIL_CG_COLOR_CODE,
+            </if>
+            <if test="cmcrDetailCgColorName != null">
+                CMCR_DETAIL_CG_COLOR_NAME,
+            </if>
+            <if test="cmcrDetailCgCreateDate != null">
+                CMCR_DETAIL_CG_CREATE_DATE,
+            </if>
+            <if test="cmcrDetailCgCreator != null">
+                CMCR_DETAIL_CG_CREATOR,
+            </if>
+            <if test="cmcrDetailCgUpdateDate != null">
+                CMCR_DETAIL_CG_UPDATE_DATE,
+            </if>
+            <if test="cmcrDetailCgUpdater != null">
+                CMCR_DETAIL_CG_UPDATER,
+            </if>
+            <if test="cmcrDetailCgTitle != null">
+                CMCR_DETAIL_CG_TITLE,
+            </if>
+            <if test="cmcrDetailCgIsColorful != null">
+                CMCR_DETAIL_CG_IS_COLORFUL,
+            </if>
+            <if test="cmcrDetailCgReverse3 != null">
+                CMCR_DETAIL_CG_REVERSE3,
+            </if>
+            <if test="cmcrDetailCgReverse4 != null">
+                CMCR_DETAIL_CG_REVERSE4,
+            </if>
+            <if test="cmcrDetailCgReverse5 != null">
+                CMCR_DETAIL_CG_REVERSE5,
+            </if>
+            <if test="cmcrDetailCgReverse6 != null">
+                CMCR_DETAIL_CG_REVERSE6,
+            </if>
+            <if test="cmcrCgChangeId != null">
+                CMCR_CG_CHANGE_ID,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cmcrDetailCgId != null">
+                #{cmcrDetailCgId,jdbcType=DECIMAL},
+            </if>
+            <if test="cmcrDetailSrcPuid != null">
+                #{cmcrDetailSrcPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcCfgUid != null">
+                #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcColorUid != null">
+                #{cmcrDetailSrcColorUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcCfgMainUid != null">
+                #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgVwoId != null">
+                #{cmcrDetailCgVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="cmcrDetailSrcCreateDate != null">
+                #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailSrcModifyDate != null">
+                #{cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailSrcCreator != null">
+                #{cmcrDetailSrcCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcModifier != null">
+                #{cmcrDetailSrcModifier,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcModelPuid != null">
+                #{cmcrDetailSrcModelPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgFeatureCode != null">
+                #{cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgFeatureName != null">
+                #{cmcrDetailCgFeatureName,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgColorCode != null">
+                #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgColorName != null">
+                #{cmcrDetailCgColorName,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgCreateDate != null">
+                #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailCgCreator != null">
+                #{cmcrDetailCgCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgUpdateDate != null">
+                #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailCgUpdater != null">
+                #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgTitle != null">
+                #{cmcrDetailCgTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgIsColorful != null">
+                #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
+            </if>
+            <if test="cmcrDetailCgReverse3 != null">
+                #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse4 != null">
+                #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse5 != null">
+                #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse6 != null">
+                #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
+            </if>
+            <if test="CMCR_CG_CHANGE_ID != null">
+                #{cmcrCgChangeId,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <!--**************************************update**************************************-->
+    <!--主键选择性更新-->
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
+        update ${whichTable}
+        <set>
+            <if test="cmcrDetailSrcPuid != null">
+                CMCR_DETAIL_SRC_PUID = #{cmcrDetailSrcPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcCfgUid != null">
+                CMCR_DETAIL_SRC_CFG_UID = #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcColorUid != null">
+                CMCR_DETAIL_SRC_COLOR_UID = #{cmcrDetailSrcColorUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcCfgMainUid != null">
+                CMCR_DETAIL_SRC_CFG_MAIN_UID = #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgVwoId != null">
+                CMCR_CHANGE_ORDER_UID = #{cmcrDetailCgVwoId,jdbcType=DECIMAL},
+            </if>
+            <if test="cmcrDetailSrcCreateDate != null">
+                CMCR_DETAIL_SRC_CREATE_DATE = #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailSrcModifyDate != null">
+                CMCR_DETAIL_SRC__MODIFY_DATE = #{cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailSrcCreator != null">
+                CMCR_DETAIL_SRC_CREATOR = #{cmcrDetailSrcCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcModifier != null">
+                CMCR_DETAIL_SRC_MODIFIER = #{cmcrDetailSrcModifier,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailSrcModelPuid != null">
+                CMCR_DETAIL_SRC_MODEL_PUID = #{cmcrDetailSrcModelPuid,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgFeatureCode != null">
+                CMCR_DETAIL_CG_FEATURE_CODE = #{cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgFeatureName != null">
+                CMCR_DETAIL_CG_FEATURE_NAME = #{cmcrDetailCgFeatureName,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgColorCode != null">
+                CMCR_DETAIL_CG_COLOR_CODE = #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgColorName != null">
+                CMCR_DETAIL_CG_COLOR_NAME = #{cmcrDetailCgColorName,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgCreateDate != null">
+                CMCR_DETAIL_CG_CREATE_DATE = #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailCgCreator != null">
+                CMCR_DETAIL_CG_CREATOR = #{cmcrDetailCgCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgUpdateDate != null">
+                CMCR_DETAIL_CG_UPDATE_DATE = #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cmcrDetailCgUpdater != null">
+                CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgTitle != null">
+                CMCR_DETAIL_CG_TITLE = #{cmcrDetailCgTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgIsColorful != null">
+                CMCR_DETAIL_CG_IS_COLORFUL = #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
+            </if>
+            <if test="cmcrDetailCgReverse3 != null">
+                CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse4 != null">
+                CMCR_DETAIL_CG_REVERSE4 = #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse5 != null">
+                CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrDetailCgReverse6 != null">
+                CMCR_DETAIL_CG_REVERSE6 = #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
+            </if>
+            <if test="cmcrCgChangeId != null">
+                CMCR_CG_CHANGE_ID = #{cmcrCgChangeId,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
+    </update>
+    <!--主键全更新-->
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrDetailChange">
+    update ${whichTable}
+    set CMCR_DETAIL_SRC_PUID = #{cmcrDetailSrcPuid,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_CFG_UID = #{cmcrDetailSrcCfgUid,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_COLOR_UID = #{cmcrDetailSrcColorUid,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_CFG_MAIN_UID = #{cmcrDetailSrcCfgMainUid,jdbcType=VARCHAR},
+      CMCR_CHANGE_ORDER_UID = #{cmcrDetailCgVwoId,jdbcType=DECIMAL},
+      CMCR_DETAIL_SRC_CREATE_DATE = #{cmcrDetailSrcCreateDate,jdbcType=TIMESTAMP},
+      CMCR_DETAIL_SRC__MODIFY_DATE = #{cmcrDetailSrcModifyDate,jdbcType=TIMESTAMP},
+      CMCR_DETAIL_SRC_CREATOR = #{cmcrDetailSrcCreator,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_MODIFIER = #{cmcrDetailSrcModifier,jdbcType=VARCHAR},
+      CMCR_DETAIL_SRC_MODEL_PUID = #{cmcrDetailSrcModelPuid,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_FEATURE_CODE = #{cmcrDetailCgFeatureCode,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_FEATURE_NAME = #{cmcrDetailCgFeatureName,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_COLOR_CODE = #{cmcrDetailCgColorCode,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_COLOR_NAME = #{cmcrDetailCgColorName,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_CREATE_DATE = #{cmcrDetailCgCreateDate,jdbcType=TIMESTAMP},
+      CMCR_DETAIL_CG_CREATOR = #{cmcrDetailCgCreator,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_UPDATE_DATE = #{cmcrDetailCgUpdateDate,jdbcType=TIMESTAMP},
+      CMCR_DETAIL_CG_UPDATER = #{cmcrDetailCgUpdater,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_TITLE = #{cmcrDetailCgTitle,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_IS_COLORFUL = #{cmcrDetailCgIsColorful,jdbcType=INTEGER},
+      CMCR_DETAIL_CG_REVERSE3 = #{cmcrDetailCgReverse3,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE4 = #{cmcrDetailCgReverse4,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE5 = #{cmcrDetailCgReverse5,jdbcType=VARCHAR},
+      CMCR_DETAIL_CG_REVERSE6 = #{cmcrDetailCgReverse6,jdbcType=VARCHAR},
+      CMCR_CG_CHANGE_ID = #{cmcrCgChangeId,jdbcType=DECIMAL}
+    where CMCR_DETAIL_CG_ID = #{cmcrDetailCgId,jdbcType=DECIMAL}
+  </update>
+
+    <select id="selectLast" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          ${whichTable}
+        where
+          CMCR_DETAIL_SRC_CFG_MAIN_UID = #{mainUid}
+        and
+          CMCR_DETAIL_CG_UPDATE_DATE in
+          (
+            select
+              Max(CMCR_DETAIL_CG_UPDATE_DATE)
+            from
+              ${whichTable}
+            where
+              CMCR_DETAIL_SRC_CFG_MAIN_UID = #{mainUid,jdbcType=VARCHAR}
+            and
+              CMCR_DETAIL_SRC_PUID in
+              <foreach collection="hzCmcrDetailChangeList" index="index" item="hzCmcrDetailChange" open="(" separator="," close=")">
+                    #{hzCmcrDetailChange.cmcrDetailSrcPuid, jdbcType=VARCHAR}
+              </foreach>
+          )
+    </select>
+
+    <select id="doQueryCmcrDetailChangBeforAndAfter" parameterType="java.util.List" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from(
+            select
+              <include refid="Base_Column_List"/>,ROWNUM rn
+            from
+        HZ_CMCR_DETAIL_AFTER_CHANGE t
+            WHERE
+              t.CMCR_DETAIL_SRC_PUID in
+              <foreach collection="hzCmcrDetailChanges" index="index" item="hzCmcrDetailChange" open="(" separator="," close=")">
+                  #{hzCmcrDetailChange.cmcrDetailSrcPuid,jdbcType=VARCHAR}
+              </foreach>
+            and
+              t.CMCR_CHANGE_ORDER_UID &lt;= #{vwoid,jdbcType=INTEGER}
+            ORDER BY t.CMCR_DETAIL_CG_ID DESC
+        ) te
+        where
+          te.rn &lt;= #{length,jdbcType=INTEGER}
+        order by
+          te.CMCR_DETAIL_CG_ID
+    </select>
+
+    <select id="doQueryCmcrDetailChangBefor" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+        select
+          <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from
+          HZ_CMCR_DETAIL_AFTER_CHANGE t
+        LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+        where
+          CMCR_CHANGE_ORDER_UID =
+        (select
+            max(CMCR_CHANGE_ORDER_UID)
+          from
+            (select CMCR_CHANGE_ORDER_UID from HZ_CMCR_DETAIL_AFTER_CHANGE where
+                CMCR_CHANGE_ORDER_UID&lt;#{cmcrCgVwoId,jdbcType=INTEGER}
+                and
+                CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+            )
+          )
+        and
+          CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+        and
+          CMCR_DETAIL_SRC_CFG_UID is not null
+    </select>
+
+    <select id="doQueryCmcrDetailChangFirst" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+        select
+            <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from
+            HZ_CMCR_DETAIL_AFTER_CHANGE t
+        LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+        where
+            CMCR_CHANGE_ORDER_UID = #{cmcrCgVwoId,jdbcType=INTEGER}
+        and
+            CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+        and
+            CMCR_DETAIL_SRC_CFG_UID is null
+    </select>
+    <!--<select id="doQueryCmcrDetailChangFirst" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">-->
+        <!--select-->
+            <!--<include refid="Base_Column_List"/>,t2.p_color_code as colorCode-->
+        <!--from-->
+            <!--HZ_CMCR_DETAIL_AFTER_CHANGE t-->
+        <!--LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid-->
+        <!--where-->
+            <!--CMCR_CHANGE_ORDER_UID = #{vwoId,jdbcType=INTEGER}-->
+            <!--<if test="flag==1">-->
+                <!--and ROWNUM&lt;(select (count(*)/2+1) from  HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_CHANGE_ORDER_UID = #{vwoId,jdbcType=INTEGER})-->
+            <!--</if>-->
+            <!--<if test="flag==2">-->
+                <!--and ROWNUM&gt;(select (count(*)/2) from  HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_CHANGE_ORDER_UID = #{vwoId,jdbcType=INTEGER})-->
+            <!--</if>-->
+    <!--</select>-->
+
+    <select id="doQueryCmcrDetailChangFirstAfter" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+
+        select
+            <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from(
+                select
+                    <include refid="Base_Column_List"/>
+                from
+                    HZ_CMCR_DETAIL_AFTER_CHANGE
+                where
+                  CMCR_CHANGE_ORDER_UID = #{cmcrCgVwoId,jdbcType=INTEGER}
+                and
+                  CMCR_DETAIL_SRC_CFG_UID is not NULL
+                and
+                  CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+            ) t
+        LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+    </select>
+    <!--<select id="doQueryCmcrDetailChangFirstAfter" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+
+        <!--select-->
+            <!--<include refid="Base_Column_List"/>-->
+        <!--from(-->
+                <!--select-->
+                    <!--<include refid="Base_Column_List"/>,ROWNUM rn-->
+                <!--from-->
+                    <!--HZ_CMCR_DETAIL_AFTER_CHANGE-->
+                <!--where-->
+                  <!--CMCR_CHANGE_ORDER_UID = #{vwoId,jdbcType=INTEGER}-->
+            <!--)-->
+        <!--where-->
+        <!--rn&gt;(select (count(*)/2) from HZ_CMCR_DETAIL_AFTER_CHANGE where CMCR_CHANGE_ORDER_UID =-->
+        <!--#{vwoId,jdbcType=INTEGER})-->
+    <!--</select>-->
+
+    <select id="doQueryCmcrDetailChangAfter" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrChange" resultMap="VWO_Result_map">
+        select
+        <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from
+        HZ_CMCR_DETAIL_AFTER_CHANGE t
+        LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+        where
+        CMCR_CHANGE_ORDER_UID = #{cmcrCgVwoId,jdbcType=INTEGER}
+        and
+        CMCR_DETAIL_SRC_MODEL_PUID=#{cmcrSrcPuid,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectCmcrDetailBefor" parameterType="java.util.List" resultMap="VWO_Result_map">
+        select
+          <include refid="Base_Column_List"/>,t2.p_color_code as colorCode
+        from
+          HZ_CMCR_DETAIL_AFTER_CHANGE t
+          LEFT JOIN Hz_cfg0_colorset t2 ON t.cmcr_detail_src_color_uid = t2.puid
+        where
+          t.CMCR_CG_CHANGE_ID in
+        <foreach collection="list" index="index" item="hzCmcrChange" open="(" separator="," close=")">
+            #{hzCmcrChange.cmcrCgId,jdbcType=DECIMAL}
+        </foreach>
+    </select>
+
+</mapper>

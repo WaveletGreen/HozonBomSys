@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        .filedNotNull {
+            color: red
+        }
+
+        .inputSize {
+            width: 100% !important;
+
+        }
+    </style>
+</head>
+<body>
+<div class="content-body panel-body col-md-12">
+    <form id="addSparePartForm" class="form-horizontal" role="form" method="post">
+        <div class="col-md-12" th:if="${isAddChild}">
+            <div class="form-group col-md-12">
+                <label for="parentCode">父层备件号<span class="filedNotNull">*</span></label>
+                <input id="parentCode" class="form-control inputSize" name="parentCode" type="text"
+                       readonly="readonly"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="parentName">父层备件名<span class="filedNotNull">*</span></label>
+                <input id="parentName" class="form-control inputSize" name="parentName" type="text"
+                       readonly="readonly"/>
+            </div>
+        </div>
+        <hr style="border:1px dashed #ff9a86" width="100%" th:if="${isAddChild}">
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="ads">A/D/S<span class="filedNotNull">*</span></label>
+                <input id="ads" class="form-control inputSize" name="ads" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="hierarchy">层级<span class="filedNotNull">*</span></label>
+                <input id="hierarchy" class="form-control inputSize" name="hierarchy" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="major">专业<span class="filedNotNull">*</span></label>
+                <input id="major" class="form-control inputSize" name="major" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="level">级别<span class="filedNotNull">*</span></label>
+                <input id="level" class="form-control inputSize" name="level" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="productivePartCode">生产零件号<span class="filedNotNull">*</span></label>
+                <input id="productivePartCode" class="form-control inputSize" name="productivePartCode" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="productivePartName">生产零件名称<span class="filedNotNull">*</span></label>
+                <input id="productivePartName" class="form-control inputSize" name="productivePartName" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="sparePartCode">备件零件号<span class="filedNotNull">*</span></label>
+                <input id="sparePartCode" class="form-control inputSize" name="sparePartCode" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="sparePartName">备件零件名称<span class="filedNotNull">*</span></label>
+                <input id="sparePartName" class="form-control inputSize" name="sparePartName" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="isSparePart">是否备件<span class="filedNotNull">*</span></label>
+                <select id="isSparePart" class="form-control inputSize" name="isSparePart">
+                    <option value="-1"></option>
+                    <option value="1">是</option>
+                    <option value="0">否</option>
+                </select>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="unit">单位<span class="filedNotNull">*</span></label>
+                <input id="unit" class="form-control inputSize" name="unit" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="drawingNum">单位<span class="filedNotNull">*</span></label>
+                <input id="drawingNum" class="form-control inputSize" name="drawingNum" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="department">专业部门<span class="filedNotNull">*</span></label>
+                <input id="department" class="form-control inputSize" name="department" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="responsibleEngineer">责任工程师<span class="filedNotNull">*</span></label>
+                <input id="responsibleEngineer" class="form-control inputSize" name="responsibleEngineer" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="supplier">供应商<span class="filedNotNull">*</span></label>
+                <input id="supplier" class="form-control inputSize" name="supplier" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="code">代码<span class="filedNotNull">*</span></label>
+                <input id="code" class="form-control inputSize" name="code" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="purchasingEngineer">采购工程师<span class="filedNotNull">*</span></label>
+                <input id="purchasingEngineer" class="form-control inputSize" name="purchasingEngineer" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="remark">备注<span class="filedNotNull">*</span></label>
+                <input id="remark" class="form-control inputSize" name="remark" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="workshop1">车间1<span class="filedNotNull">*</span></label>
+                <input id="workshop1" class="form-control inputSize" name="workshop1" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="workshop2">车间2<span class="filedNotNull">*</span></label>
+                <input id="workshop2" class="form-control inputSize" name="workshop2" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="partClass">零件分类<span class="filedNotNull">*</span></label>
+                <input id="partClass" class="form-control inputSize" name="partClass" type="text"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script th:inline="javascript">
+    <![CDATA[
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    $(function () {
+        let row = getActiveTab().getSelectedRows()[0];
+        $("#parentCode").val(row.sparePartName);
+        $("#parentName").val(row.sparePartName);
+        let parentId = row.id;
+        $('#addSparePartForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            // fields: {
+            //     pCfg0FamilyName: {
+            //         message: '特性名称验证失败',
+            //         validators: {
+            //             notEmpty: {
+            //                 message: '特性名称不能为空'
+            //             },
+            //             //正则校验
+            //             regexp: {
+            //                 regexp: /^[a-zA-Z][a-zA-Z0-9]*$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+            //                 message: '特性只能以英文开头，加英文和数字，不允许有英文和数字以外的字符'
+            //             },
+            //             stringLength: {
+            //                 max: 30,
+            //                 message: '特性最长长度为30'
+            //             },
+            //         }
+            //     },
+            //     pCfg0FamilyDesc: {
+            //         message: '特性描述验证失败',
+            //         validators: {
+            //             notEmpty: {
+            //                 message: '特性描述不能为空'
+            //             }
+            //         }
+            //     },
+            //     pCfg0Desc: {
+            //         message: '特性值/配置(描述)验证失败',
+            //         validators: {
+            //             notEmpty: {
+            //                 message: '特性值/配置(描述)不能为空'
+            //             }
+            //         }
+            //     },
+            //     length: {
+            //         message: '字符长度验证失败',
+            //         validators: {
+            //             digits: {
+            //                 message: '长度只能是整数'
+            //             }
+            //         }
+            //     },
+            // }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            const url = "sparePartsBom/addSparePartChild";
+            const bootstrapValidator = $("#addSparePartForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                let data = {};
+                const _d = $("#addSparePartForm").serializeArray();
+                for (let p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                data.projectId = getProjectUid();
+                data.parentId = parentId;
+
+                console.log(data);
+                if (false)
+                    return;
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            console.log(result)
+                            activeTabBodyRefresh();
+                            if (result.success) {
+                                layer.msg(result.data, {icon: 1, time: 2000})
+                            }
+                            else {
+                                window.Ewin.alert({message: result.errMsg});
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

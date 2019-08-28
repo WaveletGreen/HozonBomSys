@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.depository.project.HzSuperMaterielDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.materiel.HzMaterielRecord">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="P_MATERIEL_CODE" jdbcType="VARCHAR" property="pMaterielCode"/>
+        <result column="P_MATERIEL_TYPE" jdbcType="VARCHAR" property="pMaterielType"/>
+        <result column="P_MATERIEL_WERK" jdbcType="VARCHAR" property="pMaterielWerk"/>
+        <result column="P_MATERIEL_DESC" jdbcType="VARCHAR" property="pMaterielDesc"/>
+        <result column="P_PERTAIN_TO_PROJECT_PUID" jdbcType="VARCHAR" property="pPertainToProjectPuid"/>
+        <result column="P_MATERIEL_DATA_TYPE" jdbcType="INTEGER" property="pMaterielDataType"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    PUID,
+    P_MATERIEL_CODE,
+    P_MATERIEL_TYPE,
+    P_MATERIEL_WERK,
+    P_MATERIEL_DESC,
+    P_PERTAIN_TO_PROJECT_PUID,
+    P_MATERIEL_DATA_TYPE
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_SUPER_MATERIEL_RECORD
+        where PUID = #{puid,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByProjectPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_MATERIEL_RECORD
+        where P_PERTAIN_TO_PROJECT_PUID = #{projectPuid,jdbcType=VARCHAR} AND P_MATERIEL_DATA_TYPE=11
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from HZ_MATERIEL_RECORD
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.project.HzSuperMateriel">
+    insert into HZ_MATERIEL_RECORD (
+      PUID,
+      P_MATERIEL_CODE,
+      P_MATERIEL_TYPE,
+      P_MATERIEL_WERK,
+      P_MATERIEL_DESC,
+      P_PERTAIN_TO_PROJECT_PUID,
+      P_MATERIEL_DATA_TYPE
+      )
+    values (
+      #{puid,jdbcType=VARCHAR},
+      #{pMaterielCode,jdbcType=VARCHAR},
+      'A006',
+      #{pMaterielWerk,jdbcType=VARCHAR},
+      #{pMaterielDesc,jdbcType=VARCHAR},
+      #{pPertainToProjectPuid,jdbcType=VARCHAR},
+      11
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.depository.project.HzSuperMateriel">
+    update HZ_MATERIEL_RECORD
+    set P_MATERIEL_CODE = #{pMaterielCode,jdbcType=VARCHAR},
+      P_MATERIEL_TYPE = 'A006',
+      P_MATERIEL_WERK = #{pMaterielWerk,jdbcType=VARCHAR},
+      P_MATERIEL_DESC = #{pMaterielDesc,jdbcType=VARCHAR},
+      P_PERTAIN_TO_PROJECT_PUID = #{pPertainToProjectPuid,jdbcType=VARCHAR},
+      P_MATERIEL_DATA_TYPE = 11
+
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+</mapper>

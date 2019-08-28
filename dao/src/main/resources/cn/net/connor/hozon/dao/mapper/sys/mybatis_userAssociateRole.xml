@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.sys.UserAssociateRoleDao">
+	<resultMap type="cn.net.connor.hozon.dao.pojo.sys.UserAssociateRole" id="UserAssociateRoleMap">
+		<result property="userId" column="user_id"/>
+		<result property="roleId" column="role_id"/>
+	</resultMap>
+
+	<!--1根据用户的ID来删除用户的权限数据-->
+	<delete id="removeUserRole" parameterType="cn.net.connor.hozon.dao.pojo.sys.User">
+		DELETE FROM user_associate_role WHERE user_id=#{id}
+	</delete>
+
+	<!--x根据主键获取对象-->
+	<select id="get" parameterType="cn.net.connor.hozon.dao.pojo.sys.UserAssociateRole" resultMap="UserAssociateRoleMap">
+		SELECT user_id,role_id FROM user_associate_role 
+		WHERE 
+	</select>
+
+	<!--保存-->
+	<insert id="save" parameterType="cn.net.connor.hozon.dao.pojo.sys.UserAssociateRole">
+		INSERT INTO user_associate_role(user_id,role_id)
+		VALUES(#{userId},#{roleId})
+	</insert>
+
+	<!--修改-->
+	<update id="update" parameterType="cn.net.connor.hozon.dao.pojo.sys.UserAssociateRole">
+		UPDATE user_associate_role SET user_id=#{userId},role_id=#{roleId}
+		WHERE 
+	</update>
+
+	<!--删除-->
+	<delete id="delete" parameterType="cn.net.connor.hozon.dao.pojo.sys.UserAssociateRole">
+		 DELETE FROM user_associate_role WHERE 
+	</delete>
+
+	<!--分页查询-->
+	<select id="findByPage" parameterType="cn.net.connor.hozon.dao.query.sys.QueryUserAssociateRole" resultMap="UserAssociateRoleMap">
+		select * from(
+		SELECT user_id,role_id,rownum as rn FROM user_associate_role
+		WHERE 1=1
+		<if test="userId!=null and userId!='' "  >
+		AND user_id=#{userId}
+		</if>
+		<if test="roleId!=null and roleId!='' "  >
+		AND role_id=#{roleId}
+		</if>
+		<if test="sort!= null">
+		order by ${sort} ${order}
+		</if>
+		)u
+		where 1=1
+		<!--limit #{offset},#{limit}-->
+		<if test="offset!=null">
+			and u.rn &gt;= ${offset}+1
+		</if>
+		<if test="limit!=null and  page!=null">
+			and u.rn &lt;= ${page}*${limit}
+		</if>
+		<!--limit #{offset},#{limit}-->
+
+	</select>
+
+	<!--统计-->
+	<select id="count" parameterType="cn.net.connor.hozon.dao.query.sys.QueryUserAssociateRole" resultType="int">
+		SELECT count(*) FROM user_associate_role
+		WHERE 1=1
+		<if test="userId!=null and userId!='' ">
+		AND user_id=#{userId}
+		</if>
+		<if test="roleId!=null and roleId!='' ">
+		AND role_id=#{roleId}
+		</if>
+	</select>
+
+	<!--查询-->
+	<select id="query" parameterType="cn.net.connor.hozon.dao.query.sys.QueryUserAssociateRole" resultMap="UserAssociateRoleMap">
+		SELECT user_id,role_id FROM user_associate_role
+		WHERE 1=1
+		<if test="userId!=null and userId!='' ">
+		AND user_id=#{userId}
+		</if>
+		<if test="roleId!=null and roleId!='' ">
+		AND role_id=#{roleId}
+		</if>
+		<if test="sort!= null">
+		order by ${sort} ${order}
+		</if>
+	</select>
+</mapper>

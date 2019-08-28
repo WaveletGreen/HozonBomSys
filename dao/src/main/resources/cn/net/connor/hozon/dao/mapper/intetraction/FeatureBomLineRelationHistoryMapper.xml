@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.interaction.FeatureBomLineRelationHistoryDao">
+    <!--拓展的字段-->
+    <resultMap id="extendsResultMap" type="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+
+    </resultMap>
+    <!--主键序列为SEQ_CFG_BL_REL_HIS-->
+    <!--基础生成的字段映射，以后拓展直接从extendsResultMap中添加-->
+    <resultMap extends="extendsResultMap" id="BaseResultMap"
+               type="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId"/>
+        <result column="FEATURE_VALUE_ID" jdbcType="VARCHAR" property="featureValueId"/>
+        <result column="FEATURE_DESC" jdbcType="VARCHAR" property="featureDesc"/>
+        <result column="FEATURE_VALUE_CODE" jdbcType="VARCHAR" property="featureValueCode"/>
+        <result column="BOM_LINE_ID" jdbcType="VARCHAR" property="bomLineId"/>
+        <result column="BOM_LINE_NAME" jdbcType="VARCHAR" property="bomLineName"/>
+    </resultMap>
+    <!--历史2Y与特性对应-->
+    <resultMap id="historyMap" type="cn.net.connor.hozon.dao.pojo.interaction.SingleVehicleBomRelation">
+        <result column="SVB_ID" jdbcType="DECIMAL" property="svlBomId"/>
+        <result column="FEATURE_VALUE_ID" jdbcType="VARCHAR" property="featureValueId"/>
+        <result column="FEATURE_DESC" jdbcType="VARCHAR" property="featureDesc"/>
+        <result column="FEATURE_VALUE_CODE" jdbcType="VARCHAR" property="featureValueCode"/>
+        <result column="BOM_LINE_ID" jdbcType="VARCHAR" property="bomLineId"/>
+        <result column="BOM_LINE_NAME" jdbcType="VARCHAR" property="bomLineName"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    ID,
+    PROJECT_ID,
+    FEATURE_VALUE_ID,
+    FEATURE_DESC,
+    FEATURE_VALUE_CODE,
+    BOM_LINE_ID,
+    BOM_LINE_NAME
+  </sql>
+
+    <!--查询历史存在的特性值与2Y层对应的信息-->
+    <select id="selectHistory" resultMap="historyMap">
+       SELECT
+            svb.ID as SVB_ID,
+            his.FEATURE_VALUE_ID,
+            his.FEATURE_DESC,
+            his.FEATURE_VALUE_CODE,
+            his.BOM_LINE_ID,
+            his.BOM_LINE_NAME
+        FROM
+            HZ_SINGLE_VEHICLES_BOM svb
+            left join CFG_BOMLINE_RELATION_HISTORY his on svb.P_EBOM_PUID= his.BOM_LINE_ID
+        WHERE
+            svb.P_SINGLE_VEHICLES_ID = #{dmbId}
+        AND svb.P_BOM_LINE_IS_2Y = 1
+        AND his.PROJECT_ID=#{projectId}
+        ORDER BY
+            svb.P_SINGLE_VEHICLES_ID,
+            svb.P_SORT_NUM
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from CFG_BOMLINE_RELATION_HISTORY
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from CFG_BOMLINE_RELATION_HISTORY
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <delete id="deleteByProjectId" parameterType="java.lang.String">
+      delete from CFG_BOMLINE_RELATION_HISTORY where PROJECT_ID = #{projectId}
+    </delete>
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+    insert into CFG_BOMLINE_RELATION_HISTORY (ID, PROJECT_ID, FEATURE_VALUE_ID, 
+      FEATURE_DESC, FEATURE_VALUE_CODE, BOM_LINE_ID, 
+      BOM_LINE_NAME)
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=VARCHAR}, #{featureValueId,jdbcType=VARCHAR}, 
+      #{featureDesc,jdbcType=VARCHAR}, #{featureValueCode,jdbcType=VARCHAR}, #{bomLineId,jdbcType=VARCHAR},
+      #{bomLineName,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+        insert into CFG_BOMLINE_RELATION_HISTORY
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="projectId != null">
+                PROJECT_ID,
+            </if>
+            <if test="featureValueId != null">
+                FEATURE_VALUE_ID,
+            </if>
+            <if test="featureDesc != null">
+                FEATURE_DESC,
+            </if>
+            <if test="featureValueCode != null">
+                FEATURE_VALUE_CODE,
+            </if>
+            <if test="bomLineId != null">
+                BOM_LINE_ID,
+            </if>
+            <if test="bomLineName != null">
+                BOM_LINE_NAME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="featureValueId != null">
+                #{featureValueId,jdbcType=VARCHAR},
+            </if>
+            <if test="featureDesc != null">
+                #{featureDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="featureValueCode != null">
+                #{featureValueCode,jdbcType=VARCHAR},
+            </if>
+            <if test="bomLineId != null">
+                #{bomLineId,jdbcType=VARCHAR},
+            </if>
+            <if test="bomLineName != null">
+                #{bomLineName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertList" parameterType="java.util.List">
+        insert into
+        CFG_BOMLINE_RELATION_HISTORY (<include refid="Base_Column_List"/>)
+        select SEQ_CFG_BL_REL_HIS.Nextval, A.* from(
+        <foreach collection="list" index="index" item="bean" separator="union all">
+            select
+            #{bean.projectId,jdbcType=VARCHAR},
+            #{bean.featureValueId,jdbcType=VARCHAR},
+            #{bean.featureDesc,jdbcType=VARCHAR},
+            #{bean.featureValueCode,jdbcType=VARCHAR},
+            #{bean.bomLineId,jdbcType=VARCHAR},
+            #{bean.bomLineName,jdbcType=VARCHAR}
+            from
+            dual
+        </foreach>
+        )A
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+        update CFG_BOMLINE_RELATION_HISTORY
+        <set>
+            <if test="projectId != null">
+                PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+            </if>
+            <if test="featureValueId != null">
+                FEATURE_VALUE_ID = #{featureValueId,jdbcType=VARCHAR},
+            </if>
+            <if test="featureDesc != null">
+                FEATURE_DESC = #{featureDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="featureValueCode != null">
+                FEATURE_VALUE_CODE = #{featureValueCode,jdbcType=VARCHAR},
+            </if>
+            <if test="bomLineId != null">
+                BOM_LINE_ID = #{bomLineId,jdbcType=VARCHAR},
+            </if>
+            <if test="bomLineName != null">
+                BOM_LINE_NAME = #{bomLineName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="cn.net.connor.hozon.dao.pojo.interaction.FeatureBomLineRelationHistory">
+    update CFG_BOMLINE_RELATION_HISTORY
+    set PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+      FEATURE_VALUE_ID = #{featureValueId,jdbcType=VARCHAR},
+      FEATURE_DESC = #{featureDesc,jdbcType=VARCHAR},
+      FEATURE_VALUE_CODE = #{featureValueCode,jdbcType=VARCHAR},
+      BOM_LINE_ID = #{bomLineId,jdbcType=VARCHAR},
+      BOM_LINE_NAME = #{bomLineName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

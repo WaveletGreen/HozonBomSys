@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
+<!--该文件暂时不用-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.connor.hozon.dao.configuration.modelColor.HzCmcrBeforeChangeDao">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
+    <id column="CMCR_CG_ID" jdbcType="DECIMAL" property="cmcrCgId" />
+    <result column="CMCR_CG_VWO_ID" jdbcType="DECIMAL" property="cmcrCgVwoId" />
+    <result column="CMCR_CG_SHELL_CODE" jdbcType="VARCHAR" property="cmcrCgShellCode" />
+    <result column="CMCR_CG_CREATE_DATE" jdbcType="TIMESTAMP" property="cmcrCgCreateDate" />
+    <result column="CMCR_CG_CREATOR" jdbcType="OTHER" property="cmcrCgCreator" />
+    <result column="CMCR_CG_UPDATE_DATE" jdbcType="TIMESTAMP" property="cmcrCgUpdateDate" />
+    <result column="CMCR_CG_UPDATER" jdbcType="OTHER" property="cmcrCgUpdater" />
+    <result column="CMCR_CG_RESERVE1" jdbcType="VARCHAR" property="cmcrCgReserve1" />
+    <result column="CMCR_CG_RESERVE2" jdbcType="VARCHAR" property="cmcrCgReserve2" />
+    <result column="CMCR_CG_RESERVE3" jdbcType="VARCHAR" property="cmcrCgReserve3" />
+    <result column="CMCR_CG_RESERVE4" jdbcType="VARCHAR" property="cmcrCgReserve4" />
+    <result column="CMCR_CG_RESERVE5" jdbcType="VARCHAR" property="cmcrCgReserve5" />
+    <result column="CMCR_CG_RESERVE6" jdbcType="VARCHAR" property="cmcrCgReserve6" />
+    <result column="CMCR_CG_RESERVE7" jdbcType="VARCHAR" property="cmcrCgReserve7" />
+    <result column="CMCR_CG_RESERVE8" jdbcType="VARCHAR" property="cmcrCgReserve8" />
+    <result column="CMCR_SRC_MAIN_CFG" jdbcType="VARCHAR" property="cmcrSrcMainCfg" />
+    <result column="CMCR_SRC_PUID" jdbcType="VARCHAR" property="cmcrSrcPuid" />
+    <result column="CMCR_SRC_MODEL_SHELL" jdbcType="VARCHAR" property="cmcrSrcModelShell" />
+    <result column="CMCR_SRC_COLOR_UID" jdbcType="VARCHAR" property="cmcrSrcColorUid" />
+    <result column="CMCR_SRC_SHELL_CFG0_PUID" jdbcType="VARCHAR" property="cmcrSrcShellCfg0Puid" />
+    <result column="CMCR_SRC_COLOR_IS_MULTIPLY" jdbcType="VARCHAR" property="cmcrSrcColorIsMultiply" />
+    <result column="CMCR_SRC_CREATE_DATE" jdbcType="TIMESTAMP" property="cmcrSrcCreateDate" />
+    <result column="CMCR_SRC_CREATOR" jdbcType="OTHER" property="cmcrSrcCreator" />
+    <result column="CMCR_SRC_UPDATE_DATE" jdbcType="TIMESTAMP" property="cmcrSrcUpdateDate" />
+    <result column="CMCR_SRC_UPDATER" jdbcType="OTHER" property="cmcrSrcUpdater" />
+    <result column="CMCR_SRC_CODE_OF_COLOR_MOD" jdbcType="VARCHAR" property="cmcrSrcCodeOfColorMod" />
+    <result column="CMCR_SRC_DESC_OF_COLOR_MOD" jdbcType="VARCHAR" property="cmcrSrcDescOfColorMod" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    CMCR_CG_ID, CMCR_CG_VWO_ID, CMCR_CG_SHELL_CODE, CMCR_CG_CREATE_DATE, CMCR_CG_CREATOR, 
+    CMCR_CG_UPDATE_DATE, CMCR_CG_UPDATER, CMCR_CG_RESERVE1, CMCR_CG_RESERVE2, CMCR_CG_RESERVE3, 
+    CMCR_CG_RESERVE4, CMCR_CG_RESERVE5, CMCR_CG_RESERVE6, CMCR_CG_RESERVE7, CMCR_CG_RESERVE8, 
+    CMCR_SRC_MAIN_CFG, CMCR_SRC_PUID, CMCR_SRC_MODEL_SHELL, CMCR_SRC_COLOR_UID, CMCR_SRC_SHELL_CFG0_PUID, 
+    CMCR_SRC_COLOR_IS_MULTIPLY, CMCR_SRC_CREATE_DATE, CMCR_SRC_CREATOR, CMCR_SRC_UPDATE_DATE, 
+    CMCR_SRC_UPDATER, CMCR_SRC_CODE_OF_COLOR_MOD, CMCR_SRC_DESC_OF_COLOR_MOD
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_CMCR_BEFORE_CHANGE
+    where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from HZ_CMCR_BEFORE_CHANGE
+    where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
+    insert into HZ_CMCR_BEFORE_CHANGE (CMCR_CG_ID, CMCR_CG_VWO_ID, CMCR_CG_SHELL_CODE, 
+      CMCR_CG_CREATE_DATE, CMCR_CG_CREATOR, CMCR_CG_UPDATE_DATE, 
+      CMCR_CG_UPDATER, CMCR_CG_RESERVE1, CMCR_CG_RESERVE2, 
+      CMCR_CG_RESERVE3, CMCR_CG_RESERVE4, CMCR_CG_RESERVE5, 
+      CMCR_CG_RESERVE6, CMCR_CG_RESERVE7, CMCR_CG_RESERVE8, 
+      CMCR_SRC_MAIN_CFG, CMCR_SRC_PUID, CMCR_SRC_MODEL_SHELL, 
+      CMCR_SRC_COLOR_UID, CMCR_SRC_SHELL_CFG0_PUID, 
+      CMCR_SRC_COLOR_IS_MULTIPLY, CMCR_SRC_CREATE_DATE, 
+      CMCR_SRC_CREATOR, CMCR_SRC_UPDATE_DATE, CMCR_SRC_UPDATER, 
+      CMCR_SRC_CODE_OF_COLOR_MOD, CMCR_SRC_DESC_OF_COLOR_MOD
+      )
+    values (#{cmcrCgId,jdbcType=DECIMAL}, #{cmcrCgVwoId,jdbcType=DECIMAL}, #{cmcrCgShellCode,jdbcType=VARCHAR}, 
+      #{cmcrCgCreateDate,jdbcType=TIMESTAMP}, #{cmcrCgCreator,jdbcType=OTHER}, #{cmcrCgUpdateDate,jdbcType=TIMESTAMP}, 
+      #{cmcrCgUpdater,jdbcType=OTHER}, #{cmcrCgReserve1,jdbcType=VARCHAR}, #{cmcrCgReserve2,jdbcType=VARCHAR}, 
+      #{cmcrCgReserve3,jdbcType=VARCHAR}, #{cmcrCgReserve4,jdbcType=VARCHAR}, #{cmcrCgReserve5,jdbcType=VARCHAR}, 
+      #{cmcrCgReserve6,jdbcType=VARCHAR}, #{cmcrCgReserve7,jdbcType=VARCHAR}, #{cmcrCgReserve8,jdbcType=VARCHAR}, 
+      #{cmcrSrcMainCfg,jdbcType=VARCHAR}, #{cmcrSrcPuid,jdbcType=VARCHAR}, #{cmcrSrcModelShell,jdbcType=VARCHAR}, 
+      #{cmcrSrcColorUid,jdbcType=VARCHAR}, #{cmcrSrcShellCfg0Puid,jdbcType=VARCHAR}, 
+      #{cmcrSrcColorIsMultiply,jdbcType=VARCHAR}, #{cmcrSrcCreateDate,jdbcType=TIMESTAMP}, 
+      #{cmcrSrcCreator,jdbcType=OTHER}, #{cmcrSrcUpdateDate,jdbcType=TIMESTAMP}, #{cmcrSrcUpdater,jdbcType=OTHER}, 
+      #{cmcrSrcCodeOfColorMod,jdbcType=VARCHAR}, #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
+    insert into HZ_CMCR_BEFORE_CHANGE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cmcrCgId != null">
+        CMCR_CG_ID,
+      </if>
+      <if test="cmcrCgVwoId != null">
+        CMCR_CG_VWO_ID,
+      </if>
+      <if test="cmcrCgShellCode != null">
+        CMCR_CG_SHELL_CODE,
+      </if>
+      <if test="cmcrCgCreateDate != null">
+        CMCR_CG_CREATE_DATE,
+      </if>
+      <if test="cmcrCgCreator != null">
+        CMCR_CG_CREATOR,
+      </if>
+      <if test="cmcrCgUpdateDate != null">
+        CMCR_CG_UPDATE_DATE,
+      </if>
+      <if test="cmcrCgUpdater != null">
+        CMCR_CG_UPDATER,
+      </if>
+      <if test="cmcrCgReserve1 != null">
+        CMCR_CG_RESERVE1,
+      </if>
+      <if test="cmcrCgReserve2 != null">
+        CMCR_CG_RESERVE2,
+      </if>
+      <if test="cmcrCgReserve3 != null">
+        CMCR_CG_RESERVE3,
+      </if>
+      <if test="cmcrCgReserve4 != null">
+        CMCR_CG_RESERVE4,
+      </if>
+      <if test="cmcrCgReserve5 != null">
+        CMCR_CG_RESERVE5,
+      </if>
+      <if test="cmcrCgReserve6 != null">
+        CMCR_CG_RESERVE6,
+      </if>
+      <if test="cmcrCgReserve7 != null">
+        CMCR_CG_RESERVE7,
+      </if>
+      <if test="cmcrCgReserve8 != null">
+        CMCR_CG_RESERVE8,
+      </if>
+      <if test="cmcrSrcMainCfg != null">
+        CMCR_SRC_MAIN_CFG,
+      </if>
+      <if test="cmcrSrcPuid != null">
+        CMCR_SRC_PUID,
+      </if>
+      <if test="cmcrSrcModelShell != null">
+        CMCR_SRC_MODEL_SHELL,
+      </if>
+      <if test="cmcrSrcColorUid != null">
+        CMCR_SRC_COLOR_UID,
+      </if>
+      <if test="cmcrSrcShellCfg0Puid != null">
+        CMCR_SRC_SHELL_CFG0_PUID,
+      </if>
+      <if test="cmcrSrcColorIsMultiply != null">
+        CMCR_SRC_COLOR_IS_MULTIPLY,
+      </if>
+      <if test="cmcrSrcCreateDate != null">
+        CMCR_SRC_CREATE_DATE,
+      </if>
+      <if test="cmcrSrcCreator != null">
+        CMCR_SRC_CREATOR,
+      </if>
+      <if test="cmcrSrcUpdateDate != null">
+        CMCR_SRC_UPDATE_DATE,
+      </if>
+      <if test="cmcrSrcUpdater != null">
+        CMCR_SRC_UPDATER,
+      </if>
+      <if test="cmcrSrcCodeOfColorMod != null">
+        CMCR_SRC_CODE_OF_COLOR_MOD,
+      </if>
+      <if test="cmcrSrcDescOfColorMod != null">
+        CMCR_SRC_DESC_OF_COLOR_MOD,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cmcrCgId != null">
+        #{cmcrCgId,jdbcType=DECIMAL},
+      </if>
+      <if test="cmcrCgVwoId != null">
+        #{cmcrCgVwoId,jdbcType=DECIMAL},
+      </if>
+      <if test="cmcrCgShellCode != null">
+        #{cmcrCgShellCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgCreateDate != null">
+        #{cmcrCgCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cmcrCgCreator != null">
+        #{cmcrCgCreator,jdbcType=OTHER},
+      </if>
+      <if test="cmcrCgUpdateDate != null">
+        #{cmcrCgUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cmcrCgUpdater != null">
+        #{cmcrCgUpdater,jdbcType=OTHER},
+      </if>
+      <if test="cmcrCgReserve1 != null">
+        #{cmcrCgReserve1,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve2 != null">
+        #{cmcrCgReserve2,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve3 != null">
+        #{cmcrCgReserve3,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve4 != null">
+        #{cmcrCgReserve4,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve5 != null">
+        #{cmcrCgReserve5,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve6 != null">
+        #{cmcrCgReserve6,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve7 != null">
+        #{cmcrCgReserve7,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve8 != null">
+        #{cmcrCgReserve8,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcMainCfg != null">
+        #{cmcrSrcMainCfg,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcPuid != null">
+        #{cmcrSrcPuid,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcModelShell != null">
+        #{cmcrSrcModelShell,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcColorUid != null">
+        #{cmcrSrcColorUid,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcShellCfg0Puid != null">
+        #{cmcrSrcShellCfg0Puid,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcColorIsMultiply != null">
+        #{cmcrSrcColorIsMultiply,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcCreateDate != null">
+        #{cmcrSrcCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cmcrSrcCreator != null">
+        #{cmcrSrcCreator,jdbcType=OTHER},
+      </if>
+      <if test="cmcrSrcUpdateDate != null">
+        #{cmcrSrcUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cmcrSrcUpdater != null">
+        #{cmcrSrcUpdater,jdbcType=OTHER},
+      </if>
+      <if test="cmcrSrcCodeOfColorMod != null">
+        #{cmcrSrcCodeOfColorMod,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcDescOfColorMod != null">
+        #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
+    update HZ_CMCR_BEFORE_CHANGE
+    <set>
+      <if test="cmcrCgVwoId != null">
+        CMCR_CG_VWO_ID = #{cmcrCgVwoId,jdbcType=DECIMAL},
+      </if>
+      <if test="cmcrCgShellCode != null">
+        CMCR_CG_SHELL_CODE = #{cmcrCgShellCode,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgCreateDate != null">
+        CMCR_CG_CREATE_DATE = #{cmcrCgCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cmcrCgCreator != null">
+        CMCR_CG_CREATOR = #{cmcrCgCreator,jdbcType=OTHER},
+      </if>
+      <if test="cmcrCgUpdateDate != null">
+        CMCR_CG_UPDATE_DATE = #{cmcrCgUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cmcrCgUpdater != null">
+        CMCR_CG_UPDATER = #{cmcrCgUpdater,jdbcType=OTHER},
+      </if>
+      <if test="cmcrCgReserve1 != null">
+        CMCR_CG_RESERVE1 = #{cmcrCgReserve1,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve2 != null">
+        CMCR_CG_RESERVE2 = #{cmcrCgReserve2,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve3 != null">
+        CMCR_CG_RESERVE3 = #{cmcrCgReserve3,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve4 != null">
+        CMCR_CG_RESERVE4 = #{cmcrCgReserve4,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve5 != null">
+        CMCR_CG_RESERVE5 = #{cmcrCgReserve5,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve6 != null">
+        CMCR_CG_RESERVE6 = #{cmcrCgReserve6,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve7 != null">
+        CMCR_CG_RESERVE7 = #{cmcrCgReserve7,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrCgReserve8 != null">
+        CMCR_CG_RESERVE8 = #{cmcrCgReserve8,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcMainCfg != null">
+        CMCR_SRC_MAIN_CFG = #{cmcrSrcMainCfg,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcPuid != null">
+        CMCR_SRC_PUID = #{cmcrSrcPuid,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcModelShell != null">
+        CMCR_SRC_MODEL_SHELL = #{cmcrSrcModelShell,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcColorUid != null">
+        CMCR_SRC_COLOR_UID = #{cmcrSrcColorUid,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcShellCfg0Puid != null">
+        CMCR_SRC_SHELL_CFG0_PUID = #{cmcrSrcShellCfg0Puid,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcColorIsMultiply != null">
+        CMCR_SRC_COLOR_IS_MULTIPLY = #{cmcrSrcColorIsMultiply,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcCreateDate != null">
+        CMCR_SRC_CREATE_DATE = #{cmcrSrcCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cmcrSrcCreator != null">
+        CMCR_SRC_CREATOR = #{cmcrSrcCreator,jdbcType=OTHER},
+      </if>
+      <if test="cmcrSrcUpdateDate != null">
+        CMCR_SRC_UPDATE_DATE = #{cmcrSrcUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cmcrSrcUpdater != null">
+        CMCR_SRC_UPDATER = #{cmcrSrcUpdater,jdbcType=OTHER},
+      </if>
+      <if test="cmcrSrcCodeOfColorMod != null">
+        CMCR_SRC_CODE_OF_COLOR_MOD = #{cmcrSrcCodeOfColorMod,jdbcType=VARCHAR},
+      </if>
+      <if test="cmcrSrcDescOfColorMod != null">
+        CMCR_SRC_DESC_OF_COLOR_MOD = #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.modelColor.HzCmcrBeforeChange">
+    update HZ_CMCR_BEFORE_CHANGE
+    set CMCR_CG_VWO_ID = #{cmcrCgVwoId,jdbcType=DECIMAL},
+      CMCR_CG_SHELL_CODE = #{cmcrCgShellCode,jdbcType=VARCHAR},
+      CMCR_CG_CREATE_DATE = #{cmcrCgCreateDate,jdbcType=TIMESTAMP},
+      CMCR_CG_CREATOR = #{cmcrCgCreator,jdbcType=OTHER},
+      CMCR_CG_UPDATE_DATE = #{cmcrCgUpdateDate,jdbcType=TIMESTAMP},
+      CMCR_CG_UPDATER = #{cmcrCgUpdater,jdbcType=OTHER},
+      CMCR_CG_RESERVE1 = #{cmcrCgReserve1,jdbcType=VARCHAR},
+      CMCR_CG_RESERVE2 = #{cmcrCgReserve2,jdbcType=VARCHAR},
+      CMCR_CG_RESERVE3 = #{cmcrCgReserve3,jdbcType=VARCHAR},
+      CMCR_CG_RESERVE4 = #{cmcrCgReserve4,jdbcType=VARCHAR},
+      CMCR_CG_RESERVE5 = #{cmcrCgReserve5,jdbcType=VARCHAR},
+      CMCR_CG_RESERVE6 = #{cmcrCgReserve6,jdbcType=VARCHAR},
+      CMCR_CG_RESERVE7 = #{cmcrCgReserve7,jdbcType=VARCHAR},
+      CMCR_CG_RESERVE8 = #{cmcrCgReserve8,jdbcType=VARCHAR},
+      CMCR_SRC_MAIN_CFG = #{cmcrSrcMainCfg,jdbcType=VARCHAR},
+      CMCR_SRC_PUID = #{cmcrSrcPuid,jdbcType=VARCHAR},
+      CMCR_SRC_MODEL_SHELL = #{cmcrSrcModelShell,jdbcType=VARCHAR},
+      CMCR_SRC_COLOR_UID = #{cmcrSrcColorUid,jdbcType=VARCHAR},
+      CMCR_SRC_SHELL_CFG0_PUID = #{cmcrSrcShellCfg0Puid,jdbcType=VARCHAR},
+      CMCR_SRC_COLOR_IS_MULTIPLY = #{cmcrSrcColorIsMultiply,jdbcType=VARCHAR},
+      CMCR_SRC_CREATE_DATE = #{cmcrSrcCreateDate,jdbcType=TIMESTAMP},
+      CMCR_SRC_CREATOR = #{cmcrSrcCreator,jdbcType=OTHER},
+      CMCR_SRC_UPDATE_DATE = #{cmcrSrcUpdateDate,jdbcType=TIMESTAMP},
+      CMCR_SRC_UPDATER = #{cmcrSrcUpdater,jdbcType=OTHER},
+      CMCR_SRC_CODE_OF_COLOR_MOD = #{cmcrSrcCodeOfColorMod,jdbcType=VARCHAR},
+      CMCR_SRC_DESC_OF_COLOR_MOD = #{cmcrSrcDescOfColorMod,jdbcType=VARCHAR}
+    where CMCR_CG_ID = #{cmcrCgId,jdbcType=DECIMAL}
+  </update>
+</mapper>

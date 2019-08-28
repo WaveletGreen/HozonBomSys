@@ -1,0 +1,249 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!--User: xulf Date: 2018/5/30 Time: 14:22-->
+<body>
+<form id="mbomMainForm" role="form" method="post" action="mbom/update">
+    <input id="eBomPuid" name="eBomPuid" type="hidden" th:value="${data.eBomPuid}"/><!--th:value="${entity.pBomPuid}"-->
+    <input id="puid" name="puid" type="hidden" th:value="${data.puid}"/>
+    <div class="form-group">
+        <label for="lineId">零件号</label>
+        <input class="form-control" id="lineId" name="lineId" type="text" disabled="disabled"
+               th:value="${data.lineId}"
+               placeholder="请输入零件号"/><!--th:value="${entity.lineId}"-->
+    </div>
+    <div class="form-group">
+        <label for="object_name">名称</label>
+        <input class="form-control" id="object_name" name="object_name" type="text" disabled="disabled"
+               th:value="${data.object_name}"
+               placeholder="请输入名称"/><!--th:value="${entity.bomDigifaxId}"-->
+    </div>
+    <div class="form-group">
+        <label for="level">层级</label>
+        <input class="form-control" id="level" name="level" type="text" disabled="disabled"
+               th:value="${data.level}"
+               placeholder="请输入层级"/><!--th:value="${entity.level}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomOfWhichDept">专业</label>
+        <input class="form-control" id="pBomOfWhichDept" name="pBomOfWhichDept" type="text" disabled="disabled"
+               th:value="${data.pBomOfWhichDept}"
+               placeholder="请输入专业"/><!--th:value="${entity.pBomOfWhichDept}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartClass">零件分类</label>
+        <!--<select class="form-control" name="pBomLinePartClass" id="pBomLinePartClass" placeholder="请选择零件分类">-->
+            <!--<option></option>-->
+            <!--<option th:selected="data.getpBomLinePartClass()=='自制'?true:false">自制</option> &lt;!&ndash;th:selected="${data.getResource()=='MAKE'?true:false}"&ndash;&gt;-->
+            <!--<option th:selected="data.getpBomLinePartClass()=='外协'?true:false">外协</option>-->
+            <!--<option th:selected="data.getpBomLinePartClass()=='虚拟总成'?true:false">虚拟总成</option>-->
+        <!--</select>-->
+        <input class="form-control" id="pBomLinePartClass" name="pBomLinePartClass" type="text" disabled="disabled" th:value="${data.pBomLinePartClass}"
+               placeholder=""/>
+    </div>
+    <div class="form-group">
+        <label for="pBomLinePartResource">零部件来源</label>
+        <!--<select class="form-control" name="pBomLinePartResource" id="pBomLinePartResource" placeholder="请选择零件来源">-->
+            <!--<option></option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='采购件'?true:false">采购件</option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='采购拆分单件'?true:false">采购拆分单件</option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='采购拆分总成件'?true:false">采购拆分总成件</option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='采购拆分标准件'?true:false">采购拆分标准件</option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='采购拆分非标件'?true:false">采购拆分非标件</option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='自制总成'?true:false">自制总成</option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='自制单件'?true:false">自制单件</option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='自用标准件'?true:false">自用标准件</option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='自用非标件'?true:false">自用非标件</option>-->
+            <!--<option th:selected="data.getpBomLinePartResource()=='虚拟总成'?true:false">虚拟总成</option>-->
+        <!--</select>-->
+        <input class="form-control" id="pBomLinePartResource" name="pBomLinePartResource" type="text" disabled="disabled" th:value="${data.pBomLinePartResource}"
+               placeholder=""/>
+    </div>
+    <div class="form-group">
+        <label for="sparePart">备件</label>
+        <input class="form-control" id="sparePart" name="sparePart" type="text"
+               th:value="${data.sparePart}"
+               placeholder="请输入备件"/><!--th:value="${entity.sparepart}"-->
+    </div>
+    <div class="form-group">
+        <label for="sparePartNum">备件编号</label>
+        <input class="form-control" id="sparePartNum" name="sparePartNum" type="text"
+               th:value="${data.sparePartNum}"
+               placeholder="请输入备件编号"/><!--th:value="${entity.sparePartNum}"-->
+    </div>
+    <div class="form-group">
+        <label for="processRoute">工艺路线</label>
+        <input class="form-control" id="processRoute" name="processRoute" type="text"
+               th:value="${data.processRoute}"
+               placeholder="请输入工艺路线"/><!--th:value="${entity.processRoute}"-->
+    </div>
+    <div class="form-group">
+        <label for="laborHour">人工工时</label>
+        <input class="form-control" id="laborHour" name="laborHour" type="text"
+               th:value="${data.laborHour}"
+               placeholder="请输入人工工时"/><!--th:value="${entity.laborHour}"-->
+    </div>
+    <div class="form-group">
+        <label for="rhythm">节拍</label>
+        <input class="form-control" id="rhythm" name="rhythm" type="text"
+               th:value="${data.rhythm}"
+               placeholder="请输入节拍"/><!--th:value="${entity.rhythm}"-->
+    </div>
+    <div class="form-group">
+        <label for="solderJoint">焊点</label>
+        <input class="form-control" id="solderJoint" name="solderJoint" type="text"
+               th:value="${data.solderJoint}"
+               placeholder="请输入焊点"/><!--th:value="${entity.solderJoint}"-->
+    </div>
+    <div class="form-group">
+        <label for="machineMaterial">机物料</label>
+        <input class="form-control" id="machineMaterial" name="machineMaterial" type="text"
+               th:value="${data.machineMaterial}"
+               placeholder="请输入机物料"/><!--th:value="${entity.machineMaterial}"-->
+    </div>
+    <div class="form-group">
+        <label for="standardPart">标准件</label>
+        <input class="form-control" id="standardPart" name="standardPart" type="text"
+               th:value="${data.standardPart}"
+               placeholder="请输入标准件"/><!--th:value="${entity.standardPart}"-->
+    </div>
+    <div class="form-group">
+        <label for="tools">工具</label>
+        <input class="form-control" id="tools" name="tools" type="text"
+               th:value="${data.tools}"
+               placeholder="请输入工具"/><!--th:value="${entity.tools}"-->
+    </div>
+    <div class="form-group">
+        <label for="wasterProduct">废品</label>
+        <input class="form-control" id="wasterProduct" name="wasterProduct" type="text"
+               th:value="${data.wasterProduct}"
+               placeholder="请输入废品"/><!--th:value="${entity.wasterProduct}"-->
+    </div>
+    <div class="form-group">
+        <label for="change">变更</label>
+        <input class="form-control" id="change" name="change" type="text"
+               th:value="${data.change}"
+               placeholder="请输入变更"/><!--th:value="${entity.change}"-->
+    </div>
+    <div class="form-group">
+        <label for="changeNum">变更号</label>
+        <input class="form-control" id="changeNum" name="changeNum" type="text"
+               th:value="${data.changeNum}"
+               placeholder="请输入变更号"/><!--th:value="${entity.changeNum}"-->
+    </div>
+    <div class="form-group">
+        <label for="pFactoryCode">工厂代码</label>
+        <input class="form-control" id="pFactoryCode" name="pFactoryCode" type="text"
+               th:value="${data.pFactoryCode}"
+               placeholder="请输入工厂代码"/><!--th:value="${entity.changeNum}"-->
+    </div>
+    <div class="form-group">
+        <label for="pStockLocation">发货料库存地点</label>
+        <input class="form-control" id="pStockLocation" name="pStockLocation" type="text"
+               th:value="${data.pStockLocation}"
+               placeholder="请输入发货料库存地点"/><!--th:value="${entity.changeNum}"-->
+    </div>
+    <div class="form-group">
+        <label for="pBomType">BOM类型</label>
+        <select class="form-control" name="pBomType" id="pBomType" placeholder="请选择BOM类型">
+            <option th:selected="${data.getpBomType()=='生产'?true:false}">生产</option>
+            <option th:selected="${data.getpBomType()=='财务'?true:false}">财务</option>
+        </select>
+    </div>
+</form>
+
+<script th:inline="javascript">
+    <![CDATA[
+    $(function () {
+        $('#mbomMainForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                level: {
+                    message: '层级验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '层级不能为空'
+                        }
+                    }
+                },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var bootstrapValidator = $("#mbomMainForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                var url = $("#mbomMainForm", window.top.document).attr('action');
+                var myData = JSON.stringify({
+                    "eBomPuid": $("#eBomPuid").val(),
+                    // "level": $("#level").val(),
+                    // "pBomOfWhichDept": $("#pBomOfWhichDept").val(),
+                    "lineId": $("#lineId").val(),
+                    "updateType": $("#updateType").val(),
+                    "puid": $("#puid").val(),
+                    // "object_name": $("#object_name").val(),
+                    "projectId" : $("#project", window.top.document).val(),
+                    "sparePart": $("#sparePart").val(),
+                    "sparePartNum": $("#sparePartNum").val(),
+                    "processRoute": $("#processRoute").val(),
+                    "laborHour": $("#laborHour").val(),
+                    "rhythm": $("#rhythm").val(),
+                    "solderJoint": $("#solderJoint").val(),
+                    "machineMaterial": $("#machineMaterial").val(),
+                    "standardPart": $("#standardPart").val(),
+                    "tools": $("#tools").val(),
+                    "wasterProduct": $("#wasterProduct").val(),
+                    "change": $("#change").val(),
+                    "changeNum": $("#changeNum").val(),
+                    "pFactoryCode": $("#pFactoryCode").val(),
+                    "pStockLocation": $("#pStockLocation").val(),
+                    "pBomType": $("#pBomType").val(),
+                });
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: myData,
+                    success:
+                        function (result) {
+                            // $('.modal-dialog', window.top.document).parent('div').remove()
+                            // $('body', window.top.document).find('.modal-backdrop').remove();
+                            // jquery 调用刷新当前操作的table页面的refresh方法
+                            // $(window.parent.document).contents().find(".tab-pane.fade.active.in iframe")[0].contentWindow.doQuery();
+                            activeTabBodyRefresh();
+                            /*if (result)
+                                window.Ewin.alert({message: '修改数据成功!'});
+                            else
+                                window.Ewin.alert({message: '修改数据失败!'});*/
+                            if (result.success) {
+                                layer.msg('修改成功', {icon: 1, time: 2000})
+                            }
+                            else if(!result.success){
+                                window.Ewin.alert({message: result.errMsg})
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':修改数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    $(document).keydown(function(event) {
+        if (event.keyCode == 13) {
+            $('form').each(function() {
+                event.preventDefault();
+            });
+        }
+    });
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

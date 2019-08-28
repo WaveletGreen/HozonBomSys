@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzApplicantChangeRecordMapper">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="APPLICANT_ID" jdbcType="DOUBLE" property="applicantId" />
+    <result column="APPLICANT_TIME" jdbcType="TIMESTAMP" property="applicantTime" />
+    <result column="ORDER_ID" jdbcType="DOUBLE" property="orderId" />
+    <result column="AUDIT_RECORD_ID" jdbcType="DOUBLE" property="auditRecordId" />
+  </resultMap>
+
+
+  <sql id="Base_Column_List">
+    ID, APPLICANT_ID, APPLICANT_TIME, ORDER_ID, AUDIT_RECORD_ID
+  </sql>
+
+
+  <!--我的申请返回ORDER_ID-->
+  <select id="HzApplicantChangeDAOImpl_findAuditorList" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    *
+    <!--ORDER_ID-->
+    from HZ_APPLICANT_CHANGE_RECORD
+    where 1=1
+    <!--ID = #{id,jdbcType=DOUBLE}-->
+    and APPLICANT_ID = #{applicantId,jdbcType=DOUBLE}
+    <!--and AUDIT_RESULT is NULL-->
+
+  </select>
+
+  <!--insert-->
+  <insert id="HzApplicantChangeDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
+    insert into HZ_APPLICANT_CHANGE_RECORD (ID, APPLICANT_ID, APPLICANT_TIME,
+      ORDER_ID, AUDIT_RECORD_ID)
+    values (SEQ_HZ_APPLICANT_CHANGE_RECORD.nextval, #{applicantId,jdbcType=DOUBLE}, sysdate,
+      #{orderId,jdbcType=DOUBLE}, #{auditRecordId,jdbcType=DOUBLE})
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
+    insert into HZ_APPLICANT_CHANGE_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="applicantId != null">
+        APPLICANT_ID,
+      </if>
+      <if test="applicantTime != null">
+        APPLICANT_TIME,
+      </if>
+      <if test="orderId != null">
+        ORDER_ID,
+      </if>
+      <if test="auditRecordId != null">
+        AUDIT_RECORD_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="applicantId != null">
+        #{applicantId,jdbcType=DECIMAL},
+      </if>
+      <if test="applicantTime != null">
+        #{applicantTime,jdbcType=DATE},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=DECIMAL},
+      </if>
+      <if test="auditRecordId != null">
+        #{auditRecordId,jdbcType=DOUBLE}
+      </if>
+    </trim>
+  </insert>
+
+  <!--update-->
+  <update id="HzApplicantChangeDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
+    update HZ_APPLICANT_CHANGE_RECORD
+    <set>
+      <if test="applicantId != null">
+        APPLICANT_ID = #{applicantId,jdbcType=DOUBLE},
+      </if>
+      <if test="applicantTime != null">
+        APPLICANT_TIME = #{applicantTime,jdbcType=DATE},
+      </if>
+      <if test="orderId != null">
+        ORDER_ID = #{orderId,jdbcType=DOUBLE},
+      </if>
+      <if test="auditRecordId != null">
+        AUDIT_RECORD_ID = #{auditRecordId,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DOUBLE}
+  </update>
+
+
+  <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzApplicantChangeRecord">
+    update HZ_APPLICANT_CHANGE_RECORD
+    set APPLICANT_ID = #{applicantId,jdbcType=DECIMAL},
+      APPLICANT_TIME = #{applicantTime,jdbcType=DATE},
+      ORDER_ID = #{orderId,jdbcType=DECIMAL},
+      TABLE_NAME = #{tableName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+  <!--delete-->
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from HZ_APPLICANT_CHANGE_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+
+  <!--select-->
+  <select id="selectByPrimaryKey" parameterType="java.math.BigDecimal" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from HZ_APPLICANT_CHANGE_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+</mapper>

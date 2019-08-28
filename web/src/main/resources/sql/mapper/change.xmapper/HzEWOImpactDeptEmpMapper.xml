@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzEWOImpactDeptEmpMapper">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactDeptEmp">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="IMPACT_DEPT_ID" jdbcType="DOUBLE" property="impactDeptId" />
+    <result column="USER_ID" jdbcType="DOUBLE" property="userId" />
+    <result column="VALID_FLAG" jdbcType="INTEGER" property="validFlag" />
+    <result column="EWO_NO" jdbcType="VARCHAR" property="ewoNo" />
+    <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
+
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, IMPACT_DEPT_ID, USER_ID,VALID_FLAG,EWO_NO,PROJECT_ID
+  </sql>
+
+
+  <select id="HzEWOImpactDeptEmpDAOImpl_findImpactDeptList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_EWO_IMPACT_DEPT_EMP
+    <where>
+      1=1
+      <if test="impactDeptId != null">
+        and IMPACT_DEPT_ID = #{impactDeptId,jdbcType=VARCHAR}
+      </if>
+      <if test="ewoNo != null">
+        and EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+      </if>
+      <if test="projectId != null">
+        and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal">
+    delete from HZ_EWO_IMPACT_DEPT_EMP
+    where ID = #{id,jdbcType=DOUBLE}
+  </delete>
+
+  <insert id="HzEWOImpactDeptEmpDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactDeptEmp">
+    insert into HZ_EWO_IMPACT_DEPT_EMP (ID, IMPACT_DEPT_ID, USER_ID,
+      VALID_FLAG, EWO_NO, PROJECT_ID
+      )
+    values (#{id,jdbcType=DOUBLE}, #{impactDeptId,jdbcType=DOUBLE}, #{userId,jdbcType=DOUBLE},
+      #{validFlag,jdbcType=DOUBLE}, #{ewoNo,jdbcType=VARCHAR}, #{projectId,jdbcType=VARCHAR}
+      )
+  </insert>
+
+
+  <update id="HzEWOImpactDeptEmpDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactDeptEmp">
+    update HZ_EWO_IMPACT_DEPT_EMP
+    <set>
+      <if test="impactDeptId != null">
+        IMPACT_DEPT_ID = #{impactDeptId,jdbcType=DOUBLE},
+      </if>
+      <if test="userId != null">
+        USER_ID = #{userId,jdbcType=DOUBLE},
+      </if>
+      <if test="validFlag != null">
+        VALID_FLAG = #{validFlag,jdbcType=INTEGER}
+      </if>
+      <if test="ewoNo != null">
+        EWO_NO = #{ewoNo,jdbcType=VARCHAR},
+      </if>
+      <if test="projectId != null">
+        PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DOUBLE}
+  </update>
+  
+</mapper>

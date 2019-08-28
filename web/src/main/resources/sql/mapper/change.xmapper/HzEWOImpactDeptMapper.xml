@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzEWOImpactDeptMapper">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzEWOImpactDept">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="DEPT_ID" jdbcType="DOUBLE" property="deptId" />
+    <result column="EWO_NO" jdbcType="VARCHAR" property="ewoNo" />
+    <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
+    <result column="CHECK_FLAG" jdbcType="DOUBLE" property="checkFlag" />
+  </resultMap>
+
+  <resultMap id="ImpactAllDeptMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzEWOAllImpactDept">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="DEPT_NAME" jdbcType="VARCHAR" property="deptName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, DEPT_ID, EWO_NO, PROJECT_ID, CHECK_FLAG
+  </sql>
+
+
+  <select id="HzEWOImpactDeptDAOImpl_findEWOImpactDeptList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_EWO_IMPACT_DEPT
+    <where>
+      1=1
+      <if test="ewoNo != null">
+        and EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+      </if>
+      <if test="deptId != null">
+        and DEPT_ID = #{deptId,jdbcType=VARCHAR}
+      </if>
+      <if test="projectId != null">
+        and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+
+  <select id="HzEWOImpactDeptDAOImpl_findEWOAllImpactDept" resultMap="ImpactAllDeptMap">
+    select
+    *
+    from HZ_EWO_DEPT
+  </select>
+
+
+  <insert id="HzEWOImpactDeptDAOImpl_insertList" parameterType="java.util.List">
+    insert into HZ_EWO_IMPACT_DEPT (ID, DEPT_ID, EWO_NO, 
+      PROJECT_ID, CHECK_FLAG)
+    select SEQ_HZ_EWO_IMPACT_DEPT.nextval,t.* from
+    (
+    <foreach collection="list" item="item" index="index" separator="UNION ALL">
+      select
+      #{item.deptId,jdbcType=DOUBLE},
+      #{item.ewoNo,jdbcType=VARCHAR},
+      #{item.projectId,jdbcType=VARCHAR},
+      #{item.checkFlag,jdbcType=INTEGER}
+      from DUAL
+    </foreach>
+    )t
+  </insert>
+
+
+  <update id="HzEWOImpactDeptDAOImpl_updateList" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="begin" close=";end;" separator=";">
+      update HZ_EWO_IMPACT_DEPT
+      <set>
+        <if test="item.ewoNo != null">
+          EWO_NO = #{item.ewoNo,jdbcType=VARCHAR},
+        </if>
+        <if test="item.checkFlag != null">
+          CHECK_FLAG = #{item.checkFlag,jdbcType=INTEGER},
+        </if>
+      </set>
+      where ID = #{item.id,jdbcType=DOUBLE}
+    </foreach>
+  </update>
+
+</mapper>

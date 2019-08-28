@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.main.HzMainBomDao">
+    <resultMap id="BaseResultMap"
+               type="cn.net.connor.hozon.dao.pojo.main.HzMainBom">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="POST_DATE" jdbcType="TIMESTAMP"
+                property="createDate"/>
+        <result column="POSTER" jdbcType="VARCHAR" property="creator"/>
+        <result column="BOM_DIGIFAX" jdbcType="VARCHAR"
+                property="digifaxName"/>
+        <result column="BOM_ORG_PUID" jdbcType="VARCHAR"
+                property="digifaxUidFromTC"/>
+        <result column="P_CFG0_OF_WHICH_PROJECT" jdbcType="VARCHAR"
+                property="projectName"/>
+        <result column="P_CFG0_OF_WHICH_PROJECT_PUID"
+                jdbcType="VARCHAR" property="projectId"/>
+        <result column="P_CFG0_LAST_MOD_DATE" jdbcType="TIMESTAMP"
+                property="lastModifyDate"/>
+        <result column="P_CFG0_ORG_POSTER" jdbcType="VARCHAR"
+                property="updater"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+		PUID,
+		POSTER,
+		POST_DATE,
+		BOM_DIGIFAX,
+		BOM_ORG_PUID,
+		P_CFG0_OF_WHICH_PROJECT,
+		P_CFG0_OF_WHICH_PROJECT_PUID,
+		P_CFG0_LAST_MOD_DATE,
+		P_CFG0_ORG_POSTER
+	</sql>
+    <sql id="Base_Values_List">
+        #{puid,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR},
+        #{createDate,jdbcType=TIMESTAMP},
+        #{digifaxName,jdbcType=VARCHAR},
+        #{digifaxUidFromTC,jdbcType=VARCHAR},
+        #{projectName,jdbcType=VARCHAR},
+        #{projectId,jdbcType=VARCHAR},
+        #{lastModifyDate,jdbcType=TIMESTAMP},
+        #{updater,jdbcType=VARCHAR}
+    </sql>
+    <select id="selectByProjectId"
+            parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_BOM_MAIN_RECORD
+        where P_CFG0_OF_WHICH_PROJECT_PUID =
+        #{projectId,jdbcType=VARCHAR}
+    </select>
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.main.HzMainBom">
+        insert into HZ_BOM_MAIN_RECORD(
+        <include refid="Base_Column_List"/>
+        )
+        values(
+        <include refid="Base_Values_List"/>
+        )
+    </insert>
+</mapper>

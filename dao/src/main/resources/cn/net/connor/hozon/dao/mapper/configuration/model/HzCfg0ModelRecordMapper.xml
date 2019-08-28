@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.model.HzCfg0ModelRecordDao">
+    <resultMap id="BaseResultMap"
+               type="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord">
+        <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+        <result column="OBJECT_NAME" jdbcType="VARCHAR"
+                property="objectName"/>
+        <result column="OBJECT_DESC" jdbcType="VARCHAR"
+                property="objectDesc"/>
+        <result column="P_CFG0_MODEL_OF_MAIN_RECORD" jdbcType="VARCHAR"
+                property="modelMainRecord"/>
+        <result column="P_CFG0_MODEL_BASIC_DETAIL" jdbcType="VARCHAR"
+                property="modelBasicDetail"/>
+        <result column="IS_SENT" jdbcType="INTEGER"
+                property="isSent"/>
+        <result column="MODEL_CREATE_DATE" jdbcType="TIMESTAMP"
+                property="modelCreateDate"/>
+        <result column="MODEL_UPDATE_DATE" jdbcType="TIMESTAMP"
+                property="modelUpdateDate"/>
+    </resultMap>
+    <resultMap id="JoinResultMap" extends="BaseResultMap"
+               type="cn.net.connor.hozon.dao.pojo.configuration.model.HzCfg0ModelRecord">
+
+    </resultMap>
+    <sql id="Base_Column_List">
+		PUID,
+		OBJECT_NAME,
+		OBJECT_DESC,
+		P_CFG0_MODEL_OF_MAIN_RECORD,
+		P_CFG0_MODEL_BASIC_DETAIL,
+		IS_SENT,
+		MODEL_CREATE_DATE,
+		MODEL_UPDATE_DATE
+	</sql>
+    <!--根据主键筛选-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"
+        />
+        from HZ_CFG0_MODEL_RECORD
+        where PUID=#{puid,jdbcType=VARCHAR}
+    </select>
+    <!--根据项目puid获取所有车型-->
+    <select id="selectByProjectPuid" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_CFG0_MODEL_RECORD t
+        where P_CFG0_MODEL_OF_MAIN_RECORD=
+        (
+        select t.puid
+        from HZ_CFG0_MAIN_RECORD t
+        where t.p_cfg0_of_which_project_puid=#{projectPuid,jdbcType=VARCHAR}
+        )
+
+    </select>
+    <!--根据项目puid获取所有车型，只不过是用链接查询的而已-->
+    <select id="selectByProjectIdWithJoin" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select t.* from HZ_CFG0_MODEL_RECORD t
+        LEFT JOIN HZ_CFG0_MODEL_DETAIL t2 on t.PUID=t2.P_MODEL_PUID
+        left JOIN HZ_CFG0_MAIN_RECORD t3 on t.P_CFG0_MODEL_OF_MAIN_RECORD=t3.puid
+        LEFT JOIN HZ_PROJECT_LIBS t4 on t3.P_CFG0_OF_WHICH_PROJECT_PUID=t4.PUID
+        where t4.PUID=#{projectId,jdbcType=VARCHAR}
+    </select>
+    <sql id="values_by_batch">
+		#{item.puid,jdbcType=VARCHAR},
+		#{item.objectName,jdbcType=VARCHAR},
+		#{item.objectDesc,jdbcType=VARCHAR},
+		#{item.modelMainRecord,jdbcType=VARCHAR},
+		#{item.modelBasicDetail,jdbcType=VARCHAR},
+		0,
+		sysdate,
+		sysdate
+	</sql>
+    <!--批量插入-->
+    <insert id="insertByBatch" parameterType="java.util.List">
+        insert all
+        <foreach collection="list" item="item" index="index"
+                 separator=" ">
+            into HZ_CFG0_MODEL_RECORD (
+            <include refid="Base_Column_List"/>
+            ) values (
+            <include refid="values_by_batch"/>
+            )
+        </foreach>
+        select 1 from dual
+    </insert>
+    <!--更新基本信息-->
+    <update id="updateBasicByPuid">
+        update HZ_CFG0_MODEL_RECORD t
+          set t.P_CFG0_MODEL_BASIC_DETAIL=#{modelBasicDetail,jdbcType=VARCHAR},
+              t.MODEL_UPDATE_DATE=sysdate
+        where t.PUID=#{puid,jdbcType=VARCHAR}
+    </update>
+    <!--根据主键修改车型模型名称-->
+    <update id="updateModelName">
+        update HZ_CFG0_MODEL_RECORD t
+          set t.OBJECT_NAME=#{objectName,jdbcType=VARCHAR},
+              t.OBJECT_DESC=#{objectDesc,jdbcType=VARCHAR},
+              t.P_CFG0_MODEL_BASIC_DETAIL=#{modelBasicDetail,jdbcType=VARCHAR},
+              t.MODEL_UPDATE_DATE=sysdate
+        where t.PUID=#{puid,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="deleteModelById" parameterType="java.lang.String">
+        delete from
+          HZ_CFG0_MODEL_RECORD
+        where
+          PUID = #{puid,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectByFullCfgModel" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List"/>
+        from
+          HZ_CFG0_MODEL_RECORD
+        where
+          PUID in (
+            select distinct(MOD_MODEL_UID) from HZ_FC_MODEL_RECORD_CHANGE where FL_MAIN_ID = #{orderChangeId,jdbcType=DECIMAL}
+          )
+    </select>
+</mapper>

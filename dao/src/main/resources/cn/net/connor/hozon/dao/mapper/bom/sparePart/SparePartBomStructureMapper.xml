@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.bom.sparePart.SparePartBomStructureDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="SPARE_PART_ID" jdbcType="DECIMAL" property="sparePartId"/>
+        <result column="SPARE_PART_CHILD_ID" jdbcType="DECIMAL" property="sparePartChildId"/>
+        <result column="RESERVED1" jdbcType="VARCHAR" property="reserved1"/>
+        <result column="RESERVED2" jdbcType="VARCHAR" property="reserved2"/>
+        <result column="RESERVED3" jdbcType="VARCHAR" property="reserved3"/>
+        <result column="RESERVED4" jdbcType="VARCHAR" property="reserved4"/>
+        <result column="RESERVED5" jdbcType="VARCHAR" property="reserved5"/>
+    </resultMap>
+
+    <resultMap id="RecursionResultMap"
+               type="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartStructureRecursion">
+        <id column="ID" jdbcType="INTEGER" property="id"/>
+        <!--这一部分属于结构的字段-->
+        <association property="structure" javaType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure"
+                     column="STRU_ID">
+            <id column="STRU_ID" jdbcType="DECIMAL" property="id"/>
+            <result column="STRU_SPARE_PART_ID" jdbcType="DECIMAL" property="sparePartId"/>
+            <result column="STRU_SPARE_PART_CHILD_ID" jdbcType="DECIMAL" property="sparePartChildId"/>
+            <result column="STRU_RESERVED1" jdbcType="VARCHAR" property="reserved1"/>
+            <result column="STRU_RESERVED2" jdbcType="VARCHAR" property="reserved2"/>
+            <result column="STRU_RESERVED3" jdbcType="VARCHAR" property="reserved3"/>
+            <result column="STRU_RESERVED4" jdbcType="VARCHAR" property="reserved4"/>
+            <result column="STRU_RESERVED5" jdbcType="VARCHAR" property="reserved5"/>
+        </association>
+        <association property="part" javaType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartData"
+                     column="PART_ID">
+            <id column="PART_ID" jdbcType="DECIMAL" property="id"/>
+            <result column="PART_PRODUCTIVE_PART_CODE" jdbcType="VARCHAR" property="productivePartCode"/>
+            <result column="PART_PRODUCTIVE_PART_NAME" jdbcType="VARCHAR" property="productivePartName"/>
+            <result column="PART_SPARE_PART_CODE" jdbcType="VARCHAR" property="sparePartCode"/>
+            <result column="PART_SPARE_PART_NAME" jdbcType="VARCHAR" property="sparePartName"/>
+            <result column="PART_IS_SPARE_PART" jdbcType="DECIMAL" property="isSparePart"/>
+            <result column="PART_UNIT" jdbcType="VARCHAR" property="unit"/>
+            <result column="PART_DEPARTMENT" jdbcType="VARCHAR" property="department"/>
+            <result column="PART_RESPONSIBLE_ENGINEER" jdbcType="VARCHAR" property="responsibleEngineer"/>
+            <result column="PART_SUPPLIER" jdbcType="VARCHAR" property="supplier"/>
+            <result column="PART_CODE" jdbcType="VARCHAR" property="code"/>
+            <result column="PART_PURCHASING_ENGINEER" jdbcType="VARCHAR" property="purchasingEngineer"/>
+            <result column="PART_REMARK" jdbcType="VARCHAR" property="remark"/>
+            <result column="PART_PART_CLASS" jdbcType="VARCHAR" property="partClass"/>
+            <result column="PART_WORKSHOP1" jdbcType="VARCHAR" property="workshop1"/>
+            <result column="PART_WORKSHOP2" jdbcType="VARCHAR" property="workshop2"/>
+            <result column="PART_PART_LEVEL" jdbcType="VARCHAR" property="level"/>
+            <result column="PART_MAJOR" jdbcType="VARCHAR" property="major"/>
+            <result column="PART_HIERARCHY" jdbcType="VARCHAR" property="hierarchy"/>
+            <result column="PART_ADS" jdbcType="VARCHAR" property="ads"/>
+            <result column="PART_REL_EBOM_LINE_ID" jdbcType="VARCHAR" property="relEbomLineId"/>
+            <result column="PART_DRAWING_NUM" jdbcType="VARCHAR" property="drawingNum"/>
+            <result column="PART_RESERVED2" jdbcType="VARCHAR" property="reserved2"/>
+            <result column="PART_RESERVED3" jdbcType="VARCHAR" property="reserved3"/>
+            <result column="PART_RESERVED4" jdbcType="VARCHAR" property="reserved4"/>
+            <result column="PART_RESERVED5" jdbcType="VARCHAR" property="reserved5"/>
+        </association>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    ID, SPARE_PART_ID, SPARE_PART_CHILD_ID, RESERVED1, RESERVED2, RESERVED3, RESERVED4,
+    RESERVED5
+  </sql>
+
+    <sql id="Recur_Base_Column_List">
+    tb.ID as STRU_ID,
+    tb.SPARE_PART_ID as STRU_SPARE_PART_ID,
+    tb.SPARE_PART_CHILD_ID as STRU_SPARE_PART_CHILD_ID,
+    tb.RESERVED1 as STRU_RESERVED1,
+    tb.RESERVED2 as STRU_RESERVED2,
+    tb.RESERVED3 as STRU_RESERVED3,
+    tb.RESERVED4 as STRU_RESERVED4,
+    tb.RESERVED5 as STRU_RESERVED5
+  </sql>
+    <sql id="Recur_Part_Column_List">
+        t.ID as PART_ID,
+        t.PRODUCTIVE_PART_CODE as PART_PRODUCTIVE_PART_CODE,
+        t.PRODUCTIVE_PART_NAME as PART_PRODUCTIVE_PART_NAME,
+        t.SPARE_PART_CODE as PART_SPARE_PART_CODE,
+        t.SPARE_PART_NAME as PART_SPARE_PART_NAME,
+        t.IS_SPARE_PART as PART_IS_SPARE_PART,
+        t.UNIT as PART_UNIT,
+        t.DEPARTMENT as PART_DEPARTMENT,
+        t.RESPONSIBLE_ENGINEER as PART_RESPONSIBLE_ENGINEER,
+        t.SUPPLIER as PART_SUPPLIER,
+        t.CODE as PART_CODE,
+        t.PURCHASING_ENGINEER as PART_PURCHASING_ENGINEER,
+        t.REMARK as PART_REMARK,
+        t.PART_CLASS as PART_PART_CLASS,
+        t.WORKSHOP1 as PART_WORKSHOP1,
+        t.WORKSHOP2 as PART_WORKSHOP2,
+        t.PART_LEVEL as PART_PART_LEVEL,
+        t.MAJOR as PART_MAJOR,
+        t.HIERARCHY as PART_HIERARCHY,
+        t.ADS as PART_ADS,
+        t.REL_EBOM_LINE_ID as PART_REL_EBOM_LINE_ID,
+        t.DRAWING_NUM as PART_DRAWING_NUM,
+        t.RESERVED2 as PART_RESERVED2,
+        t.RESERVED3 as PART_RESERVED3,
+        t.RESERVED4 as PART_RESERVED4,
+        t.RESERVED5 as PART_RESERVED5
+  </sql>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from SPARE_PART_BOM_STRUCTURE
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <select id="selectRecursionByTopLayerId" parameterType="java.lang.Long" resultMap="RecursionResultMap">
+        SELECT
+        <include refid="Recur_Base_Column_List"/>,
+        <include refid="Recur_Part_Column_List"/>
+        FROM
+        SPARE_PART_BOM_STRUCTURE tb
+        LEFT JOIN SPARE_PART_DATA t ON t.id = tb.SPARE_PART_CHILD_ID
+        START WITH tb.SPARE_PART_ID = #{id,jdbcType=DECIMAL} CONNECT BY PRIOR tb.SPARE_PART_CHILD_ID = SPARE_PART_ID
+        order by t.id
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from SPARE_PART_BOM_STRUCTURE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+        <selectKey order="BEFORE"
+                   keyColumn="ID" keyProperty="id" resultType="java.lang.Long">
+            select SEQ_SPARE_PART_STRUCTURE_ID.Nextval from dual
+        </selectKey>
+        insert into SPARE_PART_BOM_STRUCTURE (ID, SPARE_PART_ID, SPARE_PART_CHILD_ID,
+        RESERVED1, RESERVED2, RESERVED3,
+        RESERVED4, RESERVED5)
+        values (#{id,jdbcType=DECIMAL}, #{sparePartId,jdbcType=DECIMAL}, #{sparePartChildId,jdbcType=DECIMAL},
+        #{reserved1,jdbcType=VARCHAR}, #{reserved2,jdbcType=VARCHAR}, #{reserved3,jdbcType=VARCHAR},
+        #{reserved4,jdbcType=VARCHAR}, #{reserved5,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+        insert into SPARE_PART_BOM_STRUCTURE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="sparePartId != null">
+                SPARE_PART_ID,
+            </if>
+            <if test="sparePartChildId != null">
+                SPARE_PART_CHILD_ID,
+            </if>
+            <if test="reserved1 != null">
+                RESERVED1,
+            </if>
+            <if test="reserved2 != null">
+                RESERVED2,
+            </if>
+            <if test="reserved3 != null">
+                RESERVED3,
+            </if>
+            <if test="reserved4 != null">
+                RESERVED4,
+            </if>
+            <if test="reserved5 != null">
+                RESERVED5,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="sparePartId != null">
+                #{sparePartId,jdbcType=DECIMAL},
+            </if>
+            <if test="sparePartChildId != null">
+                #{sparePartChildId,jdbcType=DECIMAL},
+            </if>
+            <if test="reserved1 != null">
+                #{reserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved2 != null">
+                #{reserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved3 != null">
+                #{reserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved4 != null">
+                #{reserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved5 != null">
+                #{reserved5,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertList" parameterType="java.util.List">
+        insert into SPARE_PART_BOM_STRUCTURE
+        (ID, SPARE_PART_ID, SPARE_PART_CHILD_ID,
+        RESERVED1, RESERVED2, RESERVED3,
+        RESERVED4, RESERVED5)
+        select SEQ_SPARE_PART_STRUCTURE_ID.Nextval, A.* from(
+        <foreach collection="list" index="index" item="bean" separator="union all">
+            select
+            #{bean.sparePartId,jdbcType=DECIMAL}, #{bean.sparePartChildId,jdbcType=DECIMAL},
+            #{bean.reserved1,jdbcType=VARCHAR}, #{bean.reserved2,jdbcType=VARCHAR}, #{bean.reserved3,jdbcType=VARCHAR},
+            #{bean.reserved4,jdbcType=VARCHAR}, #{bean.reserved5,jdbcType=VARCHAR}
+            from
+            dual
+        </foreach>
+        )A
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+        update SPARE_PART_BOM_STRUCTURE
+        <set>
+            <if test="sparePartId != null">
+                SPARE_PART_ID = #{sparePartId,jdbcType=DECIMAL},
+            </if>
+            <if test="sparePartChildId != null">
+                SPARE_PART_CHILD_ID = #{sparePartChildId,jdbcType=DECIMAL},
+            </if>
+            <if test="reserved1 != null">
+                RESERVED1 = #{reserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved2 != null">
+                RESERVED2 = #{reserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved3 != null">
+                RESERVED3 = #{reserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved4 != null">
+                RESERVED4 = #{reserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="reserved5 != null">
+                RESERVED5 = #{reserved5,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.bom.sparePart.SparePartBomStructure">
+    update SPARE_PART_BOM_STRUCTURE
+    set SPARE_PART_ID = #{sparePartId,jdbcType=DECIMAL},
+      SPARE_PART_CHILD_ID = #{sparePartChildId,jdbcType=DECIMAL},
+      RESERVED1 = #{reserved1,jdbcType=VARCHAR},
+      RESERVED2 = #{reserved2,jdbcType=VARCHAR},
+      RESERVED3 = #{reserved3,jdbcType=VARCHAR},
+      RESERVED4 = #{reserved4,jdbcType=VARCHAR},
+      RESERVED5 = #{reserved5,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

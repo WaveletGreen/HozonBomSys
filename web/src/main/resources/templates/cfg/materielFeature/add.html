@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<body>
+<head>
+    <meta charset="UTF-8">
+    <title>添加衍生物料</title>
+</head>
+<meta charset=utf-8/>
+<form class="form-horizontal" id="form" role="form" method="post" th:action="${action}">
+    <fieldset>
+        <input id="projectUid" name="projectUid" type="hidden" th:value="${projectUid}"/>
+        <div id="legend" class="">
+            <legend class="">添加带颜色的衍生物料</legend>
+        </div>
+
+        <div class="form-group col-lg-12">
+            <label for="modelUid">模型</label>
+            <select class="form-control input-small" name="modelUid" id="modelUid">
+                <option th:each="model:${models}"
+                        th:value="${model.getPuid()}"
+                        th:text="${model.getObjectName()+'-'+(model.getModelBasicDetail()==null?'':model.getModelBasicDetail())}"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-12">
+            <label for="colorModel">配色方案</label>
+            <select class="form-control input-small" name="colorModel" id="colorModel">
+                <option th:each="colorModel:${colorModels}"
+                        th:value="${colorModel.getPuid()}"
+                        th:text="${colorModel.getpDescOfColorfulModel()}"
+                >
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-lg-12">
+            <label for="pCfg0ModelBasicDetail">衍生物料基本信息</label>
+            <input class="form-control" id="pCfg0ModelBasicDetail" name="pCfg0ModelBasicDetail" type="text"
+                   placeholder="请填写数据衍生物料基本信息"
+            />
+        </div>
+        <div class="form-group col-lg-12">
+            <label for="superMateriel">超级物料号</label>
+            <input class="form-control" id="superMateriel" name="superMateriel" type="text"
+                   placeholder="请填写超级物料号"
+            />
+            <!--th:disabled="${model.superMateriel==null}"-->
+        </div>
+        <div class="form-group col-lg-12">
+            <label for="modelGroup">模型族</label>
+            <input class="form-control" id="modelGroup" name="modelGroup" type="text"
+                   placeholder="请填写模型族"
+            />
+        </div>
+        <div class="form-group col-lg-12">
+            <label for="factoryCode">工厂(默认1001)</label>
+            <input class="form-control" id="factoryCode" name="factoryCode" type="text"
+            />
+        </div>
+    </fieldset>
+</form>
+<script th:inline="javascript">
+    <![CDATA[
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+    $(function () {
+        var sm = [[${sm}]];
+        console.log(sm);
+        if (null != sm) {
+            $("#superMateriel").val(sm.pMaterielCode);
+            $('#superMateriel').attr("disabled", "disabled");
+        }
+        var modelGroup = [[${modelGroup}]];
+        if(null!=modelGroup){
+            $("#modelGroup").val(modelGroup);
+            $('#modelGroup').attr("disabled", "disabled");
+        }
+
+        $('#form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+
+            var url = $("#form", window.top.document).attr('action');
+            var data = {};
+            var _d = $("#form").serializeArray();
+            for (var p in _d) {
+                data[_d[p].name] = _d[p].value;
+            }
+            data.puid = $("#puid").val();
+            data.pCfg0ModelBasicDetail = $("#pCfg0ModelBasicDetail").val();
+            $.ajax({
+                contentType:
+                    "application/json",
+                type:
+                    'POST',
+                url: url,
+                data: JSON.stringify(data),
+                success:
+                    function (result) {
+                        activeTabBodyRefresh();
+                        if (result.status) {
+                            layer.msg(result.msg, {icon: 1, time: 2000})
+                            // window.Ewin.alert({message: '修改数据成功!'});
+                        }
+                        else {
+                            window.Ewin.alert({message: result.msg});
+                        }
+
+                    },
+                error: function (status) {
+                    window.Ewin.alert({message: status.status + ':添加失败!'});
+                }
+            });
+            // }
+        });
+    })
+    ]]>
+</script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

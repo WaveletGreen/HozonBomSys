@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+
+<html xmlns:th="http://wwwthymeleaf.org">
+<!--User: xulf Date: 2018/6/1 Time: 9:34-->
+<!--<head th:include="include/includebase"></head>-->
+<head th:include="include/basicHead"></head>
+<title>特性表</title>
+<body class="content-body">
+<div class="panel-body" style="padding-bottom: 0;">
+    <form class="form-inline" role="form" style="float: left; width: 100%;margin-left: 20px;" method="get"
+          id="sparePartForm">
+        <input class="form-control" id="projectId" name="projectId" type="hidden" value=""/>
+        <div class="form-group">
+            <label for="hierarchy">层级:</label>
+            <input type="text" style="width: 140px;" class="form-control" name="hierarchy" id="hierarchy" placeholder="请输入层级"/>
+        </div>
+        <div class="form-group">
+            <label for="productivePartCode">生产零件号:</label>
+            <input type="text" style="width: 140px;" class="form-control" name="productivePartCode" id="productivePartCode" placeholder="请输入生产零件号"/>
+        </div>
+        <div class="form-group">
+            <label for="sparePartCode">备件零件号:</label>
+            <input type="text" style="width: 140px;" class="form-control" name="sparePartCode" id="sparePartCode" placeholder="请输入备件零件号"/>
+        </div>
+        <div class="form-group">
+            <button type="button" id="queryBtn" onclick="doQuery();" class="btn btn-primary">查询</button>
+        </div>
+    </form>
+</div>
+<div class="content col-lg-12">
+    <div><table class="table table-striped tableNormalStyle" id="sparePartTable"></table></div>
+</div>
+<script th:src="@{/js/bom/sparePart/sparePartIndex.js}"></script>
+</body>
+</html>

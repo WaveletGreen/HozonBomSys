@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/11/27 Time: 13:42-->
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${version}"></title>
+</head>
+<body>
+<div style="text-align: center;font-size: 22px;font-family: 黑体, 微软雅黑, 宋体" ><h2 th:text="'更新日志'+${version}"></h2></div>
+
+<div style="text-align: left;font-size: 16px;font-family: 黑体, 微软雅黑, 宋体">
+    <p style="font-size: 24px"><strong>1.基础功能</strong></p>
+    <xmp>
+        1.1 系统新增https连接方式，http重定向到https连接，提高传输层数据安全性
+        1.2 登录及界面字体及图片、颜色的更新优化
+    </xmp>
+    <p style="font-size: 24px"><strong>2.配置管理</strong></p>
+    <xmp>
+        2.1 全配置BOM一级清单新增车型年字段维护
+        2.2 全配置BOM一级清单修改基础信息优化，提升数据回显效率
+        2.3 全配置BOM一级清单提高查询效率，减少一次大数据查询
+        2.4 配置物料特性表基础信息自动更新，仅在满足 "平台 车型年 版型 内饰颜色/外饰颜色(即车身颜色) 动总描述" 的情况下自动生成
+        2.5 相关性新增特性值查询排序，自动根据特性值+颜色代码进行升/降序
+        2.6 相关性修复裸色特性的相关性无法生成的bug; 修复油漆车身总成无法生成相关性的bug
+        2.7 我的申请新增详请页面，显示BOM端传过来的变更数据，以及TC端传过来的变更数据
+        2.8 我的申请新增详请页面的审批意见的显示功能。
+        2.9 主页面新增通知接口变更人的功能和提示
+        2.10 全配置BOM一级清单导出表新增时间点信息
+    </xmp>
+    <p style="font-size: 24px"><strong>3.BOM管理</strong></p>
+    <xmp>
+        3.1 工艺合件新增查询多个2Y层并回显成BOM结构树功能，查询多个2Y用符号 ";" 进行分段说明，如:S00-10000000;S00-20000000
+        3.2 工艺合件允许从多个2Y剪切子层功能
+        3.3 EPL管理新增责任工程师字段与TC责任工程师的衔接
+        3.4 MBOM管理新增功能点是颜色件名称显示颜色信息
+        3.5 单车BOM的物料描述系统生成
+    </xmp>
+    <p style="font-size: 24px"><strong>4.合众资源库</strong></p>
+    <xmp>
+        4.1 合众项目库的项目显示顺序的修改
+        4.2 配置字典新增快速添加/从特定行复制信息
+        4.3 VPPS库快速添加/从特定行复制信息
+    </xmp>
+    <p style="font-size: 24px"><strong>5.系统管理</strong></p>
+    <xmp>
+        5.1 权限管理的BUG修改，解决VPPS管理员无权限添加的BUG。
+    </xmp>
+</div>
+
+</body>
+</html>

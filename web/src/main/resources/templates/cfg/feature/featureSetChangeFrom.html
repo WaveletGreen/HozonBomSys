@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>选择变更表单</title>
+</head>
+<body>
+<div style="max-width: 450px;max-height: 450px;">
+    <form id="form" role="form" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="stage">选择变更表单</label>
+                    <select class="form-control" id="stage" name="stage">
+                        <option th:each="model:${changeFroms}"
+                                th:value="${model.getId()}"
+                                th:text="${model.getChangeNo()}"
+                        >
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script th:inline="javascript">
+    <![CDATA[
+    var setting = {
+        check: {
+            enable: false
+        },
+        view: {
+            dblClickExpand: false,
+            showLine: true,
+            selectedMulti: false
+        },
+        data: {
+            simpleData: {
+                enable: true,
+                idKey: "uid",
+                pIdKey: "pUid",
+                rootPId: "0"
+            }
+        },
+        callback: {
+            beforeClick: function (treeId, treeNode) {
+                var zTree = $.fn.zTree.getZTreeObj('orgGroupTree');
+                if (treeNode.isParent) {
+                    zTree.expandNode(treeNode);
+                    return false;
+                } else {
+                    return true;
+                }
+            },
+            onClick: function (event, treeId, treeNode) {
+                console.log(treeId);
+                console.log($("#selectOption").val());
+                let userId = treeNode.uid;
+                $.ajax({
+                    type: "GET",
+                    //ajax需要添加打包名
+                    url: "./vwo/getUserDetail?uid=" + userId,
+                    success: function (result) {
+                        if (result.status) {
+                            $("#dept").val(result.groupName);
+                            $("#selectedUserId").val(result.personId);
+                            $("#" + $("#selectOption").val()).val(result.personName);
+
+                        }
+                    },
+                    error: function (e) {
+                        console.error("连接服务器异常:" + e.status);
+                    }
+                });
+            }
+        }
+    };
+    $(
+        initZTree = function () {
+            $.post("./vwo/getUserAndGroup", function (info) {
+                var t = $("#orgGroupTree");
+                t = $.fn.zTree.init(t, setting, info.data);
+            })
+        }
+    );
+
+
+    var rows = [[${beans}]];
+    var projectPuid = getProjectUid();
+    $(function () {
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            var changeFromId = $("#stage option:selected").val();
+            $.ajax({
+                type: "POST",
+                //ajax需要添加打包名
+                url: "./vwoProcess/featureGetIntoVWO?projectUid="+projectPuid+"&changeFromId="+changeFromId,
+                data: JSON.stringify(rows),
+                contentType: "application/json",
+                success: function (result) {
+                    activeTabBodyRefresh();
+                    if (result.status) {
+                        layer.msg(result.msg, {icon: 1, time: 2000});
+                    }
+                    else {
+                        window.Ewin.alert({message: result.msg});
+                    }
+                },
+                error: function (info) {
+                    window.Ewin.alert({message: "操作发送失败:" + info.status});
+                }
+            })
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

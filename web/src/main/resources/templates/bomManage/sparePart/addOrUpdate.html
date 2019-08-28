@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!--
+  ~ /*
+  ~  * Copyright (c) 2019 Author: Fancyears Milos Malvis @1243093366@qq.com
+  ~  * ALL COPYRIGHT REVERSED.
+  ~  */
+  -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        .filedNotNull {
+            color: red
+        }
+
+        .inputSize {
+            width: 100%;
+
+        }
+        .vehicleNumClass{
+
+        }
+    </style>
+</head>
+<body>
+<div class="content-body panel-body col-md-12">
+    <form id="addSparePartForm" class="form-horizontal" role="form" method="post" th:action="${url}">
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="ads">A/D/S<span class="filedNotNull">*</span></label>
+                <input id="ads" class="form-control inputSize" name="ads" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="hierarchy">层级<span class="filedNotNull">*</span></label>
+                <input id="hierarchy" class="form-control inputSize" name="hierarchy" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="major">专业<span class="filedNotNull">*</span></label>
+                <input id="major" class="form-control inputSize" name="major" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="level">级别<span class="filedNotNull">*</span></label>
+                <input id="level" class="form-control inputSize" name="level" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="productivePartCode">生产零件号<span class="filedNotNull">*</span></label>
+                <input id="productivePartCode" class="form-control inputSize" name="productivePartCode" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="productivePartName">生产零件名称<span class="filedNotNull">*</span></label>
+                <input id="productivePartName" class="form-control inputSize" name="productivePartName" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="sparePartCode">备件零件号<span class="filedNotNull">*</span></label>
+                <input id="sparePartCode" class="form-control inputSize" name="sparePartCode" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="sparePartName">备件零件名称<span class="filedNotNull">*</span></label>
+                <input id="sparePartName" class="form-control inputSize" name="sparePartName" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="isSparePart">是否备件<span class="filedNotNull">*</span></label>
+                <select id="isSparePart" class="form-control inputSize" name="isSparePart">
+                    <option value="-1"></option>
+                    <option value="1">是</option>
+                    <option value="0">否</option>
+                </select>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="unit">单位<span class="filedNotNull">*</span></label>
+                <input id="unit" class="form-control inputSize" name="unit" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="drawingNum">图号<span class="filedNotNull">*</span></label>
+                <input id="drawingNum" class="form-control inputSize" name="drawingNum" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="department">专业部门<span class="filedNotNull">*</span></label>
+                <input id="department" class="form-control inputSize" name="department" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="responsibleEngineer">责任工程师<span class="filedNotNull">*</span></label>
+                <input id="responsibleEngineer" class="form-control inputSize" name="responsibleEngineer" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="supplier">供应商<span class="filedNotNull">*</span></label>
+                <input id="supplier" class="form-control inputSize" name="supplier" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="code">代码<span class="filedNotNull">*</span></label>
+                <input id="code" class="form-control inputSize" name="code" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="purchasingEngineer">采购工程师<span class="filedNotNull">*</span></label>
+                <input id="purchasingEngineer" class="form-control inputSize" name="purchasingEngineer" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="remark">备注<span class="filedNotNull">*</span></label>
+                <input id="remark" class="form-control inputSize" name="remark" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="workshop1">车间1<span class="filedNotNull">*</span></label>
+                <input id="workshop1" class="form-control inputSize" name="workshop1" type="text"/>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="workshop2">车间2<span class="filedNotNull">*</span></label>
+                <input id="workshop2" class="form-control inputSize" name="workshop2" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group col-md-12">
+                <label for="partClass">零件分类<span class="filedNotNull">*</span></label>
+                <input id="partClass" class="form-control inputSize" name="partClass" type="text"/>
+            </div>
+        </div>
+        <div class="col-md-12" th:each="_data,c:${vehicleUsageTitle.keySet()}">
+            <div class="form-group col-md-12">
+                <label th:text="${_data}"></label>
+                <input class="form-control inputSize vehicleNumClass" th:id="${_data}" th:name="${_data}" type="text"
+                       th:placeholder="${'请输入单车用量'}"/>
+                <!--th:value="${vehicleUsageTitle.get(_data)}"-->
+            </div>
+        </div>
+    </form>
+</div>
+<script th:inline="javascript">
+    <![CDATA[
+    var type = [[${type}]]
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $('form').each(function () {
+                event.preventDefault();
+            });
+        }
+    });
+
+    /**
+     * 根据选择的行进行数据填充
+     */
+    function fillInput() {
+        let row = getActiveTab().getSelectedRows()[0];
+        const _d = $("#addSparePartForm").serializeArray();
+        log(_d)
+        for (let p in _d) {
+            let name = _d[p].name;
+            let value = row[_d[p].name];
+            if (name === null) {
+                continue;
+            }
+            if (name === 'isSparePart') {
+                if (value === 1) {
+                    $("#" + name).find('option:eq(1)').attr('selected', 'selected');
+                }
+                else if (value === 0) {
+                    $("#" + name).find('option:eq(2)').attr('selected', 'selected');
+                }
+            }
+            else {
+                $("#" + name).val(value);
+            }
+
+        }
+    }
+
+    $(function () {
+        log(type)
+        if (type === 'update' || type === "clonePartData"||type==="selectRecursionByTopLayerId") {
+            fillInput();
+        }
+        $('#addSparePartForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                // productivePartCode: {
+                //     message: '特性名称验证失败',
+                //     validators: {
+                //         notEmpty: {
+                //             message: '特性名称不能为空'
+                //         },
+                //         //正则校验
+                //         regexp: {
+                //             regexp: /^[a-zA-Z][a-zA-Z0-9]*$/, /* ^ 指的是匹配字符串开始的位置 + 匹配一个或者多个*/
+                //             message: '特性只能以英文开头，加英文和数字，不允许有英文和数字以外的字符'
+                //         },
+                //         stringLength: {
+                //             max: 30,
+                //             message: '特性最长长度为30'
+                //         },
+                //     }
+                // },
+                productivePartName: {
+                    message: '生产零件名称',
+                    validators: {
+                        notEmpty: {
+                            message: '生产零件名称不能为空'
+                        }
+                    }
+                },
+                productivePartCode: {
+                    message: '生产零件名称',
+                    validators: {
+                        notEmpty: {
+                            message: '生产零件名称不能为空'
+                        }
+                    }
+                }, sparePartCode: {
+                    message: '备件零件号验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '备件零件号不能为空'
+                        }
+                    }
+                }, sparePartName: {
+                    message: '备件零件名称验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '备件零件名称不能为空'
+                        }
+                    }
+                },
+                // length: {
+                //     message: '字符长度验证失败',
+                //     validators: {
+                //         digits: {
+                //             message: '长度只能是整数'
+                //         }
+                //     }
+                // },
+            }
+        });
+        // 绑定dialog的确定按钮的监听事件
+        $("#btnOk", window.top.document).click(function () {
+            const url = $("#addSparePartForm", window.top.document).attr('action');
+            const bootstrapValidator = $("#addSparePartForm", window.top.document).data('bootstrapValidator');
+            bootstrapValidator.validate();
+            if (bootstrapValidator.isValid()) {
+                let data = {};
+                const _d = $("#addSparePartForm").serializeArray();
+                for (let p in _d) {
+                    data[_d[p].name] = _d[p].value;
+                }
+                log(data)
+                data.projectId = getProjectUid();
+                if (type === 'update'||type==="selectRecursionByTopLayerId") {
+                    data.id = getActiveTab().getSelectedRows()[0].id;
+                }
+                else if (type === 'clonePartData') {
+                    data.relEbomLineId = getActiveTab().getSelectedRows()[0].relEbomLineId;
+                }
+                let reserved2=getActiveTab().getSelectedRows()[0].reserved2;
+                let _data=reserved2.split(",");//根据逗号进行拆分字符串
+                let resultReserved2="";
+                //所有的字段都已经在后台去除所有的**
+                log(_data)
+                for (let field in _data){
+                    if(_data[field].indexOf("#")!=-1){//需要判断是否存在#，有些是没有的
+                        let value=_data[field].split("#");//拆解字符串
+                        let f=value[0];
+                        log($("#"+f).val())
+                        resultReserved2+=f+"#"+$("#"+f).val()+",";//这里没有去掉最后的一个,，因为EBOM里面没有去掉
+                    }
+                }
+                data.reserved2=resultReserved2;
+                data.type=type;
+                // log(data)
+                // if (true) {
+                //     return;
+                // }
+                $.ajax({
+                    contentType:
+                        "application/json",
+                    type:
+                        'POST',
+                    url: url,
+                    data: JSON.stringify(data),
+                    success:
+                        function (result) {
+                            console.log(result)
+                            activeTabBodyRefresh();
+                            if (result.success) {
+                                layer.msg(result.data, {icon: 1, time: 2000})
+                            }
+                            else {
+                                window.Ewin.alert({message: result.errMsg});
+                            }
+                        },
+                    error: function (status) {
+                        window.Ewin.alert({message: status.status + ':添加数据失败!'});
+                    }
+                });
+            }
+        });
+    })
+    ]]>
+</script>
+</body>
+</html>

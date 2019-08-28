@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzEWOBasicInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo">
+    <id column="ID" jdbcType="DOUBLE" property="id" />
+    <result column="EWO_NO" jdbcType="VARCHAR" property="ewoNo" />
+    <result column="DEPT" jdbcType="VARCHAR" property="dept" />
+    <result column="CHANGE_TYPE" jdbcType="VARCHAR" property="changeType" />
+    <result column="REASON_CODE" jdbcType="VARCHAR" property="reasonCode" />
+    <result column="FORM_CREATE_TIME" jdbcType="TIMESTAMP" property="formCreateTime" />
+    <result column="FLOW_STATUS" jdbcType="VARCHAR" property="flowStatus" />
+    <result column="TITLE" jdbcType="VARCHAR" property="title" />
+    <result column="ORIGINATOR" jdbcType="VARCHAR" property="originator" />
+    <result column="TEL" jdbcType="VARCHAR" property="tel" />
+    <result column="FINISH_TIME" jdbcType="TIMESTAMP" property="finishTime" />
+    <result column="COST_ASSUME_DEPT" jdbcType="VARCHAR" property="costAssumeDept" />
+    <result column="PUBLIC_TYPE" jdbcType="INTEGER" property="publicType" />
+    <result column="RELATION_EWO_NO" jdbcType="VARCHAR" property="relationEwoNo" />
+    <result column="REASON_DESC" jdbcType="VARCHAR" property="reasonDesc" />
+    <result column="PLATFORM" jdbcType="VARCHAR" property="platform" />
+    <result column="VEHICLE_CODE" jdbcType="VARCHAR" property="vehicleCode" />
+    <result column="PROJECT_CODE" jdbcType="VARCHAR" property="projectCode" />
+    <result column="EFFECT_TIME" jdbcType="TIMESTAMP" property="effectTime" />
+    <result column="PROJECT_STAGE" jdbcType="VARCHAR" property="projectStage" />
+    <result column="RELATION_ENGINEER" jdbcType="VARCHAR" property="relationEngineer" />
+    <result column="RELATION_ENGINEER_DEPT" jdbcType="VARCHAR" property="relationEngineerDept" />
+    <result column="RELATION_ITEM_ID" jdbcType="VARCHAR" property="relationItemId" />
+    <result column="RELATION_ITEM_NAME" jdbcType="VARCHAR" property="relationItemName" />
+    <result column="CHANGE_DESC" jdbcType="VARCHAR" property="changeDesc" />
+    <result column="ORIGINATOR_ID" jdbcType="DOUBLE" property="originatorId" />
+    <result column="PROJECT_ID" jdbcType="VARCHAR" property="projectId" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    ID, EWO_NO, DEPT, CHANGE_TYPE, REASON_CODE, FORM_CREATE_TIME, FLOW_STATUS, TITLE, 
+    ORIGINATOR, TEL, FINISH_TIME, COST_ASSUME_DEPT, PUBLIC_TYPE, RELATION_EWO_NO, REASON_DESC, 
+    PLATFORM, VEHICLE_CODE, PROJECT_CODE, EFFECT_TIME, PROJECT_STAGE, RELATION_ENGINEER, 
+    RELATION_ENGINEER_DEPT, RELATION_ITEM_ID, RELATION_ITEM_NAME, CHANGE_DESC,ORIGINATOR_ID,PROJECT_ID
+  </sql>
+
+
+  <select id="HzEWOBasicInfoDAOImpl_findHzEWOBasicInfoList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from HZ_EWO_BASIC_INFO
+    <where>
+      1=1
+      <if test="id != null">
+        and ID = #{id,jdbcType=DOUBLE}
+      </if>
+      <if test="ewoNo != null and ewoNo!=''">
+       and EWO_NO = #{ewoNo,jdbcType=VARCHAR}
+      </if>
+      <if test="projectId != null and projectId !='' ">
+        and PROJECT_ID = #{projectId,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from HZ_EWO_BASIC_INFO
+    where ID = #{id,jdbcType=DOUBLE}
+  </delete>
+
+
+  <insert id="HzEWOBasicInfoDAOImpl_insert" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo">
+    insert into HZ_EWO_BASIC_INFO (ID,EWO_NO, DEPT,
+      CHANGE_TYPE, REASON_CODE, FORM_CREATE_TIME, 
+      FLOW_STATUS, TITLE, ORIGINATOR, 
+      TEL, FINISH_TIME, COST_ASSUME_DEPT, 
+      PUBLIC_TYPE, RELATION_EWO_NO, REASON_DESC, 
+      PLATFORM, VEHICLE_CODE, PROJECT_CODE, 
+      EFFECT_TIME, PROJECT_STAGE, RELATION_ENGINEER, 
+      RELATION_ENGINEER_DEPT, RELATION_ITEM_ID, RELATION_ITEM_NAME, 
+      CHANGE_DESC,ORIGINATOR_ID,PROJECT_ID)
+    values (SEQ_HZ_EWO_BASIC_INFO.nextval,#{ewoNo,jdbcType=VARCHAR}, #{dept,jdbcType=VARCHAR},
+      #{changeType,jdbcType=VARCHAR}, #{reasonCode,jdbcType=VARCHAR}, #{formCreateTime,jdbcType=TIMESTAMP}, 
+      #{flowStatus,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{originator,jdbcType=VARCHAR}, 
+      #{tel,jdbcType=VARCHAR}, #{finishTime,jdbcType=TIMESTAMP}, #{costAssumeDept,jdbcType=VARCHAR}, 
+      #{publicType,jdbcType=INTEGER}, #{relationEwoNo,jdbcType=VARCHAR}, #{reasonDesc,jdbcType=VARCHAR}, 
+      #{platform,jdbcType=VARCHAR}, #{vehicleCode,jdbcType=VARCHAR}, #{projectCode,jdbcType=VARCHAR}, 
+      #{effectTime,jdbcType=TIMESTAMP}, #{projectStage,jdbcType=VARCHAR}, #{relationEngineer,jdbcType=VARCHAR}, 
+      #{relationEngineerDept,jdbcType=VARCHAR}, #{relationItemId,jdbcType=VARCHAR}, #{relationItemName,jdbcType=VARCHAR}, 
+      #{changeDesc,jdbcType=VARCHAR},#{originatorId,jdbcType=DOUBLE},#{projectId,jdbcType=VARCHAR})
+  </insert>
+
+
+  <update id="HzEWOBasicInfoDAOImpl_update" parameterType="cn.net.connor.hozon.dao.pojo.change.change.HzEWOBasicInfo">
+    update HZ_EWO_BASIC_INFO
+    <set>
+      <if test="ewoNo != null">
+        EWO_NO = #{ewoNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dept != null">
+        DEPT = #{dept,jdbcType=VARCHAR},
+      </if>
+      <if test="changeType != null">
+        CHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="reasonCode != null">
+        REASON_CODE = #{reasonCode,jdbcType=VARCHAR},
+      </if>
+      <if test="formCreateTime != null">
+        FORM_CREATE_TIME = #{formCreateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flowStatus != null">
+        FLOW_STATUS = #{flowStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        TITLE = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="originator != null">
+        ORIGINATOR = #{originator,jdbcType=VARCHAR},
+      </if>
+      <if test="tel != null">
+        TEL = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="finishTime != null">
+        FINISH_TIME = #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="costAssumeDept != null">
+        COST_ASSUME_DEPT = #{costAssumeDept,jdbcType=VARCHAR},
+      </if>
+      <if test="publicType != null">
+        PUBLIC_TYPE = #{publicType,jdbcType=INTEGER},
+      </if>
+      <if test="relationEwoNo != null">
+        RELATION_EWO_NO = #{relationEwoNo,jdbcType=VARCHAR},
+      </if>
+      <if test="reasonDesc != null">
+        REASON_DESC = #{reasonDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="platform != null">
+        PLATFORM = #{platform,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleCode != null">
+        VEHICLE_CODE = #{vehicleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="projectCode != null">
+        PROJECT_CODE = #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="effectTime != null">
+        EFFECT_TIME = #{effectTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectStage != null">
+        PROJECT_STAGE = #{projectStage,jdbcType=VARCHAR},
+      </if>
+      <if test="relationEngineer != null">
+        RELATION_ENGINEER = #{relationEngineer,jdbcType=VARCHAR},
+      </if>
+      <if test="relationEngineerDept != null">
+        RELATION_ENGINEER_DEPT = #{relationEngineerDept,jdbcType=VARCHAR},
+      </if>
+      <if test="relationItemId != null">
+        RELATION_ITEM_ID = #{relationItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="relationItemName != null">
+        RELATION_ITEM_NAME = #{relationItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="changeDesc != null">
+        CHANGE_DESC = #{changeDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DOUBLE}
+  </update>
+
+
+
+  <select id="HzEWOBasicInfoDAOImpl_getMaxEWONoLastFourIndexInThisMonth" resultType="java.lang.String" parameterType="java.util.HashMap">
+      SELECT max(substr(EWO_NO, -4)) FROM HZ_EWO_BASIC_INFO WHERE EWO_NO like
+
+      CONCAT(CONCAT('%',#{ym,jdbcType=VARCHAR}),'%')
+
+      and PROJECT_ID=#{projectId,jdbcType=VARCHAR}
+
+  </select>
+
+
+</mapper>

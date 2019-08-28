@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--User: xulf Date: 2018/8/3 Time: 10:02-->
+<head th:include="include/includebase"></head>
+<link th:href="@{/css/changeManage/vwo/vwoFromList.css}" rel="stylesheet"/>
+<meta charset="UTF-8">
+<title>断点信息</title>
+</head>
+<body>
+<div class="panel-body" style="padding-bottom:0px;">
+    <div class="panel panel-default" style="margin-top: 20px;">
+        <div class="panel-body">
+          <form class="form-inline" role="form" style="float: left; width: 100%;margin: 20px;" id="queryBreakpointForm">
+                <div class="form-group">
+                    <label for="P_TCECN">TC_ECN:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="P_TCECN" id="P_TCECN"
+                           placeholder="请输入TC_ECN"/>
+                </div>
+                <div class="form-group">
+                    <label for="P_ECN">SAP_ECN:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="P_ECN" id="P_ECN"
+                           placeholder="请输入SAP_ECN"/>
+                </div>
+                <div class="form-group">
+                    <label for="P_USER">断点执行工号:</label>
+                    <input type="text" style="width: 150px;" class="form-control" name="P_USER" id="P_USER"
+                           placeholder="请输入执行工号"/>
+                </div>
+                <div class="form-group">
+                    <label for="P_CTIME">断点处理时间:</label>
+                    <input class="form-control head-input-set" name="P_CTIME" id="P_CTIME" type="date"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" id="refresh" class="btn btn-primary">查询</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<div class="content col-lg-12"><!--style="margin-top: -50px;"-->
+    <table id="codpwoTable" class="table table-striped tableNormalStyle"></table>
+</div>
+
+<script th:src="@{/js/change/breakPoint/breakPoint.js}"></script>
+
+</body>
+</html>

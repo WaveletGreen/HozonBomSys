@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="HzLegislativeItemDao">
+  <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem">
+    <id column="PUID" jdbcType="VARCHAR" property="puid" />
+
+    <result column="NOTICE_NO" jdbcType="VARCHAR" property="noticeNo" />
+    <result column="APPLICABLE_MODELS" jdbcType="VARCHAR" property="applicableModels" />
+    <result column="EPL_ID" jdbcType="VARCHAR" property="eplId" />
+    <result column="TECHNOLOGY_DESC" jdbcType="VARCHAR" property="technologyDesc" />
+    <result column="IS_HAVE_TEST" jdbcType="INTEGER" property="isHaveTest" />
+    <result column="INSERT_TIME" jdbcType="TIMESTAMP" property="insertTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+    <result column="APPLY_DEPA" jdbcType="VARCHAR" property="applyDepa" />
+
+
+    <result column="LEGISLATIVE_UID" jdbcType="VARCHAR" property="legislativeUid" />
+    <result column="LEGISLATIVE_NAME" jdbcType="VARCHAR" property="legislativeName" />
+    <result column="LEGISLATIVE_NO" jdbcType="VARCHAR" property="legislativeNo" />
+
+    <!--来自EPL属性-->
+    <result column="PART_ID" jdbcType="VARCHAR" property="partId" />
+    <result column="PART_NAME" jdbcType="VARCHAR" property="partName" />
+    <result column="SUPPLIER" jdbcType="VARCHAR" property="supplier" />
+    <result column="SUPPLIER_NO" jdbcType="VARCHAR" property="supplierNo" />
+    <result column="IS_HAVE_CCC" jdbcType="INTEGER" property="isHaveCcc" />
+    <result column="DUTY_ENGINEER" jdbcType="VARCHAR" property="dutyEngineer" />
+  </resultMap>
+
+  <!--全部字段-->
+  <sql id="Base_Column_List">
+    PUID,  LEGISLATIVE_NAME, LEGISLATIVE_NO, NOTICE_NO, APPLICABLE_MODELS, EPL_ID,
+    TECHNOLOGY_DESC, IS_HAVE_TEST, INSERT_TIME, UPDATE_TIME, STATUS, REMARKS ,APPLY_DEPA,LEGISLATIVE_UID,
+    PART_ID, PART_NAME, SUPPLIER, SUPPLIER_NO ,IS_HAVE_CCC, DUTY_ENGINEER
+  </sql>
+
+  <!--法规字段1-->
+  <sql id="Leg_Column_List">
+      t0.LEGISLATIVE_NAME as LEGISLATIVE_NAME, t0.LEGISLATIVE_NO as LEGISLATIVE_NO
+  </sql>
+
+
+  <!--法规件ITEM字段-->
+  <sql id="Legis_Column_List">
+    t1.PUID,  t1.NOTICE_NO, t1.APPLICABLE_MODELS, t1.EPL_ID, t1.TECHNOLOGY_DESC, t1.IS_HAVE_TEST,
+    t1.INSERT_TIME, t1.UPDATE_TIME, t1.STATUS, t1.REMARKS ,t1.APPLY_DEPA,t1.LEGISLATIVE_UID
+  </sql>
+
+  <!--EPL字段-->
+  <sql id="EPL_Column_List">
+    t2.PART_ID as PART_ID, t2.PART_NAME as PART_NAME, t2.SUPPLY as SUPPLIER,
+    t2.SUPPLY_CODE as SUPPLIER_NO,t2.IS_3CPART as IS_HAVE_CCC , t2.DUTY_ENGINEER as DUTY_ENGINEER
+  </sql>
+
+
+
+
+  <!--分页获取当前整车所有法规件的数据-->
+  <select id="HzLegislativeItemDaoImpl_select" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" /> FROM
+    (select  t.*,ROWNUM as rn FROM
+    (select
+    <include refid="Legis_Column_List"/> ,<include refid="EPL_Column_List"/>,<include refid="Leg_Column_List"/>
+    FROM HZ_LEGISLATIVE_RECORD t0
+    LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
+    LEFT JOIN HZ_EPL_RECORD t2 on  t2.ID = t1.EPL_ID
+    <where>
+      1=1
+      <if test="noticeNo != null and noticeNo != ''">
+        and t1.NOTICE_NO like CONCAT(CONCAT('%',#{noticeNo,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="legislativeNo != null and legislativeNo != ''">
+        and t0.LEGISLATIVE_NO like CONCAT(CONCAT('%',#{legislativeNo,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="applicableModels != null and applicableModels != ''">
+        and t1.APPLICABLE_MODELS like CONCAT(CONCAT('%',#{applicableModels,jdbcType=VARCHAR}),'%')
+      </if>
+      and t1.STATUS = 1 and t0.STATUS=1
+    </where>
+    order by t1.NOTICE_NO ,t0.LEGISLATIVE_NO ,t2.PART_ID asc
+    ) t
+    where ROWNUM &lt;=#{limit,jdbcType=INTEGER})
+    where rn &gt;#{offset,jdbcType=INTEGER}
+  </select>
+
+  <!--获取当前整车所有法规件的总条数-->
+  <select id="HzLegislativeItemDaoImpl_count" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+    SELECT  count(*) FROM  HZ_LEGISLATIVE_RECORD t0
+    LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
+    left join HZ_EPL_RECORD t2 on  t2.ID = t1.EPL_ID
+    <where>
+      1=1
+      <if test="noticeNo != null and noticeNo != ''">
+        and t1.NOTICE_NO like CONCAT(CONCAT('%',#{noticeNo,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="legislativeNo != null and legislativeNo != ''">
+        and t1.LEGISLATIVE_NO like CONCAT(CONCAT('%',#{legislativeNo,jdbcType=VARCHAR}),'%')
+      </if>
+      <if test="applicableModels != null and applicableModels != ''">
+        and t1.APPLICABLE_MODELS like CONCAT(CONCAT('%',#{applicableModels,jdbcType=VARCHAR}),'%')
+      </if>
+      and t1.STATUS =1 and t0.STATUS=1
+    </where>
+  </select>
+
+  <!--根据法规件编码获取法规件信息-->
+  <select id="HzLegislativeItemDaoImpl_selectByLegislativeNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Legis_Column_List" />
+    from HZ_LEGISLATIVE_RECORD t0
+    LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
+    where t0.LEGISLATIVE_NO = #{legislativeNo,jdbcType=VARCHAR}
+    and t1.STATUS =1 and t0.STATUS=1
+  </select>
+
+  <!--根据法规件编码获取法规件数量-->
+  <select id="HzLegislativeItemDaoImpl_selectByLegislativeNo_count" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select
+    count(*)
+    from HZ_LEGISLATIVE_RECORD t0
+    LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
+    where t0.LEGISLATIVE_NO = #{legislativeNo,jdbcType=VARCHAR}
+    and t1.STATUS =1 and t0.STATUS=1
+  </select>
+
+
+
+  <!--根据法规件EPLID获取法规件信息-->
+  <select id="HzLegislativeItemDaoImpl_selectByEplId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Legis_Column_List" />,<include refid="EPL_Column_List"/>,<include refid="Leg_Column_List"/>
+    from  HZ_LEGISLATIVE_RECORD t0
+    LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
+    LEFT JOIN HZ_EPL_RECORD t2 on  t2.ID = t1.EPL_ID
+    where t1.EPL_ID = #{eplId,jdbcType=VARCHAR}
+    and t1.STATUS =1 and t0.STATUS=1
+  </select>
+
+
+  <!--根据法规件ItemPuid获取法规件信息-->
+  <select id="HzLegislativeItemDaoImpl_selectByPuid" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Legis_Column_List" />,<include refid="EPL_Column_List"/>,<include refid="Leg_Column_List"/>
+    from  HZ_LEGISLATIVE_RECORD t0
+    LEFT JOIN  HZ_LEGISLATIVE_ITEMS t1 ON t1.LEGISLATIVE_UID = t0.PUID
+    LEFT JOIN HZ_EPL_RECORD t2 on  t2.ID = t1.EPL_ID
+    where t1.PUID = #{puid,jdbcType=VARCHAR}
+    and t1.STATUS =1 and t0.STATUS=1
+  </select>
+
+  <!--&lt;!&ndash;根据法规件ItemPuids删除&ndash;&gt;-->
+  <!--<delete id="HzLegislativeItem_delete" parameterType="java.util.List">-->
+    <!--&lt;!&ndash;delete ${tableName}&ndash;&gt;-->
+    <!--delete HZ_LEGISLATIVE_ITEMS-->
+    <!--where PUID-->
+    <!--in-->
+    <!--<foreach collection="list" index="index" item="item"  open="(" separator="," close=")">-->
+      <!--#{list[${index}]}-->
+    <!--</foreach>-->
+  <!--</delete>-->
+
+    <!--根据法规件ItemPuids删除-->
+    <update id="HzLegislativeItem_delete" parameterType="java.util.List">
+        <!--delete ${tableName}-->
+      update HZ_LEGISLATIVE_ITEMS
+      set STATUS = 0
+        where PUID
+        in
+        <foreach collection="list" index="index" item="item"  open="(" separator="," close=")">
+            #{list[${index}]}
+        </foreach>
+    </update>
+
+
+    <!--根据法规件ItemPuids删除编码-->
+    <update id="HzLegislativeItemRecord_delete" parameterType="java.util.List">
+        <!--delete ${tableName}-->
+      update HZ_LEGISLATIVE_RECORD
+        set STATUS = 0
+        where PUID
+        in
+        <foreach collection="list" index="index" item="item"  open="(" separator="," close=")">
+            select LEGISLATIVE_UID from HZ_LEGISLATIVE_ITEMS where PUID =
+            #{list[${index}]}
+        </foreach>
+    </update>
+
+
+  <!--插入一条ITEM-->
+  <insert id="HzLegislativeItem_insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem">
+    insert into HZ_LEGISLATIVE_ITEMS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        PUID,
+      </if>
+      <if test="noticeNo != null">
+        NOTICE_NO,
+      </if>
+      <if test="applicableModels != null">
+        APPLICABLE_MODELS,
+      </if>
+      <if test="eplId != null">
+        EPL_ID,
+      </if>
+      <if test="technologyDesc != null">
+        TECHNOLOGY_DESC,
+      </if>
+      <if test="isHaveTest != null">
+        IS_HAVE_TEST,
+      </if>
+      <if test="insertTime != null">
+        INSERT_TIME,
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="remarks != null">
+        REMARKS,
+      </if>
+      <if test="applyDepa != null">
+        APPLY_DEPA,
+      </if>
+      <if test="legislativeUid != null">
+        LEGISLATIVE_UID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="puid != null">
+        #{puid,jdbcType=VARCHAR},
+      </if>
+
+      <if test="noticeNo != null">
+        #{noticeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="applicableModels != null">
+        #{applicableModels,jdbcType=VARCHAR},
+      </if>
+      <if test="eplId != null">
+        #{eplId,jdbcType=VARCHAR},
+      </if>
+      <if test="technologyDesc != null">
+        #{technologyDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isHaveTest != null">
+        #{isHaveTest,jdbcType=INTEGER},
+      </if>
+      <if test="insertTime != null">
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=INTEGER},
+      </if>
+      <if test="applyDepa != null">
+        #{applyDepa,jdbcType=VARCHAR},
+      </if>
+      <if test="legislativeUid != null">
+        #{legislativeUid,jdbcType=VARCHAR},
+      </if>
+
+    </trim>
+  </insert>
+
+  <!--插入一条法规件-->
+  <insert id="HzLegislativeRecord_insert" parameterType="cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem">
+    insert into HZ_LEGISLATIVE_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="legislativeUid != null">
+        PUID,
+      </if>
+      <if test="legislativeName != null">
+        LEGISLATIVE_NAME,
+      </if>
+      <if test="legislativeNo != null">
+        LEGISLATIVE_NO,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="legislativeUid != null">
+        #{legislativeUid,jdbcType=VARCHAR},
+      </if>
+      <if test="legislativeName != null">
+        #{legislativeName,jdbcType=VARCHAR},
+      </if>
+      <if test="legislativeNo != null">
+        #{legislativeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <!--修改一条法规件Item-->
+  <update id="HzLegislativeItem_update" parameterType="cn.net.connor.hozon.dao.pojo.depository.legislativeLibrary.HzLegislativeItem">
+    update HZ_LEGISLATIVE_ITEMS
+    <set>
+      <if test="noticeNo != null">
+        NOTICE_NO = #{noticeNo,jdbcType=VARCHAR},
+      </if>
+      <if test="applicableModels != null">
+        APPLICABLE_MODELS = #{applicableModels,jdbcType=VARCHAR},
+      </if>
+      <if test="eplId != null">
+        EPL_ID = #{eplId,jdbcType=VARCHAR},
+      </if>
+      <if test="technologyDesc != null">
+        TECHNOLOGY_DESC = #{technologyDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isHaveTest != null">
+        IS_HAVE_TEST = #{isHaveTest,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="applyDepa != null">
+        APPLY_DEPA = #{applyDepa,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PUID = #{puid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

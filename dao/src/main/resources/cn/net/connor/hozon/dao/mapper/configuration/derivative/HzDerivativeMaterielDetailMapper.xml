@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2018.
+  ~ This file was written by fancyears·milos·malvis @connor. Any question/bug you can post to 1243093366@qq.com.
+  ~ ALL RIGHTS RESERVED.
+  -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.net.connor.hozon.dao.dao.configuration.derivative.HzDerivativeMaterielDetailDao">
+    <resultMap id="BaseResultMap" type="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
+        <!--主键-->
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <!--基本信息外键-->
+        <result column="DMD_DMB_ID" jdbcType="DECIMAL" property="dmdDmbId"/>
+        <!--特性值外键-->
+        <result column="DMD_CFG0_UID" jdbcType="VARCHAR" property="dmdCfg0Uid"/>
+        <!--特性外键-->
+        <result column="DMD_CFG0_FAMILY_UID" jdbcType="VARCHAR" property="dmdCfg0FamilyUid"/>
+        <!--创建者-->
+        <result column="DMD_CREATOR" jdbcType="OTHER" property="dmdCreator"/>
+        <!--创建时间-->
+        <result column="DMD_CREATE_DATE" jdbcType="TIMESTAMP" property="dmdCreateDate"/>
+        <!--更新人-->
+        <result column="DMD_UPDATER" jdbcType="OTHER" property="dmdUpdater"/>
+        <!--更新时间-->
+        <result column="DMD_UPDATE_DATE" jdbcType="TIMESTAMP" property="dmdUpdateDate"/>
+        <!--保留字段1-->
+        <result column="DMD_RESERVED_1" jdbcType="VARCHAR" property="dmdReserved1"/>
+        <!--保留字段2-->
+        <result column="DMD_RESERVED_2" jdbcType="VARCHAR" property="dmdReserved2"/>
+        <!--保留字段3-->
+        <result column="DMD_RESERVED_3" jdbcType="VARCHAR" property="dmdReserved3"/>
+        <!--保留字段4-->
+        <result column="DMD_RESERVED_4" jdbcType="VARCHAR" property="dmdReserved4"/>
+        <!--保留字段5-->
+        <result column="DMD_RESERVED_5" jdbcType="VARCHAR" property="dmdReserved5"/>
+        <!--特性值,放在最后直接显示在前端-->
+        <result column="DMD_FEATURE_VALUE" jdbcType="VARCHAR" property="dmdFeatureValue"/>
+    </resultMap>
+    <resultMap id="BaseResultWithCfg" type="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
+        <!--主键-->
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <!--基本信息外键-->
+        <result column="DMD_DMB_ID" jdbcType="DECIMAL" property="dmdDmbId"/>
+        <!--特性值外键-->
+        <result column="DMD_CFG0_UID" jdbcType="VARCHAR" property="dmdCfg0Uid"/>
+        <!--特性外键-->
+        <result column="DMD_CFG0_FAMILY_UID" jdbcType="VARCHAR" property="dmdCfg0FamilyUid"/>
+        <!--创建者-->
+        <result column="DMD_CREATOR" jdbcType="OTHER" property="dmdCreator"/>
+        <!--创建时间-->
+        <result column="DMD_CREATE_DATE" jdbcType="TIMESTAMP" property="dmdCreateDate"/>
+        <!--更新人-->
+        <result column="DMD_UPDATER" jdbcType="OTHER" property="dmdUpdater"/>
+        <!--更新时间-->
+        <result column="DMD_UPDATE_DATE" jdbcType="TIMESTAMP" property="dmdUpdateDate"/>
+        <!--保留字段1-->
+        <result column="DMD_RESERVED_1" jdbcType="VARCHAR" property="dmdReserved1"/>
+        <!--保留字段2-->
+        <result column="DMD_RESERVED_2" jdbcType="VARCHAR" property="dmdReserved2"/>
+        <!--保留字段3-->
+        <result column="DMD_RESERVED_3" jdbcType="VARCHAR" property="dmdReserved3"/>
+        <!--保留字段4-->
+        <result column="DMD_RESERVED_4" jdbcType="VARCHAR" property="dmdReserved4"/>
+        <!--保留字段5-->
+        <result column="DMD_RESERVED_5" jdbcType="VARCHAR" property="dmdReserved5"/>
+        <!--特性值,放在最后直接显示在前端-->
+        <result column="DMD_FEATURE_VALUE" jdbcType="VARCHAR" property="dmdFeatureValue"/>
+        <!--特性对象-->
+        <association property="cfg0Record" javaType="cn.net.connor.hozon.dao.pojo.configuration.feature.HzFeatureValue" column="DMD_CFG0_UID">
+            <id column="PUID" jdbcType="VARCHAR" property="puid"/>
+            <result column="P_CFG0_OBJECT_ID" jdbcType="VARCHAR" property="pCfg0ObjectId"/>
+            <result column="P_CFG0_DESC" jdbcType="VARCHAR" property="pCfg0Desc"/>
+            <result column="P_CFG0_FAMILY_NAME" jdbcType="VARCHAR" property="pCfg0FamilyName"/>
+            <result column="P_CFG0_FAMILY_PUID" jdbcType="VARCHAR" property="pCfg0FamilyPuid"/>
+            <result column="P_CFG0_MAIN_ITEM_PUID" jdbcType="VARCHAR" property="pCfg0MainItemPuid"/>
+            <result column="P_H9FEATUREENNAME" jdbcType="VARCHAR" property="pH9featureenname"/>
+            <result column="P_CFG0_FAMILY_DESC" jdbcType="VARCHAR" property="pCfg0FamilyDesc"/>
+            <result column="CHANGE_ORDER_ID" jdbcType="DECIMAL" property="vwoId"/>
+        </association>
+    </resultMap>
+    <sql id="Base_Column_List">
+        ID,
+        DMD_DMB_ID,
+        DMD_CFG0_UID,
+        DMD_CFG0_FAMILY_UID,
+        DMD_CREATOR,
+        DMD_CREATE_DATE,
+        DMD_UPDATER,
+        DMD_UPDATE_DATE,
+        DMD_RESERVED_1,
+        DMD_RESERVED_2,
+        DMD_RESERVED_3,
+        DMD_RESERVED_4,
+        DMD_RESERVED_5,
+        DMD_FEATURE_VALUE
+  </sql>
+    <sql id="cfg0Column">
+        PUID,
+        P_CFG0_OBJECT_ID,
+        P_CFG0_DESC,
+        P_CFG0_FAMILY_NAME,
+        P_CFG0_FAMILY_PUID,
+        P_CFG0_MAIN_ITEM_PUID,
+        P_H9FEATUREENNAME,
+        P_CFG0_FAMILY_DESC,
+        CHANGE_ORDER_ID
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from HZ_DERIVATIVE_MATERIEL_DETAIL
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <select id="selectByBasicWithCfg" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="cfg0Column"/>
+        from HZ_DERIVATIVE_MATERIEL_DETAIL t
+        left join Hz_Cfg0_Record t2 on t.dmd_cfg0_uid=t2.puid
+        where DMD_DMB_ID = #{dmdDmbId,jdbcType=DECIMAL}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from HZ_DERIVATIVE_MATERIEL_DETAIL
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select seq_hz_dmd_id.Nextval from dual
+        </selectKey>
+        insert into HZ_DERIVATIVE_MATERIEL_DETAIL (ID, DMD_DMB_ID, DMD_CFG0_UID,
+        DMD_CFG0_FAMILY_UID, DMD_CREATOR, DMD_CREATE_DATE,
+        DMD_UPDATER, DMD_UPDATE_DATE, DMD_RESERVED_1,
+        DMD_RESERVED_2, DMD_RESERVED_3, DMD_RESERVED_4,
+        DMD_RESERVED_5, DMD_FEATURE_VALUE)
+        values (#{id,jdbcType=DECIMAL}, #{dmdDmbId,jdbcType=DECIMAL}, #{dmdCfg0Uid,jdbcType=VARCHAR},
+        #{dmdCfg0FamilyUid,jdbcType=VARCHAR}, #{dmdCreator,jdbcType=OTHER}, sysdate,
+        #{dmdUpdater,jdbcType=VARCHAR}, sysdate, #{dmdReserved1,jdbcType=VARCHAR},
+        #{dmdReserved2,jdbcType=VARCHAR}, #{dmdReserved3,jdbcType=VARCHAR}, #{dmdReserved4,jdbcType=VARCHAR},
+        #{dmdReserved5,jdbcType=VARCHAR}, #{dmdFeatureValue,jdbcType=VARCHAR})
+    </insert>
+    <!--选择性单个插入-->
+    <insert id="insertSelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
+        <selectKey order="BEFORE"
+                   keyColumn="id" keyProperty="id" resultType="java.lang.Long">
+            select seq_hz_dmd_id.Nextval from dual
+        </selectKey>
+        insert into HZ_DERIVATIVE_MATERIEL_DETAIL
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="dmdDmbId != null">
+                DMD_DMB_ID,
+            </if>
+            <if test="dmdCfg0Uid != null">
+                DMD_CFG0_UID,
+            </if>
+            <if test="dmdCfg0FamilyUid != null">
+                DMD_CFG0_FAMILY_UID,
+            </if>
+            <if test="dmdCreator != null">
+                DMD_CREATOR,
+            </if>
+            <if test="dmdCreateDate != null">
+                DMD_CREATE_DATE,
+            </if>
+            <if test="dmdUpdater != null">
+                DMD_UPDATER,
+            </if>
+            DMD_UPDATE_DATE,
+            <if test="dmdReserved1 != null">
+                DMD_RESERVED_1,
+            </if>
+            <if test="dmdReserved2 != null">
+                DMD_RESERVED_2,
+            </if>
+            <if test="dmdReserved3 != null">
+                DMD_RESERVED_3,
+            </if>
+            <if test="dmdReserved4 != null">
+                DMD_RESERVED_4,
+            </if>
+            <if test="dmdReserved5 != null">
+                DMD_RESERVED_5,
+            </if>
+            <if test="dmdFeatureValue != null">
+                DMD_FEATURE_VALUE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="dmdDmbId != null">
+                #{dmdDmbId,jdbcType=DECIMAL},
+            </if>
+            <if test="dmdCfg0Uid != null">
+                #{dmdCfg0Uid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdCfg0FamilyUid != null">
+                #{dmdCfg0FamilyUid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdCreator != null">
+                #{dmdCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdCreateDate != null">
+                #{dmdCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dmdUpdater != null">
+                #{dmdUpdater,jdbcType=VARCHAR},
+            </if>
+            sysdate,
+            <if test="dmdReserved1 != null">
+                #{dmdReserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdReserved2 != null">
+                #{dmdReserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdReserved3 != null">
+                #{dmdReserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdReserved4 != null">
+                #{dmdReserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdReserved5 != null">
+                #{dmdReserved5,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdFeatureValue != null">
+                #{dmdFeatureValue,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
+        update HZ_DERIVATIVE_MATERIEL_DETAIL
+        <set>
+            <if test="dmdDmbId != null">
+                DMD_DMB_ID = #{dmdDmbId,jdbcType=DECIMAL},
+            </if>
+            <if test="dmdCfg0Uid != null">
+                DMD_CFG0_UID = #{dmdCfg0Uid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdCfg0FamilyUid != null">
+                DMD_CFG0_FAMILY_UID = #{dmdCfg0FamilyUid,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdCreator != null">
+                DMD_CREATOR = #{dmdCreator,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdCreateDate != null">
+                DMD_CREATE_DATE = #{dmdCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dmdUpdater != null">
+                DMD_UPDATER = #{dmdUpdater,jdbcType=VARCHAR},
+            </if>
+            DMD_UPDATE_DATE = sysdate,
+            <if test="dmdReserved1 != null">
+                DMD_RESERVED_1 = #{dmdReserved1,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdReserved2 != null">
+                DMD_RESERVED_2 = #{dmdReserved2,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdReserved3 != null">
+                DMD_RESERVED_3 = #{dmdReserved3,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdReserved4 != null">
+                DMD_RESERVED_4 = #{dmdReserved4,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdReserved5 != null">
+                DMD_RESERVED_5 = #{dmdReserved5,jdbcType=VARCHAR},
+            </if>
+            <if test="dmdFeatureValue != null">
+                DMD_FEATURE_VALUE = #{dmdFeatureValue,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.net.connor.hozon.dao.pojo.configuration.derivative.HzDerivativeMaterielDetail">
+    update HZ_DERIVATIVE_MATERIEL_DETAIL
+    set DMD_DMB_ID = #{dmdDmbId,jdbcType=DECIMAL},
+      DMD_CFG0_UID = #{dmdCfg0Uid,jdbcType=VARCHAR},
+      DMD_CFG0_FAMILY_UID = #{dmdCfg0FamilyUid,jdbcType=VARCHAR},
+      DMD_CREATOR = #{dmdCreator,jdbcType=VARCHAR},
+      DMD_CREATE_DATE = #{dmdCreateDate,jdbcType=TIMESTAMP},
+      DMD_UPDATER = #{dmdUpdater,jdbcType=VARCHAR},
+      DMD_UPDATE_DATE = sysdate,
+      DMD_RESERVED_1 = #{dmdReserved1,jdbcType=VARCHAR},
+      DMD_RESERVED_2 = #{dmdReserved2,jdbcType=VARCHAR},
+      DMD_RESERVED_3 = #{dmdReserved3,jdbcType=VARCHAR},
+      DMD_RESERVED_4 = #{dmdReserved4,jdbcType=VARCHAR},
+      DMD_RESERVED_5 = #{dmdReserved5,jdbcType=VARCHAR},
+      DMD_FEATURE_VALUE = #{dmdFeatureValue,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+
+    <select id="selectByBasics" parameterType="java.util.List" resultMap="BaseResultWithCfg">
+        select
+          <include refid="Base_Column_List"/>,
+          <include refid="cfg0Column"/>
+        from
+          HZ_DERIVATIVE_MATERIEL_DETAIL t
+        LEFT OUTER JOIN HZ_CFG0_RECORD t2 on  t.DMD_CFG0_UID = t2.PUID
+        where
+        DMD_DMB_ID in
+        <foreach collection="list" index="index" item="hzDerivativeMaterielBasic" open="(" separator="," close=")">
+            #{hzDerivativeMaterielBasic.id,jdbcType=DECIMAL}
+        </foreach>
+    </select>
+
+    <update id="updateByDetailAll" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="hzDerivativeMaterielDetails" open="begin" close=";end;" separator=";">
+            update HZ_DERIVATIVE_MATERIEL_DETAIL
+            set
+            DMD_CFG0_UID = #{hzDerivativeMaterielDetails.dmdCfg0Uid,jdbcType=VARCHAR},
+            DMD_CFG0_FAMILY_UID =#{hzDerivativeMaterielDetails.dmdCfg0FamilyUid,jdbcType=VARCHAR},
+            DMD_FEATURE_VALUE=#{hzDerivativeMaterielDetails.dmdFeatureValue,jdbcType=VARCHAR}
+            where
+            ID = #{hzDerivativeMaterielDetails.id,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <delete id="deleteByBasicIds" parameterType="java.util.List">
+        delete from HZ_DERIVATIVE_MATERIEL_DETAIL
+        where
+        DMD_DMB_ID in
+        <foreach collection="list" index="index" item="hzComposeDelDto" open="(" separator="," close=")">
+            #{hzComposeDelDto.basicId,jdbcType=DECIMAL}
+        </foreach>
+    </delete>
+</mapper>

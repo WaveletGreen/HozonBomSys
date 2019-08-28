@@ -6175,7 +6175,7 @@ INSERT INTO `tree` VALUES ('17', 'sysManager', 'fa fa-fw fa-desktop', '工作区
 INSERT INTO `tree` VALUES ('34', 'bomMenuID2', 'fa fa-fw fa-desktop', 'BOM维护2a', '17', '2', 'hozon/bom-treegrid', '1');
 INSERT INTO `tree` VALUES ('36', 'bomMenuID3', 'fa fa-fw fa-desktop', 'BOM维护3', '17', '3', 'hozon/bom-treegrid', '1');
 INSERT INTO `tree` VALUES ('37', 'fd', 'fa fa-bandcamp', '全配置清单', '17', '1', 'hozon/bom', '1');
-INSERT INTO `tree` VALUES ('38', '1', 'fa fa-tasks', '全BOM配置清单', '17', '1', 'hozon/bom-all-cfg0', '1');
+INSERT INTO `tree` VALUES ('38', '1', 'fa fa-tasks', '全BOM配置清单', '17', '1', 'hozon/bom-all-feature', '1');
 INSERT INTO `tree` VALUES ('39', 'colorSet', 'f fa', '合众颜色库', '17', '1', 'colorSet/queryAll', '1');
 
 -- ----------------------------
