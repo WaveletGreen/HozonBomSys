@@ -37,6 +37,7 @@ ideal下载项目，构建maven项目，maven->package web模块即可得到hozo
 keystore.p12为RSA秘钥，实际上线运行请自行更换自己的私钥
 
 #### 参与贡献
+* fancyears 黎立聪 https://gitee.com/fancyears
 * xulf 许林飞 https://gitee.com/xu_linfei
 * zhuangl 张乐 https://gitee.com/zhanglemy
 * duanyf 段云峰 https://gitee.com/duanyunfeng
