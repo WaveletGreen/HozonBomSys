@@ -23,7 +23,7 @@ public interface FeatureService {
      * @param mainId
      * @return
      */
-    public List<HzFeature> selectCfg0OptionFamilyListByProjectPuid(String mainId);
+    List<HzFeature> selectCfg0OptionFamilyListByProjectPuid(String mainId);
 
     /**
      * 新版方法,根据族的PUID排序
@@ -31,7 +31,7 @@ public interface FeatureService {
      * @param mainId
      * @return
      */
-    public List<HzFeature> selectCfg0OptionFamilyListByProjectPuid2(String mainId);
+    List<HzFeature> selectCfg0OptionFamilyListByProjectPuid2(String mainId);
 
     /**
      * 主键删除
@@ -39,7 +39,7 @@ public interface FeatureService {
      * @param uid
      * @return
      */
-    public boolean deleteByPrimaryKey(String uid);
+    boolean deleteByPrimaryKey(String uid);
 
     /**
      * 在当前项目找出带颜色/不带颜色的特性，不能排除2特性值分别带颜色和不带颜色，因此会发生重复，需要进行排重
@@ -48,7 +48,7 @@ public interface FeatureService {
      * @param isColor    1，带颜色的特性；0，不带颜色的特性
      * @return
      */
-    public List<HzFeature> selectForColorBluePrint(String projectUid, Integer isColor);
+    List<HzFeature> selectForColorBluePrint(String projectUid, Integer isColor);
 
     /**
      * 根据主配置puid获取列信息定义，强制包含<br/>
@@ -56,7 +56,7 @@ public interface FeatureService {
      * @param mainId 主配置puid
      * @return 一组列信息
      */
-    public List<String> getColumn(String mainId);
+    List<String> getColumn(String mainId);
 
     /**
      * 根据主配置puid获取列信息定义，强制包含\t
@@ -64,7 +64,7 @@ public interface FeatureService {
      * @param mainId 主配置puid
      * @return 一组列信息
      */
-    public List<String> getColumn2(String mainId);
+    List<String> getColumn2(String mainId);
 
     /**
      * 自定义的列信息，如果组的id(name)未定义(null)，则取留空;如果组描述(desc)未定义，则取组的id(name)的值
@@ -73,7 +73,7 @@ public interface FeatureService {
      * @param def    自定义的分隔符
      * @return 一组列信息，包含分隔符
      */
-    public List<String> getColumnDef(String mainId, String def);
+    List<String> getColumnDef(String mainId, String def);
 
     /**
      * 自定义的列信息，如果组的id(name)未定义(null)，则取留空;如果组描述(desc)未定义，则取组的id(name)的值
@@ -82,7 +82,7 @@ public interface FeatureService {
      * @param def    自定义的分隔符
      * @return 一组列信息，包含分隔符
      */
-    public List<String> getColumnDef2(String mainId, String def);
+    List<String> getColumnDef2(String mainId, String def);
 
     /**
      * 根据主键获取组对象信息
@@ -90,22 +90,13 @@ public interface FeatureService {
      * @param family 一个含有puid的组对象
      * @return
      */
-    public HzFeature selectById(HzFeature family);
+    HzFeature selectById(HzFeature family);
 
-    public HzFeature selectByCodeAndDescWithMain(HzFeature family);
+    HzFeature selectByCodeAndDescWithMain(HzFeature family);
 
-    public boolean insert(HzFeature family);
+    boolean insert(HzFeature family);
 
-    public List<HzFeature> selectByDesc(String mainUid, String desc);
-
-    /**
-     * 获取排序好的列
-     *
-     * @param projectUid
-     * @param def
-     * @return
-     */
-    public List<String> getColumnNew(String projectUid, String def);
+    List<HzFeature> selectByDesc(String mainUid, String desc);
 
     /**
      * 获取排序好的列
@@ -114,7 +105,16 @@ public interface FeatureService {
      * @param def
      * @return
      */
-    public List<String> getColumnNew2(String projectUid, String def);
+    List<String> getColumnNew(String projectUid, String def);
+
+    /**
+     * 获取排序好的列
+     *
+     * @param projectUid
+     * @param def
+     * @return
+     */
+    List<String> getColumnNew2(String projectUid, String def);
 
     /**
      * 重新构造列信息
@@ -123,7 +123,7 @@ public interface FeatureService {
      * @param def
      * @return
      */
-    public List<String> getColumnNewWithFamilies(List<HzFeature> families, String def);
+    List<String> getColumnNewWithFamilies(List<HzFeature> families, String def);
 
     /**
      * 将项目下的所有特性查询出来，车身颜色和油漆车身总成放在前两位，其余都经过特性NAME排序
@@ -133,7 +133,7 @@ public interface FeatureService {
      * @param end
      * @return
      */
-    public List<HzFeature> getFamilies(String projectUid, int start, int end);
+    List<HzFeature> getFamilies(String projectUid, int start, int end);
 
     /**
      * @param projectUid 项目UID
@@ -144,7 +144,7 @@ public interface FeatureService {
      * @return
      * @Desc 如果想查询项目中的使用的特性，且特性经过特性代码排序后的数据，将names设为null即可
      */
-    public List<HzFeature> selectNameByMap(String projectUid, List<String> names, boolean isIn);
+    List<HzFeature> selectNameByMap(String projectUid, List<String> names, boolean isIn);
 
     /**
      * 选择性更新项目下的特性
@@ -152,5 +152,5 @@ public interface FeatureService {
      * @param family 特性对象
      * @return
      */
-    public boolean updateByPrimaryKeySelective(HzFeature family);
+    boolean updateByPrimaryKeySelective(HzFeature family);
 }
