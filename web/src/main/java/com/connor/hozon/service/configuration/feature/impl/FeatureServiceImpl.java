@@ -131,8 +131,9 @@ public class FeatureServiceImpl implements FeatureService {
     @Override
     public List<String> getColumn(String mainId) {
         List<HzFeature> families = selectCfg0OptionFamilyListByProjectPuid(mainId);
-        if (families == null || families.isEmpty())
+        if (families == null || families.isEmpty()) {
             return null;
+        }
         List<String> result = new ArrayList<>();
         families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getFeatureDesc() + "<br/>" + f.getFeatureCode()));
         return result;
@@ -147,8 +148,9 @@ public class FeatureServiceImpl implements FeatureService {
     @Override
     public List<String> getColumn2(String mainId) {
         List<HzFeature> families = selectCfg0OptionFamilyListByProjectPuid(mainId);
-        if (families == null || families.isEmpty())
+        if (families == null || families.isEmpty()) {
             return null;
+        }
         List<String> result = new ArrayList<>();
         families.stream().filter(f -> f != null).collect(Collectors.toList()).forEach(f -> result.add(f.getFeatureDesc() + "\t" + f.getFeatureCode()));
         return result;
@@ -164,8 +166,9 @@ public class FeatureServiceImpl implements FeatureService {
     @Override
     public List<String> getColumnDef(String mainId, String def) {
         List<HzFeature> families = selectCfg0OptionFamilyListByProjectPuid(mainId);
-        if (families == null || families.isEmpty())
+        if (families == null || families.isEmpty()) {
             return null;
+        }
         List<String> result = new ArrayList<>();
         return sortFamiliesCode(families, def);
     }
@@ -180,8 +183,9 @@ public class FeatureServiceImpl implements FeatureService {
     @Override
     public List<String> getColumnDef2(String mainId, String def) {
         List<HzFeature> families = selectCfg0OptionFamilyListByProjectPuid2(mainId);
-        if (families == null || families.isEmpty())
+        if (families == null || families.isEmpty()) {
             return null;
+        }
         return sortFamiliesCode(families, def);
     }
 
